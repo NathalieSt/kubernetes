@@ -30,7 +30,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: capacitor
+  name: capacitor-lb
   namespace: flux-system
 spec:
   type: LoadBalancer
