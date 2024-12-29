@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: headlamp
       version: "*"
-  interval: 30m0s
+  interval: 1m0s
   values:
     config:
       pluginsDir: /build/plugins
