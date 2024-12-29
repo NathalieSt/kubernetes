@@ -5,3 +5,7 @@ resources:
   - namespace.yaml
   - repository.yaml
   - release.yaml
+patches:
+  - path: podinfo-values.yaml
+    target:
+      kind: HelmRelease
