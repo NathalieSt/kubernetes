@@ -30,6 +30,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: capacitor-clusterip
+  namespace: flux-system
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+  selector:
+    app: capacitor
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: capacitor-lb
   namespace: flux-system
 spec:
