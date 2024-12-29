@@ -27,33 +27,34 @@ spec:
     kind: OCIRepository
     name: capacitor
 ---
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
 metadata:
-  name: capacitor
+  name: capacitor-ingress
   namespace: flux-system
 spec:
-  type: ClusterIP
-  ports:
-    - port: 9000
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    app.kubernetes.io/name: onechart
-    app.kubernetes.io/instance: capacitor
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - namespaceSelector: {}
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: capacitor
 ---
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: capacitor-loadbalancer
+  name: capacitor-ingress
   namespace: flux-system
 spec:
-  type: LoadBalancer
-  ports:
-    - port: 9000
-      targetPort: 9000
-      protocol: TCP
-  selector:
-    app.kubernetes.io/name: onechart
-    app.kubernetes.io/instance: capacitor
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: capacitor
+                port:
+                  number: 9000
