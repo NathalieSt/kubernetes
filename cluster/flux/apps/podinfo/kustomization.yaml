@@ -1,5 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: podinfo
 resources:
   - namespace.yaml
-  - github.com/stefanprodan/podinfo//kustomize?ref=master
+  - repository.yaml
+  - release.yaml
