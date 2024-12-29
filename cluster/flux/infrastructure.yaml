@@ -30,13 +30,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: capacitor-loadbalancer
+  name: capacitor-nodeport
   namespace: flux-system
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 9000
       targetPort: 9000
+      nodePort: 30900
   selector:
     app.kubernetes.io/instance: capacitor
     app.kubernetes.io/name: onechart
