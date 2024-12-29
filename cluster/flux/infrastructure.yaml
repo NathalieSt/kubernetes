@@ -53,5 +53,7 @@ spec:
   ports:
     - port: 9000
       targetPort: 9000
+      protocol: TCP
   selector:
-    app: capacitor
+    app.kubernetes.io/name: onechart
+    app.kubernetes.io/instance: capacitor
