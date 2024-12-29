@@ -42,3 +42,16 @@ spec:
   selector:
     app.kubernetes.io/name: onechart
     app.kubernetes.io/instance: capacitor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capacitor-loadbalancer
+  namespace: flux-system
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9000
+      targetPort: 9000
+  selector:
+    app: capacitor
