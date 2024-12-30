@@ -12,3 +12,8 @@ spec:
   values:
     proxy: edge
     cache.enabled: true
+    extraEnv: |
+      - name: KEYCLOAK_USER
+        value: admin
+      - name: KEYCLOAK_PASSWORD
+        value: admin
