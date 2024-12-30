@@ -6,7 +6,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: bitnami/keycloak
+      chart: keycloak
       sourceRef:
         kind: HelmRepository
         name: keycloak
