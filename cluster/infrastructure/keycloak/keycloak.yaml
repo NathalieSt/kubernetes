@@ -9,3 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: keycloak
+  values:
+    proxy: edge
+    cache.enabled: true
