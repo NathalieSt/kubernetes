@@ -1,16 +1,11 @@
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
 metadata:
   name: keycloak
   namespace: keycloak
 spec:
-  targetNamespace: keycloak
-  interval: 1h
-  retryInterval: 2m
-  timeout: 5m
-  wait: true
-  prune: true
-  path: "./"
-  sourceRef:
+  interval: 10m
+  releaseName: keycloak
+  chartRef:
     kind: OCIRepository
     name: keycloak
