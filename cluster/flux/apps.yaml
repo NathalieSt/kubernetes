@@ -9,7 +9,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/headlamp
+  path: ./cluster/apps/kubedoom
   prune: true
   wait: true
   timeout: 5m0s
