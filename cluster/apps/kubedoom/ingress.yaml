@@ -12,7 +12,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: kubedoom
+                name: kubedoom-service
                 port:
                   number: 5900
   tls:
