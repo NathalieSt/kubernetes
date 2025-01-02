@@ -4,7 +4,7 @@ metadata:
   name: admin-user-clusterrolebinding
 subjects:
   - kind: User
-    name: tail495c5f.study946@passmail.net # Please note that the name is case-sensitive
+    name: keycloak-local-nathi.scurvy634@passmail.net # Please note that the name is case-sensitive
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
