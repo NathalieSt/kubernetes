@@ -15,6 +15,12 @@ spec:
   values:
     config:
       pluginsDir: /build/plugins
+      oidc:
+        clientID: "keycloak-headlamp"
+        #FIXME: Replace with something else than cleartext
+        clientSecret: "seYCq0vJpMnMkc7OP4BcNy1arJhp1YVJ"
+        issuerURL: "https://keycloak.tail495c5f.ts.net/realms/master"
+        scopes: "email,profile"
     persistentVolumeClaim:
       accessModes:
         - ReadWriteOnce
