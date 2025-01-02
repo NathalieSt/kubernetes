@@ -4,7 +4,7 @@ metadata:
   name: kubedoom-service
   namespace: kubedoom
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: kubedoom
   ports:
