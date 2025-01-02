@@ -16,7 +16,7 @@ spec:
     config:
       pluginsDir: /build/plugins
       oidc:
-        clientID: "keycloak-headlamp"
+        clientID: "oidc-client"
         #FIXME: Replace with something else than cleartext
         clientSecret: "ULO4luVMCnAG0xCG8EKrFTet0ufzitWJ"
         issuerURL: "https://keycloak.tail495c5f.ts.net/realms/local"
