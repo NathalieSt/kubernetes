@@ -1,55 +1,62 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   labels:
-    app.kubernetes.io/component: exporter
-    app.kubernetes.io/name: node-exporter
+    app: node-exporter
   name: node-exporter
   namespace: monitoring
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/component: exporter
-      app.kubernetes.io/name: node-exporter
+      app: node-exporter
   template:
     metadata:
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
-        app.kubernetes.io/component: exporter
-        app.kubernetes.io/name: node-exporter
+        app: node-exporter
     spec:
       containers:
       - args:
+        - --web.listen-address=0.0.0.0:9100
+        - --path.procfs=/host/proc
         - --path.sysfs=/host/sys
-        - --path.rootfs=/host/root
-        - --no-collector.wifi
-        - --no-collector.hwmon
-        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
-        - --collector.netclass.ignored-devices=^(veth.*)$
+        image: quay.io/prometheus/node-exporter
+        imagePullPolicy: IfNotPresent
         name: node-exporter
-        image: prom/node-exporter
         ports:
-          - containerPort: 9100
-            protocol: TCP
+        - containerPort: 9100
+          hostPort: 9100
+          name: metrics
+          protocol: TCP
         resources:
           limits:
-            cpu: 250m
-            memory: 180Mi
+            cpu: 200m
+            memory: 50Mi
           requests:
-            cpu: 102m
-            memory: 180Mi
+            cpu: 100m
+            memory: 30Mi
         volumeMounts:
+        - mountPath: /host/proc
+          name: proc
+          readOnly: true
         - mountPath: /host/sys
-          mountPropagation: HostToContainer
           name: sys
           readOnly: true
-        - mountPath: /host/root
-          mountPropagation: HostToContainer
-          name: root
-          readOnly: true
+      hostNetwork: true
+      hostPID: true
+      restartPolicy: Always
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
       volumes:
       - hostPath:
-          path: /sys
-        name: sys
+          path: /proc
+          type: ""
+        name: proc
       - hostPath:
-          path: /
-        name: root
+          path: /sys
+          type: ""
+        name: sys
