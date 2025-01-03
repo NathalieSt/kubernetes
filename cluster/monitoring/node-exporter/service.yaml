@@ -4,7 +4,7 @@ metadata:
   labels:
     app: node-exporter
   name: node-exporter
-  namespace: prometheus
+  namespace: monitoring
 spec:
   ports:
   - name: node-exporter
