@@ -20,6 +20,9 @@ spec:
       containers:
         - name: grafana
           image: grafana/grafana:latest
+          env:
+            - name: GF_SERVER_ALLOW_ORIGIN
+              value: "https://homer.tail495c5f.ts.net"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
