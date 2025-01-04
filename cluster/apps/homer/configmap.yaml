@@ -47,7 +47,7 @@ data:
           - name: "Grafana"
             type: Ping
             tag: "Monitoring"
-            url: "https://grafana.tail495c5f.ts.net/login"
+            url: "grafana.tail495c5f.ts.net"
           - name: "Prometheus"
             tag: "Monitoring"
             url: "https://prometheus.tail495c5f.ts.net/query"
