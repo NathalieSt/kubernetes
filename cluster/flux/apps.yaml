@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
+  targetNamespace: kubedoom
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -21,6 +22,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
+  targetNamespace: homer
   sourceRef:
     kind: GitRepository
     name: flux-system
