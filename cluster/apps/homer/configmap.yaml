@@ -3,55 +3,50 @@ kind: ConfigMap
 metadata:
   name: homer-config
 data:
-  config.yml: |
-    # Your Homer configuration
-    title: "My Dashboard"
+  config.yml: | #yaml
+    title: "Nathalies Kubernetes Cluster"
     subtitle: "Home"
     links:
-      - name: "Link 1"
+      - name: "GitHub"
         icon: "fab fa-github"
         url: "https://github.com/bastienwirtz/homer"
-      - name: "link 2"
+      - name: "Tailscale Network"
         icon: "fas fa-book"
         url: "https://github.com/bastienwirtz/homer"
-      - name: "Second Page"
-        icon: "fas fa-file-alt"
-        url: "#page2"
-      - name: "Third Page"
-        icon: "fas fa-gear"
-        url: "#page2"
     services:
-      - name: "Application"
-        icon: "fas fa-code-branch"
-        # A path to an image can also be provided. Note that icon take precedence if both icon and logo are set.
-        # logo: "path/to/logo"
-        # class: "highlight-purple" # Optional css class to add on the service group. 
+      - name: "Applications used in the cluster"
+        icon: "fas fa-book"
         items:
-          - name: "Awesome app"
-            logo: "assets/tools/sample.png"
-            # Alternatively a fa icon can be provided:
-            # icon: "fab fa-jenkins"
+          - name: "Flux"
             subtitle: "Bookmark example"
-            tag: "app"
-            keywords: "self hosted reddit" # optional keyword used for searching purpose
-            url: "https://www.reddit.com/r/selfhosted/"
-            target: "_blank" # optional html tag target attribute
-          - name: "Another one"
-            logo: "assets/tools/sample2.png"
+            tag: "GitOps"
+            url: "https://toolkit.fluxcd.io/"
+          - name: "Kubedoom"
             subtitle: "Another application"
-            tag: "app"
-            # Optional tagstyle
-            tagstyle: "is-success"
-            url: "#"
-      - name: "Other group"
+            tag: "fun"
+            url: "https://github.com/storax/kubedoom"
+          - name: "Homer"
+            subtitle: "Another application"
+            tag: "visualisation"
+            url: "https://github.com/bastienwirtz/homer"
+          - name: "Tailscale"
+            subtitle: "Another application"
+            tag: "networking"
+            url: "https://tailscale.com/"
+          - name: "Prometheus"
+            subtitle: "Another application"
+            tag: "monitoring"
+            url: "https://prometheus.io/"
+          - name: "Grafana"
+            subtitle: "Another application"
+            tag: "monitoring"
+            url: "https://grafana.com/"
+      - name: "Access to the applications"
         icon: "fas fa-heartbeat"
         items:
           - name: "Pi-hole"
             logo: "assets/tools/sample.png"
-            # subtitle: "Network-wide Ad Blocking" # optional, if no subtitle is defined, PiHole statistics will be shown
             tag: "other"
             url: "http://192.168.0.151/admin"
-            type: "PiHole" # optional, loads a specific component that provides extra features. MUST MATCH a file name (without file extension) available in `src/components/services`
-            target: "_blank" # optional html a tag target attribute
-            # class: "green" # optional custom CSS class for card, useful with custom stylesheet
-            # background: red # optional color for card to set color directly without custom stylesheet
+            type: "PiHole"
+            target: "_blank"
