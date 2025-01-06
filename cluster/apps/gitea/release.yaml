@@ -23,6 +23,8 @@ spec:
     ingress:
       enabled: true
       className: tailscale
+      hosts:
+        - host: "*"
       tls:
         - hosts:
             - gitea
