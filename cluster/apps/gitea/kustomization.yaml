@@ -8,4 +8,3 @@ resources:
   - http-service.yaml
   - http-ingress.yaml
   - ssh-service.yaml
-  - ssh-ingress.yaml

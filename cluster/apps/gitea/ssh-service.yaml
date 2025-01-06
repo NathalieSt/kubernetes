@@ -3,10 +3,12 @@ kind: Service
 metadata:
   name: gitea-ssh-service
   namespace: gitea
+  annotations:
+    tailscale.com/expose: "true"
 spec:
   type: ClusterIP
   selector:
     app: gitea
   ports:
     - port: 22
-      targetPort: 2222
+      targetPort: 22
