@@ -22,3 +22,7 @@ spec:
         enabled: true
     serviceAccount:
       name: gitea-tailscale
+    gitea:
+      config:
+        server:
+          SSH_DOMAIN: gitea-ssh.tail495c5f.ts.net
