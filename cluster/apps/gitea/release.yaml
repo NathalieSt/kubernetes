@@ -22,19 +22,3 @@ spec:
         enabled: true
     serviceAccount:
       name: gitea-tailscale
-    extraContainers:
-      - name: tailscale-sidecar
-        image: ghcr.io/tailscale/tailscale:latest
-        hostname: gitea
-        env:
-          - name: TS_KUBE_SECRET
-            value: tailscale-auth
-          - name: TS_AUTHKEY
-            valueFrom:
-              secretKeyRef:
-                name: tailscale-auth
-                key: TS_AUTHKEY
-        securityContext:
-          capabilities:
-            add:
-              - NET_ADMIN
