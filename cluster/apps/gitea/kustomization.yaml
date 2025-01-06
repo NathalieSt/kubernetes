@@ -6,5 +6,4 @@ resources:
   - repository.yaml
   - release.yaml
   - rbac.yaml
-  - nginx-configmap.yaml
-  - nginx-tailscale-deployment.yaml
+  - ssh-service.yaml
