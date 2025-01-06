@@ -16,4 +16,4 @@ spec:
                   number: 3000
   tls:
     - hosts:
-        - gitea
+        - gitea-web
