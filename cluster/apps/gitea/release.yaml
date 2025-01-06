@@ -27,27 +27,6 @@ spec:
         image: ghcr.io/tailscale/tailscale:latest
         hostname: gitea
         env:
-          - name: TS_SERVE_CONFIG
-            value: |-
-              {
-                "TCP": {
-                  "443": {
-                    "HTTPS": true
-                  }
-                },
-                "Web": {
-                  "${TS_CERT_DOMAIN}:443": {
-                    "Handlers": {
-                      "/": {
-                        "Proxy": "http://127.0.0.1:3000"
-                      }
-                    }
-                  }
-                },
-                "AllowFunnel": {
-                  "${TS_CERT_DOMAIN}:443": false,
-                }
-              }
           - name: TS_KUBE_SECRET
             value: tailscale-auth
           - name: TS_AUTHKEY
