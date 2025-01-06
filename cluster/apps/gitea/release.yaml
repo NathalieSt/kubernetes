@@ -34,7 +34,7 @@ spec:
                 name: tailscale-auth
                 key: TS_AUTHKEY
           - name: TS_USERSPACE
-            value: "false"
+            value: "true"
         securityContext:
           capabilities:
             add:
