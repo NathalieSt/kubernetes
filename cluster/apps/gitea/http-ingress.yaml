@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: gitea-ingress
+  name: gitea-http-ingress
 spec:
   ingressClassName: tailscale
   rules:
@@ -11,7 +11,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: gitea-service
+                name: gitea-http-service
                 port:
                   number: 3000
   tls:

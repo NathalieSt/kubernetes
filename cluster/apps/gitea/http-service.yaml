@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitea-service
+  name: gitea-http-service
   namespace: gitea
 spec:
   type: ClusterIP
