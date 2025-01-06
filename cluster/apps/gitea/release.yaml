@@ -18,3 +18,5 @@ spec:
   values:
     actions:
       enabled: true
+      provisioning:
+        enabled: true
