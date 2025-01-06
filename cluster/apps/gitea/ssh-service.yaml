@@ -9,4 +9,4 @@ spec:
   loadBalancerClass: tailscale
   ports:
     - port: 22
-      targetPort: 22
+      targetPort: 2222
