@@ -44,18 +44,8 @@ spec:
                     }
                   }
                 },
-                "SSH": {
-                  "${TS_CERT_DOMAIN}:22": {
-                    "Handlers": {
-                      "/": {
-                        "Proxy": "http://127.0.0.1:2222"
-                      }
-                    }
-                  }
-                },
                 "AllowFunnel": {
                   "${TS_CERT_DOMAIN}:443": false,
-                  "${TS_CERT_DOMAIN}:22": false
                 }
               }
           - name: TS_KUBE_SECRET
