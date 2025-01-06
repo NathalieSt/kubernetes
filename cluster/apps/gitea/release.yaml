@@ -20,6 +20,8 @@ spec:
       enabled: true
       provisioning:
         enabled: true
+    serviceAccount:
+      name: gitea-tailscale
     extraContainers:
       - name: tailscale-sidecar
         image: ghcr.io/tailscale/tailscale:latest

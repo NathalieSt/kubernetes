@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitea-tailscale
+  namespace: gitea
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: read-secrets
+  namespace: gitea
+rules:
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gitea-tailscale-binding
+  namespace: gitea
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: read-secrets
+subjects:
+  - kind: ServiceAccount
+    name: gitea-tailscale
+    namespace: gitea
