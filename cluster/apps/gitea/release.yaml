@@ -21,7 +21,7 @@ spec:
       provisioning:
         enabled: true
     service:
-    http:
-      type: ClusterIP
-      port: 3000
-      clusterIP:
+      http:
+        type: ClusterIP
+        port: 3000
+        clusterIP:
