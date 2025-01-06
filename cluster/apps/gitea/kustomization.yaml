@@ -7,3 +7,5 @@ resources:
   - release.yaml
   - rbac.yaml
   - ssh-service.yaml
+  - web-service.yaml
+  - web-ingress.yaml
