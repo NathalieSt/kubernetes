@@ -26,3 +26,4 @@ spec:
       config:
         server:
           SSH_DOMAIN: gitea-ssh.tail495c5f.ts.net
+          ENABLE_PUSH_CREATE_USER: true
