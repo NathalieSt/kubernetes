@@ -16,4 +16,4 @@ spec:
                   number: 2222
   tls:
     - hosts:
-        - ssh.gitea
+        - gitea-ssh
