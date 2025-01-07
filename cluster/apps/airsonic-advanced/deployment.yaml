@@ -20,3 +20,7 @@ spec:
               value: -Dserver.port=4040
           ports:
             - containerPort: 4040
+        - name: airsonic-refix
+          image: tamland/airsonic-refix:latest
+          ports:
+            - containerPort: 80
