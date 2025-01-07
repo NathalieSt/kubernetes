@@ -27,6 +27,7 @@ jobs:
           docker build -t custom-homer:latest -f customized-homer/Dockerfile .
 
       - name: Log in to local Gitea registry
-        run: docker login http://gitea:3000 -u ${{ gitea.actor }} -p ${{ secrets.TOKEN }}
+        run: docker login https://gitea-web.tail495c5f.ts.net -u ${{ gitea.actor }} -p ${{ secrets.TOKEN }}
+
       - name: Push image
-        run: docker push http://gitea:3000:3000/gitea_admin/custom-homer:latest
+        run: docker push https://gitea-web.tail495c5f.ts.net/gitea_admin/custom-homer:latest
