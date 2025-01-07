@@ -1,0 +1,21 @@
+name: Build and Push
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "customized-homer/**"
+
+jobs:
+  build-and-push:
+    runs-on: docker
+    steps:
+      - name: Checkout repository
+        run: git clone ${{ gitea.repository }} .
+      - name: Build Docker image
+        run: |
+          docker build -t http://gitea:3000/gitea_admin/custom-homer:latest -f customized-homer/Dockerfile .
+      - name: Log in to local Gitea registry
+        run: docker login http://gitea:3000 -u ${{ gitea.actor }} -p ${{ secrets.TOKEN }}
+      - name: Push image
+        run: docker push http://gitea:3000:3000/gitea_admin/custom-homer:latest
