@@ -1,3 +1,3 @@
 FROM b4bz/homer:latest
-ADD assets /www/
+ADD ./assets /www/
 EXPOSE 8080
