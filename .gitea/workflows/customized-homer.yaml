@@ -5,16 +5,19 @@ on:
       - main
     paths:
       - "customized-homer/**"
+      - ".gitea/workflows/customized-homer.yaml"
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        run: git clone ${{ gitea.repository }} .
+        uses: actions/checkout@v4
+
       - name: Build Docker image
         run: |
           docker build -t http://gitea:3000/gitea_admin/custom-homer:latest -f customized-homer/Dockerfile .
+
       - name: Log in to local Gitea registry
         run: docker login http://gitea:3000 -u ${{ gitea.actor }} -p ${{ secrets.TOKEN }}
       - name: Push image
