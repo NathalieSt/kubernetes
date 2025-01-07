@@ -15,5 +15,8 @@ spec:
       containers:
         - name: airsonic-advanced
           image: ghcr.io/airsonic-advanced/airsonic-advanced:gitrun-8809770505
+          env:
+            - name: JAVA_OPTS
+              value: -Dserver.port=4040
           ports:
-            - containerPort: 80
+            - containerPort: 4040
