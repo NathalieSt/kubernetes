@@ -16,4 +16,4 @@ spec:
         - name: navidrome
           image: deluan/navidrome:latest
           ports:
-            - containerPort: 13378
+            - containerPort: 4533

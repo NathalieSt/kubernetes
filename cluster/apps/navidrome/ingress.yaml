@@ -13,7 +13,7 @@ spec:
               service:
                 name: navidrome-service
                 port:
-                  number: 80
+                  number: 4533
   tls:
     - hosts:
         - navidrome
