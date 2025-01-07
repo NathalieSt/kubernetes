@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: airsonic-advanced
-          image: docker pull ghcr.io/airsonic-advanced/airsonic-advanced:gitrun-8809770505
+          image: ghcr.io/airsonic-advanced/airsonic-advanced:gitrun-8809770505
           ports:
             - containerPort: 80
