@@ -9,8 +9,13 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest:docker://node:16-bullseye
+    runs-on: ubuntu-latest
     steps:
+      - name: Base requirements
+        run: |
+          # packages
+          apt update && apt install git docker nodejs npm
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
