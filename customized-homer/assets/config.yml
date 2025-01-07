@@ -5,7 +5,6 @@ links:
     icon: "fab fa-github"
     url: "https://github.com/NathalieSt/kubernetes"
   - name: "Tailscale Network"
-    logo: "assets/icons/tailscale-light.png"
     url: "https://login.tailscale.com/admin/machines"
 services:
   - name: "Applications used in the cluster"
@@ -60,4 +59,3 @@ services:
       - name: Gitea
         logo: assets/icons/gitea.png
         url: https://gitea-web.tail495c5f.ts.net
-        type: Gitea
