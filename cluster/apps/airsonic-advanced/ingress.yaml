@@ -33,7 +33,7 @@ spec:
               service:
                 name: airsonic-refix-service
                 port:
-                  number: 4040
+                  number: 80
   tls:
     - hosts:
         - airsonic-refix
