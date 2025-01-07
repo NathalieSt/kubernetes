@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: homer
-          image: b4bz/homer:latest
+          image: gitea-web.tail495c5f.ts.net/gitea_admin/custom-homer:latest
           ports:
             - containerPort: 8080
           volumeMounts:
