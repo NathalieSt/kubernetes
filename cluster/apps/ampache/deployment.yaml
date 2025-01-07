@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: navidrome
+  name: ampache
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: navidrome
+      app: ampache
   template:
     metadata:
       labels:
-        app: navidrome
+        app: ampache
     spec:
       containers:
-        - name: navidrome
-          image: deluan/navidrome:latest
+        - name: ampache
+          image: ampache/ampache:latest
           ports:
-            - containerPort: 4533
+            - containerPort: 80
