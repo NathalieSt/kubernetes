@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ampache
+  name: airsonic-advanced
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ampache
+      app: airsonic-advanced
   template:
     metadata:
       labels:
-        app: ampache
+        app: airsonic-advanced
     spec:
       containers:
-        - name: ampache
-          image: ampache/ampache:latest
+        - name: airsonic-advanced
+          image: docker pull ghcr.io/airsonic-advanced/airsonic-advanced:gitrun-8809770505
           ports:
             - containerPort: 80

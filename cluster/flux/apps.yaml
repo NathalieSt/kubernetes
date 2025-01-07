@@ -50,15 +50,15 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: ampache
+  name: airsonic-advanced
   namespace: flux-system
 spec:
   interval: 10m0s
-  targetNamespace: ampache
+  targetNamespace: airsonic-advanced
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/ampache
+  path: ./cluster/apps/airsonic-advanced
   prune: true
   wait: true
   timeout: 5m0s
