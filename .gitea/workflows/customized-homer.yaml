@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t http://gitea:3000/gitea_admin/custom-homer:latest -f customized-homer/Dockerfile .
+          docker build -t custom-homer:latest -f customized-homer/Dockerfile .
 
       - name: Log in to local Gitea registry
         run: docker login http://gitea:3000 -u ${{ gitea.actor }} -p ${{ secrets.TOKEN }}
