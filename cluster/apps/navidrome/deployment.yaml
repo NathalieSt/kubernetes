@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: audiobookshelf
+  name: navidrome
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: audiobookshelf
+      app: navidrome
   template:
     metadata:
       labels:
-        app: audiobookshelf
+        app: navidrome
     spec:
       containers:
-        - name: audiobookshelf
+        - name: navidrome
           image: deluan/navidrome:latest
           ports:
             - containerPort: 13378
