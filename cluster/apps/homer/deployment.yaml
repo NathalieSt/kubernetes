@@ -17,10 +17,3 @@ spec:
           image: gitea-web.tail495c5f.ts.net/gitea_admin/custom-homer:latest
           ports:
             - containerPort: 8080
-          volumeMounts:
-            - name: config-volume
-              mountPath: /www/assets
-      volumes:
-        - name: config-volume
-          configMap:
-            name: homer-config
