@@ -13,7 +13,7 @@ spec:
               service:
                 name: audiobookshelf-service
                 port:
-                  number: 3000
+                  number: 80
   tls:
     - hosts:
         - audiobookshelf

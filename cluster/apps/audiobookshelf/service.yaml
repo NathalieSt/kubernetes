@@ -7,4 +7,4 @@ spec:
     app: audiobookshelf
   ports:
     - port: 80
-      targetPort: 13378
+      targetPort: 80
