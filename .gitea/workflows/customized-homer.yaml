@@ -24,10 +24,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t custom-homer:latest -f customized-homer/Dockerfile .
+          docker build -t gitea-web.tail495c5f.ts.net/gitea_admin/custom-homer:latest -f customized-homer/Dockerfile .
 
       - name: Log in to local Gitea registry
         run: docker login https://gitea-web.tail495c5f.ts.net -u ${{ gitea.actor }} -p ${{ secrets.TOKEN }}
 
       - name: Push image
-        run: docker push https://gitea-web.tail495c5f.ts.net/gitea_admin/custom-homer:latest
+        run: docker push gitea-web.tail495c5f.ts.net/gitea_admin/custom-homer:latest
