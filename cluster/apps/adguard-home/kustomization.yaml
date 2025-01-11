@@ -6,3 +6,6 @@ resources:
   - namespace.yaml
   - deployment.yaml
   - pvcs.yaml
+  - dns-service.yaml
+  - web-service.yaml
+  - web-ingress.yaml
