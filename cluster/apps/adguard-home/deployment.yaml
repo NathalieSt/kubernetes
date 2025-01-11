@@ -43,11 +43,23 @@ spec:
                 - NET_ADMIN
                 - NET_RAW
           volumeMounts:
+            - name: dev-tun
+              mountPath: /dev/net/tun
+            - name: modules
+              mountPath: /lib/modules
             - name: work
               mountPath: /opt/adguardhome/work
             - name: conf
               mountPath: /opt/adguardhome/conf
       volumes:
+        - name: dev-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+        - name: modules
+          hostPath:
+            path: /lib/modules
+            type: Directory
         - name: work
           persistentVolumeClaim:
             claimName: adguard-work
