@@ -15,7 +15,13 @@ spec:
     spec:
       containers:
         - name: adguard-home
-          image: adguard/adguardhome
+          image: gitea-web.tail495c5f.ts.net/gitea_admin/custom-adguard-home:latest
+          env:
+            - name: TAILSCALE_AUTHKEY
+              valueFrom:
+                secretKeyRef:
+                  name: tailscale-auth
+                  key: authkey
           ports:
             - containerPort: 53
               protocol: UDP
@@ -31,12 +37,31 @@ spec:
               name: dns-over-tls
             - containerPort: 3000
               name: web-ui
+          securityContext:
+            privileged: true # Add this line
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_MODULE # Add this capability
           volumeMounts:
+            - name: dev-tun
+              mountPath: /dev/net/tun
+            - name: modules
+              mountPath: /lib/modules
             - name: work
               mountPath: /opt/adguardhome/work
             - name: conf
               mountPath: /opt/adguardhome/conf
       volumes:
+        - name: dev-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+        - name: modules
+          hostPath:
+            path: /lib/modules
+            type: Directory
         - name: work
           persistentVolumeClaim:
             claimName: adguard-work
