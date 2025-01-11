@@ -8,8 +8,8 @@ RUN apk update && \
     tailscale \
     dos2unix
 
-# Install AdGuard Home
-RUN curl -L -o /tmp/AdGuardHome.tar.gz https://github.com/AdguardTeam/AdGuardHome/releases/latest/download/AdGuardHome_linux_amd64.tar.gz && \
+# Install AdGuard Home for ARM64
+RUN curl -L -o /tmp/AdGuardHome.tar.gz https://github.com/AdguardTeam/AdGuardHome/releases/latest/download/AdGuardHome_linux_arm64.tar.gz && \
     tar xvf /tmp/AdGuardHome.tar.gz -C /opt && \
     rm /tmp/AdGuardHome.tar.gz && \
     chmod +x /opt/AdGuardHome/AdGuardHome
