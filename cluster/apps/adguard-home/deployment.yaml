@@ -38,10 +38,12 @@ spec:
             - containerPort: 3000
               name: web-ui
           securityContext:
+            privileged: true # Add this line
             capabilities:
               add:
                 - NET_ADMIN
                 - NET_RAW
+                - SYS_MODULE # Add this capability
           volumeMounts:
             - name: dev-tun
               mountPath: /dev/net/tun
