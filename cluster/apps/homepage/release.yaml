@@ -18,6 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/gethomepage/homepage
+      tag: latest
     config:
       bookmarks:
         - Developer:
