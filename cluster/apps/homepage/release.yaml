@@ -20,28 +20,13 @@ spec:
       repository: ghcr.io/gethomepage/homepage
       tag: latest
     config:
+      headerStyle: boxed
       layout:
-        bookmarks:
-          - Developer:
-              - Github:
-                  - abbr: GH
-                    href: https://github.com/
-        services:
-          - My First Group TEEEEEST:
-              - My First Service:
-                  href: http://localhost/
-                  description: Homepage is awesome
-
-          - My Second Group:
-              - My Second Service:
-                  href: http://localhost/
-                  description: Homepage is the best
-
-          - My Third Group:
-              - My Third Service:
-                  href: http://localhost/
-                  description: Homepage is 😎
-        widgets:
+        Useful Bookmarks:
+          - Github:
+              - abbr: GH
+                href: https://github.com/
+        Cluster Status:
           # show the kubernetes widget, with the cluster summary and individual nodes
           - kubernetes:
               cluster:
@@ -61,6 +46,8 @@ spec:
         kubernetes:
           mode: cluster
         settings:
+        Applications in the Cluster:
+          - homepage:
 
     # The service account is necessary to allow discovery of other services
     serviceAccount:
