@@ -11,9 +11,9 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: homepage
+      valuesFiles:
+        - values.yaml
   interval: 50m
   install:
     remediation:
       retries: 3
-  valuesFiles:
-    - values.yaml
