@@ -1,0 +1,40 @@
+# Homepage Configuration
+homepage:
+  # Default theme and color scheme
+  settings:
+    title: "Kubernetes Home"
+    theme: dark
+    color: slate
+
+  # Service groups
+  services:
+    - name: Infrastructure
+      items:
+        - name: Gitea
+          icon: gitea.png
+          href: https://gitea-web.tail495c5f.ts.net
+          description: Git Server
+
+        - name: AdGuard Home
+          icon: adguard.png
+          href: https://adguard-home-web.tail495c5f.ts.net
+          description: DNS Ad Blocking
+
+    - name: Monitoring
+      items:
+        - name: Grafana
+          icon: grafana.png
+          href: https://grafana.tail495c5f.ts.net
+          description: Metrics & Monitoring
+
+        - name: Prometheus
+          icon: prometheus.png
+          href: https://prometheus.tail495c5f.ts.net
+          description: Metrics Collection
+
+    - name: Tools
+      items:
+        - name: KubeDoom
+          icon: doom.png
+          href: http://kubedoom.kubedoom
+          description: Kill pods with Doom!

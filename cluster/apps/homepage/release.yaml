@@ -15,4 +15,5 @@ spec:
   install:
     remediation:
       retries: 3
-  values:
+  valuesFiles:
+    - values.yaml
