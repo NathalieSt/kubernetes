@@ -5,7 +5,7 @@ metadata:
   name: kubedoom
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 50m0s
   targetNamespace: kubedoom
   sourceRef:
     kind: GitRepository
@@ -21,7 +21,7 @@ metadata:
   name: homer
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 50m0s
   targetNamespace: homer
   sourceRef:
     kind: GitRepository
@@ -37,7 +37,7 @@ metadata:
   name: gitea
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 50m0s
   targetNamespace: gitea
   sourceRef:
     kind: GitRepository
@@ -53,7 +53,7 @@ metadata:
   name: adguard-home
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 50m0s
   targetNamespace: adguard-home
   sourceRef:
     kind: GitRepository
@@ -69,7 +69,7 @@ metadata:
   name: homepage
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 50m0s
   targetNamespace: homepage
   sourceRef:
     kind: GitRepository
