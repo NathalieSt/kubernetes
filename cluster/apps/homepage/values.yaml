@@ -1,40 +1,65 @@
-# Homepage Configuration
-homepage:
-  # Default theme and color scheme
-  settings:
-    title: "Kubernetes Home"
-    theme: dark
-    color: slate
-
-  # Service groups
+config:
+  bookmarks:
+    - Developer:
+        - Github:
+            - abbr: GH
+              href: https://github.com/
   services:
-    - name: Infrastructure
-      items:
-        - name: Gitea
-          icon: gitea.png
-          href: https://gitea-web.tail495c5f.ts.net
-          description: Git Server
+    - My First Group:
+        - My First Service:
+            href: http://localhost/
+            description: Homepage is awesome
 
-        - name: AdGuard Home
-          icon: adguard.png
-          href: https://adguard-home-web.tail495c5f.ts.net
-          description: DNS Ad Blocking
+    - My Second Group:
+        - My Second Service:
+            href: http://localhost/
+            description: Homepage is the best
 
-    - name: Monitoring
-      items:
-        - name: Grafana
-          icon: grafana.png
-          href: https://grafana.tail495c5f.ts.net
-          description: Metrics & Monitoring
+    - My Third Group:
+        - My Third Service:
+            href: http://localhost/
+            description: Homepage is 😎
+  widgets:
+    # show the kubernetes widget, with the cluster summary and individual nodes
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+    - search:
+        provider: duckduckgo
+        target: _blank
+  kubernetes:
+    mode: cluster
+  settings:
 
-        - name: Prometheus
-          icon: prometheus.png
-          href: https://prometheus.tail495c5f.ts.net
-          description: Metrics Collection
+# The service account is necessary to allow discovery of other services
+serviceAccount:
+  create: true
+  name: homepage
 
-    - name: Tools
-      items:
-        - name: KubeDoom
-          icon: doom.png
-          href: http://kubedoom.kubedoom
-          description: Kill pods with Doom!
+# This enables the service account to access the necessary resources
+enableRbac: true
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      # Example annotations to add Homepage to your Homepage!
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/name: "Homepage"
+      gethomepage.dev/description: "Dynamically Detected Homepage"
+      gethomepage.dev/group: "Dynamic"
+      gethomepage.dev/icon: "homepage.png"
+    hosts:
+      - host: homepage.example.com
+        paths:
+          - path: /
+            pathType: Prefix
