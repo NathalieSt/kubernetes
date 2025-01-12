@@ -16,6 +16,8 @@ spec:
     remediation:
       retries: 3
   values:
+    image:
+      repository: ghcr.io/gethomepage/homepage
     config:
       bookmarks:
         - Developer:
