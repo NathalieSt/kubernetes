@@ -6,10 +6,27 @@ homepage_ingress = shared.TailscaleIngress {
         name: "homepage-ingress"
     }
     spec: {
-        defaultBackend: {
-            service.name = variables.service_name
-            service.port.number = 3000
-        }
+        ingressClassName = "tailscale"
+        rules = [
+            {
+                http = {
+                    paths = [
+                        {
+                            path = "/"
+                            pathType = "Prefix"
+                            backend = {
+                                service = {
+                                    name = "homepage"
+                                    port = {
+                                        number = 3000
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
         tls: [
             {
                 hosts: [

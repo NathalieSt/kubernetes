@@ -4,11 +4,16 @@ metadata:
   name: homepage-ingress
 spec:
   ingressClassName: tailscale
-  defaultBackend:
-    service:
-      name: homepage
-      port:
-        number: 3000
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: homer-service
+            port:
+              number: 80
   tls:
   - hosts:
     - homepage

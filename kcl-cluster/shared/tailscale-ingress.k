@@ -9,8 +9,19 @@ schema Metadata:
 
 schema Spec:
     ingressClassName: "tailscale" = "tailscale"
-    defaultBackend: Backend
+    rules: [Http]
     tls: [Tls]
+
+schema Http:
+    http: Paths
+
+schema Paths:
+    paths: [Path]
+
+schema Path:
+    path: str
+    pathType: "Prefix" = "Prefix"
+    backend: Backend
 
 schema Backend:
     service: Service
