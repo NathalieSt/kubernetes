@@ -8,7 +8,7 @@ homepage_ingress = shared.TailscaleIngress {
     spec: {
         defaultBackend: {
             service.name = variables.service_name
-            service.port.number = 80
+            service.port.number = 3000
         }
         tls: [
             {
