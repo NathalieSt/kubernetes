@@ -3,7 +3,7 @@ import .variables
 
 homepage_ingress = shared.TailscaleIngress {
     metadata: {
-        name: "homepage_ingress"
+        name: "homepage-ingress"
     }
     spec: {
         defaultBackend: {
