@@ -63,18 +63,18 @@ spec:
   wait: true
   timeout: 5m0s
 ---
-apiVersion: infra.contrib.fluxcd.io/v1alpha2
-kind: Terraform
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
 metadata:
   name: homepage
   namespace: flux-system
 spec:
-  interval: 1h
-  path: ./cluster/apps/homepage
+  interval: 50m0s
+  targetNamespace: homepage
   sourceRef:
     kind: GitRepository
     name: flux-system
-  approvePlan: "auto"
-  destroyResourcesOnDeletion: true
-  writeOutputsToSecret:
-    name: homepage-outputs
+  path: ./cluster/apps/homepage
+  prune: true
+  wait: true
+  timeout: 5m0s
