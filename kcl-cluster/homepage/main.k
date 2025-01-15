@@ -18,4 +18,6 @@ resources = {
     "kustomization.yaml": yaml.encode(kustomization.homepage_kustomization)
 }
 
-_ = [file.write(shared_variables.cwd + "homepage/" + k, v) for k, v in resources]
+file.mkdir(shared_variables.cwd + "/apps/homepage/")
+
+_ = [file.write(shared_variables.cwd + "/apps/homepage/" + k, v) for k, v in resources]
