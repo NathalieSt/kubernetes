@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - main.tf
   - namespace.tf
+  - .terraform.lock.hcl
