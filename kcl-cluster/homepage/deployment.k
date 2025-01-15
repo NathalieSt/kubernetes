@@ -3,7 +3,6 @@ homepage_deployment = {
     kind = "Deployment"
     metadata = {
         name = "homepage"
-        namespace = "default"
         labels = {
             "app.kubernetes.io/name" = "homepage"
         }

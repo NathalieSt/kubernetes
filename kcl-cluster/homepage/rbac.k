@@ -4,7 +4,6 @@ homepage_rbac = [
         kind = "ServiceAccount"
         metadata = {
             name = "homepage"
-            namespace = "default"
             labels = {
                 "app.kubernetes.io/name" = "homepage"
             }
@@ -21,7 +20,6 @@ homepage_rbac = [
         $type = "kubernetes.io/service-account-token"
         metadata = {
             name = "homepage"
-            namespace = "default"
             labels = {
                 "app.kubernetes.io/name" = "homepage"
             }
@@ -112,7 +110,6 @@ homepage_rbac = [
             {
                 kind = "ServiceAccount"
                 name = "homepage"
-                namespace = "default"
             }
         ]
     }

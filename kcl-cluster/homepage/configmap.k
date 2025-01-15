@@ -3,7 +3,6 @@ homepage_configmap = {
     kind = "ConfigMap"
     metadata = {
         name = "homepage"
-        namespace = "default"
         labels = {
             "app.kubernetes.io/name" = "homepage"
         }

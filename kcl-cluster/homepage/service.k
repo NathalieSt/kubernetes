@@ -5,7 +5,6 @@ homepage_service = {
     kind = "Service"
     metadata = {
         name = variables.service_name
-        namespace = "default"
         labels = {
             "app.kubernetes.io/name" = "homepage"
         }
