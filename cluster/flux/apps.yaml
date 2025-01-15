@@ -63,3 +63,18 @@ spec:
   wait: true
   timeout: 5m0s
 ---
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: homepage
+  namespace: flux-system
+spec:
+  interval: 1h
+  path: ./cluster/apps/homepage
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  approvePlan: "auto"
+  destroyResourcesOnDeletion: true
+  writeOutputsToSecret:
+    name: homepage-outputs
