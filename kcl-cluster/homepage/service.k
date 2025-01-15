@@ -21,7 +21,7 @@ homepage_service = {
             }
         ]
         selector = {
-            "app.kubernetes.io/name" = "homepages"
+            "app.kubernetes.io/name" = "homepage"
         }
     }
 }
