@@ -8,8 +8,10 @@ import .configmap
 import .rbac
 import .service
 import .kustomization
+import .namespace
 
 resources = {
+    "namespace.yaml": yaml.encode(namespace.homepage_namespace)
     "rbac.yaml": yaml.encode_all(rbac.homepage_rbac)
     "deployment.yaml": yaml.encode(deployment.homepage_deployment)
     "service.yaml": yaml.encode(service.homepage_service)
