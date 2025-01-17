@@ -1,8 +1,8 @@
 import shared
 
-forgejo_web_ingress = shared.TailscaleIngress {
+forgejo_ingress = shared.TailscaleIngress {
     metadata: {
-        name: "homepage-ingress"
+        name: "forgejo-ingress"
     }
     spec: {
         ingressClassName = "tailscale"
@@ -29,7 +29,7 @@ forgejo_web_ingress = shared.TailscaleIngress {
         tls: [
             {
                 hosts: [
-                    "homepage"
+                    "forgejo"
                 ]
             }
         ]
