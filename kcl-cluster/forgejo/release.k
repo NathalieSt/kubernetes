@@ -6,13 +6,9 @@ forgejo_release = {
     }
     spec: {
         releaseName: "forgejo"
-        chart: {
-            spec: {
-                sourceRef: {
-                    kind: "OCIRepository"
-                    name: "forgejo"
-                }
-            }
+        chartRef: {
+            kind: "OCIRepository"
+            name: "forgejo"
         }
         interval: "50m"
         install.remediation.retries: 3
