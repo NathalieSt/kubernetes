@@ -11,7 +11,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: forgejo
+            name: forgejo-http
             port:
               number: 3000
   tls:

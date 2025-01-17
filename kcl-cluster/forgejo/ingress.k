@@ -15,7 +15,7 @@ forgejo_ingress = shared.TailscaleIngress {
                             pathType = "Prefix"
                             backend = {
                                 service = {
-                                    name = "forgejo"
+                                    name = "forgejo-http"
                                     port = {
                                         number = 3000
                                     }
