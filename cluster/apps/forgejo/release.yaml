@@ -19,7 +19,7 @@ spec:
     gitea:
       config:
         server:
-          SSH_DOMAIN: forgejo-ssh.tail495c5f.ts.net
+          SSH_DOMAIN: ssh.tail495c5f.ts.net
           ENABLE_PUSH_CREATE_USER: true
     postgresql-ha:
       enabled: false

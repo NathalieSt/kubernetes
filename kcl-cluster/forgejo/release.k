@@ -15,7 +15,7 @@ forgejo_release = {
         values: {
             actions.enabled = True
             actions.provisioning.enabled = True
-            gitea.config.server.SSH_DOMAIN = "forgejo-ssh.tail495c5f.ts.net"
+            gitea.config.server.SSH_DOMAIN = "ssh.tail495c5f.ts.net"
             gitea.config.server.ENABLE_PUSH_CREATE_USER = True
             "postgresql-ha": {
                 enabled = False
