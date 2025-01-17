@@ -26,6 +26,8 @@ forgejo_release = {
                 enabled = False
             }
             postgresql.enabled = True
+            service.ssh.type = "LoadBalancer"
+            service.ssh.loadBalancerClass = "tailscale"
         }
     }
 }
