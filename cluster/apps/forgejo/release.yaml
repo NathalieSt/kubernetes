@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo
+spec:
+  releaseName: forgejo
+  chart:
+    spec:
+      chart: forgejo
+      sourceRef:
+        kind: HelmRepository
+        name: forgejo
+  interval: '50m'
+  install:
+    remediation:
+      retries: 3
+  values:
+    actions:
+      enabled: true
+      provisioning:
+        enabled: true
+    gitea:
+      config:
+        server:
+          SSH_DOMAIN: forgejo-ssh.tail495c5f.ts.net
+          ENABLE_PUSH_CREATE_USER: true
+    postgresql-ha:
+      enabled: false
+    postgresql:
+      enabled: true
+    service:
+      ssh:
+        type: LoadBalancer
+        loadBalancerClass: tailscale
