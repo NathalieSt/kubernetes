@@ -8,9 +8,8 @@ forgejo_release = {
         releaseName: "forgejo"
         chart: {
             spec: {
-                chart: "forgejo"
                 sourceRef: {
-                    kind: "HelmRepository"
+                    kind: "OCIRepository"
                     name: "forgejo"
                 }
             }
