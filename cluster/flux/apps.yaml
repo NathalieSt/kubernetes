@@ -2,22 +2,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: kubedoom
-  namespace: flux-system
-spec:
-  interval: 50m0s
-  targetNamespace: kubedoom
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/kubedoom
-  prune: true
-  wait: true
-  timeout: 5m0s
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: adguard-home
   namespace: flux-system
 spec:
