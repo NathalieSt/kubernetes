@@ -36,6 +36,8 @@ spec:
               value: "20000000"
             - name: CONDUWUIT_PORT
               value: "5890"
+            - name: CONDUWUIT_ALLOW_REGISTRATION
+              value: "true"
           securityContext:
             capabilities:
               add:
