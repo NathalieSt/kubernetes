@@ -19,10 +19,8 @@ spec:
         - name: conduwuit
           image: girlbossceo/conduwuit
           ports:
-            - containerPort: 8448
-              name: federation
-            - containerPort: 443
-              name: https
+            - containerPort: 80
+              name: conduwuit
           env:
             - name: CONDUWUIT_SERVER_NAME
               value: myserver
@@ -32,6 +30,8 @@ spec:
               value: "rocksdb"
             - name: CONDUWUIT_MAX_REQUEST_SIZE
               value: "20000000"
+            - name: CONDUWUIT_PORT
+              value: "80"
           securityContext:
             capabilities:
               add:

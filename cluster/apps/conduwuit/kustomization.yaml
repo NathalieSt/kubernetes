@@ -4,7 +4,7 @@ metadata:
   name: conduwuit
 resources:
 - deployment.yaml
-- https-service.yaml
-- https-ingress.yaml
+- service.yaml
+- ingress.yaml
 - pvc.yaml
 - namespace.yaml
