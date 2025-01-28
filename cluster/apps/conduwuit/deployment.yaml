@@ -42,6 +42,12 @@ spec:
             capabilities:
               add:
                 - NET_BIND_SERVICE
+          readinessProbe:
+            httpGet:
+              path: /_matrix/federation/v1/version
+              port: http
+            periodSeconds: 2
+            failureThreshold: 5
       volumes:
         - name: data
           persistentVolumeClaim:
