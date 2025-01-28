@@ -23,8 +23,8 @@ spec:
         - name: conduwuit
           image: girlbossceo/conduwuit
           ports:
-            - containerPort: 5890
-              name: conduwuit
+            - name: http
+              containerPort: 80
           env:
             - name: CONDUWUIT_SERVER_NAME
               value: conduwuit.tail495c5f.ts.net
@@ -35,7 +35,7 @@ spec:
             - name: CONDUWUIT_MAX_REQUEST_SIZE
               value: "20000000"
             - name: CONDUWUIT_PORT
-              value: "5890"
+              value: "80"
           securityContext:
             capabilities:
               add:

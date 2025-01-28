@@ -7,5 +7,5 @@ spec:
   selector:
     app: conduwuit
   ports:
-    - port: 5890
-      targetPort: 5890
+    - port: 80
+      targetPort: 80

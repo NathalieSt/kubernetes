@@ -13,7 +13,7 @@ spec:
           service:
             name: conduwuit-service
             port:
-              number: 5890
+              number: 80
   tls:
   - hosts:
     - conduwuit
