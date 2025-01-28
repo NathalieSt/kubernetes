@@ -4,7 +4,8 @@ metadata:
   name: conduwuit-pvc
   labels:
 spec:
-  accessModes: ReadWriteOnce
+  accessModes: 
+    - ReadWriteOnce
   resources:
     requests:
       storage: 16Gi
