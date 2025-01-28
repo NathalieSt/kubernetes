@@ -3,7 +3,7 @@ kind: Kustomization
 metadata:
   name: conduwuit
 resources:
-- repository.yaml
-- release.yaml
+- deployment.yaml
+- service.yaml
 - ingress.yaml
 - namespace.yaml

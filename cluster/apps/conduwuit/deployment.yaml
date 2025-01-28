@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: conduwuit
+  namespace: conduwuit
+spec:
+  podManagementPolicy: Parallel
+  serviceName: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conduwuit
+  template:
+    metadata:
+      labels:
+        app: conduwuit
+    spec:
+      containers:
+        - name: conduwuit
+          image: girlbossceo/conduwuit
+          ports:
+            - containerPort: 8448
+              name: federation
+            - containerPort: 443
+              name: https
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: conduwuit-pvc
