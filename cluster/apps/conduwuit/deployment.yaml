@@ -22,6 +22,10 @@ spec:
       containers:
         - name: conduwuit
           image: girlbossceo/conduwuit
+          volumeMounts:
+            - mountPath: /data
+              name: data
+              subPath: data
           ports:
             - name: http
               containerPort: 80
@@ -36,6 +40,8 @@ spec:
               value: "20000000"
             - name: CONDUWUIT_PORT
               value: "80"
+            - name: CONDUWUIT_ADDRESS
+              value: "0.0.0.0"
           securityContext:
             capabilities:
               add:
