@@ -15,6 +15,10 @@ spec:
       labels:
         app: conduwuit
     spec:
+      securityContext:
+        sysctls:
+          - name: net.ipv4.ip_unprivileged_port_start
+            value: "0"
       containers:
         - name: conduwuit
           image: girlbossceo/conduwuit
