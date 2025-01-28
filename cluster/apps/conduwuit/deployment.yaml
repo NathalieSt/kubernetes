@@ -27,3 +27,8 @@ spec:
             - name: data
               persistentVolumeClaim:
                 claimName: conduwuit-pvc
+          env:
+            - name: CONDUWUIT_SERVER_NAME
+              value: myserver
+
+
