@@ -23,7 +23,7 @@ spec:
               name: conduwuit
           env:
             - name: CONDUWUIT_SERVER_NAME
-              value: myserver
+              value: conduwuit.tail495c5f.ts.net
             - name: CONDUWUIT_DATABASE_PATH
               value: "/data/db"
             - name: CONDUWUIT_DATABASE_BACKEND
