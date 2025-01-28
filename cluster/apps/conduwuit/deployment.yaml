@@ -30,5 +30,13 @@ spec:
           env:
             - name: CONDUWUIT_SERVER_NAME
               value: myserver
-
-
+            - name: CONDUWUIT_DATABASE_PATH
+              value: "/data/db"
+            - name: CONDUWUIT_DATABASE_BACKEND
+              value: "rocksdb"
+            - name: CONDUWUIT_MAX_REQUEST_SIZE
+              value: 20000000
+          securityContext:
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
