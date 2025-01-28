@@ -6,4 +6,5 @@ resources:
 - deployment.yaml
 - https-service.yaml
 - https-ingress.yaml
+- pvc.yaml
 - namespace.yaml
