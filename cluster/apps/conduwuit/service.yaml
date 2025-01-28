@@ -7,5 +7,8 @@ spec:
   selector:
     app: conduwuit
   ports:
-    - port: 80
-      targetPort: 80
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http
+
