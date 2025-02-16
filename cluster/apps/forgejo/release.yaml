@@ -13,9 +13,9 @@ spec:
       retries: 3
   values:
     actions:
-          enabled: true
-          provisioning:
-            enabled: true
+      enabled: true
+      provisioning:
+        enabled: true
     gitea:
       config:
         server:
