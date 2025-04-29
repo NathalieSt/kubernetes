@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: renovate
-      version: "~36.0.0"  # Replace with desired version constraint
+      version: "39.263.1"
       sourceRef:
         kind: HelmRepository
         name: renovate
