@@ -21,6 +21,7 @@ spec:
             "autodiscover": "false",
             "dryRun": true,
             "printConfig": true,
+            "token": "$RENOVATE_TOKEN"
             "repositories": ["NathalieStiefsohn/kubernetes"]
           }
     existingSecret: renovate-secrets
