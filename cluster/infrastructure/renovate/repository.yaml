@@ -5,4 +5,4 @@ metadata:
   namespace: renovate
 spec:
   interval: 10m  # Check for updates every 10 minutes
-  url: https://renovatebot.github.io/helm-charts
+  url: https://docs.renovatebot.com/helm-charts
