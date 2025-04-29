@@ -14,9 +14,15 @@ spec:
         name: renovate
   values:
     renovate:
-      existingConfigFile: /usr/src/app/config.js  # Path in Renovate's container
-    config:
-      configMap: renovate-config  # Name of the ConfigMap
-      key: config.js  # Must match the key in ConfigMap
+      config: |
+          {
+            "platform": "gitea",
+            "endpoint": "https://codeberg.org",
+            "autodiscover": "false",
+            "dryRun": true,
+            "printConfig": true,
+            "repositories": ["NathalieStiefsohn/kubernetes"]
+          }
+      existingSecret: renovate-secrets
     cronjob:
       schedule: "0 * * * *"  # Runs at the start of every hour
