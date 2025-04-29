@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: renovate
+  namespace: renovate
+spec:
+  interval: 5m  # Reconciliation interval
+  chart:
+    spec:
+      chart: renovate
+      version: "~36.0.0"  # Replace with desired version constraint
+      sourceRef:
+        kind: HelmRepository
+        name: renovate
+        namespace: flux-system
+  values:
+    renovate:
+      platform: gitea  # Codeberg is Gitea-based
+      endpoint: https://codeberg.org  # Codeberg's URL
+      username: NathalieStiefsohn  # Optional (if using token)
+      gitAuthor: "Renovate Bot"
+      repositories:
+        - "NathalieStiefsohn/kubernetes"  # Codeberg repo path (e.g., "david/example")
