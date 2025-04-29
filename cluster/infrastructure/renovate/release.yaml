@@ -19,5 +19,6 @@ spec:
       endpoint: https://codeberg.org  # Codeberg's URL
       username: NathalieStiefsohn  # Optional (if using token)
       gitAuthor: "Renovate Bot"
+      existingSecret: renovate-secrets
       repositories:
         - "NathalieStiefsohn/kubernetes"  # Codeberg repo path (e.g., "david/example")
