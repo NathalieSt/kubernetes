@@ -14,7 +14,7 @@ spec:
         name: renovate
   values:
     renovate:
-      platform: gitea  # Codeberg is Gitea-based
+      platform: gitea  # Codeberg is based
       endpoint: https://codeberg.org  # Codeberg's URL
       username: NathalieStiefsohn  # Optional (if using token)
       gitAuthor: "Renovate Bot"
