@@ -18,3 +18,5 @@ spec:
     config:
       configMap: renovate-config  # Name of the ConfigMap
       key: config.js  # Must match the key in ConfigMap
+    cronjob:
+      schedule: "0 * * * *"  # Runs at the start of every hour
