@@ -14,10 +14,7 @@ spec:
         name: renovate
   values:
     renovate:
-      platform: gitea  # Codeberg is based
-      endpoint: https://codeberg.org  # Codeberg's URL
-      username: NathalieStiefsohn  # Optional (if using token)
-      gitAuthor: "Renovate Bot"
-      existingSecret: renovate-secrets
-      repositories:
-        - "NathalieStiefsohn/kubernetes"  # Codeberg repo path (e.g., "david/example")
+      existingConfigFile: /usr/src/app/config.js  # Path in Renovate's container
+    config:
+      configMap: renovate-config  # Name of the ConfigMap
+      key: config.js  # Must match the key in ConfigMap
