@@ -23,6 +23,6 @@ spec:
             "printConfig": true,
             "repositories": ["NathalieStiefsohn/kubernetes"]
           }
-      existingSecret: renovate-secrets
+    existingSecret: renovate-secrets
     cronjob:
       schedule: "0 * * * *"  # Runs at the start of every hour
