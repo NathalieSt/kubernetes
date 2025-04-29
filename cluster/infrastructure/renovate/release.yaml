@@ -12,7 +12,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: renovate
-        namespace: flux-system
   values:
     renovate:
       platform: gitea  # Codeberg is Gitea-based
