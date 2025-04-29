@@ -4,6 +4,6 @@ metadata:
   name: forgejo
 spec:
   interval: '50m0s'
-  url: oci://code.forgejo.org/forgejo-helm/forgejo
+  url: oci://code.forgejo.org/forgejo-helm/forgejo # {"$imagepolicy": "flux-system:forgejo:name"}
   ref:
-    semver: '11.0.1'
+    semver: '11.0.1' # {"$imagepolicy": "flux-system:forgejo:tag"}
