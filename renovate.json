@@ -1,14 +1,15 @@
 {
   "extends": ["config:base"],
-  "packageRules": [
-    {
-      "matchManagers": ["helmfile", "kustomize", "flux"],
-      "enabled": true
-    },
-    {
-      "matchManagers": ["regex"],
-      "fileMatch": ["\\.yaml$", "\\.yml$"],
-      "enabled": true
-    }
-  ]
+  "enabledManagers": ["kubernetes", "flux"],
+  "kubernetes": {
+    "managerFilePatterns": ["/^deployment/.*\\.yaml$/"]
+  },
+  "flux": {
+    "managerFilePatterns": [
+        "/^release/.*\\.yaml$/",
+        "/^repository/.*\\.yaml$/"
+    ]
+  }
+
+
 }
