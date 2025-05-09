@@ -3,21 +3,21 @@
   "extends": ["config:base"],
   "packageRules": [
     {
-      "matchFiles": ["**/release.yaml"],
+      "matchFileNames": ["helm-release.yaml", "release.yaml"],
       "dependencyDashboardApproval": true
     },
     {
-      "matchFiles": ["**/deployment.yaml"],
+      "matchFileNames": ["deployment.yaml"],
       "dependencyDashboardApproval": true
     },
     {
-      "matchPaths": ["**/flux-system/**"],
+      "matchPaths": ["flux-system/"],
       "enabled": false
     }
   ],
   "regexManagers": [
     {
-      "fileMatch": ["**/release.yaml"],
+      "fileMatch": ["(^|/)helm-release\\.yaml$", "(^|/)release\\.yaml$"],
       "matchStrings": [
         "chart:\\s*?ref:\\s*?(?<depName>.*?)\\s*?version:\\s*?\"?(?<currentValue>.*?)\"?"
       ],
@@ -25,7 +25,7 @@
     }
   ],
   "kubernetes": {
-    "fileMatch": ["**/deployment.yaml"]
+    "fileMatch": ["(^|/)deployment\\.yaml$"]
   },
   "automerge": false,
   "platformAutomerge": false
