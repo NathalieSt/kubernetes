@@ -1,15 +1,8 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": [
+    "config:base"
+  ],
   "packageRules": [
-    {
-      "matchFileNames": ["helm-release.yaml", "release.yaml"],
-      "dependencyDashboardApproval": true
-    },
-    {
-      "matchFileNames": ["deployment.yaml"],
-      "dependencyDashboardApproval": true
-    },
     {
       "matchPaths": ["flux-system/"],
       "enabled": false
@@ -17,16 +10,25 @@
   ],
   "regexManagers": [
     {
-      "fileMatch": ["(^|/)helm-release\\.yaml$", "(^|/)release\\.yaml$"],
-      "matchStrings": [
-        "chart:\\s*?ref:\\s*?(?<depName>.*?)\\s*?version:\\s*?\"?(?<currentValue>.*?)\"?"
+      "description": "Update Helm chart versions in HelmRelease files",
+      "fileMatch": [
+        "^cluster/.*(release|repository)\\.yaml$"
       ],
-      "datasourceTemplate": "helm"
+      "matchStrings": [
+        "version:\\s*[\"'](?<currentValue>[^\"']+)[\"']"
+      ],
+      "datasourceTemplate": "helm",
+      "depNameTemplate": "Flux Helm chart"
+    },
+    {
+      "description": "Update Docker image tags in Kubernetes manifests",
+      "fileMatch": [
+        "^cluster/.*\\.yaml$"
+      ],
+      "matchStrings": [
+        "image:\\s*(?<depName>[^:\\s]+)(?::(?<currentValue>[^\\s]+))?"
+      ],
+      "datasourceTemplate": "docker"
     }
-  ],
-  "kubernetes": {
-    "fileMatch": ["(^|/)deployment\\.yaml$"]
-  },
-  "automerge": false,
-  "platformAutomerge": false
+  ]
 }
