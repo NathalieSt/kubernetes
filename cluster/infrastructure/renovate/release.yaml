@@ -19,7 +19,7 @@ spec:
             "platform": "gitea",
             "endpoint": "https://codeberg.org",
             "autodiscover": false,
-            "dryRun": true,
+            "dryRun": false,
             "printConfig": true,
             "token": "$RENOVATE_TOKEN",
             "repositories": ["NathalieStiefsohn/kubernetes"]
