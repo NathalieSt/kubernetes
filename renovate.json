@@ -10,15 +10,26 @@
   ],
   "regexManagers": [
     {
-      "description": "Update Helm chart versions in HelmRelease files",
+      "description": "Update nfs-subdir-external-provisioner chart in HelmRelease files",
       "fileMatch": [
-        "^cluster/.*(release|repository)\\.yaml$"
+        "^cluster/infrastructure/nfs-subdir-external-provisioner/.*release\\.yaml$"
       ],
       "matchStrings": [
-        "version:\\s*[\"'](?<currentValue>[^\"']+)[\"']"
+        "chart:\\s*nfs-subdir-external-provisioner\\s+version:\\s*[\"'](?<currentValue>[^\"']+)[\"']"
       ],
       "datasourceTemplate": "helm",
-      "depNameTemplate": "Flux Helm chart"
+      "depNameTemplate": "nfs-subdir-external-provisioner"
+    },
+    {
+      "description": "Update jellyfin chart in HelmRelease files",
+      "fileMatch": [
+        "^cluster/apps/jellyfin/.*release\\.yaml$"
+      ],
+      "matchStrings": [
+        "chart:\\s*jellyfin\\s+version:\\s*[\"'](?<currentValue>[^\"']+)[\"']"
+      ],
+      "datasourceTemplate": "helm",
+      "depNameTemplate": "jellyfin"
     },
     {
       "description": "Update Docker image tags in Kubernetes manifests",
