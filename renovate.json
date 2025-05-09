@@ -18,7 +18,7 @@
         "chart:\\s*nfs-subdir-external-provisioner\\s+version:\\s*[\"'](?<currentValue>[^\"']+)[\"']"
       ],
       "datasourceTemplate": "helm",
-      "depNameTemplate": "nfs-subdir-external-provisioner"
+      "depNameTemplate": "nfs-subdir-external-provisioner/nfs-subdir-external-provisioner"
     },
     {
       "description": "Update jellyfin chart in HelmRelease files",
@@ -29,7 +29,7 @@
         "chart:\\s*jellyfin\\s+version:\\s*[\"'](?<currentValue>[^\"']+)[\"']"
       ],
       "datasourceTemplate": "helm",
-      "depNameTemplate": "jellyfin"
+      "depNameTemplate": "jellyfin/jellyfin"
     },
     {
       "description": "Update Docker image tags in Kubernetes manifests",
