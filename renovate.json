@@ -3,8 +3,11 @@
   "extends": ["config:base"],
   "packageRules": [
     {
-      "matchFiles": ["**/*helm-release.yaml"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchFiles": ["**/release.yaml"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchFiles": ["**/deployment.yaml"],
       "dependencyDashboardApproval": true
     },
     {
@@ -14,13 +17,16 @@
   ],
   "regexManagers": [
     {
-      "fileMatch": ["**/*helm-release.yaml"],
+      "fileMatch": ["**/*release.yaml"],
       "matchStrings": [
         "chart:\\s*?ref:\\s*?(?<depName>.*?)\\s*?version:\\s*?\"?(?<currentValue>.*?)\"?"
       ],
       "datasourceTemplate": "helm"
     }
   ],
+  "kubernetes": {
+    "fileMatch": ["**/deployment.yaml"]
+  },
   "automerge": false,
   "platformAutomerge": false
 }
