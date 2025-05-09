@@ -1,45 +1,26 @@
 {
-    "extends": [
-      "config:base"
-    ],
-    "gitAuthor": "Development Bot <dev-bot@my-software-company.com>",
-    "regexManagers": [
-      {
-        "fileMatch": [".*\\.yaml$", ".*\\.yml$"], 
-        "matchStrings": [
-          "image:\\s*(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)", 
-          "chart:\\s*(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)", 
-          "git:\\s*(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)"
-        ],
-        "datasourceTemplate": "docker" 
-      },
-      {
-        "fileMatch": ["Dockerfile"],
-        "matchStrings": [
-          "FROM\\s+(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)"
-        ],
-        "datasourceTemplate": "docker"
-      }
-    ],
-    "packageRules": [
-      {
-        "matchDatasources": ["docker"],
-        "groupName": "Docker Images",
-        "enabled": true
-      },
-      {
-        "matchDatasources": ["helm"],
-        "groupName": "Helm Charts",
-        "enabled": true
-      },
-      {
-        "matchDatasources": ["git"],
-        "groupName": "Git Repositories",
-        "enabled": true
-      }
-    ],
-    "kubernetes": {
-      "fileMatch": [".*\\.yaml$", ".*\\.yml$"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "matchFiles": ["**/*helm-release.yaml"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchPaths": ["**/flux-system/**"],
+      "enabled": false
     }
-  }
-  
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["**/*helm-release.yaml"],
+      "matchStrings": [
+        "chart:\\s*?ref:\\s*?(?<depName>.*?)\\s*?version:\\s*?\"?(?<currentValue>.*?)\"?"
+      ],
+      "datasourceTemplate": "helm"
+    }
+  ],
+  "automerge": false,
+  "platformAutomerge": false
+}
