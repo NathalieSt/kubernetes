@@ -1,9 +1,9 @@
 {
   "extends": ["config:base"],
   "kubernetes": {
-    "managerFilePatterns": ["/^deployment/.*\\.yaml$/"]
+    "fileMatch": [".*deployment.*\\.yaml$"]
   },
   "flux": {
-    "managerFilePatterns": ["/^release/.*\\.yaml$/"]
-  } 
+    "fileMatch": [".*release.*\\.yaml$"]
+  }
 }
