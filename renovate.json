@@ -1,0 +1,15 @@
+{
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "matchManagers": ["helm-values", "kustomize"],
+      "enabled": true
+    }
+  ],
+  "helmValues": {
+    "fileMatch": ["\\.yaml$", "\\.yml$"]
+  },
+  "kustomize": {
+    "fileMatch": ["kustomization\\.yaml$"]
+  }
+}
