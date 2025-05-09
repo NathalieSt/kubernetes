@@ -1,0 +1,20 @@
+{
+"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+"extends": [
+    "config:base"
+],
+"packageRules": [
+    {
+        "description": "Group Flux HelmRelease updates",
+        "matchManagers": ["flux"],
+        "matchFilePaths": ["cluster/**/release.yaml"],
+        "groupName": "flux-helm-releases"
+    },
+    {
+        "description": "Group standard Kubernetes Deployment/DaemonSet image updates",
+        "matchManagers": ["kubernetes"],
+        "matchFilePaths": ["cluster/**/deployment.yaml", "**/daemonset.yaml"],
+        "groupName": "kubernetes-app-images"
+    }
+]
+}
