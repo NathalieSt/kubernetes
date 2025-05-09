@@ -2,7 +2,7 @@
   "extends": ["config:base"],
   "packageRules": [
     {
-      "matchManagers": ["helmfile", "kustomize"],
+      "matchManagers": ["helmfile", "kustomize", "flux"],
       "enabled": true
     },
     {
