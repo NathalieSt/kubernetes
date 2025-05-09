@@ -8,12 +8,14 @@
         {
             "description": "Group Flux HelmRelease updates",
             "matchManagers": ["flux"],
-            "groupName": "flux-helm-releases"
+            "groupName": "flux-helm-releases",
+            "matchFileNames": ["**/release.yaml"]
         },
         {
             "description": "Group standard Kubernetes Deployment/DaemonSet image updates",
             "matchManagers": ["kubernetes"],
-            "groupName": "kubernetes-app-images"
+            "groupName": "kubernetes-app-images",
+            "matchFileNames": ["**/deployment.yaml", "**/daemonset.yaml"]
         }
     ]
 }
