@@ -1,15 +1,4 @@
 {
   "extends": ["config:base"],
-  "enabledManagers": ["kubernetes", "flux"],
-  "kubernetes": {
-    "managerFilePatterns": ["/^deployment/.*\\.yaml$/"]
-  },
-  "flux": {
-    "managerFilePatterns": [
-        "/^release/.*\\.yaml$/",
-        "/^repository/.*\\.yaml$/"
-    ]
-  }
-
-
+  "enabledManagers": ["kubernetes", "flux"]
 }
