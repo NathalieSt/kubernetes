@@ -1,17 +1,26 @@
 {
-  "extends": ["config:base"],
-  "helm": {
-    "fileMatch": ["\\.yaml$", "\\.yml$"],
-    "enabled": true,
-    "extractVersion": "^version:\\s*\"?(?<version>[0-9a-zA-Z\\.\\-]+)\"?$"
-  },
-  "packageRules": [
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "regexManagers": [
     {
-      "matchManagers": ["helm"],
-      "matchDatasources": ["helm"],
-      "enabled": true,
-      "groupName": "Helm Chart Updates"
+      "fileMatch": [
+        ".*\\.yaml$"
+      ],
+      "matchStrings": [
+        "chart:\\s+(?<depName>[\\w-]+)[\\s\\S]*?version:\\s+\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver",
+      "depNameTemplate": "{{depName}}"
+    },
+    {
+      "fileMatch": [
+        ".*\\.yaml$"
+      ],
+      "matchStrings": [
+        "image:\\s+(?<depName>[^\\s:]+):(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "semver"
     }
-  ],
-  "postUpdateOptions": ["helm-values"]
+  ]
 }
