@@ -1,21 +1,44 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:base"
+      "config:base"
     ],
-    "enabledManagers": ["flux", "kubernetes"],
+    "regexManagers": [
+      {
+        "fileMatch": [".*\\.yaml$", ".*\\.yml$"], 
+        "matchStrings": [
+          "image:\\s*(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)", 
+          "chart:\\s*(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)", 
+          "git:\\s*(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)"
+        ],
+        "datasourceTemplate": "docker" 
+      },
+      {
+        "fileMatch": ["Dockerfile"],
+        "matchStrings": [
+          "FROM\\s+(?<depName>[\\w\\-/]+):(?<currentValue>[\\d\\.\\w\\-]+)"
+        ],
+        "datasourceTemplate": "docker"
+      }
+    ],
     "packageRules": [
-        {
-            "description": "Group Flux HelmRelease updates",
-            "matchManagers": ["flux"],
-            "groupName": "flux-helm-releases",
-            "matchFileNames": ["**/release.yaml"]
-        },
-        {
-            "description": "Group standard Kubernetes Deployment/DaemonSet image updates",
-            "matchManagers": ["kubernetes"],
-            "groupName": "kubernetes-app-images",
-            "matchFileNames": ["**/deployment.yaml", "**/daemonset.yaml"]
-        }
-    ]
-}
+      {
+        "matchDatasources": ["docker"],
+        "groupName": "Docker Images",
+        "enabled": true
+      },
+      {
+        "matchDatasources": ["helm"],
+        "groupName": "Helm Charts",
+        "enabled": true
+      },
+      {
+        "matchDatasources": ["git"],
+        "groupName": "Git Repositories",
+        "enabled": true
+      }
+    ],
+    "kubernetes": {
+      "fileMatch": [".*\\.yaml$", ".*\\.yml$"]
+    }
+  }
+  
