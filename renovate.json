@@ -1,13 +1,17 @@
 {
   "extends": ["config:base"],
-  "kubernetes": {
-    "fileMatch": [".*deployment.*\\.yaml$"]
+  "helm": {
+    "fileMatch": ["\\.yaml$", "\\.yml$"],
+    "enabled": true,
+    "extractVersion": "^version:\\s*\"?(?<version>[0-9a-zA-Z\\.\\-]+)\"?$"
   },
-  "flux": {
-    "fileMatch": [".*release.*\\.yaml$"],
-    "helmRelease": {
+  "packageRules": [
+    {
+      "matchManagers": ["helm"],
+      "matchDatasources": ["helm"],
       "enabled": true,
-      "versioning": "semver"
+      "groupName": "Helm Chart Updates"
     }
-  }
+  ],
+  "postUpdateOptions": ["helm-values"]
 }
