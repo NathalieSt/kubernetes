@@ -4,6 +4,10 @@
     "fileMatch": [".*deployment.*\\.yaml$"]
   },
   "flux": {
-    "fileMatch": [".*release.*\\.yaml$"]
+    "fileMatch": [".*release.*\\.yaml$"],
+    "helmRelease": {
+      "enabled": true,
+      "versioning": "semver"
+    }
   }
 }
