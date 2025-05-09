@@ -2,14 +2,13 @@
   "extends": ["config:base"],
   "packageRules": [
     {
-      "matchManagers": ["helm-values", "kustomize"],
+      "matchManagers": ["helmfile", "kustomize"],
+      "enabled": true
+    },
+    {
+      "matchManagers": ["regex"],
+      "fileMatch": ["\\.yaml$", "\\.yml$"],
       "enabled": true
     }
-  ],
-  "helmValues": {
-    "fileMatch": ["\\.yaml$", "\\.yml$"]
-  },
-  "kustomize": {
-    "fileMatch": ["kustomization\\.yaml$"]
-  }
+  ]
 }
