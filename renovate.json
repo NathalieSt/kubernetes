@@ -17,7 +17,7 @@
   ],
   "regexManagers": [
     {
-      "fileMatch": ["**/*release.yaml"],
+      "fileMatch": ["**/release.yaml"],
       "matchStrings": [
         "chart:\\s*?ref:\\s*?(?<depName>.*?)\\s*?version:\\s*?\"?(?<currentValue>.*?)\"?"
       ],
