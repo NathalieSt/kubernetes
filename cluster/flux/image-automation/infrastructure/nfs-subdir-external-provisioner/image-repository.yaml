@@ -4,5 +4,5 @@ metadata:
   name: nfs-subdir-external-provisioner-image-repository
   namespace: flux-system
 spec:
-  image: nfs-subdir-external-provisioner/nfs-subdir-external-provisioner
+  image: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner
   interval: 5m
