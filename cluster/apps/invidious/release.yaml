@@ -1,0 +1,31 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: invidious
+spec:
+  releaseName: invidious
+  timeout: 15m
+  chart:
+    spec:
+      chart: invidious
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: invidious
+      interval: "5m"
+  interval: "50m"
+  install:
+    remediation:
+      retries: 3
+  values:
+    image:
+      repository: quay.io/invidious/invidious
+      tag: "v2.20250504.0" # {"$imagepolicy": "flux-system:invidious-image-policy:tag"}
+    postgresql:
+      readReplicas:
+        persistence:
+          storageClass: nfs-client
+      primary:
+        persistence:
+          storageClass: nfs-client
+    
