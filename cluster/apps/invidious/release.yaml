@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: quay.io/invidious/invidious
-      tag: "v2.20250504.0" # {"$imagepolicy": "flux-system:invidious-image-policy:tag"}
+      tag: "2.20250504.0" # {"$imagepolicy": "flux-system:invidious-image-policy:tag"}
     postgresql:
       readReplicas:
         persistence:
