@@ -39,4 +39,10 @@ spec:
       backend:
         enabled: false
       ytproxy:
-        enabled: false
+        enabled: true
+        ingressClassName: nginx
+        primary: false
+        hosts:
+          - host: https://pipedproxy.tail495c5f.ts.net
+            paths:
+              - path: "/"
