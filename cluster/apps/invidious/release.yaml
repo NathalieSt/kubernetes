@@ -30,3 +30,4 @@ spec:
           storageClass: nfs-client
     config:
       hmac_key: KgPz*x$eF^5arJH7y6Sct!n7jE%CE1BbajyX5NVb@H%67Wz1K5NGpxwJ^xv03Yx!
+      admins: ["Nathi"]
