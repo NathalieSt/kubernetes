@@ -4,6 +4,7 @@ metadata:
   name: jellyfin
 spec:
   releaseName: jellyfin
+  timeout: 15m
   chart:
     spec:
       chart: jellyfin
