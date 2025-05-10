@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: invidious
+  name: piped
 spec:
   interval: '50m0s'
-  url: https://charts-helm.invidious.io
+  url: https://helm.piped.video/
