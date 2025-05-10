@@ -19,7 +19,7 @@ spec:
       retries: 3
   values:
     image:
-      repository: jellyfin/jellyfin
+      repository: docker.io/jellyfin/jellyfin
       tag: "10.10.7" # {"$imagepolicy": "flux-system:jellyfin-image-policy:tag"} 
     persistence:
       media:
