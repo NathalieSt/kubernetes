@@ -25,3 +25,9 @@ spec:
       primary:
         persistence:
           storageClass: nfs-client
+    frontend:
+      env:
+        BACKEND_HOSTNAME: pipedbackend.tail495c5f.ts.net
+    backend:
+      config:
+        FRONTEND_URL: https://pipedfrontend.tail495c5f.ts.net

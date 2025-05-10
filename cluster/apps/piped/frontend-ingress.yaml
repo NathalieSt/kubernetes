@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: piped-proxy-ingress
+spec:
+  ingressClassName: tailscale
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: piped-frontend
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - pipedfrontend
