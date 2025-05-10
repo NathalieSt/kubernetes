@@ -1,0 +1,11 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: nfs-subdir-external-provisioner-image-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: nfs-subdir-external-provisioner-image-repository
+  policy:
+    semver:
+      range: x.x.x

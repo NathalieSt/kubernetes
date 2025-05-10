@@ -17,6 +17,9 @@ spec:
     remediation:
       retries: 3
   values:
+    image:
+      repository: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner
+      tag: v4.0.2 # {"$imagepolicy": "flux-system:nfs-subdir-external-provisioner-image-policy:tag"}
     nfs:
       server: raspberry-pi-4-storage
       path: "/mnt/external_ssd"
