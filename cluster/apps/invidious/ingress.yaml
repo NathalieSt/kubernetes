@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jellyfin-ingress
+  name: invidious-ingress
 spec:
   ingressClassName: tailscale
   rules:
@@ -11,9 +11,9 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: jellyfin
+            name: invidious
             port:
               number: 8096
   tls:
   - hosts:
-    - jellyfin
+    - invidious
