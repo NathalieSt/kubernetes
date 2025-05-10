@@ -4,7 +4,6 @@ metadata:
   name: invidious
 resources:
 - namespace.yaml
-- pvc.yaml
 - repository.yaml
 - release.yaml
 - ingress.yaml
