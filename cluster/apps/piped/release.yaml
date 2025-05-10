@@ -7,7 +7,7 @@ spec:
   timeout: 15m
   chart:
     spec:
-      chart: TeamPiped
+      chart: piped
       version: "*"
       sourceRef:
         kind: HelmRepository
