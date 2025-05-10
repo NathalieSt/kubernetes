@@ -11,9 +11,9 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: piped
+            name: piped-frontend
             port:
-              number: 3000
+              number: 80
   tls:
   - hosts:
     - piped
