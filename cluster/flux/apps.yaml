@@ -5,7 +5,7 @@ metadata:
   name: adguard-home
   namespace: flux-system
 spec:
-  interval: 50m0s
+  interval: 24h
   targetNamespace: adguard-home
   sourceRef:
     kind: GitRepository
@@ -21,7 +21,7 @@ metadata:
   name: homepage
   namespace: flux-system
 spec:
-  interval: 50m0s
+  interval: 24h
   targetNamespace: homepage
   sourceRef:
     kind: GitRepository
@@ -37,7 +37,7 @@ metadata:
   name: jellyfin
   namespace: flux-system
 spec:
-  interval: 50m0s
+  interval: 24h
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
@@ -53,7 +53,7 @@ metadata:
   name: piped
   namespace: flux-system
 spec:
-  interval: 50m0s
+  interval: 24h
   targetNamespace: piped
   sourceRef:
     kind: GitRepository

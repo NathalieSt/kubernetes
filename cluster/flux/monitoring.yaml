@@ -9,7 +9,7 @@ metadata:
   name: prometheus
   namespace: flux-system
 spec:
-  interval: 50m0s
+  interval: 24h
   targetNamespace: monitoring
   sourceRef:
     kind: GitRepository
@@ -25,7 +25,7 @@ metadata:
   name: node-exporter
   namespace: flux-system
 spec:
-  interval: 50m0s
+  interval: 24h
   targetNamespace: monitoring
   sourceRef:
     kind: GitRepository
@@ -41,7 +41,7 @@ metadata:
   name: grafana
   namespace: flux-system
 spec:
-  interval: 50m0s
+  interval: 24h
   targetNamespace: monitoring
   sourceRef:
     kind: GitRepository
