@@ -16,4 +16,4 @@ spec:
               number: 80
   tls:
   - hosts:
-    - pipedfrontend
+    - piped

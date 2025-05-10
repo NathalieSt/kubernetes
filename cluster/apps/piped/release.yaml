@@ -33,3 +33,4 @@ spec:
         FRONTEND_URL: https://pipedfrontend.tail495c5f.ts.net
         PROXY_PART: https://piped.tail495c5f.ts.net
         API_URL: https://pipedbackend.tail495c5f.ts.net
+        IMAGE_PROXY_PART: https://pipedproxy.tail495c5f.ts.net
