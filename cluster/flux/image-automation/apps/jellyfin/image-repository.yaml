@@ -1,0 +1,8 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: jellyfin-image-repository
+  namespace: flux-system
+spec:
+  image: jellyfin/jellyfin
+  interval: 5m

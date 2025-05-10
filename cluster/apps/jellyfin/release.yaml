@@ -17,6 +17,9 @@ spec:
     remediation:
       retries: 3
   values:
+    image:
+      repository: jellyfin/jellyfin
+      tag: "2025042805"
     persistence:
       media:
         existingClaim: jellyfin-library-storage-pvc
