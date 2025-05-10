@@ -38,6 +38,7 @@ spec:
         enabled: false
       backend:
         enabled: false
+      # helm chart calculated proxy hostname from this, it actually should use PROXY_PART
       ytproxy:
         enabled: true
         ingressClassName: nginx
