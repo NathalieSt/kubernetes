@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: docker.io/jellyfin/jellyfin
-      tag: "10.10.6" # {"$imagepolicy": "flux-system:jellyfin-image-policy:tag"} 
+      tag: "10.10.7" # {"$imagepolicy": "flux-system:jellyfin-image-policy:tag"} 
     persistence:
       media:
         existingClaim: jellyfin-library-storage-pvc
