@@ -45,4 +45,4 @@ spec:
   path: ./cluster/apps/jellyfin
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: 15m0s
