@@ -6,7 +6,7 @@ spec:
   releaseName: netbird
   chart:
     spec:
-      chart: netbird
+      chart: netbird-operator
       version: "*"
       sourceRef:
         kind: HelmRepository
