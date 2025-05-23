@@ -4,11 +4,7 @@ metadata:
   name: homepage
   labels:
     app.kubernetes.io/name: homepage
-  annotations:
-    netbird.io/expose: "true"
-    netbird.io/policy: default
-    netbird.io/resource-name: homepage
-    netbird.io/groups: k8s-apps
+  annotations: null
 spec:
   type: ClusterIP
   ports:
