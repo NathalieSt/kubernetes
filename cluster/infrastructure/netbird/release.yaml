@@ -17,6 +17,7 @@ spec:
     remediation:
       retries: 3
   values:
+    managementURL: "https://netbird.nathalie-stiefsohn.eu"
     ingress:
       enabled: true
       router:
