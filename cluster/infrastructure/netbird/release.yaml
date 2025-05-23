@@ -22,5 +22,6 @@ spec:
       router:
         enabled: true
     netbirdAPI:
-      name: "netbird-mgmt-api-key"
-      key: "NB_API_KEY"
+      keyFromSecret:
+        name: "netbird-mgmt-api-key"
+        key: "NB_API_KEY"
