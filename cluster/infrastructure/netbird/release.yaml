@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: netbird
+spec:
+  releaseName: netbird
+  chart:
+    spec:
+      chart: netbird
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: netbird
+      interval: "24h"
+  interval: "24h"
+  install:
+    remediation:
+      retries: 3
+  values:
+    netbirdAPI:
+      keyFromSecret:
+        name: netbird-secret
+        key: NB_API_KEY
