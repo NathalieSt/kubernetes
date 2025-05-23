@@ -23,5 +23,7 @@ spec:
         key: NB_API_KEY
     ingress:
       enabled: true
+      router:
+        enabled: true
     cluster:
       name: kubernetes
