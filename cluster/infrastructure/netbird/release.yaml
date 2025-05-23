@@ -21,3 +21,7 @@ spec:
       keyFromSecret:
         name: netbird-secret
         key: NB_API_KEY
+    ingress:
+      enabled: true
+    cluster:
+      name: kubernetes
