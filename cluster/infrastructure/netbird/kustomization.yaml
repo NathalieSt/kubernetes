@@ -6,4 +6,3 @@ resources:
 - namespace.yaml
 - release.yaml
 - repository.yaml
-- setupKey.yaml
