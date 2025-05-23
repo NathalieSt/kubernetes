@@ -6,7 +6,7 @@ spec:
   releaseName: netbird
   chart:
     spec:
-      chart: netbird-operator
+      chart: kubernetes-operator
       version: "*"
       sourceRef:
         kind: HelmRepository
