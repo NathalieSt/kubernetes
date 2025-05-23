@@ -17,13 +17,10 @@ spec:
     remediation:
       retries: 3
   values:
-    netbirdAPI:
-      keyFromSecret:
-        name: netbird-secret
-        key: NB_API_KEY
     ingress:
       enabled: true
       router:
         enabled: true
-    cluster:
-      name: kubernetes
+    netbirdAPI:
+      name: "netbird-mgmt-api-key"
+      key: "NB_API_KEY"
