@@ -7,4 +7,3 @@ resources:
   - rbac.yaml
   - config.yaml
   - service.yaml
-  - ingress.yaml

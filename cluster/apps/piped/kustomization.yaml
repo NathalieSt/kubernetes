@@ -6,6 +6,3 @@ resources:
 - namespace.yaml
 - repository.yaml
 - release.yaml
-- backend-ingress.yaml
-- frontend-ingress.yaml
-- proxy-ingress.yaml

@@ -8,6 +8,4 @@ resources:
   - pvcs.yaml
   - dns-service.yaml
   - install-service.yaml
-  - install-ingress.yaml
   - web-service.yaml
-  - web-ingress.yaml
