@@ -26,7 +26,6 @@ spec:
         existingClaim: jellyfin-library-storage-pvc
     service:
       annotations:
-        annotations:
-          netbird.io/expose: "true"
-          netbird.io/resource-name: jellyfin
-          netbird.io/groups: k3s-apps
+        netbird.io/expose: "true"
+        netbird.io/resource-name: jellyfin
+        netbird.io/groups: k3s-apps
