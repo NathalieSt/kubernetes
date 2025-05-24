@@ -1,4 +1,4 @@
-# Kubernetes
+# Kubernetees
 ## Delete terminating namespace
 ```sh
 kubectl get namespace "netbird" -o json \
