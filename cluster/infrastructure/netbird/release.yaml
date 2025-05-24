@@ -18,9 +18,6 @@ spec:
       retries: 3
   values:
     managementURL: "https://netbird.nathalie-stiefsohn.eu"
-    cluster:
-      dns: svc.default.local
-      name: default
     ingress:
       enabled: true
       router:
