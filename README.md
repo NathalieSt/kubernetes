@@ -9,3 +9,12 @@ kubectl get namespace "netbird" -o json \
 ```sh
 kubectl patch crd nbgroups.netbird.io -p '{"metadata":{"finalizers":[]}}' --type=merge
 ```
+
+```sh
+flux bootstrap git \
+  --components-extra=image-reflector-controller,image-automation-controller \
+  --url=ssh://git@codeberg.org/NathalieStiefsohn/kubernetes.git \
+  --branch=main \
+  --private-key-file=./id_ed25519 \
+  --path=cluster/flux
+```
