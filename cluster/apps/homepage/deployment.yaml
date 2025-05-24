@@ -14,6 +14,8 @@ spec:
       app.kubernetes.io/name: homepage
   template:
     metadata:
+      annotations:
+        netbird.io/setup-key: netbird-setupkey
       labels:
         app.kubernetes.io/name: homepage
     spec:
