@@ -7,9 +7,9 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 8096
+    port: 80
     protocol: TCP
-    targetPort: 80
+    targetPort: 8096
   selector:
     app.kubernetes.io/name: jellyfin
   type: ClusterIP
