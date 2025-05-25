@@ -48,6 +48,7 @@ sudo systemctl restart sshd
 ```sh
 sudo bash ufw.sh
 ```
+Enable with `sudo ufw enable`
 ## Install fail2ban
 ```sh
 sudo bash fail2ban.sh
