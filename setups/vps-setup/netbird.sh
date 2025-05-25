@@ -5,4 +5,4 @@ cat getting-started-with-zitadel.sh
 
 export NETBIRD_DOMAIN=netbird.nathalie-stiefsohn.eu
 
-bash getting-started-with-zitadel.sh
+sudo bash getting-started-with-zitadel.sh
