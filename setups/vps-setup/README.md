@@ -24,7 +24,9 @@ ssh -i ./ssh_key nathi@vps-server-ip
 sudo nano /etc/ssh/sshd_config
 ```
 Set `PasswordAuthentication` to `no`
-
+```sh
+sudo systemctl restart sshd
+```
 ## Disable root user access
 ### Login on server
 ```sh
