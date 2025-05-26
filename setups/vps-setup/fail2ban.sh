@@ -2,6 +2,8 @@
 
 sudo apt-get update && sudo apt-get install fail2ban
 
+sudo apt install python3-systemd
+
 sudo systemctl start fail2ban
 
 sudo systemctl enable fail2ban
