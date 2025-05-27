@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rimworld-together
-  namespace: rimworld-together
 spec:
   replicas: 1
   selector:

@@ -6,7 +6,6 @@ metadata:
     netbird.io/resource-name: rimworld-together-server
     netbird.io/groups: rimworld-together-server, k3s-apps
   name: rimworld-together-service
-  namespace: rimworld-together
 spec:
   type: ClusterIP
   selector:
