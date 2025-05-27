@@ -19,8 +19,6 @@ spec:
             - containerPort: 25555
               protocol: TCP
               name: server
-          stdin: true
-          tty: true
           volumeMounts:
             - name: data
               mountPath: /Data
