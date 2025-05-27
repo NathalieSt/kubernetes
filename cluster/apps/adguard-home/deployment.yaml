@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: adguard-home
-          image: adguard/adguardhome:v0.107.61 # {"$imagepolicy": "flux-system:adguard-home-image-policy"} 
+          image: adguard/adguardhome:v0.107.62 # {"$imagepolicy": "flux-system:adguard-home-image-policy"} 
           ports:
             - containerPort: 53
               protocol: UDP
