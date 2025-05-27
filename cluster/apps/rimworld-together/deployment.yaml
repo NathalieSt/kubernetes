@@ -22,9 +22,9 @@ spec:
           stdin: true
           tty: true
           volumeMounts:
-            - name: data
+            - name: rt-data
               mountPath: /Data
       volumes:
-        - name: data
+        - name: rt-data
           persistentVolumeClaim:
             claimName: rimworld-together-data
