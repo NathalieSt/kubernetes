@@ -10,6 +10,7 @@ kubectl get namespace "netbird" -o json \
 kubectl patch crd nbgroups.netbird.io -p '{"metadata":{"finalizers":[]}}' --type=merge
 ```
 
+## Bootstrap flux
 ```sh
 flux bootstrap git \
   --components-extra=image-reflector-controller,image-automation-controller \
@@ -17,4 +18,9 @@ flux bootstrap git \
   --branch=main \
   --private-key-file=./id_ed25519 \
   --path=cluster/flux
+```
+
+## Remove stuck pod
+```sh
+kubectl delete pod <podname> -n <namespace> --force --grace-period=0
 ```
