@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-gateway
+  name: cluster
   labels:
     app: nginx-gateway
 spec:
@@ -24,25 +24,26 @@ spec:
           mountPath: /etc/nginx/conf.d
         - name: shared-tmp
           mountPath: /tmp
-      - name: netbird
+      - name: netbird-agent
         image: netbirdio/netbird:latest
-        command: ["/usr/bin/netbird", "up", "--log-level", "info"]
         env:
-        - name: NB_SETUP_KEY
-          valueFrom:
-            secretKeyRef:
-              name: netbird-setup-key
-              key: setup-key
-        - name: NB_LOG_LEVEL
-          value: "info"
-        volumeMounts:
-        - name: shared-tmp
-          mountPath: /tmp
+          - name: NB_SETUP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: netbird-setup-key
+                key: setup-key
+          - name: NB_HOSTNAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
         securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
-            - SYS_ADMIN
           privileged: true
       volumes:
       - name: nginx-config
