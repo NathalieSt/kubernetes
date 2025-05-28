@@ -5,7 +5,7 @@ metadata:
 data:
   default.conf: |
     upstream jellyfin {
-        server jellyfin-service.jellyfin.svc.cluster.local:8096;
+        server jellyfin.jellyfin.svc.cluster.local:8096;
     }
     
     server {
