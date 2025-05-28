@@ -9,3 +9,4 @@ resources:
   - dns-service.yaml
   - install-service.yaml
   - web-service.yaml
+  - netbird-setup-key.yaml
