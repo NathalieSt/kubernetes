@@ -6,7 +6,4 @@ resources:
   - namespace.yaml
   - deployment.yaml
   - pvcs.yaml
-  - dns-service.yaml
-  - install-service.yaml
-  - web-service.yaml
   - netbird-setup-key.yaml
