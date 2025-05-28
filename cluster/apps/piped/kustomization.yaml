@@ -6,3 +6,6 @@ resources:
 - namespace.yaml
 - repository.yaml
 - release.yaml
+- frontend-service.yaml
+- backend-service.yaml
+- ytproxy-service.yaml
