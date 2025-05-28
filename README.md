@@ -24,3 +24,8 @@ flux bootstrap git \
 ```sh
 kubectl delete pod <podname> -n <namespace> --force --grace-period=0
 ```
+
+## Delete netbird operator
+```sh
+helm uninstall netbird-operator -n netbird
+```

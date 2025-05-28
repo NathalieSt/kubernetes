@@ -28,4 +28,4 @@ spec:
       annotations:
         netbird.io/expose: "true"
         netbird.io/resource-name: jellyfin
-        netbird.io/groups: jellyfin, k3s-apps
+        netbird.io/groups: jellyfin,k3s-apps
