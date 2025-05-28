@@ -36,6 +36,8 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
+          - name: NB_MANAGEMENT_URL
+            value: "https://netbird.nathalie-stiefsohn.eu"
         resources:
           requests:
             cpu: 50m
