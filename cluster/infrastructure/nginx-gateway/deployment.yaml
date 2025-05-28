@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-gateway
+  labels:
+    app: nginx-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-gateway
+  template:
+    metadata:
+      labels:
+        app: nginx-gateway
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+        - name: shared-tmp
+          mountPath: /tmp
+      - name: netbird
+        image: netbirdio/netbird:latest
+        command: ["/usr/bin/netbird", "up", "--log-level", "info"]
+        env:
+        - name: NB_SETUP_KEY
+          valueFrom:
+            secretKeyRef:
+              name: netbird-setup-key
+              key: setup-key
+        - name: NB_LOG_LEVEL
+          value: "info"
+        volumeMounts:
+        - name: shared-tmp
+          mountPath: /tmp
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - SYS_ADMIN
+          privileged: true
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-gateway-config
+      - name: shared-tmp
+        emptyDir: {}

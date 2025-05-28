@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-gateway-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name jellyfin.cluster.netbird.selfhosted;
+        
+        location / {
+            proxy_pass http://jellyfin-service.jellyfin.svc.cluster.local:8096;
+            proxy_set_header Host $host;
+        }
+    }
