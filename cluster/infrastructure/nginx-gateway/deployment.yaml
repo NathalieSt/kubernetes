@@ -36,6 +36,8 @@ spec:
             value: cluster
           - name: NB_MANAGEMENT_URL
             value: "https://netbird.nathalie-stiefsohn.eu"
+          - name: NB_EXTRA_IPS
+            value: "jellyfin.cluster.netbird.selfhosted,piped.cluster.netbird.selfhosted,piped-api.cluster.netbird.selfhosted"
         resources:
           requests:
             cpu: 50m
