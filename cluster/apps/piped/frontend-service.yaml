@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    netbird.io/expose: "true"
+    netbird.io/resource-name: frontend
+    netbird.io/groups: k3s-apps,piped
+  labels:
+    app: frontend-service
+  name: frontend-service
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    protocol: HTTP
+  
