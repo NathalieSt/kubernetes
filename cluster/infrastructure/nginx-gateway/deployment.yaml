@@ -19,9 +19,13 @@ spec:
         image: nginx:alpine
         ports:
         - containerPort: 80
+        - containerPort: 443
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/conf.d
+        - name: nginx-tls
+          mountPath: /etc/nginx/ssl
+          readOnly: true
         - name: shared-tmp
           mountPath: /tmp
       - name: netbird-agent
@@ -51,5 +55,9 @@ spec:
       - name: nginx-config
         configMap:
           name: nginx-gateway-config
+      - name: nginx-tls
+        secret:
+          secretName: nginx-gateway-tls
+          defaultMode: 0400
       - name: shared-tmp
         emptyDir: {}
