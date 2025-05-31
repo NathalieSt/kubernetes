@@ -37,8 +37,8 @@ spec:
           enabled: false
       config:
         FRONTEND_URL: http://frontend.piped.svc.cluster.local
-        PROXY_PART: http://ytproxy.piped.svc.cluster.local
-        API_URL: http://backend.piped.svc.cluster.local
+        PROXY_PART: http://ytproxy.piped.svc.cluster.local:8080
+        API_URL: http://backend.piped.svc.cluster.local:8080
     ytproxy:
       service:
         main:

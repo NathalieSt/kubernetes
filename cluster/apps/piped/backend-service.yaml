@@ -10,3 +10,5 @@ spec:
   - name: http
     port: 8080
     protocol: TCP
+  selector:
+    app.kubernetes.io/name: piped-backend
