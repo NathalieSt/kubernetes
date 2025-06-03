@@ -4,9 +4,10 @@ metadata:
   name: nginx-gateway-tls
   namespace: nginx-gateway
 spec:
+  subject: "my-cert" 
   secretName: nginx-gateway-tls
   issuerRef:
-    name: selfsigned-cluster-issuer
+    name: my-ca-issuer
     kind: ClusterIssuer
   dnsNames:
   - "*.cluster.netbird.selfhosted"
