@@ -20,7 +20,7 @@ spec:
         image: caddy:2.10.0
         env:
         - name: CADDY_DNS_RESOLVERS
-          value: "/etc/resolv.conf"
+          value: "kube-dns.kube-system.svc.cluster.local"
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -39,8 +39,6 @@ spec:
             value: caddy-cluster
           - name: NB_MANAGEMENT_URL
             value: "https://netbird.nathalie-stiefsohn.eu"
-          - name: NB_DISABLE_DNS
-            value: "true"
         resources:
           requests:
             cpu: 50m
