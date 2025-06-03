@@ -22,7 +22,7 @@ spec:
         - containerPort: 443
         volumeMounts:
         - name: caddy-config
-          mountPath: /etc/caddy/Caddyfile
+          mountPath: /etc/caddy/
       - name: netbird-agent
         image: netbirdio/netbird:latest
         env:
