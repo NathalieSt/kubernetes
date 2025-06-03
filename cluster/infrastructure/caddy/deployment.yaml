@@ -14,9 +14,18 @@ spec:
       labels:
         app: caddy
     spec:
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "2"
+        - name: edns0
       containers:
       - name: caddy
         image: caddy:2.10.0
+        env:
+        - name: CADDY_DNS_RESOLVERS
+          value: "/etc/resolv.conf"
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -37,6 +46,8 @@ spec:
             value: "https://netbird.nathalie-stiefsohn.eu"
           - name: NB_EXTRA_DNS_LABELS
             value: "jellyfin.caddy.cluster"
+          - name: NB_PRESERVE_DNS
+            value: "true"
         resources:
           requests:
             cpu: 50m
