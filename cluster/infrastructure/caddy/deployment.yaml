@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy
+  labels:
+    app: caddy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+      - name: caddy
+        image: caddy:2.10.0
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - name: caddy-config
+          mountPath: /etc/caddy/Caddyfile
+      - name: netbird-agent
+        image: netbirdio/netbird:latest
+        env:
+          - name: NB_SETUP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: netbird-setup-key
+                key: setup-key
+          - name: NB_HOSTNAME
+            value: caddy-cluster
+          - name: NB_MANAGEMENT_URL
+            value: "https://netbird.nathalie-stiefsohn.eu"
+          - name: NB_EXTRA_DNS_LABELS
+            value: "jellyfin.caddy.cluster"
+      volumes:
+      - name: caddy-config
+        configMap:
+          name: caddy-config
