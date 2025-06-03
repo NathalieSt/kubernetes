@@ -4,7 +4,9 @@ metadata:
   name: nginx-gateway-tls
   namespace: nginx-gateway
 spec:
-  subject: "my-cert" 
+  subject:
+    organizations:
+      - cert-manager 
   secretName: nginx-gateway-tls
   issuerRef:
     name: my-ca-issuer
