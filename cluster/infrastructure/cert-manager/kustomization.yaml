@@ -7,4 +7,3 @@ resources:
 - repository.yaml
 - release.yaml
 - cluster-issuer.yaml
-- nginx-gateway-certificate.yaml

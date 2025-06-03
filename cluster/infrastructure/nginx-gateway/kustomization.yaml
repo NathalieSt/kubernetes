@@ -6,3 +6,4 @@ resources:
 - namespace.yaml
 - deployment.yaml
 - nginx-gateway-config.yaml
+- nginx-gateway-certificate.yaml
