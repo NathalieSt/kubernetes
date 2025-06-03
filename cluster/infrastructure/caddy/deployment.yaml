@@ -37,6 +37,15 @@ spec:
             value: "https://netbird.nathalie-stiefsohn.eu"
           - name: NB_EXTRA_DNS_LABELS
             value: "jellyfin.caddy.cluster"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          privileged: true
       volumes:
       - name: caddy-config
         configMap:
