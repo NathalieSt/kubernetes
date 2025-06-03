@@ -15,16 +15,26 @@ spec:
         app: caddy
     spec:
       dnsPolicy: ClusterFirst
+      initContainers:
+      - name: copy-resolv
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - cp /etc/resolv.conf /dns-copy/resolv.conf
+        volumeMounts:
+        - name: dns-copy
+          mountPath: /dns-copy
       containers:
       - name: caddy
         image: caddy:2.10.0
-        env:
-        - name: CADDY_DNS_RESOLVERS
-          value: "kube-dns.kube-system.svc.cluster.local"
         ports:
         - containerPort: 80
         - containerPort: 443
         volumeMounts:
+        - name: dns-copy
+          mountPath: /etc/resolv.conf
+          subPath: resolv.conf
         - name: caddy-config
           mountPath: /etc/caddy/
       - name: netbird-agent
@@ -52,3 +62,5 @@ spec:
       - name: caddy-config
         configMap:
           name: caddy-config
+      - name: dns-copy
+        emptyDir: {}
