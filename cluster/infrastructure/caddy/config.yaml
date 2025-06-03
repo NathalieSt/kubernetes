@@ -5,6 +5,6 @@ metadata:
 data:
   Caddyfile: |
     jellyfin.caddy.cluster.netbird.selfhosted {
-	    reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096
+        reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096
         tls internal
     }
