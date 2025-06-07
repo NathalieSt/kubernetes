@@ -1,19 +1,21 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: infisical-operator
+  name: vault
 spec:
-  releaseName: infisical-operator
+  releaseName: vault
   chart:
     spec:
-      chart: secrets-operator
+      chart: vault
       version: "*"
       sourceRef:
         kind: HelmRepository
-        name: infisical
+        name: vault
       interval: "24h"
   interval: "24h"
   install:
     remediation:
       retries: 3
   values:
+    ui:
+      enabled: true

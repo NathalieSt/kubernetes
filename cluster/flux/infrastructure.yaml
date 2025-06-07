@@ -49,18 +49,18 @@ spec:
   dependsOn:
   - name: cert-manager
 ---
-#apiVersion: kustomize.toolkit.fluxcd.io/v1
-#kind: Kustomization
-#metadata:
-#  name: infisical
-#  namespace: flux-system
-#spec:
-#  interval: 24h
-#  targetNamespace: infisical
-#  sourceRef:
-#    kind: GitRepository
-#    name: flux-system
-#  path: ./cluster/infrastructure/infisical
-#  prune: true
-#  wait: true
-#  timeout: 5m0s
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vault
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: vault
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/vault
+  prune: true
+  wait: true
+  timeout: 5m0s

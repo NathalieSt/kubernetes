@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: infisical
+  name: vault
 spec:
   interval: "24h"
-  url: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts/
+  url: https://helm.releases.hashicorp.com
