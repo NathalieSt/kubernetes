@@ -1,7 +1,6 @@
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
-  namespace: vso-example
   name: vault-auth
 spec:
   # required configuration
