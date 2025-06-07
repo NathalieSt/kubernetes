@@ -3,5 +3,4 @@ kind: Kustomization
 metadata:
   name: infisical-standalone-postgres
 resources:
-- namespace.yaml
 - release.yaml

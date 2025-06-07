@@ -3,6 +3,4 @@ kind: Kustomization
 metadata:
   name: infisical-operator
 resources:
-- namespace.yaml
 - release.yaml
-- repository.yaml

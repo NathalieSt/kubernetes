@@ -5,3 +5,4 @@ metadata:
 resources:
 - ./infisical/kustomization.yaml
 - repository.yaml
+- namespace.yaml
