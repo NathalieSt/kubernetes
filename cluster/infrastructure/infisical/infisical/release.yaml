@@ -21,3 +21,5 @@ spec:
       enabled: false
       nginx:
         enabled: false
+    infisical:
+      replicaCount: 1
