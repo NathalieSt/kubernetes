@@ -15,13 +15,13 @@ spec:
   timeout: 5m
   valuesFrom:
     - kind: Secret
-      name: authentik-credentials
-      valuesKey: secret-key
+      name: authentik-secret
+      valuesKey: key
       targetPath: authentik.secret_key
       optional: false
     - kind: Secret
-      name: authentik-credentials
-      valuesKey: postgresql-password
+      name: authentik-postgres-secret
+      valuesKey: key
       targetPath: authentik.postgresql.auth.password
       optional: false
   values:
