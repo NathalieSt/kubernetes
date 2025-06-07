@@ -8,5 +8,3 @@ resources:
 - pvc.yaml
 - service.yaml
 - test-secret.yaml
-- auth.yaml
-- rbac.yaml
