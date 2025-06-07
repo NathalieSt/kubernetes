@@ -22,5 +22,20 @@ spec:
     - kind: Secret
       name: authentik-credentials
       valuesKey: postgresql-password
-      targetPath: authentik.postgresql.password
+      targetPath: authentik.postgresql.auth.password
       optional: false
+  values:
+    authentik:
+      error_reporting:
+        enabled: true
+      postgresql:
+        password: "ThisIsNotASecurePassword"
+    server:
+      ingress:
+          # Specify kubernetes ingress controller class name
+          ingressClassName: nginx | traefik | kong
+          enabled: false
+    postgresql:
+      enabled: true
+    redis:
+      enabled: true
