@@ -7,7 +7,3 @@ resources:
 - deployment.yaml
 - pvc.yaml
 - service.yaml
-- vault-connection.yaml
-- vault-rbac.yaml
-- vault-auth.yaml
-- test-secret.yaml

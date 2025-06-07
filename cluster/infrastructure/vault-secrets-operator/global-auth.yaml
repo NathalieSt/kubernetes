@@ -1,0 +1,16 @@
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuthGlobal
+metadata:
+  name: default
+spec:
+  allowedNamespaces:
+    - nginx-gateway
+  vaultConnectionRef: vault-connection
+  kubernetes:
+    audiences:
+    - vault
+    mount: kubernetes
+    role: global-vault-auth
+    serviceAccount: vault-auth-serviceaccount
+    tokenExpirationSeconds: 600
