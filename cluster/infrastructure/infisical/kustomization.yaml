@@ -3,6 +3,8 @@ kind: Kustomization
 metadata:
   name: infisical
 resources:
+# Infisical Resources
 - ./infisical/release.yaml
+# Infisical Operator Resources
 - repository.yaml
 - namespace.yaml
