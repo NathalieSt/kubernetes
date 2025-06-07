@@ -14,6 +14,7 @@ spec:
   interval: 5m0s
   timeout: 5m
   valuesFrom:
+    # Authentik Secrets
     - kind: Secret
       name: authentik-secret
       valuesKey: key
@@ -22,18 +23,20 @@ spec:
     - kind: Secret
       name: authentik-postgres-secret
       valuesKey: key
-      targetPath: authentik.postgresql.auth.password
+      targetPath: authentik.postgresql.password
+      optional: false
+    # Postgres Secret
+    - kind: Secret
+      name: authentik-postgres-secret
+      valuesKey: key
+      targetPath: postgresql.auth.password
       optional: false
   values:
     authentik:
       error_reporting:
         enabled: true
-      postgresql:
-        password: "ThisIsNotASecurePassword"
     server:
       ingress:
-          # Specify kubernetes ingress controller class name
-          ingressClassName: nginx | traefik | kong
           enabled: false
     postgresql:
       enabled: true
