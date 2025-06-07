@@ -7,4 +7,4 @@ resources:
 - deployment.yaml
 - pvc.yaml
 - service.yaml
-- test-secret.yaml
+#- test-secret.yaml
