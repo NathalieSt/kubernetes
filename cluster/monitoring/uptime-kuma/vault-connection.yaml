@@ -1,0 +1,9 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultConnection
+metadata:
+  name: vault-connection
+  namespace: uptime-kuma
+spec:
+  # required configuration
+  # address to the Vault server.
+  address: http://vault.vault.svc.cluster.local:8200
