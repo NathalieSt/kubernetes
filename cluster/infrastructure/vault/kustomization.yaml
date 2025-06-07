@@ -4,6 +4,7 @@ metadata:
   name: vault
 resources:
 - namespace.yaml
+# FIXME: separate vault and operator
 - ./vault/release.yaml
 - ./operator/release.yaml
 - repository.yaml
