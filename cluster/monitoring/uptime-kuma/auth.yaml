@@ -10,7 +10,7 @@ spec:
   # Kubernetes specific auth configuration, requires that the Method be set to kubernetes.
   kubernetes:
     # role to use when authenticating to Vault
-    role: example
+    role: k8s
     # ServiceAccount to use when authenticating to Vault
     # it is recommended to always provide a unique serviceAccount per Pod/application
-    serviceAccount: default
+    serviceAccount: vault-auth-serviceaccount
