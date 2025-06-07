@@ -6,7 +6,9 @@ metadata:
 spec:
   allowedNamespaces:
     - nginx-gateway
+    - authentik
   defaultAuthMethod: kubernetes
+  vaultConnectionRef: vault-connection
   kubernetes:
     audiences:
     - vault
