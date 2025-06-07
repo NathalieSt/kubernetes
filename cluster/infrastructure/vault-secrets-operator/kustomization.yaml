@@ -6,3 +6,5 @@ resources:
 - namespace.yaml
 - release.yaml
 - repository.yaml
+- auth.yaml
+- connection.yaml
