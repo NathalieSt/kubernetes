@@ -6,7 +6,7 @@ spec:
   releaseName: infisical-standalone-postgres
   chart:
     spec:
-      chart: infisical-standalone-postgres
+      chart: infisical-standalone
       version: "*"
       sourceRef:
         kind: HelmRepository
