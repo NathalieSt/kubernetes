@@ -7,3 +7,7 @@ resources:
 - deployment.yaml
 - nginx-gateway-config.yaml
 - nginx-gateway-certificate.yaml
+- ./secrets/vault-connection.yaml
+- ./secrets/vault-auth.yaml
+- ./secrets/vault-rbac.yaml
+- ./secrets/netbird-setupkey-secret.yaml
