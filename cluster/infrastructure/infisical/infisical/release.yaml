@@ -1,0 +1,21 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: infisical-standalone-postgres
+spec:
+  releaseName: infisical-standalone-postgres
+  chart:
+    spec:
+      chart: infisical
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: infisical
+      interval: "24h"
+  interval: "24h"
+  install:
+    remediation:
+      retries: 3
+  values:
+    ingress:
+      enabled: false
