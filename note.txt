@@ -1,0 +1,18 @@
+wwyWMmSGufJXvFDw8fxqb0D8mKstQ8V2MaMIZa5m
+
+
+MudmNZtWu3xUUBy9TAdvUkajwQwIZSdXl4ydnHRZ0VmMIk4oxMjw8dkCbYv1M9jhAtN5K522cNAf93NFiu20N2VbtEbiaHcwSoUHbbWThXzObcGcZPyrFEV6OT3T2PWI
+
+vault write auth/oidc/config \
+         oidc_discovery_url="authentik-server.authentik.svc.cluster.local:443/application/o/vault/" \
+         oidc_client_id="wwyWMmSGufJXvFDw8fxqb0D8mKstQ8V2MaMIZa5m" \
+         oidc_client_secret="MudmNZtWu3xUUBy9TAdvUkajwQwIZSdXl4ydnHRZ0VmMIk4oxMjw8dkCbYv1M9jhAtN5K522cNAf93NFiu20N2VbtEbiaHcwSoUHbbWThXzObcGcZPyrFEV6OT3T2PWI" \
+         default_role="reader"
+
+vault write auth/oidc/role/reader \
+      bound_audiences="wwyWMmSGufJXvFDw8fxqb0D8mKstQ8V2MaMIZa5m" \
+      allowed_redirect_uris="https://vault.cluster.netbird.selfhosted/ui/vault/auth/oidc/oidc/callback" \
+      allowed_redirect_uris="https://vault.cluster.netbird.selfhosted/oidc/callback" \
+      allowed_redirect_uris="http://localhost:8250/oidc/callback" \
+      user_claim="sub" \
+      policies="reader"
