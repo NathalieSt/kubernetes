@@ -9,4 +9,4 @@ resources:
 #- repository.yaml
 - ./secrets/vault-auth.yaml
 - ./secrets/vault-rbac.yaml
-- ./secrets/netbird-mgmt-api-key.yaml
+#- ./secrets/netbird-mgmt-api-key.yaml
