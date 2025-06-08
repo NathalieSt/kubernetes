@@ -7,6 +7,6 @@ resources:
 # FIXME: reinsert after secret has been deployed
 #- release.yaml
 #- repository.yaml
-#- ./secrets/vault-auth.yaml
-#- ./secrets/vault-rbac.yaml
-#- ./secrets/netbird-mgmt-api-key.yaml
+- ./secrets/vault-auth.yaml
+- ./secrets/vault-rbac.yaml
+- ./secrets/netbird-mgmt-api-key.yaml
