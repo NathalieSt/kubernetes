@@ -63,8 +63,6 @@ spec:
           value: authentik
         - name: NB_MANAGEMENT_URL
           value: https://netbird.nathalie-stiefsohn.eu
-        - name: NB_DNS_RESOLVER_ADDRESS
-          value: kube-dns.kube-system.svc.cluster.local:53
         resources:
           requests:
             cpu: '50m'
