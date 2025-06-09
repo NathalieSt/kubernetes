@@ -15,7 +15,7 @@ create_nginx_config_map = lambda name: str, service_name: str, service_namespace
                 }
                 
                 upstream ${service_name} {
-                    server localhost:${service_port};
+                    server ${service_name}.${service_namespace}.svc.cluster.local:${service_port};
                 }
 
                 # HTTP server - redirect to HTTPS
