@@ -79,8 +79,6 @@ spec:
         - name: tls-volume
           mountPath: /etc/nginx/ssl
           readOnly: true
-        - name: shared-tmp
-          mountPath: /tmp
         resources:
           requests:
             cpu: '50m'

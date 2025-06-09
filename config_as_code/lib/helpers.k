@@ -26,10 +26,6 @@ create_nginx_sidecar = lambda config_volume_name: str, tls_volume_name: str {
                 name: tls_volume_name
                 mountPath: "/etc/nginx/ssl"
                 readOnly: True
-            },
-            {
-            name: "shared-tmp"
-            mountPath: "/tmp"
             }
         ]
         resources: resources
