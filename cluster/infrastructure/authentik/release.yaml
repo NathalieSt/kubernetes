@@ -54,11 +54,9 @@ spec:
               name: netbird-setup-key
               key: setup-key
         - name: NB_HOSTNAME
-          value: cluster
+          value: authentik
         - name: NB_MANAGEMENT_URL
           value: https://netbird.nathalie-stiefsohn.eu
-        - name: NB_EXTRA_DNS_LABELS
-          value: authentik.cluster
         resources:
           requests:
             cpu: '50m'

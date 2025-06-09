@@ -66,7 +66,7 @@ release = helm_flux.create_helm_release(
                 helpers.create_netbird_sidecar(
                     shared.netbird.setup_key,
                     shared.netbird.key,
-                    "authentik.cluster"
+                    "authentik"
                 ),
                 helpers.create_nginx_sidecar(
                     "nginx-volume",
