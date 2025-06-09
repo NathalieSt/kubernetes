@@ -59,9 +59,20 @@ release = helm_flux.create_helm_release(
             enabled: True
         }
         server: {
-            hostNetwork: True,
             ingress: {
                 enabled: False
+            },
+            dnsPolicy: "ClusterFirst",
+            dnsConfig: {
+                options: [
+                    {
+                        name: "ndots"
+                        value: "2"
+                    },
+                    {
+                        name: "edns0"
+                    }
+                ]
             },
             extraContainers: [
                 helpers.create_netbird_sidecar(

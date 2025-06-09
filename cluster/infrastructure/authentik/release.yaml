@@ -44,6 +44,12 @@ spec:
     server:
       ingress:
         enabled: false
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+        - name: ndots
+          value: '2'
+        - name: edns0
       extraContainers:
       - name: netbird-agent
         image: netbirdio/netbird:latest
@@ -57,6 +63,8 @@ spec:
           value: authentik
         - name: NB_MANAGEMENT_URL
           value: https://netbird.nathalie-stiefsohn.eu
+        - name: NB_DNS_RESOLVER_ADDRESS
+          value: kube-dns.kube-system.svc.cluster.local:53
         resources:
           requests:
             cpu: '50m'

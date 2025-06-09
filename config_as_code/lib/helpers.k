@@ -55,10 +55,15 @@ create_netbird_sidecar = lambda setup_key_secret_name: str, setup_key_secret_key
                 name: "NB_MANAGEMENT_URL"
                 value: "https://netbird.nathalie-stiefsohn.eu"
             },
+            {
+                name: "NB_DNS_RESOLVER_ADDRESS"
+                value: "kube-dns.kube-system.svc.cluster.local:53"
+            }
         ]
         resources: resources
         securityContext: {
           privileged: True
         }
     }
+    sidecar
 }
