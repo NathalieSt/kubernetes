@@ -37,10 +37,10 @@ spec:
     authentik:
       error_reporting:
         enabled: true
-      postgresql:
-        enabled: true
-      redis:
-        enabled: true
+    postgresql:
+      enabled: true
+    redis:
+      enabled: true
     server:
       ingress:
         enabled: false

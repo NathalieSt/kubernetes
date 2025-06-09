@@ -40,18 +40,18 @@ repo = helm_flux.create_helm_repository(
 )
 release = helm_flux.create_helm_release(
     {
-       authentik: {
+        authentik: {
             error_reporting: {
                 enabled: True
             },
-            postgresql: {
-                enabled: True
-            }
-            redis: {
-                enabled: True
-            }
-       }
-       server: {
+        }
+        postgresql: {
+            enabled: True
+        }
+        redis: {
+            enabled: True
+        }
+        server: {
             ingress: {
                 enabled: False
             }
