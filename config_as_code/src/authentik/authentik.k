@@ -91,7 +91,7 @@ vault_auth = vault.create_vault_auth(
     "authentik",
     "authentik-vault-serviceaccount",
     True,
-    "vault-secrets-operator"
+    shared.global_vault_auth_namespace
 )
 
 vault_rbac = vault.create_vault_rbac(
