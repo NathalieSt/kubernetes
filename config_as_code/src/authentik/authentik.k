@@ -2,6 +2,7 @@ import ...lib.k8s_wrapper
 import ...lib.helm_flux
 import ...lib.vault
 import ...lib.helpers
+import ...lib.nginx
 import ..shared
 import yaml
 
@@ -14,6 +15,7 @@ kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
+nginx_config_file = "nginx-config.yaml"
 authentik_secret_file = "authentik-secret.yaml"
 authentik_postgres_secret_file = "authentik-postgres-secret.yaml"
 vault_auth_file = "vault-auth.yaml"
@@ -26,6 +28,7 @@ kustomization = k8s_wrapper.create_kustomization(
         namespace_file,
         release_file,
         repository_file,
+        nginx_config_file,
         # Secrets
         secrets_sub_dir + authentik_secret_file,
         secrets_sub_dir + authentik_postgres_secret_file,
@@ -34,6 +37,9 @@ kustomization = k8s_wrapper.create_kustomization(
     ]
 )
 namespace = k8s_wrapper.create_namespace("authentik")
+
+# Nginx configuration
+nginx_config = nginx.create_nginx_config_map("nginx-config", "authentik", "authentik", 80)
 # Helm configuration
 repo = helm_flux.create_helm_repository(
     "https://charts.goauthentik.io",
@@ -75,6 +81,12 @@ release = helm_flux.create_helm_release(
                     secretName: shared.tls_cert_secret
                     defaultMode: "0400"
                 }
+            },
+            {
+                name: "nginx-volume"
+                configMap: {
+                    name: "nginx-config"
+                }
             }
         ]
     },
@@ -107,6 +119,7 @@ release = helm_flux.create_helm_release(
      ]
     
 )
+
 # Vault configuration
 vault_auth = vault.create_vault_auth(
     "authentik",
@@ -136,9 +149,11 @@ authentik_postgres_secret = vault.create_vault_static_secret(
     "10s",
     "authentik-postgres-secret",
 )
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
+yaml.dump_to_file(nginx_config, out_dir + nginx_config_file)
 # Write helm configuration to files
 yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)
