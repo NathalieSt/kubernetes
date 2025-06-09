@@ -80,7 +80,7 @@ release = helm_flux.create_helm_release(
                     name: "tls-volume",
                     secret: {
                         secretName: shared.tls_cert_secret
-                        defaultMode: "0400"
+                        defaultMode: 0400
                     }
                 },
                 {
