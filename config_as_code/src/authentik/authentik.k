@@ -39,7 +39,7 @@ kustomization = k8s_wrapper.create_kustomization(
 namespace = k8s_wrapper.create_namespace("authentik")
 
 # Nginx configuration
-nginx_config = nginx.create_nginx_config_map("nginx-config", "authentik", "authentik", 80)
+nginx_config = nginx.create_nginx_config_map("nginx-config", "authentik", "authentik", 9000)
 # Helm configuration
 repo = helm_flux.create_helm_repository(
     "https://charts.goauthentik.io",

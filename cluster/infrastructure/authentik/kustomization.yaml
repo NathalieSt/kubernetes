@@ -6,6 +6,7 @@ resources:
 - namespace.yaml
 - release.yaml
 - repository.yaml
+- nginx-config.yaml
 - secrets/authentik-secret.yaml
 - secrets/authentik-postgres-secret.yaml
 - secrets/vault-auth.yaml
