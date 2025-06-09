@@ -19,4 +19,5 @@ spec:
   values:
     managementUrl: "https://netbird.nathalie-stiefsohn.eu"
     netbirdAPI:
-      keyFromSecret: "netbird-mgmt-api-key"
+      keyFromSecret:
+        name: "netbird-mgmt-api-key"
