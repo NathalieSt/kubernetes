@@ -32,3 +32,33 @@ create_nginx_sidecar = lambda config_volume_name: str, tls_volume_name: str {
     }
     sidecar
 }
+
+create_netbird_sidecar = lambda setup_key_secret_name: str, setup_key_secret_key: str, service_name: str {
+    sidecar = {
+        name: "netbird-agent"
+        image: "netbirdio/netbird:latest"
+        env: [
+            {
+                name: "NB_SETUP_KEY"
+                valueFrom: {
+                    secretKeyRef: {
+                        name: setup_key_secret_name
+                        key: setup_key_secret_key 
+                    }
+                }
+            },
+            {
+                name: "NB_HOSTNAME"
+                value: service_name
+            },
+            {
+                name: "NB_MANAGEMENT_URL"
+                value: "https://netbird.nathalie-stiefsohn.eu"
+            },
+        ]
+        resources: resources
+        securityContext: {
+          privileged: True
+        }
+    }
+}

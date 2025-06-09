@@ -4,8 +4,9 @@ metadata:
   name: netbird-operator
 resources:
 - namespace.yaml
-- release.yaml
-- repository.yaml
+# FIXME: reinsert after secret has been deployed
+#- release.yaml
+#- repository.yaml
 - ./secrets/vault-auth.yaml
 - ./secrets/vault-rbac.yaml
 - ./secrets/netbird-mgmt-api-key.yaml

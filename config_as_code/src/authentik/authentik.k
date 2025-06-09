@@ -63,6 +63,11 @@ release = helm_flux.create_helm_release(
                 enabled: False
             },
             extraContainers: [
+                helpers.create_netbird_sidecar(
+                    shared.netbird.setup_key,
+                    shared.netbird.key,
+                    "authentik"
+                ),
                 helpers.create_nginx_sidecar(
                     "nginx-volume",
                     "tls-volume"

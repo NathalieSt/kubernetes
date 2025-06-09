@@ -45,6 +45,27 @@ spec:
       ingress:
         enabled: false
       extraContainers:
+      - name: netbird-agent
+        image: netbirdio/netbird:latest
+        env:
+        - name: NB_SETUP_KEY
+          valueFrom:
+            secretKeyRef:
+              name: netbird-setup-key
+              key: setup-key
+        - name: NB_HOSTNAME
+          value: authentik
+        - name: NB_MANAGEMENT_URL
+          value: https://netbird.nathalie-stiefsohn.eu
+        resources:
+          requests:
+            cpu: '50m'
+            memory: '64Mi'
+          limits:
+            cpu: '100m'
+            memory: '128Mi'
+        securityContext:
+          privileged: true
       - name: nginx
         image: nginx:alpine
         ports:
