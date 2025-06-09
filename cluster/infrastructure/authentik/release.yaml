@@ -42,7 +42,6 @@ spec:
     redis:
       enabled: true
     server:
-      hostNetwork: true
       ingress:
         enabled: false
       extraContainers:
