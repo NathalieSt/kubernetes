@@ -5,10 +5,12 @@ import ..shared
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/authentik/"
+secrets_sub_dir = "secrets/"
+secrets_out_dir = out_dir + secrets_sub_dir
 
 # Filenames
 kustomization_file = "kustomization.yaml"
-namespace_file = "authentik.yaml"
+namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
 authentik_secret_file = "authentik-secret.yaml"
@@ -23,10 +25,11 @@ kustomization = k8s_wrapper.create_kustomization(
         namespace_file,
         release_file,
         repository_file,
-        authentik_secret_file,
-        authentik_postgres_secret_file,
-        vault_auth_file,
-        vault_rbac_file
+        # Secrets
+        secrets_sub_dir + authentik_secret_file,
+        secrets_sub_dir + authentik_postgres_secret_file,
+        secrets_sub_dir + vault_auth_file,
+        secrets_sub_dir + vault_rbac_file
     ]
 )
 namespace = k8s_wrapper.create_namespace("authentik")
@@ -41,11 +44,6 @@ release = helm_flux.create_helm_release(
             error_reporting: {
                 enabled: True
             },
-            server: {
-                ingress: {
-                    enabled: False
-                }
-            }
             postgresql: {
                 enabled: True
             }
@@ -53,6 +51,11 @@ release = helm_flux.create_helm_release(
                 enabled: True
             }
        }
+       server: {
+            ingress: {
+                enabled: False
+            }
+        }
     },
     "authentik",
     "authentik",
@@ -65,7 +68,14 @@ release = helm_flux.create_helm_release(
             targetPath: "authentik.secret_key",
             valuesKey: "key",
             optional: False
-        }, 
+        },
+        {
+            kind: "Secret",
+            name: "authentik-postgres-secret",
+            targetPath: "authentik.postgresql.password",
+            valuesKey: "key",
+            optional: False
+        },
         {
             kind: "Secret",
             name: "authentik-postgres-secret",
@@ -108,9 +118,11 @@ authentik_postgres_secret = vault.create_vault_static_secret(
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
+# Write helm configuration to files
 yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)
-yaml.dump_to_file(authentik_secret, out_dir + authentik_secret_file)
-yaml.dump_to_file(authentik_postgres_secret, out_dir + authentik_postgres_secret_file)
-yaml.dump_to_file(vault_auth, out_dir + vault_auth_file)
-yaml.dump_all_to_file(vault_rbac, out_dir + vault_rbac_file)
+# Write secrets to files
+yaml.dump_to_file(authentik_secret, secrets_out_dir + authentik_secret_file)
+yaml.dump_to_file(authentik_postgres_secret, secrets_out_dir + authentik_postgres_secret_file)
+yaml.dump_to_file(vault_auth, secrets_out_dir + vault_auth_file)
+yaml.dump_all_to_file(vault_rbac, secrets_out_dir + vault_rbac_file)
