@@ -93,7 +93,7 @@ spec:
       - name: tls-volume
         secret:
           secretName: nginx-tls-secret
-          defaultMode: '0400'
+          defaultMode: 256
       - name: nginx-volume
         configMap:
           name: nginx-config
