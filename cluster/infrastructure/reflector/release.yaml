@@ -1,0 +1,21 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: reflector
+spec:
+  releaseName: reflector
+  chart:
+    spec:
+      chart: reflector
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: reflector
+      interval: '24h'
+  interval: '24h'
+  install:
+    remediation:
+      retries: 3
+  timeout: '5m'
+  valuesFrom: []
+  values: {}

@@ -20,7 +20,7 @@ schema VaultStaticSecret:
     metadata: meta.ObjectMeta
     spec: VaultStaticSecretSpec
 
-create_vault_static_secret = lambda secret_name: str, vault_auth_ref: str, mount: str, secret_type: str, path: str, refresh_after: str, destination_name: str -> VaultStaticSecret {
+create_vault_static_secret = lambda secret_name: str, vault_auth_ref: str, mount: str, secret_type: str, path: str, refresh_after: str, destination_name: str, secret_annotations: {str: str} = {} -> VaultStaticSecret {
     vault_static_secret = VaultStaticSecret{
         metadata: meta.ObjectMeta{
             name: secret_name,
@@ -34,6 +34,7 @@ create_vault_static_secret = lambda secret_name: str, vault_auth_ref: str, mount
             destination: Destination{
                 create: True,
                 name: destination_name
+                annotations: secret_annotations
             }
         }
     }

@@ -113,7 +113,7 @@ authentik_postgres_secret = vault.create_vault_static_secret(
     "kv-v2",
     "authentik/postgres",
     "10s",
-    "authentik-postgres-secret"
+    "authentik-postgres-secret",
 )
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
