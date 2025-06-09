@@ -1,6 +1,7 @@
 import ...lib.k8s_wrapper
 import ...lib.helm_flux
 import ...lib.vault
+import ...lib.helpers
 import ..shared
 import yaml
 
@@ -56,6 +57,26 @@ release = helm_flux.create_helm_release(
                 enabled: False
             }
         }
+        extraContainers: [
+            helpers.create_netbird_sidecar(
+                shared.netbird.setup_key,
+                shared.netbird.key,
+                "authentik.cluster"
+            ),
+            helpers.create_nginx_sidecar(
+                "nginx-volume",
+                "tls-volume"
+            )
+        ]
+        volumes: [
+            {
+                name: "tls-volume",
+                secret: {
+                    secretName: shared.tls_cert_secret
+                    defaultMode: "0400"
+                }
+            }
+        ]
     },
     "authentik",
     "authentik",

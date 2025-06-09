@@ -35,7 +35,7 @@ schema ReleaseSpec:
     }
     timeout: "5m"
     valuesFrom: [ValuesFrom] = []
-    values: {str:{str:any}}
+    values: any
 
 schema HelmRelease:
     apiVersion: "helm.toolkit.fluxcd.io/v2"
@@ -43,7 +43,7 @@ schema HelmRelease:
     metadata: meta.ObjectMeta
     spec: ReleaseSpec
 
-create_helm_release = lambda values: {str:{str:any}}, metadata_name: str, release_name: str, chart_name: str, source_ref_name: str, valuesFrom: [ValuesFrom] -> HelmRelease {
+create_helm_release = lambda values: any, metadata_name: str, release_name: str, chart_name: str, source_ref_name: str, valuesFrom: [ValuesFrom] -> HelmRelease {
     {
         metadata.name = metadata_name
         spec.releaseName = release_name

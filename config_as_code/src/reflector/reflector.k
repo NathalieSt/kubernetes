@@ -72,7 +72,7 @@ netbird_setup_key_secret = vault.create_vault_static_secret(
     "kv-v2",
     "netbird/setup-key",
     "10s",
-    "netbird-setup-key",
+    shared.netbird.setup_key,
     # Allow reflector to replicate the netbird setup key secret across namespaces
     reflector_annotations 
 )
@@ -83,7 +83,7 @@ cert_manager_certificate = cert_manager.create_certificate(
     "nginx-tls-secret", 
     shared.ca_issuer, 
     "ClusterIssuer", 
-    ["*.netbird.selfhosted"],
+    ["*.cluster.netbird.selfhosted"],
     # Allow reflector to replicate the certificate across namespaces
     reflector_annotations
 )
