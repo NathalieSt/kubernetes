@@ -61,34 +61,36 @@ release = helm_flux.create_helm_release(
         server: {
             ingress: {
                 enabled: False
-            }
-        }
-        extraContainers: [
-            helpers.create_netbird_sidecar(
-                shared.netbird.setup_key,
-                shared.netbird.key,
-                "authentik.cluster"
-            ),
-            helpers.create_nginx_sidecar(
-                "nginx-volume",
-                "tls-volume"
-            )
-        ]
-        volumes: [
-            {
-                name: "tls-volume",
-                secret: {
-                    secretName: shared.tls_cert_secret
-                    defaultMode: "0400"
-                }
             },
-            {
-                name: "nginx-volume"
-                configMap: {
-                    name: "nginx-config"
+            extraContainers: [
+                helpers.create_netbird_sidecar(
+                    shared.netbird.setup_key,
+                    shared.netbird.key,
+                    "authentik.cluster"
+                ),
+                helpers.create_nginx_sidecar(
+                    "nginx-volume",
+                    "tls-volume"
+                )
+            ]
+        }
+        global: { 
+            volumes: [
+                {
+                    name: "tls-volume",
+                    secret: {
+                        secretName: shared.tls_cert_secret
+                        defaultMode: "0400"
+                    }
+                },
+                {
+                    name: "nginx-volume"
+                    configMap: {
+                        name: "nginx-config"
+                    }
                 }
-            }
-        ]
+            ]
+        }
     },
     "authentik",
     "authentik",
