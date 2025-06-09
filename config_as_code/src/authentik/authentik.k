@@ -59,6 +59,7 @@ release = helm_flux.create_helm_release(
             enabled: True
         }
         server: {
+            hostNetwork: True,
             ingress: {
                 enabled: False
             },
