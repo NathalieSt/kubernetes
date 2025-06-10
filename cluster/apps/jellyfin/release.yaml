@@ -4,24 +4,23 @@ metadata:
   name: jellyfin
 spec:
   releaseName: jellyfin
-  timeout: "15m"
   chart:
     spec:
       chart: jellyfin
-      version: "*"
+      version: '*'
       sourceRef:
         kind: HelmRepository
         name: jellyfin
-      interval: "24h"
-  interval: "24h"
+      interval: '24h'
+  interval: '24h'
   install:
     remediation:
       retries: 3
+  timeout: '5m'
   values:
     image:
       repository: docker.io/jellyfin/jellyfin
-      tag: "10.10.7" # {"$imagepolicy": "flux-system:jellyfin-image-policy:tag"} 
+      tag: '10.10.7'
     persistence:
       media:
         existingClaim: jellyfin-library-storage-pvc
-

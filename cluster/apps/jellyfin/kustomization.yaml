@@ -4,6 +4,6 @@ metadata:
   name: jellyfin
 resources:
 - namespace.yaml
-- pvc.yaml
-- repository.yaml
 - release.yaml
+- repository.yaml
+- pvc.yaml

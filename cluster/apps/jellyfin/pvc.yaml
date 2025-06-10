@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: jellyfin-library-storage-pvc
 spec:
-  storageClassName: "nfs-client"
   accessModes:
-    - ReadWriteMany
+  - ReadWriteMany
   resources:
     requests:
-      storage: "100Gi"
+      storage: '100Gi'
+  storageClassName: nfs-client
