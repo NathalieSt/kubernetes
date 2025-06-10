@@ -13,8 +13,8 @@ repository_file = "repository.yaml"
 
 # Configs
 service_name = "nfs-subdir-external-provisioner"
-chart_url = "https://charts.jetstack.io"
-chart_name = "cert-manager"
+chart_url = "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner"
+chart_name = "nfs-subdir-external-provisioner"
 root_issuer_name = "selfsigned-issuer"
 root_certificate_name = "root-cert"
 
@@ -44,7 +44,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: ""
+                version: "*"
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"

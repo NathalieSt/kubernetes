@@ -47,7 +47,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: ""
+                version: "*"
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"
