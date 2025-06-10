@@ -19,8 +19,8 @@ spec:
   timeout: '5m'
   values:
     image:
-      repository: "registry.k8s.io/sig-storage/nfs-subdir-external-provisioner"
-      tag: "v4.0.2"
+      repository: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner
+      tag: v4.0.2
     nfs:
-      server: "raspberry-pi-4-storage"
-      path: "/mnt/external_ssd"
+      server: raspberry-pi-4-storage
+      path: /mnt/external_ssd
