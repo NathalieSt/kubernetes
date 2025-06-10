@@ -4,6 +4,6 @@ metadata:
   name: cert-manager
 resources:
 - namespace.yaml
-- repository.yaml
 - release.yaml
+- repository.yaml
 - cluster-issuer.yaml

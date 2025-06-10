@@ -6,15 +6,15 @@ schema SourceRef:
 
 schema ChartSpec:
     chart: str
-    version: "*"
+    version: str
     sourceRef: SourceRef
-    interval: "24h"
+    interval: str
 
 schema Chart:
     spec: ChartSpec
 
 schema Remediation:
-    retries: 3
+    retries: int
 
 schema Install:
     remediation: Remediation
@@ -29,12 +29,12 @@ schema ValuesFrom:
 schema ReleaseSpec:
     releaseName: str
     chart: Chart
-    interval: "24h"
+    interval: str
     install: Install = {
         remediation = {}
     }
-    timeout: "5m"
-    valuesFrom: [ValuesFrom] = []
+    timeout: str
+    valuesFrom?: [ValuesFrom]
     values: any
 
 schema HelmRelease:
@@ -42,14 +42,3 @@ schema HelmRelease:
     kind: "HelmRelease"
     metadata: meta.ObjectMeta
     spec: ReleaseSpec
-
-create_helm_release = lambda values: any, metadata_name: str, release_name: str, chart_name: str, source_ref_name: str, valuesFrom: [ValuesFrom] -> HelmRelease {
-    {
-        metadata.name = metadata_name
-        spec.releaseName = release_name
-        spec.chart.spec.chart = chart_name
-        spec.chart.spec.sourceRef.name = source_ref_name
-        spec.values = values
-        spec.valuesFrom = valuesFrom
-    }
-}

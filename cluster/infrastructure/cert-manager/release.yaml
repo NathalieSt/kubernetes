@@ -7,43 +7,41 @@ spec:
   chart:
     spec:
       chart: cert-manager
-      version: "*"
+      version: ''
       sourceRef:
         kind: HelmRepository
-        name: jetstack
-      interval: "24h"
-  interval: "24h"
+        name: cert-manager
+      interval: '24h'
+  interval: '24h'
   install:
     remediation:
       retries: 3
-    crds: CreateReplace
-  upgrade:
-    crds: CreateReplace
+  timeout: '5m'
   values:
     installCRDs: true
     replicaCount: 1
     resources:
       requests:
-        cpu: 10m
-        memory: 64Mi
+        cpu: '10m'
+        memory: '64Mi'
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: '100m'
+        memory: '128Mi'
     webhook:
       replicaCount: 1
       resources:
         requests:
-          cpu: 10m
-          memory: 32Mi
+          cpu: '10m'
+          memory: '32Mi'
         limits:
-          cpu: 100m
-          memory: 64Mi
+          cpu: '100m'
+          memory: '64Mi'
     cainjector:
-      replicaCount: 1  
+      replicaCount: 1
       resources:
         requests:
-          cpu: 10m
-          memory: 64Mi
+          cpu: '10m'
+          memory: '64Mi'
         limits:
-          cpu: 100m
-          memory: 128Mi
+          cpu: '100m'
+          memory: '128Mi'

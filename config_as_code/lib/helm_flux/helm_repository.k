@@ -1,7 +1,7 @@
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 
 schema RepositorySpec:
-    interval: "24h"
+    interval: str
     url: str
     
 schema HelmRepository:
@@ -9,12 +9,3 @@ schema HelmRepository:
     metadata: meta.ObjectMeta
     kind: "HelmRepository"
     spec: RepositorySpec
-
-create_helm_repository = lambda url: str, repo_name: str -> HelmRepository {
-    repo = {   
-        metadata.name = repo_name
-        spec.url= url
-    }
-
-    repo
-}
