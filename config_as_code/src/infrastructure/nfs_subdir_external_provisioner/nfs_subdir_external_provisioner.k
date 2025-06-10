@@ -1,9 +1,9 @@
-import ...lib.k8s_wrapper
-import ...lib.helm_flux
-import ..shared
+import ....lib.k8s_wrapper
+import ....lib.helm_flux
+import ...shared
 import yaml
 
-out_dir = shared.cluster_path + "infrastructure/vault/"
+out_dir = shared.cluster_path + "infrastructure/nfs-subdir-external-provisioner/"
 
 # Filenames
 kustomization_file = "kustomization.yaml"
@@ -12,9 +12,9 @@ release_file = "release.yaml"
 repository_file = "repository.yaml"
 
 # Configs
-service_name = "vault"
-chart_url = "https://helm.releases.hashicorp.com"
-chart_name = "vault"
+service_name = "nfs-subdir-external-provisioner"
+chart_url = "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner"
+chart_name = "nfs-subdir-external-provisioner"
 
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(
@@ -55,7 +55,14 @@ release: helm_flux.HelmRelease = {
         timeout: "5m"
         interval: "24h"
         values: {
-                ui.enabled: True
+            image: {
+                repository: "registry.k8s.io/sig-storage/nfs-subdir-external-provisioner"
+                tag: "v4.0.2" # {\"$imagepolicy\": \"flux-system:nfs-subdir-external-provisioner-image-policy:tag\"}
+            }
+            nfs: {
+                server: "raspberry-pi-4-storage"
+                path: "/mnt/external_ssd"
+            }
         }
     }
 }

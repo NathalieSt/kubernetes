@@ -1,7 +1,7 @@
-import ...lib.k8s_wrapper
-import ...lib.helm_flux
-import ...lib.cert_manager
-import ..shared
+import ....lib.k8s_wrapper
+import ....lib.helm_flux
+import ....lib.cert_manager
+import ...shared
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/cert-manager/"
