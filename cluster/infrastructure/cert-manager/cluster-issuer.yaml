@@ -13,7 +13,7 @@ metadata:
 spec:
   secretName: root-cert
   commonName: my-selfsigned-ca
-  isCa: true
+  isCA: true
   issuerRef:
     name: selfsigned-issuer
     kind: ClusterIssuer
