@@ -9,8 +9,8 @@ schema IssuerRef:
   group?: str
 
 schema SecretTemplate:
-  annotations?: {str:str} = {}
-  labels?: {str:str} = {}
+  annotations?: {str:str}
+  labels?: {str:str}
 
 schema PrivateKey:
   algorithm?: "ECDSA" | "RSA" | "Ed25519"

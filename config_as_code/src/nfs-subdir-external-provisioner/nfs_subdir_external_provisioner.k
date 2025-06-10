@@ -15,8 +15,6 @@ repository_file = "repository.yaml"
 service_name = "nfs-subdir-external-provisioner"
 chart_url = "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner"
 chart_name = "nfs-subdir-external-provisioner"
-root_issuer_name = "selfsigned-issuer"
-root_certificate_name = "root-cert"
 
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(

@@ -5,7 +5,7 @@ schema Ca:
 
 schema ClusterIssuerSpec:
   ca?: Ca
-  selfSigned?: {str: str} = {}
+  selfSigned?: {str: str}
 
 schema ClusterIssuer:
   apiVersion: "cert-manager.io/v1"

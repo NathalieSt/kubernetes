@@ -30,4 +30,3 @@ metadata:
 spec:
   ca:
     secretName: root-cert
-  selfSigned: {}
