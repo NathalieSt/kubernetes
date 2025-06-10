@@ -1,4 +1,3 @@
-import k8s.api.core.v1 as core_api
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 
 schema Kubernetes:

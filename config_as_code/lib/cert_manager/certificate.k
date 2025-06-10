@@ -20,7 +20,7 @@ schema CertificateSpec:
   subject?: Subject
   secretName: str
   commonName?: str
-  isCa?: bool
+  isCA?: bool
   issuerRef: IssuerRef
   dnsNames?: [str]
   secretTemplate?: SecretTemplate

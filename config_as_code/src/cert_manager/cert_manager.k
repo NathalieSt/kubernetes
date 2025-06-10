@@ -103,7 +103,7 @@ root_issuer: cert_manager.ClusterIssuer = {
 root_certificate: cert_manager.Certificate = {
     metadata.name: "my-selfsigned-ca"
     spec: {
-        isCa: True
+        isCA: True
         commonName: "my-selfsigned-ca"
         secretName: root_certificate_name
         privateKey: {
