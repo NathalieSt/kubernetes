@@ -7,15 +7,16 @@ spec:
   chart:
     spec:
       chart: vault
-      version: "*"
+      version: '*'
       sourceRef:
         kind: HelmRepository
         name: vault
-      interval: "24h"
-  interval: "24h"
+      interval: '24h'
+  interval: '24h'
   install:
     remediation:
       retries: 3
+  timeout: '5m'
   values:
     ui:
       enabled: true
