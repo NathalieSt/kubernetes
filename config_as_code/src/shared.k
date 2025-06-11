@@ -41,14 +41,14 @@ flux_source_controller: ClusterService = {
     name: "flux-source-controller"
     namespace: "flux-system"
     cluster_url: "source-controller.flux-system.svc.cluster.local:80"
-    gatus.endpointType: "tcp"
-    gatus.conditions: ["[CONNECTED] == true"]
+    gatus.endpointType: "http"
+    gatus.conditions: ["[STATUS] == 200"]
 }
 
 nginx_gateway: ClusterService = {
     name: "nginx-gateway"
     namespace: "nginx-gateway"
-    cluster_url: "nginx-gateway.nginx-gateway.svc.cluster.local:80"
+    cluster_url: "nginx-gateway-service.nginx-gateway.svc.cluster.local:80"
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
 }

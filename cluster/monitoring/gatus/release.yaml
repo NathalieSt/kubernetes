@@ -43,15 +43,15 @@ spec:
         interval: '60s'
       - enabled: true
         name: flux-source-controller
-        url: tcp://source-controller.flux-system.svc.cluster.local:80
+        url: http://source-controller.flux-system.svc.cluster.local:80
         group: Cluster Services
         method: GET
         conditions:
-        - '[CONNECTED] == true'
+        - '[STATUS] == 200'
         interval: '60s'
       - enabled: true
         name: nginx-gateway
-        url: http://nginx-gateway.nginx-gateway.svc.cluster.local:80
+        url: http://nginx-gateway-service.nginx-gateway.svc.cluster.local:80
         group: Cluster Services
         method: GET
         conditions:
