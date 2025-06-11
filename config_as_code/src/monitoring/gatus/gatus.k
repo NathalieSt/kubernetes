@@ -62,7 +62,7 @@ release: helm_flux.HelmRelease = {
                 storage.type: "postgres"
                 storage.path: "/data/data.db"
                 endpoints: [
-                    helpers.create_gatus_endpoint("jellyfin", "jellyfin.jellyfin.svc.cluster.local:8096", "GET", ["[STATUS] == 200"], "60s")
+                    helpers.create_gatus_endpoint("jellyfin", "http://jellyfin.jellyfin.svc.cluster.local:8096", "GET", ["[STATUS] == 200"], "60s")
                 ]
             }
         }
