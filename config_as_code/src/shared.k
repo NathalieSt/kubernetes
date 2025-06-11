@@ -4,6 +4,7 @@ schema Netbird:
 
 schema GatusConfig:
     endpointType: "http" | "tcp"
+    conditions?: [str]
 
 schema ClusterService:
     name: str
@@ -25,6 +26,7 @@ jellyfin: ClusterService = {
     namespace: "jellyfin"
     cluster_url: "jellyfin.jellyfin.svc.cluster.local:8096"
     gatus.endpointType: "http"
+    gatus.conditions: ["[STATUS] == 200"]
 }
 
 vault: ClusterService = {
@@ -32,6 +34,7 @@ vault: ClusterService = {
     namespace: "vault"
     cluster_url: "vault.vault.svc.cluster.local:8200"
     gatus.endpointType: "http"
+    gatus.conditions: ["[STATUS] == 200"]
 }
 
 flux_source_controller: ClusterService = {
@@ -39,6 +42,7 @@ flux_source_controller: ClusterService = {
     namespace: "flux-system"
     cluster_url: "source-controller.flux-system.svc.cluster.local:80"
     gatus.endpointType: "tcp"
+    gatus.conditions: ["[CONNECTED] == true"]
 }
 
 nginx_gateway: ClusterService = {
@@ -46,6 +50,7 @@ nginx_gateway: ClusterService = {
     namespace: "nginx-gateway"
     cluster_url: "nginx-gateway.nginx-gateway.svc.cluster.local:80"
     gatus.endpointType: "http"
+    gatus.conditions: ["[STATUS] == 200"]
 }
 
 cert_manager: ClusterService = {
@@ -53,6 +58,7 @@ cert_manager: ClusterService = {
     namespace: "cert-manager"
     cluster_url: "cert-manager.cert-manager.svc.cluster.local:9402"
     gatus.endpointType: "tcp"
+    gatus.conditions: ["[CONNECTED] == true"]
 }
 
 cluster_services: [ClusterService] = [

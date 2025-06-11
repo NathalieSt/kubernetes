@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: nginx-gateway
   labels:
-    app: nginx-gateway
+    app.kubernetes.io/name: nginx-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-gateway
+      app.kubernetes.io/name: nginx-gateway
   template:
     metadata:
       labels:
-        app: nginx-gateway
+        app.kubernetes.io/name: nginx-gateway
     spec:
       containers:
       - name: nginx

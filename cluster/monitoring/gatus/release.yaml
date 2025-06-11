@@ -47,7 +47,7 @@ spec:
         group: Cluster Services
         method: GET
         conditions:
-        - '[STATUS] == 200'
+        - '[CONNECTED] == true'
         interval: '60s'
       - enabled: true
         name: nginx-gateway
@@ -63,7 +63,7 @@ spec:
         group: Cluster Services
         method: GET
         conditions:
-        - '[STATUS] == 200'
+        - '[CONNECTED] == true'
         interval: '60s'
       - enabled: true
         name: netbird

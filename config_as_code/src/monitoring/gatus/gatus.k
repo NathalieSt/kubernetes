@@ -75,7 +75,7 @@ release: helm_flux.HelmRelease = {
                 storage.type: "sqlite"
                 storage.path: "/data/data.db"
                 endpoints: [
-                    helpers.create_gatus_endpoint( service.name, service.gatus.endpointType + "://" + service.cluster_url, "GET", ["[STATUS] == 200"], "60s", "Cluster Services")
+                    helpers.create_gatus_endpoint( service.name, service.gatus.endpointType + "://" + service.cluster_url, "GET", service.gatus.conditions, "60s", "Cluster Services")
                     for service in shared.cluster_services
                 ] + [
                     helpers.create_gatus_endpoint( service.name, service.url, "GET", ["[STATUS] == 200"], "60s", "External Services")
