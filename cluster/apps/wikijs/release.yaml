@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: wikijs
+spec:
+  releaseName: wikijs
+  chart:
+    spec:
+      chart: wiki
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: wikijs
+      interval: '24h'
+  interval: '24h'
+  install:
+    remediation:
+      retries: 3
+  timeout: '5m'
+  values:
+    postgresql:
+      persistence:
+        storageClass: nfs-client
