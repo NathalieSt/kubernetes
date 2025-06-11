@@ -43,7 +43,7 @@ spec:
         interval: '60s'
       - enabled: true
         name: flux-source-controller
-        url: http://source-controller.flux-system.svc.cluster.local
+        url: http://source-controller.flux-system.svc.cluster.local:9090
         group: Cluster Services
         method: GET
         conditions:
