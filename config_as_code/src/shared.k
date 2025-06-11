@@ -37,16 +37,7 @@ vault: ClusterService = {
     gatus.conditions: ["[STATUS] == 200"]
 }
 
-flux_source_controller: ClusterService = {
-    name: "flux-source-controller"
-    namespace: "flux-system"
-    cluster_url: "source-controller.flux-system.svc.cluster.local:9090"
-    gatus.endpointType: "http"
-    gatus.conditions: ["[STATUS] == 200"]
-}
-
 cluster_services: [ClusterService] = [
     jellyfin,
     vault,
-    flux_source_controller,
 ]
