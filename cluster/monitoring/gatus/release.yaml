@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gatus
+spec:
+  releaseName: gatus
+  chart:
+    spec:
+      chart: gatus
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: gatus
+      interval: '24h'
+  interval: '24h'
+  install:
+    remediation:
+      retries: 3
+  timeout: '5m'
+  values:
+    persistence:
+      enabled: true
+    config:
+      storage:
+        type: postgres
+        path: /data/data.db
+      endpoints:
+      - enabled: true
+        name: jellyfin
+        url: jellyfin.jellyfin.svc.cluster.local:8096
+        method: GET
+        conditions:
+        - '[STATUS] == 200'
+        interval: '60s'

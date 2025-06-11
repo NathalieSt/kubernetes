@@ -63,3 +63,15 @@ create_netbird_sidecar = lambda setup_key_secret_name: str, setup_key_secret_key
     }
     sidecar
 }
+
+create_gatus_endpoint = lambda name: str, url: str, method: str = "GET", conditions: [str] = [], interval: str = "60s" {
+    endpoint = {
+        enabled: True
+        name: name
+        url: url
+        method: method
+        conditions: conditions
+        interval: interval
+    }
+    endpoint
+}
