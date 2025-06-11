@@ -42,14 +42,6 @@ spec:
         - '[STATUS] == 200'
         interval: '60s'
       - enabled: true
-        name: flux-source-controller
-        url: http://source-controller.flux-system.svc.cluster.local:9090
-        group: Cluster Services
-        method: GET
-        conditions:
-        - '[STATUS] == 200'
-        interval: '60s'
-      - enabled: true
         name: netbird
         url: https://netbird.nathalie-stiefsohn.eu
         group: External Services
