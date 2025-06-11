@@ -10,3 +10,4 @@ resources:
 - ./secrets/vault-auth.yaml
 - ./secrets/vault-rbac.yaml
 - ./secrets/netbird-setupkey-secret.yaml
+- service.yaml
