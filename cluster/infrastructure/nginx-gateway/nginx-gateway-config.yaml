@@ -17,7 +17,7 @@ data:
     }
 
     upstream wikijs {
-        server wikijs.gatus.svc.cluster.local:80;
+        server wikijs.wikijs.svc.cluster.local:80;
     }
 
     # HTTP server - redirect to HTTPS
