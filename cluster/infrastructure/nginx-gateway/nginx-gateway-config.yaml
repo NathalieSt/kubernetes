@@ -7,10 +7,6 @@ data:
     upstream jellyfin {
         server jellyfin.jellyfin.svc.cluster.local:8096;
     }
-    
-    upstream uptime-kuma {
-        server uptime-kuma-service.uptime-kuma.svc.cluster.local:3001;
-    }
 
     upstream vault {
         server vault.vault.svc.cluster.local:8200;
