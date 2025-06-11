@@ -37,6 +37,19 @@ repo: helm_flux.HelmRepository = {
         url: chart_url
     }
 }
+
+schema ExternalService:
+    name: str
+    url: str
+    
+
+external_services: [ExternalService] = [
+    {
+        name: "netbird",
+        url: "https://netbird.nathalie-stiefsohn.eu"
+    }
+]
+
 release: helm_flux.HelmRelease = {
     metadata.name = service_name
     spec: {
@@ -62,8 +75,12 @@ release: helm_flux.HelmRelease = {
                 storage.type: "sqlite"
                 storage.path: "/data/data.db"
                 endpoints: [
-                    helpers.create_gatus_endpoint("jellyfin", "http://jellyfin.jellyfin.svc.cluster.local:8096", "GET", ["[STATUS] == 200"], "60s")
-                ]
+                    helpers.create_gatus_endpoint( service.name, "http://" + service.cluster_url, "GET", ["[STATUS] == 200"], "60s", "Cluster Services")
+                    for service in shared.cluster_services
+                ] + [
+                    helpers.create_gatus_endpoint( service.name, service.url, "GET", ["[STATUS] == 200"], "60s", "External Services")
+                    for service in external_services
+                ] 
             }
         }
     }

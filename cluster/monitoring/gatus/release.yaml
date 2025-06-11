@@ -28,6 +28,39 @@ spec:
       - enabled: true
         name: jellyfin
         url: http://jellyfin.jellyfin.svc.cluster.local:8096
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[STATUS] == 200'
+        interval: '60s'
+      - enabled: true
+        name: vault
+        url: http://vault.vault.svc.cluster.local:8200
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[STATUS] == 200'
+        interval: '60s'
+      - enabled: true
+        name: flux-source-controller
+        url: http://source-controller.flux-system.svc.cluster.local:80
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[STATUS] == 200'
+        interval: '60s'
+      - enabled: true
+        name: nginx-gateway
+        url: http://nginx-gateway.nginx-gateway.svc.cluster.local:80
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[STATUS] == 200'
+        interval: '60s'
+      - enabled: true
+        name: netbird
+        url: https://netbird.nathalie-stiefsohn.eu
+        group: External Services
         method: GET
         conditions:
         - '[STATUS] == 200'
