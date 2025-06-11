@@ -59,7 +59,7 @@ release: helm_flux.HelmRelease = {
         values: {
             persistence.enabled: True
             config: {
-                storage.type: "postgres"
+                storage.type: "sqlite"
                 storage.path: "/data/data.db"
                 endpoints: [
                     helpers.create_gatus_endpoint("jellyfin", "http://jellyfin.jellyfin.svc.cluster.local:8096", "GET", ["[STATUS] == 200"], "60s")

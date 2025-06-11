@@ -22,7 +22,7 @@ spec:
       enabled: true
     config:
       storage:
-        type: postgres
+        type: sqlite
         path: /data/data.db
       endpoints:
       - enabled: true
