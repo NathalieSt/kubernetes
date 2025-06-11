@@ -45,26 +45,8 @@ flux_source_controller: ClusterService = {
     gatus.conditions: ["[STATUS] == 200"]
 }
 
-nginx_gateway: ClusterService = {
-    name: "nginx-gateway"
-    namespace: "nginx-gateway"
-    cluster_url: "nginx-gateway-service.nginx-gateway.svc.cluster.local:80"
-    gatus.endpointType: "http"
-    gatus.conditions: ["[STATUS] == 200"]
-}
-
-cert_manager: ClusterService = {
-    name: "cert-manager"
-    namespace: "cert-manager"
-    cluster_url: "cert-manager.cert-manager.svc.cluster.local:9402"
-    gatus.endpointType: "tcp"
-    gatus.conditions: ["[CONNECTED] == true"]
-}
-
 cluster_services: [ClusterService] = [
     jellyfin,
     vault,
     flux_source_controller,
-    nginx_gateway,
-    cert_manager,
 ]

@@ -50,22 +50,6 @@ spec:
         - '[STATUS] == 200'
         interval: '60s'
       - enabled: true
-        name: nginx-gateway
-        url: http://nginx-gateway-service.nginx-gateway.svc.cluster.local:80
-        group: Cluster Services
-        method: GET
-        conditions:
-        - '[STATUS] == 200'
-        interval: '60s'
-      - enabled: true
-        name: cert-manager
-        url: tcp://cert-manager.cert-manager.svc.cluster.local:9402
-        group: Cluster Services
-        method: GET
-        conditions:
-        - '[CONNECTED] == true'
-        interval: '60s'
-      - enabled: true
         name: netbird
         url: https://netbird.nathalie-stiefsohn.eu
         group: External Services
