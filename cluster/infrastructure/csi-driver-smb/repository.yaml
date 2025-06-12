@@ -1,0 +1,7 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+metadata:
+  name: csi-driver-smb
+kind: HelmRepository
+spec:
+  interval: '24h'
+  url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts

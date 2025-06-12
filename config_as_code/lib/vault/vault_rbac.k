@@ -3,6 +3,11 @@ import k8s.api.core.v1 as core_api
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 
 
+schema VaultRbac:
+    serviceAccount: core_api.ServiceAccount
+    role: rbac_api.Role
+    rolebinding: rbac_api.RoleBinding
+
 create_vault_rbac = lambda application_name: str{
 
     service_account_name = application_name + "-vault-serviceaccount"
@@ -45,9 +50,11 @@ create_vault_rbac = lambda application_name: str{
             apiGroup: "rbac.authorization.k8s.io"
         }
     }
-    [
-        service_account,
-        role,
-        rolebinding
-    ]
+    rbac: VaultRbac = {
+        serviceAccount: service_account
+        role: role
+        rolebinding: rolebinding
+    }
+
+    rbac
 }

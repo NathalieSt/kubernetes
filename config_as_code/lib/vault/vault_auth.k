@@ -17,23 +17,3 @@ schema VaultAuth:
     kind: "VaultAuth"
     metadata: meta.ObjectMeta
     spec: VaultAuthSpec
-
-create_vault_auth = lambda role: str, service_account: str, allow_default: bool, global_auth_namespace: str -> VaultAuth {
-    vault_auth = VaultAuth{
-        metadata: meta.ObjectMeta{
-            name: "vault-auth"
-        }
-        spec: VaultAuthSpec{
-            kubernetes: Kubernetes{
-                role: role,
-                serviceAccount: service_account
-            },
-            vaultAuthGlobalRef: VaultAuthGlobalRef{
-                allowDefault: allow_default,
-                namespace: global_auth_namespace
-            }
-        }
-    }
-
-    vault_auth
-}
