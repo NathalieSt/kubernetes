@@ -59,7 +59,7 @@ release: helm_flux.HelmRelease = {
         values: {
             postgresql: {
                 persistence: {
-                    storageClass: "smb"
+                    storageClass: "nfs-client"
                     size: "10Gi"
                 }
                 image: {
