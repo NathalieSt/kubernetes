@@ -58,11 +58,11 @@ release: helm_flux.HelmRelease = {
         interval: "24h"
         values: {
             postgresql: {
-                persistence.storageClass: "nfs-client"
+                persistence.storageClass: "smb"
                 image: {
                     registry: "docker.io"
                     repository: "bitnami/postgresql"
-                    tag: "15.8.0-debian-12-r7"
+                    tag: "17.5.0-debian-12-r11"
                     pullPolicy: "IfNotPresent"
                 }
             }
