@@ -20,3 +20,6 @@ spec:
   values:
     ui:
       enabled: true
+    server:
+      dataStorage:
+        storageClass: smb

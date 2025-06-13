@@ -20,6 +20,7 @@ netbird: Netbird = {
     key = "setup-key"
 }
 tls_cert_secret = "nginx-tls-secret"
+smb_storage_class_name= "smb"
 
 jellyfin: ClusterService = {
     name: "jellyfin"

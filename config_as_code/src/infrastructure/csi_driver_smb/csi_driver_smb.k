@@ -74,7 +74,7 @@ release: helm_flux.HelmRelease = {
 storage_class = {
     apiVersion: "storage.k8s.io/v1"
     kind: "StorageClass"
-    metadata.name = "smb"
+    metadata.name = shared.smb_storage_class_name
     provisioner: "smb.csi.k8s.io"
     parameters: {
         source: "//u465810.your-storagebox.de/backup"

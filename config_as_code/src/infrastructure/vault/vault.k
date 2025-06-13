@@ -56,6 +56,7 @@ release: helm_flux.HelmRelease = {
         interval: "24h"
         values: {
                 ui.enabled: True
+                server.dataStorage.storageClass: shared.smb_storage_class_name
         }
     }
 }
