@@ -21,6 +21,7 @@ spec:
     postgresql:
       persistence:
         storageClass: smb
+        size: '10Gi'
       image:
         registry: docker.io
         repository: bitnami/postgresql

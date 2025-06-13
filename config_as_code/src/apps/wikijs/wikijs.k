@@ -58,7 +58,10 @@ release: helm_flux.HelmRelease = {
         interval: "24h"
         values: {
             postgresql: {
-                persistence.storageClass: "smb"
+                persistence: {
+                    storageClass: "smb"
+                    size: "10Gi"
+                }
                 image: {
                     registry: "docker.io"
                     repository: "bitnami/postgresql"
