@@ -23,3 +23,5 @@ spec:
     server:
       dataStorage:
         storageClass: smb
+      extraEnvironmentVars:
+        SKIP_CHOWN: true
