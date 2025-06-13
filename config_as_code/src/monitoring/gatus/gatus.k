@@ -71,7 +71,6 @@ release: helm_flux.HelmRelease = {
         interval: "24h"
         values: {
             persistence.enabled: True
-            persistence.storageClassName: "smb"
             config: {
                 storage.type: "sqlite"
                 storage.path: "/data/data.db"
