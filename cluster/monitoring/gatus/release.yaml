@@ -20,6 +20,7 @@ spec:
   values:
     persistence:
       enabled: true
+      storageClass: smb
     config:
       storage:
         type: sqlite
