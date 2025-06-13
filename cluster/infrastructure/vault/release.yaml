@@ -22,6 +22,4 @@ spec:
       enabled: true
     server:
       dataStorage:
-        storageClass: smb
-      extraEnvironmentVars:
-        SKIP_CHOWN: true
+        storageClass: nfs
