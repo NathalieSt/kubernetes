@@ -7,6 +7,7 @@ spec:
   allowedNamespaces:
     - nginx-gateway
     - authentik
+    - csi-driver-smb
   defaultAuthMethod: kubernetes
   kubernetes:
     audiences:
