@@ -99,4 +99,4 @@ spec:
   wait: true
   timeout: 5m0s
   dependsOn:
-  - name: vault
+  - name: vault-secrets-operator

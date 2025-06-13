@@ -86,7 +86,7 @@ storage_class = {
     reclaimPolicy: "Delete"
     volumeBindingMode: "Immediate"
     allowVolumeExpansion: True
-    mountOptions: ["dir_mode=0777", "file_mode=0777", "uid=1001", "gid=1001"]
+    mountOptions: ["dir_mode=0755", "file_mode=0644"]
 }
 
 vault_rbac = vault.create_vault_rbac(service_name)
