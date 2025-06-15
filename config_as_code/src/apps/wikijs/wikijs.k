@@ -31,6 +31,7 @@ namespace = k8s_wrapper.create_namespace(service_name)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
+    kind: "HelmRepository"
     spec: {
         interval: "24h",
         url: chart_url
@@ -58,16 +59,9 @@ release: helm_flux.HelmRelease = {
         interval: "24h"
         values: {
             postgresql: {
-                persistence: {
-                    storageClass: "nfs-client"
-                    size: "10Gi"
-                }
-                image: {
-                    registry: "docker.io"
-                    repository: "bitnami/postgresql"
-                    tag: "17.5.0-debian-12-r11"
-                    pullPolicy: "IfNotPresent"
-                }
+                enabled: False
+                postgresqlHost: shared.postgres.cluster_url
+                existingSecret: shared.postgres_creds_secret_name
             }
         }
     }

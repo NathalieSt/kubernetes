@@ -19,11 +19,6 @@ spec:
   timeout: '5m'
   values:
     postgresql:
-      persistence:
-        storageClass: nfs-client
-        size: '10Gi'
-      image:
-        registry: docker.io
-        repository: bitnami/postgresql
-        tag: '17.5.0-debian-12-r11'
-        pullPolicy: IfNotPresent
+      enabled: false
+      postgresqlHost: postgres-postgresql.postgres.svc.cluster.local:5432
+      existingSecret: postgres-creds-secret

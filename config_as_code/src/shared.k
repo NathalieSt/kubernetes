@@ -33,6 +33,14 @@ vault: ClusterService = {
     gatus.conditions: ["[STATUS] == 200"]
 }
 
+postgres: ClusterService = {
+    name: "postgres"
+    namespace: "postgres"
+    cluster_url: "postgres-postgresql.postgres.svc.cluster.local:5432"
+    gatus.endpointType: "http"
+    gatus.conditions: ["[STATUS] == 200"]
+}
+
 cluster_services: [ClusterService] = [
     jellyfin,
     vault,
