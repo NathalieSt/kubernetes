@@ -23,6 +23,7 @@ spec:
       persistence:
         storageClass: nfs-client
     backup:
+      enabled: true
       cronjob:
         storage:
           storageClass: smb
