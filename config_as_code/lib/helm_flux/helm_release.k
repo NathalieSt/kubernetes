@@ -1,7 +1,7 @@
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 
 schema SourceRef:
-    kind: "HelmRepository"
+    kind: "HelmRepository" | "OCIRepository"
     name: str
 
 schema ChartSpec:

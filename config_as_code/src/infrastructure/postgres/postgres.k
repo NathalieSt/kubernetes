@@ -30,6 +30,7 @@ namespace = k8s_wrapper.create_namespace(service_name)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
+    kind: "OCIRepository"
     spec: {
         type: "oci"
         interval: "24h",
@@ -46,7 +47,7 @@ release: helm_flux.HelmRelease = {
                 version: "*"
                 interval: "24h"
                 sourceRef: {
-                    kind: "HelmRepository"
+                    kind: "OCIRepository"
                     name: service_name
                 }
             }

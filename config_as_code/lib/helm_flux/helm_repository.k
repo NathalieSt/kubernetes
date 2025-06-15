@@ -8,5 +8,5 @@ schema RepositorySpec:
 schema HelmRepository:
     apiVersion: "source.toolkit.fluxcd.io/v1beta2"
     metadata: meta.ObjectMeta
-    kind: "HelmRepository"
+    kind: "HelmRepository" | "OCIRepository"
     spec: RepositorySpec

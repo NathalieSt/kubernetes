@@ -32,6 +32,7 @@ namespace = k8s_wrapper.create_namespace(service_name)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
+    kind: "HelmRepository"
     spec: {
         interval: "24h",
         url: chart_url

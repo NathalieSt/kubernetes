@@ -48,6 +48,7 @@ namespace: core_api.Namespace = {
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
+    kind: "HelmRepository"
     spec: {
         interval: "24h",
         url: chart_url
