@@ -6,7 +6,7 @@ spec:
   releaseName: postgres
   chart:
     spec:
-      chart: postgres
+      chart: postgresql
       version: '*'
       sourceRef:
         kind: HelmRepository
