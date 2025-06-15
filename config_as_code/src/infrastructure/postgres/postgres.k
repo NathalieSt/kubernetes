@@ -32,7 +32,6 @@ repo: helm_flux.HelmRepository = {
     metadata.name = service_name
     kind: "OCIRepository"
     spec: {
-        type: "oci"
         interval: "24h",
         url: chart_url
     }
