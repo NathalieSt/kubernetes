@@ -9,7 +9,7 @@ spec:
       chart: postgres
       version: '*'
       sourceRef:
-        kind: HelmRepository
+        kind: OCIRepository
         name: postgres
       interval: '24h'
   interval: '24h'
@@ -23,4 +23,11 @@ spec:
     valuesKey: password
     targetPath: auth.postgresPassword
     optional: false
-  values: {}
+  values:
+    primary:
+      persistence:
+        storageClass: nfs-client
+    backup:
+      cronjob:
+        storage:
+          storageClass: smb

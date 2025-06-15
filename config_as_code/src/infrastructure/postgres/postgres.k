@@ -65,7 +65,10 @@ release: helm_flux.HelmRelease = {
                 targetPath: "auth.postgresPassword"
             }
         ]
-        values: {}
+        values: {
+            primary.persistence.storageClass: "nfs-client"
+            backup.cronjob.storage.storageClass: "smb"
+        }
     }
 }
 

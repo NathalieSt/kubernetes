@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 metadata:
   name: postgres
-kind: HelmRepository
+kind: OCIRepository
 spec:
   type: oci
   interval: '24h'
