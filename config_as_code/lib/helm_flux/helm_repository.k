@@ -1,6 +1,7 @@
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 
 schema RepositorySpec:
+    type?: "default" | "oci"
     interval: str
     url: str
     

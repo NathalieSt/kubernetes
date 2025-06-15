@@ -1,6 +1,4 @@
-schema Netbird:
-    setup_key: str
-    key: str
+
 
 schema GatusConfig:
     endpointType: "http" | "tcp"
@@ -15,10 +13,7 @@ schema ClusterService:
 cluster_path = "../../../../cluster/"
 global_vault_auth_namespace = "vault-secrets-operator"
 ca_issuer = "my-ca-issuer"
-netbird: Netbird = {
-    setup_key = "netbird-setup-key"
-    key = "setup-key"
-}
+postgres_creds_secret_name = "postgres-creds-secret"
 tls_cert_secret = "nginx-tls-secret"
 smb_storage_class_name= "smb"
 
