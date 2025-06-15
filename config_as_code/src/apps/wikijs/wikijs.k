@@ -57,11 +57,19 @@ release: helm_flux.HelmRelease = {
         install.remediation.retries: 3
         timeout: "5m"
         interval: "24h"
+        valuesFrom: [
+            {
+                kind: "Secret"
+                name: shared.postgres_creds_secret_name
+                optional: False
+                valuesKey: "password"
+                targetPath: "postgresql.postgresqlPassword"
+            }
+        ]
         values: {
             postgresql: {
                 enabled: False
                 postgresqlHost: shared.postgres.cluster_url
-                existingSecret: shared.postgres_creds_secret_name
             }
         }
     }
