@@ -5,3 +5,5 @@ kind: OCIRepository
 spec:
   interval: '24h'
   url: oci://registry-1.docker.io/bitnamicharts/postgresql
+  ref:
+    semver: '16.7.11'
