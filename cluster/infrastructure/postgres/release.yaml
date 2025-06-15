@@ -9,7 +9,7 @@ spec:
       chart: postgres
       version: '*'
       sourceRef:
-        kind: OCIRepository
+        kind: HelmRepository
         name: postgres
       interval: '24h'
   interval: '24h'
