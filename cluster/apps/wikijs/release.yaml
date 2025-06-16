@@ -17,13 +17,9 @@ spec:
     remediation:
       retries: 3
   timeout: '5m'
-  valuesFrom:
-  - kind: Secret
-    name: postgres-creds-secret
-    valuesKey: password
-    targetPath: postgresql.postgresqlPassword
-    optional: false
   values:
     postgresql:
       enabled: false
       postgresqlHost: postgres-postgresql.postgres.svc.cluster.local:5432
+      existingSecret: postgres-creds-secret
+      existingSecretKey: password
