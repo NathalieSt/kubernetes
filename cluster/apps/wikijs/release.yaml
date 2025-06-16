@@ -20,6 +20,6 @@ spec:
   values:
     postgresql:
       enabled: false
-      postgresqlHost: postgres-postgresql.postgres.svc.cluster.local:5432
+      postgresqlHost: postgresql://postgres-postgresql.postgres.svc.cluster.local:5432
       existingSecret: postgres-creds-secret
       existingSecretKey: password
