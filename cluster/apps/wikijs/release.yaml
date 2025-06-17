@@ -20,8 +20,8 @@ spec:
   values:
     postgresql:
       enabled: false
-      postgresqlHost: "postgres-postgresql.postgres.svc.cluster.local"
-      postgresqlPort: 5432 
-      postgresqlDatabase: "wiki"
+      postgresqlHost: postgres-postgresql.postgres.svc.cluster.local
+      postgresqlPort: 5432
+      postgresqlDatabase: wiki
       existingSecret: postgres-creds-secret
       existingSecretKey: password
