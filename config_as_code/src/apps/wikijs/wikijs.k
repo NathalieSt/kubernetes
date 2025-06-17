@@ -60,8 +60,8 @@ release: helm_flux.HelmRelease = {
         values: {
             postgresql: {
                 enabled: False
-                postgresqlHost: "postgres-postgresql.postgres.svc.cluster.local"
-                postgresqlPort: 5432 
+                postgresqlHost: shared.postgres.cluster_url
+                postgresqlPort: shared.postgres.port
                 postgresqlDatabase: "wiki"
                 existingSecret: "postgres-creds-secret"
                 existingSecretKey: "password"

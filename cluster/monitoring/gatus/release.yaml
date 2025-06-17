@@ -42,20 +42,20 @@ spec:
         - '[STATUS] == 200'
         interval: '60s'
       - enabled: true
+        name: postgres
+        url: tcp://postgres-postgresql.postgres.svc.cluster.local:5432
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[CONNECTED] == true'
+        interval: '60s'
+      - enabled: true
         name: wikijs
         url: http://wikijs.wikijs.svc.cluster.local:80
         group: Cluster Services
         method: GET
         conditions:
         - '[STATUS] == 200'
-        interval: '60s'
-      # FIXME: works, but needs to be added to kcl
-      - enabled: true
-        name: postgres
-        url: tcp://postgres-postgresql.postgres.svc.cluster.local:5432
-        group: Cluster Services
-        conditions:
-        - '[CONNECTED] == true'
         interval: '60s'
       - enabled: true
         name: netbird

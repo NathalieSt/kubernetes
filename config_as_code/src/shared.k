@@ -8,6 +8,7 @@ schema ClusterService:
     name: str
     namespace: str
     cluster_url: str
+    port: int
     gatus: GatusConfig
 
 cluster_path = "../../../../cluster/"
@@ -20,7 +21,8 @@ smb_storage_class_name= "smb"
 jellyfin: ClusterService = {
     name: "jellyfin"
     namespace: "jellyfin"
-    cluster_url: "jellyfin.jellyfin.svc.cluster.local:8096"
+    cluster_url: "jellyfin.jellyfin.svc.cluster.local"
+    port: 8096
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
 }
@@ -28,7 +30,8 @@ jellyfin: ClusterService = {
 vault: ClusterService = {
     name: "vault"
     namespace: "vault"
-    cluster_url: "vault.vault.svc.cluster.local:8200"
+    cluster_url: "vault.vault.svc.cluster.local"
+    port: 8200
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
 }
@@ -36,12 +39,24 @@ vault: ClusterService = {
 postgres: ClusterService = {
     name: "postgres"
     namespace: "postgres"
-    cluster_url: "postgres-postgresql.postgres.svc.cluster.local:5432"
+    cluster_url: "postgres-postgresql.postgres.svc.cluster.local"
+    port: 5432
+    gatus.endpointType: "tcp"
+    gatus.conditions: ["[CONNECTED] == true"]
+}
+
+wikijs: ClusterService = {
+    name: "wikijs"
+    namespace: "wikijs"
+    cluster_url: "wikijs.wikijs.svc.cluster.local"
+    port: 80
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
-}
+} 
 
 cluster_services: [ClusterService] = [
     jellyfin,
     vault,
+    postgres,
+    wikijs
 ]
