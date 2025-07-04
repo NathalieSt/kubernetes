@@ -26,9 +26,14 @@ schema ValuesFrom:
     targetPath: str
     optional: bool = False
 
+schema ChartRef:
+    kind: "HelmChart" | "OCIRepository"
+    name: str
+
 schema ReleaseSpec:
     releaseName: str
-    chart: Chart
+    chart?: Chart
+    chartRef?: ChartRef
     interval: str
     install: Install = {
         remediation = {}
