@@ -29,3 +29,8 @@ kubectl delete pod <podname> -n <namespace> --force --grace-period=0
 ```sh
 helm uninstall netbird-operator -n netbird
 ```
+
+## Trigger Cronjob manually
+```sh
+kubectl create job --from=cronjob/postgres-postgresql-pgdumpall manual-postgres -n postgres
+```

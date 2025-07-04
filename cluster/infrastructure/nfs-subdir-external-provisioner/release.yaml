@@ -22,5 +22,5 @@ spec:
       repository: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner
       tag: v4.0.2
     nfs:
-      server: raspberry-pi-4-storage
+      server: raspberry-pi-5-0
       path: /mnt/external_ssd

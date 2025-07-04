@@ -61,7 +61,7 @@ release: helm_flux.HelmRelease = {
                 tag: "v4.0.2" # {\"$imagepolicy\": \"flux-system:nfs-subdir-external-provisioner-image-policy:tag\"}
             }
             nfs: {
-                server: "raspberry-pi-4-storage"
+                server: "raspberry-pi-5-0"
                 path: "/mnt/external_ssd"
             }
         }
