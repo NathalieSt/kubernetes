@@ -1,6 +1,7 @@
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
+import k8s.api.core.v1 as core_api
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/postgres/"
@@ -10,11 +11,13 @@ kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
+init_configmap_file = "init-configmap.yaml"
 
 # Configs
 service_name = "postgres"
 chart_url = "oci://registry-1.docker.io/bitnamicharts/postgresql"
 chart_name = "postgres"
+configmap_name = "init-configmap"
 
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(
@@ -23,9 +26,24 @@ kustomization = k8s_wrapper.create_kustomization(
         namespace_file,
         release_file,
         repository_file,
+        init_configmap_file,
     ]
 )
 namespace = k8s_wrapper.create_namespace(service_name)
+
+# init configmap
+init_configmap: core_api.ConfigMap = {
+    metadata: {
+        name: configmap_name
+    }
+    data: {
+        "init-wikijs.sql": """
+            SELECT 'CREATE DATABASE wikijs'
+            WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'wikijs')\gexec
+        
+        """
+    }
+}
 
 # Helm configuration
 repo: helm_flux.HelmRepository = {
@@ -40,17 +58,9 @@ release: helm_flux.HelmRelease = {
     metadata.name = service_name
     spec: {
         releaseName: service_name
-        chart: {
-            spec: {
-                chart: chart_name
-                version: "*"
-                interval: "24h"
-                sourceRef: {
-                    kind: "OCIRepository"
-                    name: service_name
-                }
-            }
-            
+        chartRef: {
+            kind: "OCIRepository"
+            name: "postgres"
         }
         install.remediation.retries: 3
         timeout: "5m"
@@ -66,6 +76,7 @@ release: helm_flux.HelmRelease = {
         ]
         values: {
             primary.persistence.storageClass: "nfs-client"
+            backup.enabled: True
             backup.cronjob.storage.storageClass: "smb"
         }
     }
@@ -74,6 +85,7 @@ release: helm_flux.HelmRelease = {
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
+yaml.dump_to_file(init_configmap, out_dir + init_configmap_file)
 # Write helm configuration to files
 yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)
