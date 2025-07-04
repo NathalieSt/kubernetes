@@ -14,3 +14,9 @@ dietpi-software install 109
 
 # export mounted ssd via nfs
 echo "/mnt/external_ssd *(rw,async,no_root_squash,crossmnt,no_subtree_check)" | tee -a /etc/exports.d/dietpi.exports
+
+# apply added export
+exportfs -ra
+
+# verify export 
+exportfs -v
