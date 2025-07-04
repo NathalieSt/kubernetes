@@ -22,6 +22,8 @@ spec:
     primary:
       persistence:
         storageClass: nfs-client
+      initdb:
+        scriptsConfigMap: init-configmap
     backup:
       enabled: true
       cronjob:

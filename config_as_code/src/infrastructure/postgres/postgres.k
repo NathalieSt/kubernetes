@@ -17,7 +17,7 @@ init_configmap_file = "init-configmap.yaml"
 service_name = "postgres"
 chart_url = "oci://registry-1.docker.io/bitnamicharts/postgresql"
 chart_name = "postgres"
-configmap_name = "init-configmap"
+init_configmap_name = "init-configmap"
 
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(
@@ -34,7 +34,7 @@ namespace = k8s_wrapper.create_namespace(service_name)
 # init configmap
 init_configmap: core_api.ConfigMap = {
     metadata: {
-        name: configmap_name
+        name: init_configmap_name
     }
     data: {
         "init-wikijs.sql": """
@@ -76,6 +76,7 @@ release: helm_flux.HelmRelease = {
         ]
         values: {
             primary.persistence.storageClass: "nfs-client"
+            primary.initdb.scriptsConfigMap: init_configmap_name
             backup.enabled: True
             backup.cronjob.storage.storageClass: "smb"
         }
