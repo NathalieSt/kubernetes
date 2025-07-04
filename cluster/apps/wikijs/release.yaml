@@ -22,6 +22,6 @@ spec:
       enabled: false
       postgresqlHost: postgres-postgresql.postgres.svc.cluster.local
       postgresqlPort: 5432
-      postgresqlDatabase: wiki
+      postgresqlDatabase: wikijs
       existingSecret: postgres-creds-secret
       existingSecretKey: password
