@@ -52,6 +52,9 @@ repo: helm_flux.HelmRepository = {
     spec: {
         interval: "24h",
         url: chart_url
+        ref: {
+            tag: "16.7.15"
+        }
     }
 }
 release: helm_flux.HelmRelease = {
