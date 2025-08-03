@@ -36,7 +36,7 @@ configmap = core_api.ConfigMap {
             "app.kubernetes.io/name": label_app_name
         }
     }
-    # secret_key is overwritten by ${SEARXNG_SECRET}
+    # secret_key is overwritten by ${SEARXNG_SECRET}, currently a random string, later an env variable will replace it
     # URL to connect valkey database is overwritten by ${SEARXNG_VALKEY_URL}
     # FIXME: maybe extract the inline yaml into a separate file and use a kcl function to turn it into a string here??? Could be useful for nginx gateway later
     data: {
@@ -55,7 +55,7 @@ configmap = core_api.ConfigMap {
                     - html
 
             server:
-                secret_key: "ultrasecretkey"
+                secret_key: "mBrieVOfZQzc7"
                 limiter: true
                 image_proxy: true
 
