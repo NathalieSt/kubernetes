@@ -33,7 +33,7 @@ data:
     # HTTP server - redirect to HTTPS
     server {
         listen 80;
-        server_name jellyfin.cluster.netbird.selfhosted,vault.cluster.netbird.selfhosted,gatus.cluster.netbird.selfhosted,wikijs.cluster.netbird.selfhosted;
+        server_name jellyfin.cluster.netbird.selfhosted,vault.cluster.netbird.selfhosted,gatus.cluster.netbird.selfhosted,wikijs.cluster.netbird.selfhosted,searxng.cluster.netbird.selfhosted;
         return 301 https://$server_name$request_uri;
     }
     
