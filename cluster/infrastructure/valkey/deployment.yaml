@@ -1,0 +1,18 @@
+metadata:
+  labels:
+    app.kubernetes.io/name: valkey
+  name: valkey-deployment
+spec:
+  containers:
+  - image: valkey/valkey:8-alpine3.22
+    name: valkey
+    ports:
+    - containerPort: 6379
+      name: valkey
+    volumeMounts:
+    - mountPath: /data
+      name: valkey-volume
+  volumes:
+  - name: valkey-volume
+    persistentVolumeClaim:
+      claimName: valkey-pvc

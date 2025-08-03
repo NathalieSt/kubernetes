@@ -11,7 +11,6 @@ import yaml
 out_dir = shared.cluster_path + "infrastructure/reflector/"
 secrets_sub_dir = "secrets/"
 secrets_out_dir = out_dir + secrets_sub_dir
-
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
@@ -20,23 +19,21 @@ repository_file = "repository.yaml"
 postgres_creds_file = "postgres-creds.yaml"
 vault_auth_file = "vault-auth.yaml"
 vault_rbac_file = "vault-rbac.yaml"
-
 # Configs
 service_name = "reflector"
 chart_url = "https://emberstack.github.io/helm-charts"
 chart_name = "reflector"
 service_account_name = "reflector-vault-serviceaccount"
-
 # k8s configuration
 kustomization: k8s_wrapper.Kustomization = {
     metadata.name = service_name
     resources = [
-        namespace_file,
-        release_file,
-        repository_file,
+        namespace_file
+        release_file
+        repository_file
         # Secrets
-        secrets_sub_dir + postgres_creds_file,
-        secrets_sub_dir + vault_auth_file,
+        secrets_sub_dir + postgres_creds_file
+        secrets_sub_dir + vault_auth_file
         secrets_sub_dir + vault_rbac_file
     ]
 }
@@ -50,7 +47,7 @@ repo: helm_flux.HelmRepository = {
     metadata.name = service_name
     kind: "HelmRepository"
     spec: {
-        interval: "24h",
+        interval: "24h"
         url: chart_url
     }
 }
@@ -68,7 +65,6 @@ release: helm_flux.HelmRelease = {
                     name: service_name
                 }
             }
-            
         }
         install.remediation.retries: 3
         timeout: "5m"
@@ -78,12 +74,14 @@ release: helm_flux.HelmRelease = {
 }
 # Reflector annotations
 reflector_annotations = {
-        "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
-        "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,wikijs"  # Control destination namespaces
-        "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true" # Auto create reflection for matching namespaces
-        "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,wikijs" # Control auto-reflection namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
+    # Control destination namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,wikijs"
+    # Auto create reflection for matching namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
+    # Control auto-reflection namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,wikijs"
 }
-
 # Vault configuration
 vault_auth: vault.VaultAuth = {
     metadata: {
@@ -102,41 +100,41 @@ vault_auth: vault.VaultAuth = {
 }
 
 vault_rbac: vault.VaultRbac = {
-    serviceAccount: core_api.ServiceAccount{
-        metadata: meta.ObjectMeta{
+    serviceAccount: core_api.ServiceAccount {
+        metadata: meta.ObjectMeta {
             name: service_account_name
         }
     }
-    role: rbac_api.Role{
-        metadata: meta.ObjectMeta{
+    role: rbac_api.Role {
+        metadata: meta.ObjectMeta {
             name: "vault-token-reviewer"
         }
         rules: [
-            rbac_api.PolicyRule{
+            rbac_api.PolicyRule {
                 apiGroups: ["authentication.k8s.io"]
                 resources: ["tokenreviews"]
                 verbs: ["create"]
-            },
-            rbac_api.PolicyRule{
+            }
+            rbac_api.PolicyRule {
                 apiGroups: ["authorization.k8s.io"]
                 resources: ["subjectaccessreviews"]
                 verbs: ["create"]
             }
         ]
     }
-    rolebinding: rbac_api.RoleBinding{
-        metadata: meta.ObjectMeta{
+    rolebinding: rbac_api.RoleBinding {
+        metadata: meta.ObjectMeta {
             name: "reflector-vault-binding"
         }
         subjects: [
-            rbac_api.Subject{
-                kind: "ServiceAccount",
+            rbac_api.Subject {
+                kind: "ServiceAccount"
                 name: service_account_name
             }
         ]
-        roleRef: rbac_api.RoleRef{
-            kind: "Role",
-            name: "vault-token-reviewer",
+        roleRef: rbac_api.RoleRef {
+            kind: "Role"
+            name: "vault-token-reviewer"
             apiGroup: "rbac.authorization.k8s.io"
         }
     }

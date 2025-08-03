@@ -136,3 +136,19 @@ spec:
   timeout: 5m0s
   dependsOn:
   - name: vault-secrets-operator
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: valkey
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: valkey
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/valkey
+  prune: true
+  wait: true
+  timeout: 5m0s
