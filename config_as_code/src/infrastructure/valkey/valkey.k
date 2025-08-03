@@ -37,6 +37,10 @@ pvc: core_api.PersistentVolumeClaim = {
     }
     spec: {
         storageClassName: "nfs-client"
+        # FIXME: Is this the correct access mode???
+        accessModes: [
+            "ReadWriteMany"
+        ]
         resources: {
             requests: {
                 "storage": "10Gi"

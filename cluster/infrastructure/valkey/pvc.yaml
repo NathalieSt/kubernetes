@@ -5,6 +5,8 @@ metadata:
     app.kubernetes.io/name: valkey
   name: valkey-pvc
 spec:
+  accessModes:
+  - ReadWriteMany
   resources:
     requests:
       storage: '10Gi'
