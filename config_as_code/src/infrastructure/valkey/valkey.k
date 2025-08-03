@@ -14,7 +14,7 @@ service_file = "service.yaml"
 # Configs
 service_name = "valkey"
 label_app_name = "valkey"
-k8s_service_name = "valkey-service"
+k8s_service_name = "valkey"
 pvc_name = "valkey"
 port = 6379
 # k8s configuration

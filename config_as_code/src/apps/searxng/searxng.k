@@ -14,12 +14,14 @@ service_file = "service.yaml"
 # Configs
 service_name = "searxng"
 label_app_name = "searxng"
-k8s_service_name = "searxng-service"
+k8s_service_name = "searxng"
 configmap_name = "searxng-configmap"
+deployment_configmap_volume = "searxng-config"
 port = 6379
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
+    configmap_file
     deployment_file
     service_file
 ])
@@ -29,8 +31,9 @@ configmap = core_api.ConfigMap {
     apiVersion: "v1"
     kind: "ConfigMap"
     metadata: {
+        name: configmap_name
         annotations: {
-            "": label_app_name
+            "app.kubernetes.io/name": label_app_name
         }
     }
     # secret_key is overwritten by ${SEARXNG_SECRET}
@@ -55,11 +58,8 @@ configmap = core_api.ConfigMap {
             secret_key: "ultrasecretkey"
             limiter: true
             image_proxy: true
-
             valkey:
-            
-            url: valkey://localhost:6379/0
-        
+                url: valkey://valkey.valkey.svc.cluster.local:6379/0
         """
     }
 }
@@ -97,6 +97,20 @@ deployment = {
                                 containerPort: port
                             }
                         ]
+                        volumeMounts: [
+                            {
+                                mountPath: "/etc/searxng"
+                                name: deployment_configmap_volume
+                            }
+                        ]
+                    }
+                ]
+                volumes: [
+                    {
+                        name: deployment_configmap_volume
+                        configMap: {
+                            name: configmap_name
+                        }
                     }
                 ]
             }
@@ -129,5 +143,6 @@ service: core_api.Service = {
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
+yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + service_file)
