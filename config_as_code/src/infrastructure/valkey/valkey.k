@@ -12,8 +12,9 @@ pvc_file = "pvc.yaml"
 deployment_file = "deployment.yaml"
 service_file = "service.yaml"
 # Configs
+service_name = "valkey"
 label_app_name = "valkey"
-service_name = "valkey-service"
+k8s_service_name = "valkey-service"
 pvc_name = "valkey"
 port = 6379
 # k8s configuration
@@ -85,7 +86,7 @@ service: core_api.Service = {
     apiVersion: "v1"
     kind: "Service"
     metadata: {
-        name: service_name
+        name: k8s_service_name
         labels: {
             "app.kubernetes.io/name": label_app_name
         }
