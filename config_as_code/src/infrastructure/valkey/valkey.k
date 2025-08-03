@@ -58,45 +58,47 @@ deployment = {
             "app.kubernetes.io/name": label_app_name
         }
     }
-    replicas: 1
-    selector: {
-        matchLabels: {
-            "app.kubernetes.io/name": label_app_name
-        }
-    }
-    template: {
-        metadata: meta.ObjectMeta {
-            labels: {
+    spec: {
+        replicas: 1
+        selector: {
+            matchLabels: {
                 "app.kubernetes.io/name": label_app_name
             }
         }
-        spec = core_api.PodSpec {
-            containers: [
-                {
-                    name: "valkey"
-                    image: "valkey/valkey:8-alpine3.22"
-                    ports: [
-                        {
-                            name: "valkey"
-                            containerPort: port
-                        }
-                    ]
-                    volumeMounts: [
-                        {
-                            name: "valkey-volume"
-                            mountPath: "/data"
-                        }
-                    ]
+        template: {
+            metadata: meta.ObjectMeta {
+                labels: {
+                    "app.kubernetes.io/name": label_app_name
                 }
-            ]
-            volumes: [
-                {
-                    name: "valkey-volume"
-                    persistentVolumeClaim: {
-                        claimName: "valkey-pvc"
+            }
+            spec = core_api.PodSpec {
+                containers: [
+                    {
+                        name: "valkey"
+                        image: "valkey/valkey:8-alpine3.22"
+                        ports: [
+                            {
+                                name: "valkey"
+                                containerPort: port
+                            }
+                        ]
+                        volumeMounts: [
+                            {
+                                name: "valkey-volume"
+                                mountPath: "/data"
+                            }
+                        ]
                     }
-                }
-            ]
+                ]
+                volumes: [
+                    {
+                        name: "valkey-volume"
+                        persistentVolumeClaim: {
+                            claimName: "valkey-pvc"
+                        }
+                    }
+                ]
+            }
         }
     }
 }

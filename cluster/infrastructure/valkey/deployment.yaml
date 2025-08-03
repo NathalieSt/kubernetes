@@ -4,25 +4,26 @@ metadata:
   labels:
     app.kubernetes.io/name: valkey
   name: valkey-deployment
-replicas: 1
-selector:
-  matchLabels:
-    app.kubernetes.io/name: valkey
-template:
-  metadata:
-    labels:
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
       app.kubernetes.io/name: valkey
-  spec:
-    containers:
-    - image: valkey/valkey:8-alpine3.22
-      name: valkey
-      ports:
-      - containerPort: 6379
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: valkey
+    spec:
+      containers:
+      - image: valkey/valkey:8-alpine3.22
         name: valkey
-      volumeMounts:
-      - mountPath: /data
-        name: valkey-volume
-    volumes:
-    - name: valkey-volume
-      persistentVolumeClaim:
-        claimName: valkey-pvc
+        ports:
+        - containerPort: 6379
+          name: valkey
+        volumeMounts:
+        - mountPath: /data
+          name: valkey-volume
+      volumes:
+      - name: valkey-volume
+        persistentVolumeClaim:
+          claimName: valkey-pvc
