@@ -38,6 +38,7 @@ configmap = core_api.ConfigMap {
     }
     # secret_key is overwritten by ${SEARXNG_SECRET}
     # URL to connect valkey database is overwritten by ${SEARXNG_VALKEY_URL}
+    # FIXME: maybe extract the inline yaml into a separate file and use a kcl function to turn it into a string here??? Could be useful for nginx gateway later
     data: {
         "settings.yml": """
             # SearXNG settings
