@@ -44,20 +44,20 @@ configmap = core_api.ConfigMap {
             use_default_settings: true
 
             general:
-            debug: false
-            instance_name: "SearXNG"
+                debug: false
+                instance_name: "Nathalies SearXNG"
 
             search:
-            safe_search: 2
-            autocomplete: 'duckduckgo'
-            formats:
-                - html
+                safe_search: 2
+                autocomplete: 'duckduckgo'
+                formats:
+                    - html
 
             server:
-            
-            secret_key: "ultrasecretkey"
-            limiter: true
-            image_proxy: true
+                secret_key: "ultrasecretkey"
+                limiter: true
+                image_proxy: true
+
             valkey:
                 url: valkey://valkey.valkey.svc.cluster.local:6379/0
         """
