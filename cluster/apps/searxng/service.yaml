@@ -3,11 +3,11 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: searxng
-  name: searxng-service
+  name: searxng
 spec:
   ports:
   - name: searxng
-    port: 6379
-    targetPort: 6379
+    port: 8888
+    targetPort: 8888
   selector:
     app.kubernetes.io/name: searxng

@@ -17,7 +17,7 @@ label_app_name = "searxng"
 k8s_service_name = "searxng"
 configmap_name = "searxng-configmap"
 deployment_configmap_volume = "searxng-config"
-port = 6379
+port = 8888
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
