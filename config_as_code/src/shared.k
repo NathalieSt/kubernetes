@@ -132,7 +132,7 @@ dawarich: shared.ClusterService = {
     gatus.conditions: ["[CONNECTED] == true"]
     gatus.endpointType: "http"
     gateway_config: {
-        dns_name: "gatus.cluster"
+        dns_name: "dawarich.cluster"
         requires_websockets: False
         requires_larger_body: False
     }
@@ -147,6 +147,7 @@ cluster_services: [shared.ClusterService] = [
     gluetun_proxy
     valkey
     searxng
+    dawarich
 ]
 
 exposed_services = filter service in cluster_services {
