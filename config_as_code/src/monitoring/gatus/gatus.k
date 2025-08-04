@@ -6,35 +6,28 @@ import ....lib.helpers
 import ...shared
 
 out_dir = shared.cluster_path + "monitoring/gatus/"
-
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
-
 # Configs
 service_name = "gatus"
 chart_url = "https://twin.github.io/helm-charts"
 chart_name = "gatus"
-
 # k8s configuration
-kustomization = k8s_wrapper.create_kustomization(
-    service_name,
-    [
-        namespace_file,
-        release_file,
-        repository_file,
-    ]
-)
+kustomization = k8s_wrapper.create_kustomization(service_name, [
+    namespace_file
+    release_file
+    repository_file
+])
 namespace = k8s_wrapper.create_namespace(service_name)
-
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
     kind: "HelmRepository"
     spec: {
-        interval: "24h",
+        interval: "24h"
         url: chart_url
     }
 }
@@ -42,15 +35,14 @@ repo: helm_flux.HelmRepository = {
 schema ExternalService:
     name: str
     url: str
-    
 
 external_services: [ExternalService] = [
     {
-        name: "netbird",
+        name: "netbird"
         url: "https://netbird.nathalie-stiefsohn.eu"
-    },
+    }
     {
-        name: "revolt",
+        name: "revolt"
         url: "https://chat.nathalie-stiefsohn.eu"
     }
 ]
@@ -69,7 +61,6 @@ release: helm_flux.HelmRelease = {
                     name: service_name
                 }
             }
-            
         }
         install.remediation.retries: 3
         timeout: "5m"
@@ -79,13 +70,7 @@ release: helm_flux.HelmRelease = {
             config: {
                 storage.type: "sqlite"
                 storage.path: "/data/data.db"
-                endpoints: [
-                    helpers.create_gatus_endpoint( service.name, service.gatus.endpointType + "://" + service.cluster_url + ":" + str(service.port), "GET", service.gatus.conditions, "60s", "Cluster Services")
-                    for service in shared.cluster_services
-                ] + [
-                    helpers.create_gatus_endpoint( service.name, service.url, "GET", ["[STATUS] == 200"], "60s", "External Services")
-                    for service in external_services
-                ] 
+                endpoints: [helpers.create_gatus_endpoint(service.name, service.gatus.endpointType + "://" + service.cluster_url + ":" + str(service.port), "GET", service.gatus.conditions, "60s", "Cluster Services") for service in shared.cluster_services] + [helpers.create_gatus_endpoint(service.name, service.url, "GET", ["[STATUS] == 200"], "60s", "External Services") for service in external_services]
             }
         }
     }

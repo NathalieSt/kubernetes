@@ -6,37 +6,30 @@ import ....lib.helm_flux
 import ...shared
 
 out_dir = shared.cluster_path + "apps/jellyfin/"
-
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
 pvc_file = "pvc.yaml"
-
 # Configs
 service_name = "jellyfin"
 chart_url = "https://jellyfin.github.io/jellyfin-helm"
 chart_name = "jellyfin"
 pvc_name = "jellyfin-library-storage-pvc"
-
 # k8s configuration
-kustomization = k8s_wrapper.create_kustomization(
-    service_name,
-    [
-        namespace_file,
-        release_file,
-        repository_file,
-        pvc_file,
-    ]
-)
+kustomization = k8s_wrapper.create_kustomization(service_name, [
+    namespace_file
+    release_file
+    repository_file
+    pvc_file
+])
 namespace = k8s_wrapper.create_namespace(service_name)
-
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
     spec: {
-        interval: "24h",
+        interval: "24h"
         url: chart_url
     }
 }
@@ -54,7 +47,6 @@ release: helm_flux.HelmRelease = {
                     name: service_name
                 }
             }
-            
         }
         install.remediation.retries: 3
         timeout: "5m"
@@ -62,8 +54,9 @@ release: helm_flux.HelmRelease = {
         values: {
             image: {
                 repository: "docker.io/jellyfin/jellyfin"
-                tag: "10.10.7" # {"$imagepolicy": "flux-system:jellyfin-image-policy:tag"}
-            } 
+                # {"$imagepolicy": "flux-system:jellyfin-image-policy:tag"}
+                tag: "10.10.7"
+            }
             persistence.media.existingClaim: pvc_name
         }
     }
@@ -74,12 +67,9 @@ pvc: core_api.PersistentVolumeClaim = {
     spec: {
         accessModes: ["ReadWriteMany"]
         storageClassName: shared.smb_storage_class_name
-        resources.requests.storage:"100Gi"
+        resources.requests.storage: "100Gi"
     }
 }
-
-
-
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)

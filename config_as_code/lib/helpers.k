@@ -3,7 +3,7 @@ resources = {
         cpu: "50m"
         memory: "64Mi"
     }
-    limits:{
+    limits: {
         cpu: "100m"
         memory: "128Mi"
     }
@@ -14,15 +14,15 @@ create_nginx_sidecar = lambda config_volume_name: str, tls_volume_name: str {
         name: "nginx"
         image: "nginx:alpine"
         ports: [
-            { containerPort: 80},
-            { containerPort: 443}
+            {containerPort: 80}
+            {containerPort: 443}
         ]
         volumeMounts: [
-            { 
+            {
                 name: config_volume_name
                 mountPath: "/etc/nginx/conf.d"
-            },
-            { 
+            }
+            {
                 name: tls_volume_name
                 mountPath: "/etc/nginx/ssl"
                 readOnly: True
@@ -43,22 +43,22 @@ create_netbird_sidecar = lambda setup_key_secret_name: str, setup_key_secret_key
                 valueFrom: {
                     secretKeyRef: {
                         name: setup_key_secret_name
-                        key: setup_key_secret_key 
+                        key: setup_key_secret_key
                     }
                 }
-            },
+            }
             {
                 name: "NB_HOSTNAME"
                 value: service_name
-            },
+            }
             {
                 name: "NB_MANAGEMENT_URL"
                 value: "https://netbird.nathalie-stiefsohn.eu"
-            },
+            }
         ]
         resources: resources
         securityContext: {
-          privileged: True
+            privileged: True
         }
     }
     sidecar

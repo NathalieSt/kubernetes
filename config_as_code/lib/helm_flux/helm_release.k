@@ -47,3 +47,4 @@ schema HelmRelease:
     kind: "HelmRelease"
     metadata: meta.ObjectMeta
     spec: ReleaseSpec
+

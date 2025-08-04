@@ -1,5 +1,3 @@
-
-
 schema GatusConfig:
     endpointType: "http" | "tcp"
     conditions?: [str]
@@ -16,7 +14,7 @@ global_vault_auth_namespace = "vault-secrets-operator"
 ca_issuer = "my-ca-issuer"
 postgres_creds_secret_name = "postgres-creds-secret"
 tls_cert_secret = "nginx-tls-secret"
-smb_storage_class_name= "smb"
+smb_storage_class_name = "smb"
 
 jellyfin: ClusterService = {
     name: "jellyfin"
@@ -52,11 +50,11 @@ wikijs: ClusterService = {
     port: 80
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
-} 
+}
 
 cluster_services: [ClusterService] = [
-    jellyfin,
-    vault,
-    postgres,
+    jellyfin
+    vault
+    postgres
     wikijs
 ]

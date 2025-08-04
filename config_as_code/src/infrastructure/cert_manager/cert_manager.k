@@ -5,39 +5,32 @@ import ...shared
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/cert-manager/"
-
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
 cert_manager_file = "cluster-issuer.yaml"
-
 # Configs
 service_name = "cert-manager"
 chart_url = "https://charts.jetstack.io"
 chart_name = "cert-manager"
 root_issuer_name = "selfsigned-issuer"
 root_certificate_name = "root-cert"
-
 # k8s configuration
-kustomization = k8s_wrapper.create_kustomization(
-    service_name,
-    [
-        namespace_file,
-        release_file,
-        repository_file,
-        cert_manager_file,
-    ]
-)
+kustomization = k8s_wrapper.create_kustomization(service_name, [
+    namespace_file
+    release_file
+    repository_file
+    cert_manager_file
+])
 namespace = k8s_wrapper.create_namespace(service_name)
-
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
     kind: "HelmRepository"
     spec: {
-        interval: "24h",
+        interval: "24h"
         url: chart_url
     }
 }
@@ -55,7 +48,6 @@ release: helm_flux.HelmRelease = {
                     name: service_name
                 }
             }
-            
         }
         install.remediation.retries: 3
         timeout: "5m"
@@ -72,7 +64,7 @@ release: helm_flux.HelmRelease = {
                 memory: "128Mi"
             }
             webhook.replicaCount: 1
-            webhook.resources.requests: {    
+            webhook.resources.requests: {
                 cpu: "10m"
                 memory: "32Mi"
             }
@@ -80,7 +72,7 @@ release: helm_flux.HelmRelease = {
                 cpu: "100m"
                 memory: "64Mi"
             }
-            cainjector.replicaCount: 1  
+            cainjector.replicaCount: 1
             cainjector.resources.requests: {
                 cpu: "10m"
                 memory: "64Mi"
@@ -92,7 +84,6 @@ release: helm_flux.HelmRelease = {
         }
     }
 }
-
 # Cert Manager configuration
 root_issuer: cert_manager.ClusterIssuer = {
     metadata.name: root_issuer_name
@@ -108,7 +99,7 @@ root_certificate: cert_manager.Certificate = {
         commonName: "my-selfsigned-ca"
         secretName: root_certificate_name
         privateKey: {
-            algorithm: "ECDSA",
+            algorithm: "ECDSA"
             size: 521
         }
         issuerRef: {
@@ -131,11 +122,10 @@ cluster_issuer: cert_manager.ClusterIssuer = {
 }
 
 cert_manger_config = [
-    root_issuer,
-    root_certificate,
-    cluster_issuer,
+    root_issuer
+    root_certificate
+    cluster_issuer
 ]
-
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)

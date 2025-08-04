@@ -1,4 +1,5 @@
 import ....lib.k8s_wrapper
+import ....lib.vault
 import ...shared
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
@@ -11,12 +12,18 @@ namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 service_file = "service.yaml"
+vault_rbac_file = "vault_rbac.yaml"
+vault_auth_file = "vault_auth.yaml"
+vault_static_secret_file = "vault_static_secret.yaml"
 # Configs
 service_name = "searxng"
 label_app_name = "searxng"
 k8s_service_name = "searxng"
 configmap_name = "searxng-configmap"
 deployment_configmap_volume = "searxng-config"
+secret_name = "searxng-vpn"
+vault_role = "vpn"
+secret_path = "vpn"
 port = 8080
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
@@ -24,6 +31,9 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     configmap_file
     deployment_file
     service_file
+    vault_rbac_file
+    vault_auth_file
+    vault_static_secret_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name)
 
@@ -65,6 +75,41 @@ configmap = core_api.ConfigMap {
     }
 }
 
+vault_rbac = vault.create_vault_rbac(service_name)
+
+vault_auth: vault.VaultAuth = {
+    metadata: {
+        name: "vault-auth"
+    }
+    spec: {
+        kubernetes: {
+            role: vault_role
+            serviceAccount: vault_rbac.serviceAccount.metadata.name
+        }
+        vaultAuthGlobalRef: {
+            allowDefault: True
+            namespace: shared.global_vault_auth_namespace
+        }
+    }
+}
+
+vault_static_secret: vault.VaultStaticSecret = {
+    metadata: {
+        name: secret_name
+    }
+    spec: {
+        vaultAuthRef: vault_auth.metadata.name
+        mount: "kvv2"
+        type: "kv-v2"
+        path: secret_path
+        refreshAfter: "10s"
+        destination: {
+            create: True
+            name: secret_name
+        }
+    }
+}
+
 deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
@@ -102,6 +147,44 @@ deployment = {
                             {
                                 mountPath: "/etc/searxng"
                                 name: deployment_configmap_volume
+                            }
+                        ]
+                    }
+                    {
+                        name: "gluetun"
+                        image: "qmcgaw/gluetun:v3.40"
+                        securityContext: {
+                            capabilities: {
+                                add: [
+                                    "NET_ADMIN"
+                                ]
+                            }
+                        }
+                        env: [
+                            {
+                                name: "VPN_SERVICE_PROVIDER"
+                                value: "protonvpn"
+                            }
+                            {
+                                name: "VPN_TYPE"
+                                value: "wireguard"
+                            }
+                            {
+                                name: "WIREGUARD_PRIVATE_KEY"
+                                valueFrom: {
+                                    secretKeyRef: {
+                                        name: secret_name
+                                        key: "key"
+                                    }
+                                }
+                            }
+                            {
+                                name: "DOT"
+                                value: "on"
+                            }
+                            {
+                                name: "DNS_KEEP_NAMESERVER"
+                                value: "on"
                             }
                         ]
                     }

@@ -17,3 +17,4 @@ schema VaultAuth:
     kind: "VaultAuth"
     metadata: meta.ObjectMeta
     spec: VaultAuthSpec
+

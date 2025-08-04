@@ -19,3 +19,4 @@ schema VaultStaticSecret:
     kind: "VaultStaticSecret"
     metadata: meta.ObjectMeta
     spec: VaultStaticSecretSpec
+

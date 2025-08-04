@@ -7,3 +7,4 @@ schema Endpoint:
     # e.g. [STATUS] == 200
     conditions?: [str]
     interval?: str
+
