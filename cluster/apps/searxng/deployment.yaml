@@ -45,7 +45,7 @@ spec:
         - name: FIREWALL_OUTBOUND_SUBNETS
           value: '10.42.0.0/15'
         - name: SERVER_COUNTRIES
-          value: AT
+          value: Austria,Finland,Malta
         image: qmcgaw/gluetun:v3.40
         name: gluetun
         securityContext:

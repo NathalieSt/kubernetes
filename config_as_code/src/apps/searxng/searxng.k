@@ -204,7 +204,7 @@ deployment = {
                             }
                             {
                                 name: "SERVER_COUNTRIES"
-                                value: "AT"
+                                value: "Austria,Finland,Malta"
                             }
                         ]
                     }
