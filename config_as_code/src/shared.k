@@ -6,6 +6,7 @@ ca_issuer = "my-ca-issuer"
 postgres_creds_secret_name = "postgres-creds-secret"
 tls_cert_secret = "nginx-tls-secret"
 smb_storage_class_name = "smb"
+nfs_storage_class_name = "nfs-client"
 
 jellyfin: shared.ClusterService = {
     name: "jellyfin"
@@ -104,6 +105,30 @@ gatus: shared.ClusterService = {
     namespace: "gatus"
     cluster_url: "gatus.gatus.svc.cluster.local"
     port: 80
+    gatus.conditions: ["[CONNECTED] == true"]
+    gatus.endpointType: "http"
+    gateway_config: {
+        dns_name: "gatus.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+}
+
+redis = shared.ClusterService {
+    name: "redis"
+    namespace: "redis"
+    cluster_url: "redis.redis.svc.cluster.local"
+    port: 3000
+    gatus.conditions: ["[CONNECTED] == true"]
+    gatus.endpointType: "http"
+}
+
+#FIXME: make gatus configs optional
+dawarich: shared.ClusterService = {
+    name: "dawarich"
+    namespace: "dawarich"
+    cluster_url: "dawarich.dawarich.svc.cluster.local"
+    port: 3000
     gatus.conditions: ["[CONNECTED] == true"]
     gatus.endpointType: "http"
     gateway_config: {

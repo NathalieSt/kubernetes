@@ -10,7 +10,7 @@ kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
-k8s_service_file = "service.yaml"
+service_file = "service.yaml"
 # Configs
 service_name = "searxng"
 label_app_name = "searxng"
@@ -23,7 +23,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     configmap_file
     deployment_file
-    k8s_service_file
+    service_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name)
 
@@ -159,4 +159,4 @@ yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
-yaml.dump_to_file(service, out_dir + k8s_service_file)
+yaml.dump_to_file(service, out_dir + service_file)
