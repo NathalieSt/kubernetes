@@ -12,7 +12,6 @@ secret_out_dir = out_dir + secret_dir
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
-pvc_file = "pvc.yaml"
 deployment_file = "deployment.yaml"
 service_file = "service.yaml"
 ## Vault specific filenames
@@ -23,7 +22,6 @@ vault_static_secret_file = "vault_static_secret.yaml"
 service_name = "gluetun-proxy"
 label_app_name = "gluetun-proxy"
 k8s_service_name = "gluetun-proxy"
-pvc_name = "gluetun-proxy"
 port = 8888
 ## Vault specific configs
 secret_name = "gluetun-proxy-vpn"
@@ -32,7 +30,6 @@ secret_path = "vpn"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
-    pvc_file
     deployment_file
     service_file
     # Vault specific files
