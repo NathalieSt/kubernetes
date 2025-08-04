@@ -47,6 +47,7 @@ spec:
           value: Austria,Finland,Malta
         image: qmcgaw/gluetun:v3.40
         name: gluetun
+        restartPolicy: Always
         securityContext:
           capabilities:
             add:

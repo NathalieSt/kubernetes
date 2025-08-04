@@ -140,6 +140,7 @@ deployment = {
                     {
                         name: "gluetun"
                         image: "qmcgaw/gluetun:v3.40"
+                        restartPolicy: "Always"
                         securityContext: {
                             capabilities: {
                                 add: [
