@@ -59,11 +59,11 @@ spec:
         interval: '60s'
       - enabled: true
         name: gluetun-proxy
-        url: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        url: tcp://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
         group: Cluster Services
         method: GET
         conditions:
-        - '[STATUS] == 200'
+        - '[CONNECTED] == true'
         interval: '60s'
       - enabled: true
         name: valkey

@@ -66,8 +66,8 @@ gluetun_proxy: ClusterService = {
     namespace: "gluetun-proxy"
     cluster_url: "gluetun-proxy.gluetun-proxy.svc.cluster.local"
     port: 8888
-    gatus.endpointType: "http"
-    gatus.conditions: ["[STATUS] == 200"]
+    gatus.endpointType: "tcp"
+    gatus.conditions: ["[CONNECTED] == true"]
     exposed: False
 }
 
@@ -89,6 +89,16 @@ searxng: ClusterService = {
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
     exposed: True
+}
+
+nginx_gateway: ClusterService = {
+    name: "nginx-gateway"
+    namespace: "searxng"
+    cluster_url: "nginx-gateway.nginx-gateway.svc.cluster.local"
+    port: 80
+    gatus.conditions: []
+    gatus.endpointType: "http"
+    exposed: False
 }
 
 cluster_services: [ClusterService] = [
