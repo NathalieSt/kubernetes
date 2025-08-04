@@ -6,7 +6,8 @@ import k8s.api.core.v1 as core_api
 import yaml
 
 out_dir = shared.cluster_path + "apps/searxng/"
-secret_out_dir = out_dir + "secrets/"
+secret_dir = "secrets/"
+secret_out_dir = out_dir + secret_dir
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
@@ -33,9 +34,9 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     deployment_file
     service_file
     # secrets
-    vault_rbac_file
-    vault_auth_file
-    vault_static_secret_file
+    secret_dir + vault_rbac_file
+    secret_dir + vault_auth_file
+    secret_dir + vault_static_secret_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name)
 
