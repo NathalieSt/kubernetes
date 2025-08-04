@@ -23,7 +23,7 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: searxng-config
-      - image: corfr/tcpdump
+      - image: nicolaka/netshoot
         name: debug-dumps
         imagePullPolicy: Always
       volumes:
