@@ -73,7 +73,7 @@ configmap = core_api.ConfigMap {
                 enable_http2: true         # See https://www.python-httpx.org/http2/
                 proxies:
                     all://:
-                        - http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888;
+                        - http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
         """
     }
 }
