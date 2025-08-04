@@ -101,7 +101,6 @@ deployment = {
                     {
                         name: "gluetun"
                         image: "qmcgaw/gluetun:v3.40"
-                        restartPolicy: "Always"
                         ports: [
                             {
                                 name: "gluetun-proxy"
