@@ -4,7 +4,6 @@ metadata:
   name: gluetun-proxy
 resources:
 - namespace.yaml
-- pvc.yaml
 - deployment.yaml
 - service.yaml
 - secrets/vault_rbac.yaml
