@@ -187,6 +187,10 @@ deployment = {
                                 name: "SERVER_COUNTRIES"
                                 value: "Austria,Finland,Malta"
                             }
+                            {
+                                name: "FIREWALL_INPUT_PORTS"
+                                value: "8080"
+                            }
                         ]
                     }
                     {
