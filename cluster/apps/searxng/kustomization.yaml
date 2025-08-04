@@ -7,3 +7,6 @@ resources:
 - configmap.yaml
 - deployment.yaml
 - service.yaml
+- vault_rbac.yaml
+- vault_auth.yaml
+- vault_static_secret.yaml

@@ -23,6 +23,26 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: searxng-config
+      - env:
+        - name: VPN_SERVICE_PROVIDER
+          value: protonvpn
+        - name: VPN_TYPE
+          value: wireguard
+        - name: WIREGUARD_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              key: key
+              name: searxng-vpn
+        - name: DOT
+          value: 'on'
+        - name: DNS_KEEP_NAMESERVER
+          value: 'on'
+        image: qmcgaw/gluetun:v3.40
+        name: gluetun
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
       volumes:
       - configMap:
           name: searxng-configmap
