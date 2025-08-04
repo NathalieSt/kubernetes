@@ -8,6 +8,11 @@ schema ClusterService:
     cluster_url: str
     port: int
     gatus: GatusConfig
+    exposed: bool
+
+schema ExternalService:
+    name: str
+    url: str
 
 cluster_path = "../../../../cluster/"
 global_vault_auth_namespace = "vault-secrets-operator"
@@ -23,6 +28,7 @@ jellyfin: ClusterService = {
     port: 8096
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
+    exposed: True
 }
 
 vault: ClusterService = {
@@ -32,6 +38,7 @@ vault: ClusterService = {
     port: 8200
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
+    exposed: True
 }
 
 postgres: ClusterService = {
@@ -41,6 +48,7 @@ postgres: ClusterService = {
     port: 5432
     gatus.endpointType: "tcp"
     gatus.conditions: ["[CONNECTED] == true"]
+    exposed: False
 }
 
 wikijs: ClusterService = {
@@ -50,6 +58,37 @@ wikijs: ClusterService = {
     port: 80
     gatus.endpointType: "http"
     gatus.conditions: ["[STATUS] == 200"]
+    exposed: True
+}
+
+gluetun_proxy: ClusterService = {
+    name: "gluetun-proxy"
+    namespace: "gluetun-proxy"
+    cluster_url: "gluetun-proxy.gluetun-proxy.svc.cluster.local"
+    port: 8888
+    gatus.endpointType: "http"
+    gatus.conditions: ["[STATUS] == 200"]
+    exposed: False
+}
+
+valkey: ClusterService = {
+    name: "valkey"
+    namespace: "valkey"
+    cluster_url: "valkey.valkey.svc.cluster.local"
+    port: 6379
+    gatus.endpointType: "tcp"
+    gatus.conditions: ["[CONNECTED] == true"]
+    exposed: False
+}
+
+searxng: ClusterService = {
+    name: "searxng"
+    namespace: "searxng"
+    cluster_url: "searxng.searxng.svc.cluster.local"
+    port: 8080
+    gatus.endpointType: "http"
+    gatus.conditions: ["[STATUS] == 200"]
+    exposed: True
 }
 
 cluster_services: [ClusterService] = [
@@ -57,4 +96,7 @@ cluster_services: [ClusterService] = [
     vault
     postgres
     wikijs
+    gluetun_proxy
+    valkey
+    searxng
 ]

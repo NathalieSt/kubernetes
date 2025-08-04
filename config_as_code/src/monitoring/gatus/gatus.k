@@ -32,11 +32,7 @@ repo: helm_flux.HelmRepository = {
     }
 }
 
-schema ExternalService:
-    name: str
-    url: str
-
-external_services: [ExternalService] = [
+external_services: [shared.ExternalService] = [
     {
         name: "netbird"
         url: "https://netbird.nathalie-stiefsohn.eu"
