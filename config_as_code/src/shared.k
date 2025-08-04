@@ -118,7 +118,7 @@ redis = shared.ClusterService {
     name: "redis"
     namespace: "redis"
     cluster_url: "redis.redis.svc.cluster.local"
-    port: 3000
+    port: 6379
     gatus.conditions: ["[CONNECTED] == true"]
     gatus.endpointType: "http"
 }

@@ -16,7 +16,7 @@ service_name = shared.redis.name
 label_app_name = "redis"
 k8s_service_name = "redis"
 pvc_name = "redis-pvc"
-port = 6379
+port = shared.redis.port
 pvc_volume_name = "redis-volume"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [

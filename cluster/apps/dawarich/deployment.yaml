@@ -28,7 +28,7 @@ spec:
         - name: RAILS_ENV
           value: development
         - name: REDIS_URL
-          value: redis://redis.redis.svc.cluster.local:3000
+          value: redis://redis.redis.svc.cluster.local:6379
         - name: DATABASE_HOST
           value: postgres-postgresql.postgres.svc.cluster.local
         - name: DATABASE_PORT
@@ -78,7 +78,7 @@ spec:
         - name: RAILS_ENV
           value: development
         - name: REDIS_URL
-          value: redis://redis.redis.svc.cluster.local:3000
+          value: redis://redis.redis.svc.cluster.local:6379
         - name: DATABASE_HOST
           value: postgres-postgresql.postgres.svc.cluster.local
         - name: DATABASE_PORT
