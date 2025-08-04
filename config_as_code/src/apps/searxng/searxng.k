@@ -136,23 +136,7 @@ deployment = {
                 }
             }
             spec = core_api.PodSpec {
-                containers: [
-                    {
-                        name: "searxng"
-                        image: "searxng/searxng:2025.8.3-2e62eb5"
-                        ports: [
-                            {
-                                name: "searxng"
-                                containerPort: port
-                            }
-                        ]
-                        volumeMounts: [
-                            {
-                                mountPath: "/etc/searxng"
-                                name: deployment_configmap_volume
-                            }
-                        ]
-                    }
+                initContainers: [
                     {
                         name: "gluetun"
                         image: "qmcgaw/gluetun:v3.40"
@@ -191,10 +175,6 @@ deployment = {
                                 }
                             }
                             {
-                                name: "DOT"
-                                value: "on"
-                            }
-                            {
                                 name: "DNS_KEEP_NAMESERVER"
                                 value: "on"
                             }
@@ -205,6 +185,40 @@ deployment = {
                             {
                                 name: "SERVER_COUNTRIES"
                                 value: "Austria,Finland,Malta"
+                            }
+                        ]
+                    }
+                    {
+                        name: "ping"
+                        image: "busybox"
+                        command: [
+                            "sh"
+                            "-c"
+                            """
+                                sleep 30
+                                while ! ping -c 1 8.8.8.8; do
+                                    echo "Ping failed, retrying in 5"
+                                    sleep 5
+                                done
+                                echo "ping succesfull, exiting"   
+                            """
+                        ]
+                    }
+                ]
+                containers: [
+                    {
+                        name: "searxng"
+                        image: "searxng/searxng:2025.8.3-2e62eb5"
+                        ports: [
+                            {
+                                name: "searxng"
+                                containerPort: port
+                            }
+                        ]
+                        volumeMounts: [
+                            {
+                                mountPath: "/etc/searxng"
+                                name: deployment_configmap_volume
                             }
                         ]
                     }
