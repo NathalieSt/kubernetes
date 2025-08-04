@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-gateway
+  labels:
+    app.kubernetes.io/name: nginx-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nginx-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nginx-gateway
+    spec:
+      serviceAccount: nginx-vault-serviceaccount
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+              cpu: 100m
+              memory: 128Mi
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+        - name: nginx-tls
+          mountPath: /etc/nginx/ssl
+          readOnly: true
+        - name: shared-tmp
+          mountPath: /tmp
+      - name: netbird-agent
+        image: netbirdio/netbird:latest
+        env:
+          - name: NB_SETUP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: netbird-setup-key
+                key: setup-key
+          - name: NB_HOSTNAME
+            value: cluster
+          - name: NB_MANAGEMENT_URL
+            value: "https://netbird.nathalie-stiefsohn.eu"
+          - name: NB_EXTRA_DNS_LABELS
+            value: "jellyfin.cluster,vault.cluster,gatus.cluster,wikijs.cluster,searxng.cluster"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          privileged: true
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-gateway-config
+      - name: nginx-tls
+        secret:
+          secretName: nginx-gateway-tls
+          defaultMode: 0400
+      - name: shared-tmp
+        emptyDir: {}

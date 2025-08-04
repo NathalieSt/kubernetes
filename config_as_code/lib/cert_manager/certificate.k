@@ -29,7 +29,7 @@ schema CertificateSpec:
 schema Certificate:
     apiVersion: "cert-manager.io/v1"
     kind: "Certificate"
-    metadata?: meta.ObjectMeta
+    metadata: meta.ObjectMeta
     spec?: CertificateSpec
 
 create_certificate = lambda certificate_name: str, organizations: [str], secret_name: str, issuer_ref_name: str, issuer_ref_kind: str, dns_names: [str], secret_annotations: {str:str} -> Certificate {
