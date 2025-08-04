@@ -23,47 +23,6 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: searxng-config
-      initContainers:
-      - env:
-        - name: VPN_SERVICE_PROVIDER
-          value: protonvpn
-        - name: VPN_TYPE
-          value: openvpn
-        - name: OPENVPN_USER
-          valueFrom:
-            secretKeyRef:
-              key: user
-              name: searxng-vpn
-        - name: OPENVPN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: password
-              name: searxng-vpn
-        - name: SERVER_COUNTRIES
-          value: Austria,Finland,Malta
-        - name: FIREWALL_VPN_INPUT_PORTS
-          value: '8080'
-        - name: FIREWALL_INPUT_PORTS
-          value: '8080'
-        - name: FIREWALL_OUTBOUND_SUBNETS
-          value: '10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.42.0.0/15'
-        - name: DOT
-          value: 'off'
-        - name: DNS_KEEP_NAMESERVER
-          value: 'on'
-        image: qmcgaw/gluetun:v3.40
-        name: gluetun
-        restartPolicy: Always
-        securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
-      - command:
-        - sh
-        - '-c'
-        - "\n                                sleep 30\n                                while ! ping -c 1 8.8.8.8; do\n                                    echo \"Ping failed, retrying in 5\"\n                                    sleep 5\n                                done\n                                echo \"ping succesfull, exiting\"   \n                            "
-        image: busybox
-        name: ping
       volumes:
       - configMap:
           name: searxng-configmap
