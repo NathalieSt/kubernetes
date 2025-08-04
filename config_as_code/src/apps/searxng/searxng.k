@@ -176,20 +176,26 @@ deployment = {
                                 }
                             }
                             {
-                                name: "DNS_KEEP_NAMESERVER"
-                                value: "on"
-                            }
-                            {
-                                name: "FIREWALL_OUTBOUND_SUBNETS"
-                                value: "10.42.0.0/15"
-                            }
-                            {
                                 name: "SERVER_COUNTRIES"
                                 value: "Austria,Finland,Malta"
+                            }
+                            # Key settings for selective routing
+                            {
+                                name: "FIREWALL_VPN_INPUT_PORTS"
+                                value: "8080"
                             }
                             {
                                 name: "FIREWALL_INPUT_PORTS"
                                 value: "8080"
+                            }
+                            {
+                                name: "FIREWALL_OUTBOUND_SUBNETS"
+                                # Allow local cluster traffic
+                                value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+                            }
+                            {
+                                name: "DOT"
+                                value: "off"
                             }
                         ]
                     }
