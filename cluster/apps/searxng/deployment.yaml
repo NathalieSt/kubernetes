@@ -25,7 +25,8 @@ spec:
           name: searxng-config
       - image: nicolaka/netshoot
         name: debug-dumps
-        imagePullPolicy: Always
+        command: ["/bin/bash"]
+        args: ["-c", "while true; do ping localhost; sleep 60;done"]
       volumes:
       - configMap:
           name: searxng-configmap
