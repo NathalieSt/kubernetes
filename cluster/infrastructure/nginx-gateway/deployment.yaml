@@ -40,7 +40,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: setup-key
-              name: netbird-setup-key
+              name: netbird-setup-key-vault-secret
         - name: NB_HOSTNAME
           value: cluster
         - name: NB_MANAGEMENT_URL

@@ -198,7 +198,7 @@ deployment = {
                                 name = "NB_SETUP_KEY"
                                 valueFrom = {
                                     secretKeyRef = {
-                                        name = "netbird-setup-key"
+                                        name = secret_name
                                         key = "setup-key"
                                     }
                                 }
