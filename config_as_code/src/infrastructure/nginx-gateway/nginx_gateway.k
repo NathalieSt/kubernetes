@@ -94,18 +94,7 @@ configmap = core_api.ConfigMap {
         "default.conf": nginx.create_conf_from_services(shared.exposed_services)
     }
 }
-#subject:
-#    organizations:
-#      - cert-manager 
-#  secretName: nginx-gateway-tls
-#  issuerRef:
-#    name: my-ca-issuer
-#    kind: ClusterIssuer
-#  dnsNames:
-#  - "*.cluster.netbird.selfhosted"
-#  - "cluster.netbird.selfhosted"
-#  - "jellyfin.cluster.netbird.selfhosted"
-#  - "uptime.cluster.netbird.selfhosted"
+
 certificate: cert_manager.Certificate = {
     apiVersion: "cert-manager.io/v1"
     kind: "Certificate"
