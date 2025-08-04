@@ -234,6 +234,6 @@ yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + service_file)
 # secrets
-yaml.dump_to_file(vault_rbac, secret_out_dir + vault_rbac_file)
+yaml.dump_all_to_file([vault_rbac[key] for key in vault_rbac], secret_out_dir + vault_rbac_file)
 yaml.dump_to_file(vault_auth, secret_out_dir + vault_auth_file)
 yaml.dump_to_file(vault_static_secret, secret_out_dir + vault_static_secret_file)
