@@ -46,9 +46,11 @@ spec:
         - name: FIREWALL_INPUT_PORTS
           value: '8080'
         - name: FIREWALL_OUTBOUND_SUBNETS
-          value: '10.0.0.0/8,172.16.0.0/12,192.168.0.0/16'
+          value: '10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.42.0.0/15'
         - name: DOT
           value: 'off'
+        - name: DNS_KEEP_NAMESERVER
+          value: 'on'
         image: qmcgaw/gluetun:v3.40
         name: gluetun
         restartPolicy: Always
