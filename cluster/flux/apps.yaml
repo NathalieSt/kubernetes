@@ -46,3 +46,23 @@ spec:
   wait: true
   timeout: 15m0s
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dawarich
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: dawarich
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/dawarich
+  prune: true
+  wait: true
+  timeout: 15m0s
+  dependsOn:
+  - name: reflector
+  - name: redis
+  - name: postgres
+---

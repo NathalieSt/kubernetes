@@ -76,11 +76,11 @@ release: helm_flux.HelmRelease = {
 reflector_annotations = {
     "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
     # Control destination namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,wikijs"
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,wikijs,dawarich"
     # Auto create reflection for matching namespaces
     "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
     # Control auto-reflection namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,wikijs"
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,wikijs,dawarich"
 }
 # Vault configuration
 vault_auth: vault.VaultAuth = {

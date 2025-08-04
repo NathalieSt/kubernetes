@@ -4,85 +4,116 @@ import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
 
-out_dir = shared.cluster_path + "apps/searxng/"
+out_dir = shared.cluster_path + "apps/dawarich/"
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
-configmap_file = "configmap.yaml"
+public_pvc_file = "public-dawarich-pvc.yaml"
+watched_pvc_file = "watched-dawarich-pvc.yaml"
+storage_pvc_file = "storage-dawarich-pvc.yaml"
 deployment_file = "deployment.yaml"
-service_file = "service.yaml"
+k8s_service_file = "service.yaml"
 # Configs
-service_name = "searxng"
-label_app_name = "searxng"
-k8s_service_name = "searxng"
-configmap_name = "searxng-configmap"
-deployment_configmap_volume = "searxng-config"
-port = 8080
+service_name = shared.dawarich.name
+label_app_name = "dawarich"
+k8s_service_name = "dawarich"
+public_pvc_name = "public-dawarich-pvc"
+watched_pvc_name = "watched-dawarich-pvc"
+storage_pvc_name = "storage-dawarich-pvc"
+port = 3000
+public_pvc_volume_name = "public-dawarich-volume"
+watched_pvc_volume_name = "watched-dawarich-volume"
+storage_pvc_volume_name = "storage-dawarich-volume"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
-    configmap_file
+    public_pvc_file
+    watched_pvc_file
+    storage_pvc_file
     deployment_file
-    service_file
+    k8s_service_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name)
 
-configmap = core_api.ConfigMap {
-    apiVersion: "v1"
-    kind: "ConfigMap"
-    metadata: {
-        name: configmap_name
-        annotations: {
-            "app.kubernetes.io/name": label_app_name
-        }
-    }
-    # secret_key is overwritten by ${SEARXNG_SECRET}, currently a random string, later an env variable will replace it
-    # URL to connect valkey database is overwritten by ${SEARXNG_VALKEY_URL}
-    # FIXME: maybe extract the inline yaml into a separate file and use a kcl function to turn it into a string here??? Could be useful for nginx gateway later
-    data: {
-        "settings.yml": """
-            # SearXNG settings
-            use_default_settings: true
-
-            general:
-                debug: false
-                instance_name: "Nathalies SearXNG"
-
-            search:
-                safe_search: 2
-                autocomplete: 'duckduckgo'
-                formats:
-                    - html
-
-            server:
-                secret_key: "mBrieVOfZQzc7"
-                limiter: true
-                image_proxy: true
-
-            valkey:
-                url: valkey://valkey.valkey.svc.cluster.local:6379/0
-
-            outgoing:
-                request_timeout: 2.0       # default timeout in seconds, can be override by engine
-                max_request_timeout: 10.0  # the maximum timeout in seconds
-                useragent_suffix: ""       # information like an email address to the administrator
-                pool_connections: 100      # Maximum number of allowable connections, or null
-                                            # for no limits. The default is 100.
-                pool_maxsize: 10           # Number of allowable keep-alive connections, or null
-                                            # to always allow. The default is 10.
-                enable_http2: true         # See https://www.python-httpx.org/http2/
-                proxies:
-                    all://:
-                        - http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
-        """
+public_pvc: core_api.PersistentVolumeClaim = {
+    metadata.name = public_pvc_name
+    spec: {
+        accessModes: ["ReadWriteMany"]
+        storageClassName: shared.nfs_storage_class_name
+        resources.requests.storage: "10Gi"
     }
 }
+
+watched_pvc: core_api.PersistentVolumeClaim = {
+    metadata.name = watched_pvc_name
+    spec: {
+        accessModes: ["ReadWriteMany"]
+        storageClassName: shared.nfs_storage_class_name
+        resources.requests.storage: "10Gi"
+    }
+}
+
+storage_pvc: core_api.PersistentVolumeClaim = {
+    metadata.name = watched_pvc_name
+    spec: {
+        accessModes: ["ReadWriteMany"]
+        storageClassName: shared.nfs_storage_class_name
+        resources.requests.storage: "10Gi"
+    }
+}
+
+dawarich_env: [core_api.EnvVar] = [
+    {name: "RAILS_ENV", value: "development"}
+    {name: "REDIS_URL", value: "redis://${shared.redis.cluster_url}:${shared.redis.port}"}
+    {name: "DATABASE_HOST", value: shared.postgres.cluster_url}
+    {name: "DATABASE_PORT", value: "${shared.postgres.port}"}
+    {name: "DATABASE_USERNAME", value: "postgres"}
+    {name: "DATABASE_PASSWORD", valueFrom: {
+        secretKeyRef: {
+            name: shared.postgres_creds_secret_name
+            key: "password"
+        }
+    }}
+    {name: "DATABASE_NAME", value: "dawarich_development"}
+    {name: "MIN_MINUTES_SPENT_IN_CITY", value: "60"}
+    {name: "APPLICATION_HOSTS", value: "localhost"}
+    {name: "TIME_ZONE", value: "Europe/Vienna"}
+    {name: "APPLICATION_PROTOCOL", value: "http"}
+    {name: "PROMETHEUS_EXPORTER_ENABLED", value: "false"}
+    {name: "PROMETHEUS_EXPORTER_HOST", value: "0.0.0.0"}
+    {name: "PROMETHEUS_EXPORTER_PORT", value: "9394"}
+    {name: "SELF_HOSTED", value: "true"}
+    {name: "STORE_GEODATA", value: "true"}
+]
+
+sidekiq_env: [core_api.EnvVar] = [
+    {name: "RAILS_ENV", value: "development"}
+    {name: "REDIS_URL", value: "redis://${shared.redis.cluster_url}:${shared.redis.port}"}
+    {name: "DATABASE_HOST", value: shared.postgres.cluster_url}
+    {name: "DATABASE_PORT", value: "${shared.postgres.port}"}
+    {name: "DATABASE_USERNAME", value: "postgres"}
+    {name: "DATABASE_PASSWORD", valueFrom: {
+        secretKeyRef: {
+            name: shared.postgres_creds_secret_name
+            key: "password"
+        }
+    }}
+    {name: "DATABASE_NAME", value: "dawarich_development"}
+    {name: "APPLICATION_HOSTS", value: "localhost"}
+    {name: "BACKGROUND_PROCESSING_CONCURRENCY", value: "10"}
+    {name: "APPLICATION_PROTOCOL", value: "http"}
+    {name: "PROMETHEUS_EXPORTER_ENABLED", value: "false"}
+    {name: "PROMETHEUS_EXPORTER_HOST", value: "dawarich_app"}
+    {name: "PROMETHEUS_EXPORTER_PORT", value: "9394"}
+    {name: "SELF_HOSTED", value: "true"}
+    {name: "STORE_GEODATA", value: "true"}
+]
 
 deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
     metadata: meta.ObjectMeta {
-        name: "searxng-deployment"
+        name: service_name
         labels: {
             "app.kubernetes.io/name": label_app_name
         }
@@ -103,27 +134,77 @@ deployment = {
             spec = core_api.PodSpec {
                 containers: [
                     {
-                        name: "searxng"
-                        image: "searxng/searxng:2025.8.3-2e62eb5"
+                        name: "dawarich"
+                        image: "freikin/dawarich:latest"
+                        command: ['web-entrypoint.sh']
+                        args: ['bin/rails', 'server', '-p', '3000', '-b', '::']
                         ports: [
                             {
-                                name: "searxng"
+                                name: "dawarich"
                                 containerPort: port
                             }
                         ]
+                        env: dawarich_env
                         volumeMounts: [
                             {
-                                mountPath: "/etc/searxng"
-                                name: deployment_configmap_volume
+                                mountPath: "/var/app/public"
+                                name: public_pvc_volume_name
+                            }
+                            {
+                                mountPath: "/var/app/tmp/imports/watched"
+                                name: watched_pvc_volume_name
+                            }
+                            {
+                                mountPath: "/var/app/storage"
+                                name: storage_pvc_volume_name
+                            }
+                        ]
+                    }
+                    {
+                        name: "dawarich-sidekiq"
+                        image: "freikin/dawarich:latest"
+                        command: ['sidekiq-entrypoint.sh']
+                        ports: [
+                            {
+                                name: "dawarich"
+                                containerPort: port
+                            }
+                        ]
+                        env: sidekiq_env
+                        volumeMounts: [
+                            # FIXME: if it works, maybe unify it with above volumeMounts
+                            {
+                                mountPath: "/var/app/public"
+                                name: public_pvc_volume_name
+                            }
+                            {
+                                mountPath: "/var/app/tmp/imports/watched"
+                                name: watched_pvc_volume_name
+                            }
+                            {
+                                mountPath: "/var/app/storage"
+                                name: storage_pvc_volume_name
                             }
                         ]
                     }
                 ]
                 volumes: [
                     {
-                        name: deployment_configmap_volume
-                        configMap: {
-                            name: configmap_name
+                        name: public_pvc_volume_name
+                        persistentVolumeClaim: {
+                            claimName: public_pvc_name
+                        }
+                    }
+                    {
+                        name: watched_pvc_volume_name
+                        persistentVolumeClaim: {
+                            claimName: watched_pvc_name
+                        }
+                    }
+                    {
+                        name: storage_pvc_volume_name
+                        persistentVolumeClaim: {
+                            claimName: storage_pvc_name
                         }
                     }
                 ]
@@ -132,7 +213,7 @@ deployment = {
     }
 }
 
-service: core_api.Service = {
+k8s_service: core_api.Service = {
     apiVersion: "v1"
     kind: "Service"
     metadata: {
@@ -144,7 +225,7 @@ service: core_api.Service = {
     spec: {
         ports: [
             {
-                name: "searxng"
+                name: "dawarich"
                 port: port
                 targetPort: port
             }
@@ -157,6 +238,8 @@ service: core_api.Service = {
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
-yaml.dump_to_file(configmap, out_dir + configmap_file)
+yaml.dump_to_file(public_pvc, out_dir + public_pvc_file)
+yaml.dump_to_file(watched_pvc, out_dir + watched_pvc_file)
+yaml.dump_to_file(storage_pvc, out_dir + storage_pvc_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
-yaml.dump_to_file(service, out_dir + service_file)
+yaml.dump_to_file(k8s_service, out_dir + k8s_service_file)
