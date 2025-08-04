@@ -23,7 +23,11 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: searxng-config
+      - image: corfr/tcpdump
+        name: debug-dumps
+        imagePullPolicy: Always
       volumes:
       - configMap:
           name: searxng-configmap
         name: searxng-config
+      
