@@ -58,6 +58,30 @@ spec:
         - '[STATUS] == 200'
         interval: '60s'
       - enabled: true
+        name: gluetun-proxy
+        url: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[STATUS] == 200'
+        interval: '60s'
+      - enabled: true
+        name: valkey
+        url: tcp://valkey.valkey.svc.cluster.local:6379
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[CONNECTED] == true'
+        interval: '60s'
+      - enabled: true
+        name: searxng
+        url: http://searxng.searxng.svc.cluster.local:8080
+        group: Cluster Services
+        method: GET
+        conditions:
+        - '[STATUS] == 200'
+        interval: '60s'
+      - enabled: true
         name: netbird
         url: https://netbird.nathalie-stiefsohn.eu
         group: External Services
