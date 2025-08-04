@@ -54,7 +54,7 @@ watched_pvc: core_api.PersistentVolumeClaim = {
 }
 
 storage_pvc: core_api.PersistentVolumeClaim = {
-    metadata.name = watched_pvc_name
+    metadata.name = storage_pvc_name
     spec: {
         accessModes: ["ReadWriteMany"]
         storageClassName: shared.nfs_storage_class_name
