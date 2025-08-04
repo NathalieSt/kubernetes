@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: nginx-gateway
-  name: searxng-deployment
+  name: nginx-gateway
 spec:
   replicas: 1
   selector:

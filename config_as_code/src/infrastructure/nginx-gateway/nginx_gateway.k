@@ -133,7 +133,7 @@ deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
     metadata: meta.ObjectMeta {
-        name: "searxng-deployment"
+        name: service_name
         labels: {
             "app.kubernetes.io/name": label_app_name
         }
