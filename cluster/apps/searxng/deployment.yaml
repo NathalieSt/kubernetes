@@ -27,16 +27,25 @@ spec:
         - name: VPN_SERVICE_PROVIDER
           value: protonvpn
         - name: VPN_TYPE
-          value: wireguard
-        - name: WIREGUARD_PRIVATE_KEY
+          value: openvpn
+        - name: OPENVPN_USER
           valueFrom:
             secretKeyRef:
-              key: key
+              key: user
+              name: searxng-vpn
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
               name: searxng-vpn
         - name: DOT
           value: 'on'
         - name: DNS_KEEP_NAMESERVER
           value: 'on'
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: '10.42.0.0/15'
+        - name: SERVER_COUNTRIES
+          value: AT
         image: qmcgaw/gluetun:v3.40
         name: gluetun
         securityContext:

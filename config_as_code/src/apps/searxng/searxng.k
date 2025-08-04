@@ -170,14 +170,23 @@ deployment = {
                             }
                             {
                                 name: "VPN_TYPE"
-                                value: "wireguard"
+                                value: "openvpn"
                             }
                             {
-                                name: "WIREGUARD_PRIVATE_KEY"
+                                name: "OPENVPN_USER"
                                 valueFrom: {
                                     secretKeyRef: {
                                         name: secret_name
-                                        key: "key"
+                                        key: "user"
+                                    }
+                                }
+                            }
+                            {
+                                name: "OPENVPN_PASSWORD"
+                                valueFrom: {
+                                    secretKeyRef: {
+                                        name: secret_name
+                                        key: "password"
                                     }
                                 }
                             }
@@ -188,6 +197,14 @@ deployment = {
                             {
                                 name: "DNS_KEEP_NAMESERVER"
                                 value: "on"
+                            }
+                            {
+                                name: "FIREWALL_OUTBOUND_SUBNETS"
+                                value: "10.42.0.0/15"
+                            }
+                            {
+                                name: "SERVER_COUNTRIES"
+                                value: "AT"
                             }
                         ]
                     }
