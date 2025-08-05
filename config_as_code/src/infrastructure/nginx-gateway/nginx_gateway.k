@@ -200,7 +200,7 @@ deployment = {
                         volumeMounts = [
                             {
                                 name = "nginx-config"
-                                mountPath = "/etc/nginx/conf.d"
+                                mountPath = "/etc/nginx/conf.d/default.conf"
                                 subPath: "default.conf"
                             }
                             {
