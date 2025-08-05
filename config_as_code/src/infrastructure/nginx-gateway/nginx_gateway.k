@@ -33,6 +33,7 @@ certificate_name = "nginx-gateway-tls"
 vault_role = "nginx"
 netbird_secret_name = "netbird-setup-key-vault-secret"
 netbird_secret_path = "netbird/setup-key"
+# FIXME: change to something like "nginx user secret"
 nginx_secret_name = "nginx-secret"
 nginx_secret_path = "nginx"
 nginx_secret_volume = "nginx-secret-volume"
@@ -212,7 +213,7 @@ deployment = {
                             }
                             {
                                 name: nginx_secret_volume
-                                mountPath: "/etc/nginx/conf.d/nginx.htpasswd"
+                                mountPath: "/etc/nginx/.htpasswd"
                                 subPath: "htpasswd"
                             }
                         ]

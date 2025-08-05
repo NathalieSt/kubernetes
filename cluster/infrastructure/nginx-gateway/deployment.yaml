@@ -35,7 +35,7 @@ spec:
           readOnly: true
         - mountPath: /tmp
           name: shared-tmp
-        - mountPath: /etc/nginx/conf.d/nginx.htpasswd
+        - mountPath: /etc/nginx/.htpasswd
           name: nginx-secret-volume
           subPath: htpasswd
       - env:
