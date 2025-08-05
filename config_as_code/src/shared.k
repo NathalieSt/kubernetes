@@ -96,13 +96,13 @@ nginx_gateway: shared.ClusterService = {
     gatus_config.endpointType: "http"
 }
 
-gatus_config: shared.ClusterService = {
-    name: "gatus_config"
-    namespace: "gatus_config"
-    cluster_url: "gatus_config.gatus_config.svc.cluster.local"
+gatus: shared.ClusterService = {
+    name: "gatus"
+    namespace: "gatus"
+    cluster_url: "gatus.gatus.svc.cluster.local"
     port: 80
     gateway_config: {
-        dns_name: "gatus_config.cluster"
+        dns_name: "gatus.cluster"
         requires_websockets: False
         requires_larger_body: False
     }
@@ -163,7 +163,7 @@ registry: shared.ClusterService = {
 cluster_services: [shared.ClusterService] = [
     jellyfin
     vault
-    gatus_config
+    gatus
     postgres
     wikijs
     gluetun_proxy
