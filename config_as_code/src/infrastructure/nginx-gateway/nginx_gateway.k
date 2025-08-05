@@ -20,7 +20,8 @@ k8s_service_file = "service.yaml"
 ## Vault specific files
 vault_rbac_file = "vault-rbac.yaml"
 vault_auth_file = "vault-auth.yaml"
-vault_static_secret_file = "vault-static-secret.yaml"
+vault_netbird_static_secret_file = "vault-netbird-static-secret.yaml"
+vault_nginx_static_secret_file = "vault-nginx-static-secret.yaml"
 # Configs
 service_name = shared.nginx_gateway.name
 label_app_name = service_name
@@ -30,8 +31,11 @@ configmap_name = "nginx-gateway-config"
 certificate_name = "nginx-gateway-tls"
 ## Vault specific configs
 vault_role = "nginx"
-secret_name = "netbird-setup-key-vault-secret"
-secret_path = "netbird/setup-key"
+netbird_secret_name = "netbird-setup-key-vault-secret"
+netbird_secret_path = "netbird/setup-key"
+nginx_secret_name = "nginx-secret"
+nginx_secret_path = "nginx"
+nginx_secret_volume = "nginx-secret-volume"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
@@ -42,7 +46,8 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     # Vault
     secrets_subdir + vault_rbac_file
     secrets_subdir + vault_auth_file
-    secrets_subdir + vault_static_secret_file
+    secrets_subdir + vault_netbird_static_secret_file
+    secrets_subdir + vault_nginx_static_secret_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name)
 
@@ -64,19 +69,47 @@ vault_auth: vault.VaultAuth = {
     }
 }
 
-vault_static_secret: vault.VaultStaticSecret = {
+vault_netbird_static_secret: vault.VaultStaticSecret = {
     metadata: {
-        name: secret_name
+        name: netbird_secret_name
     }
     spec: {
         vaultAuthRef: vault_auth.metadata.name
         mount: "kvv2"
         type: "kv-v2"
-        path: secret_path
+        path: netbird_secret_path
         refreshAfter: "10s"
         destination: {
             create: True
-            name: secret_name
+            name: netbird_secret_name
+        }
+    }
+}
+
+vault_nginx_static_secret: vault.VaultStaticSecret = {
+    metadata: {
+        name: nginx_secret_name
+    }
+    spec: {
+        vaultAuthRef: vault_auth.metadata.name
+        mount: "kvv2"
+        type: "kv-v2"
+        path: nginx_secret_path
+        refreshAfter: "10s"
+        destination: {
+            create: True
+            name: nginx_secret_name
+            transformation: {
+                templates: {
+                    "htpasswd": {
+                        text: """
+                        {{- $user := get .Secrets "user" -}}
+                        {{- $password := get .Secrets "password" -}}
+                        {{- printf "%s:%s" $user $password -}}              
+                        """
+                    }
+                }
+            }
         }
     }
 }
@@ -177,6 +210,11 @@ deployment = {
                                 name = "shared-tmp"
                                 mountPath = "/tmp"
                             }
+                            {
+                                name: nginx_secret_volume
+                                mountPath: "/etc/nginx/.htpasswd"
+                                subPath: ".htpasswd"
+                            }
                         ]
                     }
                     {
@@ -187,7 +225,7 @@ deployment = {
                                 name = "NB_SETUP_KEY"
                                 valueFrom = {
                                     secretKeyRef = {
-                                        name = secret_name
+                                        name = netbird_secret_name
                                         key = "setup-key"
                                     }
                                 }
@@ -239,6 +277,12 @@ deployment = {
                         name = "shared-tmp"
                         emptyDir = {}
                     }
+                    {
+                        name: nginx_secret_volume
+                        secret: {
+                            secretName: nginx_secret_name
+                        }
+                    }
                 ]
             }
         }
@@ -277,4 +321,5 @@ yaml.dump_to_file(k8s_service, out_dir + k8s_service_file)
 ## Write vault configuration to files
 yaml.dump_all_to_file([vault_rbac[key] for key in vault_rbac], secrets_out_dir + vault_rbac_file)
 yaml.dump_to_file(vault_auth, secrets_out_dir + vault_auth_file)
-yaml.dump_to_file(vault_static_secret, secrets_out_dir + vault_static_secret_file)
+yaml.dump_to_file(vault_netbird_static_secret, secrets_out_dir + vault_netbird_static_secret_file)
+yaml.dump_to_file(vault_nginx_static_secret, secrets_out_dir + vault_nginx_static_secret_file)

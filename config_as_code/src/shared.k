@@ -71,8 +71,6 @@ valkey: shared.ClusterService = {
     namespace: "valkey"
     cluster_url: "valkey.valkey.svc.cluster.local"
     port: 6379
-    gatus_config.endpointType: "tcp"
-    gatus_config.conditions: ["[CONNECTED] == true"]
 }
 
 searxng: shared.ClusterService = {
@@ -131,6 +129,37 @@ dawarich: shared.ClusterService = {
     }
 }
 
+registry: shared.ClusterService = {
+    name: "registry"
+    namespace: "registry"
+    cluster_url: "registry.registry.svc.cluster.local"
+    port: 5000
+    gatus_config.conditions: ["[CONNECTED] == true"]
+    gatus_config.endpointType: "http"
+    gateway_config: {
+        dns_name: "registry.cluster"
+        requires_websockets: False
+        requires_larger_body: True
+        extra_location_config: """
+            if ($http_user_agent ~ "^(docker\/1\.(3|4|5(?!\.[0-9]-dev))|Go ).*$" ) {
+                return 404;
+            }
+
+            # To add basic authentication to v2 use auth_basic setting.
+            auth_basic "Registry realm";
+            auth_basic_user_file /etc/nginx/conf.d/nginx.htpasswd;
+
+            ## If $docker_distribution_api_version is empty, the header is not added.
+            ## See the map directive above where this variable is defined.
+            add_header 'Docker-Distribution-Api-Version' $docker_distribution_api_version always;
+        """
+        extra_server_config: """
+            # required to avoid HTTP 411: see Issue #1486 (https://github.com/moby/moby/issues/1486)
+            chunked_transfer_encoding on;
+        """
+    }
+}
+
 cluster_services: [shared.ClusterService] = [
     jellyfin
     vault
@@ -141,6 +170,7 @@ cluster_services: [shared.ClusterService] = [
     valkey
     searxng
     dawarich
+    registry
 ]
 
 cluster_services_watched_by_gatus = filter service in cluster_services {

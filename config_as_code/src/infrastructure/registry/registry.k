@@ -1,0 +1,120 @@
+import ....lib.k8s_wrapper
+import ...shared
+import k8s.apimachinery.pkg.apis.meta.v1 as meta
+import k8s.api.core.v1 as core_api
+import yaml
+
+out_dir = shared.cluster_path + "infrastructure/registry/"
+# Filenames
+kustomization_file = "kustomization.yaml"
+namespace_file = "namespace.yaml"
+pvc_file = "pvc.yaml"
+deployment_file = "deployment.yaml"
+k8s_service_file = "service.yaml"
+# Configs
+service_name = shared.registry.name
+label_app_name = service_name
+k8s_service_name = service_name
+pvc_name = "registry-pvc"
+deployment_configmap_volume = "registry-config"
+port = shared.registry.port
+# k8s configuration
+kustomization = k8s_wrapper.create_kustomization(service_name, [
+    namespace_file
+    deployment_file
+    pvc_file
+    k8s_service_file
+])
+namespace = k8s_wrapper.create_namespace(service_name)
+
+pvc: core_api.PersistentVolumeClaim = {
+    metadata.name = pvc_name
+    spec: {
+        accessModes: ["ReadWriteMany"]
+        storageClassName: shared.smb_storage_class_name
+        resources.requests.storage: "100Gi"
+    }
+}
+
+deployment = {
+    apiVersion: "apps/v1"
+    kind: "Deployment"
+    metadata: meta.ObjectMeta {
+        name: service_name
+        labels: {
+            "app.kubernetes.io/name": label_app_name
+        }
+    }
+    spec: {
+        replicas: 1
+        selector: {
+            matchLabels: {
+                "app.kubernetes.io/name": label_app_name
+            }
+        }
+        template: {
+            metadata: meta.ObjectMeta {
+                labels: {
+                    "app.kubernetes.io/name": label_app_name
+                }
+            }
+            spec = core_api.PodSpec {
+                containers: [
+                    {
+                        name: "registry"
+                        image: "registry"
+                        ports: [
+                            {
+                                name: "registry"
+                                containerPort: port
+                            }
+                        ]
+                        volumeMounts: [
+                            {
+                                mountPath: "/var/lib/registry"
+                                name: deployment_configmap_volume
+                            }
+                        ]
+                    }
+                ]
+                volumes: [
+                    {
+                        name: deployment_configmap_volume
+                        persistentVolumeClaim: {
+                            claimName: pvc_name
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+
+service: core_api.Service = {
+    apiVersion: "v1"
+    kind: "Service"
+    metadata: {
+        name: k8s_service_name
+        labels: {
+            "app.kubernetes.io/name": label_app_name
+        }
+    }
+    spec: {
+        ports: [
+            {
+                name: "registry"
+                port: port
+                targetPort: port
+            }
+        ]
+        selector: {
+            "app.kubernetes.io/name": label_app_name
+        }
+    }
+}
+# Write to files
+yaml.dump_to_file(kustomization, out_dir + kustomization_file)
+yaml.dump_to_file(namespace, out_dir + namespace_file)
+yaml.dump_to_file(deployment, out_dir + deployment_file)
+yaml.dump_to_file(pvc, out_dir + pvc_file)
+yaml.dump_to_file(service, out_dir + k8s_service_file)

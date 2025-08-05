@@ -5,7 +5,8 @@ get_larger_body_size_if_required = lambda service: shared.ClusterService -> str 
     if service.gateway_config.requires_larger_body == True:
         result = """
             # Increase client body size for file uploads
-            client_max_body_size 100M;
+            # 0 for unlimited size
+            client_max_body_size 0;
         """
 
     result
@@ -23,6 +24,22 @@ get_websocket_support_if_required = lambda service: shared.ClusterService -> str
             # Use the upgrade mapping variable
             proxy_set_header Connection $connection_upgrade;
         """
+
+    result
+}
+
+get_extra_location_config_if_required = lambda service: shared.ClusterService -> str {
+    result = ""
+    if service.gateway_config.extra_location_config != Undefined:
+        result = service.gateway_config.extra_location_config
+
+    result
+}
+
+get_extra_server_config_if_required = lambda service: shared.ClusterService -> str {
+    result = ""
+    if service.gateway_config.extra_server_config != Undefined:
+        result = service.gateway_config.extra_server_config
 
     result
 }
@@ -52,6 +69,8 @@ create_conf_from_services = lambda services: [shared.ClusterService] -> str {
         add_header X-XSS-Protection "1; mode=block";
 
         ${get_larger_body_size_if_required(service)}
+
+        ${get_extra_server_config_if_required(service)}
         
         location / {
             proxy_pass http://${service.name};
@@ -63,6 +82,8 @@ create_conf_from_services = lambda services: [shared.ClusterService] -> str {
             proxy_set_header X-Forwarded-Port $server_port;
 
             ${get_websocket_support_if_required(service)}
+
+            ${get_extra_location_config_if_required(service)}
         }
     }
     """ for service in services])
@@ -73,6 +94,16 @@ create_conf_from_services = lambda services: [shared.ClusterService] -> str {
             default upgrade;
             '' close;
         }
+
+        ## Set a variable to help us decide if we need to add the
+        ## 'Docker-Distribution-Api-Version' header.
+        ## The registry always sets this header.
+        ## In the case of nginx performing auth, the header is unset
+        ## since nginx is auth-ing before proxying.
+        map $upstream_http_docker_distribution_api_version $docker_distribution_api_version {
+            '' 'registry/2.0';
+        }
+
         ${configmap_upstreams}
         server {
             listen 80;
