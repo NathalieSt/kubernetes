@@ -48,6 +48,7 @@ spec:
   timeout: 5m0s
   dependsOn:
   - name: cert-manager
+  - name: vault-secrets-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
