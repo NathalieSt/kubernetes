@@ -214,7 +214,7 @@ deployment = {
                             {
                                 name: nginx_secret_volume
                                 mountPath: "/etc/nginx/conf.d/"
-                                subPath: "htpasswd"
+                                subPath: "nginx.htpasswd"
                             }
                         ]
                     }

@@ -37,7 +37,7 @@ spec:
           name: shared-tmp
         - mountPath: /etc/nginx/conf.d/
           name: nginx-secret-volume
-          subPath: htpasswd
+          subPath: nginx.htpasswd
       - env:
         - name: NB_SETUP_KEY
           valueFrom:
