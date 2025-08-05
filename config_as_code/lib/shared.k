@@ -12,7 +12,7 @@ schema ClusterService:
     namespace: str
     cluster_url: str
     port: int
-    gatus: GatusConfig
+    gatus_config?: GatusConfig
     gateway_config?: GatewayConfig
 
 schema ExternalService:

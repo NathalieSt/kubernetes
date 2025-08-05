@@ -2,6 +2,7 @@ import yaml
 
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
+import ....lib.shared as lib_shared
 import ....lib.helpers
 import ...shared
 
@@ -32,7 +33,7 @@ repo: helm_flux.HelmRepository = {
     }
 }
 
-external_services: [shared.ExternalService] = [
+external_services: [lib_shared.ExternalService] = [
     {
         name: "netbird"
         url: "https://netbird.nathalie-stiefsohn.eu"
@@ -42,6 +43,10 @@ external_services: [shared.ExternalService] = [
         url: "https://chat.nathalie-stiefsohn.eu"
     }
 ]
+
+cluster_internal_endpoints = [helpers.create_gatus_endpoint(service.name, service.gatus_config.endpointType + "://" + service.cluster_url + ":" + str(service.port), "GET", service.gatus_config.conditions, "60s", "Cluster Services") for service in shared.cluster_services_watched_by_gatus]
+
+external_endpoints = [helpers.create_gatus_endpoint(service.name, service.url, "GET", ["[STATUS] == 200"], "60s", "External Services") for service in external_services]
 
 release: helm_flux.HelmRelease = {
     metadata.name = service_name
@@ -66,7 +71,7 @@ release: helm_flux.HelmRelease = {
             config: {
                 storage.type: "sqlite"
                 storage.path: "/data/data.db"
-                endpoints: [helpers.create_gatus_endpoint(service.name, service.gatus.endpointType + "://" + service.cluster_url + ":" + str(service.port), "GET", service.gatus.conditions, "60s", "Cluster Services") for service in shared.cluster_services] + [helpers.create_gatus_endpoint(service.name, service.url, "GET", ["[STATUS] == 200"], "60s", "External Services") for service in external_services]
+                endpoints: cluster_internal_endpoints + external_endpoints
             }
         }
     }

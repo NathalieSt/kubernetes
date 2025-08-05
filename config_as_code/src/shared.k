@@ -13,8 +13,8 @@ jellyfin: shared.ClusterService = {
     namespace: "jellyfin"
     cluster_url: "jellyfin.jellyfin.svc.cluster.local"
     port: 8096
-    gatus.endpointType: "http"
-    gatus.conditions: ["[STATUS] == 200"]
+    gatus_config.endpointType: "http"
+    gatus_config.conditions: ["[STATUS] == 200"]
     gateway_config: {
         dns_name: "jellyfin.cluster"
         requires_websockets: True
@@ -27,8 +27,8 @@ vault: shared.ClusterService = {
     namespace: "vault"
     cluster_url: "vault.vault.svc.cluster.local"
     port: 8200
-    gatus.endpointType: "http"
-    gatus.conditions: ["[STATUS] == 200"]
+    gatus_config.endpointType: "http"
+    gatus_config.conditions: ["[STATUS] == 200"]
     gateway_config: {
         dns_name: "vault.cluster"
         requires_websockets: False
@@ -41,8 +41,6 @@ postgres: shared.ClusterService = {
     namespace: "postgres"
     cluster_url: "postgres-postgresql.postgres.svc.cluster.local"
     port: 5432
-    gatus.endpointType: "tcp"
-    gatus.conditions: ["[CONNECTED] == true"]
 }
 
 wikijs: shared.ClusterService = {
@@ -50,8 +48,8 @@ wikijs: shared.ClusterService = {
     namespace: "wikijs"
     cluster_url: "wikijs.wikijs.svc.cluster.local"
     port: 80
-    gatus.endpointType: "http"
-    gatus.conditions: ["[STATUS] == 200"]
+    gatus_config.endpointType: "http"
+    gatus_config.conditions: ["[STATUS] == 200"]
     gateway_config: {
         dns_name: "wikijs.cluster"
         requires_websockets: False
@@ -64,8 +62,8 @@ gluetun_proxy: shared.ClusterService = {
     namespace: "gluetun-proxy"
     cluster_url: "gluetun-proxy.gluetun-proxy.svc.cluster.local"
     port: 8888
-    gatus.endpointType: "tcp"
-    gatus.conditions: ["[CONNECTED] == true"]
+    gatus_config.endpointType: "tcp"
+    gatus_config.conditions: ["[CONNECTED] == true"]
 }
 
 valkey: shared.ClusterService = {
@@ -73,8 +71,8 @@ valkey: shared.ClusterService = {
     namespace: "valkey"
     cluster_url: "valkey.valkey.svc.cluster.local"
     port: 6379
-    gatus.endpointType: "tcp"
-    gatus.conditions: ["[CONNECTED] == true"]
+    gatus_config.endpointType: "tcp"
+    gatus_config.conditions: ["[CONNECTED] == true"]
 }
 
 searxng: shared.ClusterService = {
@@ -82,8 +80,8 @@ searxng: shared.ClusterService = {
     namespace: "searxng"
     cluster_url: "searxng.searxng.svc.cluster.local"
     port: 8080
-    gatus.endpointType: "http"
-    gatus.conditions: ["[STATUS] == 200"]
+    gatus_config.endpointType: "http"
+    gatus_config.conditions: ["[STATUS] == 200"]
     gateway_config: {
         dns_name: "searxng.cluster"
         requires_websockets: False
@@ -96,19 +94,17 @@ nginx_gateway: shared.ClusterService = {
     namespace: "searxng"
     cluster_url: "nginx-gateway.nginx-gateway.svc.cluster.local"
     port: 80
-    gatus.conditions: ["[CONNECTED] == true"]
-    gatus.endpointType: "http"
+    gatus_config.conditions: ["[CONNECTED] == true"]
+    gatus_config.endpointType: "http"
 }
 
-gatus: shared.ClusterService = {
-    name: "gatus"
-    namespace: "gatus"
-    cluster_url: "gatus.gatus.svc.cluster.local"
+gatus_config: shared.ClusterService = {
+    name: "gatus_config"
+    namespace: "gatus_config"
+    cluster_url: "gatus_config.gatus_config.svc.cluster.local"
     port: 80
-    gatus.conditions: ["[CONNECTED] == true"]
-    gatus.endpointType: "http"
     gateway_config: {
-        dns_name: "gatus.cluster"
+        dns_name: "gatus_config.cluster"
         requires_websockets: False
         requires_larger_body: False
     }
@@ -119,18 +115,15 @@ redis = shared.ClusterService {
     namespace: "redis"
     cluster_url: "redis.redis.svc.cluster.local"
     port: 6379
-    gatus.conditions: ["[CONNECTED] == true"]
-    gatus.endpointType: "http"
 }
 
-#FIXME: make gatus configs optional
 dawarich: shared.ClusterService = {
     name: "dawarich"
     namespace: "dawarich"
     cluster_url: "dawarich.dawarich.svc.cluster.local"
     port: 3000
-    gatus.conditions: ["[CONNECTED] == true"]
-    gatus.endpointType: "http"
+    gatus_config.conditions: ["[CONNECTED] == true"]
+    gatus_config.endpointType: "http"
     gateway_config: {
         dns_name: "dawarich.cluster"
         requires_websockets: False
@@ -141,7 +134,7 @@ dawarich: shared.ClusterService = {
 cluster_services: [shared.ClusterService] = [
     jellyfin
     vault
-    gatus
+    gatus_config
     postgres
     wikijs
     gluetun_proxy
@@ -149,6 +142,10 @@ cluster_services: [shared.ClusterService] = [
     searxng
     dawarich
 ]
+
+cluster_services_watched_by_gatus = filter service in cluster_services {
+    service.gatus_config != Undefined
+}
 
 exposed_services = filter service in cluster_services {
     service.gateway_config != Undefined
