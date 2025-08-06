@@ -138,7 +138,7 @@ kubeshark: shared.ClusterService = {
     gatus_config.endpointType: "http"
     gateway_config: {
         dns_name: "kubeshark.cluster"
-        requires_websockets: False
+        requires_websockets: True
         requires_larger_body: False
     }
 }
