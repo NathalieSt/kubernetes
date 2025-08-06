@@ -52,6 +52,7 @@ release: helm_flux.HelmRelease = {
         interval: "24h"
         values: {
             tap.persistentStorage: True
+            tap.persistentStoragePvcVolumeMode: "Filesystem"
             tap.storageClass: shared.smb_storage_class_name
             tap.proxy.front.port: shared.kubeshark.port
         }
