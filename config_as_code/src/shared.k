@@ -129,6 +129,20 @@ dawarich: shared.ClusterService = {
     }
 }
 
+kubeshark: shared.ClusterService = {
+    name: "kubeshark"
+    namespace: "kubeshark"
+    cluster_url: "kubeshark.kubeshark.svc.cluster.local"
+    port: 8899
+    gatus_config.conditions: ["[CONNECTED] == true"]
+    gatus_config.endpointType: "http"
+    gateway_config: {
+        dns_name: "kubeshark.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+}
+
 cluster_services: [shared.ClusterService] = [
     jellyfin
     vault
@@ -139,6 +153,7 @@ cluster_services: [shared.ClusterService] = [
     valkey
     searxng
     dawarich
+    kubeshark
 ]
 
 cluster_services_watched_by_gatus = filter service in cluster_services {
