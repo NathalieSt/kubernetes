@@ -58,14 +58,6 @@ spec:
         - '[CONNECTED] == true'
         interval: '60s'
       - enabled: true
-        name: valkey
-        url: tcp://valkey.valkey.svc.cluster.local:6379
-        group: Cluster Services
-        method: GET
-        conditions:
-        - '[CONNECTED] == true'
-        interval: '60s'
-      - enabled: true
         name: searxng
         url: http://searxng.searxng.svc.cluster.local:8080
         group: Cluster Services
