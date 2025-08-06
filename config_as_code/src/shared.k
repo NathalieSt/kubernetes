@@ -132,8 +132,8 @@ dawarich: shared.ClusterService = {
 kubeshark: shared.ClusterService = {
     name: "kubeshark"
     namespace: "kubeshark"
-    cluster_url: "kubeshark.kubeshark.svc.cluster.local"
-    port: 8899
+    cluster_url: "kubeshark-front.kubeshark.svc.cluster.local"
+    port: 80
     gatus_config.conditions: ["[CONNECTED] == true"]
     gatus_config.endpointType: "http"
     gateway_config: {
