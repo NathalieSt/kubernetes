@@ -166,7 +166,7 @@ pvc: core_api.PersistentVolumeClaim = {
     spec: {
         accessModes: ["ReadWriteMany"]
         storageClassName: shared.nfs_remote_storage_class_name
-        resources.requests.storage: "100Gi"
+        resources.requests.storage: "60Gi"
     }
 }
 
