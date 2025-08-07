@@ -129,6 +129,18 @@ dawarich: shared.ClusterService = {
     }
 }
 
+kiali: shared.ClusterService = {
+    name: "kiali"
+    namespace: "kiali-operator"
+    cluster_url: "kiali.kiali.svc.cluster.local"
+    port: 20001
+    gateway_config: {
+        dns_name: "kiali.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+}
+
 cluster_services: [shared.ClusterService] = [
     jellyfin
     vault
@@ -139,6 +151,7 @@ cluster_services: [shared.ClusterService] = [
     valkey
     searxng
     dawarich
+    kiali
 ]
 
 cluster_services_watched_by_gatus = filter service in cluster_services {

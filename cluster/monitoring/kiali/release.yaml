@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kiali
+spec:
+  releaseName: kiali
+  chart:
+    spec:
+      chart: kiali-operator
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: kiali
+      interval: '24h'
+  interval: '24h'
+  install:
+    remediation:
+      retries: 3
+  timeout: '5m'
+  values:
+    cr:
+      create: true
+      namespace: istio-system
