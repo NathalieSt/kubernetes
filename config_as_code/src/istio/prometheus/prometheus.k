@@ -51,40 +51,41 @@ configmap = core_api.ConfigMap {
     data: {
         "prometheus.yml": """
             global:
-                scrape_interval: 5s
-                evaluation_interval: 5s
+                scrape_interval: 30s
+                evaluation_interval: 30s
             scrape_configs:
             - job_name: 'istiod'
-                kubernetes_sd_configs:
-                - role: endpoints
-                    namespaces:
-                    names:
-                    - istio-system
-                relabel_configs:
-                - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
-                    action: keep
-                    regex: istiod;http-monitoring
-                scheme: https
-                tls_config:
-                    ca_file: /etc/prom-certs/root-cert.pem
-                    cert_file: /etc/prom-certs/cert-chain.pem
-                    key_file: /etc/prom-certs/key.pem
-                    insecure_skip_verify: true
-            - job_name: 'envoy-stats'
-                metrics_path: /stats/prometheus
-                kubernetes_sd_configs:
-                - role: pod
+            kubernetes_sd_configs:
+            - role: endpoints
+                namespaces:
+                names:
+                - istio-system
+            relabel_configs:
+            - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+                action: keep
+                regex: istiod;http-monitoring
+            scheme: https
+            tls_config:
+                ca_file: /etc/prom-certs/root-cert.pem
+                cert_file: /etc/prom-certs/cert-chain.pem
+                key_file: /etc/prom-certs/key.pem
+                insecure_skip_verify: true
 
-                relabel_configs:
-                - source_labels: [__meta_kubernetes_pod_container_port_name]
-                    action: keep
-                    regex: '.*-envoy-prom'
-                scheme: https
-                tls_config:
-                    ca_file: /etc/prom-certs/root-cert.pem
-                    cert_file: /etc/prom-certs/cert-chain.pem
-                    key_file: /etc/prom-certs/key.pem
-                    insecure_skip_verify: true
+            - job_name: 'envoy-stats'
+            metrics_path: /stats/prometheus
+            kubernetes_sd_configs:
+            - role: pod
+
+            relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_container_port_name]
+                action: keep
+                regex: '.*-envoy-prom'
+            scheme: https
+            tls_config:
+                ca_file: /etc/prom-certs/root-cert.pem
+                cert_file: /etc/prom-certs/cert-chain.pem
+                key_file: /etc/prom-certs/key.pem
+                insecure_skip_verify: true
         """
     }
 }
@@ -190,6 +191,7 @@ deployment = {
                 labels: {
                     "app.kubernetes.io/name": label_app_name
                     "app.kubernetes.io/version": image_version
+                    "sidecar.istio.io/inject": "true"
                 }
                 annotations: {
                     # do not intercept any inbound ports
