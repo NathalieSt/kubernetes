@@ -10,7 +10,6 @@ import outdent
 out_dir = shared.cluster_path + "istio/prometheus/"
 # Filenames
 kustomization_file = "kustomization.yaml"
-namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
@@ -30,14 +29,12 @@ cluster_role_name = "istio-prometheus-cluster-role"
 port = 9090
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
-    namespace_file
     configmap_file
     deployment_file
     k8s_service_file
     rbac_file
     pvc_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
 
 configmap = core_api.ConfigMap {
     apiVersion: "v1"
@@ -287,7 +284,6 @@ service: core_api.Service = {
 }
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
-yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + k8s_service_file)
