@@ -59,7 +59,9 @@ release: helm_flux.HelmRelease = {
 # the package seems to be broken
 # to get IDE support, import "import k8s.api.storage.v1 as storage_api" and use storage_api for schemas
 # remote storage class
+#import k8s.api.storage.v1 as storage_api
 remote_storage_class = {
+    apiVersion: "storage.k8s.io/v1"
     kind: "StorageClass"
     metadata: {
         name: shared.nfs_remote_storage_class_name
