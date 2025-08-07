@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: prometheus
+    app.kubernetes.io/version: v3.5.0
+  name: prometheus-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+  template:
+    metadata:
+      annotations:
+        traffic.sidecar.istio.io/includeInboundPorts: ''
+        traffic.sidecar.istio.io/includeOutboundIPRanges: ''
+        proxy.istio.io/config: "\n                        proxyMetadata:\n                            OUTPUT_CERTS: /etc/istio-output-certs\n                    "
+      labels:
+        app.kubernetes.io/name: prometheus
+        app.kubernetes.io/version: v3.5.0
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - args:
+        - '--storage.tsdb.retention.time=30d'
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--storage.tsdb.path=/prometheus/'
+        image: prom/prometheus:v3.5.0
+        name: prometheus
+        ports:
+        - containerPort: 9090
+          name: prometheus
+        volumeMounts:
+        - mountPath: /etc/prometheus
+          name: prometheus-config
+        - mountPath: /prometheus/
+          name: prometheus-storage
+        - mountPath: /etc/prom-certs/
+          name: istio-certs
+      volumes:
+      - configMap:
+          name: prometheus-configmap
+        name: prometheus-config
+      - name: prometheus-storage
+        persistentVolumeClaim:
+          claimName: prometheus-pvc
+      - emptyDir:
+          medium: Memory
+        name: istio-certs
