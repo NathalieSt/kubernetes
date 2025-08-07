@@ -1,4 +1,3 @@
-import k8s.api.core.v1 as core_api
 import yaml
 
 import ....lib.k8s_wrapper
