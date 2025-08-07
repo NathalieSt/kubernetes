@@ -1,0 +1,11 @@
+kind: StorageClass
+metadata:
+  name: nfs-remote
+parameters:
+  server: remote-fs
+  share: /mnt/HC_Volume_103061115
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+- nfsvers=4.1
