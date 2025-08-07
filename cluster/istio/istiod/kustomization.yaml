@@ -4,3 +4,4 @@ metadata:
   name: istiod
 resources:
 - release.yaml
+- strict-tls.yaml
