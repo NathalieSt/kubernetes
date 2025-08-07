@@ -200,6 +200,8 @@ deployment = {
                         proxyMetadata:
                           OUTPUT_CERTS: /etc/istio-output-certs
                     """)
+                    # mount the shared volume at sidecar proxy
+                    "sidecar.istio.io/userVolumeMount": '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]'
                 }
             }
             spec = core_api.PodSpec {
