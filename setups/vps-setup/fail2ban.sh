@@ -8,6 +8,11 @@ sudo systemctl start fail2ban
 
 sudo systemctl enable fail2ban
 
+sudo nano /etc/fail2ban/jail.d/defaults-debian.conf
+
+# edit in this line:
+# backend = systemd
+
 # PERMISISION DENIED: just make it manually
 #sudo touch /etc/fail2ban/jail.d/fort.conf
 #
