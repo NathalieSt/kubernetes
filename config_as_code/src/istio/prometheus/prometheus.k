@@ -196,10 +196,10 @@ deployment = {
                     "traffic.sidecar.istio.io/includeInboundPorts": ""
                     # do not intercept any outbound traffic
                     "traffic.sidecar.istio.io/includeOutboundIPRanges": ""
-                    "proxy.istio.io/config": """
+                    "proxy.istio.io/config": outdent.outdent("""
                         proxyMetadata:
-                            OUTPUT_CERTS: /etc/istio-output-certs
-                    """
+                          OUTPUT_CERTS: /etc/istio-output-certs
+                    """)
                 }
             }
             spec = core_api.PodSpec {

@@ -15,7 +15,9 @@ spec:
       annotations:
         traffic.sidecar.istio.io/includeInboundPorts: ''
         traffic.sidecar.istio.io/includeOutboundIPRanges: ''
-        proxy.istio.io/config: "\n                        proxyMetadata:\n                            OUTPUT_CERTS: /etc/istio-output-certs\n                    "
+        proxy.istio.io/config: |-
+          proxyMetadata:
+            OUTPUT_CERTS: /etc/istio-output-certs
       labels:
         app.kubernetes.io/name: prometheus
         app.kubernetes.io/version: v3.5.0
