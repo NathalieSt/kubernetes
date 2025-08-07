@@ -5,6 +5,7 @@ import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
 import k8s.api.rbac.v1 as rbac_api
+import outdent
 
 out_dir = shared.cluster_path + "istio/prometheus/"
 # Filenames
@@ -49,7 +50,7 @@ configmap = core_api.ConfigMap {
         }
     }
     data: {
-        "prometheus.yml": """
+        "prometheus.yml": outdent.outdent("""
             global:
                 scrape_interval: 30s
                 evaluation_interval: 30s
@@ -58,12 +59,12 @@ configmap = core_api.ConfigMap {
             kubernetes_sd_configs:
             - role: endpoints
                 namespaces:
-                names:
-                - istio-system
+                    names:
+                    - istio-system
             relabel_configs:
             - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
-                action: keep
-                regex: istiod;http-monitoring
+            action: keep
+            regex: istiod;http-monitoring
             scheme: https
             tls_config:
                 ca_file: /etc/prom-certs/root-cert.pem
@@ -78,15 +79,15 @@ configmap = core_api.ConfigMap {
 
             relabel_configs:
             - source_labels: [__meta_kubernetes_pod_container_port_name]
-                action: keep
-                regex: '.*-envoy-prom'
+            action: keep
+            regex: '.*-envoy-prom'
             scheme: https
             tls_config:
                 ca_file: /etc/prom-certs/root-cert.pem
                 cert_file: /etc/prom-certs/cert-chain.pem
                 key_file: /etc/prom-certs/key.pem
                 insecure_skip_verify: true
-        """
+        """)
     }
 }
 

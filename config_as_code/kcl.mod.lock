@@ -7,3 +7,11 @@
     reg = "ghcr.io"
     repo = "kcl-lang/k8s"
     oci_tag = "1.32"
+  [dependencies.outdent]
+    name = "outdent"
+    full_name = "outdent_0.1.0"
+    version = "0.1.0"
+    sum = "hx6FEJC+9Co0056NXoJmx3B/VJdRD6+M/hDlDCrMw7Q="
+    reg = "ghcr.io"
+    repo = "kcl-lang/outdent"
+    oci_tag = "0.1.0"
