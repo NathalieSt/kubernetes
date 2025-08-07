@@ -166,7 +166,7 @@ pvc: core_api.PersistentVolumeClaim = {
         resources.requests.storage: "60Gi"
     }
 }
-
+# Must match Prometheus process GID
 deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
@@ -203,6 +203,13 @@ deployment = {
                 }
             }
             spec = core_api.PodSpec {
+                securityContext: {
+                    # Matches Prometheus GID
+                    fsGroup: 65534
+                    # Matches Prometheus UID
+                    runAsUser: 65534
+                    runAsGroup: 65534
+                }
                 containers: [
                     {
                         name: "prometheus"

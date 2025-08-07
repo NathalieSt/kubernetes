@@ -38,6 +38,10 @@ spec:
           name: prometheus-storage
         - mountPath: /etc/prom-certs/
           name: istio-certs
+      securityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsUser: 65534
       volumes:
       - configMap:
           name: prometheus-configmap
