@@ -66,6 +66,7 @@ remote_storage_class = {
     metadata: {
         name: shared.nfs_remote_storage_class_name
     }
+    provisioner: "nfs.csi.k8s.io"
     parameters: {
         "server": "remote-fs"
         "share": "/mnt/HC_Volume_103061115"
