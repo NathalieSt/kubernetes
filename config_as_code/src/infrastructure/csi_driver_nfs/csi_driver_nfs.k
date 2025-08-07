@@ -68,7 +68,7 @@ remote_storage_class = {
     }
     provisioner: "nfs.csi.k8s.io"
     parameters: {
-        "server": "remote-fs"
+        "server": "remote-fs.netbird.selfhosted"
         "share": "/mnt/HC_Volume_103061115"
     }
     reclaimPolicy: "Delete"
