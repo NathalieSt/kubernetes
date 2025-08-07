@@ -1,4 +1,5 @@
 import ..lib.shared
+import .istio.istio_shared
 
 cluster_path = "../../../../cluster/"
 global_vault_auth_namespace = "vault-secrets-operator"
@@ -132,7 +133,7 @@ dawarich: shared.ClusterService = {
 kiali: shared.ClusterService = {
     name: "kiali"
     namespace: "kiali-operator"
-    cluster_url: "kiali.kiali.svc.cluster.local"
+    cluster_url: "kiali.${istio_shared.namespace}.svc.cluster.local"
     port: 20001
     gateway_config: {
         dns_name: "kiali.cluster"
