@@ -9,14 +9,12 @@ out_dir = shared.cluster_path + "istio/istiod/"
 # Filenames
 kustomization_file = "kustomization.yaml"
 release_file = "release.yaml"
-strict_tls_file = "strict-tls.yaml"
 # Configs
 service_name = "istiod"
 chart_name = "istiod"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     release_file
-    strict_tls_file
 ])
 
 # Helm configuration
@@ -42,22 +40,7 @@ release: helm_flux.HelmRelease = {
     }
 }
 
-strict_tls = {
-    apiVersion: "security.istio.io/v1"
-    kind: "PeerAuthentication"
-    metadata: {
-        name: "default"
-        namespace: istio_shared.namespace
-    }
-    spec: {
-        mtls: {
-            mode: "STRICT"
-        }
-    }
-}
-
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
-yaml.dump_to_file(strict_tls, out_dir + strict_tls_file)
 # Write helm configuration to files
 yaml.dump_to_file(release, out_dir + release_file)
