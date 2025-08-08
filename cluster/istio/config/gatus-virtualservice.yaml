@@ -10,6 +10,6 @@ spec:
   http:
     - route:
         - destination:
-            host: gatus
+            host: gatus.gatus.svc.cluster.local
             port:
               number: 80
