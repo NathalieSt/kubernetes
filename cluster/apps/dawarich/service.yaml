@@ -3,10 +3,11 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: dawarich
+    app.kubernetes.io/version: latest
   name: dawarich
 spec:
   ports:
-  - name: dawarich
+  - name: http
     port: 3000
     targetPort: 3000
   selector:

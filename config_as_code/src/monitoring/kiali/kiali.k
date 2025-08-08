@@ -23,7 +23,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     release_file
     repository_file
 ])
-namespace = k8s_wrapper.create_namespace(shared.kiali.namespace)
+namespace = k8s_wrapper.create_namespace(shared.kiali.namespace, True)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name

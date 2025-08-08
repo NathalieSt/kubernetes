@@ -24,6 +24,7 @@ port = 3000
 public_pvc_volume_name = "public-dawarich-volume"
 watched_pvc_volume_name = "watched-dawarich-volume"
 storage_pvc_volume_name = "storage-dawarich-volume"
+image_version = "latest"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
@@ -116,6 +117,7 @@ deployment = {
         name: service_name
         labels: {
             "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
         }
     }
     spec: {
@@ -129,13 +131,14 @@ deployment = {
             metadata: meta.ObjectMeta {
                 labels: {
                     "app.kubernetes.io/name": label_app_name
+                    "app.kubernetes.io/version": image_version
                 }
             }
             spec = core_api.PodSpec {
                 containers: [
                     {
                         name: "dawarich"
-                        image: "freikin/dawarich:latest"
+                        image: "freikin/dawarich:${image_version}"
                         command: ['web-entrypoint.sh']
                         args: ['bin/rails', 'server', '-p', '3000', '-b', '::']
                         ports: [
@@ -220,12 +223,13 @@ k8s_service: core_api.Service = {
         name: k8s_service_name
         labels: {
             "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
         }
     }
     spec: {
         ports: [
             {
-                name: "dawarich"
+                name: "http"
                 port: port
                 targetPort: port
             }

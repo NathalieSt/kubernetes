@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: dawarich
+    app.kubernetes.io/version: latest
   name: dawarich
 spec:
   replicas: 1
@@ -13,6 +14,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: dawarich
+        app.kubernetes.io/version: latest
     spec:
       containers:
       - args:

@@ -34,3 +34,8 @@ helm uninstall netbird-operator -n netbird
 ```sh
 kubectl create job --from=cronjob/postgres-postgresql-pgdumpall manual-postgres -n postgres
 ```
+
+## Creating a token for kiali
+```sh
+kubectl create token kiali-service-account -n istio-system
+```
