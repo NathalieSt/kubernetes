@@ -10,9 +10,8 @@ out_dir = shared.cluster_path + "istio/repo/"
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 repository_file = "repository.yaml"
-# Configs
-chart_url = "https://istio-release.storage.googleapis.com/charts"
 
+# Configs
 namespace = k8s_wrapper.create_namespace(istio_shared.namespace, False)
 
 kustomization = k8s_wrapper.create_kustomization(istio_shared.repo_name, [
@@ -25,7 +24,7 @@ repo: helm_flux.HelmRepository = {
     kind: "HelmRepository"
     spec: {
         interval: "24h"
-        url: chart_url
+        url: istio_shared.chart_url
     }
 }
 
