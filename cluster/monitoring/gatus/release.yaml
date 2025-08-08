@@ -67,11 +67,11 @@ spec:
         interval: '60s'
       - enabled: true
         name: dawarich
-        url: http://dawarich.dawarich.svc.cluster.local:3000
+        url: tcp://dawarich.dawarich.svc.cluster.local:3000
         group: Cluster Services
         method: GET
         conditions:
-        - '[STATUS] == 200'
+        - '[CONNECTED] == true'
         interval: '60s'
       - enabled: true
         name: netbird
