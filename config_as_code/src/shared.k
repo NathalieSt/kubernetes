@@ -122,7 +122,7 @@ dawarich: shared.ClusterService = {
     namespace: "dawarich"
     cluster_url: "dawarich.dawarich.svc.cluster.local"
     port: 3000
-    gatus_config.conditions: ["[CONNECTED] == true"]
+    gatus_config.conditions: ["[STATUS] == 200"]
     gatus_config.endpointType: "http"
     gateway_config: {
         dns_name: "dawarich.cluster"

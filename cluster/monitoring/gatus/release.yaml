@@ -71,7 +71,7 @@ spec:
         group: Cluster Services
         method: GET
         conditions:
-        - '[CONNECTED] == true'
+        - '[STATUS] == 200'
         interval: '60s'
       - enabled: true
         name: netbird
