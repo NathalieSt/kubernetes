@@ -24,7 +24,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     deployment_file
     service_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 
 pvc: core_api.PersistentVolumeClaim = {
     apiVersion: "v1"

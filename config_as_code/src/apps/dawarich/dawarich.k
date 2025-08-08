@@ -33,7 +33,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     deployment_file
     k8s_service_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 
 public_pvc: core_api.PersistentVolumeClaim = {
     metadata.name = public_pvc_name

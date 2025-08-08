@@ -21,7 +21,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     repository_file
     remote_storage_class_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     apiVersion: "source.toolkit.fluxcd.io/v1beta2"

@@ -24,10 +24,11 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     repository_file
     pvc_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
+    kind: "HelmRepository"
     spec: {
         interval: "24h"
         url: chart_url

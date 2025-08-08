@@ -37,11 +37,8 @@ kustomization: k8s_wrapper.Kustomization = {
         secrets_sub_dir + vault_rbac_file
     ]
 }
-namespace: core_api.Namespace = {
-    metadata: meta.ObjectMeta {
-        name: service_name
-    }
-}
+namespace: core_api.Namespace = k8s_wrapper.create_namespace(service_name, True)
+
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name

@@ -13,7 +13,7 @@ repository_file = "repository.yaml"
 # Configs
 chart_url = "https://istio-release.storage.googleapis.com/charts"
 
-namespace = k8s_wrapper.create_namespace(istio_shared.namespace)
+namespace = k8s_wrapper.create_namespace(istio_shared.namespace, False)
 
 kustomization = k8s_wrapper.create_kustomization(istio_shared.repo_name, [
     namespace_file

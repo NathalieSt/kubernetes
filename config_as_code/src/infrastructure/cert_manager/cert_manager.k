@@ -24,7 +24,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     repository_file
     cert_manager_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name

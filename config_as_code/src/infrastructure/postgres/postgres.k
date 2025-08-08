@@ -23,7 +23,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     repository_file
     init_configmap_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 # init configmap
 init_configmap: core_api.ConfigMap = {
     metadata: {

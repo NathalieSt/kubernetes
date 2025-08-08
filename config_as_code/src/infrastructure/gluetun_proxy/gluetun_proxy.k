@@ -37,7 +37,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     secret_dir + vault_auth_file
     secret_dir + vault_static_secret_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 
 vault_rbac = vault.create_vault_rbac(service_name)
 

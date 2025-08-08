@@ -50,7 +50,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     secrets_subdir + vault_netbird_static_secret_file
     secrets_subdir + vault_nginx_static_secret_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name)
+namespace = k8s_wrapper.create_namespace(service_name, True)
 
 vault_rbac = vault.create_vault_rbac(service_name)
 
