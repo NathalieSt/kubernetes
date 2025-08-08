@@ -3,9 +3,8 @@ kind: Gateway
 metadata:
   name: cluster-gateway
 spec:
-  gatewayClassName: istio
   selector:
-    istio: ingress
+    istio: ingressgateway
   servers:
     - port:
         number: 80
