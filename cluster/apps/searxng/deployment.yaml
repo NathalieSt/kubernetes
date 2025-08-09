@@ -17,9 +17,6 @@ spec:
         app.kubernetes.io/version: '2025.8.3-2e62eb5'
     spec:
       containers:
-      - env:
-        - name: NO_PROXY
-          value: localhost,127.0.0.1,.svc,.cluster.local,gluetun-proxy.gluetun-proxy.svc.cluster.local
         image: searxng/searxng:2025.8.3-2e62eb5
         name: searxng
         ports:
