@@ -12,3 +12,4 @@ spec:
         protocol: HTTP
       hosts:
         - "gatus.cluster.netbird.selfhosted"
+        - "searxng.cluster.netbird.selfhosted"

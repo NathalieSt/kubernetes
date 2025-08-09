@@ -7,6 +7,12 @@ data:
             header_up Host {host}
         }
     }
+    searxng.cluster.netbird.selfhosted:443 {
+        tls internal
+        reverse_proxy 10.43.164.134:80 {
+            header_up Host {host}
+        }
+    }
 kind: ConfigMap
 metadata:
   annotations:

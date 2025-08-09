@@ -1,15 +1,15 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: gatus-virtualservice
+  name: searxng-virtualservice
 spec:
   hosts:
-    - "gatus.cluster.netbird.selfhosted"
+    - "searxng.cluster.netbird.selfhosted"
   gateways:
     - cluster-gateway
   http:
     - route:
         - destination:
-            host: gatus.gatus.svc.cluster.local
+            host: searxng.searxng.svc.cluster.local
             port:
-              number: 80
+              number: 8080
