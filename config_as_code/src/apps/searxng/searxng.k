@@ -16,6 +16,7 @@ service_name = "searxng"
 label_app_name = "searxng"
 k8s_service_name = "searxng"
 configmap_name = "searxng-configmap"
+image_version = "2025.8.3-2e62eb5"
 deployment_configmap_volume = "searxng-config"
 port = 8080
 # k8s configuration
@@ -85,6 +86,7 @@ deployment = {
         name: "searxng-deployment"
         labels: {
             "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
         }
     }
     spec: {
@@ -98,13 +100,14 @@ deployment = {
             metadata: meta.ObjectMeta {
                 labels: {
                     "app.kubernetes.io/name": label_app_name
+                    "app.kubernetes.io/version": image_version
                 }
             }
             spec = core_api.PodSpec {
                 containers: [
                     {
                         name: "searxng"
-                        image: "searxng/searxng:2025.8.3-2e62eb5"
+                        image: "searxng/searxng:${image_version}"
                         ports: [
                             {
                                 name: "searxng"
@@ -139,6 +142,7 @@ service: core_api.Service = {
         name: k8s_service_name
         labels: {
             "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
         }
     }
     spec: {
