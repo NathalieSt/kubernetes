@@ -9,3 +9,4 @@ resources:
 - secrets/vault_rbac.yaml
 - secrets/vault_auth.yaml
 - secrets/vault_static_secret.yaml
+- destination-rule.yaml
