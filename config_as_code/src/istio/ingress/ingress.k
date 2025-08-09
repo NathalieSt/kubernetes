@@ -47,7 +47,7 @@ release: helm_flux.HelmRelease = {
                 maxReplicas: 2
             }
             service: {
-                loadBalancerIP: "10.43.164.134"
+                loadBalancerIP: shared.istio_gateway_ip
             }
         }
     }

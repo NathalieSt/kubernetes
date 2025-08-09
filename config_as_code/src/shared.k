@@ -143,6 +143,8 @@ kiali: shared.ClusterService = {
     }
 }
 
+istio_gateway_ip = "10.43.164.134"
+
 cluster_services: [shared.ClusterService] = [
     jellyfin
     vault

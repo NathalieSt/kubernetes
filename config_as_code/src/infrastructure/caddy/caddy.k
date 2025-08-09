@@ -43,7 +43,7 @@ configmap = core_api.ConfigMap {
         "Caddyfile": outdent.outdent("""
             gatus.cluster.netbird.selfhosted:443 {
                 tls internal
-                reverse_proxy 10.43.164.134:80 {
+                reverse_proxy ${shared.istio_gateway_ip}:80 {
                     header_up Host {host}
                 }
             }
