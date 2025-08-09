@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Sidecar
+metadata:
+  name: searxng-proxy-bypass
+spec:
+  workloadSelector:
+    labels:
+      app.kubernetes.io/name: searxng  # Must match your SearXNG pod labels
+  egress:
+  - hosts:
+    - "./*"  # Allow all internal services through Istio
+  - hosts:
+    - "gluetun-proxy/gluetun-proxy"  # Target Gluetun namespace/service
+    portLevelSettings:
+    - port:
+        number: 8888
+      tls:
+        mode: DISABLE  # ONLY for this specific connection

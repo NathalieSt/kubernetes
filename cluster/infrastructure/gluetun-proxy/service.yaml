@@ -10,6 +10,5 @@ spec:
   - name: proxy
     port: 8888
     targetPort: 8888
-    protocol: TCP  # MUST be TCP, NOT HTTP
   selector:
     app.kubernetes.io/name: gluetun-proxy
