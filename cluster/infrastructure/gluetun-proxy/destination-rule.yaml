@@ -6,7 +6,7 @@ spec:
   host: gluetun-proxy.gluetun-proxy.svc.cluster.local
   trafficPolicy:
     tls:
-      mode: DISABLE  # Critical for proxy traffic
+      mode: PERMISSIVE  # Critical: Allows plain text JUST for this connection
     connectionPool:
       tcp:
         maxConnections: 100
