@@ -111,6 +111,12 @@ deployment = {
                     {
                         name: "searxng"
                         image: "searxng/searxng:${image_version}"
+                        env: [
+                            {
+                                name: "NO_PROXY"
+                                value: "localhost,127.0.0.1,.svc,.cluster.local,gluetun-proxy.gluetun-proxy.svc.cluster.local"
+                            }
+                        ]
                         ports: [
                             {
                                 name: "searxng"
