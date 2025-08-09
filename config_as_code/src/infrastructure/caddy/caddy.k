@@ -47,6 +47,12 @@ configmap = core_api.ConfigMap {
                     header_up Host {host}
                 }
             }
+            searxng.cluster.netbird.selfhosted:443 {
+                tls internal
+                reverse_proxy ${shared.istio_gateway_ip}:80 {
+                    header_up Host {host}
+                }
+            }
         """)
     }
 }
@@ -118,7 +124,7 @@ deployment = {
                             {
                                 name = "NB_EXTRA_DNS_LABELS"
                                 # Old hardcoded string: "jellyfin.cluster,vault.cluster,gatus.cluster,wikijs.cluster,searxng.cluster"
-                                value = "gatus.cluster"
+                                value = "gatus.cluster,searxng.cluster"
                             }
                         ]
                         resources = {
