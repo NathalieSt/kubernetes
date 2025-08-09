@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: gluetun-proxy-entry
+spec:
+  hosts:
+    - gluetun-proxy.gluetun-proxy.svc.cluster.local
+  ports:
+    - number: 8888
+      name: http-proxy
+      protocol: HTTP
+  location: MESH_INTERNAL   # or MESH_INTERNAL
+  resolution: DNS
