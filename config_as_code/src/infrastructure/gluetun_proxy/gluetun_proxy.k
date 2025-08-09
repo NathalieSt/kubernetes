@@ -23,6 +23,7 @@ service_name = "gluetun-proxy"
 label_app_name = "gluetun-proxy"
 k8s_service_name = "gluetun-proxy"
 port = 8888
+image_version = "v3.40"
 ## Vault specific configs
 secret_name = "gluetun-proxy-vpn"
 vault_role = "vpn"
@@ -81,6 +82,7 @@ deployment = {
         name: "gluetun-proxy-deployment"
         labels: {
             "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
         }
     }
     spec: {
@@ -94,13 +96,14 @@ deployment = {
             metadata: meta.ObjectMeta {
                 labels: {
                     "app.kubernetes.io/name": label_app_name
+                    "app.kubernetes.io/version": image_version
                 }
             }
             spec = core_api.PodSpec {
                 containers: [
                     {
                         name: "gluetun"
-                        image: "qmcgaw/gluetun:v3.40"
+                        image: "qmcgaw/gluetun:${image_version}"
                         ports: [
                             {
                                 name: "gluetun-proxy"
@@ -181,6 +184,7 @@ service: core_api.Service = {
         name: k8s_service_name
         labels: {
             "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
         }
     }
     spec: {

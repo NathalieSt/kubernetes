@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: gluetun-proxy
+    app.kubernetes.io/version: v3.40
   name: gluetun-proxy
 spec:
   ports:
