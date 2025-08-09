@@ -7,7 +7,7 @@ metadata:
   name: gluetun-proxy
 spec:
   ports:
-  - name: gluetun-proxy
+  - name: proxy
     port: 8888
     targetPort: 8888
   selector:

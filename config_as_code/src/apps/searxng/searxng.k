@@ -3,6 +3,7 @@ import ...shared
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
+import outdent
 
 out_dir = shared.cluster_path + "apps/searxng/"
 # Filenames
@@ -11,6 +12,7 @@ namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
+service_entry_file = "service-entry.yaml"
 # Configs
 service_name = "searxng"
 label_app_name = "searxng"
@@ -25,6 +27,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     configmap_file
     deployment_file
     k8s_service_file
+    service_entry_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, True)
 
@@ -41,7 +44,7 @@ configmap = core_api.ConfigMap {
     # URL to connect valkey database is overwritten by ${SEARXNG_VALKEY_URL}
     # FIXME: maybe extract the inline yaml into a separate file and use a kcl function to turn it into a string here??? Could be useful for nginx gateway later
     data: {
-        "settings.yml": """
+        "settings.yml": outdent.outdent("""
             # SearXNG settings
             use_default_settings: true
 
@@ -75,7 +78,7 @@ configmap = core_api.ConfigMap {
                 proxies:
                     all://:
                         - http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
-        """
+        """)
     }
 }
 

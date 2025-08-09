@@ -7,4 +7,4 @@ resources:
 - configmap.yaml
 - deployment.yaml
 - service.yaml
-#- service-entry.yaml
+- service-entry.yaml

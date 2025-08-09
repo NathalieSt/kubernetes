@@ -1,13 +1,15 @@
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
-  name: gluetun-proxy-entry
+  name: gluetun-proxy-tcp
 spec:
   hosts:
-    - gluetun-proxy.gluetun-proxy.svc.cluster.local
+  - gluetun-proxy.gluetun-proxy.svc.cluster.local  # Must match your full service DNS
+  addresses:
+  - 0.0.0.0/0
   ports:
-    - number: 8888
-      name: http
-      protocol: HTTP
-  location: MESH_EXTERNAL
+  - number: 8888
+    name: proxy
+    protocol: TCP  # CRITICAL: Must be TCP, not HTTP
+  location: MESH_INTERNAL
   resolution: DNS
