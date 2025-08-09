@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: kiali-virtualservice
+spec:
+  hosts:
+    - "kiali.cluster.netbird.selfhosted"
+  gateways:
+    - cluster-gateway
+  http:
+    - route:
+        - destination:
+            host: kiali.kiali.svc.cluster.local
+            port:
+              number: 20001

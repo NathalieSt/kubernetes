@@ -7,3 +7,4 @@ resources:
 - gateway.yaml
 - gatus-virtualservice.yaml
 - searxng-virtualservice.yaml
+- kiali-virtualservice.yaml
