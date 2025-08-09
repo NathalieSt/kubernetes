@@ -9,5 +9,5 @@ spec:
     - number: 8888
       name: http
       protocol: HTTP
-  location: MESH_INTERNAL
+  location: MESH_EXTERNAL
   resolution: DNS
