@@ -6,3 +6,4 @@ resources:
 - strict-tls.yaml
 - gateway.yaml
 - gatus-virtualservice.yaml
+- searxng-virtualservice.yaml
