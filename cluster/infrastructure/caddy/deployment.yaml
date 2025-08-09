@@ -39,7 +39,7 @@ spec:
         - name: NB_EXTRA_DNS_LABELS
           value: gatus.cluster
         - name: DISABLE_DNS
-          value: true
+          value: "true"
         image: netbirdio/netbird:latest
         name: netbird-agent
         resources:
