@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  Caddyfile: |-
+    gatus.cluster.netbird.selfhosted {
+        tls internal
+        reverse_proxy istio-ingress.istio-ingress.svc.cluster.local
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    app.kubernetes.io/name: caddy
+  name: caddy-configmap
