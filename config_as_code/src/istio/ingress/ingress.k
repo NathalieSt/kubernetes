@@ -46,6 +46,9 @@ release: helm_flux.HelmRelease = {
             autoscaling: {
                 maxReplicas: 2
             }
+            service: {
+                loadBalancerIP: "10.43.164.134"
+            }
         }
     }
 }
