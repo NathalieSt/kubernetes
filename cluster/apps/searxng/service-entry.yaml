@@ -7,7 +7,7 @@ spec:
     - gluetun-proxy.gluetun-proxy.svc.cluster.local
   ports:
     - number: 8888
-      name: http-proxy
+      name: gluetun-proxy
       protocol: HTTP
-  location: MESH_INTERNAL   # or MESH_INTERNAL
+  location: MESH_EXTERNAL   # or MESH_INTERNAL
   resolution: DNS
