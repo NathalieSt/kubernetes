@@ -17,9 +17,6 @@ spec:
         app.kubernetes.io/name: caddy
         app.kubernetes.io/version: '2.10.0-alpine'
     spec:
-      dnsPolicy: ClusterFirst
-      dnsConfig:
-        nameservers: ["10.96.0.10"]
       containers:
       - image: caddy:2.10.0-alpine
         name: caddy
@@ -41,6 +38,8 @@ spec:
           value: https://netbird.nathalie-stiefsohn.eu
         - name: NB_EXTRA_DNS_LABELS
           value: gatus.cluster
+        - name: DISABLE_DNS
+          value: true
         image: netbirdio/netbird:latest
         name: netbird-agent
         resources:
