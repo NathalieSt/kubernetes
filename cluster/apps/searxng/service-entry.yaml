@@ -9,7 +9,5 @@ spec:
     - number: 8888
       name: http
       protocol: HTTP
-  location: MESH_INTERNAL        # <-- key
-  resolution: STATIC
-  endpoints:
-    - address: gluetun-proxy.gluetun-proxy.svc.cluster.local
+  location: MESH_INTERNAL
+  resolution: DNS
