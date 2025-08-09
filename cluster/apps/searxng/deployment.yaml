@@ -17,7 +17,7 @@ spec:
         app.kubernetes.io/version: '2025.8.3-2e62eb5'
     spec:
       containers:
-        image: searxng/searxng:2025.8.3-2e62eb5
+      - image: searxng/searxng:2025.8.3-2e62eb5
         name: searxng
         ports:
         - containerPort: 8080
