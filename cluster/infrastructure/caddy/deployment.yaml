@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/name: caddy
     app.kubernetes.io/version: '2.10.0-alpine'
-  name: searxng-deployment
+  name: caddy-deployment
 spec:
   replicas: 1
   selector:
@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: caddy
+        app.kubernetes.io/version: '2.10.0-alpine'
     spec:
       containers:
       - image: caddy:2.10.0-alpine

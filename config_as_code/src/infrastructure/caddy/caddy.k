@@ -53,7 +53,7 @@ deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
     metadata: meta.ObjectMeta {
-        name: "searxng-deployment"
+        name: "caddy-deployment"
         labels: {
             "app.kubernetes.io/name": label_app_name
             "app.kubernetes.io/version": image_version
@@ -71,6 +71,7 @@ deployment = {
             metadata: meta.ObjectMeta {
                 labels: {
                     "app.kubernetes.io/name": label_app_name
+                    "app.kubernetes.io/version": image_version
                 }
             }
             spec = core_api.PodSpec {
