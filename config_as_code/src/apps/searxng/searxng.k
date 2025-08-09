@@ -12,7 +12,6 @@ namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
-service_entry_file = "service-entry.yaml"
 # Configs
 service_name = "searxng"
 label_app_name = "searxng"
@@ -27,7 +26,6 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     configmap_file
     deployment_file
     k8s_service_file
-    service_entry_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, True)
 
@@ -111,12 +109,6 @@ deployment = {
                     {
                         name: "searxng"
                         image: "searxng/searxng:${image_version}"
-                        env: [
-                            {
-                                name: "NO_PROXY"
-                                value: "localhost,127.0.0.1,.svc,.cluster.local,gluetun-proxy.gluetun-proxy.svc.cluster.local"
-                            }
-                        ]
                         ports: [
                             {
                                 name: "searxng"
