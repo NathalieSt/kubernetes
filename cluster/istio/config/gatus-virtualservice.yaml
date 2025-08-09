@@ -4,7 +4,7 @@ metadata:
   name: example-virtualservice
 spec:
   hosts:
-    - "example.com"
+    - "gatus.gatus.svc.cluster.local"
   gateways:
     - cluster-gateway
   http:
