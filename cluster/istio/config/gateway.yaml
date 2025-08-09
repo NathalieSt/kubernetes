@@ -13,3 +13,4 @@ spec:
       hosts:
         - "gatus.cluster.netbird.selfhosted"
         - "searxng.cluster.netbird.selfhosted"
+        - "kiali.cluster.netbird.selfhosted"
