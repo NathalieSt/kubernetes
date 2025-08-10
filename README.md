@@ -39,3 +39,12 @@ kubectl create job --from=cronjob/postgres-postgresql-pgdumpall manual-postgres 
 ```sh
 kubectl create token kiali-service-account -n istio-system
 ```
+
+## Copy cert from caddy
+For Firefox p12 is required to import,
+for OwnTracks on Android to work only the root.crt needs to be imported as CA.
+```sh
+kubectl cp <pod-name>:/data/caddy/pki/authorities/local/root.crt ./root.crt -n caddy
+kubectl cp <pod-name>:/data/caddy/pki/authorities/local/root.key ./root.key -n caddy
+openssl pkcs12 -export -in root.crt -inkey root.key -out caddy-server.p12
+```
