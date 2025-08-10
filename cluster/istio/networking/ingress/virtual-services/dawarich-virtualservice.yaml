@@ -13,3 +13,7 @@ spec:
         host: dawarich.dawarich.svc.cluster.local
         port:
           number: 3000
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: "https"  # Explicitly enforce HTTPS
