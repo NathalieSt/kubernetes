@@ -1,4 +1,5 @@
 import ....lib.k8s_wrapper
+import ....lib.shared as lib_shared
 import ...shared
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
@@ -30,12 +31,27 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
 ])
 namespace = k8s_wrapper.create_namespace(service_name, False)
 
+# FIXME: put into lib.caddy
+get_websocket_support_if_required = lambda service: lib_shared.ClusterService -> str {
+    result = ""
+    if service.gateway_config.requires_websockets == True:
+        result = """
+            reverse_proxy @websockets ${shared.istio_gateway_ip}:80 {
+                header_up Host {host}
+            }
+    """
+
+    result
+}
+
 caddy_services = ("").join(["""
     ${service.gateway_config.dns_name}.netbird.selfhosted:443 {
         tls internal
         reverse_proxy ${shared.istio_gateway_ip}:80 {
             header_up Host {host}
         }
+
+        ${get_websocket_support_if_required(service)}
     }
 """ for service in shared.exposed_services])
 
@@ -50,7 +66,11 @@ configmap = core_api.ConfigMap {
     }
     data: {
         "Caddyfile": outdent.outdent("""
-            ${caddy_services}
+            @websockets {
+                header Connection *Upgrade*
+                header Upgrade    websocket
+            }
+            ${outdent.outdent(caddy_services)}
         """)
     }
 }

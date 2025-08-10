@@ -126,7 +126,7 @@ dawarich: shared.ClusterService = {
     gatus_config.endpointType: "tcp"
     gateway_config: {
         dns_name: "dawarich.cluster"
-        requires_websockets: False
+        requires_websockets: True
         requires_larger_body: False
     }
 }
