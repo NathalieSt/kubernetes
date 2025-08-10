@@ -77,5 +77,6 @@ ingress_cluster_gateway: istio.Gateway = {
 
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
+yaml.dump_to_file(ingress_cluster_gateway, ingress_out_dir + ingress_cluster_gateway_file)
 ## Write ingress-virtual-services
 [yaml.dump_to_file(virtual_service.virtual_service, ingress_virtual_service_out_dir) for virtual_service in ingress_virtual_services]
