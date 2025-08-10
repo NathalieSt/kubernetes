@@ -6,12 +6,15 @@ schema Destination:
     port: shared.IstioPort
 
 schema Route:
-    destination: [Destination]
+    destination: Destination
+
+schema Http:
+    route: [Route]
 
 schema VirtualServiceSpec:
     hosts: [str]
     gateways: [str]
-    http: [Route]
+    http: [Http]
 
 schema VirtualService:
     apiVersion = "networking.istio.io/v1"

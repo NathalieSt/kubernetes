@@ -1,17 +1,17 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: gatus-virtualservice
+  name: jellyfin-virtualservice
 spec:
   hosts:
-  - gatus.cluster.netbird.selfhosted
+  - jellyfin.cluster.netbird.selfhosted
   gateways:
   - ingress-cluster-gateway
   http:
   - route:
     - destination:
-        host: gatus.gatus.svc.cluster.local
+        host: jellyfin.jellyfin.svc.cluster.local
         port:
-          number: 80
-          name: gatus
+          number: 8096
+          name: jellyfin
           protocol: HTTP

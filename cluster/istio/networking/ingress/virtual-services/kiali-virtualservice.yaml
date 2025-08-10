@@ -4,12 +4,14 @@ metadata:
   name: kiali-virtualservice
 spec:
   hosts:
-    - "kiali.cluster.netbird.selfhosted"
+  - kiali.cluster.netbird.selfhosted
   gateways:
-    - cluster-gateway
+  - ingress-cluster-gateway
   http:
-    - route:
-        - destination:
-            host: kiali.istio-system.svc.cluster.local
-            port:
-              number: 20001
+  - route:
+    - destination:
+        host: kiali.istio-system.svc.cluster.local
+        port:
+          number: 20001
+          name: kiali
+          protocol: HTTP

@@ -1,17 +1,17 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: gatus-virtualservice
+  name: wikijs-virtualservice
 spec:
   hosts:
-  - gatus.cluster.netbird.selfhosted
+  - wikijs.cluster.netbird.selfhosted
   gateways:
   - ingress-cluster-gateway
   http:
   - route:
     - destination:
-        host: gatus.gatus.svc.cluster.local
+        host: wikijs.wikijs.svc.cluster.local
         port:
           number: 80
-          name: gatus
+          name: wikijs
           protocol: HTTP

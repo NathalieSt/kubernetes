@@ -4,12 +4,14 @@ metadata:
   name: searxng-virtualservice
 spec:
   hosts:
-    - "searxng.cluster.netbird.selfhosted"
+  - searxng.cluster.netbird.selfhosted
   gateways:
-    - cluster-gateway
+  - ingress-cluster-gateway
   http:
-    - route:
-        - destination:
-            host: searxng.searxng.svc.cluster.local
-            port:
-              number: 8080
+  - route:
+    - destination:
+        host: searxng.searxng.svc.cluster.local
+        port:
+          number: 8080
+          name: searxng
+          protocol: HTTP
