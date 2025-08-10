@@ -16,5 +16,5 @@ schema Gateway:
     apiVersion = "networking.istio.io/v1"
     kind = "Gateway"
     metadata: meta.ObjectMeta
-    servers: [Server]
+    spec: GatewaySpec
 

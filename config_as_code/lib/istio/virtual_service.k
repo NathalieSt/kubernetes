@@ -17,4 +17,5 @@ schema VirtualService:
     apiVersion = "networking.istio.io/v1"
     kind = "VirtualService"
     metadata: meta.ObjectMeta
+    spec: VirtualServiceSpec
 
