@@ -18,22 +18,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cert-manager
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: cert-manager
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/infrastructure/cert-manager
-  prune: true
-  wait: true
-  timeout: 5m0s
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: vault
   namespace: flux-system
 spec:
@@ -63,7 +47,7 @@ spec:
   wait: true
   timeout: 5m0s
   dependsOn:
-  - name: vault
+    - name: vault
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -81,7 +65,7 @@ spec:
   wait: true
   timeout: 5m0s
   dependsOn:
-  - name: vault-secrets-operator
+    - name: vault-secrets-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -99,7 +83,7 @@ spec:
   wait: true
   timeout: 5m0s
   dependsOn:
-  - name: vault-secrets-operator
+    - name: vault-secrets-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -117,7 +101,7 @@ spec:
   wait: true
   timeout: 5m0s
   dependsOn:
-  - name: vault-secrets-operator
+    - name: vault-secrets-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
