@@ -12,7 +12,6 @@ spec:
     - jellyfin.cluster.netbird.selfhosted
     - vault.cluster.netbird.selfhosted
     - gatus.cluster.netbird.selfhosted
-    - wikijs.cluster.netbird.selfhosted
     - searxng.cluster.netbird.selfhosted
     - dawarich.cluster.netbird.selfhosted
     - kiali.cluster.netbird.selfhosted

@@ -45,20 +45,6 @@ postgres: shared.ClusterService = {
     port: 5432
 }
 
-wikijs: shared.ClusterService = {
-    name: "wikijs"
-    namespace: "wikijs"
-    cluster_url: "wikijs.wikijs.svc.cluster.local"
-    port: 80
-    gatus_config.endpointType: "http"
-    gatus_config.conditions: ["[STATUS] == 200"]
-    gateway_config: {
-        dns_name: "wikijs.cluster"
-        requires_websockets: False
-        requires_larger_body: False
-    }
-}
-
 gluetun_proxy: shared.ClusterService = {
     name: "gluetun-proxy"
     namespace: "gluetun-proxy"
@@ -87,15 +73,6 @@ searxng: shared.ClusterService = {
         requires_websockets: False
         requires_larger_body: False
     }
-}
-
-nginx_gateway: shared.ClusterService = {
-    name: "nginx-gateway"
-    namespace: "searxng"
-    cluster_url: "nginx-gateway.nginx-gateway.svc.cluster.local"
-    port: 80
-    gatus_config.conditions: ["[CONNECTED] == true"]
-    gatus_config.endpointType: "http"
 }
 
 gatus: shared.ClusterService = {
@@ -155,7 +132,6 @@ cluster_services: [shared.ClusterService] = [
     vault
     gatus
     postgres
-    wikijs
     gluetun_proxy
     valkey
     searxng

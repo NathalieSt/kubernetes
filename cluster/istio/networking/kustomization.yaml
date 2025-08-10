@@ -7,7 +7,6 @@ resources:
 - ingress/virtual-services/jellyfin-virtualservice.yaml
 - ingress/virtual-services/vault-virtualservice.yaml
 - ingress/virtual-services/gatus-virtualservice.yaml
-- ingress/virtual-services/wikijs-virtualservice.yaml
 - ingress/virtual-services/searxng-virtualservice.yaml
 - ingress/virtual-services/dawarich-virtualservice.yaml
 - ingress/virtual-services/kiali-virtualservice.yaml
