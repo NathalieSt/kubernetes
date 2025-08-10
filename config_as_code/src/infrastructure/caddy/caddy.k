@@ -30,6 +30,15 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
 ])
 namespace = k8s_wrapper.create_namespace(service_name, False)
 
+caddy_services = ("").join(["""
+    ${service.gateway_config.dns_name}.netbird.selfhosted:443 {
+        tls internal
+        reverse_proxy ${shared.istio_gateway_ip}:80 {
+            header_up Host {host}
+        }
+    }
+""" for service in shared.exposed_services])
+
 configmap = core_api.ConfigMap {
     apiVersion: "v1"
     kind: "ConfigMap"
@@ -41,24 +50,7 @@ configmap = core_api.ConfigMap {
     }
     data: {
         "Caddyfile": outdent.outdent("""
-            gatus.cluster.netbird.selfhosted:443 {
-                tls internal
-                reverse_proxy ${shared.istio_gateway_ip}:80 {
-                    header_up Host {host}
-                }
-            }
-            searxng.cluster.netbird.selfhosted:443 {
-                tls internal
-                reverse_proxy ${shared.istio_gateway_ip}:80 {
-                    header_up Host {host}
-                }
-            }
-            kiali.cluster.netbird.selfhosted:443 {
-                tls internal
-                reverse_proxy ${shared.istio_gateway_ip}:80 {
-                    header_up Host {host}
-                }
-            }
+            ${caddy_services}
         """)
     }
 }
@@ -129,8 +121,8 @@ deployment = {
                             }
                             {
                                 name = "NB_EXTRA_DNS_LABELS"
-                                # Old hardcoded string: "jellyfin.cluster,vault.cluster,gatus.cluster,wikijs.cluster,searxng.cluster"
-                                value = "gatus.cluster,searxng.cluster,kiali.cluster"
+                                # Old hardcoded string: "gatus.cluster,searxng.cluster,kiali.cluster"
+                                value = ",".join([service.gateway_config.dns_name for service in shared.exposed_services])
                             }
                         ]
                         resources = {

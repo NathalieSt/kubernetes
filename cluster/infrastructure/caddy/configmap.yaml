@@ -1,18 +1,48 @@
 apiVersion: v1
 data:
   Caddyfile: |-
+    jellyfin.cluster.netbird.selfhosted:443 {
+        tls internal
+        reverse_proxy 10.43.164.134:80 {
+            header_up Host {host}
+        }
+    }
+
+    vault.cluster.netbird.selfhosted:443 {
+        tls internal
+        reverse_proxy 10.43.164.134:80 {
+            header_up Host {host}
+        }
+    }
+
     gatus.cluster.netbird.selfhosted:443 {
         tls internal
         reverse_proxy 10.43.164.134:80 {
             header_up Host {host}
         }
     }
+
+    wikijs.cluster.netbird.selfhosted:443 {
+        tls internal
+        reverse_proxy 10.43.164.134:80 {
+            header_up Host {host}
+        }
+    }
+
     searxng.cluster.netbird.selfhosted:443 {
         tls internal
         reverse_proxy 10.43.164.134:80 {
             header_up Host {host}
         }
     }
+
+    dawarich.cluster.netbird.selfhosted:443 {
+        tls internal
+        reverse_proxy 10.43.164.134:80 {
+            header_up Host {host}
+        }
+    }
+
     kiali.cluster.netbird.selfhosted:443 {
         tls internal
         reverse_proxy 10.43.164.134:80 {
