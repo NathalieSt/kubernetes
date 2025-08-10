@@ -3,8 +3,4 @@ kind: Kustomization
 metadata:
   name: istio-config
 resources:
-- strict-tls.yaml
-- gateway.yaml
-- gatus-virtualservice.yaml
-- searxng-virtualservice.yaml
-- kiali-virtualservice.yaml
+- peer-authenthication.yaml

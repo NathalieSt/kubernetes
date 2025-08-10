@@ -1,4 +1,5 @@
 import ....lib.k8s_wrapper
+import ....lib.istio
 import ...shared
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
@@ -12,6 +13,7 @@ namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
+proxy_service_entry_file = "proxy-service-entry.yaml"
 # Configs
 service_name = "searxng"
 label_app_name = "searxng"
@@ -20,12 +22,14 @@ configmap_name = "searxng-configmap"
 image_version = "2025.8.3-2e62eb5"
 deployment_configmap_volume = "searxng-config"
 port = 8080
+proxy_service_entry_name = "searxng-proxy-service-entry"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     configmap_file
     deployment_file
     k8s_service_file
+    proxy_service_entry_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, True)
 
@@ -159,9 +163,31 @@ service: core_api.Service = {
         }
     }
 }
+
+proxy_service_entry: istio.ServiceEntry = {
+    metadata: {
+        name: proxy_service_entry_name
+    }
+    spec: {
+        hosts: [
+            "gluetun-proxy.gluetun-proxy.svc.cluster.local"
+        ]
+        ports: [
+            {
+                name: "tcp"
+                number: 8888
+                protocol: "TCP"
+            }
+        ]
+        location: "MESH_EXTERNAL"
+        resolution: "DNS"
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + k8s_service_file)
+yaml.dump_to_file(proxy_service_entry, out_dir + proxy_service_entry_file)
