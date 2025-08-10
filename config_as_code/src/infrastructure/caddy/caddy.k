@@ -36,9 +36,13 @@ get_websocket_support_if_required = lambda service: lib_shared.ClusterService ->
     result = ""
     if service.gateway_config.requires_websockets == True:
         result = """
-            reverse_proxy @websockets ${shared.istio_gateway_ip}:80 {
-                header_up Host {host}
-            }
+        @websockets {
+            header Connection *Upgrade*
+            header Upgrade    websocket
+        }
+        reverse_proxy @websockets ${shared.istio_gateway_ip}:80 {
+            header_up Host {host}
+        }
     """
 
     result
@@ -66,11 +70,7 @@ configmap = core_api.ConfigMap {
     }
     data: {
         "Caddyfile": outdent.outdent("""
-            @websockets {
-                header Connection *Upgrade*
-                header Upgrade    websocket
-            }
-            ${outdent.outdent(caddy_services)}
+            ${caddy_services}
         """)
     }
 }
