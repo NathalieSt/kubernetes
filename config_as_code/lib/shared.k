@@ -21,3 +21,8 @@ schema ExternalService:
     name: str
     url: str
 
+schema IstioPort:
+    number: int
+    name: str
+    protocol: "TCP" | "HTTP"
+
