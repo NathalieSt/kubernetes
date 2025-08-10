@@ -7,8 +7,18 @@ schema Destination:
     host: str
     port: VirtualServicePort
 
+schema Set:
+    "X-Forwarded-Proto": "http" | "https"
+
+schema Request:
+    set: Set
+
+schema Headers:
+    request: Request
+
 schema Route:
     destination: Destination
+    headers?: Headers
 
 schema Http:
     route: [Route]

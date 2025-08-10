@@ -1,6 +1,7 @@
 import ....lib.istio
 import ....lib.k8s_wrapper
 import ...shared
+import ....lib.shared as lib_shared
 import yaml
 
 schema VirtualServiceAndFile:
@@ -22,36 +23,51 @@ service_name = "istio-networking"
 ingress_cluster_gateway_name = "ingress-cluster-gateway"
 ingress_name = "ingress"
 # k8s configuration
-ingress_virtual_services: [VirtualServiceAndFile] = [{
-    file_name: service.name + "-virtualservice.yaml"
-    virtual_service: {
-        metadata: {
-            name: service.name + "-virtualservice"
-        }
-        spec: {
-            hosts: [
-                "${service.gateway_config.dns_name}.netbird.selfhosted"
-            ]
-            gateways: [
-                ingress_cluster_gateway_name
-            ]
-            http: [
-                {
-                    route: [
-                        {
-                            destination: {
-                                host: "${service.cluster_url}"
-                                port: {
-                                    number: service.port
-                                }
-                            }
-                        }
-                    ]
-                }
-            ]
+parse_service_into_virtual_service_and_file = lambda service: lib_shared.ClusterService -> VirtualServiceAndFile {
+    route: istio.Route = {
+        destination: {
+            host: "${service.cluster_url}"
+            port: {
+                number: service.port
+            }
         }
     }
-} for service in shared.exposed_services]
+    # FIXME: find a better way to do this?
+    if service.virtual_service_config != Undefined:
+        if service.virtual_service_config.client_protocol != Undefined:
+            route.headers = {
+                request: {
+                    set: {
+                        "X-Forwarded-Proto": service.virtual_service_config.client_protocol
+                    }
+                }
+            }
+
+
+    {
+        file_name: service.name + "-virtualservice.yaml"
+        virtual_service: {
+            metadata: {
+                name: service.name + "-virtualservice"
+            }
+            spec: {
+                hosts: [
+                    "${service.gateway_config.dns_name}.netbird.selfhosted"
+                ]
+                gateways: [
+                    ingress_cluster_gateway_name
+                ]
+                http: [
+                    {
+                        route: [route]
+                    }
+                ]
+            }
+        }
+    }
+}
+
+ingress_virtual_services: [VirtualServiceAndFile] = [parse_service_into_virtual_service_and_file(service) for service in shared.exposed_services]
 
 ingress_virtual_service_kustomization_resources = [ingress_virtual_service_kustomization_path + ingress_virtual_service.file_name for ingress_virtual_service in ingress_virtual_services]
 

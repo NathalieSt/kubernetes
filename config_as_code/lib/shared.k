@@ -2,6 +2,9 @@ schema GatusConfig:
     endpointType: "http" | "tcp"
     conditions?: [str]
 
+schema VirtualServiceConfig:
+    client_protocol?: "http" | "https"
+
 schema GatewayConfig:
     dns_name: str
     requires_websockets: bool
@@ -16,6 +19,7 @@ schema ClusterService:
     port: int
     gatus_config?: GatusConfig
     gateway_config?: GatewayConfig
+    virtual_service_config?: VirtualServiceConfig
 
 schema ExternalService:
     name: str

@@ -16,4 +16,4 @@ spec:
       headers:
         request:
           set:
-            X-Forwarded-Proto: "https"  # Explicitly enforce HTTPS
+            X-Forwarded-Proto: https

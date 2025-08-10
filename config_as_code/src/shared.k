@@ -129,6 +129,11 @@ dawarich: shared.ClusterService = {
         requires_websockets: True
         requires_larger_body: False
     }
+    virtual_service_config: {
+        # https protocol needs to be forwarded to dawarich to prevent
+        # a mismatch between configured server url and origin header url
+        client_protocol: "https"
+    }
 }
 
 kiali: shared.ClusterService = {
