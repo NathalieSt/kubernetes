@@ -13,4 +13,3 @@ spec:
         host: kiali.istio-system.svc.cluster.local
         port:
           number: 20001
-          name: kiali

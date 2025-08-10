@@ -13,4 +13,3 @@ spec:
         host: jellyfin.jellyfin.svc.cluster.local
         port:
           number: 8096
-          name: jellyfin

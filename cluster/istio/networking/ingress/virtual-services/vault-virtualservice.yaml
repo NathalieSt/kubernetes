@@ -13,4 +13,3 @@ spec:
         host: vault.vault.svc.cluster.local
         port:
           number: 8200
-          name: vault

@@ -13,4 +13,3 @@ spec:
         host: wikijs.wikijs.svc.cluster.local
         port:
           number: 80
-          name: wikijs

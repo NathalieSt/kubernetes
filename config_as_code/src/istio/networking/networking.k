@@ -42,8 +42,6 @@ ingress_virtual_services: [VirtualServiceAndFile] = [{
                             destination: {
                                 host: "${service.cluster_url}"
                                 port: {
-                                    # FIXME: Include port name in shared.<services>.gateway_config
-                                    name: service.name
                                     number: service.port
                                 }
                             }

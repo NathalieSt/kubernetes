@@ -13,4 +13,3 @@ spec:
         host: searxng.searxng.svc.cluster.local
         port:
           number: 8080
-          name: searxng

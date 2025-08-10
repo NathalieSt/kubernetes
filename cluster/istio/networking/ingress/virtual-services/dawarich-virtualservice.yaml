@@ -13,4 +13,3 @@ spec:
         host: dawarich.dawarich.svc.cluster.local
         port:
           number: 3000
-          name: dawarich

@@ -13,4 +13,3 @@ spec:
         host: gatus.gatus.svc.cluster.local
         port:
           number: 80
-          name: gatus

@@ -2,7 +2,6 @@ import k8s.apimachinery.pkg.apis.meta.v1 as meta
 
 schema VirtualServicePort:
     number: int
-    name: str
 
 schema Destination:
     host: str
