@@ -14,4 +14,3 @@ spec:
         port:
           number: 8200
           name: vault
-          protocol: HTTP

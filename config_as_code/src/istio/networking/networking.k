@@ -45,8 +45,6 @@ ingress_virtual_services: [VirtualServiceAndFile] = [{
                                     # FIXME: Include port name in shared.<services>.gateway_config
                                     name: service.name
                                     number: service.port
-                                    # FIXME: Include protocol in shared.<services>.gateway_config
-                                    protocol: "HTTP"
                                 }
                             }
                         }

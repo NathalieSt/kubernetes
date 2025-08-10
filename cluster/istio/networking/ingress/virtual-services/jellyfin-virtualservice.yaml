@@ -14,4 +14,3 @@ spec:
         port:
           number: 8096
           name: jellyfin
-          protocol: HTTP

@@ -14,4 +14,3 @@ spec:
         port:
           number: 20001
           name: kiali
-          protocol: HTTP
