@@ -144,7 +144,7 @@ tandoor: shared.ClusterService = {
     name: "tandoor"
     namespace: "tandoor"
     cluster_url: "tandoor.tandoor.svc.cluster.local"
-    port: 80
+    port: 8080
     gateway_config: {
         dns_name: "tandoor.cluster"
         requires_websockets: False
