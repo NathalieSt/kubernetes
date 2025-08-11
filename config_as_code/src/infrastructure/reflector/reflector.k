@@ -70,14 +70,14 @@ release: helm_flux.HelmRelease = {
     }
 }
 # Reflector annotations
-reflector_annotations = {
+postgres_creds_reflector_annotations = {
     "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
     # Control destination namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,wikijs,dawarich"
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,tandoor"
     # Auto create reflection for matching namespaces
     "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
     # Control auto-reflection namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,wikijs,dawarich"
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,dawarich,tandoor"
 }
 # Vault configuration
 vault_auth: vault.VaultAuth = {
@@ -150,7 +150,7 @@ postgres_creds: vault.VaultStaticSecret = {
         destination: {
             create: True
             name: shared.postgres_creds_secret_name
-            annotations: reflector_annotations
+            annotations: postgres_creds_reflector_annotations
         }
     }
 }

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: tandoor
+    app.kubernetes.io/version: '2.0.1'
+  name: tandoor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tandoor
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tandoor
+        app.kubernetes.io/version: '2.0.1'
+    spec:
+      containers:
+      - env:
+        - name: SECRET_KEY
+          value: '4c9fMV%R1w!%*G0a&hfkb#2Tb6RYupZZ3s0z&xB^49yRQ!HwF7fQjN%uBV*X*8yN'
+        - name: POSTGRES_HOST
+          value: postgres-postgresql.postgres.svc.cluster.local
+        - name: POSTGRES_DB
+          value: tandoor-db
+        - name: POSTGRES_PORT
+          value: '5432'
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        image: linuxserver/heimdall:2.0.1
+        name: heimdall
+        ports:
+        - containerPort: 80
+          name: heimdall
+        volumeMounts:
+        - mountPath: /opt/recipes/staticfiles
+          name: static-files-pvc-volume
+        - mountPath: /opt/recipes/mediafiles
+          name: mediafiles-files-pvc-volume
+      volumes:
+      - name: static-files-pvc-volume
+        persistentVolumeClaim:
+          claimName: static-files-tandoor-pvc
+      - name: mediafiles-files-pvc-volume
+        persistentVolumeClaim:
+          claimName: media-files-tandoor-pvc

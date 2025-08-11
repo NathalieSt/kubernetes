@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: heimdall-virtualservice
+spec:
+  hosts:
+  - heimdall.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: heimdall.heimdall.svc.cluster.local
+        port:
+          number: 80

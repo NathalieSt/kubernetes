@@ -125,6 +125,30 @@ kiali: shared.ClusterService = {
     }
 }
 
+heimdall: shared.ClusterService = {
+    name: "heimdall"
+    namespace: "heimdall"
+    cluster_url: "heimdall.heimdall.svc.cluster.local"
+    port: 80
+    gateway_config: {
+        dns_name: "heimdall.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+}
+
+tandoor: shared.ClusterService = {
+    name: "tandoor"
+    namespace: "tandoor"
+    cluster_url: "tandoor.tandoor.svc.cluster.local"
+    port: 80
+    gateway_config: {
+        dns_name: "tandoor.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+}
+
 istio_gateway_ip = "10.43.164.134"
 
 cluster_services: [shared.ClusterService] = [
@@ -137,6 +161,8 @@ cluster_services: [shared.ClusterService] = [
     searxng
     dawarich
     kiali
+    heimdall
+    tandoor
 ]
 
 cluster_services_watched_by_gatus = filter service in cluster_services {
