@@ -93,7 +93,7 @@ deployment = {
             spec = core_api.PodSpec {
                 containers: [
                     {
-                        name: "heimdall"
+                        name: service_name
                         image: "vabene1111/recipes:${image_version}"
                         ports: [
                             {

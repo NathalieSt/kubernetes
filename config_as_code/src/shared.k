@@ -135,6 +135,9 @@ heimdall: shared.ClusterService = {
         requires_websockets: False
         requires_larger_body: False
     }
+    virtual_service_config: {
+        client_protocol: "https"
+    }
 }
 
 tandoor: shared.ClusterService = {
@@ -146,6 +149,9 @@ tandoor: shared.ClusterService = {
         dns_name: "tandoor.cluster"
         requires_websockets: False
         requires_larger_body: False
+    }
+    virtual_service_config: {
+        client_protocol: "https"
     }
 }
 

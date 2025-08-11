@@ -34,7 +34,7 @@ spec:
               key: password
               name: postgres-creds-secret
         image: vabene1111/recipes:2.0.1
-        name: heimdall
+        name: tandoor
         ports:
         - containerPort: 80
           name: http-tandoor
