@@ -28,7 +28,12 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: heimdall-config
+        - mountPath: /config/www
+          name: configmap-volume
       volumes:
       - name: heimdall-config
         persistentVolumeClaim:
           claimName: heimdall-pvc
+      - configMap:
+          name: heimdall-configmap
+        name: configmap-volume

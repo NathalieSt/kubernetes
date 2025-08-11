@@ -1,0 +1,6 @@
+apiVersion: v1
+data:
+  '.env': "\nAPP_NAME=Heimdall\nAPP_ENV=local\nAPP_KEY=base64:Zi3j7RYZ4M3OlMT7sMdtUtLeXszJ1rVq4j4sda4FTZA=\nAPP_DEBUG=true\nAPP_LOG_LEVEL=debug\nAPP_URL=https://heimdall.cluster.netbird.selfhosted\n\nDB_CONNECTION=sqlite\nDB_DATABASE=app.sqlite\n\nBROADCAST_DRIVER=log\nCACHE_DRIVER=file\nSESSION_DRIVER=file\nSESSION_LIFETIME=120\nQUEUE_DRIVER=database\n\nREDIS_HOST=127.0.0.1\nREDIS_PASSWORD=null\nREDIS_PORT=6379\n\nMAIL_DRIVER=smtp\nMAIL_HOST=smtp.mailtrap.io\nMAIL_PORT=2525\nMAIL_USERNAME=null\nMAIL_PASSWORD=null\nMAIL_ENCRYPTION=null\n\nPUSHER_APP_ID=\nPUSHER_APP_KEY=\nPUSHER_APP_SECRET=\nPUSHER_APP_CLUSTER=mt1\n\nFORCE_HTTPS=true\n        \n        "
+kind: ConfigMap
+metadata:
+  name: heimdall-configmap
