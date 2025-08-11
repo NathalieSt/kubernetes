@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: heimdall
-    app.kubernetes.io/version: '2.7.4'
+    app.kubernetes.io/version: "2.7.4"
   name: heimdall
 spec:
   replicas: 1
@@ -14,26 +14,27 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: heimdall
-        app.kubernetes.io/version: '2.7.4'
+        app.kubernetes.io/version: "2.7.4"
     spec:
       containers:
-      - env:
-        - name: APP_URL
-          value: https://heimdall.cluster.netbird.selfhosted
-        image: linuxserver/heimdall:2.7.4
-        name: heimdall
-        ports:
-        - containerPort: 80
-          name: http-heimdall
-        volumeMounts:
-        - mountPath: /config
-          name: heimdall-config
-        - mountPath: /config/www
-          name: configmap-volume
+        - env:
+            - name: APP_URL
+              value: https://heimdall.cluster.netbird.selfhosted
+          image: linuxserver/heimdall:2.7.4
+          name: heimdall
+          ports:
+            - containerPort: 80
+              name: http-heimdall
+          volumeMounts:
+            - mountPath: /config
+              name: heimdall-config
+              readOnly: false
+            - mountPath: /config/www
+              name: configmap-volume
       volumes:
-      - name: heimdall-config
-        persistentVolumeClaim:
-          claimName: heimdall-pvc
-      - configMap:
-          name: heimdall-configmap
-        name: configmap-volume
+        - name: heimdall-config
+          persistentVolumeClaim:
+            claimName: heimdall-pvc
+        - configMap:
+            name: heimdall-configmap
+          name: configmap-volume
