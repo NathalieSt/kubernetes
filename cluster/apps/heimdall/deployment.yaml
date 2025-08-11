@@ -16,6 +16,24 @@ spec:
         app.kubernetes.io/name: heimdall
         app.kubernetes.io/version: "2.7.4"
     spec:
+      initContainers: # ✅ ADD THIS SECTION
+        - name: config-init
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              # Only copy if target is empty (first run)
+              if [ ! "$(ls -A /config/www)" ]; then
+                cp -r /defaults/.env /config/www/.env
+                chown -R 1000:1000 /config/www
+              fi
+          volumeMounts:
+            - name: heimdall-config
+              mountPath: /config
+            - name: configmap-init
+              mountPath: /defaults
+
       containers:
         - env:
             - name: APP_URL
@@ -37,4 +55,4 @@ spec:
             claimName: heimdall-pvc
         - configMap:
             name: heimdall-configmap
-          name: configmap-volume
+          name: configmap-init
