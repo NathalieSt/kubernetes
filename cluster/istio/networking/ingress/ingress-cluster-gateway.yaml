@@ -15,6 +15,5 @@ spec:
     - searxng.cluster.netbird.selfhosted
     - dawarich.cluster.netbird.selfhosted
     - kiali.cluster.netbird.selfhosted
-    - heimdall.cluster.netbird.selfhosted
   selector:
     istio: ingress

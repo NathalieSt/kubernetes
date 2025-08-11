@@ -37,7 +37,7 @@ spec:
         - name: NB_MANAGEMENT_URL
           value: https://netbird.nathalie-stiefsohn.eu
         - name: NB_EXTRA_DNS_LABELS
-          value: jellyfin.cluster,vault.cluster,gatus.cluster,searxng.cluster,dawarich.cluster,kiali.cluster,heimdall.cluster,tandoor.cluster
+          value: jellyfin.cluster,vault.cluster,gatus.cluster,searxng.cluster,dawarich.cluster,kiali.cluster
         image: netbirdio/netbird:latest
         name: netbird-agent
         resources:
