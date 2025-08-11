@@ -7,17 +7,17 @@ spec:
   chartRef:
     kind: OCIRepository
     name: postgres
-  interval: '24h'
+  interval: "24h"
   install:
     remediation:
       retries: 3
-  timeout: '5m'
+  timeout: "5m"
   valuesFrom:
-  - kind: Secret
-    name: postgres-creds-secret
-    valuesKey: password
-    targetPath: auth.postgresPassword
-    optional: false
+    - kind: Secret
+      name: postgres-creds-secret
+      valuesKey: password
+      targetPath: auth.postgresPassword
+      optional: false
   values:
     primary:
       persistence:
@@ -27,5 +27,7 @@ spec:
     backup:
       enabled: true
       cronjob:
+        annotations:
+          proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
         storage:
           storageClass: smb
