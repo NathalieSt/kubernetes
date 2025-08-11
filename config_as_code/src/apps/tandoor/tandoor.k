@@ -94,7 +94,7 @@ deployment = {
                 containers: [
                     {
                         name: "heimdall"
-                        image: "linuxserver/heimdall:${image_version}"
+                        image: "vabene1111/recipes:${image_version}"
                         ports: [
                             {
                                 name: "http-${service_name}"

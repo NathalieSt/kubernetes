@@ -33,11 +33,11 @@ spec:
             secretKeyRef:
               key: password
               name: postgres-creds-secret
-        image: linuxserver/heimdall:2.0.1
+        image: vabene1111/recipes:2.0.1
         name: heimdall
         ports:
         - containerPort: 80
-          name: heimdall
+          name: http-tandoor
         volumeMounts:
         - mountPath: /opt/recipes/staticfiles
           name: static-files-pvc-volume
