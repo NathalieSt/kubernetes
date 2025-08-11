@@ -158,10 +158,6 @@ deployment = {
                                 value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.42.0.0/15"
                             }
                             {
-                                name: "DNS_KEEP_NAMESERVER"
-                                value: "on"
-                            }
-                            {
                                 name: "HTTPPROXY"
                                 value: "on"
                             }
