@@ -42,8 +42,8 @@ pvc: core_api.PersistentVolumeClaim = {
         }
     }
     spec: {
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: "local-path"
+        accessModes: ["ReadWriteMany"]
+        storageClassName: shared.nfs_storage_class_name
         resources.requests.storage: "1Gi"
     }
 }
