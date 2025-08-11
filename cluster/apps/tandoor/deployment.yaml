@@ -36,8 +36,12 @@ spec:
         image: vabene1111/recipes:2.0.1
         name: tandoor
         ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
         - containerPort: 8080
-          name: http-tandoor
+          name: gunicorn
+          protocol: TCP
         volumeMounts:
         - mountPath: /opt/recipes/staticfiles
           name: static-files-pvc-volume

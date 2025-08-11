@@ -7,8 +7,13 @@ metadata:
   name: tandoor
 spec:
   ports:
-  - name: http-tandoor
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: gunicorn
     port: 8080
-    targetPort: 8080
+    protocol: TCP
+    targetPort: gunicorn
   selector:
     app.kubernetes.io/name: tandoor

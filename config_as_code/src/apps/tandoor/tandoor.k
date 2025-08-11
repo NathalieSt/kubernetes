@@ -97,8 +97,14 @@ deployment = {
                         image: "vabene1111/recipes:${image_version}"
                         ports: [
                             {
-                                name: "http-${service_name}"
-                                containerPort: port
+                                containerPort: 80
+                                protocol: "TCP"
+                                name: "http"
+                            }
+                            {
+                                containerPort: 8080
+                                protocol: "TCP"
+                                name: "gunicorn"
                             }
                         ]
                         volumeMounts: [
@@ -176,9 +182,16 @@ service: core_api.Service = {
     spec: {
         ports: [
             {
-                name: "http-${service_name}"
-                port: port
-                targetPort: port
+                port: 80
+                targetPort: "http"
+                name: "http"
+                protocol: "TCP"
+            }
+            {
+                port: 8080
+                targetPort: "gunicorn"
+                name: "gunicorn"
+                protocol: "TCP"
             }
         ]
         selector: {
