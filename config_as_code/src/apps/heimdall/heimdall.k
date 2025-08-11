@@ -39,7 +39,7 @@ pvc: core_api.PersistentVolumeClaim = {
         }
     }
     spec: {
-        accessModes: ["ReadWriteMany"]
+        accessModes: ["ReadWriteOnce"]
         storageClassName: "local-path"
         resources.requests.storage: "1Gi"
     }

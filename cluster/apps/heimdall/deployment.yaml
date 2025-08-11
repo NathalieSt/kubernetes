@@ -21,7 +21,7 @@ spec:
         name: heimdall
         ports:
         - containerPort: 80
-          name: heimdall
+          name: http-heimdall
         volumeMounts:
         - mountPath: /config
           name: heimdall-config
