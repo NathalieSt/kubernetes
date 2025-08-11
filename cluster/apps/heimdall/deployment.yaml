@@ -46,9 +46,6 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: heimdall-config
-              readOnly: false
-            - mountPath: /config/www
-              name: configmap-volume
       volumes:
         - name: heimdall-config
           persistentVolumeClaim:
