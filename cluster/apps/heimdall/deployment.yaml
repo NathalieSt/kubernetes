@@ -17,7 +17,10 @@ spec:
         app.kubernetes.io/version: '2.7.4'
     spec:
       containers:
-      - image: linuxserver/heimdall:2.7.4
+      - env:
+        - name: APP_URL
+          value: https://heimdall.cluster.netbird.selfhosted
+        image: linuxserver/heimdall:2.7.4
         name: heimdall
         ports:
         - containerPort: 80

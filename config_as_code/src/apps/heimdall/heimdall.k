@@ -74,6 +74,12 @@ deployment = {
                     {
                         name: service_name
                         image: "linuxserver/heimdall:${image_version}"
+                        env: [
+                            {
+                                name: "APP_URL"
+                                value: "https://${shared.heimdall.gateway_config.dns_name}.netbird.selfhosted"
+                            }
+                        ]
                         ports: [
                             {
                                 name: "http-${service_name}"
