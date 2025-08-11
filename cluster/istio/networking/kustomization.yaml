@@ -11,4 +11,3 @@ resources:
 - ingress/virtual-services/dawarich-virtualservice.yaml
 - ingress/virtual-services/kiali-virtualservice.yaml
 - ingress/virtual-services/heimdall-virtualservice.yaml
-- ingress/virtual-services/tandoor-virtualservice.yaml

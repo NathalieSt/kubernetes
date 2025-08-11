@@ -140,21 +140,6 @@ heimdall: shared.ClusterService = {
     }
 }
 
-tandoor: shared.ClusterService = {
-    name: "tandoor"
-    namespace: "tandoor"
-    cluster_url: "tandoor.tandoor.svc.cluster.local"
-    port: 8080
-    gateway_config: {
-        dns_name: "tandoor.cluster"
-        requires_websockets: False
-        requires_larger_body: False
-    }
-    virtual_service_config: {
-        client_protocol: "https"
-    }
-}
-
 istio_gateway_ip = "10.43.164.134"
 
 cluster_services: [shared.ClusterService] = [
@@ -168,7 +153,6 @@ cluster_services: [shared.ClusterService] = [
     dawarich
     kiali
     heimdall
-    tandoor
 ]
 
 cluster_services_watched_by_gatus = filter service in cluster_services {
