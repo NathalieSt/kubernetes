@@ -42,14 +42,6 @@ spec:
         - '[STATUS] == 200'
         interval: '60s'
       - enabled: true
-        name: wikijs
-        url: http://wikijs.wikijs.svc.cluster.local:80
-        group: Cluster Services
-        method: GET
-        conditions:
-        - '[STATUS] == 200'
-        interval: '60s'
-      - enabled: true
         name: gluetun-proxy
         url: tcp://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
         group: Cluster Services
