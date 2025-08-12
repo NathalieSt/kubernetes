@@ -8,6 +8,7 @@ import outdent
 out_dir = shared.cluster_path + "apps/glance/"
 # Filenames
 kustomization_file = "kustomization.yaml"
+namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
@@ -20,10 +21,13 @@ configmap_name = "glance-configmap"
 deployment_configmap_volume = "glance-config"
 port = shared.glance.port
 # k8s configuration
+namespace = k8s_wrapper.create_namespace(service_name, True)
+
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     configmap_file
     deployment_file
     k8s_service_file
+    namespace_file
 ])
 
 configmap = core_api.ConfigMap {
@@ -213,6 +217,7 @@ service: core_api.Service = {
 }
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
+yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + k8s_service_file)
