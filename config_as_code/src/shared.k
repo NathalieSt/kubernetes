@@ -129,7 +129,7 @@ mealie: shared.ClusterService = {
     name: "mealie"
     namespace: "mealie"
     cluster_url: "mealie.mealie.svc.cluster.local"
-    port: 9925
+    port: 9000
     gateway_config: {
         dns_name: "mealie.cluster"
         requires_websockets: False

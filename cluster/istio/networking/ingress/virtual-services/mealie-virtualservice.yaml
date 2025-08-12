@@ -12,4 +12,4 @@ spec:
     - destination:
         host: mealie.mealie.svc.cluster.local
         port:
-          number: 9925
+          number: 9000

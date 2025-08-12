@@ -78,6 +78,7 @@ deployment = {
                                 }
                             }}
                             {name: "POSTGRES_DB", value: "mealie"}
+                            {name: "BASE_URL", value: "https://${shared.mealie.gateway_config.dns_name}.netbird.selfhosted"}
                         ]
                         ports: [
                             {

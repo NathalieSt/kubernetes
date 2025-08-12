@@ -31,10 +31,12 @@ spec:
               name: postgres-creds-secret
         - name: POSTGRES_DB
           value: mealie
+        - name: BASE_URL
+          value: https://mealie.cluster.netbird.selfhosted
         image: ghcr.io/mealie-recipes/mealie:v3.0.2
         name: mealie
         ports:
-        - containerPort: 9925
+        - containerPort: 9000
           name: mealie
         volumeMounts:
         - mountPath: /app/data/
