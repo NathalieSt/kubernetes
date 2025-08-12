@@ -16,5 +16,6 @@ spec:
     - dawarich.cluster.netbird.selfhosted
     - kiali.cluster.netbird.selfhosted
     - mealie.cluster.netbird.selfhosted
+    - glance.cluster.netbird.selfhosted
   selector:
     istio: ingress

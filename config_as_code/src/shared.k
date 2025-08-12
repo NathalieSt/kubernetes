@@ -137,6 +137,18 @@ mealie: shared.ClusterService = {
     }
 }
 
+glance: shared.ClusterService = {
+    name: "glance"
+    namespace: "glance"
+    cluster_url: "glance.glance.svc.cluster.local"
+    port: 8080
+    gateway_config: {
+        dns_name: "glance.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+}
+
 istio_gateway_ip = "10.43.164.134"
 
 cluster_services: [shared.ClusterService] = [
@@ -150,6 +162,7 @@ cluster_services: [shared.ClusterService] = [
     dawarich
     kiali
     mealie
+    glance
 ]
 
 cluster_services_watched_by_gatus = filter service in cluster_services {
