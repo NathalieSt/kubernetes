@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: mealie
+    app.kubernetes.io/version: v3.0.2
+  name: mealie
+spec:
+  ports:
+  - name: mealie
+    port: 9925
+    targetPort: 9925
+  selector:
+    app.kubernetes.io/name: mealie

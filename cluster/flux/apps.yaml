@@ -53,17 +53,20 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: heimdall
+  name: mealie
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: heimdall
+  targetNamespace: mealie
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/heimdall
+  path: ./cluster/apps/mealie
   prune: true
   wait: true
   timeout: 15m0s
+  dependsOn:
+    - name: reflector
+    - name: postgres
 ---
 

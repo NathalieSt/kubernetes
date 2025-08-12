@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: mealie
+    app.kubernetes.io/version: v3.0.2
+  name: mealie
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mealie
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mealie
+        app.kubernetes.io/version: v3.0.2
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_SERVER
+          value: postgres-postgresql.postgres.svc.cluster.local
+        - name: POSTGRES_PORT
+          value: '5432'
+        - name: POSTGRES_USERNAME
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: POSTGRES_DB
+          value: mealie
+        image: ghcr.io/mealie-recipes/mealie:v3.0.2
+        name: mealie
+        ports:
+        - containerPort: 9925
+          name: mealie
+        volumeMounts:
+        - mountPath: /app/data/
+          name: mealie-pvc
+      volumes:
+      - name: mealie-pvc
+        persistentVolumeClaim:
+          claimName: mealie-pvc

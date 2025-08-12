@@ -125,6 +125,18 @@ kiali: shared.ClusterService = {
     }
 }
 
+mealie: shared.ClusterService = {
+    name: "mealie"
+    namespace: "mealie"
+    cluster_url: "mealie.mealie.svc.cluster.local"
+    port: 9925
+    gateway_config: {
+        dns_name: "mealie.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+}
+
 istio_gateway_ip = "10.43.164.134"
 
 cluster_services: [shared.ClusterService] = [
@@ -137,6 +149,7 @@ cluster_services: [shared.ClusterService] = [
     searxng
     dawarich
     kiali
+    mealie
 ]
 
 cluster_services_watched_by_gatus = filter service in cluster_services {

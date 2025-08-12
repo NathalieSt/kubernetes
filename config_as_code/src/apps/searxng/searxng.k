@@ -111,11 +111,11 @@ deployment = {
             spec = core_api.PodSpec {
                 containers: [
                     {
-                        name: "searxng"
+                        name: service_name
                         image: "searxng/searxng:${image_version}"
                         ports: [
                             {
-                                name: "searxng"
+                                name: service_name
                                 containerPort: port
                             }
                         ]
