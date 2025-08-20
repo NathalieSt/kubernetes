@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-local-v2
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: raspberry-pi-5-0
+  share: /mnt/external_ssd
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+- nfsvers=4.1

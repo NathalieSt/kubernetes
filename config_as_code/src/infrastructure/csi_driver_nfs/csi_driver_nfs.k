@@ -1,6 +1,7 @@
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
+import ...versions
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/csi-driver-nfs/"
@@ -10,16 +11,19 @@ namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
 remote_storage_class_file = "remote-storage-class.yaml"
+local_storage_class_v2_file = "local-storage-class-v2.yaml"
 # Configs
 service_name = "csi-driver-nfs"
 chart_url = "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts"
 chart_name = "csi-driver-nfs"
+chart_version = versions.helm_charts.csi_driver_nfs
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     release_file
     repository_file
     remote_storage_class_file
+    local_storage_class_v2_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, True)
 # Helm configuration
@@ -41,7 +45,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: "*"
+                version: chart_version
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"
@@ -79,6 +83,25 @@ remote_storage_class = {
     ]
 }
 
+local_storage_class_v2 = {
+    apiVersion: "storage.k8s.io/v1"
+    kind: "StorageClass"
+    metadata: {
+        name: shared.nfs_local_storage_class_v2_name
+    }
+    provisioner: "nfs.csi.k8s.io"
+    parameters: {
+        "server": "raspberry-pi-5-0"
+        "share": "/mnt/external_ssd"
+    }
+    reclaimPolicy: "Delete"
+    volumeBindingMode: "Immediate"
+    allowVolumeExpansion: True
+    mountOptions: [
+        "nfsvers=4.1"
+    ]
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
@@ -87,3 +110,4 @@ yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)
 ## Write storage classes to files
 yaml.dump_to_file(remote_storage_class, out_dir + remote_storage_class_file)
+yaml.dump_to_file(local_storage_class_v2, out_dir + local_storage_class_v2_file)

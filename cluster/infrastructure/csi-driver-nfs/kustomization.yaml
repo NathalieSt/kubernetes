@@ -7,3 +7,4 @@ resources:
 - release.yaml
 - repository.yaml
 - remote-storage-class.yaml
+- local-storage-class-v2.yaml
