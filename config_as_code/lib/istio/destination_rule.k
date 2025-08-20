@@ -12,6 +12,7 @@ schema DestinationRuleSpec:
 
 schema DestinationRule:
     apiVersion = "networking.istio.io/v1"
+    kind = "DestinationRule"
     metadata: meta.ObjectMeta
     spec: DestinationRuleSpec
 
