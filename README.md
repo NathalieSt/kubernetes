@@ -48,3 +48,8 @@ kubectl cp <pod-name>:/data/caddy/pki/authorities/local/root.crt ./root.crt -n c
 kubectl cp <pod-name>:/data/caddy/pki/authorities/local/root.key ./root.key -n caddy
 openssl pkcs12 -export -in root.crt -inkey root.key -out caddy-server.p12
 ```
+
+## Copy file from vault
+```sh
+kubectl cp <pod-name>:/vault/data ./vault/ -n vault
+```

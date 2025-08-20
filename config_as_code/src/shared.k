@@ -3,11 +3,7 @@ import .istio.istio_shared
 
 cluster_path = "../../../../cluster/"
 global_vault_auth_namespace = "vault-secrets-operator"
-ca_issuer = "my-ca-issuer"
 postgres_creds_secret_name = "postgres-creds-secret"
-tls_cert_secret = "nginx-tls-secret"
-smb_storage_class_name = "smb"
-nfs_storage_class_name = "nfs-client"
 nfs_local_storage_class_v2_name = "nfs-local-v2"
 nfs_remote_storage_class_name = "nfs-remote"
 

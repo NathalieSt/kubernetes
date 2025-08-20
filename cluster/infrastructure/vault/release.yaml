@@ -22,4 +22,4 @@ spec:
       enabled: true
     server:
       dataStorage:
-        storageClass: nfs-client
+        storageClass: nfs-local-v2

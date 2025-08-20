@@ -36,7 +36,7 @@ pvc: core_api.PersistentVolumeClaim = {
         }
     }
     spec: {
-        storageClassName: "nfs-client"
+        storageClassName: shared.nfs_remote_storage_class_name
         # FIXME: Is this the correct access mode???
         accessModes: [
             "ReadWriteMany"

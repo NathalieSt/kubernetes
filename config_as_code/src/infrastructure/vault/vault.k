@@ -49,7 +49,7 @@ release: helm_flux.HelmRelease = {
         interval: "24h"
         values: {
             ui.enabled: True
-            server.dataStorage.storageClass: "nfs-client"
+            server.dataStorage.storageClass: shared.nfs_local_storage_class_v2_name
         }
     }
 }

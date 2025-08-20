@@ -67,10 +67,11 @@ pvc: core_api.PersistentVolumeClaim = {
     metadata.name = pvc_name
     spec: {
         accessModes: ["ReadWriteMany"]
-        storageClassName: shared.smb_storage_class_name
+        storageClassName: shared.nfs_local_storage_class_v2_name
         resources.requests.storage: "100Gi"
     }
 }
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
