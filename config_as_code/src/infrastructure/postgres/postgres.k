@@ -55,7 +55,7 @@ release: helm_flux.HelmRelease = {
             }
         ]
         values: {
-            primary.persistence.storageClass: shared.nfs_remote_storage_class_name
+            primary.persistence.storageClass: shared.nfs_local_storage_class_v2_name
         }
     }
 }
