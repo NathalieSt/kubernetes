@@ -39,4 +39,4 @@ caddy-server.p12
 root.crt
 root.key
 
-vault
+vault-backup

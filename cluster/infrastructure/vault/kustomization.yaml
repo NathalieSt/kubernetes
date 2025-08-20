@@ -3,6 +3,8 @@ kind: Kustomization
 metadata:
   name: vault
 resources:
-- namespace.yaml
-- release.yaml
-- repository.yaml
+  - namespace.yaml
+  - release.yaml
+  - repository.yaml
+  - destination-rule.yaml
+  - peer-auth.yaml
