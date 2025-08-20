@@ -1,0 +1,15 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuthGlobal
+metadata:
+  name: global-vault-auth
+spec:
+  allowedNamespaces:
+  - reflector
+  defaultAuthMethod: kubernetes
+  kubernetes:
+    audiences:
+    - vault
+    mount: kubernetes
+    role: vault-token-reviewer
+    serviceAccount: vault-secrets-operator-vault-serviceaccount
+    tokenExpirationSeconds: 600

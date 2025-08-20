@@ -6,6 +6,6 @@ resources:
 - namespace.yaml
 - release.yaml
 - repository.yaml
-- global-auth.yaml
-- connection.yaml
-- rbac.yaml
+- vault-rbac.yaml
+- vault-auth-global.yaml
+- vault-connection.yaml

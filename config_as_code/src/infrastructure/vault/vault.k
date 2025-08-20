@@ -1,7 +1,6 @@
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
-import ....lib.istio.destination_rule
-import ....lib.istio.peer_authenthication
+import ....lib.istio
 import ...shared
 import ...versions
 import yaml
@@ -62,7 +61,7 @@ release: helm_flux.HelmRelease = {
     }
 }
 
-vso_destination_rule: destination_rule.DestinationRule = {
+vso_destination_rule: istio.DestinationRule = {
     metadata: {
         name: "vault-dr"
     }
@@ -76,7 +75,7 @@ vso_destination_rule: destination_rule.DestinationRule = {
     }
 }
 
-vso_peer_auth: peer_authenthication.PeerAuthenthication = {
+vso_peer_auth: istio.PeerAuthenthication = {
     metadata: {
         name: "vault-permissive-mtls"
     }
