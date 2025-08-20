@@ -49,8 +49,14 @@ kubectl cp <pod-name>:/data/caddy/pki/authorities/local/root.key ./root.key -n c
 openssl pkcs12 -export -in root.crt -inkey root.key -out caddy-server.p12
 ```
 
-## Copy file from vault
+## Copying files from/to vault
 ```sh
+# copy from
 kubectl cp <pod-name>:/vault/data ./vault/ -n vault
+# copy to
 kubectl cp ./vault-backup/ <pod-name>:/vault/data -n vault
+```
+## Mounting nfs
+```sh
+sudo mount -t nfs <server name>:<location on server> <local location>
 ```
