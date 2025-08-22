@@ -35,7 +35,7 @@ vault_rbac = vault.create_vault_rbac(service_name)
 
 vault_auth_global: vault.VaultAuthGlobal = {
     metadata: {
-        name: vault_auth_global_name
+        name: "default"
     }
     spec: {
         allowedNamespaces: ["reflector"]
