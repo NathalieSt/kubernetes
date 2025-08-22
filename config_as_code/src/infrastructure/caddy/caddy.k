@@ -13,6 +13,7 @@ namespace_file = "namespace.yaml"
 configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
+cert_pvc_file = "caddy-cert-pvc.yaml"
 # Configs
 service_name = "caddy"
 label_app_name = "caddy"
@@ -22,14 +23,30 @@ deployment_configmap_volume = "caddy-config"
 image_version = "2.10.0-alpine"
 netbird_secret_name = "netbird-setup-key-vault-secret"
 port = 80
+cert_pvc_name = "caddy-cert-pvc"
+cert_pvc_volume = "caddy-cert-pvc-volume"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     configmap_file
     deployment_file
     k8s_service_file
+    cert_pvc_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, False)
+
+cert_pvc: core_api.PersistentVolumeClaim = {
+    apiVersion: "v1"
+    kind: "PersistentVolumeClaim"
+    metadata: {
+        name: cert_pvc_name
+    }
+    spec: {
+        accessModes: ["ReadWriteMany"]
+        storageClassName: shared.nfs_local_storage_class_v2_name
+        resources.requests.storage: "1Gi"
+    }
+}
 
 # FIXME: put into lib.caddy
 get_websocket_support_if_required = lambda service: lib_shared.ClusterService -> str {
@@ -116,6 +133,10 @@ deployment = {
                                 mountPath: "/etc/caddy/"
                                 name: deployment_configmap_volume
                             }
+                            {
+                                mountPath: "/data/caddy/pki/authorities/local/"
+                                name: cert_pvc_volume
+                            }
                         ]
                     }
                     {
@@ -167,6 +188,12 @@ deployment = {
                             name: configmap_name
                         }
                     }
+                    {
+                        name: cert_pvc_volume
+                        configMap: {
+                            name: cert_pvc_name
+                        }
+                    }
                 ]
             }
         }
@@ -202,3 +229,4 @@ yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + k8s_service_file)
+yaml.dump_to_file(cert_pvc, out_dir + cert_pvc_file)
