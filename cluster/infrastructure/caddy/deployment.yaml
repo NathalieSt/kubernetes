@@ -26,6 +26,8 @@ spec:
         volumeMounts:
         - mountPath: /etc/caddy/
           name: caddy-config
+        - mountPath: /data/caddy/pki/authorities/local/
+          name: caddy-cert-pvc-volume
       - env:
         - name: NB_SETUP_KEY
           valueFrom:
@@ -53,3 +55,6 @@ spec:
       - configMap:
           name: caddy-configmap
         name: caddy-config
+      - configMap:
+          name: caddy-cert-pvc
+        name: caddy-cert-pvc-volume
