@@ -190,8 +190,8 @@ deployment = {
                     }
                     {
                         name: cert_pvc_volume
-                        configMap: {
-                            name: cert_pvc_name
+                        persistentVolumeClaim: {
+                            claimName: cert_pvc_name 
                         }
                     }
                 ]

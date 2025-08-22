@@ -55,6 +55,6 @@ spec:
       - configMap:
           name: caddy-configmap
         name: caddy-config
-      - configMap:
-          name: caddy-cert-pvc
-        name: caddy-cert-pvc-volume
+      - name: caddy-cert-pvc-volume
+        persistentVolumeClaim:
+          claimName: caddy-cert-pvc
