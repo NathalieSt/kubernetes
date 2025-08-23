@@ -15,7 +15,7 @@ spec:
         app.kubernetes.io/name: redis
     spec:
       containers:
-      - image: redis:latest
+      - image: redis:8.2.1
         name: redis
         ports:
         - containerPort: 6379

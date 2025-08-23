@@ -1,6 +1,7 @@
 import ....lib.k8s_wrapper
 import ....lib.shared as lib_shared
 import ...shared
+import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
@@ -20,7 +21,7 @@ label_app_name = "caddy"
 k8s_service_name = "caddy"
 configmap_name = "caddy-configmap"
 deployment_configmap_volume = "caddy-config"
-image_version = "2.10.0-alpine"
+image_version = versions.docker_images.caddy
 netbird_secret_name = "netbird-setup-key-vault-secret"
 port = 80
 cert_pvc_name = "caddy-cert-pvc"

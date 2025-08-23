@@ -6,6 +6,7 @@ import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ....lib.vault
 import ...shared
+import ...versions
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/reflector/"
@@ -23,6 +24,7 @@ vault_rbac_file = "vault-rbac.yaml"
 service_name = "reflector"
 chart_url = "https://emberstack.github.io/helm-charts"
 chart_name = "reflector"
+chart_version = versions.helm_charts.reflector
 service_account_name = "reflector-vault-serviceaccount"
 # k8s configuration
 kustomization: k8s_wrapper.Kustomization = {
@@ -55,7 +57,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: "*"
+                version: chart_version
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"

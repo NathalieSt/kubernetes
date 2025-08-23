@@ -4,6 +4,7 @@ import yaml
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
+import ...versions
 
 out_dir = shared.cluster_path + "apps/jellyfin/"
 # Filenames
@@ -16,6 +17,7 @@ pvc_file = "pvc.yaml"
 service_name = "jellyfin"
 chart_url = "https://jellyfin.github.io/jellyfin-helm"
 chart_name = "jellyfin"
+chart_version = versions.helm_charts.jellyfin
 pvc_name = "jellyfin-library-storage-pvc"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
@@ -41,7 +43,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: "*"
+                version: chart_version
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"
@@ -53,11 +55,6 @@ release: helm_flux.HelmRelease = {
         timeout: "5m"
         interval: "24h"
         values: {
-            image: {
-                repository: "docker.io/jellyfin/jellyfin"
-                # {"$imagepolicy": "flux-system:jellyfin-image-policy:tag"}
-                tag: "10.10.7"
-            }
             persistence.media.existingClaim: pvc_name
         }
     }

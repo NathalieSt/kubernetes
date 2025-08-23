@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: dawarich
-    app.kubernetes.io/version: latest
+    app.kubernetes.io/version: '0.30.10'
   name: dawarich
 spec:
   ports:

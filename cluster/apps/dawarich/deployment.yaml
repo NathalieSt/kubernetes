@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: dawarich
-    app.kubernetes.io/version: latest
+    app.kubernetes.io/version: '0.30.10'
   name: dawarich
 spec:
   replicas: 1
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: dawarich
-        app.kubernetes.io/version: latest
+        app.kubernetes.io/version: '0.30.10'
     spec:
       containers:
       - args:
@@ -62,7 +62,7 @@ spec:
           value: 'true'
         - name: STORE_GEODATA
           value: 'true'
-        image: freikin/dawarich:latest
+        image: freikin/dawarich:0.30.10
         name: dawarich
         ports:
         - containerPort: 3000
@@ -110,7 +110,7 @@ spec:
           value: 'true'
         - name: STORE_GEODATA
           value: 'true'
-        image: freikin/dawarich:latest
+        image: freikin/dawarich:0.30.10
         name: dawarich-sidekiq
         ports:
         - containerPort: 3000

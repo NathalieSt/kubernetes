@@ -1,6 +1,7 @@
 import ....lib.k8s_wrapper
 import ....lib.istio
 import ...shared
+import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
@@ -19,7 +20,7 @@ service_name = "searxng"
 label_app_name = "searxng"
 k8s_service_name = "searxng"
 configmap_name = "searxng-configmap"
-image_version = "2025.8.3-2e62eb5"
+image_version = versions.docker_images.searxng
 deployment_configmap_volume = "searxng-config"
 port = 8080
 proxy_service_entry_name = "searxng-proxy-service-entry"

@@ -18,6 +18,7 @@ vault_connection_file = "vault-connection.yaml"
 service_name = "vault-secrets-operator"
 chart_url = "https://helm.releases.hashicorp.com"
 chart_name = "vault-secrets-operator"
+chart_version = versions.helm_charts.vault_secrets_operator
 vault_auth_global_name = "global-vault-auth"
 
 # k8s configuration
@@ -75,7 +76,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: versions.helm_charts.vault_secrets_operator
+                version: chart_version
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"

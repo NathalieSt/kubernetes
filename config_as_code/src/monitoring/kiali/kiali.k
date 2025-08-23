@@ -3,6 +3,7 @@ import yaml
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
+import ...versions
 import ...istio.istio_shared
 
 out_dir = shared.cluster_path + "monitoring/kiali/"
@@ -15,8 +16,7 @@ repository_file = "repository.yaml"
 service_name = shared.kiali.name
 chart_url = "https://kiali.org/helm-charts"
 chart_name = "kiali-operator"
-## Apparently the kiali chart most current version is 0.0.0 lmao
-chart_version = "*"
+chart_version = versions.helm_charts.kiali
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file

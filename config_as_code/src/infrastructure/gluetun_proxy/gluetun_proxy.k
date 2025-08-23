@@ -1,5 +1,6 @@
 import ....lib.k8s_wrapper
 import ...shared
+import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
@@ -23,7 +24,7 @@ service_name = "gluetun-proxy"
 label_app_name = "gluetun-proxy"
 k8s_service_name = "gluetun-proxy"
 port = 8888
-image_version = "v3.40"
+image_version = versions.docker_images.gluetun 
 ## Vault specific configs
 secret_name = "gluetun-proxy-vpn"
 vault_role = "vpn"

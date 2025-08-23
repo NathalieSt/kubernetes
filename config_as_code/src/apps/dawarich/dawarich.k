@@ -1,5 +1,6 @@
 import ....lib.k8s_wrapper
 import ...shared
+import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
@@ -24,7 +25,7 @@ port = 3000
 public_pvc_volume_name = "public-dawarich-volume"
 watched_pvc_volume_name = "watched-dawarich-volume"
 storage_pvc_volume_name = "storage-dawarich-volume"
-image_version = "latest"
+image_version = versions.docker_images.dawarich
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
@@ -165,7 +166,7 @@ deployment = {
                     }
                     {
                         name: "dawarich-sidekiq"
-                        image: "freikin/dawarich:latest"
+                        image: "freikin/dawarich:${image_version}"
                         command: ['sidekiq-entrypoint.sh']
                         ports: [
                             {

@@ -3,6 +3,7 @@ import yaml
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
+import ...versions
 import ..istio_shared
 
 out_dir = shared.cluster_path + "istio/ingress/"
@@ -13,6 +14,7 @@ release_file = "release.yaml"
 repo_file = "repo.yaml"
 # Configs
 chart_name = "gateway"
+chart_version = versions.helm_charts.istio_ingress
 service_name = "istio-ingress"
 
 namespace = k8s_wrapper.create_namespace(service_name, True)
@@ -31,7 +33,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: "*"
+                version: chart_version
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"

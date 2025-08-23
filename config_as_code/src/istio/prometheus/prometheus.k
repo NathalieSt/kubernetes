@@ -1,5 +1,6 @@
 import ....lib.k8s_wrapper
 import ...shared
+import ...versions
 import ..istio_shared
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
@@ -18,7 +19,7 @@ pvc_file = "pvc.yaml"
 # Configs
 service_name = "prometheus"
 label_app_name = "prometheus"
-image_version = "v3.5.0"
+image_version = versions.docker_images.prometheus
 k8s_service_name = "prometheus"
 pvc_name = "prometheus-pvc"
 configmap_name = "prometheus-configmap"

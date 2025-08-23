@@ -3,6 +3,7 @@ import yaml
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
+import ...versions
 import ..istio_shared
 
 out_dir = shared.cluster_path + "istio/istiod/"
@@ -12,6 +13,7 @@ release_file = "release.yaml"
 # Configs
 service_name = "istiod"
 chart_name = "istiod"
+chart_version = versions.helm_charts.istiod
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     release_file
@@ -25,7 +27,7 @@ release: helm_flux.HelmRelease = {
         chart: {
             spec: {
                 chart: chart_name
-                version: "*"
+                version: chart_version
                 interval: "24h"
                 sourceRef: {
                     kind: "HelmRepository"

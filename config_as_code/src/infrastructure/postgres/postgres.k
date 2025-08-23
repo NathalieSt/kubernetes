@@ -1,6 +1,7 @@
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
+import ...versions
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/postgres/"
@@ -13,6 +14,7 @@ repository_file = "repository.yaml"
 service_name = "postgres"
 chart_url = "oci://registry-1.docker.io/bitnamicharts/postgresql"
 chart_name = "postgres"
+chart_version = versions.helm_charts.postgres
 init_configmap_name = "init-configmap"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
@@ -30,7 +32,7 @@ repo: helm_flux.HelmRepository = {
         interval: "24h"
         url: chart_url
         ref: {
-            tag: "16.7.15"
+            tag: chart_version
         }
     }
 }

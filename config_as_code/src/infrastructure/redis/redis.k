@@ -1,5 +1,6 @@
 import ....lib.k8s_wrapper
 import ...shared
+import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
@@ -18,6 +19,7 @@ k8s_service_name = "redis"
 pvc_name = "redis-pvc"
 port = shared.redis.port
 pvc_volume_name = "redis-volume"
+image_version = versions.docker_images.redis
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
@@ -62,7 +64,7 @@ deployment = {
                 containers: [
                     {
                         name: "redis"
-                        image: "redis:latest"
+                        image: "redis:${image_version}"
                         ports: [
                             {
                                 name: "redis"

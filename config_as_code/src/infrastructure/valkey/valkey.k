@@ -17,6 +17,7 @@ label_app_name = "valkey"
 k8s_service_name = "valkey"
 pvc_name = "valkey"
 port = 6379
+image_version = ""
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
@@ -75,7 +76,7 @@ deployment = {
                 containers: [
                     {
                         name: "valkey"
-                        image: "valkey/valkey:8-alpine3.22"
+                        image: "valkey/valkey:${image_version}"
                         ports: [
                             {
                                 name: "valkey"

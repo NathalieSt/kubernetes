@@ -1,6 +1,7 @@
 import ....lib.k8s_wrapper
 import ....lib.istio
 import ...shared
+import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
@@ -16,7 +17,7 @@ pvc_file = "pvc.yaml"
 service_name = shared.mealie.name
 label_app_name = service_name
 k8s_service_name = service_name
-image_version = "v3.0.2"
+image_version = versions.docker_images.mealie
 deployment_pvc_volume = "mealie-pvc"
 port = shared.mealie.port
 pvc_name = "mealie-pvc"
