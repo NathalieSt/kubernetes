@@ -1,6 +1,4 @@
 import k8s.api.core.v1 as core_api
-import k8s.api.rbac.v1 as rbac_api
-import k8s.apimachinery.pkg.apis.meta.v1 as meta
 
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
@@ -18,6 +16,7 @@ namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
 postgres_creds_file = "postgres-creds.yaml"
+netbird_setup_key_file = "netbird-setup-key.yaml"
 vault_auth_file = "vault-auth.yaml"
 vault_rbac_file = "vault-rbac.yaml"
 # Configs
@@ -34,6 +33,7 @@ kustomization: k8s_wrapper.Kustomization = {
         release_file
         repository_file
         # Secrets
+        secrets_sub_dir + netbird_setup_key_file
         secrets_sub_dir + postgres_creds_file
         secrets_sub_dir + vault_auth_file
         secrets_sub_dir + vault_rbac_file
@@ -71,16 +71,7 @@ release: helm_flux.HelmRelease = {
         values: {}
     }
 }
-# Reflector annotations
-postgres_creds_reflector_annotations = {
-    "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
-    # Control destination namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,mealie"
-    # Auto create reflection for matching namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
-    # Control auto-reflection namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,dawarich,mealie"
-}
+
 # Vault configuration
 vault_auth: vault.VaultAuth = {
     metadata: {
@@ -98,47 +89,49 @@ vault_auth: vault.VaultAuth = {
     }
 }
 
-vault_rbac: vault.VaultRbac = {
-    serviceAccount: core_api.ServiceAccount {
-        metadata: meta.ObjectMeta {
-            name: service_account_name
-        }
+vault_rbac: vault.VaultRbac = vault.create_vault_rbac(service_name)
+
+# Netbird Reflector annotations
+netbird_setup_key_reflector_annotations = {
+    "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
+    # Control destination namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy,forgejo"
+    # Auto create reflection for matching namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
+    # Control auto-reflection namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "caddy,forgejo"
+}
+# FIXME: TODO: add permission for reflector service-account in Vault to access netbird setup key
+# right now the config in Vault only allows it to access the postgres creds 
+netbird_setup_key: vault.VaultStaticSecret = {
+    metadata: {
+        name: "netbird-setup-key"
     }
-    role: rbac_api.Role {
-        metadata: meta.ObjectMeta {
-            name: "vault-token-reviewer"
-        }
-        rules: [
-            rbac_api.PolicyRule {
-                apiGroups: ["authentication.k8s.io"]
-                resources: ["tokenreviews"]
-                verbs: ["create"]
-            }
-            rbac_api.PolicyRule {
-                apiGroups: ["authorization.k8s.io"]
-                resources: ["subjectaccessreviews"]
-                verbs: ["create"]
-            }
-        ]
-    }
-    rolebinding: rbac_api.RoleBinding {
-        metadata: meta.ObjectMeta {
-            name: "reflector-vault-binding"
-        }
-        subjects: [
-            rbac_api.Subject {
-                kind: "ServiceAccount"
-                name: service_account_name
-            }
-        ]
-        roleRef: rbac_api.RoleRef {
-            kind: "Role"
-            name: "vault-token-reviewer"
-            apiGroup: "rbac.authorization.k8s.io"
+    spec: {
+        vaultAuthRef: vault_auth.metadata.name
+        mount: "kvv2"
+        type: "kv-v2"
+        # FIXME: TODO: FIND OUT PATH OF NETBIRD SETUP KEY IN VAULT
+        path: "TODO"
+        refreshAfter: "10s"
+        destination: {
+            create: True
+            name: shared.netbird_secret_name
+            annotations: netbird_setup_key_reflector_annotations
         }
     }
 }
 
+# Postgres Reflector annotations
+postgres_creds_reflector_annotations = {
+    "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
+    # Control destination namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,mealie"
+    # Auto create reflection for matching namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
+    # Control auto-reflection namespaces
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,dawarich,mealie"
+}
 postgres_creds: vault.VaultStaticSecret = {
     metadata: {
         name: "postgres-creds"
@@ -164,5 +157,6 @@ yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)
 # Write secrets to files
 yaml.dump_to_file(postgres_creds, secrets_out_dir + postgres_creds_file)
+yaml.dump_to_file(netbird_setup_key, secrets_out_dir + netbird_setup_key_file)
 yaml.dump_to_file(vault_auth, secrets_out_dir + vault_auth_file)
 yaml.dump_all_to_file([vault_rbac[key] for key in vault_rbac], secrets_out_dir + vault_rbac_file)

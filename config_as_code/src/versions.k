@@ -10,6 +10,7 @@ schema HelmCharts:
     istiod: str
     kiali: str
     jellyfin: str
+    forgejo: str
 
 schema DockerImages:
     caddy: str
@@ -46,4 +47,5 @@ helm_charts: HelmCharts = {
     istiod: "1.27.0"
     kiali: "2.14.0"
     jellyfin: "2.3.0"
+    forgejo: "TODO"
 }

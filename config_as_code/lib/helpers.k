@@ -1,3 +1,5 @@
+import .flux
+
 resources = {
     requests: {
         cpu: "50m"
@@ -7,30 +9,6 @@ resources = {
         cpu: "100m"
         memory: "128Mi"
     }
-}
-
-create_nginx_sidecar = lambda config_volume_name: str, tls_volume_name: str {
-    sidecar = {
-        name: "nginx"
-        image: "nginx:alpine"
-        ports: [
-            {containerPort: 80}
-            {containerPort: 443}
-        ]
-        volumeMounts: [
-            {
-                name: config_volume_name
-                mountPath: "/etc/nginx/conf.d"
-            }
-            {
-                name: tls_volume_name
-                mountPath: "/etc/nginx/ssl"
-                readOnly: True
-            }
-        ]
-        resources: resources
-    }
-    sidecar
 }
 
 create_netbird_sidecar = lambda setup_key_secret_name: str, setup_key_secret_key: str, service_name: str {
@@ -64,15 +42,27 @@ create_netbird_sidecar = lambda setup_key_secret_name: str, setup_key_secret_key
     sidecar
 }
 
-create_gatus_endpoint = lambda name: str, url: str, method: str = "GET", conditions: [str] = [], interval: str = "60s", group: str = "default" {
-    endpoint = {
-        enabled: True
-        name: name
-        url: url
-        group: group
-        method: method
-        conditions: conditions
-        interval: interval
+create_cluster_kustomization = lambda service_name: str, kustomization_path: str, target_namespace: str, dependencies: [flux.FluxKustomizationDependency] {
+    kustomization: flux.FluxKustomization = {
+        apiVersion: "kustomize.toolkit.fluxcd.io/v1"
+        kind: "Kustomization"
+        metadata: {
+            name: service_name
+            namespace: "flux-system"
+        }
+        spec: {
+            interval: "24h"
+            dependsOn: dependencies
+            path: kustomization_path
+            prune: True
+            sourceRef: {
+                kind: "GitRepository"
+                name: "flux-system"
+            }
+            targetNamespace: target_namespace
+            timeout: "10m"
+            wait: True
+        }
     }
-    endpoint
+    kustomization
 }
