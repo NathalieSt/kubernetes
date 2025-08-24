@@ -1,7 +1,3 @@
-schema GatusConfig:
-    endpointType: "http" | "tcp"
-    conditions?: [str]
-
 schema VirtualServiceConfig:
     client_protocol?: "http" | "https"
 
@@ -15,9 +11,9 @@ schema GatewayConfig:
 schema ClusterService:
     name: str
     namespace: str
+    type: "app" | "infrastructure" | "istio" | "monitoring"
     cluster_url: str
     port: int
-    gatus_config?: GatusConfig
     gateway_config?: GatewayConfig
     virtual_service_config?: VirtualServiceConfig
 

@@ -80,6 +80,7 @@ remote_storage_class = {
     allowVolumeExpansion: True
     mountOptions: [
         "nfsvers=4.1"
+        "hard"
     ]
 }
 
