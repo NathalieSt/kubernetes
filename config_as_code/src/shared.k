@@ -144,6 +144,7 @@ vault: shared.ClusterService = {
 vault_secrets_operator: shared.ClusterService = {
     name: "vault-secrets-operator"
     namespace: "vault-secrets-operator"
+    type: "infrastructure"
     flux_kustomization: {
         dependencies: [{name: vault.name}]
         kustomization_path: "${kustomization_infrastructure_path}/vault-secrets-operator"
@@ -201,6 +202,7 @@ redis: shared.ClusterService = {
 reflector: shared.ClusterService = {
     name: "reflector"
     namespace: "reflector"
+    type: "infrastructure"
     flux_kustomization: {
         dependencies: [{name: vault_secrets_operator.name}]
         kustomization_path: "${kustomization_infrastructure_path}/reflector"
@@ -210,6 +212,7 @@ reflector: shared.ClusterService = {
 caddy: shared.ClusterService = {
     name: "caddy"
     namespace: "caddy"
+    type: "infrastructure"
     flux_kustomization: {
         dependencies: []
         kustomization_path: "${kustomization_infrastructure_path}/caddy"
@@ -223,6 +226,7 @@ istio_system_namespace = "istio-system"
 istio_repo: shared.ClusterService = {
     name: "istio-repo"
     namespace: istio_system_namespace
+    type: "istio"
     flux_kustomization: {
         dependencies: []
         kustomization_path: "${kustomization_istio_path}/repo"
@@ -232,6 +236,7 @@ istio_repo: shared.ClusterService = {
 istio_base: shared.ClusterService = {
     name: "istio-base"
     namespace: istio_system_namespace
+    type: "istio"
     flux_kustomization: {
         dependencies: [{name: istio_repo.name}]
         kustomization_path: "${kustomization_istio_path}/base"
@@ -241,6 +246,7 @@ istio_base: shared.ClusterService = {
 istiod: shared.ClusterService = {
     name: "istiod"
     namespace: istio_system_namespace
+    type: "istio"
     flux_kustomization: {
         dependencies: [{name: istio_base.name}]
         kustomization_path: "${kustomization_istio_path}/istiod"
@@ -250,6 +256,7 @@ istiod: shared.ClusterService = {
 istio_prometheus: shared.ClusterService = {
     name: "prometheus"
     namespace: istio_system_namespace
+    type: "istio"
     flux_kustomization: {
         dependencies: [{name: istiod.name}]
         kustomization_path: "${kustomization_istio_path}/prometheus"
@@ -259,6 +266,7 @@ istio_prometheus: shared.ClusterService = {
 istio_ingress: shared.ClusterService = {
     name: "istio-ingress"
     namespace: "istio-ingress"
+    type: "istio"
     flux_kustomization: {
         dependencies: [{name: istiod.name}]
         kustomization_path: "${kustomization_istio_path}/ingress"
@@ -268,6 +276,7 @@ istio_ingress: shared.ClusterService = {
 istio_security: shared.ClusterService = {
     name: "istio-security"
     namespace: istio_system_namespace
+    type: "istio"
     flux_kustomization: {
         dependencies: [
             {name: istiod.name}
@@ -280,6 +289,7 @@ istio_security: shared.ClusterService = {
 istio_networking: shared.ClusterService = {
     name: "istio-networking"
     namespace: istio_system_namespace
+    type: "istio"
     flux_kustomization: {
         dependencies: [
             {name: istiod.name}
