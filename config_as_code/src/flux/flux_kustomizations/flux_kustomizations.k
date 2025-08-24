@@ -20,7 +20,7 @@ istio_kustomizations: [flux.FluxKustomization] = [helpers.create_cluster_kustomi
 monitoring_kustomizations: [flux.FluxKustomization] = [helpers.create_cluster_kustomization(monitoring_service.name, monitoring_service.flux_kustomization.kustomization_path, monitoring_service.namespace, monitoring_service.flux_kustomization.dependencies) for monitoring_service in shared.cluster_monitoring_services]
 
 # Write to files
-yaml.dump_to_file(app_kustomizations, out_dir + apps_kustomizations_file)
-yaml.dump_to_file(infrastructure_kustomizations, out_dir + infrastructure_kustomizations_file)
-yaml.dump_to_file(istio_kustomizations, out_dir + istio_kustomizations_file)
-yaml.dump_to_file(monitoring_kustomizations, out_dir + monitoring_kustomizations_file)
+yaml.dump_all_to_file(app_kustomizations, out_dir + apps_kustomizations_file)
+yaml.dump_all_to_file(infrastructure_kustomizations, out_dir + infrastructure_kustomizations_file)
+yaml.dump_all_to_file(istio_kustomizations, out_dir + istio_kustomizations_file)
+yaml.dump_all_to_file(monitoring_kustomizations, out_dir + monitoring_kustomizations_file)
