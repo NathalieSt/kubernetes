@@ -52,6 +52,16 @@ pvc: core_api.PersistentVolumeClaim = {
     }
 }
 
+postgres_env: [core_api.EnvVar] = [
+    {name: "POSTGRES_USER", value: "postgres"}
+    {name: "POSTGRES_PASSWORD", valueFrom: {
+        secretKeyRef: {
+            name: shared.postgres_creds_secret_name
+            key: "password"
+        }
+    }}
+]
+
 deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
@@ -87,6 +97,7 @@ deployment = {
                                 containerPort: port
                             }
                         ]
+                        env: postgres_env
                         volumeMounts: [
                             {
                                 name: deployment_volume_name
