@@ -1,69 +1,139 @@
 import ....lib.k8s_wrapper
-import ....lib.helm_flux
 import ...shared
 import ...versions
+import k8s.apimachinery.pkg.apis.meta.v1 as meta
+import k8s.api.core.v1 as core_api
 import yaml
 
 out_dir = shared.cluster_path + "infrastructure/postgres/"
 # Filenames
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
-release_file = "release.yaml"
-repository_file = "repository.yaml"
+pvc_file = "pvc.yaml"
+deployment_file = "deployment.yaml"
+service_file = "service.yaml"
 # Configs
-service_name = "postgres"
-chart_url = "oci://registry-1.docker.io/bitnamicharts/postgresql"
-chart_name = "postgres"
-chart_version = versions.helm_charts.postgres
-init_configmap_name = "init-configmap"
+service_name = shared.postgres.name
+label_app_name = service_name
+k8s_service_name = service_name
+pvc_name = "${service_name}-pvc"
+deployment_volume_name = "pvc-volume"
+port = shared.postgres.port
+image_version = versions.docker_images.postgres
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
-    release_file
-    repository_file
+    pvc_file
+    deployment_file
+    service_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name, True)
+namespace = k8s_wrapper.create_namespace(shared.postgres.namespace, True)
 
-# Helm configuration
-repo: helm_flux.HelmRepository = {
-    metadata.name = service_name
-    kind: "OCIRepository"
+pvc: core_api.PersistentVolumeClaim = {
+    apiVersion: "v1"
+    kind: "PersistentVolumeClaim"
+    metadata: {
+        name: pvc_name
+        annotations: {
+            "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
+        }
+    }
     spec: {
-        interval: "24h"
-        url: chart_url
-        ref: {
-            tag: chart_version
+        storageClassName: shared.nfs_remote_storage_class_name
+        accessModes: [
+            "ReadWriteMany"
+        ]
+        resources: {
+            requests: {
+                "storage": "20Gi"
+            }
         }
     }
 }
-release: helm_flux.HelmRelease = {
-    metadata.name = service_name
-    spec: {
-        releaseName: service_name
-        chartRef: {
-            kind: "OCIRepository"
-            name: "postgres"
+
+deployment = {
+    apiVersion: "apps/v1"
+    kind: "Deployment"
+    metadata: meta.ObjectMeta {
+        name: "${service_name}-deployment"
+        labels: {
+            "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
         }
-        install.remediation.retries: 3
-        timeout: "5m"
-        interval: "24h"
-        valuesFrom: [
+    }
+    spec: {
+        replicas: 1
+        selector: {
+            matchLabels: {
+                "app.kubernetes.io/name": label_app_name
+            }
+        }
+        template: {
+            metadata: meta.ObjectMeta {
+                labels: {
+                    "app.kubernetes.io/name": label_app_name
+                    "app.kubernetes.io/version": image_version
+                }
+            }
+            spec = core_api.PodSpec {
+                containers: [
+                    {
+                        name: "${service_name}"
+                        image: "postgres:${image_version}"
+                        ports: [
+                            {
+                                name: "${service_name}"
+                                containerPort: port
+                            }
+                        ]
+                        volumeMounts: [
+                            {
+                                name: deployment_volume_name
+                                mountPath: "/var/lib/postgresql/data"
+                            }
+                        ]
+                    }
+                ]
+                volumes: [
+                    {
+                        name: deployment_volume_name
+                        persistentVolumeClaim: {
+                            claimName: pvc_name
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+
+service: core_api.Service = {
+    apiVersion: "v1"
+    kind: "Service"
+    metadata: {
+        name: k8s_service_name
+        labels: {
+            "app.kubernetes.io/name": label_app_name
+            "app.kubernetes.io/version": image_version
+        }
+    }
+    spec: {
+        ports: [
             {
-                kind: "Secret"
-                name: shared.postgres_creds_secret_name
-                optional: False
-                valuesKey: "password"
-                targetPath: "auth.postgresPassword"
+                name: "tcp-${service_name}"
+                port: port
+                targetPort: port
             }
         ]
-        values: {
-            primary.persistence.storageClass: shared.nfs_remote_storage_class_name
+        selector: {
+            "app.kubernetes.io/name": label_app_name
         }
     }
 }
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
-# Write helm configuration to files
-yaml.dump_to_file(repo, out_dir + repository_file)
-yaml.dump_to_file(release, out_dir + release_file)
+yaml.dump_to_file(pvc, out_dir + pvc_file)
+yaml.dump_to_file(deployment, out_dir + deployment_file)
+yaml.dump_to_file(service, out_dir + service_file)

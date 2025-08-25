@@ -22,6 +22,7 @@ schema DockerImages:
     searxng: str
     mealie: str
     dawarich: str
+    postgres: str
 
 docker_images: DockerImages = {
     caddy: "2.10.0-alpine"
@@ -33,6 +34,7 @@ docker_images: DockerImages = {
     searxng: "2025.8.3-2e62eb5"
     mealie: "v3.0.2"
     dawarich: "0.30.10"
+    postgres: "17.6"
 }
 
 helm_charts: HelmCharts = {

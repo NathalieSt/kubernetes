@@ -4,5 +4,6 @@ metadata:
   name: postgres
 resources:
 - namespace.yaml
-- release.yaml
-- repository.yaml
+- pvc.yaml
+- deployment.yaml
+- service.yaml
