@@ -4,31 +4,35 @@ metadata:
   name: jellyfin
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/jellyfin
+  path: './cluster/apps/jellyfin'
   prune: true
   wait: true
-  timeout: 15m0s
+  timeout: '10m'
+  dependsOn: []
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: searxng
+  name: forgejo
   namespace: flux-system
 spec:
-  interval: 24h
-  targetNamespace: searxng
+  interval: '24h'
+  targetNamespace: forgejo
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/searxng
+  path: './cluster/apps/forgejo'
   prune: true
   wait: true
-  timeout: 15m0s
+  timeout: '10m'
+  dependsOn: []
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -36,19 +40,39 @@ metadata:
   name: dawarich
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: dawarich
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/dawarich
+  path: './cluster/apps/dawarich'
   prune: true
   wait: true
-  timeout: 15m0s
+  timeout: '10m'
   dependsOn:
-    - name: reflector
-    - name: redis
-    - name: postgres
+  - name: reflector
+  - name: redis
+  - name: postgres
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: searxng
+  namespace: flux-system
+spec:
+  interval: '24h'
+  targetNamespace: searxng
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: './cluster/apps/searxng'
+  prune: true
+  wait: true
+  timeout: '10m'
+  dependsOn:
+  - name: valkey
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -56,18 +80,19 @@ metadata:
   name: mealie
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: mealie
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/mealie
+  path: './cluster/apps/mealie'
   prune: true
   wait: true
-  timeout: 15m0s
+  timeout: '10m'
   dependsOn:
-    - name: reflector
-    - name: postgres
+  - name: reflector
+  - name: postgres
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -75,14 +100,13 @@ metadata:
   name: glance
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: glance
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/apps/glance
+  path: './cluster/apps/glance'
   prune: true
   wait: true
-  timeout: 15m0s
----
-
+  timeout: '10m'
+  dependsOn: []

@@ -1,16 +1,17 @@
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: kiali
   namespace: flux-system
 spec:
-  interval: 24h
-  targetNamespace: kiali
+  interval: '24h'
+  targetNamespace: kiali-operator
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/monitoring/kiali
+  path: './cluster/monitoring/kiali'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
+  dependsOn:
+  - name: prometheus

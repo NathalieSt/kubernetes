@@ -1,19 +1,20 @@
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: istio-repo
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/istio/repo
+  path: './cluster/istio/repo'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
+  dependsOn: []
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -21,17 +22,18 @@ metadata:
   name: istio-base
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/istio/base
+  path: './cluster/istio/base'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
   dependsOn:
   - name: istio-repo
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -39,17 +41,18 @@ metadata:
   name: istiod
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/istio/istiod
+  path: './cluster/istio/istiod'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
   dependsOn:
   - name: istio-base
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -57,17 +60,18 @@ metadata:
   name: prometheus
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/istio/prometheus
+  path: './cluster/istio/prometheus'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
   dependsOn:
   - name: istiod
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -75,17 +79,18 @@ metadata:
   name: istio-ingress
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: istio-ingress
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/istio/ingress
+  path: './cluster/istio/ingress'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
   dependsOn:
   - name: istiod
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -93,18 +98,19 @@ metadata:
   name: istio-security
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/istio/security
+  path: './cluster/istio/security'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
   dependsOn:
   - name: istiod
   - name: istio-ingress
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -112,16 +118,15 @@ metadata:
   name: istio-networking
   namespace: flux-system
 spec:
-  interval: 24h
+  interval: '24h'
   targetNamespace: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/istio/networking
+  path: './cluster/istio/networking'
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: '10m'
   dependsOn:
   - name: istiod
   - name: istio-ingress
----
