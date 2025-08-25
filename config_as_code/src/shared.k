@@ -219,6 +219,16 @@ caddy: shared.ClusterService = {
     }
 }
 
+csi_driver_nfs: shared.ClusterService = {
+    name: "csi-driver-nfs"
+    namespace: "csi-driver-nfs"
+    type: "infrastructure"
+    flux_kustomization: {
+        dependencies: []
+        kustomization_path: "${kustomization_infrastructure_path}/csi-driver-nfs"
+    }
+}
+
 ## Istio
 kustomization_istio_path = "./cluster/istio"
 istio_system_namespace = "istio-system"
@@ -339,6 +349,7 @@ cluster_infrastructure_services: [shared.ClusterService] = [
     valkey
     redis
     caddy
+    csi_driver_nfs
 ]
 
 cluster_istio_services: [shared.ClusterService] = [
