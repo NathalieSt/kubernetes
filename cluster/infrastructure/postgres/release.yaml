@@ -21,4 +21,4 @@ spec:
   values:
     primary:
       persistence:
-        storageClass: nfs-local-v2
+        storageClass: nfs-remote
