@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: forgejo-virtualservice
+spec:
+  hosts:
+  - code.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: forgejo.forgejo.svc.cluster.local
+        port:
+          number: 3000

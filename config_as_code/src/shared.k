@@ -115,7 +115,12 @@ forgejo: shared.ClusterService = {
     namespace: "forgejo"
     type: "app"
     cluster_url: "forgejo.forgejo.svc.cluster.local"
-    port: 80
+    port: 3000
+    gateway_config: {
+        dns_name: "code.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
     flux_kustomization: {
         dependencies: []
         kustomization_path: "${kustomization_apps_path}/forgejo"

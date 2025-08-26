@@ -5,10 +5,10 @@ metadata:
 resources:
 - ingress/ingress-cluster-gateway.yaml
 - ingress/virtual-services/jellyfin-virtualservice.yaml
-- ingress/virtual-services/vault-virtualservice.yaml
-- ingress/virtual-services/gatus-virtualservice.yaml
-- ingress/virtual-services/searxng-virtualservice.yaml
+- ingress/virtual-services/forgejo-virtualservice.yaml
 - ingress/virtual-services/dawarich-virtualservice.yaml
-- ingress/virtual-services/kiali-virtualservice.yaml
+- ingress/virtual-services/searxng-virtualservice.yaml
 - ingress/virtual-services/mealie-virtualservice.yaml
 - ingress/virtual-services/glance-virtualservice.yaml
+- ingress/virtual-services/vault-virtualservice.yaml
+- ingress/virtual-services/kiali-virtualservice.yaml

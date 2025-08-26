@@ -10,12 +10,12 @@ spec:
       protocol: HTTP
     hosts:
     - jellyfin.cluster.netbird.selfhosted
-    - vault.cluster.netbird.selfhosted
-    - gatus.cluster.netbird.selfhosted
-    - searxng.cluster.netbird.selfhosted
+    - code.cluster.netbird.selfhosted
     - dawarich.cluster.netbird.selfhosted
-    - kiali.cluster.netbird.selfhosted
+    - searxng.cluster.netbird.selfhosted
     - mealie.cluster.netbird.selfhosted
     - glance.cluster.netbird.selfhosted
+    - vault.cluster.netbird.selfhosted
+    - kiali.cluster.netbird.selfhosted
   selector:
     istio: ingress
