@@ -4,7 +4,6 @@ schema SpecRef:
     tag: str
 
 schema RepositorySpec:
-    type?: "default" | "oci"
     interval: str
     url: str
     ref?: SpecRef

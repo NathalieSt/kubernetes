@@ -5,6 +5,7 @@ cluster_path = "../../../../cluster/"
 global_vault_auth_namespace = "vault-secrets-operator"
 postgres_creds_secret_name = "postgres-creds-secret"
 netbird_secret_name = "netbird-setup-key-vault-secret"
+netbird_secret_key = "setup-key"
 nfs_local_storage_class_v2_name = "nfs-local-v2"
 nfs_remote_storage_class_name = "nfs-remote"
 

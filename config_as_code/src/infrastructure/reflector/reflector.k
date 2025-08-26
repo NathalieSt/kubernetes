@@ -101,6 +101,7 @@ netbird_setup_key_reflector_annotations = {
     # Control auto-reflection namespaces
     "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "caddy,forgejo"
 }
+
 # FIXME: TODO: add permission for reflector service-account in Vault to access netbird setup key
 # right now the config in Vault only allows it to access the postgres creds 
 netbird_setup_key: vault.VaultStaticSecret = {
@@ -111,8 +112,7 @@ netbird_setup_key: vault.VaultStaticSecret = {
         vaultAuthRef: vault_auth.metadata.name
         mount: "kvv2"
         type: "kv-v2"
-        # FIXME: TODO: FIND OUT PATH OF NETBIRD SETUP KEY IN VAULT
-        path: "TODO"
+        path: "netbird/setup-key"
         refreshAfter: "10s"
         destination: {
             create: True

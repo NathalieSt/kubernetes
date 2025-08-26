@@ -2,6 +2,7 @@ import yaml
 
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
+import ....lib.helpers
 import ...shared
 import ...versions
 
@@ -14,10 +15,12 @@ repository_file = "repository.yaml"
 # Configs
 service_name = shared.forgejo.name
 # FIXME: TODO:
-chart_url = "TODO"
-chart_name = "TODO"
+chart_url = "oci://code.forgejo.org/forgejo-helm/forgejo"
+chart_name = "forgejo"
 chart_version = versions.helm_charts.forgejo
 netbird_secret_name = shared.netbird_secret_name
+netbird_secret_key = shared.netbird_secret_name
+forgejo_postgres_db_name = "forgejo"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
@@ -28,32 +31,100 @@ namespace = k8s_wrapper.create_namespace(service_name, True)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
-    kind: "HelmRepository"
+    kind: "OCIRepository"
     spec: {
         interval: "24h"
         url: chart_url
+        ref.tag: "14.0.0"
     }
 }
 release: helm_flux.HelmRelease = {
     metadata.name = service_name
     spec: {
         releaseName: service_name
-        chart: {
-            spec: {
-                chart: chart_name
-                version: chart_version
-                interval: "24h"
-                sourceRef: {
-                    kind: "HelmRepository"
-                    name: service_name
-                }
-            }
+        chartRef: {
+            kind: "OCIRepository"
+            name: service_name
         }
         install.remediation.retries: 3
         timeout: "5m"
         interval: "24h"
+        valuesFrom: [
+            {
+                kind: "Secret"
+                # FIXME: in shared, replace "postgres_creds_secret_name" with "postgres_creds_secret" and put "name: str, key: str" inside 
+                name: shared.postgres_creds_secret_name
+                optional: False
+                targetPath: "gitea.config.database.PASSWD"
+                valuesKey: "password"
+            }
+        ]
         values: {
-            # FIXME: add netbird sidecar here
+            gitea: {
+                config: {
+                    database: {
+                        # supported values are mysql, postgres, mssql, sqlite3
+                        DB_TYPE: "postgres"
+                        HOST: "${shared.postgres.cluster_url}:${shared.postgres.port}"
+                        NAME: forgejo_postgres_db_name
+                        USER: "postgres"
+                    }
+                }
+                queue: {
+                    TYPE: "redis"
+                    CONN_STR: "valkey://${shared.valkey.cluster_url}:${shared.valkey.port}/0?"
+                }
+                cache: {
+                    ADAPTER: "redis"
+                    HOST: "valkey://${shared.valkey.cluster_url}:${shared.valkey.port}/1"
+                }
+                session: {
+                    PROVIDER: "redis"
+                    PROVIDER_CONFIG: "valkey://${shared.valkey.cluster_url}:${shared.valkey.port}/2"
+                }
+            }
+            persistence: {
+                enabled: True
+                storageClass: shared.nfs_remote_storage_class_name
+            }
+            extraContainers: [
+                {
+                    name = "netbird-agent"
+                    image = "netbirdio/netbird:latest"
+                    env = [
+                        {
+                            name = "NB_SETUP_KEY"
+                            valueFrom = {
+                                secretKeyRef = {
+                                    name = netbird_secret_name
+                                    key = netbird_secret_key
+                                }
+                            }
+                        }
+                        {
+                            name = "NB_HOSTNAME"
+                            value = "code"
+                        }
+                        {
+                            name = "NB_MANAGEMENT_URL"
+                            value = "https://netbird.nathalie-stiefsohn.eu"
+                        }
+                    ]
+                    resources = {
+                        requests = {
+                            cpu = "50m"
+                            memory = "64Mi"
+                        }
+                        limits = {
+                            cpu = "100m"
+                            memory = "128Mi"
+                        }
+                    }
+                    securityContext = {
+                        privileged = True
+                    }
+                }
+            ]
         }
     }
 }
