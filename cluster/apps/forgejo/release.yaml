@@ -20,6 +20,8 @@ spec:
     optional: false
   values:
     gitea:
+      admin:
+        username: Nathi
       config:
         database:
           DB_TYPE: postgres
