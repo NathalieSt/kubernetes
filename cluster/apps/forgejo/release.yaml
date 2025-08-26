@@ -38,25 +38,3 @@ spec:
     persistence:
       enabled: true
       storageClass: nfs-remote
-    extraContainers:
-    - name: netbird-agent
-      image: netbirdio/netbird:latest
-      env:
-      - name: NB_SETUP_KEY
-        valueFrom:
-          secretKeyRef:
-            name: netbird-setup-key-vault-secret
-            key: netbird-setup-key-vault-secret
-      - name: NB_HOSTNAME
-        value: code
-      - name: NB_MANAGEMENT_URL
-        value: https://netbird.nathalie-stiefsohn.eu
-      resources:
-        requests:
-          cpu: '50m'
-          memory: '64Mi'
-        limits:
-          cpu: '100m'
-          memory: '128Mi'
-      securityContext:
-        privileged: true

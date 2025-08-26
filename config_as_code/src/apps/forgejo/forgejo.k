@@ -87,44 +87,6 @@ release: helm_flux.HelmRelease = {
                 enabled: True
                 storageClass: shared.nfs_remote_storage_class_name
             }
-            extraContainers: [
-                {
-                    name = "netbird-agent"
-                    image = "netbirdio/netbird:latest"
-                    env = [
-                        {
-                            name = "NB_SETUP_KEY"
-                            valueFrom = {
-                                secretKeyRef = {
-                                    name = netbird_secret_name
-                                    key = netbird_secret_key
-                                }
-                            }
-                        }
-                        {
-                            name = "NB_HOSTNAME"
-                            value = "code"
-                        }
-                        {
-                            name = "NB_MANAGEMENT_URL"
-                            value = "https://netbird.nathalie-stiefsohn.eu"
-                        }
-                    ]
-                    resources = {
-                        requests = {
-                            cpu = "50m"
-                            memory = "64Mi"
-                        }
-                        limits = {
-                            cpu = "100m"
-                            memory = "128Mi"
-                        }
-                    }
-                    securityContext = {
-                        privileged = True
-                    }
-                }
-            ]
         }
     }
 }
