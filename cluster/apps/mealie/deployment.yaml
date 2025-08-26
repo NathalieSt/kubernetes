@@ -19,7 +19,7 @@ spec:
       containers:
       - env:
         - name: POSTGRES_SERVER
-          value: postgres-postgresql.postgres.svc.cluster.local
+          value: postgres.postgres.svc.cluster.local
         - name: POSTGRES_PORT
           value: '5432'
         - name: POSTGRES_USERNAME
