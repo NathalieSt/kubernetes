@@ -69,6 +69,9 @@ release: helm_flux.HelmRelease = {
                         NAME: forgejo_postgres_db_name
                         USER: "postgres"
                     }
+                    server: {
+                        ROOT_URL: "https://${shared.forgejo.gateway_config.dns_name}.netbird.selfhosted"
+                    }
                 }
                 queue: {
                     TYPE: "redis"
