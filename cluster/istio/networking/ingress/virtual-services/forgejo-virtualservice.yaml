@@ -10,6 +10,6 @@ spec:
   http:
   - route:
     - destination:
-        host: forgejo.forgejo.svc.cluster.local
+        host: forgejo-http.forgejo.svc.cluster.local
         port:
           number: 3000

@@ -114,7 +114,7 @@ forgejo: shared.ClusterService = {
     name: "forgejo"
     namespace: "forgejo"
     type: "app"
-    cluster_url: "forgejo.forgejo.svc.cluster.local"
+    cluster_url: "forgejo-http.forgejo.svc.cluster.local"
     port: 3000
     gateway_config: {
         dns_name: "code.cluster"
