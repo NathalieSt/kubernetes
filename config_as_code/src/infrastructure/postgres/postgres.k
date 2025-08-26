@@ -157,6 +157,11 @@ cnpg_cluster: cnpg.Cluster = {
             size: "20Gi"
             storageClass: shared.nfs_remote_storage_class_name
         }
+        inheritedMetadata: {
+            annotations: {
+                "proxy.istio.io/config": '{"holdApplicationUntilProxyStarts": true}'
+            }
+        }
     }
 }
 

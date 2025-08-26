@@ -7,3 +7,6 @@ spec:
   storage:
     storageClass: nfs-remote
     size: '20Gi'
+  inheritedMetadata:
+    annotations:
+      proxy.istio.io/config: '{"holdApplicationUntilProxyStarts": true}'
