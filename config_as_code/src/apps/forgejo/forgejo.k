@@ -2,7 +2,6 @@ import yaml
 
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
-import ....lib.helpers
 import ...shared
 import ...versions
 
