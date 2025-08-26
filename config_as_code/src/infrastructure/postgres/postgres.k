@@ -1,4 +1,5 @@
 import ....lib.k8s_wrapper
+import ....lib.cnpg
 import ...shared
 import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
@@ -12,6 +13,7 @@ namespace_file = "namespace.yaml"
 pvc_file = "pvc.yaml"
 deployment_file = "deployment.yaml"
 service_file = "service.yaml"
+cnpg_cluster_file = "cnpg-cluster.yaml"
 # Configs
 service_name = shared.postgres.name
 label_app_name = service_name
@@ -20,12 +22,14 @@ pvc_name = "${service_name}-pvc"
 deployment_volume_name = "pvc-volume"
 port = shared.postgres.port
 image_version = versions.docker_images.postgres
+cnpg_cluster_name = "postgres-v2"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     pvc_file
     deployment_file
     service_file
+    cnpg_cluster_file
 ])
 namespace = k8s_wrapper.create_namespace(shared.postgres.namespace, True)
 
@@ -142,9 +146,24 @@ service: core_api.Service = {
         }
     }
 }
+
+cnpg_cluster: cnpg.Cluster = {
+    metadata: {
+        name: "postgres-v2"
+    }
+    spec: {
+        instances: 1
+        storage: {
+            size: "20Gi"
+            storageClass: shared.nfs_remote_storage_class_name
+        }
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(pvc, out_dir + pvc_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + service_file)
+yaml.dump_to_file(cnpg_cluster, out_dir + cnpg_cluster_file)

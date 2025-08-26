@@ -1,0 +1,20 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cnpg
+spec:
+  releaseName: cnpg
+  chart:
+    spec:
+      chart: cnpg
+      version: '9.1.27'
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+      interval: '24h'
+  interval: '24h'
+  install:
+    remediation:
+      retries: 3
+  timeout: '5m'
+  values: {}

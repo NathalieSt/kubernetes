@@ -235,6 +235,16 @@ csi_driver_nfs: shared.ClusterService = {
     }
 }
 
+cnpg: shared.ClusterService = {
+    name: "cnpg"
+    namespace: "cnpg-system"
+    type: "infrastructure"
+    flux_kustomization: {
+        dependencies: []
+        kustomization_path: "${kustomization_infrastructure_path}/cnpg"
+    }
+}
+
 ## Istio
 kustomization_istio_path = "./cluster/istio"
 istio_system_namespace = "istio-system"
@@ -356,6 +366,7 @@ cluster_infrastructure_services: [shared.ClusterService] = [
     redis
     caddy
     csi_driver_nfs
+    cnpg
 ]
 
 cluster_istio_services: [shared.ClusterService] = [

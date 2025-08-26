@@ -1,0 +1,9 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-v2
+spec:
+  instances: 1
+  storage:
+    storageClass: nfs-remote
+    size: '20Gi'
