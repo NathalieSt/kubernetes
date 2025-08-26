@@ -152,7 +152,7 @@ cnpg_cluster: cnpg.Cluster = {
         name: "postgres"
     }
     spec: {
-        instances: 2
+        instances: 3
         storage: {
             size: "15Gi"
             storageClass: shared.nfs_remote_storage_class_name
