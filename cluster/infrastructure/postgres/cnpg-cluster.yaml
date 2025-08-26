@@ -3,7 +3,7 @@ kind: Cluster
 metadata:
   name: postgres-v2
 spec:
-  instances: 1
+  instances: 3
   storage:
     storageClass: nfs-remote
     size: '20Gi'
