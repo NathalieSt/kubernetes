@@ -4,7 +4,4 @@ metadata:
   name: postgres
 resources:
 - namespace.yaml
-- pvc.yaml
-- deployment.yaml
-- service.yaml
 - cnpg-cluster.yaml

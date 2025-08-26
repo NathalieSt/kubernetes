@@ -26,9 +26,9 @@ cnpg_cluster_name = "postgres-v2"
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
-    pvc_file
-    deployment_file
-    service_file
+    #pvc_file
+    #deployment_file
+    #service_file
     cnpg_cluster_file
 ])
 namespace = k8s_wrapper.create_namespace(shared.postgres.namespace, True)
@@ -152,7 +152,7 @@ cnpg_cluster: cnpg.Cluster = {
         name: "postgres-v2"
     }
     spec: {
-        instances: 1
+        instances: 3
         storage: {
             size: "20Gi"
             storageClass: shared.nfs_remote_storage_class_name
@@ -163,7 +163,8 @@ cnpg_cluster: cnpg.Cluster = {
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
-yaml.dump_to_file(pvc, out_dir + pvc_file)
-yaml.dump_to_file(deployment, out_dir + deployment_file)
-yaml.dump_to_file(service, out_dir + service_file)
+
+#yaml.dump_to_file(pvc, out_dir + pvc_file)
+#yaml.dump_to_file(deployment, out_dir + deployment_file)
+#yaml.dump_to_file(service, out_dir + service_file)
 yaml.dump_to_file(cnpg_cluster, out_dir + cnpg_cluster_file)
