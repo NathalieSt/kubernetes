@@ -61,6 +61,9 @@ release: helm_flux.HelmRelease = {
         ]
         values: {
             gitea: {
+                admin: {
+                    username: "Nathi"
+                }
                 config: {
                     database: {
                         # supported values are mysql, postgres, mssql, sqlite3
