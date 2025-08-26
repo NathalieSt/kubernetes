@@ -11,6 +11,7 @@ schema HelmCharts:
     kiali: str
     jellyfin: str
     forgejo: str
+    cnpg: str
 
 schema DockerImages:
     caddy: str
@@ -50,4 +51,5 @@ helm_charts: HelmCharts = {
     kiali: "2.14.0"
     jellyfin: "2.3.0"
     forgejo: "TODO"
+    cnpg: "0.26.0"
 }

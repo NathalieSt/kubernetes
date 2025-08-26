@@ -16,7 +16,7 @@ repository_file = "repository.yaml"
 service_name = shared.cnpg.name
 chart_url = "https://cloudnative-pg.github.io/charts"
 chart_name = "cnpg"
-chart_version = versions.helm_charts.reflector
+chart_version = versions.helm_charts.cnpg
 # k8s configuration
 kustomization: k8s_wrapper.Kustomization = {
     metadata.name = service_name
