@@ -162,6 +162,10 @@ cnpg_cluster: cnpg.Cluster = {
                 "proxy.istio.io/config": '{"holdApplicationUntilProxyStarts": true}'
             }
         }
+        enableSuperuserAccess: True
+        superuserSecret: {
+            name: shared.postgres_creds_secret_name
+        }
     }
 }
 

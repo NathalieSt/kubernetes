@@ -7,10 +7,15 @@ schema ClusterStorage:
 schema InheritedMetadata:
     annotations: {str:str}
 
+schema SuperUserSecret:
+    name: str
+
 schema ClusterSpec:
     instances: int
     storage: ClusterStorage
     inheritedMetadata?: InheritedMetadata
+    superuserSecret?: SuperUserSecret
+    enableSuperuserAccess?: bool
 
 schema Cluster:
     apiVersion = "postgresql.cnpg.io/v1"
