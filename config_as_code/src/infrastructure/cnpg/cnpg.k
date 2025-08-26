@@ -26,7 +26,7 @@ kustomization: k8s_wrapper.Kustomization = {
         repository_file
     ]
 }
-namespace: core_api.Namespace = k8s_wrapper.create_namespace(service_name, True)
+namespace: core_api.Namespace = k8s_wrapper.create_namespace(shared.cnpg.namespace, True)
 
 # Helm configuration
 repo: helm_flux.HelmRepository = {
