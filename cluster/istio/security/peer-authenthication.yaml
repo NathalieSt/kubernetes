@@ -4,4 +4,4 @@ metadata:
   name: enforce-mtls-in-mesh
 spec:
   mtls:
-    mode: STRICT
+    mode: PERMISSIVE

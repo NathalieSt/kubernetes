@@ -20,7 +20,7 @@ peer_authenthication: istio.PeerAuthenthication = {
     }
     spec: {
         mtls: {
-            mode: "STRICT"
+            mode: "PERMISSIVE"
         }
     }
 }
