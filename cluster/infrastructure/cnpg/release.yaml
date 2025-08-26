@@ -6,7 +6,7 @@ spec:
   releaseName: cnpg
   chart:
     spec:
-      chart: cnpg
+      chart: cloudnative-pg
       version: '0.26.0'
       sourceRef:
         kind: HelmRepository
