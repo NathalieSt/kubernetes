@@ -1,12 +1,12 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: postgres-v2
+  name: postgres
 spec:
-  instances: 3
+  instances: 2
   storage:
     storageClass: nfs-remote
-    size: '20Gi'
+    size: '15Gi'
   inheritedMetadata:
     annotations:
       proxy.istio.io/config: '{"holdApplicationUntilProxyStarts": true}'

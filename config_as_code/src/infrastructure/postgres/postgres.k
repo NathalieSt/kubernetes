@@ -149,12 +149,12 @@ service: core_api.Service = {
 
 cnpg_cluster: cnpg.Cluster = {
     metadata: {
-        name: "postgres-v2"
+        name: "postgres"
     }
     spec: {
-        instances: 3
+        instances: 2
         storage: {
-            size: "20Gi"
+            size: "15Gi"
             storageClass: shared.nfs_remote_storage_class_name
         }
         inheritedMetadata: {
