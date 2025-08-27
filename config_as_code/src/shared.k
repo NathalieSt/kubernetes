@@ -161,7 +161,7 @@ postgres: shared.ClusterService = {
     name: "postgres"
     namespace: "postgres"
     type: "infrastructure"
-    cluster_url: "postgres.postgres.svc.cluster.local"
+    cluster_url: "postgres-rw.postgres.svc.cluster.local"
     port: 5432
     flux_kustomization: {
         dependencies: [{name: reflector.name}]

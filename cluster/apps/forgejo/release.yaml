@@ -25,7 +25,7 @@ spec:
       config:
         database:
           DB_TYPE: postgres
-          HOST: postgres.postgres.svc.cluster.local:5432
+          HOST: postgres-rw.postgres.svc.cluster.local:5432
           NAME: forgejo
           USER: postgres
         server:
