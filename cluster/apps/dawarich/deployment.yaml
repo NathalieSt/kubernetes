@@ -43,7 +43,7 @@ spec:
               key: password
               name: postgres-creds-secret
         - name: DATABASE_NAME
-          value: dawarich_development
+          value: dawarich-development
         - name: MIN_MINUTES_SPENT_IN_CITY
           value: '60'
         - name: APPLICATION_HOSTS
@@ -93,7 +93,7 @@ spec:
               key: password
               name: postgres-creds-secret
         - name: DATABASE_NAME
-          value: dawarich_development
+          value: dawarich-development
         - name: APPLICATION_HOSTS
           value: dawarich.cluster.netbird.selfhosted
         - name: BACKGROUND_PROCESSING_CONCURRENCY

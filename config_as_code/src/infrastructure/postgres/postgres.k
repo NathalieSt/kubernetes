@@ -59,7 +59,7 @@ forgejo_db: cnpg.Database = {
 
 dawarich_db: cnpg.Database = {
     metadata: {
-        name: "dawarich_development"
+        name: "dawarich-development"
     }
     spec: {
         cluster: {

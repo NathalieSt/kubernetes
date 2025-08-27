@@ -76,7 +76,7 @@ dawarich_env: [core_api.EnvVar] = [
             key: "password"
         }
     }}
-    {name: "DATABASE_NAME", value: "dawarich_development"}
+    {name: "DATABASE_NAME", value: "dawarich-development"}
     {name: "MIN_MINUTES_SPENT_IN_CITY", value: "60"}
     {name: "APPLICATION_HOSTS", value: "dawarich.cluster.netbird.selfhosted"}
     {name: "TIME_ZONE", value: "Europe/Vienna"}
@@ -100,7 +100,7 @@ sidekiq_env: [core_api.EnvVar] = [
             key: "password"
         }
     }}
-    {name: "DATABASE_NAME", value: "dawarich_development"}
+    {name: "DATABASE_NAME", value: "dawarich-development"}
     {name: "APPLICATION_HOSTS", value: "dawarich.cluster.netbird.selfhosted"}
     {name: "BACKGROUND_PROCESSING_CONCURRENCY", value: "10"}
     {name: "APPLICATION_PROTOCOL", value: "http"}
