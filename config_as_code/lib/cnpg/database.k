@@ -4,6 +4,7 @@ schema DatabaseCluster:
     name: str
 
 schema DatabaseSpec:
+    name: str
     cluster: DatabaseCluster
     owner: str
 

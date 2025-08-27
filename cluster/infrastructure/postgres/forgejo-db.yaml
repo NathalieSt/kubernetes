@@ -3,6 +3,7 @@ kind: Database
 metadata:
   name: forgejo
 spec:
+  name: forgejo
   cluster:
     name: postgres
   owner: postgres

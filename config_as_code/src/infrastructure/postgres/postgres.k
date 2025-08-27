@@ -50,6 +50,7 @@ forgejo_db: cnpg.Database = {
         name: "forgejo"
     }
     spec: {
+        name: "forgejo"
         cluster: {
             name: service_name
         }
@@ -62,6 +63,7 @@ dawarich_db: cnpg.Database = {
         name: "dawarich-development"
     }
     spec: {
+        name: "dawarich-development"
         cluster: {
             name: service_name
         }

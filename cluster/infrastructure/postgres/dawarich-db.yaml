@@ -3,6 +3,7 @@ kind: Database
 metadata:
   name: dawarich-development
 spec:
+  name: dawarich-development
   cluster:
     name: postgres
   owner: postgres
