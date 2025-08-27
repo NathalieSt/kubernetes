@@ -5,3 +5,5 @@ metadata:
 resources:
 - namespace.yaml
 - cnpg-cluster.yaml
+- forgejo-db.yaml
+- dawarich-db.yaml

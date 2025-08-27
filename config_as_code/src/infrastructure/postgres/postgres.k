@@ -8,6 +8,8 @@ out_dir = shared.cluster_path + "infrastructure/postgres/"
 kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 cnpg_cluster_file = "cnpg-cluster.yaml"
+forgejo_db_file = "forgejo-db.yaml"
+dawarich_db_file = "dawarich-db.yaml"
 # Configs
 service_name = shared.postgres.name
 label_app_name = service_name
@@ -16,6 +18,8 @@ port = shared.postgres.port
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     cnpg_cluster_file
+    forgejo_db_file
+    dawarich_db_file
 ])
 namespace = k8s_wrapper.create_namespace(shared.postgres.namespace, True)
 
@@ -41,7 +45,33 @@ cnpg_cluster: cnpg.Cluster = {
     }
 }
 
+forgejo_db: cnpg.Database = {
+    metadata: {
+        name: "forgejo"
+    }
+    spec: {
+        cluster: {
+            name: service_name
+        }
+        owner: "postgres"
+    }
+}
+
+dawarich_db: cnpg.Database = {
+    metadata: {
+        name: "dawarich_development"
+    }
+    spec: {
+        cluster: {
+            name: service_name
+        }
+        owner: "postgres"
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(cnpg_cluster, out_dir + cnpg_cluster_file)
+yaml.dump_to_file(forgejo_db, out_dir + forgejo_db_file)
+yaml.dump_to_file(dawarich_db, out_dir + dawarich_db_file)

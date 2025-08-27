@@ -245,6 +245,16 @@ cnpg: shared.ClusterService = {
     }
 }
 
+authelia: shared.ClusterService = {
+    name: "authelia"
+    namespace: "authelia"
+    type: "infrastructure"
+    flux_kustomization: {
+        dependencies: []
+        kustomization_path: "${kustomization_infrastructure_path}/authelia"
+    }
+}
+
 ## Istio
 kustomization_istio_path = "./cluster/istio"
 istio_system_namespace = "istio-system"
@@ -367,6 +377,7 @@ cluster_infrastructure_services: [shared.ClusterService] = [
     caddy
     csi_driver_nfs
     cnpg
+    authelia
 ]
 
 cluster_istio_services: [shared.ClusterService] = [

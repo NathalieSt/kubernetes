@@ -1,0 +1,8 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: dawarich_development
+spec:
+  cluster:
+    name: postgres
+  owner: postgres

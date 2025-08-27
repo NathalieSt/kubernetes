@@ -3,7 +3,6 @@ schema HelmCharts:
     csi_driver_nfs: str
     vault: str
     vault_secrets_operator: str
-    postgres: str
     reflector: str
     istio_base: str
     istio_ingress: str
@@ -12,6 +11,7 @@ schema HelmCharts:
     jellyfin: str
     forgejo: str
     cnpg: str
+    authelia: str
 
 schema DockerImages:
     caddy: str
@@ -23,7 +23,6 @@ schema DockerImages:
     searxng: str
     mealie: str
     dawarich: str
-    postgres: str
 
 docker_images: DockerImages = {
     caddy: "2.10.0-alpine"
@@ -35,7 +34,6 @@ docker_images: DockerImages = {
     searxng: "2025.8.3-2e62eb5"
     mealie: "v3.0.2"
     dawarich: "0.30.10"
-    postgres: "17.6"
 }
 
 helm_charts: HelmCharts = {
@@ -43,7 +41,6 @@ helm_charts: HelmCharts = {
     csi_driver_nfs: "4.11.0"
     vault: "0.30.1"
     vault_secrets_operator: "0.10.0"
-    postgres: "16.7.15"
     reflector: "9.1.27"
     istio_base: "1.27.0"
     istio_ingress: "1.27.0"
@@ -52,4 +49,5 @@ helm_charts: HelmCharts = {
     jellyfin: "2.3.0"
     forgejo: "TODO"
     cnpg: "0.26.0"
+    authelia: "0.10.42"
 }
