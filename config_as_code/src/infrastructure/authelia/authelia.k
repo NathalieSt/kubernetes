@@ -62,7 +62,10 @@ release: helm_flux.HelmRelease = {
         ]
         values: {
             configMap.session.cookies: [
-                "https://${shared.authelia.gateway_config.dns_name}.netbird.selfhosted"
+                {
+                    domain: "https://netbird.selfhosted"
+                    subdomain: "${shared.authelia.gateway_config.dns_name}"
+                }
             ]
             configMap.storage.postgres: {
                 enabled: True

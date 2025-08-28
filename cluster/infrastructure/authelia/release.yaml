@@ -27,7 +27,8 @@ spec:
     configMap:
       session:
         cookies:
-        - https://sso.cluster.netbird.selfhosted
+        - domain: https://netbird.selfhosted
+          subdomain: sso.cluster
       storage:
         postgres:
           enabled: true
