@@ -31,6 +31,7 @@ keycloak_env: [core_api.EnvVar] = [
     {name: "KC_BOOTSTRAP_ADMIN_USERNAME", value: "admin"}
     {name: "KC_BOOTSTRAP_ADMIN_PASSWORD", value: "admin"}
     {name: "KC_PROXY_HEADERS", value: "xforwarded"}
+    {name: "KC_PROXY", value: "edge"}
     {name: "KC_HTTP_ENABLED", value: "true"}
     {name: "KC_HOSTNAME_STRICT", value: "false"}
     {name: "KC_HEALTH_ENABLED", value: "true"}
