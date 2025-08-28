@@ -249,8 +249,17 @@ authelia: shared.ClusterService = {
     name: "authelia"
     namespace: "authelia"
     type: "infrastructure"
+    port: 80
+    cluster_url: "authelia.authelia.svc.cluster.local"
+    gateway_config: {
+        dns_name: "sso.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
     flux_kustomization: {
-        dependencies: []
+        dependencies: [
+            {name: postgres.name}
+        ]
         kustomization_path: "${kustomization_infrastructure_path}/authelia"
     }
 }

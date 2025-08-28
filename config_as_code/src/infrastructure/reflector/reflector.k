@@ -95,11 +95,11 @@ vault_rbac: vault.VaultRbac = vault.create_vault_rbac(service_name)
 netbird_setup_key_reflector_annotations = {
     "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
     # Control destination namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy,forgejo"
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy"
     # Auto create reflection for matching namespaces
     "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
     # Control auto-reflection namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "caddy,forgejo"
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "caddy"
 }
 
 # FIXME: TODO: add permission for reflector service-account in Vault to access netbird setup key
@@ -126,11 +126,11 @@ netbird_setup_key: vault.VaultStaticSecret = {
 postgres_creds_reflector_annotations = {
     "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
     # Control destination namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,mealie,forgejo"
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,mealie,forgejo,authelia"
     # Auto create reflection for matching namespaces
     "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
     # Control auto-reflection namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,dawarich,mealie,forgejo"
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,dawarich,mealie,forgejo,authelia"
 }
 postgres_creds: vault.VaultStaticSecret = {
     metadata: {

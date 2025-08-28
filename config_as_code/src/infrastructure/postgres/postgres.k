@@ -71,6 +71,19 @@ dawarich_db: cnpg.Database = {
     }
 }
 
+authelia_db: cnpg.Database = {
+    metadata: {
+        name: "authelia"
+    }
+    spec: {
+        name: "authelia"
+        cluster: {
+            name: service_name
+        }
+        owner: "postgres"
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)

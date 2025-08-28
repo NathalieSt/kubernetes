@@ -1,4 +1,3 @@
-import k8s.api.core.v1 as core_api
 import yaml
 
 import ....lib.k8s_wrapper
@@ -12,7 +11,6 @@ kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
-pvc_file = "pvc.yaml"
 # Configs
 service_name = shared.authelia.name
 chart_url = "https://charts.authelia.com"
@@ -23,7 +21,6 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     release_file
     repository_file
-    pvc_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, True)
 # Helm configuration
@@ -53,7 +50,28 @@ release: helm_flux.HelmRelease = {
         install.remediation.retries: 3
         timeout: "5m"
         interval: "24h"
-        values: {}
+        valuesFrom: [
+            {
+                kind: "Secret"
+                # FIXME: in shared, replace "postgres_creds_secret_name" with "postgres_creds_secret" and put "name: str, key: str" inside 
+                name: shared.postgres_creds_secret_name
+                optional: False
+                targetPath: "configMap.storage.postgres.password.value"
+                valuesKey: "password"
+            }
+        ]
+        values: {
+            configMap.session.cookies: [
+                "https://${shared.authelia.gateway_config.dns_name}.netbird.selfhosted"
+            ]
+            configMap.storage.postgres: {
+                enabled: True
+                address: "tcp://${shared.postgres.cluster_url}:${shared.postgres.port}"
+                database: "authelia"
+                password.secret_name: "authelia-pg-password"
+                username: "postgres"
+            }
+        }
     }
 }
 
