@@ -67,21 +67,31 @@ release: helm_flux.HelmRelease = {
                     subdomain: "${shared.authelia.gateway_config.dns_name}"
                 }
             ]
-            configMap.storage.postgres: {
-                enabled: True
-                address: "tcp://${shared.postgres.cluster_url}:${shared.postgres.port}"
-                database: "authelia"
-                #"authelia-pg-password"
-                password.secret_name: shared.postgres_creds_secret_name
-                username: "postgres"
+            secret.additionalSecrets: {
+                "${shared.postgres_creds_secret_name}": {
+                    items: [
+                        {
+                            key: "password"
+                            path: "postgres-password"
+                        }
+                    ]
+                }
+                configMap.storage.postgres: {
+                    enabled: True
+                    address: "tcp://${shared.postgres.cluster_url}:${shared.postgres.port}"
+                    database: "authelia"
+                    username: "postgres"
+                    password: {
+                        secret_name: shared.postgres_creds_secret_name
+                        path: "postgres-password"
+                    }
+                }
             }
         }
     }
 }
 
 # Write to files
-yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
 # Write helm configuration to files
-yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)

@@ -23,11 +23,19 @@ spec:
         cookies:
         - domain: https://netbird.selfhosted
           subdomain: sso.cluster
-      storage:
-        postgres:
-          enabled: true
-          address: tcp://postgres-rw.postgres.svc.cluster.local:5432
-          database: authelia
-          password:
-            secret_name: postgres-creds-secret
-          username: postgres
+    secret:
+      additionalSecrets:
+        postgres-creds-secret:
+          items:
+          - key: password
+            path: postgres-password
+        configMap:
+          storage:
+            postgres:
+              enabled: true
+              address: tcp://postgres-rw.postgres.svc.cluster.local:5432
+              database: authelia
+              username: postgres
+              password:
+                secret_name: postgres-creds-secret
+                path: postgres-password
