@@ -43,7 +43,7 @@ keycloak_env: [core_api.EnvVar] = [
             }
         }
     }
-    {name: "JAVA_OPTS_APPEND", value: "-Djgroups.bind.address=$(POD_IP)"}
+    {name: "JAVA_OPTS_APPEND", value: "-Djgroups.bind.address=\${POD_IP}"}
     {name: "KC_DB_URL_DATABASE", value: "keycloak"}
     {name: "KC_DB_URL_HOST", value: "${shared.postgres.cluster_url}"}
     {name: "KC_DB", value: "postgres"}
