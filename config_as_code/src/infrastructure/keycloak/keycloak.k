@@ -35,6 +35,14 @@ keycloak_env: [core_api.EnvVar] = [
     {name: "KC_HOSTNAME_STRICT", value: "false"}
     {name: "KC_HEALTH_ENABLED", value: "true"}
     {name: "KC_CACHE", value: "ispn"}
+    {
+        name: "POD_IP"
+        valueFrom: {
+            fieldRef: {
+                fieldPath: "status.podIP"
+            }
+        }
+    }
     {name: "JAVA_OPTS_APPEND", value: "-Djgroups.bind.address=$(POD_IP)"}
     {name: "KC_DB_URL_DATABASE", value: "keycloak"}
     {name: "KC_DB_URL_HOST", value: "${shared.postgres.cluster_url}"}
