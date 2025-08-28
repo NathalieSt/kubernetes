@@ -17,12 +17,6 @@ spec:
     remediation:
       retries: 3
   timeout: '5m'
-  valuesFrom:
-  - kind: Secret
-    name: postgres-creds-secret
-    valuesKey: password
-    targetPath: configMap.storage.postgres.password.value
-    optional: false
   values:
     configMap:
       session:
@@ -35,5 +29,5 @@ spec:
           address: tcp://postgres-rw.postgres.svc.cluster.local:5432
           database: authelia
           password:
-            secret_name: authelia-pg-password
+            secret_name: postgres-creds-secret
           username: postgres

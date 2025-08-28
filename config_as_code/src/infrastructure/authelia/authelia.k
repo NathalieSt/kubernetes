@@ -50,16 +50,16 @@ release: helm_flux.HelmRelease = {
         install.remediation.retries: 3
         timeout: "5m"
         interval: "24h"
-        valuesFrom: [
-            {
-                kind: "Secret"
-                # FIXME: in shared, replace "postgres_creds_secret_name" with "postgres_creds_secret" and put "name: str, key: str" inside 
-                name: shared.postgres_creds_secret_name
-                optional: False
-                targetPath: "configMap.storage.postgres.password.value"
-                valuesKey: "password"
-            }
-        ]
+        #valuesFrom: [
+        #    {
+        #        kind: "Secret"
+        #        # FIXME: in shared, replace "postgres_creds_secret_name" with "postgres_creds_secret" and put "name: str, key: str" inside 
+        #        name: shared.postgres_creds_secret_name
+        #        optional: False
+        #        targetPath: "configMap.storage.postgres.password.value"
+        #        valuesKey: "password"
+        #    }
+        #]
         values: {
             configMap.session.cookies: [
                 {
@@ -71,7 +71,8 @@ release: helm_flux.HelmRelease = {
                 enabled: True
                 address: "tcp://${shared.postgres.cluster_url}:${shared.postgres.port}"
                 database: "authelia"
-                password.secret_name: "authelia-pg-password"
+                #"authelia-pg-password"
+                password.secret_name: shared.postgres_creds_secret_name
                 username: "postgres"
             }
         }
