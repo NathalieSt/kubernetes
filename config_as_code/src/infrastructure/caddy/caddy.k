@@ -66,11 +66,24 @@ get_websocket_support_if_required = lambda service: lib_shared.ClusterService ->
     result
 }
 
+forward_headers_if_required = lambda service: lib_shared.ClusterService -> str {
+    result = ""
+    if service.gateway_config.are_headers_forwarded == True:
+        result = """
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Uri {uri}
+    """
+
+    result
+}
+
 caddy_services = ("").join(["""
     ${service.gateway_config.dns_name}.netbird.selfhosted:443 {
         tls internal
         reverse_proxy ${shared.istio_gateway_ip}:80 {
             header_up Host {host}
+            ${forward_headers_if_required(service)}
         }
 
         ${get_websocket_support_if_required(service)}
@@ -192,7 +205,7 @@ deployment = {
                     {
                         name: cert_pvc_volume
                         persistentVolumeClaim: {
-                            claimName: cert_pvc_name 
+                            claimName: cert_pvc_name
                         }
                     }
                 ]

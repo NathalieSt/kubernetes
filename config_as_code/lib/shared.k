@@ -9,6 +9,7 @@ schema GatewayConfig:
     requires_larger_body: bool
     extra_server_config?: str
     extra_location_config?: str
+    are_headers_forwarded?: bool
 
 schema ClusterServiceFluxKustomization:
     kustomization_path: str

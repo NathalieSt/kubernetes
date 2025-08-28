@@ -255,6 +255,7 @@ keycloak: shared.ClusterService = {
         dns_name: "sso.cluster"
         requires_websockets: False
         requires_larger_body: False
+        are_headers_forwarded: True
     }
     flux_kustomization: {
         dependencies: [
