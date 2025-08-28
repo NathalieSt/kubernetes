@@ -55,6 +55,7 @@ keycloak_env: [core_api.EnvVar] = [
         }
     }}
     {name: "KC_DB_USERNAME", value: "postgres"}
+    {name: "KC_HOSTNAME", value: "sso.cluster.netbird.selfhosted"}
 ]
 
 deployment = {

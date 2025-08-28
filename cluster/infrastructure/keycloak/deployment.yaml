@@ -53,6 +53,8 @@ spec:
               name: postgres-creds-secret
         - name: KC_DB_USERNAME
           value: postgres
+        - name: KC_HOSTNAME
+          value: sso.cluster.netbird.selfhosted
         image: quay.io/keycloak/keycloak:26.3.3
         name: keycloak
         ports:
