@@ -245,12 +245,12 @@ cnpg: shared.ClusterService = {
     }
 }
 
-authelia: shared.ClusterService = {
-    name: "authelia"
-    namespace: "authelia"
+keycloak: shared.ClusterService = {
+    name: "keycloak"
+    namespace: "keycloak"
     type: "infrastructure"
-    port: 80
-    cluster_url: "authelia.authelia.svc.cluster.local"
+    port: 8080
+    cluster_url: "keycloak.keycloak.svc.cluster.local"
     gateway_config: {
         dns_name: "sso.cluster"
         requires_websockets: False
@@ -260,7 +260,7 @@ authelia: shared.ClusterService = {
         dependencies: [
             {name: postgres.name}
         ]
-        kustomization_path: "${kustomization_infrastructure_path}/authelia"
+        kustomization_path: "${kustomization_infrastructure_path}/keycloak"
     }
 }
 
@@ -386,7 +386,7 @@ cluster_infrastructure_services: [shared.ClusterService] = [
     caddy
     csi_driver_nfs
     cnpg
-    authelia
+    keycloak
 ]
 
 cluster_istio_services: [shared.ClusterService] = [

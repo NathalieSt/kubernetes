@@ -71,12 +71,12 @@ dawarich_db: cnpg.Database = {
     }
 }
 
-authelia_db: cnpg.Database = {
+keycloak: cnpg.Database = {
     metadata: {
-        name: "authelia"
+        name: "keycloak"
     }
     spec: {
-        name: "authelia"
+        name: "keycloak"
         cluster: {
             name: service_name
         }

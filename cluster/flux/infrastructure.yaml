@@ -184,15 +184,15 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: authelia
+  name: keycloak
   namespace: flux-system
 spec:
   interval: '24h'
-  targetNamespace: authelia
+  targetNamespace: keycloak
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/authelia'
+  path: './cluster/infrastructure/keycloak'
   prune: true
   wait: true
   timeout: '10m'

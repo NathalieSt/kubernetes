@@ -11,7 +11,6 @@ schema HelmCharts:
     jellyfin: str
     forgejo: str
     cnpg: str
-    authelia: str
 
 schema DockerImages:
     caddy: str
@@ -23,6 +22,7 @@ schema DockerImages:
     searxng: str
     mealie: str
     dawarich: str
+    keycloak: str
 
 docker_images: DockerImages = {
     caddy: "2.10.0-alpine"
@@ -34,6 +34,7 @@ docker_images: DockerImages = {
     searxng: "2025.8.3-2e62eb5"
     mealie: "v3.0.2"
     dawarich: "0.30.10"
+    keycloak: "26.3.3"
 }
 
 helm_charts: HelmCharts = {
@@ -49,5 +50,4 @@ helm_charts: HelmCharts = {
     jellyfin: "2.3.0"
     forgejo: "TODO"
     cnpg: "0.26.0"
-    authelia: "0.10.42"
 }
