@@ -39,7 +39,7 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         - name: JAVA_OPTS_APPEND
-          value: '-Djgroups.bind.address=$(POD_IP)'
+          value: '-Djgroups.bind.address=${POD_IP}'
         - name: KC_DB_URL_DATABASE
           value: keycloak
         - name: KC_DB_URL_HOST
