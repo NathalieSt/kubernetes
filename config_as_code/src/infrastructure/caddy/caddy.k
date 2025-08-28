@@ -74,6 +74,7 @@ forward_headers_if_required = lambda service: lib_shared.ClusterService -> str {
         header_up X-Forwarded-Host {host}
         header_up X-Forwarded-Port {server_port}
         header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-Uri {uri}
     """
 
     result

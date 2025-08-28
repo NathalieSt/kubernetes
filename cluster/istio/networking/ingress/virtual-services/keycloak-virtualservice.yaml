@@ -13,3 +13,7 @@ spec:
         host: keycloak.keycloak.svc.cluster.local
         port:
           number: 8080
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https

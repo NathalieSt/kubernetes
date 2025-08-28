@@ -257,6 +257,9 @@ keycloak: shared.ClusterService = {
         requires_larger_body: False
         are_headers_forwarded: True
     }
+    virtual_service_config: {
+        client_protocol: "https"
+    }
     flux_kustomization: {
         dependencies: [
             {name: postgres.name}
