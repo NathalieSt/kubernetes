@@ -11,5 +11,5 @@ resources:
 - ingress/virtual-services/mealie-virtualservice.yaml
 - ingress/virtual-services/glance-virtualservice.yaml
 - ingress/virtual-services/vault-virtualservice.yaml
-- ingress/virtual-services/authelia-virtualservice.yaml
+- ingress/virtual-services/keycloak-virtualservice.yaml
 - ingress/virtual-services/kiali-virtualservice.yaml

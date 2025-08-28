@@ -126,11 +126,11 @@ netbird_setup_key: vault.VaultStaticSecret = {
 postgres_creds_reflector_annotations = {
     "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
     # Control destination namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,mealie,forgejo,authelia"
+    "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,mealie,forgejo,keycloak"
     # Auto create reflection for matching namespaces
     "reflector.v1.k8s.emberstack.com/reflection-auto-enabled": "true"
     # Control auto-reflection namespaces
-    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,dawarich,mealie,forgejo,authelia"
+    "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces": "postgres,dawarich,mealie,forgejo,keycloak"
 }
 postgres_creds: vault.VaultStaticSecret = {
     metadata: {

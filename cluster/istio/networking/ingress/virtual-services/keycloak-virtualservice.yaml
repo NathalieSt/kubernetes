@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: authelia-virtualservice
+  name: keycloak-virtualservice
 spec:
   hosts:
   - sso.cluster.netbird.selfhosted
@@ -10,6 +10,6 @@ spec:
   http:
   - route:
     - destination:
-        host: authelia.authelia.svc.cluster.local
+        host: keycloak.keycloak.svc.cluster.local
         port:
-          number: 80
+          number: 8080
