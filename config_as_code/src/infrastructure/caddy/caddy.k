@@ -70,9 +70,10 @@ forward_headers_if_required = lambda service: lib_shared.ClusterService -> str {
     result = ""
     if service.gateway_config.are_headers_forwarded == True:
         result = """
-            header_up X-Forwarded-Proto {scheme}
-            header_up X-Forwarded-Host {host}
-            header_up X-Forwarded-Uri {uri}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-Host {host}
+        header_up X-Forwarded-Port {server_port}
+        header_up X-Real-IP {remote_host}
     """
 
     result
