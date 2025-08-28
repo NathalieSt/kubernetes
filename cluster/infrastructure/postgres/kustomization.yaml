@@ -7,3 +7,4 @@ resources:
 - cnpg-cluster.yaml
 - forgejo-db.yaml
 - dawarich-db.yaml
+- keycloak-db.yaml

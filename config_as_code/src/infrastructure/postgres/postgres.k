@@ -10,6 +10,7 @@ namespace_file = "namespace.yaml"
 cnpg_cluster_file = "cnpg-cluster.yaml"
 forgejo_db_file = "forgejo-db.yaml"
 dawarich_db_file = "dawarich-db.yaml"
+keycloak_db_file = "keycloak-db.yaml"
 # Configs
 service_name = shared.postgres.name
 label_app_name = service_name
@@ -20,6 +21,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     cnpg_cluster_file
     forgejo_db_file
     dawarich_db_file
+    keycloak_db_file
 ])
 namespace = k8s_wrapper.create_namespace(shared.postgres.namespace, True)
 
@@ -71,7 +73,7 @@ dawarich_db: cnpg.Database = {
     }
 }
 
-keycloak: cnpg.Database = {
+keycloak_db: cnpg.Database = {
     metadata: {
         name: "keycloak"
     }
@@ -90,3 +92,4 @@ yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(cnpg_cluster, out_dir + cnpg_cluster_file)
 yaml.dump_to_file(forgejo_db, out_dir + forgejo_db_file)
 yaml.dump_to_file(dawarich_db, out_dir + dawarich_db_file)
+yaml.dump_to_file(keycloak_db, out_dir + keycloak_db_file)
