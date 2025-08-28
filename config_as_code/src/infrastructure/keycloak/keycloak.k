@@ -37,7 +37,7 @@ keycloak_env: [core_api.EnvVar] = [
     {name: "KC_CACHE", value: "ispn"}
     {name: "JAVA_OPTS_APPEND", value: "-Djgroups.bind.address=$(POD_IP)"}
     {name: "KC_DB_URL_DATABASE", value: "keycloak"}
-    {name: "KC_DB_URL_HOST", value: "tcp://${shared.postgres.cluster_url}:${shared.postgres.port}"}
+    {name: "KC_DB_URL_HOST", value: "${shared.postgres.cluster_url}"}
     {name: "KC_DB", value: "postgres"}
     {name: "KC_DB_PASSWORD", valueFrom: {
         secretKeyRef: {
