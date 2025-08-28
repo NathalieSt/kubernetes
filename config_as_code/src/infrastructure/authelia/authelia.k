@@ -67,6 +67,16 @@ release: helm_flux.HelmRelease = {
                     subdomain: "${shared.authelia.gateway_config.dns_name}"
                 }
             ]
+            configMap.storage.postgres: {
+                enabled: True
+                address: "tcp://${shared.postgres.cluster_url}:${shared.postgres.port}"
+                database: "authelia"
+                username: "postgres"
+                password: {
+                    secret_name: shared.postgres_creds_secret_name
+                    path: "postgres-password"
+                }
+            }
             secret.additionalSecrets: {
                 "${shared.postgres_creds_secret_name}": {
                     items: [
@@ -75,16 +85,6 @@ release: helm_flux.HelmRelease = {
                             path: "postgres-password"
                         }
                     ]
-                }
-                configMap.storage.postgres: {
-                    enabled: True
-                    address: "tcp://${shared.postgres.cluster_url}:${shared.postgres.port}"
-                    database: "authelia"
-                    username: "postgres"
-                    password: {
-                        secret_name: shared.postgres_creds_secret_name
-                        path: "postgres-password"
-                    }
                 }
             }
         }
