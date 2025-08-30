@@ -245,29 +245,6 @@ cnpg: shared.ClusterService = {
     }
 }
 
-keycloak: shared.ClusterService = {
-    name: "keycloak"
-    namespace: "keycloak"
-    type: "infrastructure"
-    port: 8080
-    cluster_url: "keycloak.keycloak.svc.cluster.local"
-    gateway_config: {
-        dns_name: "sso.cluster"
-        requires_websockets: False
-        requires_larger_body: False
-        are_headers_forwarded: True
-    }
-    virtual_service_config: {
-        client_protocol: "https"
-    }
-    flux_kustomization: {
-        dependencies: [
-            {name: postgres.name}
-        ]
-        kustomization_path: "${kustomization_infrastructure_path}/keycloak"
-    }
-}
-
 ## Istio
 kustomization_istio_path = "./cluster/istio"
 istio_system_namespace = "istio-system"
@@ -390,7 +367,6 @@ cluster_infrastructure_services: [shared.ClusterService] = [
     caddy
     csi_driver_nfs
     cnpg
-    keycloak
 ]
 
 cluster_istio_services: [shared.ClusterService] = [
