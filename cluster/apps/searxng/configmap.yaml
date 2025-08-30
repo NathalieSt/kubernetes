@@ -23,7 +23,7 @@ data:
         url: valkey://valkey.valkey.svc.cluster.local:6379/0
 
     outgoing:
-        request_timeout: 2.0       # default timeout in seconds, can be override by engine
+        request_timeout: 4.0       # default timeout in seconds, can be override by engine
         max_request_timeout: 10.0  # the maximum timeout in seconds
         useragent_suffix: ""       # information like an email address to the administrator
         pool_connections: 100      # Maximum number of allowable connections, or null
