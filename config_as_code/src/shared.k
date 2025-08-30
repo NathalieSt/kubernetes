@@ -32,7 +32,7 @@ jellyfin: shared.ClusterService = {
     keda_scaling: {
         desiredReplicas: "1"
         start: "0 7 * * *"
-        end: "0 24 * * *"
+        end: "0 23 * * *"
         timezone: timezone
     }
 }
@@ -55,7 +55,7 @@ searxng: shared.ClusterService = {
     keda_scaling: {
         desiredReplicas: "1"
         start: "0 7 * * *"
-        end: "0 24 * * *"
+        end: "0 23 * * *"
         timezone: timezone
     }
 }
@@ -136,7 +136,7 @@ glance: shared.ClusterService = {
     keda_scaling: {
         desiredReplicas: "1"
         start: "0 7 * * *"
-        end: "0 24 * * *"
+        end: "0 23 * * *"
         timezone: timezone
     }
 }

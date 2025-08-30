@@ -2,7 +2,7 @@ apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: searxng-scaledobject
-  namespace: mealie
+  namespace: searxng
 spec:
   scaleTargetRef:
     name: searxng
@@ -13,5 +13,5 @@ spec:
     metadata:
       timezone: Europe/Vienna
       start: '0 7 * * *'
-      end: '0 24 * * *'
+      end: '0 23 * * *'
       desiredReplicas: '1'

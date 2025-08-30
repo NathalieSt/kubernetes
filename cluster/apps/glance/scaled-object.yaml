@@ -13,5 +13,5 @@ spec:
     metadata:
       timezone: Europe/Vienna
       start: '0 7 * * *'
-      end: '0 24 * * *'
+      end: '0 23 * * *'
       desiredReplicas: '1'

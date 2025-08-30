@@ -27,7 +27,7 @@ image_version = versions.docker_images.searxng
 deployment_configmap_volume = "searxng-config"
 port = 8080
 proxy_service_entry_name = "searxng-proxy-service-entry"
-namespace_name = shared.mealie.namespace
+namespace_name = shared.searxng.namespace
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
