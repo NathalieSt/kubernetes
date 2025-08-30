@@ -5,6 +5,7 @@ import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
 import ...versions
+import ....lib.keda
 
 out_dir = shared.cluster_path + "apps/jellyfin/"
 # Filenames
@@ -13,8 +14,10 @@ namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
 pvc_file = "pvc.yaml"
+scaled_object_file = "scaled-object.yaml"
 # Configs
 service_name = shared.jellyfin.name
+namespace_name = shared.jellyfin.namespace
 chart_url = "https://jellyfin.github.io/jellyfin-helm"
 chart_name = "jellyfin"
 chart_version = versions.helm_charts.jellyfin
@@ -25,6 +28,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     release_file
     repository_file
     pvc_file
+    scaled_object_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, True)
 # Helm configuration
@@ -69,6 +73,26 @@ pvc: core_api.PersistentVolumeClaim = {
     }
 }
 
+scaled_object: keda.ScaledObject = {
+    metadata: {
+        name: "${service_name}-scaledobject"
+        namespace: "${namespace_name}"
+    }
+    spec: {
+        minReplicaCount: 0
+        cooldownPeriod: 300
+        scaleTargetRef: {
+            name: "${service_name}"
+        }
+        triggers: [
+            {
+                type: "cron"
+                metadata: shared.jellyfin.keda_scaling
+            }
+        ]
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
@@ -76,3 +100,4 @@ yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)
 yaml.dump_to_file(pvc, out_dir + pvc_file)
+yaml.dump_to_file(scaled_object, out_dir + scaled_object_file)

@@ -1,7 +1,9 @@
 import ....lib.k8s_wrapper
 import ....lib.istio
+import ....lib.keda
 import ...shared
 import ...versions
+
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
@@ -15,6 +17,7 @@ configmap_file = "configmap.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
 proxy_service_entry_file = "proxy-service-entry.yaml"
+scaled_object_file = "scaled-object.yaml"
 # Configs
 service_name = "searxng"
 label_app_name = "searxng"
@@ -24,6 +27,7 @@ image_version = versions.docker_images.searxng
 deployment_configmap_volume = "searxng-config"
 port = 8080
 proxy_service_entry_name = "searxng-proxy-service-entry"
+namespace_name = shared.mealie.namespace
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
@@ -31,6 +35,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     deployment_file
     k8s_service_file
     proxy_service_entry_file
+    scaled_object_file
 ])
 namespace = k8s_wrapper.create_namespace(service_name, True)
 
@@ -185,6 +190,26 @@ proxy_service_entry: istio.ServiceEntry = {
     }
 }
 
+scaled_object: keda.ScaledObject = {
+    metadata: {
+        name: "${service_name}-scaledobject"
+        namespace: "${namespace_name}"
+    }
+    spec: {
+        minReplicaCount: 0
+        cooldownPeriod: 300
+        scaleTargetRef: {
+            name: "${service_name}"
+        }
+        triggers: [
+            {
+                type: "cron"
+                metadata: shared.searxng.keda_scaling
+            }
+        ]
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
@@ -192,3 +217,4 @@ yaml.dump_to_file(configmap, out_dir + configmap_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + k8s_service_file)
 yaml.dump_to_file(proxy_service_entry, out_dir + proxy_service_entry_file)
+yaml.dump_to_file(scaled_object, out_dir + scaled_object_file)

@@ -7,3 +7,4 @@ resources:
 - release.yaml
 - repository.yaml
 - pvc.yaml
+- scaled-object.yaml

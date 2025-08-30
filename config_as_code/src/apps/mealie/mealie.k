@@ -1,5 +1,5 @@
 import ....lib.k8s_wrapper
-import ....lib.istio
+import ....lib.keda
 import ...shared
 import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
@@ -13,6 +13,7 @@ namespace_file = "namespace.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
 pvc_file = "pvc.yaml"
+scaled_object_file = "scaled-object.yaml"
 # Configs
 service_name = shared.mealie.name
 label_app_name = service_name
@@ -21,14 +22,16 @@ image_version = versions.docker_images.mealie
 deployment_pvc_volume = "mealie-pvc"
 port = shared.mealie.port
 pvc_name = "mealie-pvc"
+namespace_name = shared.mealie.namespace
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     pvc_file
     deployment_file
     k8s_service_file
+    scaled_object_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name, True)
+namespace = k8s_wrapper.create_namespace(namespace_name, True)
 
 pvc: core_api.PersistentVolumeClaim = {
     metadata.name = pvc_name
@@ -132,9 +135,30 @@ service: core_api.Service = {
     }
 }
 
+scaled_object: keda.ScaledObject = {
+    metadata: {
+        name: "${service_name}-scaledobject"
+        namespace: "${namespace_name}"
+    }
+    spec: {
+        minReplicaCount: 0
+        cooldownPeriod: 300
+        scaleTargetRef: {
+            name: "${service_name}"
+        }
+        triggers: [
+            {
+                type: "cron"
+                metadata: shared.mealie.keda_scaling
+            }
+        ]
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
 yaml.dump_to_file(pvc, out_dir + pvc_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(service, out_dir + k8s_service_file)
+yaml.dump_to_file(scaled_object, out_dir + scaled_object_file)

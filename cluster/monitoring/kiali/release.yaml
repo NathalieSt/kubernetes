@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: kiali-operator
-      version: '*'
+      version: '2.14.0'
       sourceRef:
         kind: HelmRepository
         name: kiali

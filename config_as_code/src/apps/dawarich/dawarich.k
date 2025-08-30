@@ -1,4 +1,5 @@
 import ....lib.k8s_wrapper
+import ....lib.keda
 import ...shared
 import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
@@ -14,8 +15,10 @@ watched_pvc_file = "watched-dawarich-pvc.yaml"
 storage_pvc_file = "storage-dawarich-pvc.yaml"
 deployment_file = "deployment.yaml"
 k8s_service_file = "service.yaml"
+scaled_object_file = "scaled-object.yaml"
 # Configs
 service_name = shared.dawarich.name
+namespace_name = shared.dawarich.namespace
 label_app_name = "dawarich"
 k8s_service_name = "dawarich"
 public_pvc_name = "public-dawarich-pvc"
@@ -34,8 +37,9 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     storage_pvc_file
     deployment_file
     k8s_service_file
+    scaled_object_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name, True)
+namespace = k8s_wrapper.create_namespace(namespace_name, True)
 
 public_pvc: core_api.PersistentVolumeClaim = {
     metadata.name = public_pvc_name
@@ -240,6 +244,27 @@ k8s_service: core_api.Service = {
         }
     }
 }
+
+scaled_object: keda.ScaledObject = {
+    metadata: {
+        name: "${service_name}-scaledobject"
+        namespace: "${namespace_name}"
+    }
+    spec: {
+        minReplicaCount: 0
+        cooldownPeriod: 300
+        scaleTargetRef: {
+            name: "${service_name}"
+        }
+        triggers: [
+            {
+                type: "cron"
+                metadata: shared.dawarich.keda_scaling
+            }
+        ]
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
@@ -248,3 +273,4 @@ yaml.dump_to_file(watched_pvc, out_dir + watched_pvc_file)
 yaml.dump_to_file(storage_pvc, out_dir + storage_pvc_file)
 yaml.dump_to_file(deployment, out_dir + deployment_file)
 yaml.dump_to_file(k8s_service, out_dir + k8s_service_file)
+yaml.dump_to_file(scaled_object, out_dir + scaled_object_file)

@@ -18,8 +18,6 @@ spec:
       retries: 3
   timeout: '5m'
   values:
-    crds:
-      install: true
     keda:
       traffic.sidecar.istio.io/excludeInboundPorts: '9666'
       traffic.sidecar.istio.io/excludeOutboundPorts: '9443,6443'

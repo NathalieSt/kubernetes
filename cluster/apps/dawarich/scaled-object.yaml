@@ -1,0 +1,17 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: dawarich-scaledobject
+  namespace: dawarich
+spec:
+  scaleTargetRef:
+    name: dawarich
+  minReplicaCount: 0
+  cooldownPeriod: 300
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Europe/Vienna
+      start: '0 8 * * *'
+      end: '0 22 * * *'
+      desiredReplicas: '1'

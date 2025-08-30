@@ -1,5 +1,5 @@
 import yaml
-
+import ....lib.keda
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
@@ -11,9 +11,10 @@ kustomization_file = "kustomization.yaml"
 namespace_file = "namespace.yaml"
 release_file = "release.yaml"
 repository_file = "repository.yaml"
+scaled_object_file = "scaled-object.yaml"
 # Configs
 service_name = shared.forgejo.name
-# FIXME: TODO:
+namespace_name = shared.forgejo.namespace
 chart_url = "oci://code.forgejo.org/forgejo-helm/forgejo"
 chart_name = "forgejo"
 chart_version = versions.helm_charts.forgejo
@@ -25,8 +26,9 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     namespace_file
     release_file
     repository_file
+    scaled_object_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name, True)
+namespace = k8s_wrapper.create_namespace(namespace_name, True)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
@@ -96,9 +98,30 @@ release: helm_flux.HelmRelease = {
     }
 }
 
+scaled_object: keda.ScaledObject = {
+    metadata: {
+        name: "${service_name}-scaledobject"
+        namespace: "${namespace_name}"
+    }
+    spec: {
+        minReplicaCount: 0
+        cooldownPeriod: 300
+        scaleTargetRef: {
+            name: "${service_name}"
+        }
+        triggers: [
+            {
+                type: "cron"
+                metadata: shared.forgejo.keda_scaling
+            }
+        ]
+    }
+}
+
 # Write to files
 yaml.dump_to_file(kustomization, out_dir + kustomization_file)
 yaml.dump_to_file(namespace, out_dir + namespace_file)
 # Write helm configuration to files
 yaml.dump_to_file(repo, out_dir + repository_file)
 yaml.dump_to_file(release, out_dir + release_file)
+yaml.dump_to_file(scaled_object, out_dir + scaled_object_file)

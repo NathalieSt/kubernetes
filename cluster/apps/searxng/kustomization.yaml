@@ -8,3 +8,4 @@ resources:
 - deployment.yaml
 - service.yaml
 - proxy-service-entry.yaml
+- scaled-object.yaml

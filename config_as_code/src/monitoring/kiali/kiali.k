@@ -1,5 +1,5 @@
 import yaml
-
+import ....lib.keda
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared
@@ -14,6 +14,7 @@ release_file = "release.yaml"
 repository_file = "repository.yaml"
 # Configs
 service_name = shared.kiali.name
+namespace_name = shared.kiali.namespace
 chart_url = "https://kiali.org/helm-charts"
 chart_name = "kiali-operator"
 chart_version = versions.helm_charts.kiali
@@ -23,7 +24,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     release_file
     repository_file
 ])
-namespace = k8s_wrapper.create_namespace(shared.kiali.namespace, True)
+namespace = k8s_wrapper.create_namespace(namespace_name, False)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name

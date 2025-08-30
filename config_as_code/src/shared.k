@@ -8,6 +8,7 @@ netbird_secret_name = "netbird-setup-key-vault-secret"
 netbird_secret_key = "setup-key"
 nfs_local_storage_class_v2_name = "nfs-local-v2"
 nfs_remote_storage_class_name = "nfs-remote"
+timezone = "Europe/Vienna"
 
 # Cluster Services
 ## Apps
@@ -29,9 +30,10 @@ jellyfin: shared.ClusterService = {
         kustomization_path: "${kustomization_apps_path}/jellyfin"
     }
     keda_scaling: {
-        desiredReplicas: 1
+        desiredReplicas: "1"
         start: "0 7 * * *"
         end: "0 24 * * *"
+        timezone: timezone
     }
 }
 
@@ -51,9 +53,10 @@ searxng: shared.ClusterService = {
         kustomization_path: "${kustomization_apps_path}/searxng"
     }
     keda_scaling: {
-        desiredReplicas: 1
+        desiredReplicas: "1"
         start: "0 7 * * *"
         end: "0 24 * * *"
+        timezone: timezone
     }
 }
 
@@ -82,9 +85,10 @@ dawarich: shared.ClusterService = {
         kustomization_path: "${kustomization_apps_path}/dawarich"
     }
     keda_scaling: {
-        desiredReplicas: 1
+        desiredReplicas: "1"
         start: "0 8 * * *"
         end: "0 22 * * *"
+        timezone: timezone
     }
 }
 
@@ -107,9 +111,10 @@ mealie: shared.ClusterService = {
         kustomization_path: "${kustomization_apps_path}/mealie"
     }
     keda_scaling: {
-        desiredReplicas: 1
+        desiredReplicas: "1"
         start: "0 9 * * *"
         end: "0 21 * * *"
+        timezone: timezone
     }
 }
 
@@ -129,9 +134,10 @@ glance: shared.ClusterService = {
         kustomization_path: "${kustomization_apps_path}/glance"
     }
     keda_scaling: {
-        desiredReplicas: 1
+        desiredReplicas: "1"
         start: "0 7 * * *"
         end: "0 24 * * *"
+        timezone: timezone
     }
 }
 
@@ -151,9 +157,10 @@ forgejo: shared.ClusterService = {
         kustomization_path: "${kustomization_apps_path}/forgejo"
     }
     keda_scaling: {
-        desiredReplicas: 1
+        desiredReplicas: "1"
         start: "0 7 * * *"
         end: "0 2 * * *"
+        timezone: timezone
     }
 }
 
@@ -382,11 +389,6 @@ kiali: shared.ClusterService = {
     flux_kustomization: {
         dependencies: [{name: istio_prometheus.name}]
         kustomization_path: "${kustomization_monitoring_path}/kiali"
-    }
-    keda_scaling: {
-        desiredReplicas: 1
-        start: "0 7 * * *"
-        end: "0 24 * * *"
     }
 }
 

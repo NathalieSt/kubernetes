@@ -9,3 +9,4 @@ resources:
 - storage-dawarich-pvc.yaml
 - deployment.yaml
 - service.yaml
+- scaled-object.yaml

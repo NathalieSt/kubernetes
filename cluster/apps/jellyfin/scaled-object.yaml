@@ -1,0 +1,17 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: jellyfin-scaledobject
+  namespace: jellyfin
+spec:
+  scaleTargetRef:
+    name: jellyfin
+  minReplicaCount: 0
+  cooldownPeriod: 300
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Europe/Vienna
+      start: '0 7 * * *'
+      end: '0 24 * * *'
+      desiredReplicas: '1'
