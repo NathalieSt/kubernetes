@@ -11,6 +11,7 @@ schema HelmCharts:
     jellyfin: str
     forgejo: str
     cnpg: str
+    keda: str
 
 schema DockerImages:
     caddy: str
@@ -48,4 +49,5 @@ helm_charts: HelmCharts = {
     jellyfin: "2.3.0"
     forgejo: "TODO"
     cnpg: "0.26.0"
+    keda: "2.17.2"
 }

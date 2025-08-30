@@ -28,6 +28,11 @@ jellyfin: shared.ClusterService = {
         dependencies: []
         kustomization_path: "${kustomization_apps_path}/jellyfin"
     }
+    keda_scaling: {
+        desiredReplicas: 1
+        start: "0 7 * * *"
+        end: "0 24 * * *"
+    }
 }
 
 searxng: shared.ClusterService = {
@@ -44,6 +49,11 @@ searxng: shared.ClusterService = {
     flux_kustomization: {
         dependencies: [{name: valkey.name}]
         kustomization_path: "${kustomization_apps_path}/searxng"
+    }
+    keda_scaling: {
+        desiredReplicas: 1
+        start: "0 7 * * *"
+        end: "0 24 * * *"
     }
 }
 
@@ -71,6 +81,11 @@ dawarich: shared.ClusterService = {
         ]
         kustomization_path: "${kustomization_apps_path}/dawarich"
     }
+    keda_scaling: {
+        desiredReplicas: 1
+        start: "0 8 * * *"
+        end: "0 22 * * *"
+    }
 }
 
 mealie: shared.ClusterService = {
@@ -91,6 +106,11 @@ mealie: shared.ClusterService = {
         ]
         kustomization_path: "${kustomization_apps_path}/mealie"
     }
+    keda_scaling: {
+        desiredReplicas: 1
+        start: "0 9 * * *"
+        end: "0 21 * * *"
+    }
 }
 
 glance: shared.ClusterService = {
@@ -108,6 +128,11 @@ glance: shared.ClusterService = {
         dependencies: []
         kustomization_path: "${kustomization_apps_path}/glance"
     }
+    keda_scaling: {
+        desiredReplicas: 1
+        start: "0 7 * * *"
+        end: "0 24 * * *"
+    }
 }
 
 forgejo: shared.ClusterService = {
@@ -124,6 +149,11 @@ forgejo: shared.ClusterService = {
     flux_kustomization: {
         dependencies: []
         kustomization_path: "${kustomization_apps_path}/forgejo"
+    }
+    keda_scaling: {
+        desiredReplicas: 1
+        start: "0 7 * * *"
+        end: "0 2 * * *"
     }
 }
 
@@ -245,6 +275,16 @@ cnpg: shared.ClusterService = {
     }
 }
 
+keda: shared.ClusterService = {
+    name: "keda"
+    namespace: "keda"
+    type: "infrastructure"
+    flux_kustomization: {
+        dependencies: []
+        kustomization_path: "${kustomization_infrastructure_path}/keda"
+    }
+}
+
 ## Istio
 kustomization_istio_path = "./cluster/istio"
 istio_system_namespace = "istio-system"
@@ -343,6 +383,11 @@ kiali: shared.ClusterService = {
         dependencies: [{name: istio_prometheus.name}]
         kustomization_path: "${kustomization_monitoring_path}/kiali"
     }
+    keda_scaling: {
+        desiredReplicas: 1
+        start: "0 7 * * *"
+        end: "0 24 * * *"
+    }
 }
 
 istio_gateway_ip = "10.43.164.134"
@@ -367,6 +412,7 @@ cluster_infrastructure_services: [shared.ClusterService] = [
     caddy
     csi_driver_nfs
     cnpg
+    keda
 ]
 
 cluster_istio_services: [shared.ClusterService] = [

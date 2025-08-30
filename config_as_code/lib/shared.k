@@ -15,6 +15,11 @@ schema ClusterServiceFluxKustomization:
     kustomization_path: str
     dependencies: [flux.FluxKustomizationDependency]
 
+schema KedaScaling:
+    start: str
+    end: str
+    desiredReplicas: int
+
 schema ClusterService:
     name: str
     namespace: str
@@ -24,6 +29,7 @@ schema ClusterService:
     gateway_config?: GatewayConfig
     virtual_service_config?: VirtualServiceConfig
     flux_kustomization: ClusterServiceFluxKustomization
+    keda_scaling?: KedaScaling
 
 schema ExternalService:
     name: str

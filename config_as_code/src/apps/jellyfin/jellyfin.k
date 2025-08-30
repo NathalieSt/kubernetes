@@ -14,7 +14,7 @@ release_file = "release.yaml"
 repository_file = "repository.yaml"
 pvc_file = "pvc.yaml"
 # Configs
-service_name = "jellyfin"
+service_name = shared.jellyfin.name
 chart_url = "https://jellyfin.github.io/jellyfin-helm"
 chart_name = "jellyfin"
 chart_version = versions.helm_charts.jellyfin
