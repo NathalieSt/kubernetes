@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: victoria-metrics
 spec:
-  releaseName: victoria-metrics-k8s-stack
+  releaseName: victoria-metrics
   chart:
     spec:
       chart: victoria-metrics-k8s-stack
