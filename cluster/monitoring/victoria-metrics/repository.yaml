@@ -6,4 +6,4 @@ spec:
   interval: '24h'
   url: oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
   ref:
-    tag: '2.14.0'
+    tag: '0.59.3'
