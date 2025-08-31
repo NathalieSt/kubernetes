@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: perses
+    app.kubernetes.io/version: v0.52
+  name: perses-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: perses
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: perses
+        app.kubernetes.io/version: v0.52
+    spec:
+      containers:
+      - image: persesdev/perses:v0.52
+        name: perses
+        ports:
+        - containerPort: 8080
+          name: perses

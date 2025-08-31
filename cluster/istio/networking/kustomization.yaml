@@ -12,3 +12,4 @@ resources:
 - ingress/virtual-services/glance-virtualservice.yaml
 - ingress/virtual-services/vault-virtualservice.yaml
 - ingress/virtual-services/kiali-virtualservice.yaml
+- ingress/virtual-services/perses-virtualservice.yaml

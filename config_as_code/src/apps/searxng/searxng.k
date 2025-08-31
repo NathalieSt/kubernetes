@@ -19,7 +19,7 @@ k8s_service_file = "service.yaml"
 proxy_service_entry_file = "proxy-service-entry.yaml"
 scaled_object_file = "scaled-object.yaml"
 # Configs
-service_name = "searxng"
+service_name = shared.searxng.name
 label_app_name = "searxng"
 k8s_service_name = "searxng"
 configmap_name = "searxng-configmap"
@@ -37,7 +37,7 @@ kustomization = k8s_wrapper.create_kustomization(service_name, [
     proxy_service_entry_file
     scaled_object_file
 ])
-namespace = k8s_wrapper.create_namespace(service_name, True)
+namespace = k8s_wrapper.create_namespace(namespace_name, True)
 
 configmap = core_api.ConfigMap {
     apiVersion: "v1"
@@ -94,7 +94,7 @@ deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
     metadata: meta.ObjectMeta {
-        name: "searxng-deployment"
+        name: "${service_name}-deployment"
         labels: {
             "app.kubernetes.io/name": label_app_name
             "app.kubernetes.io/version": image_version

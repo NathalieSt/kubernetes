@@ -12,6 +12,7 @@ schema HelmCharts:
     forgejo: str
     cnpg: str
     keda: str
+    victoria_metrics: str
 
 schema DockerImages:
     caddy: str
@@ -23,6 +24,7 @@ schema DockerImages:
     searxng: str
     mealie: str
     dawarich: str
+    perses: str
 
 docker_images: DockerImages = {
     caddy: "2.10.0-alpine"
@@ -34,6 +36,7 @@ docker_images: DockerImages = {
     searxng: "2025.8.3-2e62eb5"
     mealie: "v3.0.2"
     dawarich: "0.30.10"
+    perses: "v0.52"
 }
 
 helm_charts: HelmCharts = {
@@ -50,4 +53,5 @@ helm_charts: HelmCharts = {
     forgejo: "TODO"
     cnpg: "0.26.0"
     keda: "2.17.2"
+    victoria_metrics: "0.59.3"
 }

@@ -392,6 +392,41 @@ kiali: shared.ClusterService = {
     }
 }
 
+victoria_metrics: shared.ClusterService = {
+    name: "victoria-metrics"
+    namespace: "victoria-metrics"
+    type: "monitoring"
+    cluster_url: "victoria-metrics.victoria-metrics.svc.cluster.local"
+    port: 20001
+    flux_kustomization: {
+        dependencies: []
+        kustomization_path: "${kustomization_monitoring_path}/victoria-metrics"
+    }
+}
+
+perses: shared.ClusterService = {
+    name: "perses"
+    namespace: "perses"
+    type: "monitoring"
+    cluster_url: "perses.perses.svc.cluster.local"
+    port: 8080
+    gateway_config: {
+        dns_name: "perses.cluster"
+        requires_websockets: False
+        requires_larger_body: False
+    }
+    flux_kustomization: {
+        dependencies: [{name: victoria_metrics.name}]
+        kustomization_path: "${kustomization_monitoring_path}/perses"
+    }
+    keda_scaling: {
+        desiredReplicas: "1"
+        start: "0 8 * * *"
+        end: "0 22 * * *"
+        timezone: timezone
+    }
+}
+
 istio_gateway_ip = "10.43.164.134"
 
 cluster_app_services: [shared.ClusterService] = [
@@ -429,6 +464,8 @@ cluster_istio_services: [shared.ClusterService] = [
 
 cluster_monitoring_services: [shared.ClusterService] = [
     kiali
+    victoria_metrics
+    perses
 ]
 
 cluster_services: [shared.ClusterService] = cluster_app_services + cluster_infrastructure_services + cluster_monitoring_services

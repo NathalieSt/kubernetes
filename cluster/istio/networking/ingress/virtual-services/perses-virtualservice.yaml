@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: perses-virtualservice
+spec:
+  hosts:
+  - perses.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: perses.perses.svc.cluster.local
+        port:
+          number: 8080
