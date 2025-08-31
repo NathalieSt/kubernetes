@@ -13,6 +13,7 @@ spec:
       retries: 3
   timeout: '5m'
   values:
+    nameOverride: vmks
     grafana:
       enabled: false
     defaultDashboards:

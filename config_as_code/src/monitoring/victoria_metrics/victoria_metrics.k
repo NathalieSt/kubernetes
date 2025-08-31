@@ -44,6 +44,7 @@ release: helm_flux.HelmRelease = {
         timeout: "5m"
         interval: "24h"
         values: {
+            nameOverride: "vmks"
             grafana.enabled: False
             defaultDashboards.enabled: False
             vmcluster.spec: {
