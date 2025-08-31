@@ -18,19 +18,7 @@ spec:
       enabled: false
     defaultDashboards:
       enabled: false
-    vmcluster:
+    vmsingle:
       spec:
-        vmselect:
-          storage:
-            volumeClaimTemplate:
-              metadata:
-                name: "vmselect-pvc"
-              spec:
-                storageClassName: nfs-remote
-        vmstorage:
-          storage:
-            volumeClaimTemplate:
-              metadata:
-                name: "vmstorage-pvc"
-              spec:
-                storageClassName: nfs-remote
+        storage:
+          storageClassName: nfs-remote

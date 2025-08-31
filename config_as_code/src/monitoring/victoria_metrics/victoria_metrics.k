@@ -47,24 +47,9 @@ release: helm_flux.HelmRelease = {
             nameOverride: "vmks"
             grafana.enabled: False
             defaultDashboards.enabled: False
-            vmcluster.spec: {
-                vmselect: {
-                    storage: {
-                        volumeClaimTemplate: {
-                            spec: {
-                                storageClassName: shared.nfs_remote_storage_class_name
-                            }
-                        }
-                    }
-                }
-                vmstorage: {
-                    storage: {
-                        volumeClaimTemplate: {
-                            spec: {
-                                storageClassName: shared.nfs_remote_storage_class_name
-                            }
-                        }
-                    }
+            vmsingle.spec: {
+                storage: {
+                    storageClassName: shared.nfs_remote_storage_class_name
                 }
             }
         }
