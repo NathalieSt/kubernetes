@@ -31,6 +31,6 @@ spec:
           storage:
             volumeClaimTemplate:
               metadata:
-                name: "vmselect-pvc"
+                name: "vmstorage-pvc"
               spec:
                 storageClassName: nfs-remote
