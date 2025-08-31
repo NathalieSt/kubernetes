@@ -16,7 +16,6 @@ scaled_object_file = "scaled-object.yaml"
 service_name = shared.forgejo.name
 namespace_name = shared.forgejo.namespace
 chart_url = "oci://code.forgejo.org/forgejo-helm/forgejo"
-chart_name = "forgejo"
 chart_version = versions.helm_charts.forgejo
 netbird_secret_name = shared.netbird_secret_name
 netbird_secret_key = shared.netbird_secret_name

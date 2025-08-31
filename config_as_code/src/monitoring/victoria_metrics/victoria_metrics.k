@@ -13,8 +13,7 @@ repository_file = "repository.yaml"
 # Configs
 service_name = shared.victoria_metrics.name
 namespace_name = shared.victoria_metrics.namespace
-chart_url = "https://victoriametrics.github.io/helm-charts/"
-chart_name = "vm/victoria-metrics-k8s-stack"
+chart_url = "oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack"
 chart_version = versions.helm_charts.kiali
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [
@@ -26,26 +25,20 @@ namespace = k8s_wrapper.create_namespace(namespace_name, False)
 # Helm configuration
 repo: helm_flux.HelmRepository = {
     metadata.name = service_name
-    kind: "HelmRepository"
+    kind: "OCIRepository"
     spec: {
         interval: "24h"
         url: chart_url
+        ref.tag: chart_version
     }
 }
 release: helm_flux.HelmRelease = {
     metadata.name = service_name
     spec: {
         releaseName: service_name
-        chart: {
-            spec: {
-                chart: chart_name
-                version: chart_version
-                interval: "24h"
-                sourceRef: {
-                    kind: "HelmRepository"
-                    name: service_name
-                }
-            }
+        chartRef: {
+            kind: "OCIRepository"
+            name: service_name
         }
         install.remediation.retries: 3
         timeout: "5m"

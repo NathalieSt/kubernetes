@@ -4,14 +4,9 @@ metadata:
   name: victoria-metrics
 spec:
   releaseName: victoria-metrics
-  chart:
-    spec:
-      chart: victoria-metrics-k8s-stack
-      version: '2.14.0'
-      sourceRef:
-        kind: HelmRepository
-        name: victoria-metrics
-      interval: '24h'
+  chartRef:
+    kind: OCIRepository
+    name: victoria-metrics
   interval: '24h'
   install:
     remediation:
