@@ -23,6 +23,7 @@ service_name = shared.searxng.name
 label_app_name = "searxng"
 k8s_service_name = "searxng"
 configmap_name = "searxng-configmap"
+deployment_name = "${service_name}-deployment"
 image_version = versions.docker_images.searxng
 deployment_configmap_volume = "searxng-config"
 port = 8080
@@ -94,7 +95,7 @@ deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
     metadata: meta.ObjectMeta {
-        name: "${service_name}-deployment"
+        name: deployment_name
         labels: {
             "app.kubernetes.io/name": label_app_name
             "app.kubernetes.io/version": image_version
@@ -199,7 +200,7 @@ scaled_object: keda.ScaledObject = {
         minReplicaCount: 0
         cooldownPeriod: 300
         scaleTargetRef: {
-            name: "${service_name}"
+            name: deployment_name
         }
         triggers: [
             {

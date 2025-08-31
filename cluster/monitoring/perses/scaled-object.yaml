@@ -5,7 +5,7 @@ metadata:
   namespace: perses
 spec:
   scaleTargetRef:
-    name: perses
+    name: perses-deployment
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:

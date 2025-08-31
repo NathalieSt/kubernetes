@@ -5,7 +5,7 @@ metadata:
   namespace: searxng
 spec:
   scaleTargetRef:
-    name: searxng
+    name: searxng-deployment
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:

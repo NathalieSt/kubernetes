@@ -1,5 +1,4 @@
 import ....lib.k8s_wrapper
-import ....lib.istio
 import ....lib.keda
 import ...shared
 import ...versions
@@ -7,7 +6,6 @@ import ...versions
 import k8s.apimachinery.pkg.apis.meta.v1 as meta
 import k8s.api.core.v1 as core_api
 import yaml
-import outdent
 
 out_dir = shared.cluster_path + "monitoring/perses/"
 # Filenames
@@ -20,6 +18,7 @@ scaled_object_file = "scaled-object.yaml"
 service_name = shared.perses.name
 label_app_name = "perses"
 k8s_service_name = "perses"
+deployment_name = "${service_name}-deployment"
 image_version = versions.docker_images.perses
 container_registry = "persesdev/perses"
 port = 8080
@@ -37,7 +36,7 @@ deployment = {
     apiVersion: "apps/v1"
     kind: "Deployment"
     metadata: meta.ObjectMeta {
-        name: "${service_name}-deployment"
+        name: deployment_name
         labels: {
             "app.kubernetes.io/name": label_app_name
             "app.kubernetes.io/version": image_version
@@ -108,7 +107,7 @@ scaled_object: keda.ScaledObject = {
         minReplicaCount: 0
         cooldownPeriod: 300
         scaleTargetRef: {
-            name: "${service_name}"
+            name: deployment_name
         }
         triggers: [
             {

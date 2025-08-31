@@ -11,6 +11,8 @@ schema ScaledObjectTrigger:
     metadata: ScaledObjectTriggerMeta
 
 schema ScaleTargetRef:
+    apiVersion?: str
+    kind?: str
     name: str
 
 schema ScaledObjectSpec:
