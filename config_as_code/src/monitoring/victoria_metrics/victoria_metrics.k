@@ -14,7 +14,7 @@ repository_file = "repository.yaml"
 service_name = shared.victoria_metrics.name
 namespace_name = shared.victoria_metrics.namespace
 chart_url = "https://victoriametrics.github.io/helm-charts/"
-chart_name = "victoria-metrics-k8s-stack"
+chart_name = "vm/victoria-metrics-k8s-stack"
 chart_version = versions.helm_charts.kiali
 # k8s configuration
 kustomization = k8s_wrapper.create_kustomization(service_name, [

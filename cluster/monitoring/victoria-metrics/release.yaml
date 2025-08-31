@@ -6,7 +6,7 @@ spec:
   releaseName: victoria-metrics
   chart:
     spec:
-      chart: victoria-metrics-k8s-stack
+      chart: vm/victoria-metrics-k8s-stack
       version: '2.14.0'
       sourceRef:
         kind: HelmRepository
