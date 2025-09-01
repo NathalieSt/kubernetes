@@ -16,6 +16,6 @@ type PVCVolumeSource struct {
 
 type Volume struct {
 	Name                  string
-	ConfigMap             *ConfigMapVolumeSource `yaml:",omitempty"`
-	PersistentVolumeClaim *PVCVolumeSource       `yaml:",omitempty"`
+	ConfigMap             ConfigMapVolumeSource `yaml:",omitempty"`
+	PersistentVolumeClaim PVCVolumeSource       `yaml:",omitempty"`
 }

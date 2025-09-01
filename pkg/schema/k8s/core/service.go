@@ -5,6 +5,7 @@ import (
 )
 
 type ServicePort struct {
+	Name       string
 	Port       int
 	TargetPort int
 }
@@ -19,4 +20,14 @@ type Service struct {
 	ApiVersion string
 	Kind       string
 	Metadata   meta.ObjectMeta
+	Spec       ServiceSpec
+}
+
+func NewService(meta meta.ObjectMeta, spec ServiceSpec) Service {
+	return Service{
+		ApiVersion: "v1",
+		Kind:       "Service",
+		Metadata:   meta,
+		Spec:       spec,
+	}
 }

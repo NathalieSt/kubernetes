@@ -10,9 +10,10 @@ type VolumeResourceRequirements struct {
 }
 
 type PersistentVolumeClaimSpec struct {
-	AccessModes []string
-	Selector    meta.LabelSelector
-	Resources   VolumeResourceRequirements
+	AccessModes      []string
+	Selector         meta.LabelSelector
+	Resources        VolumeResourceRequirements
+	StorageClassName string
 }
 
 type PersistentVolumeClaim struct {
@@ -20,4 +21,13 @@ type PersistentVolumeClaim struct {
 	Kind       string `validate:"required"`
 	Metadata   meta.ObjectMeta
 	Spec       PersistentVolumeClaimSpec
+}
+
+func NewPersistentVolumeClaim(meta meta.ObjectMeta, spec PersistentVolumeClaimSpec) PersistentVolumeClaim {
+	return PersistentVolumeClaim{
+		ApiVersion: "v1",
+		Kind:       "PersistentVolumeClaim",
+		Metadata:   meta,
+		Spec:       spec,
+	}
 }

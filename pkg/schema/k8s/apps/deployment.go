@@ -7,7 +7,7 @@ import (
 
 type DeploymentSpec struct {
 	Replicas int
-	Selector Selector
+	Selector meta.LabelSelector
 	Template core.PodTemplateSpec
 }
 
@@ -16,4 +16,13 @@ type Deployment struct {
 	Kind       string `validate:"required"`
 	Metadata   meta.ObjectMeta
 	Spec       DeploymentSpec
+}
+
+func NewDeployment(meta meta.ObjectMeta, spec DeploymentSpec) Deployment {
+	return Deployment{
+		ApiVersion: "apps/v1",
+		Kind:       "Deployment",
+		Metadata:   meta,
+		Spec:       spec,
+	}
 }

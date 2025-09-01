@@ -14,15 +14,30 @@ type Port struct {
 	Name          string
 }
 
+type Env struct {
+	Name      string
+	Value     string    `yaml:",omitempty"`
+	ValueFrom ValueFrom `yaml:",omitempty"`
+}
 type Container struct {
 	Image        string
 	Name         string
 	Ports        []Port
 	VolumeMounts []VolumeMount
+	Env          []Env
+}
+
+type SecretKeyRef struct {
+	Key  string
+	Name string
+}
+
+type ValueFrom struct {
+	SecretKeyRef SecretKeyRef
 }
 
 type PodSpec struct {
-	Containers Container
+	Containers []Container
 	Volumes    []Volume
 }
 
