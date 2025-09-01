@@ -31,12 +31,12 @@ const (
 )
 
 type Entity struct {
-	name                 string
-	namespace            string
-	entityType           EntityType
-	clusterUrl           string
-	port                 int
-	gatewayConfig        GatewayConfig
-	virtualServiceConfig VirtualServiceConfig
-	kedaScaling          keda.ScaledObject
+	Name                 string
+	Namespace            string
+	EntityType           EntityType
+	ClusterUrl           string
+	Port                 int
+	GatewayConfig        *GatewayConfig
+	VirtualServiceConfig *VirtualServiceConfig
+	KedaScaling          *keda.ScaledObject
 }
