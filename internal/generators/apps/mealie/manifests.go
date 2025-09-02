@@ -27,7 +27,7 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 
 	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
 	pvc := utils.ManifestConfig{
-		Filename: "namespace.yaml",
+		Filename: "pvc.yaml",
 		Generate: func() any {
 			return core.NewPersistentVolumeClaim(meta.ObjectMeta{
 				Name: pvcName,
@@ -85,7 +85,7 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										},
 										{
 											Name:  "POSTGRES_PORT",
-											Value: fmt.Sprintf("%v", &infrastructure.Postgres.Port),
+											Value: fmt.Sprintf("%v", infrastructure.Postgres.Port),
 										},
 										{
 											Name: "POSTGRES_USERNAME",
@@ -126,7 +126,7 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 								{
 									Name: volumeName,
 									PersistentVolumeClaim: core.PVCVolumeSource{
-										Name: pvcName,
+										ClaimName: pvcName,
 									},
 								},
 							},

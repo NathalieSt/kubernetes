@@ -5,40 +5,40 @@ import (
 )
 
 type VolumeMount struct {
-	MountPath string
-	Name      string
+	MountPath string `yaml:"mountPath,omitempty"`
+	Name      string `yaml:",omitempty"`
 }
 
 type Port struct {
-	ContainerPort int
-	Name          string
+	ContainerPort int    `yaml:"containerPath,omitempty"`
+	Name          string `yaml:",omitempty"`
 }
 
 type Env struct {
-	Name      string
+	Name      string    `yaml:",omitempty"`
 	Value     string    `yaml:",omitempty"`
-	ValueFrom ValueFrom `yaml:",omitempty"`
+	ValueFrom ValueFrom `yaml:"valueFrom,omitempty"`
 }
 type Container struct {
-	Image        string
-	Name         string
-	Ports        []Port
-	VolumeMounts []VolumeMount
-	Env          []Env
+	Image        string        `yaml:",omitempty"`
+	Name         string        `yaml:",omitempty"`
+	Ports        []Port        `yaml:",omitempty"`
+	VolumeMounts []VolumeMount `yaml:"volumeMounts,omitempty"`
+	Env          []Env         `yaml:",omitempty"`
 }
 
 type SecretKeyRef struct {
-	Key  string
-	Name string
+	Key  string `yaml:",omitempty"`
+	Name string `yaml:",omitempty"`
 }
 
 type ValueFrom struct {
-	SecretKeyRef SecretKeyRef
+	SecretKeyRef SecretKeyRef `yaml:",omitempty"`
 }
 
 type PodSpec struct {
-	Containers []Container
-	Volumes    []Volume
+	Containers []Container `yaml:",omitempty"`
+	Volumes    []Volume    `yaml:",omitempty"`
 }
 
 type Pod struct {

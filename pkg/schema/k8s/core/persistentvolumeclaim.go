@@ -5,19 +5,19 @@ import (
 )
 
 type VolumeResourceRequirements struct {
-	Limits   map[string]string
-	Requests map[string]string
+	Limits   map[string]string `yaml:",omitempty"`
+	Requests map[string]string `yaml:",omitempty"`
 }
 
 type PersistentVolumeClaimSpec struct {
-	AccessModes      []string
-	Selector         meta.LabelSelector
-	Resources        VolumeResourceRequirements
-	StorageClassName string
+	AccessModes      []string                   `yaml:"accessModes,omitempty"`
+	Selector         meta.LabelSelector         `yaml:",omitempty"`
+	Resources        VolumeResourceRequirements `yaml:",omitempty"`
+	StorageClassName string                     `yaml:"storageClassName,omitempty"`
 }
 
 type PersistentVolumeClaim struct {
-	ApiVersion string `validate:"required"`
+	ApiVersion string `yaml:"apiVersion," validate:"required"`
 	Kind       string `validate:"required"`
 	Metadata   meta.ObjectMeta
 	Spec       PersistentVolumeClaimSpec

@@ -11,11 +11,11 @@ type ConfigMapVolumeSource struct {
 }
 
 type PVCVolumeSource struct {
-	Name string
+	ClaimName string `yaml:"claimName,"`
 }
 
 type Volume struct {
-	Name                  string
-	ConfigMap             ConfigMapVolumeSource `yaml:",omitempty"`
-	PersistentVolumeClaim PVCVolumeSource       `yaml:",omitempty"`
+	Name                  string                `yaml:",omitempty"`
+	ConfigMap             ConfigMapVolumeSource `yaml:"configMap,omitempty"`
+	PersistentVolumeClaim PVCVolumeSource       `yaml:"persistentVolumeClaim,omitempty"`
 }

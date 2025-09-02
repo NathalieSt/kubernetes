@@ -1,8 +1,8 @@
 package meta
 
 type ObjectMeta struct {
-	Annotations map[string]string `yaml:"annotations,omitempty"`
-	Labels      map[string]string `yaml:"labels,omitempty"`
-	Name        string            `yaml:"name,omitempty"`
-	Namespace   string            `yaml:"namespace,omitempty"`
+	Annotations map[string]string `yaml:",omitempty"`
+	Labels      map[string]string `yaml:",omitempty"`
+	Name        string            `yaml:",omitempty"`
+	Namespace   string            `yaml:",omitempty"`
 }

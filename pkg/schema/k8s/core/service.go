@@ -5,19 +5,19 @@ import (
 )
 
 type ServicePort struct {
-	Name       string
-	Port       int
-	TargetPort int
+	Name       string `yaml:",omitempty"`
+	Port       int    `yaml:",omitempty"`
+	TargetPort int    `yaml:",omitempty"`
 }
 
 type ServiceSpec struct {
-	Selector map[string]string
-	Ports    []ServicePort
-	Type     string
+	Selector map[string]string `yaml:",omitempty"`
+	Ports    []ServicePort     `yaml:",omitempty"`
+	Type     string            `yaml:",omitempty"`
 }
 
 type Service struct {
-	ApiVersion string
+	ApiVersion string `yaml:",apiVersion"`
 	Kind       string
 	Metadata   meta.ObjectMeta
 	Spec       ServiceSpec

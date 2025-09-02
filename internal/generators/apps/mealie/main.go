@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Println("✅ Getting Meta")
+	fmt.Println("✅ Getting Meta for Mealie")
 	mealieMeta := apps.Mealie
 
 	fmt.Println("✅ Finding project root")

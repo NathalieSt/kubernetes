@@ -6,9 +6,9 @@ import (
 )
 
 type DeploymentSpec struct {
-	Replicas int
-	Selector meta.LabelSelector
-	Template core.PodTemplateSpec
+	Replicas int                  `yaml:",omitempty"`
+	Selector meta.LabelSelector   `yaml:",omitempty"`
+	Template core.PodTemplateSpec `yaml:",omitempty"`
 }
 
 type Deployment struct {
