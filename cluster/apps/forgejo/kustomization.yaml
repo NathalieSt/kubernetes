@@ -4,6 +4,6 @@ metadata:
   name: forgejo
 resources:
 - namespace.yaml
+- repo.yaml
 - release.yaml
-- repository.yaml
 - scaled-object.yaml

@@ -3,42 +3,45 @@ kind: HelmRelease
 metadata:
   name: forgejo
 spec:
-  releaseName: forgejo
+  interval: 24h
   chartRef:
     kind: OCIRepository
-    name: forgejo
-  interval: '24h'
+    name: forgejo-repo
+  timeout: 10m
+  releaseName: forgejo
   install:
     remediation:
       retries: 3
-  timeout: '5m'
-  valuesFrom:
-  - kind: Secret
-    name: postgres-creds-secret
-    valuesKey: password
-    targetPath: gitea.config.database.PASSWD
-    optional: false
   values:
+    deployment:
+      annotations:
+        proxy.istio.io/config: "'{holdApplicationUntilProxyStarts: true}'"
     gitea:
       admin:
         username: Nathi
+      cache:
+        ADAPTER: redis
+        HOST: valkey://valkey.valkey.svc.cluster.local:6379/1
       config:
         database:
           DB_TYPE: postgres
           HOST: postgres-rw.postgres.svc.cluster.local:5432
           NAME: forgejo
-          USER: postgres
-        server:
-          ROOT_URL: https://code.cluster.netbird.selfhosted
       queue:
-        TYPE: redis
         CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
-      cache:
-        ADAPTER: redis
-        HOST: valkey://valkey.valkey.svc.cluster.local:6379/1
+        TYPE: redis
       session:
         PROVIDER: redis
         PROVIDER_CONFIG: valkey://valkey.valkey.svc.cluster.local:6379/2
     persistence:
       enabled: true
       storageClass: nfs-remote
+  valuesFrom:
+  - kind: Secret
+    name: postgres-creds-secret
+    valuesKey: username
+    targetPath: gitea.config.database.USER
+  - kind: Secret
+    name: postgres-creds-secret
+    valuesKey: password
+    targetPath: gitea.config.database.PASSWD

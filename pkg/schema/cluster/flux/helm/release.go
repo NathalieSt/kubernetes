@@ -23,13 +23,29 @@ type ReleaseInstall struct {
 	Remediation ReleaseInstallRemediation `yaml:",omitempty"`
 }
 
+type ReleaseValuesFromKind string
+
+const (
+	ConfigMap ReleaseValuesFromKind = "ConfigMap"
+	Secret    ReleaseValuesFromKind = "Secret"
+)
+
+type ReleaseValuesFrom struct {
+	Kind       ReleaseValuesFromKind `yaml:",omitempty" validate:"required"`
+	Name       string                `yaml:",omitempty" validate:"required"`
+	ValuesKey  string                `yaml:"valuesKey,omitempty"`
+	TargetPath string                `yaml:"targetPath,omitempty"`
+	Optional   bool                  `yaml:",omitempty"`
+}
+
 type ReleaseSpec struct {
-	Interval    string          `yaml:",omitempty"`
-	ChartRef    ReleaseChartRef `yaml:"chartRef,omitempty"`
-	Timeout     string          `yaml:",omitempty"`
-	ReleaseName string          `yaml:"releaseName,omitempty"`
-	Install     ReleaseInstall  `yaml:",omitempty"`
-	Values      map[string]any  `yaml:",omitempty"`
+	Interval    string              `yaml:",omitempty"`
+	ChartRef    ReleaseChartRef     `yaml:"chartRef,omitempty"`
+	Timeout     string              `yaml:",omitempty"`
+	ReleaseName string              `yaml:"releaseName,omitempty"`
+	Install     ReleaseInstall      `yaml:",omitempty"`
+	Values      map[string]any      `yaml:",omitempty"`
+	ValuesFrom  []ReleaseValuesFrom `yaml:"valuesFrom,omitempty"`
 }
 
 type Release struct {

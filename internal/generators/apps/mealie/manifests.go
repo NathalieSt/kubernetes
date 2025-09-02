@@ -42,14 +42,13 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		},
 	}
 
-	deploymentName := fmt.Sprintf("%v-deployment", generatorMeta.Name)
 	volumeName := "mealie-pvc"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Generate: func() any {
 			return apps.NewDeployment(
 				meta.ObjectMeta{
-					Name: deploymentName,
+					Name: generatorMeta.Name,
 					Labels: map[string]string{
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
@@ -173,7 +172,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 					Name: fmt.Sprintf("%v-scaledobject", generatorMeta.Name),
 				}, keda.ScaledObjectSpec{
 					ScaleTargetRef: keda.ScaleTargetRef{
-						Name: deploymentName,
+						Name: generatorMeta.Name,
 					},
 					MinReplicaCount: 0,
 					CooldownPeriod:  300,

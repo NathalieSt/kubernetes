@@ -27,9 +27,9 @@ type Docker struct {
 }
 
 type Helm struct {
-	Url     string
-	Chart   string
-	Version string
+	Url     string `yaml:",omitempty" validate:"required"`
+	Chart   string `yaml:",omitempty"`
+	Version string `yaml:",omitempty"`
 }
 
 type GeneratorType = int

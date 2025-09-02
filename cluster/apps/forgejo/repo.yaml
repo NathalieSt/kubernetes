@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: forgejo-repo
+spec:
+  url: oci://code.forgejo.org/forgejo-helm/forgejo
+  interval: 24h
+  ref:
+    tag: 14.0.0
