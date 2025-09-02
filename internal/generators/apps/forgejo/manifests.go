@@ -86,6 +86,9 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]
 								"HOST":    fmt.Sprintf("%v:%v", infrastructure.Postgres.ClusterUrl, infrastructure.Postgres.Port),
 								"NAME":    "forgejo",
 							},
+							"server": map[string]any{
+								"ROOT_URL": "https://code.cluster.netbird.selfhosted",
+							},
 						},
 						"queue": map[string]any{
 							"TYPE":     "redis",

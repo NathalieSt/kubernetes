@@ -24,6 +24,8 @@ spec:
           DB_TYPE: postgres
           HOST: postgres-rw.postgres.svc.cluster.local:5432
           NAME: forgejo
+        server:
+          ROOT_URL: https://code.cluster.netbird.selfhosted
       queue:
         CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
         TYPE: redis
