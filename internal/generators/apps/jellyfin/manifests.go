@@ -80,7 +80,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			return helm.NewRelease(meta.ObjectMeta{
 				Name: generatorMeta.Name,
 			}, helm.ReleaseSpec{
-				ReleaseName: fmt.Sprintf("%v-release", generatorMeta.Name),
+				ReleaseName: generatorMeta.Name,
 				Interval:    "24h",
 				Timeout:     "10m",
 				ChartRef: helm.ReleaseChartRef{
