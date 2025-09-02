@@ -10,7 +10,7 @@ type VolumeMount struct {
 }
 
 type Port struct {
-	ContainerPort int    `yaml:"containerPath,omitempty"`
+	ContainerPort int    `yaml:"containerPort,omitempty"`
 	Name          string `yaml:",omitempty"`
 }
 
