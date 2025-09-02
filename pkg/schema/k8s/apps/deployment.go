@@ -12,8 +12,8 @@ type DeploymentSpec struct {
 }
 
 type Deployment struct {
-	ApiVersion string `validate:"required"`
-	Kind       string `validate:"required"`
+	ApiVersion string `yaml:"apiVersion,omitempty" validate:"required"`
+	Kind       string `yaml:",omitempty" validate:"required"`
 	Metadata   meta.ObjectMeta
 	Spec       DeploymentSpec
 }

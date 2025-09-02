@@ -4,7 +4,7 @@ metadata:
   name: mealie
 resources:
 - namespace.yaml
-- pvc.yaml
 - deployment.yaml
+- pvc.yaml
 - service.yaml
 - scaled-object.yaml

@@ -5,6 +5,7 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
@@ -41,13 +42,14 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		},
 	}
 
+	deploymentName := fmt.Sprintf("%v-deployment", generatorMeta.Name)
 	volumeName := "mealie-pvc"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Generate: func() any {
 			return apps.NewDeployment(
 				meta.ObjectMeta{
-					Name: generatorMeta.Name,
+					Name: deploymentName,
 					Labels: map[string]string{
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
@@ -70,7 +72,7 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 						Spec: core.PodSpec{
 							Containers: []core.Container{
 								{
-									Name:  fmt.Sprintf("%v-deployment", generatorMeta.Name),
+									Name:  generatorMeta.Name,
 									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
 									Ports: []core.Port{
 										{
@@ -143,6 +145,10 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 			return core.NewService(
 				meta.ObjectMeta{
 					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
 						"app.kubernetes.io/name": generatorMeta.Name,
@@ -152,6 +158,29 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
 							Port:       9000,
 							TargetPort: 9000,
+						},
+					},
+				},
+			)
+		},
+	}
+
+	scaledObject := utils.ManifestConfig{
+		Filename: "scaled-object.yaml",
+		Generate: func() any {
+			return keda.NewScaledObject(
+				meta.ObjectMeta{
+					Name: fmt.Sprintf("%v-scaledobject", generatorMeta.Name),
+				}, keda.ScaledObjectSpec{
+					ScaleTargetRef: keda.ScaleTargetRef{
+						Name: deploymentName,
+					},
+					MinReplicaCount: 0,
+					CooldownPeriod:  300,
+					Triggers: []keda.ScaledObjectTrigger{
+						{
+							ScalerType: keda.Cron,
+							Metadata:   generatorMeta.KedaScaling,
 						},
 					},
 				},
@@ -171,10 +200,11 @@ func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 					deployment.Filename,
 					pvc.Filename,
 					service.Filename,
+					scaledObject.Filename,
 				},
 			)
 		},
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject})
 }

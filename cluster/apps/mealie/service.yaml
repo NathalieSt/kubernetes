@@ -6,9 +6,9 @@ metadata:
     app.kubernetes.io/version: v3.0.2
   name: mealie
 spec:
-  ports:
-  - name: mealie
-    port: 9000
-    targetPort: 9000
   selector:
     app.kubernetes.io/name: mealie
+  ports:
+  - name: http-mealie
+    port: 9000
+    targetport: 9000

@@ -13,7 +13,7 @@ schema ClusterService:
     keda_scaling?: keda.ScaledObjectTriggerMeta
 */
 import (
-	"kubernetes/pkg/schema/cluster/monitoring/keda"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 )
 
 type VirtualServiceConfig struct{}
@@ -46,10 +46,10 @@ type GeneratorMeta struct {
 	EntityType          GeneratorType
 	ClusterUrl          string
 	Port                int
-	Docker              *Docker
-	Helm                *Helm
-	Caddy               *Caddy
-	VirtualService      *VirtualServiceConfig
-	KedaScaling         *keda.ScaledObject
+	Docker              Docker
+	Helm                Helm
+	Caddy               Caddy
+	VirtualService      VirtualServiceConfig
+	KedaScaling         keda.ScaledObjectTriggerMeta
 	DependentGenerators []string
 }

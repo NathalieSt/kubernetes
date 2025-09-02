@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+	// FIXME: remove when done testing and optimizing? performance
+	defer utils.Timer()()
+
 	fmt.Println("✅ Getting Meta for Mealie")
 	mealieMeta := apps.Mealie
 

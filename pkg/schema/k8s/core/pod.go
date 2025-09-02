@@ -33,7 +33,7 @@ type SecretKeyRef struct {
 }
 
 type ValueFrom struct {
-	SecretKeyRef SecretKeyRef `yaml:",omitempty"`
+	SecretKeyRef SecretKeyRef `yaml:"secretKeyRef,omitempty"`
 }
 
 type PodSpec struct {

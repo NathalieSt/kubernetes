@@ -17,7 +17,7 @@ type ServiceSpec struct {
 }
 
 type Service struct {
-	ApiVersion string `yaml:",apiVersion"`
+	ApiVersion string `yaml:"apiVersion,"`
 	Kind       string
 	Metadata   meta.ObjectMeta
 	Spec       ServiceSpec

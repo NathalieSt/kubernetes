@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/name: mealie
     app.kubernetes.io/version: v3.0.2
-  name: mealie
+  name: mealie-deployment
 spec:
   replicas: 1
   selector:
@@ -17,13 +17,24 @@ spec:
         app.kubernetes.io/version: v3.0.2
     spec:
       containers:
-      - env:
+      - image: ghcr.io/mealie-recipes/mealie:v3.0.2
+        name: mealie
+        ports:
+        - containerPath: 9000
+          name: mealie
+        volumeMounts:
+        - mountPath: /app/data/
+          name: mealie-pvc
+        env:
         - name: POSTGRES_SERVER
           value: postgres-rw.postgres.svc.cluster.local
         - name: POSTGRES_PORT
-          value: '5432'
+          value: "5432"
         - name: POSTGRES_USERNAME
-          value: postgres
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -33,14 +44,6 @@ spec:
           value: mealie
         - name: BASE_URL
           value: https://mealie.cluster.netbird.selfhosted
-        image: ghcr.io/mealie-recipes/mealie:v3.0.2
-        name: mealie
-        ports:
-        - containerPort: 9000
-          name: mealie
-        volumeMounts:
-        - mountPath: /app/data/
-          name: mealie-pvc
       volumes:
       - name: mealie-pvc
         persistentVolumeClaim:
