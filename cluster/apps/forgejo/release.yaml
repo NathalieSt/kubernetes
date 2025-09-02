@@ -25,7 +25,8 @@ spec:
           HOST: postgres-rw.postgres.svc.cluster.local:5432
           NAME: forgejo
       podAnnotations:
-        proxy.istio.io/config: "'{\"holdApplicationUntilProxyStarts\": true}'"
+        proxy.istio.io/config:
+          holdApplicationUntilProxyStarts: true
       queue:
         CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
         TYPE: redis
