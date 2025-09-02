@@ -58,7 +58,7 @@ var Forgejo = generator.GeneratorMeta{
 	KedaScaling: keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 9 * * *",
-		End:             "0 24 * * *",
+		End:             "0 23 * * *",
 		DesiredReplicas: "1",
 	},
 	DependsOnGenerators: []string{},
