@@ -13,7 +13,7 @@ import (
 	"kubernetes/pkg/schema/kustomize"
 )
 
-func CreateMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename: "namespace.yaml",
 		Generate: func() any {

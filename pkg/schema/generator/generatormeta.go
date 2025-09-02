@@ -28,6 +28,7 @@ type Docker struct {
 
 type Helm struct {
 	Url     string
+	Chart   string
 	Version string
 }
 
@@ -51,5 +52,5 @@ type GeneratorMeta struct {
 	Caddy               Caddy
 	VirtualService      VirtualServiceConfig
 	KedaScaling         keda.ScaledObjectTriggerMeta
-	DependentGenerators []string
+	DependsOnGenerators []string
 }
