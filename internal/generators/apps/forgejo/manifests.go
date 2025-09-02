@@ -100,7 +100,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							"PROVIDER_CONFIG": "valkey://valkey.valkey.svc.cluster.local:6379/2",
 						},
 						"podAnnotations": map[string]any{
-							"proxy.istio.io/config": "'{holdApplicationUntilProxyStarts: true}'",
+							"proxy.istio.io/config": "{holdApplicationUntilProxyStarts: true}",
 						},
 					},
 					"persistence": map[string]any{
