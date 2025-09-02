@@ -41,7 +41,7 @@ type Release struct {
 
 func NewRelease(meta meta.ObjectMeta, spec ReleaseSpec) Release {
 	return Release{
-		ApiVersion: "source.toolkit.fluxcd.io/v1",
+		ApiVersion: "helm.toolkit.fluxcd.io/v2",
 		Kind:       "HelmRelease",
 		Metadata:   meta,
 		Spec:       spec,

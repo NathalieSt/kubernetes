@@ -3,21 +3,16 @@ kind: HelmRelease
 metadata:
   name: jellyfin
 spec:
-  releaseName: jellyfin
-  chart:
-    spec:
-      chart: jellyfin
-      version: '2.3.0'
-      sourceRef:
-        kind: HelmRepository
-        name: jellyfin
-      interval: '24h'
-  interval: '24h'
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: jellyfin-chart
+  timeout: 10m
+  releaseName: jellyfin-release
   install:
     remediation:
       retries: 3
-  timeout: '5m'
   values:
     persistence:
       media:
-        existingClaim: jellyfin-library-storage-pvc
+        existingClaim: jellyfin-pvc
