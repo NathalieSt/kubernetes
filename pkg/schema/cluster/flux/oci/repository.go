@@ -21,7 +21,7 @@ type Repo struct {
 
 func NewRepo(meta meta.ObjectMeta, spec RepoSpec) Repo {
 	return Repo{
-		ApiVersion: "source.toolkit.fluxcd.io/v1",
+		ApiVersion: "source.toolkit.fluxcd.io/v1beta2",
 		Kind:       "OCIRepository",
 		Metadata:   meta,
 		Spec:       spec,
