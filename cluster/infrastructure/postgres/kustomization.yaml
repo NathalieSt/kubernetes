@@ -8,3 +8,4 @@ resources:
 - forgejo-db.yaml
 - dawarich-db.yaml
 - keycloak-db.yaml
+- auth-policy.yaml
