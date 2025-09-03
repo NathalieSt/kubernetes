@@ -1,6 +1,9 @@
 package helm
 
-import "kubernetes/pkg/schema/k8s/meta"
+import (
+	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
+)
 
 type ReleaseChartRefKind string
 
@@ -49,17 +52,18 @@ type ReleaseSpec struct {
 }
 
 type Release struct {
-	ApiVersion string          `yaml:"apiVersion" validate:"required"`
-	Kind       string          `validate:"required"`
-	Metadata   meta.ObjectMeta `validate:"required"`
-	Spec       ReleaseSpec     `validate:"required"`
+	shared.CommonK8sResourceWithSpec[ReleaseSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewRelease(meta meta.ObjectMeta, spec ReleaseSpec) Release {
 	return Release{
-		ApiVersion: "helm.toolkit.fluxcd.io/v2",
-		Kind:       "HelmRelease",
-		Metadata:   meta,
-		Spec:       spec,
+		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[ReleaseSpec]{
+			CommonK8sResource: shared.CommonK8sResource{
+				ApiVersion: "helm.toolkit.fluxcd.io/v2",
+				Kind:       "HelmRelease",
+				Metadata:   meta,
+			},
+			Spec: spec,
+		},
 	}
 }

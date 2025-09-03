@@ -1,12 +1,10 @@
 package core
 
 import (
-	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
 )
 
 type ConfigMap struct {
-	ApiVersion string `yaml:"apiVersion,omitempty" validate:"required"`
-	Kind       string `yaml:"kind,omitempty" validate:"required"`
-	Metadata   meta.ObjectMeta
-	Data       map[string]string
+	shared.CommonK8sResource `yaml:",omitempty,inline" validate:"required"`
+	Data                     map[string]string
 }

@@ -1,7 +1,7 @@
 package core
 
 import (
-	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
 )
 
 type VolumeMount struct {
@@ -42,8 +42,5 @@ type PodSpec struct {
 }
 
 type Pod struct {
-	ApiVersion string
-	Kind       string
-	Metadata   meta.ObjectMeta
-	Spec       PodSpec
+	shared.CommonK8sResourceWithSpec[PodSpec] `yaml:",omitempty,inline" validate:"required"`
 }

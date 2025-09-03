@@ -1,6 +1,9 @@
 package keda
 
-import "kubernetes/pkg/schema/k8s/meta"
+import (
+	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
+)
 
 type ScaleTargetRef struct {
 	ApiVersion string `yaml:"apiVersion,omitempty"`
@@ -34,17 +37,18 @@ type ScaledObjectSpec struct {
 }
 
 type ScaledObject struct {
-	ApiVersion string `yaml:"apiVersion" validate:"required"`
-	Kind       string
-	Metadata   meta.ObjectMeta
-	Spec       ScaledObjectSpec
+	shared.CommonK8sResourceWithSpec[ScaledObjectSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewScaledObject(meta meta.ObjectMeta, spec ScaledObjectSpec) ScaledObject {
 	return ScaledObject{
-		ApiVersion: "keda.sh/v1alpha1",
-		Kind:       "ScaledObject",
-		Metadata:   meta,
-		Spec:       spec,
+		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[ScaledObjectSpec]{
+			CommonK8sResource: shared.CommonK8sResource{
+				ApiVersion: "keda.sh/v1alpha1",
+				Kind:       "ScaledObject",
+				Metadata:   meta,
+			},
+			Spec: spec,
+		},
 	}
 }

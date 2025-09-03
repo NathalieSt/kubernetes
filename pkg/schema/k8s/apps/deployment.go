@@ -3,6 +3,7 @@ package apps
 import (
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
 )
 
 type DeploymentSpec struct {
@@ -12,17 +13,18 @@ type DeploymentSpec struct {
 }
 
 type Deployment struct {
-	ApiVersion string `yaml:"apiVersion,omitempty" validate:"required"`
-	Kind       string `yaml:",omitempty" validate:"required"`
-	Metadata   meta.ObjectMeta
-	Spec       DeploymentSpec
+	shared.CommonK8sResourceWithSpec[DeploymentSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewDeployment(meta meta.ObjectMeta, spec DeploymentSpec) Deployment {
 	return Deployment{
-		ApiVersion: "apps/v1",
-		Kind:       "Deployment",
-		Metadata:   meta,
-		Spec:       spec,
+		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[DeploymentSpec]{
+			CommonK8sResource: shared.CommonK8sResource{
+				ApiVersion: "apps/v1",
+				Kind:       "Deployment",
+				Metadata:   meta,
+			},
+			Spec: spec,
+		},
 	}
 }

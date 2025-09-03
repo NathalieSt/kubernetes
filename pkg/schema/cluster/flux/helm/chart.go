@@ -17,7 +17,10 @@ spec:
   version: '5.*'
 */
 
-import "kubernetes/pkg/schema/k8s/meta"
+import (
+	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
+)
 
 type ChartReconcileStrategy string
 
@@ -48,17 +51,18 @@ type ChartSpec struct {
 }
 
 type Chart struct {
-	ApiVersion string          `yaml:"apiVersion" validate:"required"`
-	Kind       string          `validate:"required"`
-	Metadata   meta.ObjectMeta `validate:"required"`
-	Spec       ChartSpec       `validate:"required"`
+	shared.CommonK8sResourceWithSpec[ChartSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewChart(meta meta.ObjectMeta, spec ChartSpec) Chart {
 	return Chart{
-		ApiVersion: "source.toolkit.fluxcd.io/v1",
-		Kind:       "HelmChart",
-		Metadata:   meta,
-		Spec:       spec,
+		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[ChartSpec]{
+			CommonK8sResource: shared.CommonK8sResource{
+				ApiVersion: "source.toolkit.fluxcd.io/v1",
+				Kind:       "HelmChart",
+				Metadata:   meta,
+			},
+			Spec: spec,
+		},
 	}
 }

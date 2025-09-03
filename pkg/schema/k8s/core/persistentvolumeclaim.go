@@ -2,6 +2,7 @@ package core
 
 import (
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
 )
 
 type VolumeResourceRequirements struct {
@@ -17,17 +18,18 @@ type PersistentVolumeClaimSpec struct {
 }
 
 type PersistentVolumeClaim struct {
-	ApiVersion string `yaml:"apiVersion," validate:"required"`
-	Kind       string `validate:"required"`
-	Metadata   meta.ObjectMeta
-	Spec       PersistentVolumeClaimSpec
+	shared.CommonK8sResourceWithSpec[PersistentVolumeClaimSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewPersistentVolumeClaim(meta meta.ObjectMeta, spec PersistentVolumeClaimSpec) PersistentVolumeClaim {
 	return PersistentVolumeClaim{
-		ApiVersion: "v1",
-		Kind:       "PersistentVolumeClaim",
-		Metadata:   meta,
-		Spec:       spec,
+		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[PersistentVolumeClaimSpec]{
+			CommonK8sResource: shared.CommonK8sResource{
+				ApiVersion: "v1",
+				Kind:       "PersistentVolumeClaim",
+				Metadata:   meta,
+			},
+			Spec: spec,
+		},
 	}
 }

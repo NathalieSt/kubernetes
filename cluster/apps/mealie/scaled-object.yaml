@@ -4,7 +4,7 @@ metadata:
   name: mealie-scaledobject
 spec:
   scaleTargetRef:
-    name: mealie-deployment
+    name: mealie
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:

@@ -1,6 +1,9 @@
 package helm
 
-import "kubernetes/pkg/schema/k8s/meta"
+import (
+	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
+)
 
 type RepoType string
 
@@ -16,17 +19,18 @@ type RepoSpec struct {
 }
 
 type Repo struct {
-	ApiVersion string          `yaml:"apiVersion" validate:"required"`
-	Kind       string          `validate:"required"`
-	Metadata   meta.ObjectMeta `validate:"required"`
-	Spec       RepoSpec        `validate:"required"`
+	shared.CommonK8sResourceWithSpec[RepoSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewRepo(meta meta.ObjectMeta, spec RepoSpec) Repo {
 	return Repo{
-		ApiVersion: "source.toolkit.fluxcd.io/v1",
-		Kind:       "HelmRepository",
-		Metadata:   meta,
-		Spec:       spec,
+		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[RepoSpec]{
+			CommonK8sResource: shared.CommonK8sResource{
+				ApiVersion: "source.toolkit.fluxcd.io/v1",
+				Kind:       "HelmRepository",
+				Metadata:   meta,
+			},
+			Spec: spec,
+		},
 	}
 }

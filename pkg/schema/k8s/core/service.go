@@ -2,6 +2,7 @@ package core
 
 import (
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/shared"
 )
 
 type ServicePort struct {
@@ -17,17 +18,18 @@ type ServiceSpec struct {
 }
 
 type Service struct {
-	ApiVersion string `yaml:"apiVersion,"`
-	Kind       string
-	Metadata   meta.ObjectMeta
-	Spec       ServiceSpec
+	shared.CommonK8sResourceWithSpec[ServiceSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewService(meta meta.ObjectMeta, spec ServiceSpec) Service {
 	return Service{
-		ApiVersion: "v1",
-		Kind:       "Service",
-		Metadata:   meta,
-		Spec:       spec,
+		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[ServiceSpec]{
+			CommonK8sResource: shared.CommonK8sResource{
+				ApiVersion: "v1",
+				Kind:       "Service",
+				Metadata:   meta,
+			},
+			Spec: spec,
+		},
 	}
 }
