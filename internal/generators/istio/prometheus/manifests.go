@@ -207,7 +207,6 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 		},
 		[]authorization.Rule{
 			{
-				APIGroups: []string{},
 				Resources: []string{
 					"nodes",
 					"nodes/proxy",
@@ -220,7 +219,6 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 					"list",
 					"watch",
 				},
-				NonResourceURLs: []string{},
 			},
 			{
 				APIGroups: []string{"extensions"},
@@ -230,7 +228,10 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 					"list",
 					"watch",
 				},
+			},
+			{
 				NonResourceURLs: []string{"/metrics"},
+				Verbs:           []string{"get"},
 			},
 		},
 	)
