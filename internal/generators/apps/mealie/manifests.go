@@ -164,7 +164,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
-			pvc.Filename,
+			namespace.Filename,
 			deployment.Filename,
 			pvc.Filename,
 			service.Filename,
