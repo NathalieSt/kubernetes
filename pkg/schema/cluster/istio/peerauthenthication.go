@@ -45,8 +45,8 @@ type PeerAuthenthicationSelector struct {
 }
 
 type PeerAuthenthicationSpec struct {
-	Selector PeerAuthenthicationSelector
-	MTLS     PeerAuthenthicationmTLS
+	Selector PeerAuthenthicationSelector `yaml:",omitempty"`
+	MTLS     PeerAuthenthicationmTLS     `yaml:",omitempty"`
 }
 
 type PeerAuthenthication struct {

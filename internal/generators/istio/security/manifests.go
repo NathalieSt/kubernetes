@@ -10,7 +10,7 @@ import (
 func createSecurityManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 
 	peerAuthenthication := utils.ManifestConfig{
-		Filename: "peer-authethication.yaml",
+		Filename: "peer-authenthication.yaml",
 		Manifests: []any{
 			istio.NewPeerAuthenthication(meta.ObjectMeta{
 				Name: "enforce-mtls-in-mesh",
