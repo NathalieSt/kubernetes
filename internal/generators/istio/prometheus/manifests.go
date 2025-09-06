@@ -207,6 +207,7 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 		},
 		[]authorization.Rule{
 			{
+				APIGroups: []string{""},
 				Resources: []string{
 					"nodes",
 					"nodes/proxy",
