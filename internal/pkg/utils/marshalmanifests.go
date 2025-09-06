@@ -18,7 +18,7 @@ func MarshalManifests(manifestConfigs []ManifestConfig) map[string][]byte {
 		manifestsBytes := []byte{}
 
 		for _, manifest := range cfg.Manifests {
-			data, err := yaml.Marshal(manifest)
+			data, err := yaml.MarshalWithOptions(manifest, yaml.UseLiteralStyleIfMultiline(true))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return nil

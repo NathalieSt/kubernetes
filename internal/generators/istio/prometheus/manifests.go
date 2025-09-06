@@ -20,7 +20,7 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 					Name: pvcName,
 				},
 				core.PersistentVolumeClaimSpec{
-					AccessModes: []string{"ReadWriteM[]any"},
+					AccessModes: []string{"ReadWriteMany"},
 					Resources: core.VolumeResourceRequirements{
 						Requests: map[string]string{
 							"storage": "60Gi",
@@ -41,42 +41,32 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 				},
 				map[string]string{
 					"prometheus.yml": `
-global:
-  scrape_interval: 30s
-  evaluation_interval: 30s
+    global:
+      scrape_interval: 30s
+      evaluation_interval: 30s
 
-scrape_configs:
-  - job_name: 'istiod'
-    kubernetes_sd_configs:
-      - role: endpoints
-        namespaces:
-          names:
-            - istio-system
-    relabel_configs:
-      - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
-        action: keep
-        regex: istiod;http-monitoring
-    scheme: https
-    tls_config:
-      ca_file: /etc/prom-certs/root-cert.pem
-      cert_file: /etc/prom-certs/cert-chain.pem
-      key_file: /etc/prom-certs/key.pem
-      insecure_skip_verify: true
+    scrape_configs:
+      - job_name: 'istiod'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - istio-system
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: istiod;http-monitoring
+        scheme: http
 
-  - job_name: 'envoy-stats'
-    metrics_path: /stats/prometheus
-    kubernetes_sd_configs:
-      - role: pod
-    relabel_configs:
-      - source_labels: [__meta_kubernetes_pod_container_port_name]
-        action: keep
-        regex: '.*-envoy-prom'
-    scheme: https
-    tls_config:
-      ca_file: /etc/prom-certs/root-cert.pem
-      cert_file: /etc/prom-certs/cert-chain.pem
-      key_file: /etc/prom-certs/key.pem
-      insecure_skip_verify: true
+      - job_name: 'envoy-stats'
+        metrics_path: /stats/prometheus
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_container_port_name]
+            action: keep
+            regex: '.*-envoy-prom'
+        scheme: http
         `,
 				},
 			),
@@ -109,14 +99,13 @@ scrape_configs:
 							Labels: map[string]string{
 								"app.kubernetes.io/name":    generatorMeta.Name,
 								"app.kubernetes.io/version": generatorMeta.Docker.Version,
+								"sidecar.istio.io/inject":   "true",
 							},
 							Annotations: map[string]string{
 								"traffic.sidecar.istio.io/includeInboundPorts":     "",
 								"traffic.sidecar.istio.io/includeOutboundIPRanges": "",
-								"proxy.istio.io/config": `
-                        proxyMetadata:
-                          OUTPUT_CERTS: /etc/istio-output-certs
-                    `,
+								"proxy.istio.io/config": `proxyMetadata:
+	OUTPUT_CERTS: /etc/istio-output-certs`,
 								"sidecar.istio.io/userVolumeMount": "[{\"name\": \"istio-certs\", \"mountPath\": \"/etc/istio-output-certs\"}]",
 							},
 						},

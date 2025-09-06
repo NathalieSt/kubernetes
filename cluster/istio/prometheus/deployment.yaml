@@ -1,10 +1,11 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/version: v3.5.0
-  name: prometheus-deployment
+  name: prometheus
 spec:
   replicas: 1
   selector:
@@ -13,22 +14,22 @@ spec:
   template:
     metadata:
       annotations:
-        traffic.sidecar.istio.io/includeInboundPorts: ''
-        traffic.sidecar.istio.io/includeOutboundIPRanges: ''
         proxy.istio.io/config: |-
           proxyMetadata:
-            OUTPUT_CERTS: /etc/istio-output-certs
-        sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]'
+          	OUTPUT_CERTS: /etc/istio-output-certs
+        sidecar.istio.io/userVolumeMount: "[{\"name\": \"istio-certs\", \"mountPath\": \"/etc/istio-output-certs\"}]"
+        traffic.sidecar.istio.io/includeInboundPorts: ""
+        traffic.sidecar.istio.io/includeOutboundIPRanges: ""
       labels:
         app.kubernetes.io/name: prometheus
         app.kubernetes.io/version: v3.5.0
-        sidecar.istio.io/inject: 'true'
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - args:
-        - '--storage.tsdb.retention.time=30d'
-        - '--config.file=/etc/prometheus/prometheus.yml'
-        - '--storage.tsdb.path=/prometheus/'
+        - --storage.tsdb.retention.time=30d
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --storage.tsdb.path=/prometheus/
         image: prom/prometheus:v3.5.0
         name: prometheus
         ports:
@@ -36,22 +37,23 @@ spec:
           name: prometheus
         volumeMounts:
         - mountPath: /etc/prometheus
-          name: prometheus-config
+          name: prometheus-configmap-volume
         - mountPath: /prometheus/
-          name: prometheus-storage
+          name: mealie-pvc-volume
         - mountPath: /etc/prom-certs/
           name: istio-certs
-      securityContext:
-        fsGroup: 65534
-        runAsGroup: 65534
-        runAsUser: 65534
       volumes:
-      - configMap:
-          name: prometheus-configmap
-        name: prometheus-config
-      - name: prometheus-storage
+      - name: mealie-pvc-volume
         persistentVolumeClaim:
           claimName: prometheus-pvc
-      - emptyDir:
+      - name: prometheus-configmap-volume
+        configMap:
+          name: prometheus-configmap
+          items: []
+      - name: istio-certs
+        emptyDir:
           medium: Memory
-        name: istio-certs
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
