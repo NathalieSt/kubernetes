@@ -1,13 +1,12 @@
 package main
 
 import (
-	"kubernetes/internal/generators/istio"
 	"kubernetes/pkg/schema/generator"
 )
 
 var Ingress = generator.GeneratorMeta{
 	Name:          "istio-ingress",
-	Namespace:     istio.Namespace,
+	Namespace:     "istio-ingress",
 	GeneratorType: generator.Istio,
 	Helm: generator.Helm{
 		Chart:   "gateway",

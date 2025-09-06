@@ -11,6 +11,11 @@ import (
 )
 
 func createIngressManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+	namespace := utils.ManifestConfig{
+		Filename:  "namespace.yaml",
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+	}
+
 	chartName := fmt.Sprintf("%v-chart", generatorMeta.Name)
 	chart := utils.ManifestConfig{
 		Filename: "chart.yaml",
@@ -53,6 +58,14 @@ func createIngressManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							Retries: 3,
 						},
 					},
+					Values: map[string]any{
+						"autoscaling": map[string]any{
+							"maxReplicas": 2,
+						},
+						"service": map[string]any{
+							"loadBalancerIP": "10.43.164.134",
+						},
+					},
 				},
 			),
 		},
@@ -68,10 +81,11 @@ func createIngressManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				[]string{
 					chart.Filename,
 					release.Filename,
+					namespace.Filename,
 				},
 			),
 		},
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, chart, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, chart, release})
 }
