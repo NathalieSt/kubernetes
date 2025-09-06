@@ -246,7 +246,7 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 					Name: fmt.Sprintf("%v-clusterrolebinding", generatorMeta.Name),
 				},
 				authorization.RoleRef{
-					APIGroup: clusterRole.ApiVersion,
+					APIGroup: "rbac.authorization.k8s.io",
 					Kind:     clusterRole.Kind,
 					Name:     clusterRole.Metadata.Name,
 				},
