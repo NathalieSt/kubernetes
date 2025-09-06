@@ -15,8 +15,8 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Jellyfin,
-		OutputDir:       filepath.Join(rootDir, "/cluster/apps/jellyfin/"),
+		Meta:            Networking,
+		OutputDir:       filepath.Join(rootDir, "/cluster/istio/networking/"),
 		CreateManifests: createJellyfinManifests,
 	})
 }

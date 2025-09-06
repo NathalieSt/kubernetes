@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+
 	fmt.Println("✅ Finding project root")
 	rootDir, err := utils.FindRoot()
 	if err != nil {
@@ -15,8 +16,8 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Jellyfin,
-		OutputDir:       filepath.Join(rootDir, "/cluster/apps/jellyfin/"),
-		CreateManifests: createJellyfinManifests,
+		Meta:            Prometheus,
+		OutputDir:       filepath.Join(rootDir, "/cluster/istio/prometheus/"),
+		CreateManifests: createPrometheusManifests,
 	})
 }

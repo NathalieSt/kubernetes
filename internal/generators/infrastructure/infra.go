@@ -5,9 +5,9 @@ import (
 )
 
 var Postgres = generator.GeneratorMeta{
-	Name:       "postgres",
-	Namespace:  "postgres",
-	EntityType: generator.Infrastructure,
-	ClusterUrl: "postgres-rw.postgres.svc.cluster.local",
-	Port:       5432,
+	Name:          "postgres",
+	Namespace:     "postgres",
+	GeneratorType: generator.Infrastructure,
+	ClusterUrl:    "postgres-rw.postgres.svc.cluster.local",
+	Port:          5432,
 }

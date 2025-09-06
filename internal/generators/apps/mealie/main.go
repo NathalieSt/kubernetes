@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators/apps"
 	"kubernetes/internal/pkg/utils"
 	"path/filepath"
 )
@@ -10,9 +9,6 @@ import (
 func main() {
 	// FIXME: remove when done testing and optimizing? performance
 	defer utils.Timer()()
-
-	fmt.Println("✅ Getting Meta for Mealie")
-	mealieMeta := apps.Mealie
 
 	fmt.Println("✅ Finding project root")
 	rootDir, err := utils.FindRoot()
@@ -22,7 +18,7 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            mealieMeta,
+		Meta:            Mealie,
 		OutputDir:       filepath.Join(rootDir, "/cluster/apps/mealie/"),
 		CreateManifests: createMealieManifests,
 	})

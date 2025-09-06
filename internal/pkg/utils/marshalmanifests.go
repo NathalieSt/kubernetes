@@ -7,19 +7,27 @@ import (
 )
 
 type ManifestConfig struct {
-	Filename string
-	Generate func() any
+	Filename  string
+	Manifests []any
 }
 
 func MarshalManifests(manifestConfigs []ManifestConfig) map[string][]byte {
 	result := make(map[string][]byte)
 	for _, cfg := range manifestConfigs {
-		data, err := yaml.Marshal(cfg.Generate())
-		if err != nil {
-			fmt.Println("Error:", err)
-			return nil
+
+		manifestsBytes := []byte{}
+
+		for _, manifest := range cfg.Manifests {
+			data, err := yaml.Marshal(manifest)
+			if err != nil {
+				fmt.Println("Error:", err)
+				return nil
+			}
+			manifestsBytes = append(manifestsBytes, []byte("---\n")...)
+			manifestsBytes = append(manifestsBytes, data...)
 		}
-		result[cfg.Filename] = data
+
+		result[cfg.Filename] = manifestsBytes
 	}
 	return result
 }

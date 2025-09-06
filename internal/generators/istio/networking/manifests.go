@@ -5,6 +5,7 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
@@ -12,8 +13,15 @@ import (
 
 func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
-		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Filename: "namespace.yaml",
+		Manifests: []any{
+			core.NewNamespace(meta.ObjectMeta{
+				Name: generatorMeta.Namespace,
+				Labels: map[string]string{
+					"istio-injection": "enabled",
+				},
+			}),
+		},
 	}
 
 	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
@@ -38,12 +46,11 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Manifests: []any{
 			helm.NewRepo(meta.ObjectMeta{
 				Name: repoName,
-			},
-				helm.RepoSpec{
-					RepoType: helm.Default,
-					Url:      generatorMeta.Helm.Url,
-					Interval: "24h",
-				}),
+			}, helm.RepoSpec{
+				RepoType: helm.Default,
+				Url:      generatorMeta.Helm.Url,
+				Interval: "24h",
+			}),
 		},
 	}
 
@@ -71,34 +78,52 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Manifests: []any{
 			helm.NewRelease(meta.ObjectMeta{
 				Name: generatorMeta.Name,
-			},
-				helm.ReleaseSpec{
-					ReleaseName: generatorMeta.Name,
-					Interval:    "24h",
-					Timeout:     "10m",
-					ChartRef: helm.ReleaseChartRef{
-						Kind: helm.HelmChart,
-						Name: chartName,
+			}, helm.ReleaseSpec{
+				ReleaseName: generatorMeta.Name,
+				Interval:    "24h",
+				Timeout:     "10m",
+				ChartRef: helm.ReleaseChartRef{
+					Kind: helm.HelmChart,
+					Name: chartName,
+				},
+				Install: helm.ReleaseInstall{
+					Remediation: helm.ReleaseInstallRemediation{
+						Retries: 3,
 					},
-					Install: helm.ReleaseInstall{
-						Remediation: helm.ReleaseInstallRemediation{
-							Retries: 3,
+				},
+				Values: map[string]any{
+					"persistence": map[string]any{
+						"media": map[string]any{
+							"existingClaim": pvcName,
 						},
 					},
-					Values: map[string]any{
-						"persistence": map[string]any{
-							"media": map[string]any{
-								"existingClaim": pvcName,
-							},
-						},
-					},
-				}),
+				},
+			}),
 		},
 	}
 
+	deploymentName := "jellyfin"
 	scaledObject := utils.ManifestConfig{
-		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+		Filename: "scaled-object.yaml",
+		Manifests: []any{
+			keda.NewScaledObject(
+				meta.ObjectMeta{
+					Name: fmt.Sprintf("%v-scaledobject", generatorMeta.Name),
+				}, keda.ScaledObjectSpec{
+					ScaleTargetRef: keda.ScaleTargetRef{
+						Name: deploymentName,
+					},
+					MinReplicaCount: 0,
+					CooldownPeriod:  300,
+					Triggers: []keda.ScaledObjectTrigger{
+						{
+							ScalerType: keda.Cron,
+							Metadata:   generatorMeta.KedaScaling,
+						},
+					},
+				},
+			),
+		},
 	}
 
 	kustomization := utils.ManifestConfig{

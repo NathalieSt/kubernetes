@@ -5,32 +5,23 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
-	"kubernetes/pkg/schema/kustomize"
 )
 
 func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
-		Filename: "namespace.yaml",
-		Generate: func() any {
-			return core.NewNamespace(meta.ObjectMeta{
-				Name: generatorMeta.Namespace,
-				Labels: map[string]string{
-					"istio-injection": "enabled",
-				},
-			})
-		},
+		Filename:  "namespace.yaml",
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
 	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
 	pvc := utils.ManifestConfig{
 		Filename: "pvc.yaml",
-		Generate: func() any {
-			return core.NewPersistentVolumeClaim(meta.ObjectMeta{
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
 				Name: pvcName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
@@ -38,15 +29,16 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 					"storage": "100Gi",
 				}},
 				StorageClassName: generators.NFSLocalClass,
-			})
+			},
+			),
 		},
 	}
 
 	volumeName := "mealie-pvc"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
-		Generate: func() any {
-			return apps.NewDeployment(
+		Manifests: []any{
+			apps.NewDeployment(
 				meta.ObjectMeta{
 					Name: generatorMeta.Name,
 					Labels: map[string]string{
@@ -134,14 +126,14 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 						},
 					},
 				},
-			)
+			),
 		},
 	}
 
 	service := utils.ManifestConfig{
 		Filename: "service.yaml",
-		Generate: func() any {
-			return core.NewService(
+		Manifests: []any{
+			core.NewService(
 				meta.ObjectMeta{
 					Name: generatorMeta.Name,
 					Labels: map[string]string{
@@ -160,49 +152,24 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 						},
 					},
 				},
-			)
+			),
 		},
 	}
 
 	scaledObject := utils.ManifestConfig{
-		Filename: "scaled-object.yaml",
-		Generate: func() any {
-			return keda.NewScaledObject(
-				meta.ObjectMeta{
-					Name: fmt.Sprintf("%v-scaledobject", generatorMeta.Name),
-				}, keda.ScaledObjectSpec{
-					ScaleTargetRef: keda.ScaleTargetRef{
-						Name: generatorMeta.Name,
-					},
-					MinReplicaCount: 0,
-					CooldownPeriod:  300,
-					Triggers: []keda.ScaledObjectTrigger{
-						{
-							ScalerType: keda.Cron,
-							Metadata:   generatorMeta.KedaScaling,
-						},
-					},
-				},
-			)
-		},
+		Filename:  "scaled-object.yaml",
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
 	}
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
-		Generate: func() any {
-			return kustomize.NewKustomization(
-				meta.ObjectMeta{
-					Name: generatorMeta.Name,
-				},
-				[]string{
-					namespace.Filename,
-					deployment.Filename,
-					pvc.Filename,
-					service.Filename,
-					scaledObject.Filename,
-				},
-			)
-		},
+		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
+			pvc.Filename,
+			deployment.Filename,
+			pvc.Filename,
+			service.Filename,
+			scaledObject.Filename,
+		}),
 	}
 
 	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject})

@@ -2,15 +2,11 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators/apps"
 	"kubernetes/internal/pkg/utils"
 	"path/filepath"
 )
 
 func main() {
-	fmt.Println("✅ Getting Meta for Forgejo")
-	forgejoMeta := apps.Forgejo
-
 	fmt.Println("✅ Finding project root")
 	rootDir, err := utils.FindRoot()
 	if err != nil {
@@ -19,7 +15,7 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            forgejoMeta,
+		Meta:            Forgejo,
 		OutputDir:       filepath.Join(rootDir, "/cluster/apps/forgejo/"),
 		CreateManifests: createForgejoManifests,
 	})

@@ -20,6 +20,7 @@ type Env struct {
 	ValueFrom ValueFrom `yaml:"valueFrom,omitempty"`
 }
 type Container struct {
+	Args         []string      `yaml:",omitempty"`
 	Image        string        `yaml:",omitempty"`
 	Name         string        `yaml:",omitempty"`
 	Ports        []Port        `yaml:",omitempty"`
@@ -36,9 +37,16 @@ type ValueFrom struct {
 	SecretKeyRef SecretKeyRef `yaml:"secretKeyRef,omitempty"`
 }
 
+type SecurityContext struct {
+	FsGroup    int `yaml:"fsGroup,omitempty"`
+	RunAsUser  int `yaml:"runAsUser,omitempty"`
+	RunAsGroup int `yaml:"runAsGroup,omitempty"`
+}
+
 type PodSpec struct {
-	Containers []Container `yaml:",omitempty"`
-	Volumes    []Volume    `yaml:",omitempty"`
+	Containers      []Container     `yaml:",omitempty"`
+	Volumes         []Volume        `yaml:",omitempty"`
+	SecurityContext SecurityContext `yaml:"securityContext,omitempty"`
 }
 
 type Pod struct {

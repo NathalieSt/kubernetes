@@ -44,7 +44,7 @@ const (
 type GeneratorMeta struct {
 	Name                string
 	Namespace           string
-	EntityType          GeneratorType
+	GeneratorType       GeneratorType
 	ClusterUrl          string
 	Port                int
 	Docker              Docker
