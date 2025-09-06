@@ -65,6 +65,7 @@ func createBaseManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 					Name: generatorMeta.Name,
 				},
 				[]string{
+					chart.Filename,
 					release.Filename,
 				},
 			),
