@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
@@ -12,7 +11,7 @@ func GenerateCronScaler(name string, targetName string, kedaScaling keda.ScaledO
 	return []any{
 		keda.NewScaledObject(
 			meta.ObjectMeta{
-				Name: fmt.Sprintf("%v-scaledobject", name),
+				Name: name,
 			}, keda.ScaledObjectSpec{
 				ScaleTargetRef: keda.ScaleTargetRef{
 					Name: targetName,
