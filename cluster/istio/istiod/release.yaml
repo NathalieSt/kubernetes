@@ -1,20 +1,15 @@
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: istiod
 spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: istiod-chart
+  timeout: 10m
   releaseName: istiod
-  chart:
-    spec:
-      chart: istiod
-      version: '1.27.0'
-      sourceRef:
-        kind: HelmRepository
-        name: istio-repo
-      interval: '24h'
-  interval: '24h'
   install:
     remediation:
       retries: 3
-  timeout: '5m'
-  values: {}
