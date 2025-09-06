@@ -6,6 +6,7 @@ import (
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
+	"kubernetes/pkg/schema/k8s/authorization"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
@@ -200,6 +201,64 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 		},
 	}
 
+	clusterRole := authorization.NewClusterRole(
+		meta.ObjectMeta{
+			Name: fmt.Sprintf("%v-clusterrole", generatorMeta.Name),
+		},
+		[]authorization.Rule{
+			{
+				APIGroups: []string{},
+				Resources: []string{
+					"nodes",
+					"nodes/proxy",
+					"services",
+					"endpoints",
+					"pods",
+				},
+				Verbs: []string{
+					"get",
+					"list",
+					"watch",
+				},
+				NonResourceURLs: []string{},
+			},
+			{
+				APIGroups: []string{"extensions"},
+				Resources: []string{"ingresses"},
+				Verbs: []string{
+					"get",
+					"list",
+					"watch",
+				},
+				NonResourceURLs: []string{"/metrics"},
+			},
+		},
+	)
+
+	rbac := utils.ManifestConfig{
+		Filename: "rbac.yaml",
+		Manifests: []any{
+			clusterRole,
+			authorization.NewClusterRoleBinding(
+				meta.ObjectMeta{
+					Name: fmt.Sprintf("%v-clusterrolebinding", generatorMeta.Name),
+				},
+				authorization.RoleRef{
+					APIGroup: clusterRole.ApiVersion,
+					Kind:     clusterRole.Kind,
+					Name:     clusterRole.Metadata.Name,
+				},
+				[]authorization.Subject{
+					{
+						Kind:      "ServiceAccount",
+						Name:      "default",
+						Namespace: generatorMeta.Namespace,
+					},
+				},
+			),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -207,8 +266,9 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 			service.Filename,
 			pvc.Filename,
 			configMap.Filename,
+			rbac.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, service, pvc, configMap})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, service, pvc, configMap, rbac})
 }
