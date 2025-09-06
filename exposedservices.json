@@ -1,0 +1,5 @@
+{
+    "jellyfin": "internal/generators/apps/jellyfin",
+    "mealie": "internal/generators/apps/mealie",
+    "forgejo": "internal/generators/apps/mealie"
+}

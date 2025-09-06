@@ -7,9 +7,7 @@ import (
 )
 
 func main() {
-	// FIXME: remove when done testing and optimizing? performance
-	//defer utils.Timer()()
-
+	fmt.Println("✅ Finding project root")
 	rootDir, err := utils.FindRoot()
 	if err != nil {
 		fmt.Println("❌ An error occurred while finding the project root")
@@ -17,8 +15,8 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Mealie,
-		OutputDir:       filepath.Join(rootDir, "/cluster/apps/mealie/"),
-		CreateManifests: createMealieManifests,
+		Meta:            Forgejo,
+		OutputDir:       filepath.Join(rootDir, "/cluster/apps/forgejo/"),
+		CreateManifests: createForgejoManifests,
 	})
 }

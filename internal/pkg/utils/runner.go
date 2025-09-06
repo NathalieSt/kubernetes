@@ -22,7 +22,6 @@ func RunGenerator(config GeneratorConfig) {
 	flag.Parse()
 
 	if *metadataFlag {
-		fmt.Println("✅ Encoding Meta in JSON")
 		json.NewEncoder(os.Stdout).Encode(meta)
 		return
 	}
