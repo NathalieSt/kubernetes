@@ -9,6 +9,7 @@ var Ingress = generator.GeneratorMeta{
 	Namespace:     "istio-ingress",
 	GeneratorType: generator.Istio,
 	Helm: generator.Helm{
+		Url:     "https://istio-release.storage.googleapis.com/charts",
 		Chart:   "gateway",
 		Version: "1.27.0",
 	},

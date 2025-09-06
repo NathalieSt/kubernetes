@@ -4,6 +4,7 @@ kind: Kustomization
 metadata:
   name: istio-ingress
 resources:
+- repo.yaml
 - chart.yaml
 - release.yaml
 - namespace.yaml

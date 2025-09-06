@@ -16,6 +16,19 @@ func createIngressManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
+	repo := utils.ManifestConfig{
+		Filename: "repo.yaml",
+		Manifests: []any{
+			helm.NewRepo(meta.ObjectMeta{
+				Name: istio.RepoName,
+			}, helm.RepoSpec{
+				RepoType: helm.Default,
+				Url:      generatorMeta.Helm.Url,
+				Interval: "24h",
+			}),
+		},
+	}
+
 	chartName := fmt.Sprintf("%v-chart", generatorMeta.Name)
 	chart := utils.ManifestConfig{
 		Filename: "chart.yaml",
@@ -79,6 +92,7 @@ func createIngressManifests(generatorMeta generator.GeneratorMeta) map[string][]
 					Name: generatorMeta.Name,
 				},
 				[]string{
+					repo.Filename,
 					chart.Filename,
 					release.Filename,
 					namespace.Filename,
@@ -87,5 +101,5 @@ func createIngressManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		},
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, chart, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, repo, kustomization, chart, release})
 }
