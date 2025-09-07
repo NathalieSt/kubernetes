@@ -11,7 +11,7 @@ var Postgres = generator.GeneratorMeta{
 	ClusterUrl:    "postgres-rw.postgres.svc.cluster.local",
 	Docker: generator.Docker{
 		Registry: "ghcr.io/cloudnative-pg/postgis",
-		Version:  "17-3.5-177",
+		Version:  "17",
 	},
 	Port:                5432,
 	DependsOnGenerators: []string{},
