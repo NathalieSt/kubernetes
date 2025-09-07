@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
@@ -24,17 +23,17 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Name: clusterName,
 			}, cnpg.ClusterSpec{
 				Instances: 3,
-				ImageName: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-				Bootstrap: cnpg.Bootstrap{
-					Initdb: cnpg.InitDB{
-						PostInitTemplateSQL: []string{
-							"CREATE EXTENSION postgis;",
-							"CREATE EXTENSION postgis_topology;",
-							"CREATE EXTENSION fuzzystrmatch;",
-							"CREATE EXTENSION postgis_tiger_geocoder;",
-						},
-					},
-				},
+				//ImageName: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+				//Bootstrap: cnpg.Bootstrap{
+				//	Initdb: cnpg.InitDB{
+				//		PostInitTemplateSQL: []string{
+				//			"CREATE EXTENSION postgis;",
+				//			"CREATE EXTENSION postgis_topology;",
+				//			"CREATE EXTENSION fuzzystrmatch;",
+				//			"CREATE EXTENSION postgis_tiger_geocoder;",
+				//		},
+				//	},
+				//},
 				Storage: cnpg.ClusterStorage{
 					StorageClass: generators.NFSRemoteClass,
 					Size:         "15Gi",
