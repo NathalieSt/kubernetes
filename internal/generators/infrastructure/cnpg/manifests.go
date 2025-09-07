@@ -20,7 +20,7 @@ func createCNPGManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 		Manifests: []any{
 			helm.NewRepo(
 				meta.ObjectMeta{
-					Name: generatorMeta.Name,
+					Name: repoName,
 				},
 				helm.RepoSpec{
 					RepoType: helm.Default,
