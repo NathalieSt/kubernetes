@@ -1,15 +1,24 @@
+---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: postgres
 spec:
   instances: 3
+  imageName: ghcr.io/cloudnative-pg/postgis:17-3.5-177
+  bootstrap:
+    initdb:
+      postInitTemplateSQL:
+      - CREATE EXTENSION postgis;
+      - CREATE EXTENSION postgis_topology;
+      - CREATE EXTENSION fuzzystrmatch;
+      - CREATE EXTENSION postgis_tiger_geocoder;
   storage:
     storageClass: nfs-remote
-    size: '15Gi'
+    size: 15Gi
   inheritedMetadata:
     annotations:
-      proxy.istio.io/config: '{"holdApplicationUntilProxyStarts": true}'
+      proxy.istio.io/config: "{\"holdApplicationUntilProxyStarts\": true}"
   superuserSecret:
     name: postgres-creds-secret
   enableSuperuserAccess: true

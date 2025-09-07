@@ -1,7 +1,8 @@
+---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: dawarich-development
+  name: dawarich-db
 spec:
   name: dawarich-development
   cluster:
