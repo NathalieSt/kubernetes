@@ -1,13 +1,15 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: valkey
+    app.kubernetes.io/version: 8-alpine3.22
   name: valkey
 spec:
-  ports:
-  - name: valkey
-    port: 6379
-    targetPort: 6379
   selector:
     app.kubernetes.io/name: valkey
+  ports:
+  - name: tcp-valkey
+    port: 6379
+    targetport: 6379

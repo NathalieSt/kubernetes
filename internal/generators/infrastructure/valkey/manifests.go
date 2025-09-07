@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/generators"
-	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/flux/helm"
-	"kubernetes/pkg/schema/cluster/flux/oci"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/apps"
+	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
@@ -17,112 +16,118 @@ func createValkeyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
-	repoName := fmt.Sprintf("%v-repo", generatorMeta.Name)
-	repo := utils.ManifestConfig{
-		Filename: "repo.yaml",
+	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
+	pvc := utils.ManifestConfig{
+		Filename: "pvc.yaml",
 		Manifests: []any{
-			oci.NewRepo(
-				meta.ObjectMeta{
-					Name: repoName,
-				},
-				oci.RepoSpec{
-					Url:      generatorMeta.Helm.Url,
-					Interval: "24h",
-					Ref: oci.RepoRef{
-						Tag: generatorMeta.Helm.Version,
-					},
-				}),
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "10Gi",
+				}},
+				StorageClassName: generators.NFSRemoteClass,
+			},
+			),
 		},
 	}
 
-	release := utils.ManifestConfig{
-		Filename: "release.yaml",
+	volumeName := "valkey-volume"
+	deployment := utils.ManifestConfig{
+		Filename: "deployment.yaml",
 		Manifests: []any{
-			helm.NewRelease(
+			apps.NewDeployment(
 				meta.ObjectMeta{
 					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
 				},
-				helm.ReleaseSpec{
-					ReleaseName: generatorMeta.Name,
-					Interval:    "24h",
-					Timeout:     "10m",
-					ChartRef: helm.ReleaseChartRef{
-						Kind: helm.OCIRepository,
-						Name: repoName,
-					},
-					Install: helm.ReleaseInstall{
-						Remediation: helm.ReleaseInstallRemediation{
-							Retries: 3,
+				apps.DeploymentSpec{
+					Replicas: 1,
+					Selector: meta.LabelSelector{
+						MatchLabels: map[string]string{
+							"app.kubernetes.io/name": generatorMeta.Name,
 						},
 					},
-					ValuesFrom: []helm.ReleaseValuesFrom{
-						{
-							Kind:       helm.Secret,
-							Name:       generators.PostgresCredsSecret,
-							ValuesKey:  "username",
-							TargetPath: "gitea.config.database.USER",
-							Optional:   false,
+					Template: core.PodTemplateSpec{
+						Metadata: meta.ObjectMeta{
+							Labels: map[string]string{
+								"app.kubernetes.io/name":    generatorMeta.Name,
+								"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							},
 						},
-						{
-							Kind:       helm.Secret,
-							Name:       generators.PostgresCredsSecret,
-							ValuesKey:  "password",
-							TargetPath: "gitea.config.database.PASSWD",
-							Optional:   false,
-						},
-					},
-					Values: map[string]any{
-						"gitea": map[string]any{
-							"admin": map[string]any{"username": "Nathi"},
-							"config": map[string]any{
-								"database": map[string]any{
-									"DB_TYPE": "postgres",
-									"HOST":    fmt.Sprintf("%v:%v", infrastructure.Postgres.ClusterUrl, infrastructure.Postgres.Port),
-									"NAME":    "forgejo",
-								},
-								"server": map[string]any{
-									"ROOT_URL": "https://code.cluster.netbird.selfhosted",
+						Spec: core.PodSpec{
+							Containers: []core.Container{
+								{
+									Name:  generatorMeta.Name,
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Ports: []core.Port{
+										{
+											ContainerPort: generatorMeta.Port,
+											Name:          generatorMeta.Name,
+										},
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/data",
+											Name:      volumeName,
+										},
+									},
 								},
 							},
-							"queue": map[string]any{
-								"TYPE":     "redis",
-								"CONN_STR": "valkey://valkey.valkey.svc.cluster.local:6379/0?",
+							Volumes: []core.Volume{
+								{
+									Name: volumeName,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: pvcName,
+									},
+								},
 							},
-							"cache": map[string]any{
-								"ADAPTER": "redis",
-								"HOST":    "valkey://valkey.valkey.svc.cluster.local:6379/1",
-							},
-							"session": map[string]any{
-								"PROVIDER":        "redis",
-								"PROVIDER_CONFIG": "valkey://valkey.valkey.svc.cluster.local:6379/2",
-							},
-						},
-						"persistence": map[string]any{
-							"enabled":      true,
-							"storageClass": generators.NFSRemoteClass,
 						},
 					},
-				}),
+				},
+			),
 		},
 	}
 
-	scaledObject := utils.ManifestConfig{
-		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+	service := utils.ManifestConfig{
+		Filename: "service.yaml",
+		Manifests: []any{
+			core.NewService(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+				}, core.ServiceSpec{
+					Selector: map[string]string{
+						"app.kubernetes.io/name": generatorMeta.Name,
+					},
+					Ports: []core.ServicePort{
+						{
+							Name:       fmt.Sprintf("tcp-%v", generatorMeta.Name),
+							Port:       generatorMeta.Port,
+							TargetPort: generatorMeta.Port,
+						},
+					},
+				},
+			),
+		},
 	}
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
-		Manifests: utils.GenerateKustomization(
-			generatorMeta.Name,
-			[]string{
-				namespace.Filename,
-				repo.Filename,
-				release.Filename,
-				scaledObject.Filename,
-			},
-		),
+		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
+			namespace.Filename,
+			deployment.Filename,
+			pvc.Filename,
+			service.Filename,
+		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, release, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service})
 }

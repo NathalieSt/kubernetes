@@ -1,9 +1,11 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: valkey
-  name: valkey-deployment
+    app.kubernetes.io/version: 8-alpine3.22
+  name: valkey
 spec:
   replicas: 1
   selector:
@@ -13,6 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: valkey
+        app.kubernetes.io/version: 8-alpine3.22
     spec:
       containers:
       - image: valkey/valkey:8-alpine3.22
