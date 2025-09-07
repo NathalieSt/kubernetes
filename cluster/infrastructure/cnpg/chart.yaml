@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: cnpg-chart
+spec:
+  interval: 24h
+  chart: cloudnative-pg
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: cnpg-repo
+  version: 0.26.0

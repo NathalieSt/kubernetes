@@ -1,20 +1,15 @@
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: cnpg
 spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: cnpg-chart
+  timeout: 10m
   releaseName: cnpg
-  chart:
-    spec:
-      chart: cloudnative-pg
-      version: '0.26.0'
-      sourceRef:
-        kind: HelmRepository
-        name: cnpg
-      interval: '24h'
-  interval: '24h'
   install:
     remediation:
       retries: 3
-  timeout: '5m'
-  values: {}
