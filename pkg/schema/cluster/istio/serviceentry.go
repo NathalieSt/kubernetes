@@ -5,29 +5,24 @@ import (
 	"kubernetes/pkg/schema/shared"
 )
 
-/*
-schema ServiceEntrySpec:
-    hosts: [str]
-    ports: [shared.IstioPort]
-    location: "MESH_EXTERNAL" | "MESH_INTERNAL"
-    resolution: "DNS" | "STATIC"
-
-schema ServiceEntry:
-    apiVersion = "networking.istio.io/v1alpha3"
-    kind = "ServiceEntry"
-    metadata: meta.ObjectMeta
-    spec: ServiceEntrySpec
-
-*/
-
+type ServiceEntryPorts struct {
+	Number   int    `yaml:"number"`
+	Name     string `yaml:"name"`
+	Protocol string `yaml:"protocol"`
+}
 type ServiceEntrySpec struct {
+	Hosts      []string            `yaml:"hosts"`
+	Ports      []ServiceEntryPorts `yaml:"ports"`
+	Location   string              `yaml:"location"`
+	Resolution string              `yaml:"resolution"`
 }
 
 type ServiceEntry struct {
 	shared.CommonK8sResourceWithSpec[ServiceEntrySpec] `yaml:",omitempty,inline" validate:"required"`
+	Spec                                               ServiceEntrySpec
 }
 
-func NewPeerServiceEntry(meta meta.ObjectMeta, spec ServiceEntrySpec) ServiceEntry {
+func NewServiceEntry(meta meta.ObjectMeta, spec ServiceEntrySpec) ServiceEntry {
 	return ServiceEntry{
 		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[ServiceEntrySpec]{
 			CommonK8sResource: shared.CommonK8sResource{

@@ -21,6 +21,7 @@ type Env struct {
 }
 type Container struct {
 	Args         []string      `yaml:",omitempty"`
+	Command      []string      `yaml:",omitempty"`
 	Image        string        `yaml:",omitempty"`
 	Name         string        `yaml:",omitempty"`
 	Ports        []Port        `yaml:",omitempty"`

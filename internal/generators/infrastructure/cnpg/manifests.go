@@ -11,7 +11,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createCNPGManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),

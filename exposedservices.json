@@ -1,5 +1,11 @@
 {
     "jellyfin": "internal/generators/apps/jellyfin",
     "mealie": "internal/generators/apps/mealie",
-    "forgejo": "internal/generators/apps/mealie"
+    "forgejo": "internal/generators/apps/forgejo",
+    "glance": "internal/generators/apps/glance",
+    "searxng": "internal/generators/apps/searxng",
+    "dawarich": "internal/generators/apps/dawarich",
+    "vault": "internal/generators/infrastructure/vault",
+    "keda": "internal/generators/monitoring/keda",
+    "perses": "internal/generators/monitoring/perses"
 }

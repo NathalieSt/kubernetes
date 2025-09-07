@@ -14,8 +14,8 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            CNPG,
-		OutputDir:       filepath.Join(rootDir, "/cluster/infrastructure/cnpg/"),
-		CreateManifests: createCNPGManifests,
+		Meta:            Glance,
+		OutputDir:       filepath.Join(rootDir, "/cluster/apps/glance/"),
+		CreateManifests: createGlanceManifests,
 	})
 }

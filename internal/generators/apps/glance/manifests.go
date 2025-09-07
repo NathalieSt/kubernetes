@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
-	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
@@ -11,30 +9,21 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
-	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
-	pvc := utils.ManifestConfig{
-		Filename: "pvc.yaml",
+	configmapName := fmt.Sprintf("%v-configmap", generatorMeta.Name)
+	configmap := utils.ManifestConfig{
+		Filename: "configmap.yaml",
 		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "100Gi",
-				}},
-				StorageClassName: generators.NFSLocalClass,
-			},
-			),
+			getConfigmap(configmapName),
 		},
 	}
 
-	volumeName := "mealie-pvc"
+	volumeName := "configmap-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -71,46 +60,9 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 											Name:          generatorMeta.Name,
 										},
 									},
-									Env: []core.Env{
-										//FIXME: Generate via running generator with --meta
-										{
-											Name:  "POSTGRES_SERVER",
-											Value: infrastructure.Postgres.ClusterUrl,
-										},
-										{
-											Name:  "POSTGRES_PORT",
-											Value: fmt.Sprintf("%v", infrastructure.Postgres.Port),
-										},
-										{
-											Name: "POSTGRES_USERNAME",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "username",
-													Name: generators.PostgresCredsSecret,
-												},
-											},
-										},
-										{
-											Name: "POSTGRES_PASSWORD",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
-													Name: generators.PostgresCredsSecret,
-												},
-											},
-										},
-										{
-											Name:  "POSTGRES_DB",
-											Value: "mealie",
-										},
-										{
-											Name:  "BASE_URL",
-											Value: "https://mealie.cluster.netbird.selfhosted",
-										},
-									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											MountPath: "/app/data/",
+											MountPath: "/app/config",
 											Name:      volumeName,
 										},
 									},
@@ -119,10 +71,9 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 							Volumes: []core.Volume{
 								{
 									Name: volumeName,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
-									},
-								},
+									ConfigMap: core.ConfigMapVolumeSource{
+										Name: configmapName,
+									}},
 							},
 						},
 					},
@@ -148,8 +99,8 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 					Ports: []core.ServicePort{
 						{
 							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
-							Port:       generatorMeta.Port,
-							TargetPort: generatorMeta.Port,
+							Port:       9000,
+							TargetPort: 9000,
 						},
 					},
 				},
@@ -167,11 +118,11 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
 			deployment.Filename,
-			pvc.Filename,
+			configmap.Filename,
 			service.Filename,
 			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject})
 }
