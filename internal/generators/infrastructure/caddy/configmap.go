@@ -1,94 +1,71 @@
 package main
 
 import (
-	"encoding/json"
+	"bytes"
 	"fmt"
-	"io"
-	"kubernetes/internal/pkg/utils"
+	"kubernetes/internal/generators"
 	"kubernetes/pkg/schema/generator"
-	"os"
-	"os/exec"
-	"path/filepath"
+	"kubernetes/pkg/schema/k8s/core"
+	"kubernetes/pkg/schema/k8s/meta"
 )
 
-type ExposedServices map[string]string
-
-func getExposedServices(root string) (*ExposedServices, error) {
-
-	file, err := os.Open(filepath.Join(root, "exposedservices.json"))
-	if err != nil {
-		fmt.Printf("❌ failed to open exposedservices.json: \n %v", err)
-		return nil, err
+func forwardHeadersIfRequried(required bool) string {
+	if required {
+		return `
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-Host {host}
+		header_up X-Forwarded-Port {server_port}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-Uri {uri}
+		`
 	}
-
-	defer file.Close()
-
-	byteValue, _ := io.ReadAll(file)
-
-	var services ExposedServices
-
-	err = json.Unmarshal(byteValue, &services)
-	if err != nil {
-		fmt.Printf("❌ error while marhsaling values from exposedservices.json: \n %v", err)
-	}
-
-	fmt.Printf("Services from exposedServices.json:  %v", services)
-
-	return &services, nil
+	return ""
 }
 
-func getExposedServiceMeta(root string, servicePath string) (*generator.GeneratorMeta, error) {
-
-	joinedPath := filepath.Join(root, servicePath)
-
-	cmd := exec.Command("go", "run",
-		joinedPath,
-		"--metadata",
-	)
-
-	output, err := cmd.Output()
-	if err != nil {
-		fmt.Printf("❌ Generator failed: %v \n", err)
-		return nil, err
+func getWebsocketSupportIfRequired(required bool) string {
+	if required {
+		return fmt.Sprintf(`
+	@websockets {
+		header Connection *Upgrade*
+		header Upgrade    websocket
 	}
-
-	var generatorMeta generator.GeneratorMeta
-	if err := json.Unmarshal(output, &generatorMeta); err != nil {
-		fmt.Printf("❌ Failed to parse objects: %v \n", err)
-		return nil, err
+	reverse_proxy @websockets %v:80 {
+		header_up Host {host}
 	}
-
-	return &generatorMeta, nil
+		`, generators.IstioGatewayIP)
+	}
+	return ""
 }
 
-func getAllExposedServicesMeta(root string, services ExposedServices) []generator.GeneratorMeta {
-	allMetas := []generator.GeneratorMeta{}
-
-	for k, v := range services {
-		meta, err := getExposedServiceMeta(root, v)
-		if err != nil {
-			fmt.Printf("Failed to get meta for service: \n %v", k)
-			fmt.Printf("Reason: \n %v", err)
-		}
-		allMetas = append(allMetas, *meta)
+func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
+	caddyfileBuffer := bytes.Buffer{}
+	for _, meta := range exposedServicesMeta {
+		caddyfileBuffer.WriteString(fmt.Sprintf(`
+%v.netbird.selfhosted:443 {
+	tls internal
+	reverse_proxy %v:80 {
+		header_up Host {host}
+		%v
+	}
+	%v
+}
+		`,
+			meta.Caddy.DNSName,
+			generators.IstioGatewayIP,
+			forwardHeadersIfRequried(meta.Caddy.HeaderForwardingIsRequired),
+			getWebsocketSupportIfRequired(meta.Caddy.WebsocketSupportIsRequired),
+		),
+		)
 	}
 
-	return allMetas
+	return caddyfileBuffer.String()
 }
 
-func getCaddyConfigMap() {
-	root, err := utils.FindRoot()
-	if err != nil {
-		fmt.Printf("Failed to get root: %v", err)
-		return
-	}
+func getCaddyConfigMap(name string, metas []generator.GeneratorMeta) core.ConfigMap {
 
-	exposedServices, err := getExposedServices(root)
-	if err != nil {
-		fmt.Printf("Failed to get exposed services: %v", err)
-	}
-
-	metas := getAllExposedServicesMeta(root, *exposedServices)
-
-	fmt.Printf("found metas: \n %v", metas)
+	return core.NewConfigMap(meta.ObjectMeta{
+		Name: name,
+	}, map[string]string{
+		"Caddyfile": getCaddyFile(metas),
+	})
 }

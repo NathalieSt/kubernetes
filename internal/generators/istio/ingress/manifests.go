@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
@@ -76,7 +77,7 @@ func createIngressManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							"maxReplicas": 2,
 						},
 						"service": map[string]any{
-							"loadBalancerIP": "10.43.164.134",
+							"loadBalancerIP": generators.IstioGatewayIP,
 						},
 					},
 				},

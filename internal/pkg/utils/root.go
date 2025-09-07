@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -8,6 +9,7 @@ import (
 func FindRoot() (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {
+		fmt.Println("Failed to get working directory")
 		return "", err
 	}
 

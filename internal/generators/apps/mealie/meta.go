@@ -16,6 +16,9 @@ var Mealie = generator.GeneratorMeta{
 		//FIXME: set to nil, later fetch in generator from version.json
 		Version: "v3.0.2",
 	},
+	Caddy: generator.Caddy{
+		DNSName: "mealie.cluster",
+	},
 	KedaScaling: keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 9 * * *",

@@ -19,6 +19,9 @@ import (
 type VirtualServiceConfig struct{}
 
 type Caddy struct {
+	DNSName                    string
+	HeaderForwardingIsRequired bool
+	WebsocketSupportIsRequired bool
 }
 
 type Docker struct {
@@ -27,9 +30,9 @@ type Docker struct {
 }
 
 type Helm struct {
-	Url     string `yaml:",omitempty" validate:"required"`
-	Chart   string `yaml:",omitempty"`
-	Version string `yaml:",omitempty"`
+	Url     string
+	Chart   string
+	Version string
 }
 
 type GeneratorType = int

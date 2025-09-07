@@ -16,6 +16,10 @@ var Jellyfin = generator.GeneratorMeta{
 		Chart:   "jellyfin",
 		Version: "2.3.0",
 	},
+	Caddy: generator.Caddy{
+		DNSName:                    "jellyfin.cluster",
+		WebsocketSupportIsRequired: true,
+	},
 	KedaScaling: keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 9 * * *",

@@ -15,6 +15,9 @@ var Forgejo = generator.GeneratorMeta{
 		Url:     "oci://code.forgejo.org/forgejo-helm/forgejo",
 		Version: "14.0.0",
 	},
+	Caddy: generator.Caddy{
+		DNSName: "forgejo.cluster",
+	},
 	KedaScaling: keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 9 * * *",

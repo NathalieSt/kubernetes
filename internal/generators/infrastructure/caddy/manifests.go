@@ -3,30 +3,28 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/generators"
-	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
-	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
 	}
 
-	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
-	pvc := utils.ManifestConfig{
-		Filename: "pvc.yaml",
+	certpvcName := "caddy-cert-pvc"
+	certpvc := utils.ManifestConfig{
+		Filename: "caddy-cert-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
+				Name: certpvcName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "100Gi",
+					"storage": "1Gi",
 				}},
 				StorageClassName: generators.NFSLocalClass,
 			},
@@ -34,99 +32,23 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		},
 	}
 
-	volumeName := "mealie-pvc"
+	metas, err := utils.GetMetaForExposedServices()
+	if err != nil {
+		fmt.Printf("An error happened while getting metadata for exposed services: \n %v", err)
+	}
+
+	configmapName := "caddy-configmap"
+	configmap := utils.ManifestConfig{
+		Filename: "configmap.yaml",
+		Manifests: []any{
+			getCaddyConfigMap(configmapName, metas),
+		},
+	}
+
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
-			apps.NewDeployment(
-				meta.ObjectMeta{
-					Name: generatorMeta.Name,
-					Labels: map[string]string{
-						"app.kubernetes.io/name":    generatorMeta.Name,
-						"app.kubernetes.io/version": generatorMeta.Docker.Version,
-					},
-				},
-				apps.DeploymentSpec{
-					Replicas: 1,
-					Selector: meta.LabelSelector{
-						MatchLabels: map[string]string{
-							"app.kubernetes.io/name": generatorMeta.Name,
-						},
-					},
-					Template: core.PodTemplateSpec{
-						Metadata: meta.ObjectMeta{
-							Labels: map[string]string{
-								"app.kubernetes.io/name":    generatorMeta.Name,
-								"app.kubernetes.io/version": generatorMeta.Docker.Version,
-							},
-						},
-						Spec: core.PodSpec{
-							Containers: []core.Container{
-								{
-									Name:  generatorMeta.Name,
-									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Ports: []core.Port{
-										{
-											ContainerPort: generatorMeta.Port,
-											Name:          generatorMeta.Name,
-										},
-									},
-									Env: []core.Env{
-										{
-											Name:  "POSTGRES_SERVER",
-											Value: infrastructure.Postgres.ClusterUrl,
-										},
-										{
-											Name:  "POSTGRES_PORT",
-											Value: fmt.Sprintf("%v", infrastructure.Postgres.Port),
-										},
-										{
-											Name: "POSTGRES_USERNAME",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "username",
-													Name: generators.PostgresCredsSecret,
-												},
-											},
-										},
-										{
-											Name: "POSTGRES_PASSWORD",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
-													Name: generators.PostgresCredsSecret,
-												},
-											},
-										},
-										{
-											Name:  "POSTGRES_DB",
-											Value: "mealie",
-										},
-										{
-											Name:  "BASE_URL",
-											Value: "https://mealie.cluster.netbird.selfhosted",
-										},
-									},
-									VolumeMounts: []core.VolumeMount{
-										{
-											MountPath: "/app/data/",
-											Name:      volumeName,
-										},
-									},
-								},
-							},
-							Volumes: []core.Volume{
-								{
-									Name: volumeName,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
-									},
-								},
-							},
-						},
-					},
-				},
-			),
+			getDeployment(generatorMeta, configmapName, certpvcName),
 		},
 	}
 
@@ -164,10 +86,11 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				namespace.Filename,
 				deployment.Filename,
 				service.Filename,
-				pvc.Filename,
+				certpvc.Filename,
+				configmap.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, pvc, deployment, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, certpvc, configmap, deployment, service})
 }

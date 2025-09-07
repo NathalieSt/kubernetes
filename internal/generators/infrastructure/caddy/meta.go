@@ -4,7 +4,7 @@ import (
 	"kubernetes/pkg/schema/generator"
 )
 
-var Forgejo = generator.GeneratorMeta{
+var Caddy = generator.GeneratorMeta{
 	Name:          "caddy",
 	Namespace:     "caddy",
 	GeneratorType: generator.Infrastructure,
