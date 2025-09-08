@@ -5,16 +5,16 @@ import (
 	"kubernetes/pkg/schema/shared"
 )
 
-type ClusterRole struct {
+type Role struct {
 	shared.CommonK8sResource `yaml:",omitempty,inline" validate:"required"`
-	Rules                    []Rule `yaml:"rules"`
+	Rules                    []Rule `yaml:"rules,omitempty"`
 }
 
-func NewClusterRole(meta meta.ObjectMeta, rules []Rule) ClusterRole {
-	return ClusterRole{
+func NewRole(meta meta.ObjectMeta, rules []Rule) Role {
+	return Role{
 		CommonK8sResource: shared.CommonK8sResource{
 			ApiVersion: "rbac.authorization.k8s.io/v1",
-			Kind:       "ClusterRole",
+			Kind:       "Role",
 			Metadata:   meta,
 		},
 		Rules: rules,
