@@ -111,7 +111,7 @@ func createPrometheusManifests(generatorMeta generator.GeneratorMeta) map[string
 							},
 						},
 						Spec: core.PodSpec{
-							SecurityContext: core.SecurityContext{
+							SecurityContext: core.PodSecurityContext{
 								FsGroup:    65534,
 								RunAsUser:  65534,
 								RunAsGroup: 65534,

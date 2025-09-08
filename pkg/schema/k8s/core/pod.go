@@ -19,15 +19,6 @@ type Env struct {
 	Value     string    `yaml:"value,omitempty"`
 	ValueFrom ValueFrom `yaml:"valueFrom,omitempty"`
 }
-type Container struct {
-	Args         []string      `yaml:"args,omitempty"`
-	Command      []string      `yaml:"command,omitempty"`
-	Image        string        `yaml:"image,omitempty"`
-	Name         string        `yaml:"name,omitempty"`
-	Ports        []Port        `yaml:"ports,omitempty"`
-	VolumeMounts []VolumeMount `yaml:"volumeMounts,omitempty"`
-	Env          []Env         `yaml:"env,omitempty"`
-}
 
 type SecretKeyRef struct {
 	Key  string `yaml:"key,omitempty"`
@@ -42,17 +33,31 @@ type Capabilities struct {
 	Add []string `yaml:"add,omitempty"`
 }
 
-type SecurityContext struct {
-	FsGroup      int          `yaml:"fsGroup,omitempty"`
-	RunAsUser    int          `yaml:"runAsUser,omitempty"`
-	RunAsGroup   int          `yaml:"runAsGroup,omitempty"`
+type ContainerSecurityContext struct {
 	Capabilities Capabilities `yaml:"capabilities,omitempty"`
 }
 
+type PodSecurityContext struct {
+	FsGroup    int `yaml:"fsGroup,omitempty"`
+	RunAsUser  int `yaml:"runAsUser,omitempty"`
+	RunAsGroup int `yaml:"runAsGroup,omitempty"`
+}
+
+type Container struct {
+	Args            []string                 `yaml:"args,omitempty"`
+	Command         []string                 `yaml:"command,omitempty"`
+	Image           string                   `yaml:"image,omitempty"`
+	Name            string                   `yaml:"name,omitempty"`
+	Ports           []Port                   `yaml:"ports,omitempty"`
+	VolumeMounts    []VolumeMount            `yaml:"volumeMounts,omitempty"`
+	Env             []Env                    `yaml:"env,omitempty"`
+	SecurityContext ContainerSecurityContext `yaml:"securityContext,omitempty"`
+}
+
 type PodSpec struct {
-	Containers      []Container     `yaml:"containers,omitempty"`
-	Volumes         []Volume        `yaml:"volumes,omitempty"`
-	SecurityContext SecurityContext `yaml:"securityContext,omitempty"`
+	Containers      []Container        `yaml:"containers,omitempty"`
+	Volumes         []Volume           `yaml:"volumes,omitempty"`
+	SecurityContext PodSecurityContext `yaml:"securityContext,omitempty"`
 }
 
 type Pod struct {

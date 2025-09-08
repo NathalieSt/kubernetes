@@ -57,13 +57,6 @@ func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[stri
 							},
 						},
 						Spec: core.PodSpec{
-							SecurityContext: core.SecurityContext{
-								Capabilities: core.Capabilities{
-									Add: []string{
-										"NET_ADMIN",
-									},
-								},
-							},
 							Containers: []core.Container{
 								{
 									Name:  generatorMeta.Name,
@@ -72,6 +65,13 @@ func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[stri
 										{
 											ContainerPort: generatorMeta.Port,
 											Name:          generatorMeta.Name,
+										},
+									},
+									SecurityContext: core.ContainerSecurityContext{
+										Capabilities: core.Capabilities{
+											Add: []string{
+												"NET_ADMIN",
+											},
 										},
 									},
 									Env: []core.Env{

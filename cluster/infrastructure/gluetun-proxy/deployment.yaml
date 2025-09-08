@@ -48,7 +48,7 @@ spec:
           value: "on"
         - name: HTTPPROXY_STEALTH
           value: "on"
-      securityContext:
-        capabilities:
-          add:
-          - NET_ADMIN
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
