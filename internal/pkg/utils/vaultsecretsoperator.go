@@ -41,14 +41,14 @@ func generateStaticSecrets(secretsConfig []StaticSecretConfig, authName string) 
 	return secrets
 }
 
-func generateAuth(serviceName string, roleName string, serviceAccountName string, globalAuthNamespace string) vaultsecretsoperator.Auth {
+func generateAuth(serviceName string, serviceAccountName string, globalAuthNamespace string) vaultsecretsoperator.Auth {
 	return vaultsecretsoperator.NewAuth(
 		meta.ObjectMeta{
 			Name: fmt.Sprintf("%v-vault-auth", serviceName),
 		},
 		vaultsecretsoperator.AuthSpec{
 			Kubernetes: vaultsecretsoperator.Kubernetes{
-				Role:           roleName,
+				Role:           serviceName,
 				ServiceAccount: serviceAccountName,
 			},
 			VaultAuthGlobalRef: vaultsecretsoperator.AuthGlobalRef{
@@ -98,7 +98,7 @@ func generateRBAC(serviceName string) (core.ServiceAccount, authorization.Role, 
 func GenerateVaultAccessManifests(serviceName string, globalAuthNamespace string, secretsConfig []StaticSecretConfig) []any {
 	serviceAccount, role, rolebinding := generateRBAC(serviceName)
 
-	auth := generateAuth(serviceName, role.Metadata.Name, serviceAccount.Metadata.Name, globalAuthNamespace)
+	auth := generateAuth(serviceName, serviceAccount.Metadata.Name, globalAuthNamespace)
 
 	staticSecrets := generateStaticSecrets(secretsConfig, auth.Metadata.Name)
 
