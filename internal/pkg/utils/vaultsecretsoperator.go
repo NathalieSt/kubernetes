@@ -64,7 +64,7 @@ func generateRBAC(serviceName string) (core.ServiceAccount, authorization.Role, 
 	})
 
 	role := authorization.NewRole(meta.ObjectMeta{
-		Name: fmt.Sprintf("%v-vault-token-reviewer", serviceName),
+		Name: "vault-token-reviewer",
 	}, []authorization.Rule{
 		{
 			APIGroups: []string{"authentication.k8s.io"},
