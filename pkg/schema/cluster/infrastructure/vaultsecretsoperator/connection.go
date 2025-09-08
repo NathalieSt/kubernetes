@@ -18,7 +18,7 @@ func NewConnection(meta meta.ObjectMeta, spec ConnectionSpec) Connection {
 		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[ConnectionSpec]{
 			CommonK8sResource: shared.CommonK8sResource{
 				ApiVersion: "secrets.hashicorp.com/v1beta1",
-				Kind:       "Connection",
+				Kind:       "VaultConnection",
 				Metadata:   meta,
 			},
 			Spec: spec,

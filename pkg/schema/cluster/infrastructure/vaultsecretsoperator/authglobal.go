@@ -20,7 +20,7 @@ func NewAuthGlobal(meta meta.ObjectMeta, spec AuthGlobalSpec) AuthGlobal {
 		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[AuthGlobalSpec]{
 			CommonK8sResource: shared.CommonK8sResource{
 				ApiVersion: "secrets.hashicorp.com/v1beta1",
-				Kind:       "AuthGlobal",
+				Kind:       "VaultAuthGlobal",
 				Metadata:   meta,
 			},
 			Spec: spec,

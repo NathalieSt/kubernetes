@@ -23,7 +23,7 @@ func NewAuth(meta meta.ObjectMeta, spec AuthSpec) Auth {
 		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[AuthSpec]{
 			CommonK8sResource: shared.CommonK8sResource{
 				ApiVersion: "secrets.hashicorp.com/v1beta1",
-				Kind:       "AuthGlobal",
+				Kind:       "VaultAuth",
 				Metadata:   meta,
 			},
 			Spec: spec,

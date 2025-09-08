@@ -29,7 +29,7 @@ func NewStaticSecret(meta meta.ObjectMeta, spec StaticSecretSpec) StaticSecret {
 		CommonK8sResourceWithSpec: shared.CommonK8sResourceWithSpec[StaticSecretSpec]{
 			CommonK8sResource: shared.CommonK8sResource{
 				ApiVersion: "secrets.hashicorp.com/v1beta1",
-				Kind:       "StaticSecret",
+				Kind:       "VaultStaticSecret",
 				Metadata:   meta,
 			},
 			Spec: spec,
