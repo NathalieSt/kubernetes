@@ -12,7 +12,7 @@ type Destination struct {
 	Annotations map[string]string `yaml:"annotations,omitempty"`
 }
 type StaticSecretSpec struct {
-	AuthRef      string      `yaml:"AuthRef,omitempty"`
+	AuthRef      string      `yaml:"vaultAuthRef,omitempty"`
 	Mount        string      `yaml:"mount,omitempty"`
 	Type         string      `yaml:"type,omitempty"`
 	Path         string      `yaml:"path,omitempty"`
