@@ -6,18 +6,18 @@ import (
 )
 
 type Destination struct {
-	Create      bool              `yaml:"create"`
-	Name        string            `yaml:"name"`
-	Labels      map[string]string `yaml:"labels"`
-	Annotations map[string]string `yaml:"annotations"`
+	Create      bool              `yaml:"create,omitempty"`
+	Name        string            `yaml:"name,omitempty"`
+	Labels      map[string]string `yaml:"labels,omitempty"`
+	Annotations map[string]string `yaml:"annotations,omitempty"`
 }
 type StaticSecretSpec struct {
-	AuthRef      string      `yaml:"AuthRef"`
-	Mount        string      `yaml:"mount"`
-	Type         string      `yaml:"type"`
-	Path         string      `yaml:"path"`
-	RefreshAfter string      `yaml:"refreshAfter"`
-	Destination  Destination `yaml:"destination"`
+	AuthRef      string      `yaml:"AuthRef,omitempty"`
+	Mount        string      `yaml:"mount,omitempty"`
+	Type         string      `yaml:"type,omitempty"`
+	Path         string      `yaml:"path,omitempty"`
+	RefreshAfter string      `yaml:"refreshAfter,omitempty"`
+	Destination  Destination `yaml:"destination,omitempty"`
 }
 
 type StaticSecret struct {

@@ -2,127 +2,170 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
-	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/flux/helm"
-	"kubernetes/pkg/schema/cluster/flux/oci"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/apps"
+	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
 	}
 
-	repoName := fmt.Sprintf("%v-repo", generatorMeta.Name)
-	repo := utils.ManifestConfig{
-		Filename: "repo.yaml",
-		Manifests: []any{
-			oci.NewRepo(
-				meta.ObjectMeta{
-					Name: repoName,
-				},
-				oci.RepoSpec{
-					Url:      generatorMeta.Helm.Url,
-					Interval: "24h",
-					Ref: oci.RepoRef{
-						Tag: generatorMeta.Helm.Version,
-					},
-				}),
-		},
+	vpnSecretConfig := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-vpn", generatorMeta.Name),
+		SecretName: fmt.Sprintf("%v-vpn", generatorMeta.Name),
+		Path:       "vpn",
 	}
 
-	release := utils.ManifestConfig{
-		Filename: "release.yaml",
+	vpnVaultSecret := utils.ManifestConfig{
+		Filename: "vault-secret.yaml",
+		Manifests: utils.GenerateVaultAccessManifests(
+			generatorMeta.Name,
+			//FIXME: get this from VSO generator meta
+			"vault-secrets-operator",
+			[]utils.StaticSecretConfig{vpnSecretConfig},
+		),
+	}
+
+	deployment := utils.ManifestConfig{
+		Filename: "deployment.yaml",
 		Manifests: []any{
-			helm.NewRelease(
+			apps.NewDeployment(
 				meta.ObjectMeta{
 					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
 				},
-				helm.ReleaseSpec{
-					ReleaseName: generatorMeta.Name,
-					Interval:    "24h",
-					Timeout:     "10m",
-					ChartRef: helm.ReleaseChartRef{
-						Kind: helm.OCIRepository,
-						Name: repoName,
-					},
-					Install: helm.ReleaseInstall{
-						Remediation: helm.ReleaseInstallRemediation{
-							Retries: 3,
+				apps.DeploymentSpec{
+					Replicas: 1,
+					Selector: meta.LabelSelector{
+						MatchLabels: map[string]string{
+							"app.kubernetes.io/name": generatorMeta.Name,
 						},
 					},
-					ValuesFrom: []helm.ReleaseValuesFrom{
-						{
-							Kind:       helm.Secret,
-							Name:       generators.PostgresCredsSecret,
-							ValuesKey:  "username",
-							TargetPath: "gitea.config.database.USER",
-							Optional:   false,
+					Template: core.PodTemplateSpec{
+						Metadata: meta.ObjectMeta{
+							Labels: map[string]string{
+								"app.kubernetes.io/name":    generatorMeta.Name,
+								"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							},
 						},
-						{
-							Kind:       helm.Secret,
-							Name:       generators.PostgresCredsSecret,
-							ValuesKey:  "password",
-							TargetPath: "gitea.config.database.PASSWD",
-							Optional:   false,
-						},
-					},
-					Values: map[string]any{
-						"gitea": map[string]any{
-							"admin": map[string]any{"username": "Nathi"},
-							"config": map[string]any{
-								"database": map[string]any{
-									"DB_TYPE": "postgres",
-									"HOST":    fmt.Sprintf("%v:%v", infrastructure.Postgres.ClusterUrl, infrastructure.Postgres.Port),
-									"NAME":    "forgejo",
-								},
-								"server": map[string]any{
-									"ROOT_URL": "https://code.cluster.netbird.selfhosted",
+						Spec: core.PodSpec{
+							SecurityContext: core.SecurityContext{
+								Capabilities: core.Capabilities{
+									Add: []string{
+										"NET_ADMIN",
+									},
 								},
 							},
-							"queue": map[string]any{
-								"TYPE":     "redis",
-								"CONN_STR": "valkey://valkey.valkey.svc.cluster.local:6379/0?",
+							Containers: []core.Container{
+								{
+									Name:  generatorMeta.Name,
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Ports: []core.Port{
+										{
+											ContainerPort: generatorMeta.Port,
+											Name:          generatorMeta.Name,
+										},
+									},
+									Env: []core.Env{
+										{
+											Name:  "VPN_SERVICE_PROVIDER",
+											Value: "protonvpn",
+										},
+										{
+											Name:  "VPN_TYPE",
+											Value: "openvpn",
+										},
+										{
+											Name: "OPENVPN_USER",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: vpnSecretConfig.SecretName,
+													Key:  "user",
+												},
+											},
+										},
+										{
+											Name: "OPENVPN_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: vpnSecretConfig.SecretName,
+													Key:  "password",
+												},
+											},
+										},
+										{
+											Name:  "SERVER_COUNTRIES",
+											Value: "Austria,Finland,Malta",
+										},
+										{
+											Name:  "FIREWALL_INPUT_PORTS",
+											Value: "8888",
+										},
+										{
+											Name:  "FIREWALL_OUTBOUND_SUBNETS",
+											Value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.42.0.0/15",
+										},
+										{
+											Name:  "HTTPPROXY",
+											Value: "on",
+										},
+										{
+											Name:  "HTTPPROXY_STEALTH",
+											Value: "on",
+										},
+									},
+								},
 							},
-							"cache": map[string]any{
-								"ADAPTER": "redis",
-								"HOST":    "valkey://valkey.valkey.svc.cluster.local:6379/1",
-							},
-							"session": map[string]any{
-								"PROVIDER":        "redis",
-								"PROVIDER_CONFIG": "valkey://valkey.valkey.svc.cluster.local:6379/2",
-							},
-						},
-						"persistence": map[string]any{
-							"enabled":      true,
-							"storageClass": generators.NFSRemoteClass,
 						},
 					},
-				}),
+				},
+			),
 		},
 	}
 
-	scaledObject := utils.ManifestConfig{
-		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+	service := utils.ManifestConfig{
+		Filename: "service.yaml",
+		Manifests: []any{
+			core.NewService(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+				}, core.ServiceSpec{
+					Selector: map[string]string{
+						"app.kubernetes.io/name": generatorMeta.Name,
+					},
+					Ports: []core.ServicePort{
+						{
+							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
+							Port:       generatorMeta.Port,
+							TargetPort: generatorMeta.Port,
+						},
+					},
+				},
+			),
+		},
 	}
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
-		Manifests: utils.GenerateKustomization(
-			generatorMeta.Name,
-			[]string{
-				namespace.Filename,
-				repo.Filename,
-				release.Filename,
-				scaledObject.Filename,
-			},
-		),
+		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
+			namespace.Filename,
+			deployment.Filename,
+			service.Filename,
+			vpnVaultSecret.Filename,
+		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, release, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, service, vpnVaultSecret})
 }

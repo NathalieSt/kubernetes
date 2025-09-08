@@ -6,16 +6,16 @@ import (
 )
 
 type AuthGlobalRef struct {
-	AllowDefault bool   `yaml:"allowDefault"`
-	Namespace    string `yaml:"namespace"`
+	AllowDefault bool   `yaml:"allowDefault,omitempty"`
+	Namespace    string `yaml:"namespace,omitempty"`
 }
 type AuthSpec struct {
-	Kubernetes         Kubernetes    `yaml:"kubernetes"`
-	VaultAuthGlobalRef AuthGlobalRef `yaml:"vaultAuthGlobalRef"`
+	Kubernetes         Kubernetes    `yaml:"kubernetes,omitempty"`
+	VaultAuthGlobalRef AuthGlobalRef `yaml:"vaultAuthGlobalRef,omitempty"`
 }
 
 type Auth struct {
-	shared.CommonK8sResourceWithSpec[AuthSpec]
+	shared.CommonK8sResourceWithSpec[AuthSpec] `yaml:",omitempty,inline" validate:"required"`
 }
 
 func NewAuth(meta meta.ObjectMeta, spec AuthSpec) Auth {

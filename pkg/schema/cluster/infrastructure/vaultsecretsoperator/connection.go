@@ -6,7 +6,7 @@ import (
 )
 
 type ConnectionSpec struct {
-	Address string `yaml:"address"`
+	Address string `yaml:"address,omitempty"`
 }
 
 type Connection struct {

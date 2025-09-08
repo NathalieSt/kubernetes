@@ -9,15 +9,15 @@ import (
 )
 
 type StaticSecretConfig struct {
-	Name        string
-	SecretName  string
-	Path        string
-	Labels      map[string]string
-	Annotations map[string]string
+	Name              string
+	SecretName        string
+	Path              string
+	SecretLabels      map[string]string
+	SecretAnnotations map[string]string
 }
 
-func generateStaticSecrets(secretsConfig []StaticSecretConfig, authName string) []vaultsecretsoperator.StaticSecret {
-	secrets := []vaultsecretsoperator.StaticSecret{}
+func generateStaticSecrets(secretsConfig []StaticSecretConfig, authName string) []any {
+	secrets := []any{}
 	for _, secret := range secretsConfig {
 		secrets = append(secrets, vaultsecretsoperator.NewStaticSecret(
 			meta.ObjectMeta{
@@ -32,8 +32,8 @@ func generateStaticSecrets(secretsConfig []StaticSecretConfig, authName string) 
 				Destination: vaultsecretsoperator.Destination{
 					Create:      true,
 					Name:        secret.SecretName,
-					Labels:      secret.Labels,
-					Annotations: secret.Annotations,
+					Labels:      secret.SecretLabels,
+					Annotations: secret.SecretAnnotations,
 				},
 			},
 		))
@@ -100,7 +100,9 @@ func GenerateVaultAccessManifests(serviceName string, globalAuthNamespace string
 
 	auth := generateAuth(serviceName, role.Metadata.Name, serviceAccount.Metadata.Name, globalAuthNamespace)
 
-	manifests := append([]any{serviceAccount, role, rolebinding, auth}, generateStaticSecrets(secretsConfig, auth.Metadata.Name))
+	staticSecrets := generateStaticSecrets(secretsConfig, auth.Metadata.Name)
+
+	manifests := append([]any{serviceAccount, role, rolebinding, auth}, staticSecrets...)
 
 	return manifests
 }

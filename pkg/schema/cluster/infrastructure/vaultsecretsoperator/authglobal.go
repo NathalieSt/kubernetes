@@ -6,9 +6,9 @@ import (
 )
 
 type AuthGlobalSpec struct {
-	AllowedNamespaces []string   `yaml:"allowedNamespaces"`
-	DefaultAuthMethod string     `yaml:"defaultAuthMethod"`
-	Kubernetes        Kubernetes `yaml:"kubernetes"`
+	AllowedNamespaces []string   `yaml:"allowedNamespaces,omitempty"`
+	DefaultAuthMethod string     `yaml:"defaultAuthMethod,omitempty"`
+	Kubernetes        Kubernetes `yaml:"kubernetes,omitempty"`
 }
 
 type AuthGlobal struct {
