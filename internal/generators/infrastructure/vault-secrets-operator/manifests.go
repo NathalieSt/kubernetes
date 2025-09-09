@@ -79,19 +79,6 @@ func createVaultSecretsOperatorManifests(generatorMeta generator.GeneratorMeta, 
 		},
 	}
 
-	kustomization := utils.ManifestConfig{
-		Filename: "kustomization.yaml",
-		Manifests: utils.GenerateKustomization(
-			generatorMeta.Name,
-			[]string{
-				namespace.Filename,
-				repo.Filename,
-				chart.Filename,
-				release.Filename,
-			},
-		),
-	}
-
 	vaultMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/vault")
 	if err != nil {
 		fmt.Println("An error happened while getting vault meta ")
@@ -125,6 +112,20 @@ func createVaultSecretsOperatorManifests(generatorMeta generator.GeneratorMeta, 
 				Address: fmt.Sprintf("http://%v:8200", vaultMeta.ClusterUrl),
 			}),
 		},
+	}
+
+	kustomization := utils.ManifestConfig{
+		Filename: "kustomization.yaml",
+		Manifests: utils.GenerateKustomization(
+			generatorMeta.Name,
+			[]string{
+				namespace.Filename,
+				repo.Filename,
+				chart.Filename,
+				release.Filename,
+				vaultConfigs.Filename,
+			},
+		),
 	}
 
 	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vaultConfigs}), nil
