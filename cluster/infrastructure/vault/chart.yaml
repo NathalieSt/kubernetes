@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: vault-chart
+spec:
+  interval: 24h
+  chart: vault
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: vault-repo
+  version: 0.30.1

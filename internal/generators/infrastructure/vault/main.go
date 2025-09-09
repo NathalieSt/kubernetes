@@ -16,6 +16,6 @@ func main() {
 	utils.RunGenerator(utils.GeneratorConfig{
 		Meta:            Vault,
 		OutputDir:       filepath.Join(rootDir, "/cluster/infrastructure/vault/"),
-		CreateManifests: createForgejoManifests,
+		CreateManifests: createVaultManifests,
 	})
 }

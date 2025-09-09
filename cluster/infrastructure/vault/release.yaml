@@ -1,25 +1,21 @@
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: vault
 spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: vault-chart
+  timeout: 10m
   releaseName: vault
-  chart:
-    spec:
-      chart: vault
-      version: '0.30.1'
-      sourceRef:
-        kind: HelmRepository
-        name: vault
-      interval: '24h'
-  interval: '24h'
   install:
     remediation:
       retries: 3
-  timeout: '5m'
   values:
-    ui:
-      enabled: true
     server:
       dataStorage:
         storageClass: nfs-local-v2
+    ui:
+      enabled: true
