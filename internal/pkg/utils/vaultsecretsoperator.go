@@ -58,7 +58,7 @@ func generateAuth(serviceName string, serviceAccountName string, globalAuthNames
 		})
 }
 
-func generateRBAC(serviceName string) (core.ServiceAccount, authorization.Role, authorization.RoleBinding) {
+func GenerateRBAC(serviceName string) (core.ServiceAccount, authorization.Role, authorization.RoleBinding) {
 	serviceAccount := core.NewServiceAccount(meta.ObjectMeta{
 		Name: fmt.Sprintf("%v-vault-serviceaccount", serviceName),
 	})
@@ -96,7 +96,7 @@ func generateRBAC(serviceName string) (core.ServiceAccount, authorization.Role, 
 }
 
 func GenerateVaultAccessManifests(serviceName string, globalAuthNamespace string, secretsConfig []StaticSecretConfig) []any {
-	serviceAccount, role, rolebinding := generateRBAC(serviceName)
+	serviceAccount, role, rolebinding := GenerateRBAC(serviceName)
 
 	auth := generateAuth(serviceName, serviceAccount.Metadata.Name, globalAuthNamespace)
 

@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: vault-secrets-operator-chart
+spec:
+  interval: 24h
+  chart: vault-secrets-operator
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: vault-secrets-operator-repo
+  version: 0.10.0

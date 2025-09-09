@@ -5,11 +5,11 @@ import (
 	"kubernetes/pkg/schema/generator"
 )
 
-var Forgejo = generator.GeneratorMeta{
-	Name:          "forgejo",
-	Namespace:     "forgejo",
-	GeneratorType: generator.App,
-	ClusterUrl:    "forgejo.forgejo.svc.cluster.local",
+var Vault = generator.GeneratorMeta{
+	Name:          "vault",
+	Namespace:     "vault",
+	GeneratorType: generator.Infrastructure,
+	ClusterUrl:    "vault.vault.svc.cluster.local",
 	Port:          9000,
 	Helm: generator.Helm{
 		Url:     "oci://code.forgejo.org/forgejo-helm/forgejo",

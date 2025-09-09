@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println("✅ Finding project root")
 	rootDir, err := utils.FindRoot()
 	if err != nil {
 		fmt.Println("❌ An error occurred while finding the project root")
@@ -15,8 +14,8 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Forgejo,
-		OutputDir:       filepath.Join(rootDir, "/cluster/apps/forgejo/"),
+		Meta:            Vault,
+		OutputDir:       filepath.Join(rootDir, "/cluster/infrastructure/vault/"),
 		CreateManifests: createForgejoManifests,
 	})
 }
