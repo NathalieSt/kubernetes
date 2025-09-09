@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: keda-chart
+spec:
+  interval: 24h
+  chart: keda
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: keda-repo
+  version: 2.17.2

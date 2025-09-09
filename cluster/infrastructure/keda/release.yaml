@@ -1,30 +1,25 @@
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: keda
 spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: keda-chart
+  timeout: 10m
   releaseName: keda
-  chart:
-    spec:
-      chart: keda
-      version: '2.17.2'
-      sourceRef:
-        kind: HelmRepository
-        name: keda
-      interval: '24h'
-  interval: '24h'
   install:
     remediation:
       retries: 3
-  timeout: '5m'
   values:
-    podAnnotations:
-      keda:
-        traffic.sidecar.istio.io/excludeInboundPorts: '9666'
-        traffic.sidecar.istio.io/excludeOutboundPorts: '9443,6443'
-      metricsAdapter:
-        traffic.sidecar.istio.io/excludeInboundPorts: '6443'
-        traffic.sidecar.istio.io/excludeOutboundPorts: '9666,9443'
-      webhooks:
-        traffic.sidecar.istio.io/excludeInboundPorts: '9443'
-        traffic.sidecar.istio.io/excludeOutboundPorts: '9666,6443'
+    keda:
+      traffic.sidecar.istio.io/excludeInboundPorts: "9666"
+      traffic.sidecar.istio.io/excludeOutboundPorts: 9443,6443
+    metricsAdapter:
+      traffic.sidecar.istio.io/excludeInboundPorts: "6443"
+      traffic.sidecar.istio.io/excludeOutboundPorts: 9666,9443
+    webhooks:
+      traffic.sidecar.istio.io/excludeInboundPorts: "9443"
+      traffic.sidecar.istio.io/excludeOutboundPorts: 9666,6443

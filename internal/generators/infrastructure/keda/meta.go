@@ -1,25 +1,17 @@
 package main
 
 import (
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 )
 
-var Forgejo = generator.GeneratorMeta{
-	Name:          "forgejo",
-	Namespace:     "forgejo",
-	GeneratorType: generator.App,
-	ClusterUrl:    "forgejo.forgejo.svc.cluster.local",
-	Port:          9000,
+var Keda = generator.GeneratorMeta{
+	Name:          "keda",
+	Namespace:     "keda",
+	GeneratorType: generator.Infrastructure,
 	Helm: generator.Helm{
-		Url:     "oci://code.forgejo.org/forgejo-helm/forgejo",
-		Version: "14.0.0",
-	},
-	KedaScaling: keda.ScaledObjectTriggerMeta{
-		Timezone:        "Europe/Vienna",
-		Start:           "0 9 * * *",
-		End:             "0 23 * * *",
-		DesiredReplicas: "1",
+		Chart:   "keda",
+		Url:     "https://kedacore.github.io/charts",
+		Version: "2.17.2",
 	},
 	DependsOnGenerators: []string{},
 }
