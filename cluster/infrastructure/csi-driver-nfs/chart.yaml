@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: csi-driver-nfs-chart
+spec:
+  interval: 24h
+  chart: csi-driver-nfs
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: csi-driver-nfs-repo
+  version: 4.11.0

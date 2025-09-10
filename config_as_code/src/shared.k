@@ -396,7 +396,7 @@ victoria_metrics: shared.ClusterService = {
     name: "victoria-metrics"
     namespace: "victoria-metrics"
     type: "monitoring"
-    cluster_url: "victoria-metrics.victoria-metrics.svc.cluster.local"
+    cluster_url: "vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local"
     port: 20001
     flux_kustomization: {
         dependencies: []

@@ -1,3 +1,4 @@
+---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -6,7 +7,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: raspberry-pi-5-0
   share: /mnt/external_ssd
-reclaimPolicy: Delete
+reclaimPolicy: Retain
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
 mountOptions:

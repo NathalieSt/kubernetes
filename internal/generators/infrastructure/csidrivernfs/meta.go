@@ -1,25 +1,17 @@
 package main
 
 import (
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 )
 
-var Forgejo = generator.GeneratorMeta{
-	Name:          "forgejo",
-	Namespace:     "forgejo",
-	GeneratorType: generator.App,
-	ClusterUrl:    "forgejo.forgejo.svc.cluster.local",
-	Port:          9000,
+var CSIDriverNFS = generator.GeneratorMeta{
+	Name:          "csi-driver-nfs",
+	Namespace:     "csi-driver-nfs",
+	GeneratorType: generator.Infrastructure,
 	Helm: generator.Helm{
-		Url:     "oci://code.forgejo.org/forgejo-helm/forgejo",
-		Version: "14.0.0",
-	},
-	KedaScaling: keda.ScaledObjectTriggerMeta{
-		Timezone:        "Europe/Vienna",
-		Start:           "0 9 * * *",
-		End:             "0 23 * * *",
-		DesiredReplicas: "1",
+		Chart:   "csi-driver-nfs",
+		Url:     "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts",
+		Version: "4.11.0",
 	},
 	DependsOnGenerators: []string{},
 }

@@ -1,3 +1,4 @@
+---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -6,7 +7,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: remote-fs.netbird.selfhosted
   share: /mnt/HC_Volume_103061115
-reclaimPolicy: Delete
+reclaimPolicy: Retain
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
 mountOptions:
