@@ -8,7 +8,7 @@ import (
 
 var Kiali = generator.GeneratorMeta{
 	Name:          "kiali",
-	Namespace:     "kiali",
+	Namespace:     "kiali-operator",
 	GeneratorType: generator.Infrastructure,
 	ClusterUrl:    fmt.Sprintf("kiali.%v.svc.cluster.local", istio.Namespace),
 	Port:          20001,

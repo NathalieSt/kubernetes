@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: kiali-chart
+spec:
+  interval: 24h
+  chart: kiali
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: kiali-repo
+  version: 2.14.0

@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
-	"kubernetes/pkg/schema/cluster/istio"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
 )
@@ -14,7 +13,7 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
 	}
 
 	repoName := fmt.Sprintf("%v-repo", generatorMeta.Name)
@@ -71,29 +70,12 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 						},
 					},
 					Values: map[string]any{
-						"ui": map[string]any{
-							"enabled": true,
-						},
-						"server": map[string]any{
-							"dataStorage": map[string]any{
-								"storageClass": generators.NFSLocalClass,
-							},
+						"cr": map[string]any{
+							"create":    true,
+							"namespace": istio.Namespace,
 						},
 					},
 				}),
-		},
-	}
-
-	peerAuth := utils.ManifestConfig{
-		Filename: "peer-auth.yaml",
-		Manifests: []any{
-			istio.NewPeerAuthenthication(meta.ObjectMeta{
-				Name: "vault-permissive-mtls",
-			}, istio.PeerAuthenthicationSpec{
-				MTLS: istio.PeerAuthenthicationmTLS{
-					Mode: istio.PERMISSIVE,
-				},
-			}),
 		},
 	}
 
@@ -106,10 +88,9 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				repo.Filename,
 				chart.Filename,
 				release.Filename,
-				peerAuth.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, peerAuth})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release})
 }

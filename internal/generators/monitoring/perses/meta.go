@@ -12,9 +12,9 @@ var Perses = generator.GeneratorMeta{
 	ClusterUrl:    "perses.perses.svc.cluster.local",
 	Port:          8080,
 	Docker: generator.Docker{
-		Registry: "ghcr.io/mealie-recipes/mealie",
+		Registry: "persesdev/perses",
 		//FIXME: set to nil, later fetch in generator from version.json
-		Version: "v3.0.2",
+		Version: "v0.52",
 	},
 	Caddy: generator.Caddy{
 		DNSName: "perses.cluster",
