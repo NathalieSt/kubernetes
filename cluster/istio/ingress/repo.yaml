@@ -2,7 +2,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: istio-repo
+  name: istio-ingress-repo
 spec:
   type: default
   url: https://istio-release.storage.googleapis.com/charts

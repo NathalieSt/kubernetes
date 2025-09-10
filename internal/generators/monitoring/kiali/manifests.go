@@ -1,12 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/generator"
-	"kubernetes/pkg/schema/k8s/meta"
 )
 
 func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -16,68 +13,15 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
 	}
 
-	repoName := fmt.Sprintf("%v-repo", generatorMeta.Name)
-	repo := utils.ManifestConfig{
-		Filename: "repo.yaml",
-		Manifests: []any{
-			helm.NewRepo(meta.ObjectMeta{
-				Name: repoName,
+	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
+		map[string]any{
+			"cr": map[string]any{
+				"create":    true,
+				"namespace": istio.Namespace,
 			},
-				helm.RepoSpec{
-					RepoType: helm.Default,
-					Url:      generatorMeta.Helm.Url,
-					Interval: "24h",
-				}),
 		},
-	}
-
-	chartName := fmt.Sprintf("%v-chart", generatorMeta.Name)
-	chart := utils.ManifestConfig{
-		Filename: "chart.yaml",
-		Manifests: []any{
-			helm.NewChart(meta.ObjectMeta{
-				Name: chartName,
-			}, helm.ChartSpec{
-				Interval:          "24h",
-				Chart:             generatorMeta.Helm.Chart,
-				ReconcileStrategy: helm.ChartVersion,
-				SourceRef: helm.ChartSourceRef{
-					Kind: helm.HelmRepository,
-					Name: repoName,
-				},
-				Version: generatorMeta.Helm.Version,
-			}),
-		},
-	}
-
-	release := utils.ManifestConfig{
-		Filename: "release.yaml",
-		Manifests: []any{
-			helm.NewRelease(meta.ObjectMeta{
-				Name: generatorMeta.Name,
-			},
-				helm.ReleaseSpec{
-					ReleaseName: generatorMeta.Name,
-					Interval:    "24h",
-					Timeout:     "10m",
-					ChartRef: helm.ReleaseChartRef{
-						Kind: helm.HelmChart,
-						Name: chartName,
-					},
-					Install: helm.ReleaseInstall{
-						Remediation: helm.ReleaseInstallRemediation{
-							Retries: 3,
-						},
-					},
-					Values: map[string]any{
-						"cr": map[string]any{
-							"create":    true,
-							"namespace": istio.Namespace,
-						},
-					},
-				}),
-		},
-	}
+		nil,
+	)
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",

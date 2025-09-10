@@ -9,5 +9,5 @@ spec:
   reconcileStrategy: ChartVersion
   sourceRef:
     kind: HelmRepository
-    name: istio-repo
+    name: istio-ingress-repo
   version: 1.27.0

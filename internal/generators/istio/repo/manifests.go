@@ -3,9 +3,7 @@ package main
 import (
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/generator"
-	"kubernetes/pkg/schema/k8s/meta"
 )
 
 func createRepoManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -14,18 +12,7 @@ func createRepoManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
 	}
 
-	repo := utils.ManifestConfig{
-		Filename: "repo.yaml",
-		Manifests: []any{
-			helm.NewRepo(meta.ObjectMeta{
-				Name: istio.RepoName,
-			}, helm.RepoSpec{
-				RepoType: helm.Default,
-				Url:      generatorMeta.Helm.Url,
-				Interval: "24h",
-			}),
-		},
-	}
+	repo := utils.GetGenericRepoManifest(istio.RepoName, generatorMeta.Helm)
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
