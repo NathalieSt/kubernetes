@@ -1,17 +1,17 @@
+---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: perses-scaledobject
-  namespace: perses
 spec:
   scaleTargetRef:
-    name: perses-deployment
+    name: perses
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:
   - type: cron
     metadata:
       timezone: Europe/Vienna
-      start: '0 8 * * *'
-      end: '0 22 * * *'
-      desiredReplicas: '1'
+      start: 0 8 * * *
+      end: 0 22 * * *
+      desiredReplicas: "1"

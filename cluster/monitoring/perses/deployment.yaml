@@ -1,10 +1,11 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: perses
     app.kubernetes.io/version: v0.52
-  name: perses-deployment
+  name: perses
 spec:
   replicas: 1
   selector:
@@ -22,3 +23,10 @@ spec:
         ports:
         - containerPort: 8080
           name: perses
+        volumeMounts:
+        - mountPath: /etc/perses/storage
+          name: storage-volumec
+      volumes:
+      - name: storage-volumec
+        persistentVolumeClaim:
+          claimName: perses-pvc
