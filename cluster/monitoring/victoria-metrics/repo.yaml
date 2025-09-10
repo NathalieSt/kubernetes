@@ -1,9 +1,10 @@
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
-metadata:
-  name: victoria-metrics
 kind: OCIRepository
+metadata:
+  name: victoria-metrics-repo
 spec:
-  interval: '24h'
   url: oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
+  interval: 24h
   ref:
-    tag: '0.59.3'
+    tag: 0.59.3
