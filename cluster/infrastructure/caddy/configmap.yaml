@@ -1,8 +1,97 @@
+---
 apiVersion: v1
-data:
-  Caddyfile: "jellyfin.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n    @websockets {\n        header Connection *Upgrade*\n        header Upgrade    websocket\n    }\n    reverse_proxy @websockets 10.43.164.134:80 {\n        header_up Host {host}\n    }\n    \n}\n\ncode.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n}\n\ndawarich.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n    @websockets {\n        header Connection *Upgrade*\n        header Upgrade    websocket\n    }\n    reverse_proxy @websockets 10.43.164.134:80 {\n        header_up Host {host}\n    }\n    \n}\n\nsearxng.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n}\n\nmealie.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n}\n\nglance.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n}\n\nvault.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n}\n\nkiali.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n}\n\nperses.cluster.netbird.selfhosted:443 {\n    tls internal\n    reverse_proxy 10.43.164.134:80 {\n        header_up Host {host}\n            \n    }\n\n        \n}"
 kind: ConfigMap
 metadata:
-  annotations:
-    app.kubernetes.io/name: caddy
   name: caddy-configmap
+data:
+  Caddyfile: |-
+    
+    jellyfin.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    	@websockets {
+    		header Connection *Upgrade*
+    		header Upgrade    websocket
+    	}
+    	reverse_proxy @websockets 10.43.164.134:80 {
+    		header_up Host {host}
+    	}
+    		
+    }
+    		
+    glance.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    searxng.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    dawarich.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    vault.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    kiali.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    perses.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    mealie.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    forgejo.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		

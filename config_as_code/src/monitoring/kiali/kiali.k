@@ -1,5 +1,4 @@
 import yaml
-import ....lib.keda
 import ....lib.k8s_wrapper
 import ....lib.helm_flux
 import ...shared

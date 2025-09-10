@@ -1,60 +1,37 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: caddy
-    app.kubernetes.io/version: '2.10.0-alpine'
-  name: caddy-deployment
+    app.kubernetes.io/version: 2.10.0-alpine
+  name: caddy
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: caddy
-      app.kubernetes.io/version: '2.10.0-alpine'
   template:
     metadata:
       labels:
         app.kubernetes.io/name: caddy
-        app.kubernetes.io/version: '2.10.0-alpine'
+        app.kubernetes.io/version: 2.10.0-alpine
     spec:
       containers:
       - image: caddy:2.10.0-alpine
         name: caddy
         ports:
         - containerPort: 80
-          name: https
+          name: caddy
         volumeMounts:
         - mountPath: /etc/caddy/
-          name: caddy-config
+          name: caddy-config-volume
         - mountPath: /data/caddy/pki/authorities/local/
           name: caddy-cert-pvc-volume
-      - env:
-        - name: NB_SETUP_KEY
-          valueFrom:
-            secretKeyRef:
-              key: setup-key
-              name: netbird-setup-key-vault-secret
-        - name: NB_HOSTNAME
-          value: cluster
-        - name: NB_MANAGEMENT_URL
-          value: https://netbird.nathalie-stiefsohn.eu
-        - name: NB_EXTRA_DNS_LABELS
-          value: jellyfin.cluster,code.cluster,dawarich.cluster,searxng.cluster,mealie.cluster,glance.cluster,vault.cluster,kiali.cluster,perses.cluster
-        image: netbirdio/netbird:latest
-        name: netbird-agent
-        resources:
-          limits:
-            cpu: '100m'
-            memory: '128Mi'
-          requests:
-            cpu: '50m'
-            memory: '64Mi'
-        securityContext:
-          privileged: true
       volumes:
-      - configMap:
-          name: caddy-configmap
-        name: caddy-config
+      - name: caddy-config-volume
+        configMap:
+          claimName: caddy-configmap
       - name: caddy-cert-pvc-volume
         persistentVolumeClaim:
           claimName: caddy-cert-pvc

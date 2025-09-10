@@ -6,8 +6,8 @@ type VolumeConfigMapItem struct {
 }
 
 type ConfigMapVolumeSource struct {
-	Name  string
-	Items []VolumeConfigMapItem
+	Name  string                `yaml:"claimName,"`
+	Items []VolumeConfigMapItem `yaml:"items,omitempty"`
 }
 
 type PVCVolumeSource struct {
@@ -21,7 +21,7 @@ const (
 )
 
 type EmptyDirVolumeSource struct {
-	Medium EmptyDirVolumeSourceMedium
+	Medium EmptyDirVolumeSourceMedium `yaml:"medium,"`
 }
 
 type Volume struct {
