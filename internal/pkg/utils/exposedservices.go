@@ -13,7 +13,7 @@ type ExposedServices map[string]string
 
 func GetExposedServices(root string) (*ExposedServices, error) {
 
-	file, err := os.Open(filepath.Join(root, "exposedservices.json"))
+	file, err := os.Open(filepath.Join(root, "clidata/exposedservices.json"))
 	if err != nil {
 		fmt.Printf("failed to open exposedservices.json \n")
 		return nil, err
