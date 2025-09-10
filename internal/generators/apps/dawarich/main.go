@@ -15,7 +15,7 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:      Mealie,
+		Meta:      Dawarich,
 		OutputDir: filepath.Join(rootDir, "/cluster/apps/dawarich/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
 			manifests, err := createDawarichManifests(gm, rootDir)

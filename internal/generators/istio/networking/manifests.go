@@ -2,141 +2,70 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/flux/helm"
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
+	"kubernetes/pkg/schema/cluster/istio"
 	"kubernetes/pkg/schema/generator"
-	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
-	namespace := utils.ManifestConfig{
-		Filename: "namespace.yaml",
-		Manifests: []any{
-			core.NewNamespace(meta.ObjectMeta{
-				Name: generatorMeta.Namespace,
-				Labels: map[string]string{
-					"istio-injection": "enabled",
-				},
-			}),
-		},
+func createIstioNetworkingManifests(generatorMeta generator.GeneratorMeta) (map[string][]byte, error) {
+
+	exposedServices, err := utils.GetMetaForExposedServices()
+	if err != nil {
+		fmt.Println("An error happened while getting exposed services")
+		return nil, err
 	}
 
-	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
-	pvc := utils.ManifestConfig{
-		Filename: "pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "100Gi",
-				}},
-				StorageClassName: generators.NFSLocalClass,
-			}),
-		},
+	hosts := []string{}
+	for _, service := range exposedServices {
+		hosts = append(hosts, fmt.Sprintf("%v.netbird.selfhosted", service.Caddy.DNSName))
 	}
 
-	repoName := fmt.Sprintf("%v-repo", generatorMeta.Name)
-	repo := utils.ManifestConfig{
-		Filename: "repo.yaml",
+	ingressClusterGatewayName := "ingress-cluster-gateway"
+	ingressClusterGateway := utils.ManifestConfig{
+		Filename: "ingress-cluster-gateway.yaml",
 		Manifests: []any{
-			helm.NewRepo(meta.ObjectMeta{
-				Name: repoName,
-			}, helm.RepoSpec{
-				RepoType: helm.Default,
-				Url:      generatorMeta.Helm.Url,
-				Interval: "24h",
-			}),
-		},
-	}
-
-	chartName := fmt.Sprintf("%v-chart", generatorMeta.Name)
-	chart := utils.ManifestConfig{
-		Filename: "chart.yaml",
-		Manifests: []any{
-			helm.NewChart(meta.ObjectMeta{
-				Name: chartName,
-			}, helm.ChartSpec{
-				Interval:          "24h",
-				Chart:             generatorMeta.Helm.Chart,
-				ReconcileStrategy: helm.ChartVersion,
-				SourceRef: helm.ChartSourceRef{
-					Kind: helm.HelmRepository,
-					Name: repoName,
-				},
-				Version: generatorMeta.Helm.Version,
-			}),
-		},
-	}
-
-	release := utils.ManifestConfig{
-		Filename: "release.yaml",
-		Manifests: []any{
-			helm.NewRelease(meta.ObjectMeta{
-				Name: generatorMeta.Name,
-			}, helm.ReleaseSpec{
-				ReleaseName: generatorMeta.Name,
-				Interval:    "24h",
-				Timeout:     "10m",
-				ChartRef: helm.ReleaseChartRef{
-					Kind: helm.HelmChart,
-					Name: chartName,
-				},
-				Install: helm.ReleaseInstall{
-					Remediation: helm.ReleaseInstallRemediation{
-						Retries: 3,
-					},
-				},
-				Values: map[string]any{
-					"persistence": map[string]any{
-						"media": map[string]any{
-							"existingClaim": pvcName,
-						},
-					},
-				},
-			}),
-		},
-	}
-
-	deploymentName := "jellyfin"
-	scaledObject := utils.ManifestConfig{
-		Filename: "scaled-object.yaml",
-		Manifests: []any{
-			keda.NewScaledObject(
+			istio.NewGateway(
 				meta.ObjectMeta{
-					Name: fmt.Sprintf("%v-scaledobject", generatorMeta.Name),
-				}, keda.ScaledObjectSpec{
-					ScaleTargetRef: keda.ScaleTargetRef{
-						Name: deploymentName,
-					},
-					MinReplicaCount: 0,
-					CooldownPeriod:  300,
-					Triggers: []keda.ScaledObjectTrigger{
+					Name: ingressClusterGatewayName,
+				},
+				istio.GatewaySpec{
+					Servers: []istio.GatewayServer{
 						{
-							ScalerType: keda.Cron,
-							Metadata:   generatorMeta.KedaScaling,
+							Port: istio.IstioPort{
+								Number:   80,
+								Name:     "http",
+								Protocol: istio.HTTP,
+							},
+							Hosts: hosts,
 						},
+					},
+					Selector: istio.GatewaySelector{
+						Istio: "ingress",
 					},
 				},
 			),
 		},
 	}
 
+	virtualServiceManifests, err := getVirtualServices(exposedServices, ingressClusterGatewayName)
+	if err != nil {
+		fmt.Println("An error happened while getting VirtualServices")
+		return nil, err
+	}
+
+	virtualServices := utils.ManifestConfig{
+		Filename:  "virtual-services.yaml",
+		Manifests: virtualServiceManifests,
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
-			namespace.Filename,
-			repo.Filename,
-			chart.Filename,
-			release.Filename,
-			pvc.Filename,
-			scaledObject.Filename,
+			virtualServices.Filename,
+			ingressClusterGateway.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, virtualServices, ingressClusterGateway}), nil
 }

@@ -10,7 +10,7 @@ var Forgejo = generator.GeneratorMeta{
 	Namespace:     "forgejo",
 	GeneratorType: generator.App,
 	ClusterUrl:    "forgejo.forgejo.svc.cluster.local",
-	Port:          9000,
+	Port:          3000,
 	Helm: generator.Helm{
 		Url:     "oci://code.forgejo.org/forgejo-helm/forgejo",
 		Version: "14.0.0",

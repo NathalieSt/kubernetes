@@ -1,15 +1,8 @@
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
   name: istio-networking
 resources:
-- ingress/ingress-cluster-gateway.yaml
-- ingress/virtual-services/jellyfin-virtualservice.yaml
-- ingress/virtual-services/forgejo-virtualservice.yaml
-- ingress/virtual-services/dawarich-virtualservice.yaml
-- ingress/virtual-services/searxng-virtualservice.yaml
-- ingress/virtual-services/mealie-virtualservice.yaml
-- ingress/virtual-services/glance-virtualservice.yaml
-- ingress/virtual-services/vault-virtualservice.yaml
-- ingress/virtual-services/kiali-virtualservice.yaml
-- ingress/virtual-services/perses-virtualservice.yaml
+- virtual-services.yaml
+- ingress-cluster-gateway.yaml

@@ -53,8 +53,8 @@ func GetMetaForExposedServices() ([]generator.GeneratorMeta, error) {
 	for k, v := range *exposedServices {
 		meta, err := GetServiceMeta(root, v)
 		if err != nil {
-			fmt.Printf("Failed to get meta for service: \n %v", k)
-			fmt.Printf("Reason: \n %v", err)
+			fmt.Printf("Failed to get meta for service: \n %v \n", k)
+			fmt.Printf("Reason: \n %v \n", err)
 		} else {
 			allMetas = append(allMetas, *meta)
 		}

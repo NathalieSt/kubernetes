@@ -10,7 +10,7 @@ var Jellyfin = generator.GeneratorMeta{
 	Namespace:     "jellyfin",
 	GeneratorType: generator.App,
 	ClusterUrl:    "jellyfin.jellyfin.svc.cluster.local",
-	Port:          9000,
+	Port:          8096,
 	Helm: generator.Helm{
 		Url:     "https://jellyfin.github.io/jellyfin-helm",
 		Chart:   "jellyfin",

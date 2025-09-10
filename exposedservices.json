@@ -6,6 +6,6 @@
     "searxng": "internal/generators/apps/searxng",
     "dawarich": "internal/generators/apps/dawarich",
     "vault": "internal/generators/infrastructure/vault",
-    "keda": "internal/generators/monitoring/keda",
+    "kiali": "internal/generators/monitoring/kiali",
     "perses": "internal/generators/monitoring/perses"
 }

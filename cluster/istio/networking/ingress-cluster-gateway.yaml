@@ -1,3 +1,4 @@
+---
 apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
@@ -9,14 +10,14 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jellyfin.cluster.netbird.selfhosted
-    - code.cluster.netbird.selfhosted
-    - dawarich.cluster.netbird.selfhosted
-    - searxng.cluster.netbird.selfhosted
-    - mealie.cluster.netbird.selfhosted
     - glance.cluster.netbird.selfhosted
+    - searxng.cluster.netbird.selfhosted
     - vault.cluster.netbird.selfhosted
     - kiali.cluster.netbird.selfhosted
+    - jellyfin.cluster.netbird.selfhosted
+    - forgejo.cluster.netbird.selfhosted
+    - dawarich.cluster.netbird.selfhosted
     - perses.cluster.netbird.selfhosted
+    - mealie.cluster.netbird.selfhosted
   selector:
     istio: ingress
