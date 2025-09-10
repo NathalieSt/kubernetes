@@ -6,6 +6,23 @@ metadata:
 data:
   Caddyfile: |-
     
+    jellyfin.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    	@websockets {
+    		header Connection *Upgrade*
+    		header Upgrade    websocket
+    	}
+    	reverse_proxy @websockets 10.43.164.134:80 {
+    		header_up Host {host}
+    	}
+    		
+    }
+    		
     mealie.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
@@ -33,7 +50,25 @@ data:
     	
     }
     		
+    searxng.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
     dawarich.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    kiali.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}
@@ -52,41 +87,6 @@ data:
     }
     		
     perses.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy 10.43.164.134:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    jellyfin.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy 10.43.164.134:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    	@websockets {
-    		header Connection *Upgrade*
-    		header Upgrade    websocket
-    	}
-    	reverse_proxy @websockets 10.43.164.134:80 {
-    		header_up Host {host}
-    	}
-    		
-    }
-    		
-    searxng.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy 10.43.164.134:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    kiali.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}

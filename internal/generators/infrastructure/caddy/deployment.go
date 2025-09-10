@@ -84,7 +84,7 @@ func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, 
 							},
 							Resources: core.Resources{
 								Requests: map[string]string{
-									"cpu":    "50m",
+									"cpu":    "50mi",
 									"memory": "64mi",
 								},
 								Limits: map[string]string{
