@@ -15,7 +15,7 @@ func createDawarichManifests(generatorMeta generator.GeneratorMeta, rootDir stri
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
-	publicpvcName := fmt.Sprintf("public-dawarich-pvc", generatorMeta.Name)
+	publicpvcName := "public-dawarich-pvc"
 	publicpvc := utils.ManifestConfig{
 		Filename: "public-dawarich-pvc.yaml",
 		Manifests: []any{
@@ -32,7 +32,7 @@ func createDawarichManifests(generatorMeta generator.GeneratorMeta, rootDir stri
 		},
 	}
 
-	watchedpvcName := fmt.Sprintf("watched-dawarich-pvc", generatorMeta.Name)
+	watchedpvcName := "watched-dawarich-pvc"
 	watchedpvc := utils.ManifestConfig{
 		Filename: "watched-dawarich-pvc.yaml",
 		Manifests: []any{
@@ -49,7 +49,7 @@ func createDawarichManifests(generatorMeta generator.GeneratorMeta, rootDir stri
 		},
 	}
 
-	storagepvcName := fmt.Sprintf("public-dawarich-pvc", generatorMeta.Name)
+	storagepvcName := "public-dawarich-pvc"
 	storagepvc := utils.ManifestConfig{
 		Filename: "storage-dawarich-pvc.yaml",
 		Manifests: []any{
