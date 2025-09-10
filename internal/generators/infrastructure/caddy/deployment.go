@@ -84,12 +84,12 @@ func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, 
 							},
 							Resources: core.Resources{
 								Requests: map[string]string{
-									"cpu":    "50mi",
-									"memory": "64mi",
+									"cpu":    "50m",
+									"memory": "64Mi",
 								},
 								Limits: map[string]string{
-									"cpu":    "100mi",
-									"memory": "128mi",
+									"cpu":    "100m",
+									"memory": "128Mi",
 								},
 							},
 							SecurityContext: core.ContainerSecurityContext{
