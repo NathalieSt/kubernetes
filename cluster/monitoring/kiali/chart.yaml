@@ -5,7 +5,7 @@ metadata:
   name: kiali-chart
 spec:
   interval: 24h
-  chart: kiali
+  chart: kiali-operator
   reconcileStrategy: ChartVersion
   sourceRef:
     kind: HelmRepository

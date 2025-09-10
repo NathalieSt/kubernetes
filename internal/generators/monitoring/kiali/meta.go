@@ -16,7 +16,7 @@ var Kiali = generator.GeneratorMeta{
 		DNSName: "kiali.cluster",
 	},
 	Helm: generator.Helm{
-		Chart:   "kiali",
+		Chart:   "kiali-operator",
 		Url:     "https://kiali.org/helm-charts",
 		Version: "2.14.0",
 	},
