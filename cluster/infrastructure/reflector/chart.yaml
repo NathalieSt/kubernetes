@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: reflector-chart
+spec:
+  interval: 24h
+  chart: reflector
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: reflector-repo
+  version: 9.1.27
