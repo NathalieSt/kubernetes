@@ -24,5 +24,8 @@ var Forgejo = generator.GeneratorMeta{
 		End:             "0 23 * * *",
 		DesiredReplicas: "1",
 	},
-	DependsOnGenerators: []string{},
+	DependsOnGenerators: []string{
+		"postgres",
+		"valkey",
+	},
 }

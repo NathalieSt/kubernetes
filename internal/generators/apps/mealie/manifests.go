@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/generators"
-	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
@@ -11,7 +10,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
@@ -32,6 +31,12 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 			},
 			),
 		},
+	}
+
+	postgresMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/postgres")
+	if err != nil {
+		fmt.Println("An error happened while getting postgres meta ")
+		return nil, err
 	}
 
 	volumeName := "mealie-pvc"
@@ -75,11 +80,11 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										//FIXME: Generate via running generator with --meta
 										{
 											Name:  "POSTGRES_SERVER",
-											Value: infrastructure.Postgres.ClusterUrl,
+											Value: postgresMeta.ClusterUrl,
 										},
 										{
 											Name:  "POSTGRES_PORT",
-											Value: fmt.Sprintf("%v", infrastructure.Postgres.Port),
+											Value: fmt.Sprintf("%v", postgresMeta.Port),
 										},
 										{
 											Name: "POSTGRES_USERNAME",
@@ -105,7 +110,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										},
 										{
 											Name:  "BASE_URL",
-											Value: "https://mealie.cluster.netbird.selfhosted",
+											Value: fmt.Sprintf("https://%v.netbird.selfhosted", Mealie.Caddy.DNSName),
 										},
 									},
 									VolumeMounts: []core.VolumeMount{
@@ -173,5 +178,5 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject}), nil
 }

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/generators"
-	"kubernetes/internal/generators/infrastructure"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/cluster/flux/oci"
@@ -11,7 +10,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
@@ -33,6 +32,18 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]
 					},
 				}),
 		},
+	}
+
+	postgresMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/postgres")
+	if err != nil {
+		fmt.Println("An error happened while getting postgres meta ")
+		return nil, err
+	}
+
+	valkeyMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/valkey")
+	if err != nil {
+		fmt.Println("An error happened while getting valkey meta ")
+		return nil, err
 	}
 
 	release := utils.ManifestConfig{
@@ -77,24 +88,24 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							"config": map[string]any{
 								"database": map[string]any{
 									"DB_TYPE": "postgres",
-									"HOST":    fmt.Sprintf("%v:%v", infrastructure.Postgres.ClusterUrl, infrastructure.Postgres.Port),
+									"HOST":    fmt.Sprintf("%v:%v", postgresMeta.ClusterUrl, postgresMeta.Port),
 									"NAME":    "forgejo",
 								},
 								"server": map[string]any{
-									"ROOT_URL": "https://code.cluster.netbird.selfhosted",
+									"ROOT_URL": fmt.Sprintf("https://%v.netbird.selfhosted", Forgejo.Caddy.DNSName),
 								},
 							},
 							"queue": map[string]any{
 								"TYPE":     "redis",
-								"CONN_STR": "valkey://valkey.valkey.svc.cluster.local:6379/0?",
+								"CONN_STR": fmt.Sprintf("valkey://%v:%v/0?", valkeyMeta.ClusterUrl, valkeyMeta.Port),
 							},
 							"cache": map[string]any{
 								"ADAPTER": "redis",
-								"HOST":    "valkey://valkey.valkey.svc.cluster.local:6379/1",
+								"HOST":    fmt.Sprintf("valkey://%v:%v/1", valkeyMeta.ClusterUrl, valkeyMeta.Port),
 							},
 							"session": map[string]any{
 								"PROVIDER":        "redis",
-								"PROVIDER_CONFIG": "valkey://valkey.valkey.svc.cluster.local:6379/2",
+								"PROVIDER_CONFIG": fmt.Sprintf("valkey://%v:%v/2", valkeyMeta.ClusterUrl, valkeyMeta.Port),
 							},
 						},
 						"persistence": map[string]any{
@@ -124,5 +135,5 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, release, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, release, scaledObject}), nil
 }

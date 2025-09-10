@@ -13,9 +13,9 @@ type ExposedServices map[string]string
 
 func GetExposedServices(root string) (*ExposedServices, error) {
 
-	file, err := os.Open(filepath.Join(root, "clidata/exposedservices.json"))
+	file, err := os.Open(filepath.Join(root, "clidata/exposedgenerators.json"))
 	if err != nil {
-		fmt.Printf("failed to open exposedservices.json \n")
+		fmt.Printf("failed to open exposedgenerators.json \n")
 		return nil, err
 	}
 
@@ -27,7 +27,7 @@ func GetExposedServices(root string) (*ExposedServices, error) {
 
 	err = json.Unmarshal(byteValue, &services)
 	if err != nil {
-		fmt.Printf("error while marhsaling values from exposedservices.json \n")
+		fmt.Printf("error while marhsaling values from exposedgenerators.json \n")
 		return nil, err
 	}
 
@@ -44,7 +44,7 @@ func GetMetaForExposedServices() (generator.GeneratorMetas, error) {
 
 	exposedServices, err := GetExposedServices(root)
 	if err != nil {
-		fmt.Printf("Failed to get exposed services \n")
+		fmt.Printf("Failed to get exposed generators \n")
 		return nil, err
 	}
 
@@ -53,7 +53,7 @@ func GetMetaForExposedServices() (generator.GeneratorMetas, error) {
 	for k, v := range *exposedServices {
 		meta, err := GetServiceMeta(root, v)
 		if err != nil {
-			fmt.Printf("Failed to get meta for service: \n %v \n", k)
+			fmt.Printf("Failed to get meta for generator: \n %v \n", k)
 			fmt.Printf("Reason: \n %v \n", err)
 		} else {
 			allMetas = append(allMetas, *meta)

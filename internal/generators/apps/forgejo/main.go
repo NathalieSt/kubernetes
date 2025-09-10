@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
 
@@ -14,8 +15,16 @@ func main() {
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Forgejo,
-		OutputDir:       filepath.Join(rootDir, "/cluster/apps/forgejo/"),
-		CreateManifests: createForgejoManifests,
+		Meta:      Forgejo,
+		OutputDir: filepath.Join(rootDir, "/cluster/apps/forgejo/"),
+		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
+			manifests, err := createForgejoManifests(gm, rootDir)
+			if err != nil {
+				fmt.Println("An error happened while generating Forgejo Manifests")
+				fmt.Printf("Reason:\n %v", err)
+				return nil
+			}
+			return manifests
+		},
 	})
 }

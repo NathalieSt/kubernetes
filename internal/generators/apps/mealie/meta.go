@@ -25,5 +25,7 @@ var Mealie = generator.GeneratorMeta{
 		End:             "0 21 * * *",
 		DesiredReplicas: "1",
 	},
-	DependsOnGenerators: []string{},
+	DependsOnGenerators: []string{
+		"postgres",
+	},
 }
