@@ -14,5 +14,7 @@ var Caddy = generator.GeneratorMeta{
 		Registry: "caddy",
 		Version:  "2.10.0-alpine",
 	},
-	DependsOnGenerators: []string{},
+	DependsOnGenerators: []string{
+		"istio-networking",
+	},
 }

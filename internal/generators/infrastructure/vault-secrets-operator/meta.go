@@ -13,5 +13,7 @@ var VaultSecretsOperator = generator.GeneratorMeta{
 		Url:     "https://helm.releases.hashicorp.com",
 		Version: "0.10.0",
 	},
-	DependsOnGenerators: []string{},
+	DependsOnGenerators: []string{
+		"vault",
+	},
 }

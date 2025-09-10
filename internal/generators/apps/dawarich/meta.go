@@ -25,5 +25,8 @@ var Dawarich = generator.GeneratorMeta{
 		End:             "0 22 * * *",
 		DesiredReplicas: "1",
 	},
-	DependsOnGenerators: []string{},
+	DependsOnGenerators: []string{
+		"redis",
+		"postgres",
+	},
 }
