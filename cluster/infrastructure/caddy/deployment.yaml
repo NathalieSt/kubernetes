@@ -28,6 +28,29 @@ spec:
           name: caddy-config-volume
         - mountPath: /data/caddy/pki/authorities/local/
           name: caddy-cert-pvc-volume
+      - image: netbirdio/netbird:latest
+        name: netbird-agent
+        env:
+        - name: NB_SETUP_KEY
+          valueFrom:
+            secretKeyRef:
+              key: setup-key
+              name: netbird-setup-key-vault-secret
+        - name: NB_HOSTNAME
+          value: cluster
+        - name: NB_MANAGEMENT_URL
+          value: https://netbird.nathalie-stiefsohn.eu
+        - name: NB_EXTRA_DNS_LABELS
+          value: mealie.cluster,forgejo.cluster,glance.cluster,dawarich.cluster,vault.cluster,perses.cluster,jellyfin.cluster,searxng.cluster,kiali.cluster
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64mi
+          limits:
+            cpu: 100m
+            memory: 128mi
+        securityContext:
+          privileged: true
       volumes:
       - name: caddy-config-volume
         configMap:

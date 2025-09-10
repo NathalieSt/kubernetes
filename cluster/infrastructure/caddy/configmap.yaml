@@ -6,6 +6,15 @@ metadata:
 data:
   Caddyfile: |-
     
+    mealie.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
     forgejo.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
@@ -42,7 +51,7 @@ data:
     	
     }
     		
-    kiali.cluster.netbird.selfhosted:443 {
+    perses.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}
@@ -68,15 +77,6 @@ data:
     		
     }
     		
-    mealie.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy 10.43.164.134:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
     searxng.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
@@ -86,7 +86,7 @@ data:
     	
     }
     		
-    perses.cluster.netbird.selfhosted:443 {
+    kiali.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}

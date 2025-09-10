@@ -35,12 +35,18 @@ type Capabilities struct {
 
 type ContainerSecurityContext struct {
 	Capabilities Capabilities `yaml:"capabilities,omitempty"`
+	Privileged   bool         `yaml:"privileged,omitempty"`
 }
 
 type PodSecurityContext struct {
 	FsGroup    int `yaml:"fsGroup,omitempty"`
 	RunAsUser  int `yaml:"runAsUser,omitempty"`
 	RunAsGroup int `yaml:"runAsGroup,omitempty"`
+}
+
+type Resources struct {
+	Requests map[string]string `yaml:"requests,omitempty"`
+	Limits   map[string]string `yaml:"limits,omitempty"`
 }
 
 type Container struct {
@@ -51,6 +57,7 @@ type Container struct {
 	Ports           []Port                   `yaml:"ports,omitempty"`
 	VolumeMounts    []VolumeMount            `yaml:"volumeMounts,omitempty"`
 	Env             []Env                    `yaml:"env,omitempty"`
+	Resources       Resources                `yaml:"resources,omitempty"`
 	SecurityContext ContainerSecurityContext `yaml:"securityContext,omitempty"`
 }
 

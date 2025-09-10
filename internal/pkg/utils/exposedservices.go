@@ -34,7 +34,7 @@ func GetExposedServices(root string) (*ExposedServices, error) {
 	return &services, nil
 }
 
-func GetMetaForExposedServices() ([]generator.GeneratorMeta, error) {
+func GetMetaForExposedServices() (generator.GeneratorMetas, error) {
 
 	root, err := FindRoot()
 	if err != nil {

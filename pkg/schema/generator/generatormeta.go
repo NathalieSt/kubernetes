@@ -57,3 +57,13 @@ type GeneratorMeta struct {
 	KedaScaling         keda.ScaledObjectTriggerMeta
 	DependsOnGenerators []string
 }
+
+type GeneratorMetas []GeneratorMeta
+
+func (metas GeneratorMetas) GetDNSNames() []string {
+	var list []string
+	for _, meta := range metas {
+		list = append(list, meta.Caddy.DNSName)
+	}
+	return list
+}

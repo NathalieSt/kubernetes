@@ -7,6 +7,7 @@ import (
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"strings"
 )
 
 func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -32,7 +33,7 @@ func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		},
 	}
 
-	metas, err := utils.GetMetaForExposedServices()
+	exposedServicesMeta, err := utils.GetMetaForExposedServices()
 	if err != nil {
 		fmt.Printf("An error happened while getting metadata for exposed services: \n %v", err)
 	}
@@ -41,14 +42,16 @@ func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	configmap := utils.ManifestConfig{
 		Filename: "configmap.yaml",
 		Manifests: []any{
-			getCaddyConfigMap(configmapName, metas),
+			getCaddyConfigMap(configmapName, exposedServicesMeta),
 		},
 	}
+
+	servicesDNSName := exposedServicesMeta.GetDNSNames()
 
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
-			getDeployment(generatorMeta, configmapName, certpvcName),
+			getDeployment(generatorMeta, configmapName, certpvcName, strings.Join(servicesDNSName, ",")),
 		},
 	}
 
