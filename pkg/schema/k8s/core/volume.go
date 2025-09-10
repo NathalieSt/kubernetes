@@ -6,7 +6,7 @@ type VolumeConfigMapItem struct {
 }
 
 type ConfigMapVolumeSource struct {
-	Name  string                `yaml:"claimName,"`
+	Name  string                `yaml:"name,"`
 	Items []VolumeConfigMapItem `yaml:"items,omitempty"`
 }
 
