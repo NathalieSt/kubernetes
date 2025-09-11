@@ -45,3 +45,5 @@ test.yaml
 test-2.yaml
 
 .vscode
+
+clidata/*.json
