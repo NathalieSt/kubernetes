@@ -7,7 +7,7 @@ import (
 var Postgres = generator.GeneratorMeta{
 	Name:          "postgres",
 	Namespace:     "postgres",
-	GeneratorType: generator.App,
+	GeneratorType: generator.Infrastructure,
 	ClusterUrl:    "postgres-rw.postgres.svc.cluster.local",
 	Docker: generator.Docker{
 		Registry: "ghcr.io/cloudnative-pg/postgis",

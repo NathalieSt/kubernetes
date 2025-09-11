@@ -107,7 +107,7 @@ func Start() {
 			clearOutput(outputView)
 			logToOutput(outputView, "Starting discovery process...")
 
-			apps, infrastructure, istio, monitoring := discoverGeneratorsViaPath(fmt.Sprintf("%v/internal/generators", rootDir), outputView).GetMetasSeparatedByCategories()
+			apps, infrastructure, istio, monitoring := discoverGeneratorsByCategoryViaPath(fmt.Sprintf("%v/internal/generators", rootDir), rootDir, outputView)
 
 			logToOutput(outputView, "Appending generators to tree")
 			appendGeneratorsToTree(generatorsTree, apps, infrastructure, istio, monitoring)
