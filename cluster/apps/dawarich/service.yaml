@@ -1,14 +1,15 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: dawarich
-    app.kubernetes.io/version: '0.30.10'
+    app.kubernetes.io/version: 0.30.10
   name: dawarich
 spec:
-  ports:
-  - name: http
-    port: 3000
-    targetPort: 3000
   selector:
     app.kubernetes.io/name: dawarich
+  ports:
+  - name: http-dawarich
+    port: 9000
+    targetport: 9000

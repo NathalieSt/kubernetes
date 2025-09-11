@@ -9,7 +9,7 @@ import (
 var Kiali = generator.GeneratorMeta{
 	Name:          "kiali",
 	Namespace:     "kiali-operator",
-	GeneratorType: generator.Infrastructure,
+	GeneratorType: generator.Monitoring,
 	ClusterUrl:    fmt.Sprintf("kiali.%v.svc.cluster.local", istio.Namespace),
 	Port:          20001,
 	Caddy: generator.Caddy{

@@ -12,7 +12,6 @@ func main() {
 		fmt.Println("❌ An error occurred while finding the project root")
 		fmt.Println("Error: " + err.Error())
 	}
-	defer utils.Timer()()
 
 	utils.RunGenerator(utils.GeneratorConfig{
 		Meta: Caddy,

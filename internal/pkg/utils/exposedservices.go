@@ -11,7 +11,7 @@ import (
 
 type ExposedServices map[string]string
 
-func GetExposedServices(root string) (*ExposedServices, error) {
+func GetExposedGenerators(root string) (*ExposedServices, error) {
 
 	file, err := os.Open(filepath.Join(root, "clidata/exposedgenerators.json"))
 	if err != nil {
@@ -34,15 +34,14 @@ func GetExposedServices(root string) (*ExposedServices, error) {
 	return &services, nil
 }
 
-func GetMetaForExposedServices() (generator.GeneratorMetas, error) {
-
+func GetMetaForExposedGenerators() (generator.GeneratorMetas, error) {
 	root, err := FindRoot()
 	if err != nil {
 		fmt.Printf("Failed to get root")
 		return nil, err
 	}
 
-	exposedServices, err := GetExposedServices(root)
+	exposedGenerators, err := GetExposedGenerators(root)
 	if err != nil {
 		fmt.Printf("Failed to get exposed generators \n")
 		return nil, err
@@ -50,8 +49,9 @@ func GetMetaForExposedServices() (generator.GeneratorMetas, error) {
 
 	allMetas := []generator.GeneratorMeta{}
 
-	for k, v := range *exposedServices {
-		meta, err := GetServiceMeta(root, v)
+	for k, v := range *exposedGenerators {
+		joinedPath := filepath.Join(root, v)
+		meta, err := GetGeneratorMeta(joinedPath)
 		if err != nil {
 			fmt.Printf("Failed to get meta for generator: \n %v \n", k)
 			fmt.Printf("Reason: \n %v \n", err)

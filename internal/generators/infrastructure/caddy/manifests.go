@@ -33,7 +33,7 @@ func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		},
 	}
 
-	exposedServicesMeta, err := utils.GetMetaForExposedServices()
+	exposedGeneratorsMeta, err := utils.GetMetaForExposedGenerators()
 	if err != nil {
 		fmt.Printf("An error happened while getting metadata for exposed services: \n %v", err)
 	}
@@ -42,11 +42,11 @@ func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	configmap := utils.ManifestConfig{
 		Filename: "configmap.yaml",
 		Manifests: []any{
-			getCaddyConfigMap(configmapName, exposedServicesMeta),
+			getCaddyConfigMap(configmapName, exposedGeneratorsMeta),
 		},
 	}
 
-	servicesDNSName := exposedServicesMeta.GetDNSNames()
+	servicesDNSName := exposedGeneratorsMeta.GetDNSNames()
 
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",

@@ -6,6 +6,7 @@ import (
 	"kubernetes/pkg/schema/cluster/infrastructure/vaultsecretsoperator"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
+	"path"
 )
 
 func createVaultSecretsOperatorManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
@@ -25,7 +26,7 @@ func createVaultSecretsOperatorManifests(generatorMeta generator.GeneratorMeta, 
 		nil,
 	)
 
-	vaultMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/vault")
+	vaultMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/vault"))
 	if err != nil {
 		fmt.Println("An error happened while getting vault meta ")
 		return nil, err

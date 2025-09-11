@@ -10,7 +10,7 @@ import (
 
 func createIstioNetworkingManifests(generatorMeta generator.GeneratorMeta) (map[string][]byte, error) {
 
-	exposedServices, err := utils.GetMetaForExposedServices()
+	exposedServices, err := utils.GetMetaForExposedGenerators()
 	if err != nil {
 		fmt.Println("An error happened while getting exposed services")
 		return nil, err

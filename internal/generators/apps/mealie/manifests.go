@@ -8,6 +8,7 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"path"
 )
 
 func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
@@ -33,7 +34,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 		},
 	}
 
-	postgresMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/postgres")
+	postgresMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/postgres"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err

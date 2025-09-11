@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-	fmt.Println("✅ Finding project root")
 	rootDir, err := utils.FindRoot()
 	if err != nil {
 		fmt.Println("❌ An error occurred while finding the project root")

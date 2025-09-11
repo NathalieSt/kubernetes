@@ -6,20 +6,17 @@ import (
 	"kubernetes/pkg/schema/generator"
 	"os"
 	"os/exec"
-	"path/filepath"
 )
 
-func GetServiceMeta(root string, servicePath string) (*generator.GeneratorMeta, error) {
+func GetGeneratorMeta(path string) (*generator.GeneratorMeta, error) {
 
-	joinedPath := filepath.Join(root, servicePath)
-
-	if _, err := os.Stat(joinedPath); os.IsNotExist(err) {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
 		fmt.Println("❌ Generator does not exist at specified location")
 		return nil, err
 	}
 
 	cmd := exec.Command("go", "run",
-		joinedPath,
+		path,
 		"--metadata",
 	)
 

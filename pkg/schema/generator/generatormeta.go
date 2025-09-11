@@ -67,3 +67,24 @@ func (metas GeneratorMetas) GetDNSNames() []string {
 	}
 	return list
 }
+
+func (metas GeneratorMetas) GetMetasSeparatedByCategories() ([]GeneratorMeta, []GeneratorMeta, []GeneratorMeta, []GeneratorMeta) {
+	apps := []GeneratorMeta{}
+	infrastructure := []GeneratorMeta{}
+	istio := []GeneratorMeta{}
+	monitoring := []GeneratorMeta{}
+
+	for _, meta := range metas {
+		switch meta.GeneratorType {
+		case App:
+			apps = append(apps, meta)
+		case Infrastructure:
+			infrastructure = append(infrastructure, meta)
+		case Istio:
+			istio = append(istio, meta)
+		case Monitoring:
+			monitoring = append(monitoring, meta)
+		}
+	}
+	return apps, infrastructure, istio, monitoring
+}

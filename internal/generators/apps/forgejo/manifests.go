@@ -8,6 +8,7 @@ import (
 	"kubernetes/pkg/schema/cluster/flux/oci"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
+	"path"
 )
 
 func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
@@ -34,13 +35,13 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		},
 	}
 
-	postgresMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/postgres")
+	postgresMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/postgres"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
 	}
 
-	valkeyMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/valkey")
+	valkeyMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/valkey"))
 	if err != nil {
 		fmt.Println("An error happened while getting valkey meta ")
 		return nil, err

@@ -3,81 +3,33 @@ package cli
 import (
 	"fmt"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 
 	"github.com/rivo/tview"
 )
 
 func getGeneratorsFromJSON() []generator.GeneratorMeta {
-	return []generator.GeneratorMeta{
-		{
-			Name:          "mealie",
-			Namespace:     "mealie",
-			GeneratorType: generator.App,
-			ClusterUrl:    "mealie.mealie.svc.cluster.local",
-			Port:          9000,
-			Docker: generator.Docker{
-				Registry: "ghcr.io/mealie-recipes/mealie",
-				//FIXME: set to nil, later fetch in generator from version.json
-				Version: "v3.0.2",
-			},
-			Caddy: generator.Caddy{
-				DNSName: "mealie.cluster",
-			},
-			KedaScaling: keda.ScaledObjectTriggerMeta{
-				Timezone:        "Europe/Vienna",
-				Start:           "0 9 * * *",
-				End:             "0 21 * * *",
-				DesiredReplicas: "1",
-			},
-			DependsOnGenerators: []string{
-				"postgres",
-			},
-		}, {
-			Name:          "searxng",
-			Namespace:     "searxng",
-			GeneratorType: generator.App,
-			ClusterUrl:    "searxng.searxng.svc.cluster.local",
-			Port:          8080,
-			Docker: generator.Docker{
-				Registry: "searxng/searxng",
-				//FIXME: set to nil, later fetch in generator from version.json
-				Version: "2025.8.3-2e62eb5",
-			},
-			Caddy: generator.Caddy{
-				DNSName: "searxng.cluster",
-			},
-			KedaScaling: keda.ScaledObjectTriggerMeta{
-				Timezone:        "Europe/Vienna",
-				Start:           "0 7 * * *",
-				End:             "0 23 * * *",
-				DesiredReplicas: "1",
-			},
-			DependsOnGenerators: []string{
-				"valkey",
-				"gluetun-proxy",
-			},
-		},
-	}
+	return []generator.GeneratorMeta{}
 }
 
-func loadGeneratorsToList(list *tview.List) {
-	list.Clear()
-	generators := getGeneratorsFromJSON()
+func appendGeneratorsToTreeNode(treeNode *tview.TreeNode, generators []generator.GeneratorMeta) {
+	//treeNode.ClearChildren()
+
+	if len(generators) == 0 {
+		treeNode.AddChild(tview.NewTreeNode("Generators").SetText("No generators available\nPlease try to run the \"discover\" command to find generators"))
+		return
+	}
 
 	for _, generator := range generators {
 		version := ""
 
 		if generator.Helm.Version != "" {
-			version = generator.Helm.Version
+			version = fmt.Sprintf("(%v)", generator.Helm.Version)
 		} else if generator.Docker.Version != "" {
-			version = generator.Docker.Version
-		} else {
-			return
+			version = fmt.Sprintf("(%v)", generator.Docker.Version)
 		}
 
-		list.AddItem(fmt.Sprintf("%v (%v)", generator.Name, version), "Test Description", '>', nil)
+		treeNode.AddChild(tview.NewTreeNode(fmt.Sprintf("%v %v", generator.Name, version)))
 	}
 }
 
@@ -90,11 +42,48 @@ func clearOutput(outputView *tview.TextView) {
 	outputView.Clear()
 }
 
+func makeNodeExpandable(node *tview.TreeNode) {
+	node.SetSelectedFunc(func() {
+		node.SetExpanded(!node.IsExpanded())
+	})
+}
+
+func appendGeneratorsToTree(
+	tree *tview.TreeView,
+	appsGenerators []generator.GeneratorMeta,
+	infrastructureGenerators []generator.GeneratorMeta,
+	istioGenerators []generator.GeneratorMeta,
+	monitoringGenerators []generator.GeneratorMeta,
+) {
+	rootNode := tree.GetRoot()
+
+	applicationNode := tview.NewTreeNode("Applications").SetExpanded(false)
+	makeNodeExpandable(applicationNode)
+
+	infrastructureNode := tview.NewTreeNode("Infrastructure").SetExpanded(false)
+	makeNodeExpandable(infrastructureNode)
+
+	istioNode := tview.NewTreeNode("Istio").SetExpanded(false)
+	makeNodeExpandable(istioNode)
+
+	monitoringNode := tview.NewTreeNode("Monitoring").SetExpanded(false)
+	makeNodeExpandable(monitoringNode)
+
+	rootNode.AddChild(applicationNode).AddChild(infrastructureNode).AddChild(istioNode).AddChild(monitoringNode)
+
+	appendGeneratorsToTreeNode(applicationNode, appsGenerators)
+	appendGeneratorsToTreeNode(infrastructureNode, infrastructureGenerators)
+	appendGeneratorsToTreeNode(istioNode, istioGenerators)
+	appendGeneratorsToTreeNode(monitoringNode, monitoringGenerators)
+}
+
 func Start() {
 
 	app := tview.NewApplication()
 
-	root, err := utils.FindRoot()
+	app.EnableMouse(true)
+
+	rootDir, err := utils.FindRoot()
 	if err != nil {
 		fmt.Println("Error while finding root, reason:")
 		fmt.Print(err)
@@ -108,23 +97,22 @@ func Start() {
 	outputView.SetTitle("Command output")
 	outputView.SetBorder(true)
 	outputView.SetScrollable(true)
-
-	generatorsList := tview.NewList()
-	generatorsList.SetBorder(true)
-	generatorsList.SetTitle("Discovered generators")
-	loadGeneratorsToList(generatorsList)
+	root := tview.NewTreeNode("Generators")
+	generatorsTree := tview.NewTreeView().SetRoot(root).SetCurrentNode(root)
 
 	commandList := tview.NewList().
+		AddItem("Run", "Run a generator", 'r', nil).
+		AddItem("Version", "Upgrade Helm/Docker versions", 'v', nil).
 		AddItem("Discover", "Discover new generators", 'd', func() {
 			clearOutput(outputView)
 			logToOutput(outputView, "Starting discovery process...")
-			discoverGenerators(fmt.Sprintf("%v/internal/generators", root), outputView)
-			logToOutput(outputView, "Reloading discovered generators")
-			loadGeneratorsToList(generatorsList)
+
+			apps, infrastructure, istio, monitoring := discoverGeneratorsViaPath(fmt.Sprintf("%v/internal/generators", rootDir), outputView).GetMetasSeparatedByCategories()
+
+			logToOutput(outputView, "Appending generators to tree")
+			appendGeneratorsToTree(generatorsTree, apps, infrastructure, istio, monitoring)
 			logToOutput(outputView, "Discovery completed")
 		}).
-		AddItem("Run", "Run a generator", 'r', nil).
-		AddItem("Version", "Upgrade Helm/Docker versions", 'v', nil).
 		AddItem("Quit", "Press to exit", 'q', func() {
 			app.Stop()
 		})
@@ -135,9 +123,9 @@ func Start() {
 	actionArea.AddItem(outputView, 0, 3, false)
 
 	flex := tview.NewFlex().
-		AddItem(commandList, 35, 1, true).
+		AddItem(commandList, 40, 1, true).
 		AddItem(actionArea, 0, 3, false).
-		AddItem(generatorsList, 0, 1, false)
+		AddItem(generatorsTree, 0, 1, false)
 	if err := app.SetRoot(flex, true).SetFocus(flex).Run(); err != nil {
 		panic(err)
 	}

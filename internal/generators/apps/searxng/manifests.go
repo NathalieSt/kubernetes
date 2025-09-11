@@ -8,6 +8,7 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"path"
 )
 
 func createSearXNGManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
@@ -16,13 +17,13 @@ func createSearXNGManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
-	valkeyMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/valkey")
+	valkeyMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/valkey"))
 	if err != nil {
 		fmt.Println("An error happened while getting valkey meta")
 		return nil, err
 	}
 
-	proxyMeta, err := utils.GetServiceMeta(rootDir, "internal/generators/infrastructure/gluetun-proxy")
+	proxyMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/gluetun-proxy"))
 	if err != nil {
 		fmt.Println("An error happened while getting gluetun-proxy meta")
 		return nil, err
