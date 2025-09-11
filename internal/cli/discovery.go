@@ -15,8 +15,7 @@ func discoverGenerators(generatorsLocation string, logOutputView *tview.TextView
 
 		if !d.IsDir() {
 			if d.Name() == "main.go" {
-				info, err := d.Info()
-				logToOutput(logOutputView, fmt.Sprintf("Generator found: %v %v\n", info.Sys(), err))
+				logToOutput(logOutputView, fmt.Sprintf("Generator found: %v %v\n", path, err))
 			}
 		}
 
