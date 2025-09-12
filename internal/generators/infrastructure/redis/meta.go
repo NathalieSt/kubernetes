@@ -10,7 +10,7 @@ var Redis = generator.GeneratorMeta{
 	GeneratorType: generator.Infrastructure,
 	ClusterUrl:    "redis.redis.svc.cluster.local",
 	Port:          6379,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "redis",
 		Version:  "8.2.1",
 	},

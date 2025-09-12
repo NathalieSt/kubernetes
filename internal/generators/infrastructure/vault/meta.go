@@ -10,12 +10,12 @@ var Vault = generator.GeneratorMeta{
 	GeneratorType: generator.Infrastructure,
 	ClusterUrl:    "vault.vault.svc.cluster.local",
 	Port:          8200,
-	Helm: generator.Helm{
+	Helm: &generator.Helm{
 		Chart:   "vault",
 		Url:     "https://helm.releases.hashicorp.com",
 		Version: "0.30.1",
 	},
-	Caddy: generator.Caddy{
+	Caddy: &generator.Caddy{
 		DNSName: "vault.cluster",
 	},
 	DependsOnGenerators: []string{},

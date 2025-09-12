@@ -10,7 +10,7 @@ var GluetunProxy = generator.GeneratorMeta{
 	GeneratorType: generator.Infrastructure,
 	ClusterUrl:    "gluetun-proxy.gluetun-proxy.svc.cluster.local",
 	Port:          8888,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "qmcgaw/gluetun",
 		Version:  "v3.40",
 	},

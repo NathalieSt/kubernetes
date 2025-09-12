@@ -8,7 +8,7 @@ var Reflector = generator.GeneratorMeta{
 	Name:          "reflector",
 	Namespace:     "reflector",
 	GeneratorType: generator.Infrastructure,
-	Helm: generator.Helm{
+	Helm: &generator.Helm{
 		Chart:   "reflector",
 		Url:     "https://emberstack.github.io/helm-charts",
 		Version: "9.1.27",

@@ -11,15 +11,15 @@ var Glance = generator.GeneratorMeta{
 	GeneratorType: generator.App,
 	ClusterUrl:    "glance.glance.svc.cluster.local",
 	Port:          8080,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "glanceapp/glance",
 		//FIXME: set to nil, later fetch in generator from version.json
 		Version: "v0.8.4",
 	},
-	Caddy: generator.Caddy{
+	Caddy: &generator.Caddy{
 		DNSName: "glance.cluster",
 	},
-	KedaScaling: keda.ScaledObjectTriggerMeta{
+	KedaScaling: &keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 7 * * *",
 		End:             "0 23 * * *",

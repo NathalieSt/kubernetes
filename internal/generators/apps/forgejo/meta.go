@@ -11,14 +11,14 @@ var Forgejo = generator.GeneratorMeta{
 	GeneratorType: generator.App,
 	ClusterUrl:    "forgejo-http.forgejo.svc.cluster.local",
 	Port:          3000,
-	Helm: generator.Helm{
+	Helm: &generator.Helm{
 		Url:     "oci://code.forgejo.org/forgejo-helm/forgejo",
 		Version: "14.0.0",
 	},
-	Caddy: generator.Caddy{
+	Caddy: &generator.Caddy{
 		DNSName: "code.cluster",
 	},
-	KedaScaling: keda.ScaledObjectTriggerMeta{
+	KedaScaling: &keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 9 * * *",
 		End:             "0 23 * * *",

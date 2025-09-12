@@ -11,16 +11,16 @@ var Jellyfin = generator.GeneratorMeta{
 	GeneratorType: generator.App,
 	ClusterUrl:    "jellyfin.jellyfin.svc.cluster.local",
 	Port:          8096,
-	Helm: generator.Helm{
+	Helm: &generator.Helm{
 		Url:     "https://jellyfin.github.io/jellyfin-helm",
 		Chart:   "jellyfin",
 		Version: "2.3.0",
 	},
-	Caddy: generator.Caddy{
+	Caddy: &generator.Caddy{
 		DNSName:                    "jellyfin.cluster",
 		WebsocketSupportIsRequired: true,
 	},
-	KedaScaling: keda.ScaledObjectTriggerMeta{
+	KedaScaling: &keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 9 * * *",
 		End:             "0 23 * * *",

@@ -9,7 +9,7 @@ var Base = generator.GeneratorMeta{
 	Name:          "base",
 	Namespace:     istio.Namespace,
 	GeneratorType: generator.Istio,
-	Helm: generator.Helm{
+	Helm: &generator.Helm{
 		Chart: "base",
 	},
 	DependsOnGenerators: []string{},

@@ -10,7 +10,7 @@ var Prometheus = generator.GeneratorMeta{
 	Namespace:     istio.Namespace,
 	GeneratorType: generator.Istio,
 	Port:          9090,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "prom/prometheus",
 		Version:  "v3.5.0",
 	},

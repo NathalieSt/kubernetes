@@ -7,7 +7,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func GetGenericRepoManifest(repoName string, generatorHelm generator.Helm) ManifestConfig {
+func GetGenericRepoManifest(repoName string, generatorHelm *generator.Helm) ManifestConfig {
 
 	return ManifestConfig{
 		Filename: "repo.yaml",
@@ -24,7 +24,7 @@ func GetGenericRepoManifest(repoName string, generatorHelm generator.Helm) Manif
 	}
 }
 
-func GetGenericChartManifest(chartName string, generatorHelm generator.Helm, repoName string) ManifestConfig {
+func GetGenericChartManifest(chartName string, generatorHelm *generator.Helm, repoName string) ManifestConfig {
 	return ManifestConfig{
 		Filename: "chart.yaml",
 		Manifests: []any{
@@ -73,7 +73,7 @@ func GetGenericReleaseManifest(generatorName string, chartName string, values ma
 
 func GetGenericHelmDeploymentManifests(
 	generatorName string,
-	generatorHelm generator.Helm,
+	generatorHelm *generator.Helm,
 	values map[string]any,
 	valuesFrom []helm.ReleaseValuesFrom,
 ) (ManifestConfig, ManifestConfig, ManifestConfig) {

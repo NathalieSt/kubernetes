@@ -10,7 +10,7 @@ var Caddy = generator.GeneratorMeta{
 	GeneratorType: generator.Infrastructure,
 	ClusterUrl:    "caddy.caddy.svc.cluster.local",
 	Port:          80,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "caddy",
 		Version:  "2.10.0-alpine",
 	},

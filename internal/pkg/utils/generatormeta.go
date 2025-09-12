@@ -34,3 +34,16 @@ func GetGeneratorMeta(path string) (*generator.GeneratorMeta, error) {
 
 	return &generatorMeta, nil
 }
+
+func GetGeneratorMetasByPaths(paths []string) []generator.GeneratorMeta {
+	generators := []generator.GeneratorMeta{}
+	for _, path := range paths {
+		meta, err := GetGeneratorMeta(path)
+		if err != nil {
+			fmt.Printf("Error while getting generator for path: %v \n Reason: \n %v", path, err)
+		} else {
+			generators = append(generators, *meta)
+		}
+	}
+	return generators
+}

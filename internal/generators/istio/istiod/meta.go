@@ -9,7 +9,7 @@ var Istiod = generator.GeneratorMeta{
 	Name:          "istiod",
 	Namespace:     istio.Namespace,
 	GeneratorType: generator.Istio,
-	Helm: generator.Helm{
+	Helm: &generator.Helm{
 		Chart:   "istiod",
 		Version: "1.27.0",
 	},

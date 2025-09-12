@@ -11,15 +11,15 @@ var Dawarich = generator.GeneratorMeta{
 	GeneratorType: generator.App,
 	ClusterUrl:    "dawarich.dawarich.svc.cluster.local",
 	Port:          3000,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "freikin/dawarich",
 		//FIXME: set to nil, later fetch in generator from version.json
 		Version: "0.30.10",
 	},
-	Caddy: generator.Caddy{
+	Caddy: &generator.Caddy{
 		DNSName: "dawarich.cluster",
 	},
-	KedaScaling: keda.ScaledObjectTriggerMeta{
+	KedaScaling: &keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 8 * * *",
 		End:             "0 22 * * *",

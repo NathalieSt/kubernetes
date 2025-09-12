@@ -11,15 +11,15 @@ var Perses = generator.GeneratorMeta{
 	GeneratorType: generator.Monitoring,
 	ClusterUrl:    "perses.perses.svc.cluster.local",
 	Port:          8080,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "persesdev/perses",
 		//FIXME: set to nil, later fetch in generator from version.json
 		Version: "v0.52",
 	},
-	Caddy: generator.Caddy{
+	Caddy: &generator.Caddy{
 		DNSName: "perses.cluster",
 	},
-	KedaScaling: keda.ScaledObjectTriggerMeta{
+	KedaScaling: &keda.ScaledObjectTriggerMeta{
 		Timezone:        "Europe/Vienna",
 		Start:           "0 8 * * *",
 		End:             "0 22 * * *",

@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 )
 
-type ExposedServices map[string]string
+type ExposedGenerators map[string]string
 
-func GetExposedGenerators(root string) (*ExposedServices, error) {
+func GetExposedGenerators(root string) (*ExposedGenerators, error) {
 
 	file, err := os.Open(filepath.Join(root, "clidata/exposedgenerators.json"))
 	if err != nil {
@@ -23,15 +23,15 @@ func GetExposedGenerators(root string) (*ExposedServices, error) {
 
 	byteValue, _ := io.ReadAll(file)
 
-	var services ExposedServices
+	var generators ExposedGenerators
 
-	err = json.Unmarshal(byteValue, &services)
+	err = json.Unmarshal(byteValue, &generators)
 	if err != nil {
 		fmt.Printf("error while marhsaling values from exposedgenerators.json \n")
 		return nil, err
 	}
 
-	return &services, nil
+	return &generators, nil
 }
 
 func GetMetaForExposedGenerators() (generator.GeneratorMetas, error) {
@@ -49,11 +49,10 @@ func GetMetaForExposedGenerators() (generator.GeneratorMetas, error) {
 
 	allMetas := []generator.GeneratorMeta{}
 
-	for k, v := range *exposedGenerators {
-		joinedPath := filepath.Join(root, v)
-		meta, err := GetGeneratorMeta(joinedPath)
+	for name, location := range *exposedGenerators {
+		meta, err := GetGeneratorMeta(location)
 		if err != nil {
-			fmt.Printf("Failed to get meta for generator: \n %v \n", k)
+			fmt.Printf("Failed to get meta for generator: \n %v \n", name)
 			fmt.Printf("Reason: \n %v \n", err)
 		} else {
 			allMetas = append(allMetas, *meta)

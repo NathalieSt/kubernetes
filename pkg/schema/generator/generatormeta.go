@@ -50,11 +50,11 @@ type GeneratorMeta struct {
 	GeneratorType       GeneratorType
 	ClusterUrl          string
 	Port                int
-	Docker              Docker
-	Helm                Helm
-	Caddy               Caddy
-	VirtualService      VirtualServiceConfig
-	KedaScaling         keda.ScaledObjectTriggerMeta
+	Docker              *Docker
+	Helm                *Helm
+	Caddy               *Caddy
+	VirtualService      *VirtualServiceConfig
+	KedaScaling         *keda.ScaledObjectTriggerMeta
 	DependsOnGenerators []string
 }
 

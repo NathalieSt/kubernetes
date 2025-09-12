@@ -10,7 +10,7 @@ var Valkey = generator.GeneratorMeta{
 	GeneratorType: generator.Infrastructure,
 	ClusterUrl:    "valkey.valkey.svc.cluster.local",
 	Port:          6379,
-	Docker: generator.Docker{
+	Docker: &generator.Docker{
 		Registry: "valkey/valkey",
 		Version:  "8-alpine3.22",
 	},
