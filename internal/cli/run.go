@@ -13,7 +13,7 @@ import (
 	"github.com/rivo/tview"
 )
 
-func appendGeneratorsToTreeNode(treeNode *tview.TreeNode, generators []generator.GeneratorMeta, generatorCommandHandler func()) {
+func appendGeneratorsToTreeNode(treeNode *tview.TreeNode, generators []generator.GeneratorMeta, generatorCommandHandler func(generator.GeneratorMeta)) {
 
 	if len(generators) == 0 {
 		treeNode.AddChild(tview.NewTreeNode("Generators").SetText("No generators available\nPlease try to run the \"discover\" command to find generators"))
@@ -31,7 +31,9 @@ func appendGeneratorsToTreeNode(treeNode *tview.TreeNode, generators []generator
 
 		generatorNode := tview.NewTreeNode(fmt.Sprintf("%v %v", generator.Name, version))
 
-		generatorNode.SetSelectedFunc(generatorCommandHandler)
+		generatorNode.SetSelectedFunc(func() {
+			generatorCommandHandler(generator)
+		})
 
 		treeNode.AddChild(generatorNode)
 	}
@@ -58,7 +60,7 @@ func appendGeneratorsToTree(
 	infrastructureGenerators []generator.GeneratorMeta,
 	istioGenerators []generator.GeneratorMeta,
 	monitoringGenerators []generator.GeneratorMeta,
-	generatorCommandHandler func(),
+	generatorCommandHandler func(generator.GeneratorMeta),
 ) {
 	rootNode := tree.GetRoot()
 	rootNode.ClearChildren()
@@ -83,7 +85,7 @@ func appendGeneratorsToTree(
 	appendGeneratorsToTreeNode(monitoringNode, monitoringGenerators, generatorCommandHandler)
 }
 
-func initializeGeneratorTree(rootDir string, outputView *tview.TextView, generatorsTree *tview.TreeView, generatorCommandHandler func()) {
+func initializeGeneratorTree(rootDir string, outputView *tview.TextView, generatorsTree *tview.TreeView, generatorCommandHandler func(generator.GeneratorMeta)) {
 	discoveredGeneratorsBytes, err := os.ReadFile(path.Join(rootDir, "clidata/discoveredgenerators.json"))
 	if err != nil {
 		logToOutput(outputView, fmt.Sprintf("An error happened while reading discoveredgenerators.json: \n %v", err))
@@ -140,7 +142,8 @@ func Start() {
 	outputView.SetScrollable(true)
 
 	currentGeneratorCommand := None
-	generatorCommandHandler := func() {
+	generatorCommandHandler := func(meta generator.GeneratorMeta) {
+		logToOutput(outputView, fmt.Sprintf("Generators Meta: %v", meta))
 		switch currentGeneratorCommand {
 		case None:
 			logToOutput(outputView, "Current command: None")
