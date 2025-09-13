@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createCaddyManifests(rootDir string, generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
@@ -33,7 +33,7 @@ func createCaddyManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		},
 	}
 
-	exposedGeneratorsMeta, err := utils.GetMetaForExposedGenerators()
+	exposedGeneratorsMeta, err := utils.GetMetaForExposedGenerators(rootDir)
 	if err != nil {
 		fmt.Printf("An error happened while getting metadata for exposed services: \n %v", err)
 	}

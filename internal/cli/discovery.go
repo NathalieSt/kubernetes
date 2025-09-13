@@ -79,7 +79,7 @@ func discoverGeneratorsByCategoryViaPath(workingDirectory string, rootDir string
 	exposedGenerators := ExposedGenerators{}
 
 	for _, location := range locations {
-		meta, err := utils.GetGeneratorMeta(location)
+		meta, err := utils.GetGeneratorMeta(rootDir, location)
 		if err != nil || meta == nil {
 			logToOutput(logOutputView, fmt.Sprintf("Failed getting meta for location: %v \n Error: %v \n", location, err))
 		} else {

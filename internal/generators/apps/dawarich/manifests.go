@@ -67,13 +67,13 @@ func createDawarichManifests(generatorMeta generator.GeneratorMeta, rootDir stri
 		},
 	}
 
-	redisMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/redis"))
+	redisMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/redis"))
 	if err != nil {
 		fmt.Println("An error happened while getting redis meta ")
 		return nil, err
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/postgres"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err

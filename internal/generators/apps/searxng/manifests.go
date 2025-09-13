@@ -17,13 +17,13 @@ func createSearXNGManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
-	valkeyMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/valkey"))
+	valkeyMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/valkey"))
 	if err != nil {
 		fmt.Println("An error happened while getting valkey meta")
 		return nil, err
 	}
 
-	proxyMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/gluetun-proxy"))
+	proxyMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/gluetun-proxy"))
 	if err != nil {
 		fmt.Println("An error happened while getting gluetun-proxy meta")
 		return nil, err

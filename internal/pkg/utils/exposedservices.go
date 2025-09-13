@@ -11,9 +11,9 @@ import (
 
 type ExposedGenerators map[string]string
 
-func GetExposedGenerators(root string) (*ExposedGenerators, error) {
+func GetExposedGenerators(rootDir string) (*ExposedGenerators, error) {
 
-	file, err := os.Open(filepath.Join(root, "clidata/exposedgenerators.json"))
+	file, err := os.Open(filepath.Join(rootDir, "clidata/exposedgenerators.json"))
 	if err != nil {
 		fmt.Printf("failed to open exposedgenerators.json \n")
 		return nil, err
@@ -34,14 +34,8 @@ func GetExposedGenerators(root string) (*ExposedGenerators, error) {
 	return &generators, nil
 }
 
-func GetMetaForExposedGenerators() (generator.GeneratorMetas, error) {
-	root, err := FindRoot()
-	if err != nil {
-		fmt.Printf("Failed to get root")
-		return nil, err
-	}
-
-	exposedGenerators, err := GetExposedGenerators(root)
+func GetMetaForExposedGenerators(rootDir string) (generator.GeneratorMetas, error) {
+	exposedGenerators, err := GetExposedGenerators(rootDir)
 	if err != nil {
 		fmt.Printf("Failed to get exposed generators \n")
 		return nil, err
@@ -50,7 +44,7 @@ func GetMetaForExposedGenerators() (generator.GeneratorMetas, error) {
 	allMetas := []generator.GeneratorMeta{}
 
 	for name, location := range *exposedGenerators {
-		meta, err := GetGeneratorMeta(location)
+		meta, err := GetGeneratorMeta(rootDir, location)
 		if err != nil {
 			fmt.Printf("Failed to get meta for generator: \n %v \n", name)
 			fmt.Printf("Reason: \n %v \n", err)

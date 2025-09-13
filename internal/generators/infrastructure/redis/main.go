@@ -1,16 +1,17 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"path/filepath"
 )
 
 func main() {
-	rootDir, err := utils.FindRoot()
-	if err != nil {
-		fmt.Println("❌ An error occurred while finding the project root")
-		fmt.Println("Error: " + err.Error())
+	rootDir := flag.String("root", "", "The root directory of this project")
+	if *rootDir == "" {
+		fmt.Println("❌ No root directory was specified as flag")
+		return
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{

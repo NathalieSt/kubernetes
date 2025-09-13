@@ -104,16 +104,16 @@ func initializeGeneratorTree(rootDir string, outputView *tview.TextView, generat
 
 		var wg sync.WaitGroup
 		wg.Go(func() {
-			appsGenerators = utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Apps)))
+			appsGenerators = utils.GetGeneratorMetasByPaths(rootDir, slices.Collect(maps.Values(discoveredGenerators.Apps)))
 		})
 		wg.Go(func() {
-			infrastructureGenerators = utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Infrastructure)))
+			infrastructureGenerators = utils.GetGeneratorMetasByPaths(rootDir, slices.Collect(maps.Values(discoveredGenerators.Infrastructure)))
 		})
 		wg.Go(func() {
-			istioGenerators = utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Istio)))
+			istioGenerators = utils.GetGeneratorMetasByPaths(rootDir, slices.Collect(maps.Values(discoveredGenerators.Istio)))
 		})
 		wg.Go(func() {
-			monitoringGenerators = utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Monitoring)))
+			monitoringGenerators = utils.GetGeneratorMetasByPaths(rootDir, slices.Collect(maps.Values(discoveredGenerators.Monitoring)))
 		})
 
 		wg.Wait()
@@ -156,7 +156,9 @@ func runGeneratorFromJSON(rootDir string, meta generator.GeneratorMeta, outputVi
 	}
 
 	logToOutput(outputView, "Running generator")
-	_, err = utils.RunGeneratorMain(generatorLocation, []string{})
+	_, err = utils.RunGeneratorMain(generatorLocation, []string{
+		fmt.Sprintf("--root %v", rootDir),
+	})
 	if err != nil {
 		logToOutput(outputView, fmt.Sprintf("Running the generator failed! Reason: \n %v", err))
 	} else {

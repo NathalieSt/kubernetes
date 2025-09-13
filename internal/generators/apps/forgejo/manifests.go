@@ -35,13 +35,13 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/postgres"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
 	}
 
-	valkeyMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/valkey"))
+	valkeyMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/valkey"))
 	if err != nil {
 		fmt.Println("An error happened while getting valkey meta ")
 		return nil, err
@@ -93,7 +93,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									"NAME":    "forgejo",
 								},
 								"server": map[string]any{
-									"ROOT_URL": fmt.Sprintf("https://%v.netbird.selfhosted", Forgejo.Caddy.DNSName),
+									"ROOT_URL": fmt.Sprintf("https://%v.netbird.selfhosted", generatorMeta.Caddy.DNSName),
 								},
 							},
 							"queue": map[string]any{

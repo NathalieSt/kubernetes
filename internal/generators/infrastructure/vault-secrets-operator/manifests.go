@@ -9,7 +9,7 @@ import (
 	"path"
 )
 
-func createVaultSecretsOperatorManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
+func createVaultSecretsOperatorManifests(rootDir string, generatorMeta generator.GeneratorMeta) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
@@ -26,7 +26,7 @@ func createVaultSecretsOperatorManifests(generatorMeta generator.GeneratorMeta, 
 		nil,
 	)
 
-	vaultMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/vault"))
+	vaultMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/vault"))
 	if err != nil {
 		fmt.Println("An error happened while getting vault meta ")
 		return nil, err

@@ -1,0 +1,5 @@
+{
+    "kiali": "2.14.0",
+    "perses": "v0.52",
+    "victoria-metrics": "0.59.3"
+}

@@ -1,21 +1,34 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
 
 func main() {
-	rootDir, err := utils.FindRoot()
-	if err != nil {
-		fmt.Println("❌ An error occurred while finding the project root")
-		fmt.Println("Error: " + err.Error())
+	rootDir := flag.String("root", "", "The root directory of this project")
+	if *rootDir == "" {
+		fmt.Println("❌ No root directory was specified as flag")
+		return
+	}
+
+	meta := generator.GeneratorMeta{
+		Name:          "base",
+		Namespace:     istio.Namespace,
+		GeneratorType: generator.Istio,
+		Helm: &generator.Helm{
+			Chart: "base",
+		},
+		DependsOnGenerators: []string{},
 	}
 
 	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Base,
-		OutputDir:       filepath.Join(rootDir, "/cluster/istio/base/"),
+		Meta:            meta,
+		OutputDir:       filepath.Join(*rootDir, "/cluster/istio/base/"),
 		CreateManifests: createBaseManifests,
 	})
 }

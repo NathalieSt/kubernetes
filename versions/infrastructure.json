@@ -1,0 +1,13 @@
+{
+    "caddy": "",
+    "cnpg": "",
+    "csi-driver-nfs": "",
+    "gluetun-proxy": "",
+    "keda": "",
+    "postgres": "",
+    "redis": "",
+    "reflector": "",
+    "valkey": "",
+    "vault": "",
+    "vault-secrets-operator": ""
+}

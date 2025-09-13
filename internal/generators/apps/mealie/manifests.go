@@ -34,7 +34,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(path.Join(rootDir, "internal/generators/infrastructure/postgres"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
@@ -111,7 +111,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 										},
 										{
 											Name:  "BASE_URL",
-											Value: fmt.Sprintf("https://%v.netbird.selfhosted", Mealie.Caddy.DNSName),
+											Value: fmt.Sprintf("https://%v.netbird.selfhosted", generatorMeta.Caddy.DNSName),
 										},
 									},
 									VolumeMounts: []core.VolumeMount{

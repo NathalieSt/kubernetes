@@ -8,9 +8,9 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createIstioNetworkingManifests(generatorMeta generator.GeneratorMeta) (map[string][]byte, error) {
+func createIstioNetworkingManifests(rootDir string, generatorMeta generator.GeneratorMeta) (map[string][]byte, error) {
 
-	exposedServices, err := utils.GetMetaForExposedGenerators()
+	exposedServices, err := utils.GetMetaForExposedGenerators(rootDir)
 	if err != nil {
 		fmt.Println("An error happened while getting exposed services")
 		return nil, err
