@@ -1,43 +1,13 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
-	"maps"
-	"os"
-	"path"
-	"slices"
+	"time"
 
 	"github.com/rivo/tview"
 )
-
-func appendGeneratorsToTreeNode(treeNode *tview.TreeNode, generators []generator.GeneratorMeta, generatorCommandHandler func(generator.GeneratorMeta)) {
-
-	if len(generators) == 0 {
-		treeNode.AddChild(tview.NewTreeNode("Generators").SetText("No generators available\nPlease try to run the \"discover\" command to find generators"))
-		return
-	}
-
-	for _, generator := range generators {
-		version := ""
-
-		if generator.Helm != nil && generator.Helm.Version != "" {
-			version = fmt.Sprintf("(%v)", generator.Helm.Version)
-		} else if generator.Docker != nil && generator.Docker.Version != "" {
-			version = fmt.Sprintf("(%v)", generator.Docker.Version)
-		}
-
-		generatorNode := tview.NewTreeNode(fmt.Sprintf("%v %v", generator.Name, version))
-
-		generatorNode.SetSelectedFunc(func() {
-			generatorCommandHandler(generator)
-		})
-
-		treeNode.AddChild(generatorNode)
-	}
-}
 
 func logToOutput(outputView *tview.TextView, message string) {
 	outputView.Write([]byte(message))
@@ -48,80 +18,15 @@ func clearOutput(outputView *tview.TextView) {
 	outputView.Clear()
 }
 
-func makeNodeExpandable(node *tview.TreeNode) {
-	node.SetSelectedFunc(func() {
-		node.SetExpanded(!node.IsExpanded())
-	})
-}
-
-func appendGeneratorsToTree(
-	tree *tview.TreeView,
-	appsGenerators []generator.GeneratorMeta,
-	infrastructureGenerators []generator.GeneratorMeta,
-	istioGenerators []generator.GeneratorMeta,
-	monitoringGenerators []generator.GeneratorMeta,
-	generatorCommandHandler func(generator.GeneratorMeta),
-) {
-	rootNode := tree.GetRoot()
-	rootNode.ClearChildren()
-
-	applicationNode := tview.NewTreeNode("Applications").SetExpanded(false)
-	makeNodeExpandable(applicationNode)
-
-	infrastructureNode := tview.NewTreeNode("Infrastructure").SetExpanded(false)
-	makeNodeExpandable(infrastructureNode)
-
-	istioNode := tview.NewTreeNode("Istio").SetExpanded(false)
-	makeNodeExpandable(istioNode)
-
-	monitoringNode := tview.NewTreeNode("Monitoring").SetExpanded(false)
-	makeNodeExpandable(monitoringNode)
-
-	rootNode.AddChild(applicationNode).AddChild(infrastructureNode).AddChild(istioNode).AddChild(monitoringNode)
-
-	appendGeneratorsToTreeNode(applicationNode, appsGenerators, generatorCommandHandler)
-	appendGeneratorsToTreeNode(infrastructureNode, infrastructureGenerators, generatorCommandHandler)
-	appendGeneratorsToTreeNode(istioNode, istioGenerators, generatorCommandHandler)
-	appendGeneratorsToTreeNode(monitoringNode, monitoringGenerators, generatorCommandHandler)
-}
-
-func initializeGeneratorTree(rootDir string, outputView *tview.TextView, generatorsTree *tview.TreeView, generatorCommandHandler func(generator.GeneratorMeta)) {
-	discoveredGeneratorsBytes, err := os.ReadFile(path.Join(rootDir, "clidata/discoveredgenerators.json"))
-	if err != nil {
-		logToOutput(outputView, fmt.Sprintf("An error happened while reading discoveredgenerators.json: \n %v", err))
-	}
-
-	discoveredGenerators := DiscoveredGenerators{}
-	err = json.Unmarshal(discoveredGeneratorsBytes, &discoveredGenerators)
-	if err != nil {
-		logToOutput(outputView, fmt.Sprintf("An error happened while unmarshalling discoveredgenerators.json: \n %v", err))
-	} else {
-		appendGeneratorsToTree(
-			generatorsTree,
-			utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Apps))),
-			utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Infrastructure))),
-			utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Istio))),
-			utils.GetGeneratorMetasByPaths(slices.Collect(maps.Values(discoveredGenerators.Monitoring))),
-			generatorCommandHandler,
-		)
-	}
-}
-
-type GeneratorCommand string
-
-var (
-	Run     GeneratorCommand = "Run"
-	Version GeneratorCommand = "Version"
-	None    GeneratorCommand = "None"
-)
-
 func Start() {
+	start := time.Now()
 	app := tview.NewApplication()
 	commandList := tview.NewList()
 	rootTreeNode := tview.NewTreeNode("Generators")
 	generatorsTree := tview.NewTreeView().SetRoot(rootTreeNode).SetCurrentNode(rootTreeNode)
 	outputView := tview.NewTextView()
 	actionArea := tview.NewFlex()
+	pages := tview.NewPages()
 	flex := tview.NewFlex()
 
 	rootDir, err := utils.FindRoot()
@@ -143,12 +48,13 @@ func Start() {
 
 	currentGeneratorCommand := None
 	generatorCommandHandler := func(meta generator.GeneratorMeta) {
-		logToOutput(outputView, fmt.Sprintf("Generators Meta: %v", meta))
 		switch currentGeneratorCommand {
 		case None:
 			logToOutput(outputView, "Current command: None")
 		case Run:
-			logToOutput(outputView, "Current command: Run")
+			logToOutput(outputView, fmt.Sprintf("Running generator: %v", meta.Name))
+			runGeneratorFromJSON(rootDir, meta, outputView)
+			logToOutput(outputView, "")
 		case Version:
 			logToOutput(outputView, "Current command: Version")
 		}
@@ -176,6 +82,10 @@ func Start() {
 			logToOutput(outputView, "Appending generators to tree")
 			appendGeneratorsToTree(generatorsTree, apps, infrastructure, istio, monitoring, generatorCommandHandler)
 			logToOutput(outputView, "Discovery completed")
+			logToOutput(outputView, "")
+		}).
+		AddItem("Scaffolding", "Create scaffolding for new generator", 's', func() {
+			pages.SwitchToPage("Scaffolding")
 		}).
 		AddItem("Quit", "Press to exit", 'q', func() {
 			app.Stop()
@@ -190,7 +100,14 @@ func Start() {
 		AddItem(commandList, 40, 1, true).
 		AddItem(actionArea, 0, 3, false).
 		AddItem(generatorsTree, 0, 1, false)
-	if err := app.SetRoot(flex, true).SetFocus(flex).Run(); err != nil {
+
+	pages.AddPage("Main", flex, true, true)
+	pages.AddPage("Scaffolding", tview.NewBox().SetTitle("This is my super awesome box").SetBorder(true), true, false)
+
+	elapsed := time.Since(start)
+	logToOutput(outputView, fmt.Sprintf("Initialization took: %s", elapsed))
+
+	if err := app.SetRoot(pages, true).SetFocus(pages).Run(); err != nil {
 		panic(err)
 	}
 }

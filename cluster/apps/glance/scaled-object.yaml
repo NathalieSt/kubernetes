@@ -1,8 +1,8 @@
+---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: glance-scaledobject
-  namespace: glance
 spec:
   scaleTargetRef:
     name: glance
@@ -12,6 +12,6 @@ spec:
   - type: cron
     metadata:
       timezone: Europe/Vienna
-      start: '0 7 * * *'
-      end: '0 23 * * *'
-      desiredReplicas: '1'
+      start: 0 7 * * *
+      end: 0 23 * * *
+      desiredReplicas: "1"

@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,8 +25,8 @@ spec:
           name: glance
         volumeMounts:
         - mountPath: /app/config
-          name: glance-config
+          name: configmap-volume
       volumes:
-      - configMap:
+      - name: configmap-volume
+        configMap:
           name: glance-configmap
-        name: glance-config
