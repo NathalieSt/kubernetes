@@ -19,7 +19,6 @@ type ServiceEntrySpec struct {
 
 type ServiceEntry struct {
 	shared.CommonK8sResourceWithSpec[ServiceEntrySpec] `yaml:",omitempty,inline" validate:"required"`
-	Spec                                               ServiceEntrySpec
 }
 
 func NewServiceEntry(meta meta.ObjectMeta, spec ServiceEntrySpec) ServiceEntry {
