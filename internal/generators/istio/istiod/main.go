@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
@@ -10,9 +9,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -24,14 +23,15 @@ func main() {
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Chart:   "istiod",
-			Version: utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            meta,
-		OutputDir:       filepath.Join(*rootDir, "/cluster/istio/istiod/"),
-		CreateManifests: createIstiodManifests,
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/istio/istiod/"),
+		CreateManifests:  createIstiodManifests,
 	})
 }

@@ -44,6 +44,11 @@ const (
 	Monitoring
 )
 
+type GeneratorFlags struct {
+	RootDir          string
+	ShouldReturnMeta bool
+}
+
 type GeneratorMeta struct {
 	Name                string
 	Namespace           string

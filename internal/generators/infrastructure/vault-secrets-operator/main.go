@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
@@ -9,9 +8,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -24,18 +23,19 @@ func main() {
 		Helm: &generator.Helm{
 			Chart:   "vault-secrets-operator",
 			Url:     "https://helm.releases.hashicorp.com",
-			Version: utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{
 			"vault",
 		},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:      meta,
-		OutputDir: filepath.Join(*rootDir, "/cluster/infrastructure/vault-secrets-operator/"),
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/vault-secrets-operator/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := createVaultSecretsOperatorManifests(*rootDir, gm)
+			manifests, err := createVaultSecretsOperatorManifests(flags.RootDir, gm)
 			if err != nil {
 				fmt.Println("An error happened while generating Vault-Secrets-Operator manifests")
 				fmt.Printf("Reason:\n %v", err)

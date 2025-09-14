@@ -1,14 +1,15 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: searxng
-    app.kubernetes.io/version: '2025.8.3-2e62eb5'
+    app.kubernetes.io/version: 2025.8.3-2e62eb5
   name: searxng
 spec:
-  ports:
-  - name: searxng
-    port: 8080
-    targetPort: 8080
   selector:
     app.kubernetes.io/name: searxng
+  ports:
+  - name: http-searxng
+    port: 8080
+    targetport: 8080

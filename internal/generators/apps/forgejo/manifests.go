@@ -37,13 +37,13 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 
 	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres"))
 	if err != nil {
-		fmt.Println("An error happened while getting postgres meta ")
+		fmt.Println("An error happened while getting postgres meta for forgejo")
 		return nil, err
 	}
 
 	valkeyMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/valkey"))
 	if err != nil {
-		fmt.Println("An error happened while getting valkey meta ")
+		fmt.Println("An error happened while getting valkey meta for forgejo")
 		return nil, err
 	}
 

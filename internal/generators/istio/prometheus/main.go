@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
@@ -10,9 +9,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -25,14 +24,15 @@ func main() {
 		Port:          9090,
 		Docker: &generator.Docker{
 			Registry: "prom/prometheus",
-			Version:  utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Prometheus,
-		OutputDir:       filepath.Join(*rootDir, "/cluster/istio/prometheus/"),
-		CreateManifests: createPrometheusManifests,
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             Prometheus,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/istio/prometheus/"),
+		CreateManifests:  createPrometheusManifests,
 	})
 }

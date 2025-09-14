@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
@@ -9,9 +8,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -26,7 +25,7 @@ func main() {
 		Helm: &generator.Helm{
 			Chart:   "vault",
 			Url:     "https://helm.releases.hashicorp.com",
-			Version: utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "vault.cluster",
@@ -34,9 +33,10 @@ func main() {
 		DependsOnGenerators: []string{},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Vault,
-		OutputDir:       filepath.Join(*rootDir, "/cluster/infrastructure/vault/"),
-		CreateManifests: createVaultManifests,
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             Vault,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/vault/"),
+		CreateManifests:  createVaultManifests,
 	})
 }

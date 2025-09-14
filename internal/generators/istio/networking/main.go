@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
@@ -10,9 +9,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -24,16 +23,17 @@ func main() {
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Url:     "oci://code.forgejo.org/forgejo-helm/forgejo",
-			Version: utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:      networking,
-		OutputDir: filepath.Join(*rootDir, "/cluster/istio/networking/"),
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             networking,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/istio/networking/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := createIstioNetworkingManifests(*rootDir, gm)
+			manifests, err := createIstioNetworkingManifests(flags.RootDir, gm)
 			if err != nil {
 				fmt.Println("An error happened while generating Istio networking Manifests")
 				fmt.Printf("Reason:\n %v", err)

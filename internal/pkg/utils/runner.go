@@ -2,26 +2,21 @@ package utils
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"kubernetes/pkg/schema/generator"
 	"os"
 )
 
-type GeneratorConfig struct {
-	Meta            generator.GeneratorMeta
-	OutputDir       string
-	CreateManifests func(generator.GeneratorMeta) map[string][]byte
+type GeneratorRunnerConfig struct {
+	Meta             generator.GeneratorMeta
+	ShouldReturnMeta bool
+	OutputDir        string
+	CreateManifests  func(generator.GeneratorMeta) map[string][]byte
 }
 
-func RunGenerator(config GeneratorConfig) {
-
+func RunGenerator(config GeneratorRunnerConfig) {
 	meta := config.Meta
-	metadataFlag := flag.Bool("metadata", false, "Output generator metadata")
-
-	flag.Parse()
-
-	if *metadataFlag {
+	if config.ShouldReturnMeta {
 		json.NewEncoder(os.Stdout).Encode(meta)
 		return
 	}

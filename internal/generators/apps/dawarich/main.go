@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
@@ -10,13 +9,13 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
-	name := ""
+	name := "dawarich"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
@@ -26,7 +25,7 @@ func main() {
 		Port:          3000,
 		Docker: &generator.Docker{
 			Registry: "freikin/dawarich",
-			Version:  utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "dawarich.cluster",
@@ -43,11 +42,12 @@ func main() {
 		},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:      meta,
-		OutputDir: filepath.Join(*rootDir, "/cluster/apps/dawarich/"),
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/dawarich/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := createDawarichManifests(gm, *rootDir)
+			manifests, err := createDawarichManifests(gm, flags.RootDir)
 			if err != nil {
 				fmt.Println("An error happened while generating Dawarich Manifests")
 				fmt.Printf("Reason:\n %v", err)

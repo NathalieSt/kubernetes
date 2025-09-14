@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
@@ -9,9 +8,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -25,19 +24,19 @@ func main() {
 		Port:          80,
 		Docker: &generator.Docker{
 			Registry: "caddy",
-			Version:  utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{
 			"istio-networking",
 		},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta: caddy,
-		// FIXME: maybe set the relative path to root in meta?
-		OutputDir: filepath.Join(*rootDir, "/cluster/infrastructure/caddy/"),
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             caddy,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/caddy/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			return createCaddyManifests(*rootDir, gm)
+			return createCaddyManifests(flags.RootDir, gm)
 		},
 	})
 }

@@ -1,17 +1,17 @@
+---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: searxng-scaledobject
-  namespace: searxng
 spec:
   scaleTargetRef:
-    name: searxng-deployment
+    name: searxng
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:
   - type: cron
     metadata:
       timezone: Europe/Vienna
-      start: '0 7 * * *'
-      end: '0 23 * * *'
-      desiredReplicas: '1'
+      start: 0 7 * * *
+      end: 0 23 * * *
+      desiredReplicas: "1"

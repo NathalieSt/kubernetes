@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
@@ -10,9 +9,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -30,14 +29,15 @@ func main() {
 		Helm: &generator.Helm{
 			Chart:   "kiali-operator",
 			Url:     "https://kiali.org/helm-charts",
-			Version: utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            kiali,
-		OutputDir:       filepath.Join(*rootDir, "/cluster/monitoring/kiali/"),
-		CreateManifests: createKialiManifests,
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             kiali,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/monitoring/kiali/"),
+		CreateManifests:  createKialiManifests,
 	})
 }

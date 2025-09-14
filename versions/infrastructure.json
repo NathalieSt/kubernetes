@@ -1,13 +1,13 @@
 {
-    "caddy": "",
-    "cnpg": "",
-    "csi-driver-nfs": "",
-    "gluetun-proxy": "",
-    "keda": "",
-    "postgres": "",
-    "redis": "",
-    "reflector": "",
-    "valkey": "",
-    "vault": "",
-    "vault-secrets-operator": ""
+    "caddy": "2.10.0-alpine",
+    "cnpg": "0.26.0",
+    "csi-driver-nfs": "4.11.0",
+    "gluetun-proxy": "v3.40",
+    "keda": "2.17.2",
+    "postgres": "8.2.1",
+    "redis": "8.2.1",
+    "reflector": "9.1.27",
+    "valkey": "8-alpine3.22",
+    "vault": "0.30.1",
+    "vault-secrets-operator": "0.10.0"
 }

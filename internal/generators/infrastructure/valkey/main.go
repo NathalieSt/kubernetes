@@ -1,22 +1,38 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            Valkey,
-		OutputDir:       filepath.Join(rootDir, "/cluster/infrastructure/valkey/"),
-		CreateManifests: createValkeyManifests,
+	name := "valkey"
+	generatorType := generator.Infrastructure
+	meta := generator.GeneratorMeta{
+		Name:          name,
+		Namespace:     "valkey",
+		GeneratorType: generatorType,
+		ClusterUrl:    "valkey.valkey.svc.cluster.local",
+		Port:          6379,
+		Docker: &generator.Docker{
+			Registry: "valkey/valkey",
+			Version:  "8-alpine3.22",
+		},
+		DependsOnGenerators: []string{},
+	}
+
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/valkey/"),
+		CreateManifests:  createValkeyManifests,
 	})
 }

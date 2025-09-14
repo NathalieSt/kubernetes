@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
@@ -10,10 +9,9 @@ import (
 )
 
 func main() {
-
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -28,7 +26,7 @@ func main() {
 		Port:          8080,
 		Docker: &generator.Docker{
 			Registry: "persesdev/perses",
-			Version:  utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "perses.cluster",
@@ -42,9 +40,10 @@ func main() {
 		DependsOnGenerators: []string{},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            meta,
-		OutputDir:       filepath.Join(*rootDir, "/cluster/monitoring/perses/"),
-		CreateManifests: createPersesManifests,
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/monitoring/perses/"),
+		CreateManifests:  createPersesManifests,
 	})
 }

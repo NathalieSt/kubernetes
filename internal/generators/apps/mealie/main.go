@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
@@ -10,9 +9,9 @@ import (
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
@@ -27,7 +26,7 @@ func main() {
 		Docker: &generator.Docker{
 			Registry: "ghcr.io/mealie-recipes/mealie",
 			//FIXME: set to nil, later fetch in generator from version.json
-			Version: utils.GetGeneratorVersionByType(*rootDir, name, generatorType),
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "mealie.cluster",
@@ -43,11 +42,12 @@ func main() {
 		},
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:      meta,
-		OutputDir: filepath.Join(*rootDir, "/cluster/apps/mealie/"),
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/mealie/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := createMealieManifests(gm, *rootDir)
+			manifests, err := createMealieManifests(gm, flags.RootDir)
 			if err != nil {
 				fmt.Println("An error happened while generating Forgejo Manifests")
 				fmt.Printf("Reason:\n %v", err)

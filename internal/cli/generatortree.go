@@ -155,9 +155,10 @@ func runGeneratorFromJSON(rootDir string, meta generator.GeneratorMeta, outputVi
 		generatorLocation = discoveredGenerators.Monitoring[meta.Name]
 	}
 
+	rootDirFlag := fmt.Sprintf("--root=%v", rootDir)
 	logToOutput(outputView, "Running generator")
 	_, err = utils.RunGeneratorMain(generatorLocation, []string{
-		fmt.Sprintf("--root %v", rootDir),
+		rootDirFlag,
 	})
 	if err != nil {
 		logToOutput(outputView, fmt.Sprintf("Running the generator failed! Reason: \n %v", err))

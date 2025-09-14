@@ -1,10 +1,11 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: searxng
-    app.kubernetes.io/version: '2025.8.3-2e62eb5'
-  name: searxng-deployment
+    app.kubernetes.io/version: 2025.8.3-2e62eb5
+  name: searxng
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: searxng
-        app.kubernetes.io/version: '2025.8.3-2e62eb5'
+        app.kubernetes.io/version: 2025.8.3-2e62eb5
     spec:
       containers:
       - image: searxng/searxng:2025.8.3-2e62eb5
@@ -24,8 +25,8 @@ spec:
           name: searxng
         volumeMounts:
         - mountPath: /etc/searxng
-          name: searxng-config
+          name: configmap-volume
       volumes:
-      - configMap:
+      - name: configmap-volume
+        configMap:
           name: searxng-configmap
-        name: searxng-config

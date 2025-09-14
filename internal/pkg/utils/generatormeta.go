@@ -2,12 +2,12 @@ package utils
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"kubernetes/pkg/schema/generator"
 	"os"
 	"os/exec"
 	"path"
-	"strings"
 	"sync"
 )
 
@@ -17,14 +17,15 @@ func RunGeneratorMain(path string, flags []string) ([]byte, error) {
 		return nil, err
 	}
 
-	cmd := exec.Command("go", "run",
-		path,
-		strings.Join(flags, " "),
-	)
+	arguments := []string{"run", path}
+	arguments = append(arguments, flags...)
+
+	cmd := exec.Command("go", arguments...)
 
 	output, err := cmd.Output()
 	if err != nil {
-		fmt.Println("❌ The command for getting the meta of the generator failed")
+		fmt.Println("❌ Executing the generator failed")
+		fmt.Println(err.Error())
 		return nil, err
 	}
 
@@ -32,13 +33,13 @@ func RunGeneratorMain(path string, flags []string) ([]byte, error) {
 }
 
 func GetGeneratorMeta(rootDir string, path string) (*generator.GeneratorMeta, error) {
-
+	rootFlag := fmt.Sprintf("--root=%v", rootDir)
 	output, err := RunGeneratorMain(path, []string{
-		fmt.Sprintf("--root %v", rootDir),
+		rootFlag,
 		"--metadata",
 	})
 	if err != nil {
-		fmt.Println("❌ Failed to run generator with metadata flag")
+		fmt.Println("❌ Failed to get metadata for generator")
 		return nil, err
 	}
 
@@ -59,7 +60,7 @@ func GetGeneratorMetasByPaths(rootDir string, paths []string) []generator.Genera
 
 	for _, path := range paths {
 		wg.Go(func() {
-			meta, err := GetGeneratorMeta(path, rootDir)
+			meta, err := GetGeneratorMeta(rootDir, path)
 			if err != nil {
 				fmt.Printf("❌ Error while getting generator for path: %v \n Reason: \n %v", path, err)
 			} else {
@@ -112,4 +113,22 @@ func GetGeneratorVersionByType(rootDir string, name string, generatorType genera
 	}
 
 	return version
+}
+
+func GetGeneratorFlags() *generator.GeneratorFlags {
+	rootDir := flag.String("root", "", "The root directory of this project")
+	metadataFlag := flag.Bool("metadata", false, "Output generator metadata")
+
+	flag.Parse()
+
+	if *rootDir == "" {
+		fmt.Println("❌ Invalid rootDir was passed to generator")
+		return nil
+	}
+
+	return &generator.GeneratorFlags{
+		RootDir:          *rootDir,
+		ShouldReturnMeta: *metadataFlag,
+	}
+
 }

@@ -1,22 +1,37 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
 
 func main() {
-	rootDir := flag.String("root", "", "The root directory of this project")
-	if *rootDir == "" {
-		fmt.Println("❌ No root directory was specified as flag")
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
 		return
 	}
 
-	utils.RunGenerator(utils.GeneratorConfig{
-		Meta:            CSIDriverNFS,
-		OutputDir:       filepath.Join(rootDir, "/cluster/infrastructure/csi-driver-nfs/"),
-		CreateManifests: createCSIDriverNFSManifests,
+	name := "csi-driver-nfs"
+	generatorType := generator.Infrastructure
+	meta := generator.GeneratorMeta{
+		Name:          name,
+		Namespace:     "csi-driver-nfs",
+		GeneratorType: generatorType,
+		Helm: &generator.Helm{
+			Chart:   "csi-driver-nfs",
+			Url:     "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts",
+			Version: "4.11.0",
+		},
+		DependsOnGenerators: []string{},
+	}
+
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/csi-driver-nfs/"),
+		CreateManifests:  createCSIDriverNFSManifests,
 	})
 }

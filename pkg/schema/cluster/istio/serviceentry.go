@@ -6,15 +6,15 @@ import (
 )
 
 type ServiceEntryPorts struct {
-	Number   int    `yaml:"number"`
-	Name     string `yaml:"name"`
-	Protocol string `yaml:"protocol"`
+	Number   int    `yaml:"number,omitempty"`
+	Name     string `yaml:"name,omitempty"`
+	Protocol string `yaml:"protocol,omitempty"`
 }
 type ServiceEntrySpec struct {
-	Hosts      []string            `yaml:"hosts"`
-	Ports      []ServiceEntryPorts `yaml:"ports"`
-	Location   string              `yaml:"location"`
-	Resolution string              `yaml:"resolution"`
+	Hosts      []string            `yaml:"hosts,omitempty"`
+	Ports      []ServiceEntryPorts `yaml:"ports,omitempty"`
+	Location   string              `yaml:"location,omitempty"`
+	Resolution string              `yaml:"resolution,omitempty"`
 }
 
 type ServiceEntry struct {
