@@ -44,36 +44,36 @@ func createSearXNGManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 use_default_settings: true
 
 general:
-	debug: false
-	instance_name: "Nathalies SearXNG"
+  debug: false
+  instance_name: "Nathalies SearXNG"
 
 search:
-	safe_search: 2
-	autocomplete: 'duckduckgo'
-	formats:
-		- html
+  safe_search: 2
+  autocomplete: 'duckduckgo'
+  formats:
+    - html
 
 server:
-	secret_key: "mBrieVOfZQzc7"
-	limiter: true
-	image_proxy: true
+  secret_key: "mBrieVOfZQzc7"
+  limiter: true
+  image_proxy: true
 
 valkey:
-	url: valkey://%v:%v/0
+  url: valkey://%v:%v/0
 
 outgoing:
-	request_timeout: 4.0       # default timeout in seconds, can be override by engine
-	max_request_timeout: 10.0  # the maximum timeout in seconds
-	useragent_suffix: ""       # information like an email address to the administrator
-	pool_connections: 100      # Maximum number of allowable connections, or null
-								# for no limits. The default is 100.
-	pool_maxsize: 10           # Number of allowable keep-alive connections, or null
-								# to always allow. The default is 10.
-	enable_http2: true         # See https://www.python-httpx.org/http2/
-	proxies:
-		all://:
-			- http://%v:%v
-			`, valkeyMeta.ClusterUrl, valkeyMeta.Port, proxyMeta.ClusterUrl, proxyMeta.Port),
+  request_timeout: 4.0       # default timeout in seconds, can be override by engine
+  max_request_timeout: 10.0  # the maximum timeout in seconds
+  useragent_suffix: ""       # information like an email address to the administrator
+  pool_connections: 100      # Maximum number of allowable connections, or null
+                # for no limits. The default is 100.
+  pool_maxsize: 10           # Number of allowable keep-alive connections, or null
+                # to always allow. The default is 10.
+  enable_http2: true         # See https://www.python-httpx.org/http2/
+  proxies:
+    all://:
+      - http://%v:%v
+      `, valkeyMeta.ClusterUrl, valkeyMeta.Port, proxyMeta.ClusterUrl, proxyMeta.Port),
 			},
 			),
 		},
