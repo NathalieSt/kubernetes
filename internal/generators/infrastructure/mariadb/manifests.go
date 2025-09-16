@@ -93,10 +93,6 @@ func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[stri
 											},
 										},
 										{
-											Name:  "MYSQL_DATABASE",
-											Value: "booklore",
-										},
-										{
 											Name: "MYSQL_USER",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{

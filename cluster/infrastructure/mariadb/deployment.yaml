@@ -38,8 +38,6 @@ spec:
             secretKeyRef:
               key: password
               name: mariadb-creds-secret
-        - name: MYSQL_DATABASE
-          value: booklore
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
