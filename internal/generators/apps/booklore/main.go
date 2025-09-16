@@ -15,20 +15,20 @@ func main() {
 		return
 	}
 
-	name := "glance"
+	name := "booklore"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "glance",
+		Namespace:     "booklore",
 		GeneratorType: generatorType,
 		ClusterUrl:    "glance.glance.svc.cluster.local",
-		Port:          8080,
+		Port:          6060,
 		Docker: &generator.Docker{
-			Registry: "glanceapp/glance",
+			Registry: "booklore/booklore",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName: "glance.cluster",
+			DNSName: "booklore.cluster",
 		},
 		KedaScaling: &keda.ScaledObjectTriggerMeta{
 			Timezone:        "Europe/Vienna",
@@ -42,7 +42,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/glance/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/booklore/"),
 		CreateManifests:  createGlanceManifests,
 	})
 }

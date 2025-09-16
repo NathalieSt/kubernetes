@@ -6,7 +6,7 @@ metadata:
 data:
   Caddyfile: |-
     
-    searxng.cluster.netbird.selfhosted:443 {
+    code.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}
@@ -15,16 +15,7 @@ data:
     	
     }
     		
-    vault.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy 10.43.164.134:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    kiali.cluster.netbird.selfhosted:443 {
+    glance.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}
@@ -50,7 +41,34 @@ data:
     		
     }
     		
-    dawarich.cluster.netbird.selfhosted:443 {
+    mealie.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    vault.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    booklore.cluster.netbird.selfhosted:443 {
+    	tls internal
+    	reverse_proxy 10.43.164.134:80 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    kiali.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}
@@ -68,7 +86,7 @@ data:
     	
     }
     		
-    mealie.cluster.netbird.selfhosted:443 {
+    searxng.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}
@@ -77,16 +95,7 @@ data:
     	
     }
     		
-    code.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy 10.43.164.134:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    glance.cluster.netbird.selfhosted:443 {
+    dawarich.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
     		header_up Host {host}

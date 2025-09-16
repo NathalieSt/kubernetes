@@ -1,0 +1,17 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: booklore-scaledobject
+spec:
+  scaleTargetRef:
+    name: booklore
+  minReplicaCount: 0
+  cooldownPeriod: 300
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Europe/Vienna
+      start: 0 7 * * *
+      end: 0 23 * * *
+      desiredReplicas: "1"

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: booklore
+    app.kubernetes.io/version: v1.3.2
+  name: booklore
+spec:
+  selector:
+    app.kubernetes.io/name: booklore
+  ports:
+  - name: http-booklore
+    port: 9000
+    targetport: 9000

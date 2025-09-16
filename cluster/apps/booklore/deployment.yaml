@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: booklore
+    app.kubernetes.io/version: v1.3.2
+  name: booklore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: booklore
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: booklore
+        app.kubernetes.io/version: v1.3.2
+    spec:
+      containers:
+      - image: booklore/booklore:v1.3.2
+        name: booklore
+        ports:
+        - containerPort: 6060
+          name: booklore
+        volumeMounts:
+        - mountPath: /app/data
+          name: data-volume
+        - mountPath: /books
+          name: books-volume
+        - mountPath: /bookdrop
+          name: bookdrop-volume
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-pvc
+      - name: books-volume
+        persistentVolumeClaim:
+          claimName: books-pvc
+      - name: bookdrop-volume
+        persistentVolumeClaim:
+          claimName: data-pvc

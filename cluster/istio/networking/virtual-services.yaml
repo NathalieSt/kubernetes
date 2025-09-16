@@ -2,6 +2,66 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
+  name: booklore-virtualservice
+spec:
+  hosts:
+  - booklore.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: glance.glance.svc.cluster.local
+        port:
+          number: 6060
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: dawarich-virtualservice
+spec:
+  hosts:
+  - dawarich.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: dawarich.dawarich.svc.cluster.local
+        port:
+          number: 3000
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: jellyfin-virtualservice
+spec:
+  hosts:
+  - jellyfin.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: jellyfin.jellyfin.svc.cluster.local
+        port:
+          number: 8096
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
   name: kiali-virtualservice
 spec:
   hosts:
@@ -42,56 +102,16 @@ spec:
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: jellyfin-virtualservice
+  name: searxng-virtualservice
 spec:
   hosts:
-  - jellyfin.cluster.netbird.selfhosted
+  - searxng.cluster.netbird.selfhosted
   gateways:
   - ingress-cluster-gateway
   http:
   - route:
     - destination:
-        host: jellyfin.jellyfin.svc.cluster.local
-        port:
-          number: 8096
-      headers:
-        request:
-          set:
-            X-Forwarded-Proto: https
----
-apiVersion: networking.istio.io/v1
-kind: VirtualService
-metadata:
-  name: mealie-virtualservice
-spec:
-  hosts:
-  - mealie.cluster.netbird.selfhosted
-  gateways:
-  - ingress-cluster-gateway
-  http:
-  - route:
-    - destination:
-        host: mealie.mealie.svc.cluster.local
-        port:
-          number: 9000
-      headers:
-        request:
-          set:
-            X-Forwarded-Proto: https
----
-apiVersion: networking.istio.io/v1
-kind: VirtualService
-metadata:
-  name: glance-virtualservice
-spec:
-  hosts:
-  - glance.cluster.netbird.selfhosted
-  gateways:
-  - ingress-cluster-gateway
-  http:
-  - route:
-    - destination:
-        host: glance.glance.svc.cluster.local
+        host: searxng.searxng.svc.cluster.local
         port:
           number: 8080
       headers:
@@ -122,16 +142,16 @@ spec:
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: searxng-virtualservice
+  name: glance-virtualservice
 spec:
   hosts:
-  - searxng.cluster.netbird.selfhosted
+  - glance.cluster.netbird.selfhosted
   gateways:
   - ingress-cluster-gateway
   http:
   - route:
     - destination:
-        host: searxng.searxng.svc.cluster.local
+        host: glance.glance.svc.cluster.local
         port:
           number: 8080
       headers:
@@ -142,18 +162,18 @@ spec:
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: dawarich-virtualservice
+  name: mealie-virtualservice
 spec:
   hosts:
-  - dawarich.cluster.netbird.selfhosted
+  - mealie.cluster.netbird.selfhosted
   gateways:
   - ingress-cluster-gateway
   http:
   - route:
     - destination:
-        host: dawarich.dawarich.svc.cluster.local
+        host: mealie.mealie.svc.cluster.local
         port:
-          number: 3000
+          number: 9000
       headers:
         request:
           set:
