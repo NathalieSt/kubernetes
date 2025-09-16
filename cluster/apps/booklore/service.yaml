@@ -11,5 +11,5 @@ spec:
     app.kubernetes.io/name: booklore
   ports:
   - name: http-booklore
-    port: 9000
-    targetport: 9000
+    port: 6060
+    targetport: 6060

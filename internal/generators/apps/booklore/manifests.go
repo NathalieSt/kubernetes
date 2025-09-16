@@ -210,8 +210,8 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 					Ports: []core.ServicePort{
 						{
 							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
-							Port:       9000,
-							TargetPort: 9000,
+							Port:       generatorMeta.Port,
+							TargetPort: generatorMeta.Port,
 						},
 					},
 				},
