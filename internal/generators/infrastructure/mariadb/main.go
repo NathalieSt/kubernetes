@@ -14,16 +14,16 @@ func main() {
 		return
 	}
 
-	name := "gluetun-proxy"
+	name := "mariadb"
 	generatorType := generator.Infrastructure
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "gluetun-proxy",
+		Namespace:     "mariadb",
 		GeneratorType: generatorType,
-		ClusterUrl:    "gluetun-proxy.gluetun-proxy.svc.cluster.local",
-		Port:          8888,
+		ClusterUrl:    "mariadb.mariadb.svc.cluster.local",
+		Port:          3306,
 		Docker: &generator.Docker{
-			Registry: "qmcgaw/gluetun",
+			Registry: "lscr.io/linuxserver/mariadb",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
@@ -32,7 +32,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/gluetun-proxy/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/mariadb/"),
 		CreateManifests:  createGluetunProxyManifests,
 	})
 }

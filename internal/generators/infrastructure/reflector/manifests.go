@@ -39,13 +39,25 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
+	mariaDBSecretConfig := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-mariadb-static-secret", generatorMeta.Name),
+		SecretName: generators.MariaDBCredsSecret,
+		Path:       "mariadb",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "mariadb,booklore",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "mariadb,booklore",
+		},
+	}
+
 	vaultSecrets := utils.ManifestConfig{
 		Filename: "vault-secrets.yaml",
 		Manifests: utils.GenerateVaultAccessManifests(
 			generatorMeta.Name,
 			//FIXME: get this from VSO generator meta
 			"vault-secrets-operator",
-			[]utils.StaticSecretConfig{netbirdSecretConfig, postgresSecretConfig},
+			[]utils.StaticSecretConfig{netbirdSecretConfig, postgresSecretConfig, mariaDBSecretConfig},
 		),
 	}
 
