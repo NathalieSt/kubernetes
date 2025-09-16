@@ -43,6 +43,6 @@ func main() {
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/booklore/"),
-		CreateManifests:  createGlanceManifests,
+		CreateManifests:  createBookloreManifests,
 	})
 }

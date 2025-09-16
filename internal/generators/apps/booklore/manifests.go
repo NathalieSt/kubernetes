@@ -10,7 +10,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
@@ -50,7 +50,7 @@ func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		},
 	}
 
-	bookdroppvcName := "data-pvc"
+	bookdroppvcName := "bookdroppvc-pvc"
 	bookdroppvc := utils.ManifestConfig{
 		Filename: "bookdrop-pvc.yaml",
 		Manifests: []any{
@@ -118,6 +118,50 @@ func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										{
 											MountPath: "/bookdrop",
 											Name:      bookdropVolume,
+										},
+									},
+									Env: []core.Env{
+										{
+											Name:  "USER_ID",
+											Value: "0",
+										},
+										{
+											Name:  "GROUP_ID",
+											Value: "0",
+										},
+										{
+											Name:  "TZ",
+											Value: "Europe/Vienna",
+										},
+										{
+											Name:  "DATABASE_URL",
+											Value: "jdbc:mariadb://mariadb.mariadb.svc.cluster.local:3306/booklore",
+										},
+										{
+											Name: "DATABASE_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: generators.MariaDBCredsSecret,
+												},
+											},
+										},
+										{
+											Name: "DATABASE_USERNAME",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "username",
+													Name: generators.MariaDBCredsSecret,
+												},
+											},
+										},
+										{
+											Name:  "BOOKLORE_PORT",
+											Value: "6060",
+										},
+										{
+											Name:  "SWAGGER_ENABLED",
+											Value: "false",
 										},
 									},
 								},

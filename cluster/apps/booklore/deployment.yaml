@@ -30,6 +30,29 @@ spec:
           name: books-volume
         - mountPath: /bookdrop
           name: bookdrop-volume
+        env:
+        - name: USER_ID
+          value: "0"
+        - name: GROUP_ID
+          value: "0"
+        - name: TZ
+          value: Europe/Vienna
+        - name: DATABASE_URL
+          value: jdbc:mariadb://mariadb.mariadb.svc.cluster.local:3306/booklore
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: mariadb-creds-secret
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: mariadb-creds-secret
+        - name: BOOKLORE_PORT
+          value: "6060"
+        - name: SWAGGER_ENABLED
+          value: "false"
       volumes:
       - name: data-volume
         persistentVolumeClaim:
@@ -39,4 +62,4 @@ spec:
           claimName: books-pvc
       - name: bookdrop-volume
         persistentVolumeClaim:
-          claimName: data-pvc
+          claimName: bookdroppvc-pvc
