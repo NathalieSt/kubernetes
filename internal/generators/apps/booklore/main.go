@@ -21,7 +21,7 @@ func main() {
 		Name:          name,
 		Namespace:     "booklore",
 		GeneratorType: generatorType,
-		ClusterUrl:    "glance.glance.svc.cluster.local",
+		ClusterUrl:    "booklore.booklore.svc.cluster.local",
 		Port:          6060,
 		Docker: &generator.Docker{
 			Registry: "booklore/booklore",
