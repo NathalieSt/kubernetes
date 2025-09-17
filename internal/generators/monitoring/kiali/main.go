@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
@@ -30,6 +31,12 @@ func main() {
 			Chart:   "kiali-operator",
 			Url:     "https://kiali.org/helm-charts",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+		},
+		KedaScaling: &keda.ScaledObjectTriggerMeta{
+			Timezone:        "Europe/Vienna",
+			Start:           "0 9 * * *",
+			End:             "0 21 * * *",
+			DesiredReplicas: "1",
 		},
 		DependsOnGenerators: []string{},
 	}

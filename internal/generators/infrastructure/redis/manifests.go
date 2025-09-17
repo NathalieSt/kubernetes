@@ -119,6 +119,11 @@ func createRedisManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		},
 	}
 
+	scaledObject := utils.ManifestConfig{
+		Filename:  "scaled-object.yaml",
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -126,8 +131,9 @@ func createRedisManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			deployment.Filename,
 			pvc.Filename,
 			service.Filename,
+			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject})
 }

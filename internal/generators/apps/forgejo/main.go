@@ -33,7 +33,7 @@ func main() {
 		KedaScaling: &keda.ScaledObjectTriggerMeta{
 			Timezone:        "Europe/Vienna",
 			Start:           "0 9 * * *",
-			End:             "0 23 * * *",
+			End:             "0 22 * * *",
 			DesiredReplicas: "1",
 		},
 		DependsOnGenerators: []string{

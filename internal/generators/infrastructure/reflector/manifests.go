@@ -61,6 +61,11 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		),
 	}
 
+	scaledObject := utils.ManifestConfig{
+		Filename:  "scaled-object.yaml",
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -69,8 +74,9 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 			chart.Filename,
 			release.Filename,
 			vaultSecrets.Filename,
+			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vaultSecrets})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vaultSecrets, scaledObject})
 }

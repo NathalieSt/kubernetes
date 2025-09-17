@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"kubernetes/internal/generators/istio"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
@@ -23,6 +24,11 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		nil,
 	)
 
+	scaledObject := utils.ManifestConfig{
+		Filename:  "scaled-object.yaml",
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -32,9 +38,10 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				repo.Filename,
 				chart.Filename,
 				release.Filename,
+				scaledObject.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, scaledObject})
 }

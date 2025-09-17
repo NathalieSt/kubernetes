@@ -61,6 +61,11 @@ func createVaultSecretsOperatorManifests(rootDir string, generatorMeta generator
 		},
 	}
 
+	scaledObject := utils.ManifestConfig{
+		Filename:  "scaled-object.yaml",
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -71,9 +76,10 @@ func createVaultSecretsOperatorManifests(rootDir string, generatorMeta generator
 				chart.Filename,
 				release.Filename,
 				vaultConfigs.Filename,
+				scaledObject.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vaultConfigs}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vaultConfigs, scaledObject}), nil
 }
