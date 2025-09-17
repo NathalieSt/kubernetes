@@ -42,9 +42,9 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "20Gi",
+					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSRemoteClass,
+				StorageClassName: generators.NFSLocalClass,
 			},
 			),
 		},

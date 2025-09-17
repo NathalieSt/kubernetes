@@ -8,5 +8,5 @@ spec:
   - ReadWriteMany
   resources:
     requests:
-      storage: 20Gi
-  storageClassName: nfs-remote
+      storage: 100Gi
+  storageClassName: nfs-local-v2
