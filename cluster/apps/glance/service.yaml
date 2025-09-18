@@ -11,5 +11,5 @@ spec:
     app.kubernetes.io/name: glance
   ports:
   - name: http-glance
-    port: 9000
-    targetport: 9000
+    port: 8080
+    targetport: 8080

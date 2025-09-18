@@ -9,3 +9,4 @@ resources:
 - chart.yaml
 - release.yaml
 - vault-configs.yaml
+- scaled-object.yaml

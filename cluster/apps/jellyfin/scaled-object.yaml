@@ -12,6 +12,6 @@ spec:
   - type: cron
     metadata:
       timezone: Europe/Vienna
-      start: 0 9 * * *
-      end: 0 23 * * *
+      start: 0 7 * * *
+      end: 0 1 * * *
       desiredReplicas: "1"

@@ -2,16 +2,16 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: forgejo-scaledobject
+  name: vault-secrets-operator-scaledobject
 spec:
   scaleTargetRef:
-    name: forgejo
+    name: vault-secrets-operator
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:
   - type: cron
     metadata:
       timezone: Europe/Vienna
-      start: 0 9 * * *
+      start: 0 8 * * *
       end: 0 22 * * *
       desiredReplicas: "1"

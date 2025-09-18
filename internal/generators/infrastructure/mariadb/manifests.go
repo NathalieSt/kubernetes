@@ -164,6 +164,11 @@ func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[stri
 		},
 	}
 
+	scaledObject := utils.ManifestConfig{
+		Filename:  "scaled-object.yaml",
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -171,8 +176,9 @@ func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[stri
 			deployment.Filename,
 			service.Filename,
 			pvc.Filename,
+			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, pvc, deployment, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, pvc, deployment, service, scaledObject})
 }
