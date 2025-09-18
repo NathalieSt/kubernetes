@@ -5,7 +5,7 @@ metadata:
   name: vault-secrets-operator-scaledobject
 spec:
   scaleTargetRef:
-    name: vault-secrets-operator
+    name: vault-secrets-operator-controller-manager
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:

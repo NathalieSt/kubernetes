@@ -63,7 +63,7 @@ func createVaultSecretsOperatorManifests(rootDir string, generatorMeta generator
 
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), "vault-secrets-operator-controller-manager", generatorMeta.KedaScaling),
 	}
 
 	kustomization := utils.ManifestConfig{
