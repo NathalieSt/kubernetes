@@ -118,7 +118,7 @@ func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[stri
 									VolumeMounts: []core.VolumeMount{
 										{
 											Name:      volumeName,
-											MountPath: "/var/lib/mysql",
+											MountPath: "/config",
 										},
 									},
 								},

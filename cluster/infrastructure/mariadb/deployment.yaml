@@ -24,7 +24,7 @@ spec:
         - containerPort: 3306
           name: mariadb
         volumeMounts:
-        - mountPath: /var/lib/mysql
+        - mountPath: /config
           name: pvc-volume
         env:
         - name: PUID
