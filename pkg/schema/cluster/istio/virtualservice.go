@@ -6,7 +6,7 @@ import (
 )
 
 type VirtualServicePortSelector struct {
-	Number int
+	Number int64
 }
 
 type VirtualServiceDestination struct {

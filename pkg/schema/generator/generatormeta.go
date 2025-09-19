@@ -54,7 +54,7 @@ type GeneratorMeta struct {
 	Namespace           string
 	GeneratorType       GeneratorType
 	ClusterUrl          string
-	Port                int
+	Port                int64
 	Docker              *Docker
 	Helm                *Helm
 	Caddy               *Caddy

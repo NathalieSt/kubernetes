@@ -7,8 +7,8 @@ import (
 
 type ServicePort struct {
 	Name       string `yaml:",omitempty"`
-	Port       int    `yaml:",omitempty"`
-	TargetPort int    `yaml:",omitempty"`
+	Port       int64  `yaml:",omitempty"`
+	TargetPort int64  `yaml:",omitempty"`
 }
 
 type ServiceSpec struct {

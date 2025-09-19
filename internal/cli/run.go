@@ -27,7 +27,9 @@ func Start() {
 	outputView := tview.NewTextView()
 	actionArea := tview.NewFlex()
 	pages := tview.NewPages()
-	flex := tview.NewFlex()
+	mainFlex := tview.NewFlex()
+	scaffoldingFlex := tview.NewFlex()
+	newGeneratorMeta := generator.GeneratorMeta{}
 
 	rootDir, err := utils.FindRoot()
 	if err != nil {
@@ -96,13 +98,15 @@ func Start() {
 	actionArea.SetDirection(tview.FlexRow)
 	actionArea.AddItem(outputView, 0, 3, false)
 
-	flex.
+	mainFlex.
 		AddItem(commandList, 40, 1, true).
 		AddItem(actionArea, 0, 3, false).
 		AddItem(generatorsTree, 0, 1, false)
 
-	pages.AddPage("Main", flex, true, true)
-	pages.AddPage("Scaffolding", tview.NewBox().SetTitle("This is my super awesome box").SetBorder(true), true, false)
+	generateScaffoldingPageLayout(pages, scaffoldingFlex, newGeneratorMeta)
+
+	pages.AddPage("Main", mainFlex, true, true)
+	pages.AddPage("Scaffolding", scaffoldingFlex, true, false)
 
 	elapsed := time.Since(start)
 	logToOutput(outputView, fmt.Sprintf("Initialization took: %s", elapsed))

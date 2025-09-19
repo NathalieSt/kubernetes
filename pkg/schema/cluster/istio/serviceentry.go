@@ -6,7 +6,7 @@ import (
 )
 
 type ServiceEntryPorts struct {
-	Number   int    `yaml:"number,omitempty"`
+	Number   int64  `yaml:"number,omitempty"`
 	Name     string `yaml:"name,omitempty"`
 	Protocol string `yaml:"protocol,omitempty"`
 }
