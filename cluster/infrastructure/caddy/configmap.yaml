@@ -5,7 +5,7 @@ metadata:
   name: caddy-configmap
 data:
   Caddyfile: |-
-    
+
     code.cluster.netbird.selfhosted:443 {
     	tls internal
     	reverse_proxy 10.43.164.134:80 {
@@ -104,12 +104,12 @@ data:
     	
     }
     		
-    matrix.cluster.netbird.selfhosted:443 {
+    matrix.cluster.netbird.selfhosted {
     	tls internal
-    	reverse_proxy 10.43.164.134:80 {
+    	reverse_proxy /_matrix/* 10.43.164.134:80{
     		header_up Host {host}
-    		
     	}
-    	
+      reverse_proxy /_synapse/client/* 10.43.164.134:80{
+    		header_up Host {host}
+    	}
     }
-    		
