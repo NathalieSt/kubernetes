@@ -99,7 +99,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									Image:   "alpine:latest",
 									Command: []string{"/bin/sh", "-c"},
 									Args: []string{
-										"envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data",
+										"apk update && apk add gettext; envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data",
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
@@ -109,18 +109,6 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 										{
 											Name:      dataVolumeName,
 											MountPath: "/data",
-										},
-									},
-								},
-							},
-							Containers: []core.Container{
-								{
-									Name:  generatorMeta.Name,
-									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Ports: []core.Port{
-										{
-											ContainerPort: generatorMeta.Port,
-											Name:          generatorMeta.Name,
 										},
 									},
 									Env: []core.Env{
@@ -180,6 +168,18 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 													Key:  "form_secret",
 												},
 											},
+										},
+									},
+								},
+							},
+							Containers: []core.Container{
+								{
+									Name:  generatorMeta.Name,
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Ports: []core.Port{
+										{
+											ContainerPort: generatorMeta.Port,
+											Name:          generatorMeta.Name,
 										},
 									},
 									VolumeMounts: []core.VolumeMount{

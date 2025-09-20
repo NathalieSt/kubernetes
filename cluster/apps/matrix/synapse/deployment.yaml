@@ -19,7 +19,7 @@ spec:
     spec:
       initContainers:
       - args:
-        - envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data
+        - apk update && apk add gettext; envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data
         command:
         - /bin/sh
         - -c
@@ -30,19 +30,6 @@ spec:
           name: config-volume
         - mountPath: /data
           name: data-volume
-      containers:
-      - image: ghcr.io/element-hq/synapse:sha-6f9fab1
-        name: synapse
-        ports:
-        - containerPort: 8008
-          name: synapse
-        volumeMounts:
-        - mountPath: /media
-          name: synapse-pvc-volume
-        - mountPath: /data
-          name: data-volume
-        - mountPath: /signing
-          name: signing-key-volume
         env:
         - name: POSTGRES_SERVER
           value: synapse-pg-rw.synapse-pg-cluster.svc.cluster.local
@@ -75,6 +62,19 @@ spec:
             secretKeyRef:
               key: form_secret
               name: synpase-secret
+      containers:
+      - image: ghcr.io/element-hq/synapse:sha-6f9fab1
+        name: synapse
+        ports:
+        - containerPort: 8008
+          name: synapse
+        volumeMounts:
+        - mountPath: /media
+          name: synapse-pvc-volume
+        - mountPath: /data
+          name: data-volume
+        - mountPath: /signing
+          name: signing-key-volume
       volumes:
       - name: config-volume
         configMap:
