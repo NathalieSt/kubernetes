@@ -8,6 +8,9 @@ spec:
   storage:
     storageClass: nfs-local-v2
     size: 100Gi
+  inheritedMetadata:
+    annotations:
+      proxy.istio.io/config: '{"holdApplicationUntilProxyStarts": true}'
   superuserSecret:
     name: postgres-creds-secret
   enableSuperuserAccess: true
