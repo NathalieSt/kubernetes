@@ -31,9 +31,9 @@ spec:
   http:
     - match:
         - uri:
-          prefix: /_matrix
+            prefix: /_matrix
         - uri:
-          prefix: /_synapse/client
+            prefix: /_synapse/client
       route:
         - destination:
             host: synapse.synapse.svc.cluster.local
