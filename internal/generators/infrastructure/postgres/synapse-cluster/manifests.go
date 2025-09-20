@@ -4,6 +4,7 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
+	"kubernetes/pkg/schema/cluster/istio"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
 )
@@ -53,6 +54,19 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	peerAuth := utils.ManifestConfig{
+		Filename: "peer-auth.yaml",
+		Manifests: []any{
+			istio.NewPeerAuthenthication(meta.ObjectMeta{
+				Name: "cnpg-permissive-mtls",
+			}, istio.PeerAuthenthicationSpec{
+				MTLS: istio.PeerAuthenthicationmTLS{
+					Mode: istio.PERMISSIVE,
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -61,9 +75,10 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				namespace.Filename,
 				cluster.Filename,
 				synapseDB.Filename,
+				peerAuth.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, synapseDB})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, synapseDB, peerAuth})
 }
