@@ -27,7 +27,7 @@ database:
     user: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
     dbname: ${POSTGRES_DB}
-    host: ${POSTGRES_SERVER}:${POSTGRES_PORT}
+    host: ${POSTGRES_SERVER}
     cp_min: 5
     cp_max: 10
 log_config: "/data/matrix.cluster.netbird.selfhosted.log.config"
