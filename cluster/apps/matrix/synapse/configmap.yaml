@@ -20,7 +20,7 @@ data:
       name: psycopg2
       args:
         user: ${POSTGRES_USERNAME}
-        password: ${POSTGRES_PASSWORD}
+        password: "${POSTGRES_PASSWORD}"
         dbname: ${POSTGRES_DB}
         host: ${POSTGRES_SERVER}
         cp_min: 5
