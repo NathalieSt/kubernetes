@@ -9,7 +9,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createSynapseClusterManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
@@ -32,7 +32,7 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 					Size:         "100Gi",
 				},
 				SuperuserSecret: cnpg.SuperuserSecret{
-					Name: generators.PostgresCredsSecret,
+					Name: generators.SynapsePGCredsSecret,
 				},
 				EnableSuperuserAccess: true,
 			}),

@@ -33,6 +33,6 @@ func main() {
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/postgres/synapse"),
-		CreateManifests:  createPostgresManifests,
+		CreateManifests:  createSynapseClusterManifests,
 	})
 }
