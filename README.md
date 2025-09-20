@@ -60,3 +60,13 @@ kubectl cp ./vault-backup/ <pod-name>:/vault/data -n vault
 ```sh
 sudo mount -t nfs <server name>:<location on server> <local location>
 ```
+
+## Generating synapse config
+```sh
+podman run -ti --rm \
+    --mount type=volume,src=synapse-data,dst=/data \
+    -e SYNAPSE_SERVER_NAME=matrix.cluster.netbird.selfhosted \
+    -e SYNAPSE_REPORT_STATS=yes \
+    -e SYNAPSE_DATA_DIR=/media \
+    ghcr.io/element-hq/synapse:latest generate
+```

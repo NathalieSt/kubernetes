@@ -5,5 +5,6 @@
     "jellyfin": "2.3.0",
     "mealie": "v3.0.2",
     "searxng": "2025.8.3-2e62eb5",
-    "booklore": "v1.3.2"
+    "booklore": "v1.3.2",
+    "synapse": "sha-6f9fab1"
 }

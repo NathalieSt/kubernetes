@@ -1,0 +1,85 @@
+package main
+
+import (
+	"kubernetes/pkg/schema/k8s/core"
+	"kubernetes/pkg/schema/k8s/meta"
+)
+
+func getSynapseConfigMap(name string) core.ConfigMap {
+
+	return core.NewConfigMap(meta.ObjectMeta{
+		Name: name,
+	}, map[string]string{
+		"homeserver.yaml": `
+server_name: "matrix.cluster.netbird.selfhosted"
+pid_file: /data/homeserver.pid
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
+database:
+  name: psycopg2
+  args:
+    user: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    dbname: ${POSTGRES_DB}
+    host: ${POSTGRES_SERVER}:${POSTGRES_PORT}
+    cp_min: 5
+    cp_max: 10
+log_config: "/data/matrix.cluster.netbird.selfhosted.log.config"
+media_store_path: /media
+registration_shared_secret: "${REGISTRATION_SHARED_SECRET}"
+report_stats: true
+macaroon_secret_key: "${MACAROON_SECRET_KEY}"
+form_secret: "${FORM_SECRET}"
+signing_key_path: "/signing/matrix.cluster.netbird.selfhosted.signing.key"
+trusted_key_servers:
+  - server_name: "matrix.org"
+`,
+		"matrix.cluster.netbird.selfhosted.log.config": `
+version: 1
+
+formatters:
+  precise:
+    
+    format: '%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(request)s - %(message)s'
+    
+
+handlers:
+
+
+  console:
+    class: logging.StreamHandler
+    formatter: precise
+
+loggers:
+    # This is just here so we can leave loggers in the config regardless of whether
+    # we configure other loggers below (avoid empty yaml dict error).
+    _placeholder:
+        level: "INFO"
+
+    
+    
+    synapse.storage.SQL:
+        # beware: increasing this to DEBUG will make synapse log sensitive
+        # information such as access tokens.
+        level: INFO
+    
+
+    
+
+root:
+    level: INFO
+
+
+    handlers: [console]
+
+
+disable_existing_loggers: false
+`,
+	})
+}

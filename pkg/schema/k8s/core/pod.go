@@ -62,6 +62,7 @@ type Container struct {
 }
 
 type PodSpec struct {
+	InitContainers  []Container        `yaml:"initContainers,omitempty"`
 	Containers      []Container        `yaml:"containers,omitempty"`
 	Volumes         []Volume           `yaml:"volumes,omitempty"`
 	SecurityContext PodSecurityContext `yaml:"securityContext,omitempty"`

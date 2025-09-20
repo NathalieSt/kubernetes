@@ -24,9 +24,20 @@ type EmptyDirVolumeSource struct {
 	Medium EmptyDirVolumeSourceMedium `yaml:"medium,"`
 }
 
+type SecretVolumeItem struct {
+	Key  string `yaml:"key,omitempty"`
+	Path string `yaml:"path,omitempty"`
+}
+
+type SecretVolumeSource struct {
+	SecretName string           `yaml:"secretName,omitempty"`
+	Items      SecretVolumeItem `yaml:"items,omitempty"`
+}
+
 type Volume struct {
 	Name                  string                `yaml:",omitempty"`
 	ConfigMap             ConfigMapVolumeSource `yaml:"configMap,omitempty"`
 	PersistentVolumeClaim PVCVolumeSource       `yaml:"persistentVolumeClaim,omitempty"`
 	EmptyDir              EmptyDirVolumeSource  `yaml:"emptyDir,omitempty"`
+	Secret                SecretVolumeSource    `yaml:"secret,omitempty"`
 }
