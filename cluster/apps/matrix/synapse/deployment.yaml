@@ -19,15 +19,17 @@ spec:
     spec:
       initContainers:
       - args:
-        - envsubst < /data/homeserver.yaml > /data/homeserver.yaml
+        - envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data
         command:
         - /bin/sh
         - -c
         image: alpine:latest
         name: config-init
         volumeMounts:
-        - mountPath: /data
+        - mountPath: /template
           name: config-volume
+        - mountPath: /data
+          name: data-volume
       containers:
       - image: ghcr.io/element-hq/synapse:sha-6f9fab1
         name: synapse
@@ -38,7 +40,7 @@ spec:
         - mountPath: /media
           name: synapse-pvc-volume
         - mountPath: /data
-          name: config-volume
+          name: data-volume
         - mountPath: /signing
           name: signing-key-volume
         env:
@@ -80,6 +82,9 @@ spec:
       - name: synapse-pvc-volume
         persistentVolumeClaim:
           claimName: synapse-pvc
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: synapse-data-pvc
       - name: signing-key-volume
         secret:
           secretName: synpase-secret

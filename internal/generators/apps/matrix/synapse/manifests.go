@@ -40,6 +40,23 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		},
 	}
 
+	datapvcName := fmt.Sprintf("%v-data-pvc", generatorMeta.Name)
+	datapvc := utils.ManifestConfig{
+		Filename: "data-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			},
+			),
+		},
+	}
+
 	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/synapse-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
@@ -47,6 +64,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 	}
 
 	configVolumeName := "config-volume"
+	dataVolumeName := "data-volume"
 	volumeName := "synapse-pvc-volume"
 	secretVolumeName := "signing-key-volume"
 	deployment := utils.ManifestConfig{
@@ -81,11 +99,15 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									Image:   "alpine:latest",
 									Command: []string{"/bin/sh", "-c"},
 									Args: []string{
-										"envsubst < /data/homeserver.yaml > /data/homeserver.yaml",
+										"envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data",
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
 											Name:      configVolumeName,
+											MountPath: "/template",
+										},
+										{
+											Name:      dataVolumeName,
 											MountPath: "/data",
 										},
 									},
@@ -166,7 +188,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 											MountPath: "/media",
 										},
 										{
-											Name:      configVolumeName,
+											Name:      dataVolumeName,
 											MountPath: "/data",
 										},
 										{
@@ -187,6 +209,12 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									Name: volumeName,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: pvcName,
+									},
+								},
+								{
+									Name: dataVolumeName,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: datapvcName,
 									},
 								},
 								{
@@ -241,10 +269,11 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 			namespace.Filename,
 			deployment.Filename,
 			pvc.Filename,
+			datapvc.Filename,
 			service.Filename,
 			configMap.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, configMap}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, configMap, datapvc}), nil
 }
