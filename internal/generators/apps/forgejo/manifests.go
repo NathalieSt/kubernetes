@@ -35,7 +35,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/forgejo-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta for forgejo")
 		return nil, err
@@ -70,14 +70,14 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 					ValuesFrom: []helm.ReleaseValuesFrom{
 						{
 							Kind:       helm.Secret,
-							Name:       generators.PostgresCredsSecret,
+							Name:       generators.ForgejoPGCredsSecret,
 							ValuesKey:  "username",
 							TargetPath: "gitea.config.database.USER",
 							Optional:   false,
 						},
 						{
 							Kind:       helm.Secret,
-							Name:       generators.PostgresCredsSecret,
+							Name:       generators.ForgejoPGCredsSecret,
 							ValuesKey:  "password",
 							TargetPath: "gitea.config.database.PASSWD",
 							Optional:   false,

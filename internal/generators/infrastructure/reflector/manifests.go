@@ -39,6 +39,30 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
+	forgejoPGSecretConfig := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-forgejo-pg-static-secret", generatorMeta.Name),
+		SecretName: generators.ForgejoPGCredsSecret,
+		Path:       "postgres-clusters/forgejo",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "forgejo-pg-cluster,forgejo",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "forgejo-pg-cluster,forgejo",
+		},
+	}
+
+	synapsePGSecretConfig := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-synapse-pg-static-secret", generatorMeta.Name),
+		SecretName: generators.SynapsePGCredsSecret,
+		Path:       "postgres-clusters/synapse",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "synapse-pg-cluster,synapse",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "synapse-pg-cluster,synapse",
+		},
+	}
+
 	mariaDBSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-mariadb-static-secret", generatorMeta.Name),
 		SecretName: generators.MariaDBCredsSecret,
@@ -57,7 +81,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 			generatorMeta.Name,
 			//FIXME: get this from VSO generator meta
 			"vault-secrets-operator",
-			[]utils.StaticSecretConfig{netbirdSecretConfig, postgresSecretConfig, mariaDBSecretConfig},
+			[]utils.StaticSecretConfig{netbirdSecretConfig, postgresSecretConfig, forgejoPGSecretConfig, synapsePGSecretConfig, mariaDBSecretConfig},
 		),
 	}
 

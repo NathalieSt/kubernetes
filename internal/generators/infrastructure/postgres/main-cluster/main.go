@@ -22,7 +22,7 @@ func main() {
 		GeneratorType: generatorType,
 		ClusterUrl:    "postgres-rw.postgres.svc.cluster.local",
 		Docker: &generator.Docker{
-			Registry: "ghcr.io/cloudnative-pg/postgis",
+			Registry: "ghcr.io/cloudnative-pg/postgresql",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Port:                5432,
@@ -32,7 +32,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/postgres/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/postgres/main"),
 		CreateManifests:  createPostgresManifests,
 	})
 }
