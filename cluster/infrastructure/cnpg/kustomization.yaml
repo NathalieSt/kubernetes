@@ -8,3 +8,4 @@ resources:
 - repo.yaml
 - chart.yaml
 - release.yaml
+- peer-auth.yaml
