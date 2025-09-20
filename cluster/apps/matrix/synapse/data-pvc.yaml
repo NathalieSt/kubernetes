@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: synapse-pvc
+  name: synapse-data-pvc
 spec:
   accessModes:
   - ReadWriteMany

@@ -45,7 +45,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		Filename: "data-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
+				Name: datapvcName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
