@@ -22,6 +22,11 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Name: clusterName,
 			}, cnpg.ClusterSpec{
 				Instances: 3,
+				InheritedMetadata: cnpg.InheritedMetadata{
+					Annotations: map[string]string{
+						"proxy.istio.io/config": "{\"holdApplicationUntilProxyStarts\": true}",
+					},
+				},
 				Storage: cnpg.ClusterStorage{
 					StorageClass: generators.NFSRemoteClass,
 					Size:         "15Gi",
