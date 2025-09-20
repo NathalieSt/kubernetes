@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
@@ -27,15 +26,6 @@ func main() {
 			Registry: "ghcr.io/mealie-recipes/mealie",
 			//FIXME: set to nil, later fetch in generator from version.json
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
-		},
-		Caddy: &generator.Caddy{
-			DNSName: "mealie.cluster",
-		},
-		KedaScaling: &keda.ScaledObjectTriggerMeta{
-			Timezone:        "Europe/Vienna",
-			Start:           "0 9 * * *",
-			End:             "0 21 * * *",
-			DesiredReplicas: "1",
 		},
 		DependsOnGenerators: []string{
 			"postgres",

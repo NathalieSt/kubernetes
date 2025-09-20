@@ -163,11 +163,6 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 		},
 	}
 
-	scaledObject := utils.ManifestConfig{
-		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
-	}
-
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -175,9 +170,8 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 			deployment.Filename,
 			pvc.Filename,
 			service.Filename,
-			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service}), nil
 }

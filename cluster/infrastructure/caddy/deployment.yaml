@@ -41,7 +41,7 @@ spec:
         - name: NB_MANAGEMENT_URL
           value: https://netbird.nathalie-stiefsohn.eu
         - name: NB_EXTRA_DNS_LABELS
-          value: searxng.cluster,vault.cluster,booklore.cluster,dawarich.cluster,code.cluster,glance.cluster,jellyfin.cluster,perses.cluster,kiali.cluster,mealie.cluster
+          value: code.cluster,glance.cluster,searxng.cluster,vault.cluster,booklore.cluster,dawarich.cluster,jellyfin.cluster,kiali.cluster,mealie.cluster,perses.cluster,matrix.cluster
         resources:
           requests:
             cpu: 50m

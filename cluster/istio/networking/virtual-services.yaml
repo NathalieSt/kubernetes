@@ -2,18 +2,78 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: glance-virtualservice
+  name: searxng-virtualservice
 spec:
   hosts:
-  - glance.cluster.netbird.selfhosted
+  - searxng.cluster.netbird.selfhosted
   gateways:
   - ingress-cluster-gateway
   http:
   - route:
     - destination:
-        host: glance.glance.svc.cluster.local
+        host: searxng.searxng.svc.cluster.local
         port:
           number: 8080
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: synapse-virtualservice
+spec:
+  hosts:
+  - matrix.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: synapse.synapse.svc.cluster.local
+        port:
+          number: 8008
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: vault-virtualservice
+spec:
+  hosts:
+  - vault.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: vault.vault.svc.cluster.local
+        port:
+          number: 8200
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: dawarich-virtualservice
+spec:
+  hosts:
+  - dawarich.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: dawarich.dawarich.svc.cluster.local
+        port:
+          number: 3000
       headers:
         request:
           set:
@@ -62,16 +122,16 @@ spec:
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: searxng-virtualservice
+  name: perses-virtualservice
 spec:
   hosts:
-  - searxng.cluster.netbird.selfhosted
+  - perses.cluster.netbird.selfhosted
   gateways:
   - ingress-cluster-gateway
   http:
   - route:
     - destination:
-        host: searxng.searxng.svc.cluster.local
+        host: perses.perses.svc.cluster.local
         port:
           number: 8080
       headers:
@@ -102,26 +162,6 @@ spec:
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: dawarich-virtualservice
-spec:
-  hosts:
-  - dawarich.cluster.netbird.selfhosted
-  gateways:
-  - ingress-cluster-gateway
-  http:
-  - route:
-    - destination:
-        host: dawarich.dawarich.svc.cluster.local
-        port:
-          number: 3000
-      headers:
-        request:
-          set:
-            X-Forwarded-Proto: https
----
-apiVersion: networking.istio.io/v1
-kind: VirtualService
-metadata:
   name: forgejo-virtualservice
 spec:
   hosts:
@@ -142,6 +182,26 @@ spec:
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
+  name: glance-virtualservice
+spec:
+  hosts:
+  - glance.cluster.netbird.selfhosted
+  gateways:
+  - ingress-cluster-gateway
+  http:
+  - route:
+    - destination:
+        host: glance.glance.svc.cluster.local
+        port:
+          number: 8080
+      headers:
+        request:
+          set:
+            X-Forwarded-Proto: https
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
   name: mealie-virtualservice
 spec:
   hosts:
@@ -154,46 +214,6 @@ spec:
         host: mealie.mealie.svc.cluster.local
         port:
           number: 9000
-      headers:
-        request:
-          set:
-            X-Forwarded-Proto: https
----
-apiVersion: networking.istio.io/v1
-kind: VirtualService
-metadata:
-  name: perses-virtualservice
-spec:
-  hosts:
-  - perses.cluster.netbird.selfhosted
-  gateways:
-  - ingress-cluster-gateway
-  http:
-  - route:
-    - destination:
-        host: perses.perses.svc.cluster.local
-        port:
-          number: 8080
-      headers:
-        request:
-          set:
-            X-Forwarded-Proto: https
----
-apiVersion: networking.istio.io/v1
-kind: VirtualService
-metadata:
-  name: vault-virtualservice
-spec:
-  hosts:
-  - vault.cluster.netbird.selfhosted
-  gateways:
-  - ingress-cluster-gateway
-  http:
-  - route:
-    - destination:
-        host: vault.vault.svc.cluster.local
-        port:
-          number: 8200
       headers:
         request:
           set:

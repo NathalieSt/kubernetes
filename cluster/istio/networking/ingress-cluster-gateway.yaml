@@ -10,15 +10,16 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - glance.cluster.netbird.selfhosted
+    - searxng.cluster.netbird.selfhosted
+    - matrix.cluster.netbird.selfhosted
+    - vault.cluster.netbird.selfhosted
+    - dawarich.cluster.netbird.selfhosted
     - jellyfin.cluster.netbird.selfhosted
     - kiali.cluster.netbird.selfhosted
-    - searxng.cluster.netbird.selfhosted
-    - booklore.cluster.netbird.selfhosted
-    - dawarich.cluster.netbird.selfhosted
-    - code.cluster.netbird.selfhosted
-    - mealie.cluster.netbird.selfhosted
     - perses.cluster.netbird.selfhosted
-    - vault.cluster.netbird.selfhosted
+    - booklore.cluster.netbird.selfhosted
+    - code.cluster.netbird.selfhosted
+    - glance.cluster.netbird.selfhosted
+    - mealie.cluster.netbird.selfhosted
   selector:
     istio: ingress
