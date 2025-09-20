@@ -19,7 +19,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 
 	configMapName := "synapse-configmap"
 	configMap := utils.ManifestConfig{
-		Filename:  "namespace.yaml",
+		Filename:  "configmap.yaml",
 		Manifests: []any{getSynapseConfigMap(configMapName)},
 	}
 
@@ -40,7 +40,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/synpase-cluster"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/synapse-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err

@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: synapse-pg
+spec:
+  instances: 1
+  storage:
+    storageClass: nfs-local-v2
+    size: 100Gi
+  superuserSecret:
+    name: postgres-creds-secret
+  enableSuperuserAccess: true

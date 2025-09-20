@@ -4,15 +4,15 @@ metadata:
   name: vault
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: vault
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/vault'
+  path: "./cluster/infrastructure/vault"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -22,17 +22,17 @@ metadata:
   name: vault-secrets-operator
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: vault-secrets-operator
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/vault-secrets-operator'
+  path: "./cluster/infrastructure/vault-secrets-operator"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn:
-  - name: vault
+    - name: vault
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -41,17 +41,17 @@ metadata:
   name: reflector
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: reflector
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/reflector'
+  path: "./cluster/infrastructure/reflector"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn:
-  - name: vault-secrets-operator
+    - name: vault-secrets-operator
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -60,17 +60,17 @@ metadata:
   name: postgres
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: postgres
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/postgres'
+  path: "./cluster/infrastructure/postgres"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn:
-  - name: reflector
+    - name: reflector
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -79,15 +79,15 @@ metadata:
   name: gluetun-proxy
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: gluetun-proxy
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/gluetun-proxy'
+  path: "./cluster/infrastructure/gluetun-proxy"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -97,15 +97,15 @@ metadata:
   name: valkey
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: valkey
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/valkey'
+  path: "./cluster/infrastructure/valkey"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -115,15 +115,15 @@ metadata:
   name: redis
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: redis
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/redis'
+  path: "./cluster/infrastructure/redis"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -133,15 +133,15 @@ metadata:
   name: caddy
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: caddy
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/caddy'
+  path: "./cluster/infrastructure/caddy"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -151,15 +151,15 @@ metadata:
   name: csi-driver-nfs
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: csi-driver-nfs
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/csi-driver-nfs'
+  path: "./cluster/infrastructure/csi-driver-nfs"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -169,15 +169,15 @@ metadata:
   name: cnpg
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: cnpg-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/cnpg'
+  path: "./cluster/infrastructure/cnpg"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -187,15 +187,15 @@ metadata:
   name: keda
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: keda
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/keda'
+  path: "./cluster/infrastructure/keda"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
   dependsOn: []
 
 ---
@@ -205,13 +205,31 @@ metadata:
   name: mariadb
   namespace: flux-system
 spec:
-  interval: '24h'
+  interval: "24h"
   targetNamespace: mariadb
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: './cluster/infrastructure/mariadb'
+  path: "./cluster/infrastructure/mariadb"
   prune: true
   wait: true
-  timeout: '10m'
+  timeout: "10m"
+  dependsOn: []
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: synapse-pg
+  namespace: flux-system
+spec:
+  interval: "24h"
+  targetNamespace: synapse-pg-cluster
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: "./cluster/infrastructure/postgres/synapse"
+  prune: true
+  wait: true
+  timeout: "10m"
   dependsOn: []

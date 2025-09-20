@@ -15,13 +15,13 @@ func main() {
 		return
 	}
 
-	name := "synapse"
+	name := "discord-bridge"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "synapse",
+		Namespace:     "discord-bridge",
 		GeneratorType: generatorType,
-		ClusterUrl:    "synapse.synapse.svc.cluster.local",
+		ClusterUrl:    "discord-bridge.discord-bridge.svc.cluster.local",
 		Port:          8008,
 		Docker: &generator.Docker{
 			Registry: "ghcr.io/mealie-recipes/mealie",

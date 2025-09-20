@@ -23,6 +23,10 @@ func RunGenerator(config GeneratorRunnerConfig) {
 
 	fmt.Println("✅ Creating K8s manifests")
 	manifests := config.CreateManifests(meta)
+	if manifests == nil {
+		fmt.Println("\nAn error happened while running CreateManifests, can't write yaml to output")
+		return
+	}
 
 	fmt.Println("✅ Writing K8s manifests to output directory")
 	WriteManifestsToYaml(config.OutputDir, manifests)
