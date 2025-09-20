@@ -30,8 +30,8 @@ type SecretVolumeItem struct {
 }
 
 type SecretVolumeSource struct {
-	SecretName string           `yaml:"secretName,omitempty"`
-	Items      SecretVolumeItem `yaml:"items,omitempty"`
+	SecretName string             `yaml:"secretName,omitempty"`
+	Items      []SecretVolumeItem `yaml:"items,omitempty"`
 }
 
 type Volume struct {

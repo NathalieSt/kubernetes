@@ -193,9 +193,11 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									Name: secretVolumeName,
 									Secret: core.SecretVolumeSource{
 										SecretName: generators.SynapseSecretName,
-										Items: core.SecretVolumeItem{
-											Key:  "signing-key",
-											Path: "matrix.cluster.netbird.selfhosted.signing.key",
+										Items: []core.SecretVolumeItem{
+											{
+												Key:  "signing-key",
+												Path: "matrix.cluster.netbird.selfhosted.signing.key",
+											},
 										},
 									},
 								},

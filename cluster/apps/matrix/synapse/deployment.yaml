@@ -84,5 +84,5 @@ spec:
         secret:
           secretName: synpase-secret
           items:
-            key: signing-key
+          - key: signing-key
             path: matrix.cluster.netbird.selfhosted.signing.key
