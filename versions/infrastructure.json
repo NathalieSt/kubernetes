@@ -6,7 +6,7 @@
     "keda": "2.17.2",
     "postgres": "17.5",
     "forgejo-pg": "17.5",
-    "synapse-pg": "17.5",
+    "matrix-pg": "17.5",
     "redis": "8.2.1",
     "reflector": "9.1.27",
     "valkey": "8-alpine3.22",

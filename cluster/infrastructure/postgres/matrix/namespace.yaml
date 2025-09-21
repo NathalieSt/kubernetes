@@ -4,4 +4,4 @@ kind: Namespace
 metadata:
   labels:
     istio-injection: enabled
-  name: synapse-pg-cluster
+  name: matrix-pg-cluster

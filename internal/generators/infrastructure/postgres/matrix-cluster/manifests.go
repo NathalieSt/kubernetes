@@ -9,14 +9,14 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createSynapseClusterManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
 	cluster := utils.ManifestConfig{
-		Filename: "synapse-cluster.yaml",
+		Filename: "matrix-cluster.yaml",
 		Manifests: []any{
 			cnpg.NewCluster(meta.ObjectMeta{
 				Name: generatorMeta.Name,
@@ -32,7 +32,7 @@ func createSynapseClusterManifests(generatorMeta generator.GeneratorMeta) map[st
 					Size:         "100Gi",
 				},
 				SuperuserSecret: cnpg.SuperuserSecret{
-					Name: generators.SynapsePGCredsSecret,
+					Name: generators.MatrixPGCredsSecret,
 				},
 				EnableSuperuserAccess: true,
 			}),

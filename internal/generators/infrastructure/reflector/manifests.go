@@ -51,15 +51,15 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
-	synapsePGSecretConfig := utils.StaticSecretConfig{
-		Name:       fmt.Sprintf("%v-synapse-pg-static-secret", generatorMeta.Name),
-		SecretName: generators.SynapsePGCredsSecret,
-		Path:       "postgres-clusters/synapse",
+	matrixPGSecretConfig := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-matrix-pg-static-secret", generatorMeta.Name),
+		SecretName: generators.MatrixPGCredsSecret,
+		Path:       "postgres-clusters/matrix",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "synapse-pg-cluster,synapse",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "matrix-pg-cluster,synapse",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "synapse-pg-cluster,synapse",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "matrix-pg-cluster,synapse",
 		},
 	}
 
@@ -97,7 +97,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 				netbirdSecretConfig,
 				postgresSecretConfig,
 				forgejoPGSecretConfig,
-				synapsePGSecretConfig,
+				matrixPGSecretConfig,
 				mariaDBSecretConfig,
 				synapseSecret,
 			},

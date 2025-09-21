@@ -220,15 +220,15 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: synapse-pg
+  name: matrix-pg
   namespace: flux-system
 spec:
   interval: "24h"
-  targetNamespace: synapse-pg-cluster
+  targetNamespace: matrix-pg-cluster
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./cluster/infrastructure/postgres/synapse"
+  path: "./cluster/infrastructure/postgres/matrix"
   prune: true
   wait: true
   timeout: "10m"

@@ -32,19 +32,19 @@ spec:
           name: data-volume
         env:
         - name: POSTGRES_SERVER
-          value: synapse-pg-rw.synapse-pg-cluster.svc.cluster.local
+          value: matrix-pg-rw.matrix-pg-cluster.svc.cluster.local
         - name: POSTGRES_PORT
           value: "5432"
         - name: POSTGRES_USERNAME
           valueFrom:
             secretKeyRef:
               key: username
-              name: synapse-pg-creds-secret
+              name: matrix-pg-creds-secret
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: synapse-pg-creds-secret
+              name: matrix-pg-creds-secret
         - name: POSTGRES_DB
           value: synapse-db
         - name: REGISTRATION_SHARED_SECRET

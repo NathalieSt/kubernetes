@@ -14,13 +14,13 @@ func main() {
 		return
 	}
 
-	name := "synapse-pg"
+	name := "matrix-pg"
 	generatorType := generator.Infrastructure
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "synapse-pg-cluster",
+		Namespace:     "matrix-pg-cluster",
 		GeneratorType: generatorType,
-		ClusterUrl:    "synapse-pg-rw.synapse-pg-cluster.svc.cluster.local",
+		ClusterUrl:    "matrix-pg-rw.matrix-pg-cluster.svc.cluster.local",
 		Docker: &generator.Docker{
 			Registry: "ghcr.io/cloudnative-pg/postgresql",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
@@ -32,7 +32,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/postgres/synapse"),
-		CreateManifests:  createSynapseClusterManifests,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/postgres/matrix"),
+		CreateManifests:  createMatrixClusterManifests,
 	})
 }

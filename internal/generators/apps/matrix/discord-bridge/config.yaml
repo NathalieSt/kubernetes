@@ -115,7 +115,7 @@ bridge:
   # This should not have a trailing slash, the endpoint above will be appended to the provided address.
   public_address: null
   # A random key used to sign the avatar URLs. The bridge will only accept requests with a valid signature.
-  avatar_proxy_key: generate
+  avatar_proxy_key: disable
 
   portal_message_buffer: 128
 
@@ -193,7 +193,7 @@ bridge:
     allow_proxy: true
     # Matrix server signing key to make the federation tester pass, same format as synapse's .signing.key file.
     # This key is also used to sign the mxc:// URIs to ensure only the bridge can generate them.
-    server_key: generate
+    server_key: disable
   # Settings for converting animated stickers.
   animated_sticker:
     # Format to which animated stickers should be converted.
@@ -349,7 +349,7 @@ bridge:
     prefix: /_matrix/provision
     # Shared secret for authentication. If set to "generate", a random secret will be generated,
     # or if set to "disable", the provisioning API will be disabled.
-    shared_secret: generate
+    shared_secret: disable
     # Enable debug API at /debug with provisioning authentication.
     debug_endpoints: false
 

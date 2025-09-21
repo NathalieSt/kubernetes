@@ -2,7 +2,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: synapse-pg
+  name: matrix-pg
 spec:
   instances: 1
   storage:
@@ -12,5 +12,5 @@ spec:
     annotations:
       proxy.istio.io/config: "{\"holdApplicationUntilProxyStarts\": true}"
   superuserSecret:
-    name: synapse-pg-creds-secret
+    name: matrix-pg-creds-secret
   enableSuperuserAccess: true

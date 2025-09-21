@@ -6,5 +6,5 @@ metadata:
 spec:
   name: synapse-db
   cluster:
-    name: synapse-pg
+    name: matrix-pg
   owner: postgres

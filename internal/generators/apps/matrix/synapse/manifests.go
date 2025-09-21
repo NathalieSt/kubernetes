@@ -57,7 +57,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/synapse-cluster"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/matrix-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
@@ -125,7 +125,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "username",
-													Name: generators.SynapsePGCredsSecret,
+													Name: generators.MatrixPGCredsSecret,
 												},
 											},
 										},
@@ -134,7 +134,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "password",
-													Name: generators.SynapsePGCredsSecret,
+													Name: generators.MatrixPGCredsSecret,
 												},
 											},
 										},
