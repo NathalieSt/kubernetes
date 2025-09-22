@@ -258,7 +258,7 @@ data:
           # When using unlimited backfill (-1), messages are backfilled as they are fetched.
           # With limits, all messages up to the limit are fetched first and backfilled afterwards.
           missed:
-            dm: 20
+            dm: -1
             channel: 0
             thread: 0
         # Maximum members in a guild to enable backfilling. Set to -1 to disable limit.
