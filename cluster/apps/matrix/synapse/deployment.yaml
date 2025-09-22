@@ -105,3 +105,5 @@ spec:
           items:
           - key: signing-key
             path: matrix.cluster.netbird.selfhosted.signing.key
+      securityContext:
+        fsGroup: 991

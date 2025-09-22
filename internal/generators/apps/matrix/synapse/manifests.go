@@ -82,6 +82,9 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 							},
 						},
 						Spec: core.PodSpec{
+							SecurityContext: core.PodSecurityContext{
+								FsGroup: 991,
+							},
 							InitContainers: []core.Container{
 								{
 									Name:  "config-init",
