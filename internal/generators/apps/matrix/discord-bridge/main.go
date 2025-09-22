@@ -21,7 +21,7 @@ func main() {
 		Namespace:     "discord-bridge",
 		GeneratorType: generatorType,
 		ClusterUrl:    "discord-bridge.discord-bridge.svc.cluster.local",
-		Port:          8008,
+		Port:          29334,
 		Docker: &generator.Docker{
 			Registry: "dock.mau.dev/mautrix/discord",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),

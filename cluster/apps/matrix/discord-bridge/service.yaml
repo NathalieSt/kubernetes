@@ -11,5 +11,5 @@ spec:
     app.kubernetes.io/name: discord-bridge
   ports:
   - name: http-discord-bridge
-    port: 8008
-    targetport: 8008
+    port: 29334
+    targetport: 29334

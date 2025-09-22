@@ -63,7 +63,7 @@ spec:
       - image: dock.mau.dev/mautrix/discord:v0.7.5
         name: discord-bridge
         ports:
-        - containerPort: 8008
+        - containerPort: 29334
           name: discord-bridge
         volumeMounts:
         - mountPath: /data
