@@ -9,7 +9,8 @@ import (
 
 func getDiscordBridgeConfigMap(name string) (*core.ConfigMap, error) {
 
-	config, err := os.ReadFile("config.yaml")
+	//FIXME: rootDir and relative dir need to be prepended
+	config, err := os.ReadFile("./config.yaml")
 	if err != nil {
 		fmt.Printf("Error while reading config.yaml")
 		return nil, err

@@ -9,18 +9,21 @@ import (
 
 func getSynapseConfigMap(name string) (*core.ConfigMap, error) {
 
+	//FIXME: rootDir and relative dir need to be prepended
 	homeserver, err := os.ReadFile("homeserver.yaml")
 	if err != nil {
 		fmt.Printf("Error while reading homeserver.yaml")
 		return nil, err
 	}
 
+	//FIXME: rootDir and relative dir need to be prepended
 	logConfig, err := os.ReadFile("log.config")
 	if err != nil {
 		fmt.Printf("Error while reading config")
 		return nil, err
 	}
 
+	//FIXME: rootDir and relative dir need to be prepended
 	discordRegistration, err := os.ReadFile("discord-registration.yaml")
 	if err != nil {
 		fmt.Printf("Error while reading discord-registration.yaml")

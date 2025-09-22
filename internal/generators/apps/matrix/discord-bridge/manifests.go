@@ -82,13 +82,13 @@ func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir
 						Spec: core.PodSpec{
 							InitContainers: []core.Container{
 								{
-									Name:    "config-init",
-									Image:   "alpine:latest",
-									Command: []string{"/bin/sh", "-c"},
-									Args: []string{
-										`
-										apk update && apk add gettext;
-										envsubst < /template/config.yaml > /data/config.yaml;
+									Name:  "config-init",
+									Image: "alpine:latest",
+									Command: []string{
+										"/bin/sh",
+										"-c",
+										`apk update && apk add gettext;
+envsubst < /template/config.yaml > /data/config.yaml;
 										`,
 									},
 									VolumeMounts: []core.VolumeMount{
