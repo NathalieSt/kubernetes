@@ -11,22 +11,34 @@ import (
 	"path"
 )
 
-func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
+func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
-	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
-	pvc := utils.ManifestConfig{
-		Filename: "pvc.yaml",
+	configMapName := "discord-bridge-configmap"
+	configMap, err := getDiscordBridgeConfigMap(configMapName)
+	if err != nil {
+		fmt.Println("An error occurred while getting the configMap for discord-bridge")
+		return nil, err
+	}
+
+	configMapManifest := utils.ManifestConfig{
+		Filename:  "configmap.yaml",
+		Manifests: []any{*configMap},
+	}
+
+	datapvcName := fmt.Sprintf("%v-data-pvc", generatorMeta.Name)
+	datapvc := utils.ManifestConfig{
+		Filename: "data-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
+				Name: datapvcName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "100Gi",
+					"storage": "1Gi",
 				}},
 				StorageClassName: generators.NFSLocalClass,
 			},
@@ -34,13 +46,14 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/matrix-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
 	}
 
-	volumeName := "mealie-pvc"
+	configVolumeName := "config-volume"
+	dataVolumeName := "data-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -67,18 +80,46 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 							},
 						},
 						Spec: core.PodSpec{
-							Containers: []core.Container{
+							InitContainers: []core.Container{
 								{
-									Name:  generatorMeta.Name,
-									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Ports: []core.Port{
+									Name:    "config-init",
+									Image:   "alpine:latest",
+									Command: []string{"/bin/sh", "-c"},
+									Args: []string{
+										`
+										apk update && apk add gettext;
+										envsubst < /template/config.yaml > /data/config.yaml;
+										`,
+									},
+									VolumeMounts: []core.VolumeMount{
 										{
-											ContainerPort: generatorMeta.Port,
-											Name:          generatorMeta.Name,
+											Name:      configVolumeName,
+											MountPath: "/template",
+										},
+										{
+											Name:      dataVolumeName,
+											MountPath: "/data",
 										},
 									},
 									Env: []core.Env{
-										//FIXME: Generate via running generator with --meta
+										{
+											Name: "AS_TOKEN",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: generators.DiscordBridgeSecretName,
+												},
+											},
+										},
+										{
+											Name: "HS_TOKEN",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: generators.DiscordBridgeSecretName,
+												},
+											},
+										},
 										{
 											Name:  "POSTGRES_SERVER",
 											Value: postgresMeta.ClusterUrl,
@@ -92,7 +133,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "username",
-													Name: generators.PostgresCredsSecret,
+													Name: generators.MatrixPGCredsSecret,
 												},
 											},
 										},
@@ -101,32 +142,46 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "password",
-													Name: generators.PostgresCredsSecret,
+													Name: generators.MatrixPGCredsSecret,
 												},
 											},
 										},
 										{
 											Name:  "POSTGRES_DB",
-											Value: "mealie",
+											Value: "synapse-db",
 										},
+									},
+								},
+							},
+							Containers: []core.Container{
+								{
+									Name:  generatorMeta.Name,
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Ports: []core.Port{
 										{
-											Name:  "BASE_URL",
-											Value: fmt.Sprintf("https://%v.netbird.selfhosted", generatorMeta.Caddy.DNSName),
+											ContainerPort: generatorMeta.Port,
+											Name:          generatorMeta.Name,
 										},
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											MountPath: "/app/data/",
-											Name:      volumeName,
+											Name:      dataVolumeName,
+											MountPath: "/data",
 										},
 									},
 								},
 							},
 							Volumes: []core.Volume{
 								{
-									Name: volumeName,
+									Name: configVolumeName,
+									ConfigMap: core.ConfigMapVolumeSource{
+										Name: configMapName,
+									},
+								},
+								{
+									Name: dataVolumeName,
 									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
+										ClaimName: datapvcName,
 									},
 								},
 							},
@@ -168,10 +223,11 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
 			deployment.Filename,
-			pvc.Filename,
+			datapvc.Filename,
 			service.Filename,
+			configMapManifest.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, service, configMapManifest, datapvc}), nil
 }

@@ -57,9 +57,9 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		Path:       "postgres-clusters/matrix",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "matrix-pg-cluster,synapse",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "matrix-pg-cluster,synapse,discord-bridge",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "matrix-pg-cluster,synapse",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "matrix-pg-cluster,synapse,discord-bridge",
 		},
 	}
 
@@ -78,12 +78,24 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 	synapseSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-synapse-static-secret", generatorMeta.Name),
 		SecretName: generators.SynapseSecretName,
-		Path:       "synapse",
+		Path:       "matrix/synapse",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
 			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "synapse",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "synapse",
+		},
+	}
+
+	discordBridgeSecret := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-discord-bridge-static-secret", generatorMeta.Name),
+		SecretName: generators.DiscordBridgeSecretName,
+		Path:       "matrix/discord-bridge",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "synapse,discord-bridge",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "synapse,discord-bridge",
 		},
 	}
 
@@ -100,6 +112,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 				matrixPGSecretConfig,
 				mariaDBSecretConfig,
 				synapseSecret,
+				discordBridgeSecret,
 			},
 		),
 	}

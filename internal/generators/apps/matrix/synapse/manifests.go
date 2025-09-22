@@ -18,9 +18,15 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 	}
 
 	configMapName := "synapse-configmap"
-	configMap := utils.ManifestConfig{
+	configMap, err := getSynapseConfigMap(configMapName)
+	if err != nil {
+		fmt.Println("An error occurred while getting the configMap for synapse")
+		return nil, err
+	}
+
+	configMapManifest := utils.ManifestConfig{
 		Filename:  "configmap.yaml",
-		Manifests: []any{getSynapseConfigMap(configMapName)},
+		Manifests: []any{*configMap},
 	}
 
 	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
@@ -99,7 +105,12 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									Image:   "alpine:latest",
 									Command: []string{"/bin/sh", "-c"},
 									Args: []string{
-										"apk update && apk add gettext; envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data",
+										`
+										apk update && apk add gettext;
+										envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
+										envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
+										cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
+										`,
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
@@ -112,6 +123,33 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 										},
 									},
 									Env: []core.Env{
+										{
+											Name: "AS_TOKEN",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: generators.DiscordBridgeSecretName,
+												},
+											},
+										},
+										{
+											Name: "HS_TOKEN",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: generators.DiscordBridgeSecretName,
+												},
+											},
+										},
+										{
+											Name: "SENDER_LOCALPART",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: generators.DiscordBridgeSecretName,
+												},
+											},
+										},
 										{
 											Name:  "POSTGRES_SERVER",
 											Value: postgresMeta.ClusterUrl,
@@ -271,9 +309,9 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 			pvc.Filename,
 			datapvc.Filename,
 			service.Filename,
-			configMap.Filename,
+			configMapManifest.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, configMap, datapvc}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, configMapManifest, datapvc}), nil
 }
