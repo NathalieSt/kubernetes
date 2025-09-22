@@ -371,8 +371,8 @@ data:
       #     mxid - Specific user
       permissions:
         "*": relay
-        "netbird.selfhosted": user
-        "@admin:netbird.selfhosted": admin
+        "matrix.cluster.netbird.selfhosted": user
+        "@admin:matrix.cluster.netbird.selfhosted": admin
     
     # Logging config. See https://github.com/tulir/zeroconfig for details.
     logging:
