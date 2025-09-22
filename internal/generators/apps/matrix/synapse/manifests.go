@@ -30,23 +30,6 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		Manifests: []any{*configMap},
 	}
 
-	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
-	pvc := utils.ManifestConfig{
-		Filename: "pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "100Gi",
-				}},
-				StorageClassName: generators.NFSLocalClass,
-			},
-			),
-		},
-	}
-
 	datapvcName := fmt.Sprintf("%v-data-pvc", generatorMeta.Name)
 	datapvc := utils.ManifestConfig{
 		Filename: "data-pvc.yaml",
@@ -56,7 +39,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
+					"storage": "100Gi",
 				}},
 				StorageClassName: generators.NFSLocalClass,
 			},
@@ -72,7 +55,6 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 
 	configVolumeName := "config-volume"
 	dataVolumeName := "data-volume"
-	volumeName := "synapse-pvc-volume"
 	secretVolumeName := "signing-key-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
@@ -223,10 +205,6 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											Name:      volumeName,
-											MountPath: "/media",
-										},
-										{
 											Name:      dataVolumeName,
 											MountPath: "/data",
 										},
@@ -242,12 +220,6 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 									Name: configVolumeName,
 									ConfigMap: core.ConfigMapVolumeSource{
 										Name: configMapName,
-									},
-								},
-								{
-									Name: volumeName,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
 									},
 								},
 								{
@@ -320,7 +292,6 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
 			deployment.Filename,
-			pvc.Filename,
 			datapvc.Filename,
 			service.Filename,
 			configMapManifest.Filename,
@@ -328,5 +299,5 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, configMapManifest, datapvc, peerAuth}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, service, configMapManifest, datapvc, peerAuth}), nil
 }

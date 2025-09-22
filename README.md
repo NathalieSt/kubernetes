@@ -70,3 +70,8 @@ podman run -ti --rm \
     -e SYNAPSE_DATA_DIR=/media \
     ghcr.io/element-hq/synapse:latest generate
 ```
+
+## Generate a new user in synapse
+```sh
+register_new_matrix_user -u <username>
+```

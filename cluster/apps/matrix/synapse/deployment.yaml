@@ -88,8 +88,6 @@ spec:
         - containerPort: 8008
           name: synapse
         volumeMounts:
-        - mountPath: /media
-          name: synapse-pvc-volume
         - mountPath: /data
           name: data-volume
         - mountPath: /signing
@@ -98,9 +96,6 @@ spec:
       - name: config-volume
         configMap:
           name: synapse-configmap
-      - name: synapse-pvc-volume
-        persistentVolumeClaim:
-          claimName: synapse-pvc
       - name: data-volume
         persistentVolumeClaim:
           claimName: synapse-data-pvc

@@ -6,7 +6,6 @@ metadata:
 resources:
 - namespace.yaml
 - deployment.yaml
-- pvc.yaml
 - data-pvc.yaml
 - service.yaml
 - configmap.yaml
