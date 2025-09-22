@@ -18,17 +18,15 @@ spec:
         app.kubernetes.io/version: sha-6f9fab1
     spec:
       initContainers:
-      - args:
-        - |-
-
-          										apk update && apk add gettext;
-          										envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
-          										envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
-          										cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
-          										
-        command:
+      - command:
         - /bin/sh
         - -c
+        - |-
+          apk update && apk add gettext;
+          envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
+          envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
+          cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
+          										
         image: alpine:latest
         name: config-init
         volumeMounts:

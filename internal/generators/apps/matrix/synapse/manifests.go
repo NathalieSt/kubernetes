@@ -101,15 +101,15 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 						Spec: core.PodSpec{
 							InitContainers: []core.Container{
 								{
-									Name:    "config-init",
-									Image:   "alpine:latest",
-									Command: []string{"/bin/sh", "-c"},
-									Args: []string{
-										`
-										apk update && apk add gettext;
-										envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
-										envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
-										cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
+									Name:  "config-init",
+									Image: "alpine:latest",
+									Command: []string{
+										"/bin/sh",
+										"-c",
+										`apk update && apk add gettext;
+envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
+envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
+cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 										`,
 									},
 									VolumeMounts: []core.VolumeMount{
