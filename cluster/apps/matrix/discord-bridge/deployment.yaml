@@ -58,7 +58,7 @@ spec:
               key: password
               name: matrix-pg-creds-secret
         - name: POSTGRES_DB
-          value: synapse-db
+          value: discord-bridge-db
       containers:
       - image: dock.mau.dev/mautrix/discord:v0.7.5
         name: discord-bridge

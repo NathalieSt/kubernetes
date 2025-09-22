@@ -148,7 +148,7 @@ envsubst < /template/config.yaml > /data/config.yaml;
 										},
 										{
 											Name:  "POSTGRES_DB",
-											Value: "synapse-db",
+											Value: "discord-bridge-db",
 										},
 									},
 								},
