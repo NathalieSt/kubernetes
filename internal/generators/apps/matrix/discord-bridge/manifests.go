@@ -106,7 +106,7 @@ func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir
 											Name: "AS_TOKEN",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
+													Key:  "as_token",
 													Name: generators.DiscordBridgeSecretName,
 												},
 											},
@@ -115,7 +115,7 @@ func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir
 											Name: "HS_TOKEN",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
+													Key:  "hs_token",
 													Name: generators.DiscordBridgeSecretName,
 												},
 											},

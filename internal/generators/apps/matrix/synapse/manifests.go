@@ -127,7 +127,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 											Name: "AS_TOKEN",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
+													Key:  "as_token",
 													Name: generators.DiscordBridgeSecretName,
 												},
 											},
@@ -136,7 +136,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 											Name: "HS_TOKEN",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
+													Key:  "hs_token",
 													Name: generators.DiscordBridgeSecretName,
 												},
 											},
@@ -145,7 +145,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 											Name: "SENDER_LOCALPART",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
+													Key:  "sender_localpart",
 													Name: generators.DiscordBridgeSecretName,
 												},
 											},
