@@ -1,7 +1,7 @@
 # Homeserver details.
 homeserver:
   # The address that this appservice can use to connect to the homeserver.
-  address: http://synapse.synapse.svc.cluster.local
+  address: synapse.synapse.svc.cluster.local:8008
   # The domain of the homeserver (also known as server_name, used for MXIDs, etc).
   domain: matrix.cluster.netbird.selfhosted
 
@@ -28,7 +28,7 @@ homeserver:
 # Changing these values requires regeneration of the registration.
 appservice:
   # The address that the homeserver can use to connect to this appservice.
-  address: http://discord-bridge.discord-bridge.svc.cluster.local:29334
+  address: discord-bridge.discord-bridge.svc.cluster.local:29334
 
   # The hostname and port where this appservice should listen.
   hostname: 0.0.0.0
