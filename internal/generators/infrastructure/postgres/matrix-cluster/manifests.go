@@ -54,6 +54,21 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 		},
 	}
 
+	discordBridgeDB := utils.ManifestConfig{
+		Filename: "discord-bridge-db.yaml",
+		Manifests: []any{
+			cnpg.NewDatabase(meta.ObjectMeta{
+				Name: "discord-bridge-db",
+			}, cnpg.DatabaseSpec{
+				Name: "discord-bridge-db",
+				Cluster: cnpg.DatabaseCluster{
+					Name: generatorMeta.Name,
+				},
+				Owner: "postgres",
+			}),
+		},
+	}
+
 	peerAuth := utils.ManifestConfig{
 		Filename: "peer-auth.yaml",
 		Manifests: []any{
@@ -75,10 +90,11 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 				namespace.Filename,
 				cluster.Filename,
 				synapseDB.Filename,
+				discordBridgeDB.Filename,
 				peerAuth.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, synapseDB, peerAuth})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, synapseDB, discordBridgeDB, peerAuth})
 }

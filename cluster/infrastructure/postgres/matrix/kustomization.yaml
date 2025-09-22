@@ -7,4 +7,5 @@ resources:
 - namespace.yaml
 - matrix-cluster.yaml
 - synapse-db.yaml
+- discord-bridge-db.yaml
 - peer-auth.yaml
