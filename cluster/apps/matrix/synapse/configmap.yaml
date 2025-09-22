@@ -4,8 +4,22 @@ kind: ConfigMap
 metadata:
   name: synapse-configmap
 data:
+  discord-registration.yaml: |
+    id: discord
+    url: http://discord-bridge.discord-bridge.svc.cluster.local:29334
+    as_token: ${AS_TOKEN}
+    hs_token: ${HS_TOKEN}
+    sender_localpart: ${SENDER_LOCALPART}
+    rate_limited: false
+    namespaces:
+      users:
+        - regex: ^@discordbot:netbird\.selfhosted$
+          exclusive: true
+        - regex: ^@discord_.*:netbird\.selfhosted$
+          exclusive: true
+    de.sorunome.msc2409.push_ephemeral: true
+    push_ephemeral: true
   homeserver.yaml: |
-    
     server_name: "matrix.cluster.netbird.selfhosted"
     pid_file: /data/homeserver.pid
     listeners:
@@ -34,8 +48,9 @@ data:
     signing_key_path: "/signing/matrix.cluster.netbird.selfhosted.signing.key"
     trusted_key_servers:
       - server_name: "matrix.org"
-  matrix.cluster.netbird.selfhosted.log.config: |
-    
+    app_service_config_files:
+      - /data/discord-registration.yaml
+  matrix.cluster.netbird.selfhosted.log.config: |-
     version: 1
     
     formatters:

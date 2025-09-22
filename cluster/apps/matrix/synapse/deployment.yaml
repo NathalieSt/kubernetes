@@ -19,7 +19,13 @@ spec:
     spec:
       initContainers:
       - args:
-        - apk update && apk add gettext; envsubst < /template/homeserver.yaml > /data/homeserver.yaml; cp /template/matrix.cluster.netbird.selfhosted.log.config /data
+        - |-
+
+          										apk update && apk add gettext;
+          										envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
+          										envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
+          										cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
+          										
         command:
         - /bin/sh
         - -c
@@ -31,6 +37,21 @@ spec:
         - mountPath: /data
           name: data-volume
         env:
+        - name: AS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: as_token
+              name: discord-bridge-secret
+        - name: HS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: hs_token
+              name: discord-bridge-secret
+        - name: SENDER_LOCALPART
+          valueFrom:
+            secretKeyRef:
+              key: sender_localpart
+              name: discord-bridge-secret
         - name: POSTGRES_SERVER
           value: matrix-pg-rw.matrix-pg-cluster.svc.cluster.local
         - name: POSTGRES_PORT
