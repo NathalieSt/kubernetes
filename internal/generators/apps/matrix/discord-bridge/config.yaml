@@ -264,10 +264,10 @@ bridge:
   # See https://docs.mau.fi/bridges/general/end-to-bridge-encryption.html for more info.
   encryption:
     # Allow encryption, work in group chat rooms with e2ee enabled
-    allow: false
+    allow: true
     # Default to encryption, force-enable encryption in all portals the bridge creates
     # This will cause the bridge bot to be in private chats for the encryption to work properly.
-    default: false
+    default: true
     # Whether to use MSC2409/MSC3202 instead of /sync long polling for receiving encryption-related data.
     # Changing this option requires updating the appservice registration file.
     appservice: false
@@ -277,7 +277,7 @@ bridge:
     # Changing this option requires updating the appservice registration file.
     msc4190: false
     # Require encryption, drop any unencrypted messages.
-    require: false
+    require: true
     # Enable key sharing? If enabled, key requests for rooms where users are in will be fulfilled.
     # You must use a client that supports requesting keys from other users to use this feature.
     allow_key_sharing: false
