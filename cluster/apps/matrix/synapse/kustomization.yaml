@@ -10,3 +10,4 @@ resources:
 - data-pvc.yaml
 - service.yaml
 - configmap.yaml
+- peer-auth.yaml

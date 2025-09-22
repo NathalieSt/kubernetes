@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/istio"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
@@ -301,6 +302,19 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 		},
 	}
 
+	peerAuth := utils.ManifestConfig{
+		Filename: "peer-auth.yaml",
+		Manifests: []any{
+			istio.NewPeerAuthenthication(meta.ObjectMeta{
+				Name: "allow-permissive-synapse-access",
+			}, istio.PeerAuthenthicationSpec{
+				MTLS: istio.PeerAuthenthicationmTLS{
+					Mode: istio.PERMISSIVE,
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -310,8 +324,9 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 			datapvc.Filename,
 			service.Filename,
 			configMapManifest.Filename,
+			peerAuth.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, configMapManifest, datapvc}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, configMapManifest, datapvc, peerAuth}), nil
 }
