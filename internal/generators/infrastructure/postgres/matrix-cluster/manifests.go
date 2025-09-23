@@ -69,6 +69,36 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 		},
 	}
 
+	whatsAppBridgeDB := utils.ManifestConfig{
+		Filename: "whatsapp-bridge-db.yaml",
+		Manifests: []any{
+			cnpg.NewDatabase(meta.ObjectMeta{
+				Name: "whatsapp-bridge-db",
+			}, cnpg.DatabaseSpec{
+				Name: "whatsapp-bridge-db",
+				Cluster: cnpg.DatabaseCluster{
+					Name: generatorMeta.Name,
+				},
+				Owner: "postgres",
+			}),
+		},
+	}
+
+	signalBridgeDB := utils.ManifestConfig{
+		Filename: "signal-bridge-db.yaml",
+		Manifests: []any{
+			cnpg.NewDatabase(meta.ObjectMeta{
+				Name: "signal-bridge-db",
+			}, cnpg.DatabaseSpec{
+				Name: "signal-bridge-db",
+				Cluster: cnpg.DatabaseCluster{
+					Name: generatorMeta.Name,
+				},
+				Owner: "postgres",
+			}),
+		},
+	}
+
 	peerAuth := utils.ManifestConfig{
 		Filename: "peer-auth.yaml",
 		Manifests: []any{
@@ -91,10 +121,21 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 				cluster.Filename,
 				synapseDB.Filename,
 				discordBridgeDB.Filename,
+				whatsAppBridgeDB.Filename,
+				signalBridgeDB.Filename,
 				peerAuth.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, synapseDB, discordBridgeDB, peerAuth})
+	return utils.MarshalManifests([]utils.ManifestConfig{
+		namespace,
+		kustomization,
+		cluster,
+		synapseDB,
+		discordBridgeDB,
+		whatsAppBridgeDB,
+		signalBridgeDB,
+		peerAuth,
+	})
 }

@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: whatsapp-bridge
+    app.kubernetes.io/version: v0.7.5
+  name: whatsapp-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: whatsapp-bridge
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: whatsapp-bridge
+        app.kubernetes.io/version: v0.7.5
+    spec:
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - |-
+          apk update && apk add gettext;
+          envsubst < /template/config.yaml > /data/config.yaml;
+          										
+        image: alpine:latest
+        name: config-init
+        volumeMounts:
+        - mountPath: /template
+          name: config-volume
+        - mountPath: /data
+          name: data-volume
+        env:
+        - name: AS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: as_token
+              name: whatsapp-bridge-secret
+        - name: HS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: hs_token
+              name: whatsapp-bridge-secret
+        - name: POSTGRES_SERVER
+          value: matrix-pg-rw.matrix-pg-cluster.svc.cluster.local
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: matrix-pg-creds-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: matrix-pg-creds-secret
+        - name: POSTGRES_DB
+          value: whatsapp-bridge-db
+      containers:
+      - image: dock.mau.dev/mautrix/whatsapp:v0.7.5
+        name: whatsapp-bridge
+        ports:
+        - containerPort: 29318
+          name: whatsapp-bridge
+        volumeMounts:
+        - mountPath: /data
+          name: data-volume
+      volumes:
+      - name: config-volume
+        configMap:
+          name: whatsapp-bridge-configmap
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: whatsapp-bridge-data-pvc

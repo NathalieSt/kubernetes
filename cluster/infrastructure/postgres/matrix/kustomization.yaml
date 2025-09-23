@@ -8,4 +8,6 @@ resources:
 - matrix-cluster.yaml
 - synapse-db.yaml
 - discord-bridge-db.yaml
+- whatsapp-bridge-db.yaml
+- signal-bridge-db.yaml
 - peer-auth.yaml

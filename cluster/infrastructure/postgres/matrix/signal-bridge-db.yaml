@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: signal-bridge-db
+spec:
+  name: signal-bridge-db
+  cluster:
+    name: matrix-pg
+  owner: postgres

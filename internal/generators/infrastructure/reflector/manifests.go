@@ -99,6 +99,18 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
+	whatsappBridgeSecret := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-whatsapp-bridge-static-secret", generatorMeta.Name),
+		SecretName: generators.DiscordBridgeSecretName,
+		Path:       "matrix/whatsapp-bridge",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "synapse,whatsapp-bridge",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "synapse,whatsapp-bridge",
+		},
+	}
+
 	vaultSecrets := utils.ManifestConfig{
 		Filename: "vault-secrets.yaml",
 		Manifests: utils.GenerateVaultAccessManifests(
@@ -113,6 +125,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 				mariaDBSecretConfig,
 				synapseSecret,
 				discordBridgeSecret,
+				whatsappBridgeSecret,
 			},
 		),
 	}
