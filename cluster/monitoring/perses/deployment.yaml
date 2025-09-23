@@ -24,9 +24,9 @@ spec:
         - containerPort: 8080
           name: perses
         volumeMounts:
-        - mountPath: /etc/perses/storage
-          name: storage-volumec
+        - mountPath: /perses
+          name: storage-volume
       volumes:
-      - name: storage-volumec
+      - name: storage-volume
         persistentVolumeClaim:
           claimName: perses-pvc

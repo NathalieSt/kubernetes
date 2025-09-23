@@ -10,7 +10,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createMariaDBManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),

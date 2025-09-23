@@ -33,7 +33,7 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		},
 	}
 
-	volumeName := "storage-volumec"
+	volumeName := "storage-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -72,7 +72,7 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											MountPath: "/etc/perses/storage",
+											MountPath: "/perses",
 											Name:      volumeName,
 										},
 									},
