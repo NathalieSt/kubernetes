@@ -1,12 +1,162 @@
 package cli
 
 import (
+	"fmt"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"strconv"
+	"strings"
+	"text/template"
 
 	"github.com/rivo/tview"
 )
+
+/*
+type GeneratorMeta struct {
+    Name                string
+    Namespace           string
+    GeneratorType       GeneratorType
+    ClusterUrl          string
+    Port                int64
+    Docker              *Docker
+    Helm                *Helm
+    Caddy               *Caddy
+    VirtualService      *VirtualServiceConfig
+    KedaScaling         *keda.ScaledObjectTriggerMeta
+    DependsOnGenerators []string
+}*/
+
+func CapitalizeFirst(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	return strings.ToUpper(string(s[0])) + s[1:]
+}
+
+func GetGeneratorTypeString(generatorType generator.GeneratorType) string {
+	switch generatorType {
+	case generator.App:
+		return "generator.App"
+	case generator.Infrastructure:
+		return "generator.Infrastructure"
+	case generator.Istio:
+		return "generator.Istio"
+	case generator.Monitoring:
+		return "generator.Monitoring"
+	default:
+		return "generator.App"
+	}
+}
+
+func getMainTemplate(generatorMeta generator.GeneratorMeta) (*template.Template, error) {
+	template, err := template.New("main.go").Funcs(template.FuncMap{
+		"CapitalizeFirst":        CapitalizeFirst,
+		"GetGeneratorTypeString": GetGeneratorTypeString,
+	}).Parse(`
+package main
+
+import (
+	"fmt"
+	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
+	"kubernetes/pkg/schema/generator"
+	"path/filepath"
+)
+
+func main() {
+	flags := utils.GetGeneratorFlags()
+	if flags == nil {
+		fmt.Println("An error happened while getting flags for generator")
+		return
+	}
+
+	name := "{{.Name}}"
+	generatorType := {{.GeneratorType | GetGeneratorTypeString}}
+	var meta = generator.GeneratorMeta{
+		Name:          name,
+		Namespace:     "{{.Namespace}}",
+		GeneratorType: generatorType,
+		ClusterUrl:    "{{.Name}}.{{.Namespace}}.svc.cluster.local",
+		Port:          {{.Port}},
+		{{not .Docker}}
+		Docker: &generator.Docker{
+			Registry: "searxng/searxng",
+			//FIXME: set to nil, later fetch in generator from version.json
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+		},
+		{{end}}
+		{{not .Helm}}
+		Helm: &generator.Helm{
+			Url:     "https://jellyfin.github.io/jellyfin-helm",
+			Chart:   "jellyfin",
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+		},
+		{{end}}
+		Caddy: &generator.Caddy{
+			DNSName: "searxng.cluster",
+		},
+		KedaScaling: &keda.ScaledObjectTriggerMeta{
+			Timezone:        "Europe/Vienna",
+			Start:           "0 7 * * *",
+			End:             "0 23 * * *",
+			DesiredReplicas: "1",
+		},
+		DependsOnGenerators: []string{
+			"valkey",
+			"gluetun-proxy",
+		},
+	}
+
+	utils.RunGenerator(utils.GeneratorRunnerConfig{
+		Meta:             meta,
+		ShouldReturnMeta: flags.ShouldReturnMeta,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/searxng/"),
+		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
+			manifests, err := createSearXNGManifests(gm, flags.RootDir)
+			if err != nil {
+				fmt.Println("An error happened while generating SearXNG Manifests")
+				fmt.Printf("Reason:\n %v", err)
+				return nil
+			}
+			return manifests
+		},
+	})
+}
+
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return template, nil
+}
+
+func getManifestsTemplate(generatorMeta generator.GeneratorMeta) (*template.Template, error) {
+	template, err := template.New("manifests").Parse(`
+	
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return template, nil
+}
+
+func writeTemplatesToFiles(templates ...*template.Template) {
+
+}
+
+func generateGoFiles(generatorMeta generator.GeneratorMeta) {
+	main, err := getMainTemplate(generatorMeta)
+	if err != nil {
+		fmt.Println("An error happened while getting Main template")
+		return
+	}
+
+	writeTemplatesToFiles(main)
+}
 
 func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex, generatorMeta generator.GeneratorMeta) {
 	name := ""
@@ -191,6 +341,8 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex, generat
 		if caddy != nil {
 			generatorMeta.Caddy = caddy
 		}
+
+		generateGoFiles(generatorMeta)
 
 		pages.SwitchToPage("Main")
 	})
