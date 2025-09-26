@@ -5,6 +5,8 @@ import (
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"os"
+	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"text/template"
@@ -64,8 +66,14 @@ func GetGeneratorTypeSubfolderString(generatorType generator.GeneratorType) stri
 	}
 }
 
+func RemoveWhitespaces(s string) string {
+	return strings.ReplaceAll(s, " ", "")
+}
+
 func getMainTemplate() (*template.Template, error) {
 	template, err := template.New("main.go").Funcs(template.FuncMap{
+		"RemoveWithspaces":                RemoveWhitespaces,
+		"CapitalizeFirst":                 CapitalizeFirst,
 		"ToLower":                         strings.ToLower,
 		"GetGeneratorTypeString":          GetGeneratorTypeString,
 		"GetGeneratorTypeSubfolderString": GetGeneratorTypeSubfolderString,
@@ -133,7 +141,7 @@ func main() {
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/{{.GeneratorType | GetGeneratorTypeSubfolderString}}/{{.Name | ToLower }}/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := create{{.Name}}Manifests(gm, flags.RootDir)
+			manifests, err := create{{.Name | CapitalizeFirst | RemoveWithspaces}}Manifests(gm, flags.RootDir)
 			if err != nil {
 				fmt.Println("An error happened while generating {{.Name}} Manifests")
 				fmt.Printf("Reason:\n %v", err)
@@ -164,10 +172,17 @@ func getManifestsTemplate() (*template.Template, error) {
 	return template, nil
 }
 
+func create(p string) (*os.File, error) {
+	if err := os.MkdirAll(filepath.Dir(p), 0770); err != nil {
+		return nil, err
+	}
+	return os.Create(p)
+}
+
 func writeTemplatesToFiles(generatorMeta generator.GeneratorMeta, outDir string, templates ...*template.Template) {
 
 	for _, template := range templates {
-		f, err := os.Create(fmt.Sprintf("%v/%v", outDir, template.Name()))
+		f, err := create(path.Join(outDir, fmt.Sprintf("internal/generators/%v/%v", GetGeneratorTypeSubfolderString(generatorMeta.GeneratorType), strings.ReplaceAll(strings.ToLower(generatorMeta.Name), " ", "")), template.Name()))
 		if err != nil {
 			fmt.Println("Couldnt create file")
 		}
@@ -190,17 +205,17 @@ func generateGoFiles(generatorMeta generator.GeneratorMeta, outdir string) {
 	writeTemplatesToFiles(generatorMeta, outdir, main)
 }
 
-func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex) {
+func generateScaffoldingPageLayout(rootDir string, pages *tview.Pages, flex *tview.Flex) {
 	generatorMeta := generator.GeneratorMeta{}
 	name := ""
 	namespace := ""
 	typeString := ""
 	clusterUrl := ""
 	port := new(int64)
-	helm := &generator.Helm{}
-	docker := &generator.Docker{}
-	keda := &keda.ScaledObjectTriggerMeta{}
-	caddy := &generator.Caddy{}
+	var helm *generator.Helm
+	var docker *generator.Docker
+	var kedaScaling *keda.ScaledObjectTriggerMeta
+	var caddy *generator.Caddy
 
 	form := tview.NewForm()
 
@@ -263,7 +278,6 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex) {
 			containerVersionInput.SetDisabled(false)
 
 		case "Helm Chart":
-			fmt.Println("HEEELLLOOO")
 			docker = nil
 			helm = &generator.Helm{}
 			registryInput.SetDisabled(true)
@@ -292,20 +306,21 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex) {
 		AddFormItem(chartVersionInput)
 
 	kedaTimezoneInput := tview.NewInputField().SetLabel("Timezone:").SetText("").SetChangedFunc(func(text string) {
-		keda.Timezone = text
+		kedaScaling.Timezone = text
 	}).SetDisabled(true)
 	kedaStartInput := tview.NewInputField().SetLabel("Start:").SetText("").SetChangedFunc(func(text string) {
-		keda.Start = text
+		kedaScaling.Start = text
 	}).SetDisabled(true)
 	kedaEndInput := tview.NewInputField().SetLabel("End:").SetText("").SetChangedFunc(func(text string) {
-		keda.End = text
+		kedaScaling.End = text
 	}).SetDisabled(true)
 	kedaReplicasInput := tview.NewInputField().SetLabel("Desired Replicas:").SetText("").SetChangedFunc(func(text string) {
-		keda.DesiredReplicas = text
+		kedaScaling.DesiredReplicas = text
 	}).SetDisabled(true)
 
 	form.AddCheckbox("Keda scaling required:", false, func(checked bool) {
 		if checked {
+			kedaScaling = &keda.ScaledObjectTriggerMeta{}
 			kedaTimezoneInput.SetDisabled(false)
 			kedaStartInput.SetDisabled(false)
 			kedaEndInput.SetDisabled(false)
@@ -315,7 +330,7 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex) {
 			kedaStartInput.SetDisabled(true)
 			kedaEndInput.SetDisabled(true)
 			kedaReplicasInput.SetDisabled(true)
-			keda = nil
+			kedaScaling = nil
 		}
 	})
 
@@ -337,6 +352,7 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex) {
 
 	form.AddCheckbox("Is externally available:", false, func(checked bool) {
 		if checked {
+			caddy = &generator.Caddy{}
 			dnsNameInput.SetDisabled(false)
 			requiresWebsocketsInput.SetDisabled(false)
 		} else {
@@ -377,8 +393,11 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex) {
 		if caddy != nil {
 			generatorMeta.Caddy = caddy
 		}
+		if kedaScaling != nil {
+			generatorMeta.KedaScaling = kedaScaling
+		}
 
-		generateGoFiles(generatorMeta, "NOT YET IMPLEMENTED")
+		generateGoFiles(generatorMeta, rootDir)
 
 		pages.SwitchToPage("Main")
 	})

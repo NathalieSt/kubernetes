@@ -102,7 +102,7 @@ func Start() {
 		AddItem(actionArea, 0, 3, false).
 		AddItem(generatorsTree, 0, 1, false)
 
-	generateScaffoldingPageLayout(pages, scaffoldingFlex)
+	generateScaffoldingPageLayout(rootDir, pages, scaffoldingFlex)
 
 	pages.AddPage("Main", mainFlex, true, true)
 	pages.AddPage("Scaffolding", scaffoldingFlex, true, false)
