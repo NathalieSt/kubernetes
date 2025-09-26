@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
+	"os"
 	"strconv"
 	"strings"
 	"text/template"
@@ -48,10 +49,26 @@ func GetGeneratorTypeString(generatorType generator.GeneratorType) string {
 	}
 }
 
-func getMainTemplate(generatorMeta generator.GeneratorMeta) (*template.Template, error) {
+func GetGeneratorTypeSubfolderString(generatorType generator.GeneratorType) string {
+	switch generatorType {
+	case generator.App:
+		return "apps"
+	case generator.Infrastructure:
+		return "infrastructure"
+	case generator.Istio:
+		return "istio"
+	case generator.Monitoring:
+		return "monitoring"
+	default:
+		return "apps"
+	}
+}
+
+func getMainTemplate() (*template.Template, error) {
 	template, err := template.New("main.go").Funcs(template.FuncMap{
-		"CapitalizeFirst":        CapitalizeFirst,
-		"GetGeneratorTypeString": GetGeneratorTypeString,
+		"ToLower":                         strings.ToLower,
+		"GetGeneratorTypeString":          GetGeneratorTypeString,
+		"GetGeneratorTypeSubfolderString": GetGeneratorTypeSubfolderString,
 	}).Parse(`
 package main
 
@@ -70,7 +87,7 @@ func main() {
 		return
 	}
 
-	name := "{{.Name}}"
+	name := "{{.Name | ToLower}}"
 	generatorType := {{.GeneratorType | GetGeneratorTypeString}}
 	var meta = generator.GeneratorMeta{
 		Name:          name,
@@ -78,43 +95,47 @@ func main() {
 		GeneratorType: generatorType,
 		ClusterUrl:    "{{.Name}}.{{.Namespace}}.svc.cluster.local",
 		Port:          {{.Port}},
-		{{not .Docker}}
+		{{if .Docker}}
 		Docker: &generator.Docker{
-			Registry: "searxng/searxng",
-			//FIXME: set to nil, later fetch in generator from version.json
+			Registry: "{{.Docker.Registry}}",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		{{end}}
-		{{not .Helm}}
+		{{if .Helm}}
 		Helm: &generator.Helm{
-			Url:     "https://jellyfin.github.io/jellyfin-helm",
-			Chart:   "jellyfin",
+			Url:     "{{.Helm.Url}}",
+			Chart:   "{{.Helm.Chart}}",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		{{end}}
+		{{if .Caddy}}
 		Caddy: &generator.Caddy{
-			DNSName: "searxng.cluster",
+			DNSName: "{{.Caddy.DNSName}}",
 		},
+		{{end}}
+		{{if .KedaScaling}}
 		KedaScaling: &keda.ScaledObjectTriggerMeta{
-			Timezone:        "Europe/Vienna",
-			Start:           "0 7 * * *",
-			End:             "0 23 * * *",
-			DesiredReplicas: "1",
+			Timezone:        "{{.KedaScaling.Timezone}}",
+			Start:           "{{.KedaScaling.Start}}",
+			End:             "{{.KedaScaling.End}}",
+			DesiredReplicas: "{{.KedaScaling.DesiredReplicas}}",
 		},
+		{{end}}
 		DependsOnGenerators: []string{
-			"valkey",
-			"gluetun-proxy",
+			{{range .DependsOnGenerators}}
+			"{{.}}"
+			{{end}}
 		},
 	}
 
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/searxng/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/{{.GeneratorType | GetGeneratorTypeSubfolderString}}/{{.Name | ToLower }}/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := createSearXNGManifests(gm, flags.RootDir)
+			manifests, err := create{{.Name}}Manifests(gm, flags.RootDir)
 			if err != nil {
-				fmt.Println("An error happened while generating SearXNG Manifests")
+				fmt.Println("An error happened while generating {{.Name}} Manifests")
 				fmt.Printf("Reason:\n %v", err)
 				return nil
 			}
@@ -122,8 +143,7 @@ func main() {
 		},
 	})
 }
-
-	`)
+`)
 
 	if err != nil {
 		return nil, err
@@ -132,7 +152,7 @@ func main() {
 	return template, nil
 }
 
-func getManifestsTemplate(generatorMeta generator.GeneratorMeta) (*template.Template, error) {
+func getManifestsTemplate() (*template.Template, error) {
 	template, err := template.New("manifests").Parse(`
 	
 	`)
@@ -144,21 +164,34 @@ func getManifestsTemplate(generatorMeta generator.GeneratorMeta) (*template.Temp
 	return template, nil
 }
 
-func writeTemplatesToFiles(templates ...*template.Template) {
+func writeTemplatesToFiles(generatorMeta generator.GeneratorMeta, outDir string, templates ...*template.Template) {
 
+	for _, template := range templates {
+		f, err := os.Create(fmt.Sprintf("%v/%v", outDir, template.Name()))
+		if err != nil {
+			fmt.Println("Couldnt create file")
+		}
+		err = template.Execute(f, generatorMeta)
+		if err != nil {
+			fmt.Println("Error executing template")
+		}
+		f.Close()
+	}
 }
 
-func generateGoFiles(generatorMeta generator.GeneratorMeta) {
-	main, err := getMainTemplate(generatorMeta)
+func generateGoFiles(generatorMeta generator.GeneratorMeta, outdir string) {
+	main, err := getMainTemplate()
 	if err != nil {
 		fmt.Println("An error happened while getting Main template")
+		fmt.Println(err.Error())
 		return
 	}
 
-	writeTemplatesToFiles(main)
+	writeTemplatesToFiles(generatorMeta, outdir, main)
 }
 
-func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex, generatorMeta generator.GeneratorMeta) {
+func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex) {
+	generatorMeta := generator.GeneratorMeta{}
 	name := ""
 	namespace := ""
 	typeString := ""
@@ -221,6 +254,7 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex, generat
 		switch option {
 		case "Manual Deployment":
 			helm = nil
+			docker = &generator.Docker{}
 			chartRepoInput.SetDisabled(true)
 			chartNameInput.SetDisabled(true)
 			chartVersionInput.SetDisabled(true)
@@ -229,7 +263,9 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex, generat
 			containerVersionInput.SetDisabled(false)
 
 		case "Helm Chart":
+			fmt.Println("HEEELLLOOO")
 			docker = nil
+			helm = &generator.Helm{}
 			registryInput.SetDisabled(true)
 			containerVersionInput.SetDisabled(true)
 
@@ -342,7 +378,7 @@ func generateScaffoldingPageLayout(pages *tview.Pages, flex *tview.Flex, generat
 			generatorMeta.Caddy = caddy
 		}
 
-		generateGoFiles(generatorMeta)
+		generateGoFiles(generatorMeta, "NOT YET IMPLEMENTED")
 
 		pages.SwitchToPage("Main")
 	})

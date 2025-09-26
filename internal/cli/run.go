@@ -29,7 +29,6 @@ func Start() {
 	pages := tview.NewPages()
 	mainFlex := tview.NewFlex()
 	scaffoldingFlex := tview.NewFlex()
-	newGeneratorMeta := generator.GeneratorMeta{}
 
 	rootDir, err := utils.FindRoot()
 	if err != nil {
@@ -103,7 +102,7 @@ func Start() {
 		AddItem(actionArea, 0, 3, false).
 		AddItem(generatorsTree, 0, 1, false)
 
-	generateScaffoldingPageLayout(pages, scaffoldingFlex, newGeneratorMeta)
+	generateScaffoldingPageLayout(pages, scaffoldingFlex)
 
 	pages.AddPage("Main", mainFlex, true, true)
 	pages.AddPage("Scaffolding", scaffoldingFlex, true, false)
