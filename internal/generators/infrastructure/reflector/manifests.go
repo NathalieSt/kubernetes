@@ -101,7 +101,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	whatsappBridgeSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-whatsapp-bridge-static-secret", generatorMeta.Name),
-		SecretName: generators.DiscordBridgeSecretName,
+		SecretName: generators.WhatsappBridgeSecretName,
 		Path:       "matrix/whatsapp-bridge",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
