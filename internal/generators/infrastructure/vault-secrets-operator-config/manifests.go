@@ -11,7 +11,7 @@ import (
 
 func createVaultSecretsOperatorManifests(rootDir string, generatorMeta generator.GeneratorMeta) (map[string][]byte, error) {
 
-	serviceAccount, role, rolebinding := utils.GenerateRBAC(generatorMeta.Name)
+	serviceAccount, role, rolebinding := utils.GenerateRBAC("vault-secrets-operator")
 
 	vaultMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/vault"))
 	if err != nil {

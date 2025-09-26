@@ -42,7 +42,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: "24h"
-  targetNamespace: vault-secrets-operator-config
+  targetNamespace: vault-secrets-operator
   sourceRef:
     kind: GitRepository
     name: flux-system
