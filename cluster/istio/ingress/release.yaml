@@ -17,4 +17,4 @@ spec:
     autoscaling:
       maxReplicas: 2
     service:
-      loadBalancerIP: 10.43.164.134
+      loadBalancerIP: 10.43.173.132
