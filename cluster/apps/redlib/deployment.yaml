@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: redlib
+    app.kubernetes.io/version: sha-a989d19
+  name: redlib
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redlib
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redlib
+        app.kubernetes.io/version: sha-a989d19
+    spec:
+      containers:
+      - image: quay.io/redlib/redlib:sha-a989d19
+        name: redlib
+        ports:
+        - containerPort: 8080
+          name: redlib

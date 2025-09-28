@@ -8,5 +8,6 @@
     "synapse": "sha-6f9fab1",
     "discord-bridge": "v0.7.5",
     "whatsapp-bridge": "v0.7.5",
-    "signal-bridge": "v0.7.5"
+    "signal-bridge": "v0.7.5",
+    "redlib": "sha-a989d19"
 }
