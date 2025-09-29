@@ -72,7 +72,7 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											MountPath: "/perses",
+											MountPath: "/etc/perses/storage",
 											Name:      volumeName,
 										},
 									},
