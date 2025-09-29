@@ -39,6 +39,29 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 		},
 	}
 
+	debianStorageClass := utils.ManifestConfig{
+		Filename: "debian-storage-class.yaml",
+		Manifests: []any{
+			storage.NewStorageClass(
+				meta.ObjectMeta{
+					Name: generators.DebianStorageClass,
+				},
+				storage.StorageClassData{
+					Provisioner: "nfs.csi.k8s.io",
+					Parameters: map[string]string{
+						"server": "debian",
+						"share":  "/srv/nfs",
+					},
+					ReclaimPolicy:        "Retain",
+					VolumeBindingMode:    "Immediate",
+					AllowVolumeExpansion: true,
+					MountOptions: []string{
+						"nfsvers=4.1",
+					},
+				}),
+		},
+	}
+
 	remoteStorageClass := utils.ManifestConfig{
 		Filename: "remote-storage-class.yaml",
 		Manifests: []any{
@@ -74,9 +97,10 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				release.Filename,
 				localStorageClass.Filename,
 				remoteStorageClass.Filename,
+				debianStorageClass.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, namespace, repo, chart, release, release, localStorageClass, remoteStorageClass})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, namespace, repo, chart, release, release, localStorageClass, remoteStorageClass, debianStorageClass})
 }

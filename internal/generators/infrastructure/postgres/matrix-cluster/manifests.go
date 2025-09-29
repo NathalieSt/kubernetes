@@ -28,7 +28,7 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 					},
 				},
 				Storage: cnpg.ClusterStorage{
-					StorageClass: generators.K3sLocalPathClass,
+					StorageClass: generators.DebianStorageClass,
 					Size:         "100Gi",
 				},
 				Affinity: cnpg.AffinityConfiguration{

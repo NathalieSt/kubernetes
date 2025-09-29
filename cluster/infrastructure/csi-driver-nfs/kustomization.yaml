@@ -10,3 +10,4 @@ resources:
 - release.yaml
 - local-storage-class-v2.yaml
 - remote-storage-class.yaml
+- debian-storage-class.yaml

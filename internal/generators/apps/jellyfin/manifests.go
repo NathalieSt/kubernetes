@@ -37,6 +37,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 				"media": map[string]any{
 					"existingClaim": pvcName,
 				},
+				"config": map[string]any{
+					"storageClass": generators.NFSLocalClass,
+				},
 			},
 			"nodeSelector": map[string]any{
 				"kubernetes.io/hostname": "debian",

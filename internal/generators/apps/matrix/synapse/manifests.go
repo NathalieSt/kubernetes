@@ -41,7 +41,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.K3sLocalPathClass,
+				StorageClassName: generators.DebianStorageClass,
 			},
 			),
 		},
