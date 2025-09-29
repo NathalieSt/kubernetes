@@ -26,14 +26,19 @@ type Bootstrap struct {
 	Initdb InitDB `yaml:"initdb"`
 }
 
+type AffinityConfiguration struct {
+	NodeSelector map[string]string `yaml:"nodeSelector,omitempty"`
+}
+
 type ClusterSpec struct {
-	Instances             int               `yaml:"instances"`
-	ImageName             string            `yaml:"imageName,omitempty"`
-	Bootstrap             Bootstrap         `yaml:"bootstrap,omitempty"`
-	Storage               ClusterStorage    `yaml:"storage"`
-	InheritedMetadata     InheritedMetadata `yaml:"inheritedMetadata,omitempty"`
-	SuperuserSecret       SuperuserSecret   `yaml:"superuserSecret,omitempty"`
-	EnableSuperuserAccess bool              `yaml:"enableSuperuserAccess,omitempty"`
+	Instances             int                   `yaml:"instances"`
+	ImageName             string                `yaml:"imageName,omitempty"`
+	Bootstrap             Bootstrap             `yaml:"bootstrap,omitempty"`
+	Storage               ClusterStorage        `yaml:"storage"`
+	InheritedMetadata     InheritedMetadata     `yaml:"inheritedMetadata,omitempty"`
+	SuperuserSecret       SuperuserSecret       `yaml:"superuserSecret,omitempty"`
+	EnableSuperuserAccess bool                  `yaml:"enableSuperuserAccess,omitempty"`
+	Affinity              AffinityConfiguration `yaml:"affinity,omitempty"`
 }
 
 type Cluster struct {

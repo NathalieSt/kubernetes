@@ -66,6 +66,7 @@ type PodSpec struct {
 	Containers      []Container        `yaml:"containers,omitempty"`
 	Volumes         []Volume           `yaml:"volumes,omitempty"`
 	SecurityContext PodSecurityContext `yaml:"securityContext,omitempty"`
+	NodeSelector    map[string]string  `yaml:"nodeSelector,omitempty"`
 }
 
 type Pod struct {

@@ -41,7 +41,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: generators.K3sLocalPathClass,
 			},
 			),
 		},
@@ -82,6 +82,9 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 							},
 						},
 						Spec: core.PodSpec{
+							NodeSelector: map[string]string{
+								"kubernetes.io/hostname": "debian",
+							},
 							SecurityContext: core.PodSecurityContext{
 								FsGroup: 991,
 							},

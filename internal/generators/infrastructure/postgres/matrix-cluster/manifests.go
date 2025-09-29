@@ -28,8 +28,13 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 					},
 				},
 				Storage: cnpg.ClusterStorage{
-					StorageClass: generators.NFSLocalClass,
+					StorageClass: generators.K3sLocalPathClass,
 					Size:         "100Gi",
+				},
+				Affinity: cnpg.AffinityConfiguration{
+					NodeSelector: map[string]string{
+						"kubernetes.io/hostname": "debian",
+					},
 				},
 				SuperuserSecret: cnpg.SuperuserSecret{
 					Name: generators.MatrixPGCredsSecret,

@@ -6,7 +6,7 @@ metadata:
 spec:
   instances: 1
   storage:
-    storageClass: nfs-local-v2
+    storageClass: local-path
     size: 100Gi
   inheritedMetadata:
     annotations:
@@ -14,3 +14,6 @@ spec:
   superuserSecret:
     name: matrix-pg-creds-secret
   enableSuperuserAccess: true
+  affinity:
+    nodeSelector:
+      kubernetes.io/hostname: debian
