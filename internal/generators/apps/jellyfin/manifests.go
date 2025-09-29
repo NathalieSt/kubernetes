@@ -38,6 +38,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 					"existingClaim": pvcName,
 				},
 			},
+			"nodeSelector": map[string]any{
+				"kubernetes.io/hostname": "debian",
+			},
 		},
 		nil,
 	)
