@@ -16,10 +16,10 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"alternateReportStorage": map[string]any{
-				"storageClassName": generators.NFSRemoteClass,
+				"storageClassName": generators.DebianStorageClass,
 			},
 			"trivy": map[string]any{
-				"storageClassName": generators.NFSRemoteClass,
+				"storageClassName": generators.DebianStorageClass,
 			},
 		},
 		nil,

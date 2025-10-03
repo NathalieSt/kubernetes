@@ -15,6 +15,6 @@ spec:
       retries: 3
   values:
     alternateReportStorage:
-      storageClassName: nfs-remote
+      storageClassName: debian-storage
     trivy:
-      storageClassName: nfs-remote
+      storageClassName: debian-storage
