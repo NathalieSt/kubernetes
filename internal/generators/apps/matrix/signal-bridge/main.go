@@ -14,11 +14,11 @@ func main() {
 		return
 	}
 
-	name := "discord-bridge"
+	name := "signal-bridge"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "discord-bridge",
+		Namespace:     "signal-bridge",
 		GeneratorType: generatorType,
 		ClusterUrl:    "discord-bridge.discord-bridge.svc.cluster.local",
 		Port:          29334,

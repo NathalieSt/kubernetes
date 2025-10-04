@@ -25,8 +25,7 @@ func main() {
 		Port:          8080,
 		Docker: &generator.Docker{
 			Registry: "searxng/searxng",
-			//FIXME: set to nil, later fetch in generator from version.json
-			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "searxng.cluster",

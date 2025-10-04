@@ -12,14 +12,14 @@ import (
 	"path"
 )
 
-func createWhatsappBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
+func createWhatsappBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir string, relativeDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
 	configMapName := "whatsapp-bridge-configmap"
-	configMap, err := getWhatsappBridgeConfigMap(configMapName)
+	configMap, err := getWhatsappBridgeConfigMap(configMapName, rootDir, relativeDir)
 	if err != nil {
 		fmt.Println("An error occurred while getting the configMap for whatsapp-bridge")
 		return nil, err

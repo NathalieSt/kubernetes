@@ -25,8 +25,7 @@ func main() {
 		Port:          9000,
 		Docker: &generator.Docker{
 			Registry: "ghcr.io/mealie-recipes/mealie",
-			//FIXME: set to nil, later fetch in generator from version.json
-			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "mealie.cluster",

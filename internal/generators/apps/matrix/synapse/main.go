@@ -34,12 +34,13 @@ func main() {
 		},
 	}
 
+	relativeDir := "internal/generators/apps/matrix/synapse"
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/matrix/synapse"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := createSynapseManifests(gm, flags.RootDir)
+			manifests, err := createSynapseManifests(gm, flags.RootDir, relativeDir)
 			if err != nil {
 				fmt.Println("An error happened while generating Synapse Manifests")
 				fmt.Printf("Reason:\n %v", err)

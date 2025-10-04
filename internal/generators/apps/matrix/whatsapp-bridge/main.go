@@ -31,12 +31,13 @@ func main() {
 		},
 	}
 
+	relativeDir := "internal/generators/apps/matrix/whatsapp-bridge"
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/matrix/whatsapp-bridge"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			manifests, err := createWhatsappBridgeManifests(gm, flags.RootDir)
+			manifests, err := createWhatsappBridgeManifests(gm, flags.RootDir, relativeDir)
 			if err != nil {
 				fmt.Println("An error happened while generating Whatsapp Bridge Manifests")
 				fmt.Printf("Reason:\n %v", err)

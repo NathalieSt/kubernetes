@@ -78,7 +78,6 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 										},
 									},
 									Env: []core.Env{
-										//FIXME: Generate via running generator with --meta
 										{
 											Name:  "POSTGRES_SERVER",
 											Value: postgresMeta.ClusterUrl,

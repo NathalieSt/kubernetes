@@ -12,14 +12,14 @@ import (
 	"path"
 )
 
-func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
+func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir string, relativeDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
 	configMapName := "synapse-configmap"
-	configMap, err := getSynapseConfigMap(configMapName)
+	configMap, err := getSynapseConfigMap(configMapName, rootDir, relativeDir)
 	if err != nil {
 		fmt.Println("An error occurred while getting the configMap for synapse")
 		return nil, err

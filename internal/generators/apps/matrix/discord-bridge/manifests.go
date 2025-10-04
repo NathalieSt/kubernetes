@@ -12,14 +12,14 @@ import (
 	"path"
 )
 
-func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
+func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir string, relativeDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
 	}
 
 	configMapName := "discord-bridge-configmap"
-	configMap, err := getDiscordBridgeConfigMap(configMapName)
+	configMap, err := getDiscordBridgeConfigMap(rootDir, relativeDir, configMapName)
 	if err != nil {
 		fmt.Println("An error occurred while getting the configMap for discord-bridge")
 		return nil, err
