@@ -22,9 +22,7 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"storageClassName": generators.DebianStorageClass,
 			},
 			"trivyOperator": map[string]any{
-				"scanJobAnnotations": map[string]any{
-					"sidecar.istio.io/inject": "false",
-				},
+				"scanJobAnnotations": "sidecar.istio.io/inject=false",
 			},
 		},
 		nil,
