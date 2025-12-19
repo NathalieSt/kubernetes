@@ -9,17 +9,11 @@ import (
 func createVaultSecretsOperatorManifests(rootDir string, generatorMeta generator.GeneratorMeta) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
-		map[string]any{
-			"controller": map[string]any{
-				"annotations": map[string]any{
-					"traffic.sidecar.istio.io/excludeOutboundPorts": "8200",
-				},
-			},
-		},
+		map[string]any{},
 		nil,
 	)
 

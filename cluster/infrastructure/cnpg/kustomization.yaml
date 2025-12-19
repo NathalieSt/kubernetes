@@ -4,8 +4,7 @@ kind: Kustomization
 metadata:
   name: cnpg
 resources:
-- namespace.yaml
-- repo.yaml
-- chart.yaml
-- release.yaml
-- peer-auth.yaml
+  - namespace.yaml
+  - repo.yaml
+  - chart.yaml
+  - release.yaml

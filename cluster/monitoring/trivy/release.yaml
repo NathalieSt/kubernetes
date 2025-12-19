@@ -18,5 +18,3 @@ spec:
       storageClassName: debian-storage
     trivy:
       storageClassName: debian-storage
-    trivyOperator:
-      scanJobAnnotations: sidecar.istio.io/inject=false

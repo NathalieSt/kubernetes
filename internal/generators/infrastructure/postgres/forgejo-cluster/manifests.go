@@ -4,7 +4,6 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
-	"kubernetes/pkg/schema/cluster/istio"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
 )
@@ -12,7 +11,7 @@ import (
 func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	cluster := utils.ManifestConfig{
@@ -25,11 +24,6 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Storage: cnpg.ClusterStorage{
 					StorageClass: generators.NFSRemoteClass,
 					Size:         "20Gi",
-				},
-				InheritedMetadata: cnpg.InheritedMetadata{
-					Annotations: map[string]string{
-						"proxy.istio.io/config": "{\"holdApplicationUntilProxyStarts\": true}",
-					},
 				},
 				SuperuserSecret: cnpg.SuperuserSecret{
 					Name: generators.PostgresCredsSecret,
@@ -54,19 +48,6 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
-	peerAuth := utils.ManifestConfig{
-		Filename: "peer-auth.yaml",
-		Manifests: []any{
-			istio.NewPeerAuthenthication(meta.ObjectMeta{
-				Name: "allow-permissive-postgres-access",
-			}, istio.PeerAuthenthicationSpec{
-				MTLS: istio.PeerAuthenthicationmTLS{
-					Mode: istio.PERMISSIVE,
-				},
-			}),
-		},
-	}
-
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -75,10 +56,9 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				namespace.Filename,
 				cluster.Filename,
 				forgejoDB.Filename,
-				peerAuth.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, forgejoDB, peerAuth})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, forgejoDB})
 }

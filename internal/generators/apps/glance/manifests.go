@@ -12,7 +12,7 @@ import (
 func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	configmapName := fmt.Sprintf("%v-configmap", generatorMeta.Name)

@@ -58,7 +58,6 @@ func appendGeneratorsToTree(
 	tree *tview.TreeView,
 	appsGenerators []generator.GeneratorMeta,
 	infrastructureGenerators []generator.GeneratorMeta,
-	istioGenerators []generator.GeneratorMeta,
 	monitoringGenerators []generator.GeneratorMeta,
 	generatorCommandHandler func(generator.GeneratorMeta),
 ) {
@@ -81,7 +80,6 @@ func appendGeneratorsToTree(
 
 	appendGeneratorsToTreeNode(applicationNode, appsGenerators, generatorCommandHandler)
 	appendGeneratorsToTreeNode(infrastructureNode, infrastructureGenerators, generatorCommandHandler)
-	appendGeneratorsToTreeNode(istioNode, istioGenerators, generatorCommandHandler)
 	appendGeneratorsToTreeNode(monitoringNode, monitoringGenerators, generatorCommandHandler)
 }
 
@@ -99,7 +97,6 @@ func initializeGeneratorTree(rootDir string, outputView *tview.TextView, generat
 
 		appsGenerators := []generator.GeneratorMeta{}
 		infrastructureGenerators := []generator.GeneratorMeta{}
-		istioGenerators := []generator.GeneratorMeta{}
 		monitoringGenerators := []generator.GeneratorMeta{}
 
 		var wg sync.WaitGroup
@@ -108,9 +105,6 @@ func initializeGeneratorTree(rootDir string, outputView *tview.TextView, generat
 		})
 		wg.Go(func() {
 			infrastructureGenerators = utils.GetGeneratorMetasByPaths(rootDir, slices.Collect(maps.Values(discoveredGenerators.Infrastructure)))
-		})
-		wg.Go(func() {
-			istioGenerators = utils.GetGeneratorMetasByPaths(rootDir, slices.Collect(maps.Values(discoveredGenerators.Istio)))
 		})
 		wg.Go(func() {
 			monitoringGenerators = utils.GetGeneratorMetasByPaths(rootDir, slices.Collect(maps.Values(discoveredGenerators.Monitoring)))
@@ -122,7 +116,6 @@ func initializeGeneratorTree(rootDir string, outputView *tview.TextView, generat
 			generatorsTree,
 			appsGenerators,
 			infrastructureGenerators,
-			istioGenerators,
 			monitoringGenerators,
 			generatorCommandHandler,
 		)
@@ -149,8 +142,6 @@ func runGeneratorFromJSON(rootDir string, meta generator.GeneratorMeta, outputVi
 		generatorLocation = discoveredGenerators.Apps[meta.Name]
 	case generator.Infrastructure:
 		generatorLocation = discoveredGenerators.Infrastructure[meta.Name]
-	case generator.Istio:
-		generatorLocation = discoveredGenerators.Istio[meta.Name]
 	case generator.Monitoring:
 		generatorLocation = discoveredGenerators.Monitoring[meta.Name]
 	}

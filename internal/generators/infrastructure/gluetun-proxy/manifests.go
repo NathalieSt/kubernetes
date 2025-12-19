@@ -12,7 +12,7 @@ import (
 func createGluetunProxyManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	vpnSecretConfig := utils.StaticSecretConfig{

@@ -4,9 +4,8 @@ kind: Kustomization
 metadata:
   name: synapse
 resources:
-- namespace.yaml
-- deployment.yaml
-- data-pvc.yaml
-- service.yaml
-- configmap.yaml
-- peer-auth.yaml
+  - namespace.yaml
+  - deployment.yaml
+  - data-pvc.yaml
+  - service.yaml
+  - configmap.yaml

@@ -14,7 +14,7 @@ import (
 func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	repoName := fmt.Sprintf("%v-repo", generatorMeta.Name)

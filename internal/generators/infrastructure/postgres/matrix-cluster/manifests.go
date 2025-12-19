@@ -4,7 +4,6 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
-	"kubernetes/pkg/schema/cluster/istio"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
 )
@@ -12,7 +11,7 @@ import (
 func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	cluster := utils.ManifestConfig{
@@ -22,11 +21,6 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 				Name: generatorMeta.Name,
 			}, cnpg.ClusterSpec{
 				Instances: 1,
-				InheritedMetadata: cnpg.InheritedMetadata{
-					Annotations: map[string]string{
-						"proxy.istio.io/config": "{\"holdApplicationUntilProxyStarts\": true}",
-					},
-				},
 				Storage: cnpg.ClusterStorage{
 					StorageClass: generators.DebianStorageClass,
 					Size:         "100Gi",
@@ -104,19 +98,6 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 		},
 	}
 
-	peerAuth := utils.ManifestConfig{
-		Filename: "peer-auth.yaml",
-		Manifests: []any{
-			istio.NewPeerAuthenthication(meta.ObjectMeta{
-				Name: "cnpg-permissive-mtls",
-			}, istio.PeerAuthenthicationSpec{
-				MTLS: istio.PeerAuthenthicationmTLS{
-					Mode: istio.PERMISSIVE,
-				},
-			}),
-		},
-	}
-
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -128,7 +109,6 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 				discordBridgeDB.Filename,
 				whatsAppBridgeDB.Filename,
 				signalBridgeDB.Filename,
-				peerAuth.Filename,
 			},
 		),
 	}
@@ -141,6 +121,5 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 		discordBridgeDB,
 		whatsAppBridgeDB,
 		signalBridgeDB,
-		peerAuth,
 	})
 }

@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"kubernetes/internal/generators"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
@@ -22,7 +21,7 @@ func forwardHeadersIfRequried(required bool) string {
 	return ""
 }
 
-func getWebsocketSupportIfRequired(required bool) string {
+func getWebsocketSupportIfRequired(required bool, clusterUrl string) string {
 	if required {
 		return fmt.Sprintf(`
 	@websockets {
@@ -32,7 +31,7 @@ func getWebsocketSupportIfRequired(required bool) string {
 	reverse_proxy @websockets %v:80 {
 		header_up Host {host}
 	}
-		`, generators.IstioGatewayIP)
+		`, clusterUrl)
 	}
 	return ""
 }
@@ -43,7 +42,7 @@ func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 		caddyfileBuffer.WriteString(fmt.Sprintf(`
 %v.netbird.selfhosted:443 {
 	tls internal
-	reverse_proxy %v:80 {
+	reverse_proxy %v:%v {
 		header_up Host {host}
 		%v
 	}
@@ -51,9 +50,10 @@ func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 }
 		`,
 			meta.Caddy.DNSName,
-			generators.IstioGatewayIP,
+			meta.ClusterUrl,
+			meta.Port,
 			forwardHeadersIfRequried(meta.Caddy.HeaderForwardingIsRequired),
-			getWebsocketSupportIfRequired(meta.Caddy.WebsocketSupportIsRequired),
+			getWebsocketSupportIfRequired(meta.Caddy.WebsocketSupportIsRequired, meta.ClusterUrl),
 		),
 		)
 	}

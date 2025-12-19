@@ -51,13 +51,12 @@ func WriteToJSONFile(destination string, toWrite any, logOutputView *tview.TextV
 type DiscoveredGenerators struct {
 	Apps           map[string]string
 	Infrastructure map[string]string
-	Istio          map[string]string
 	Monitoring     map[string]string
 }
 
 type ExposedGenerators map[string]string
 
-func discoverGeneratorsByCategoryViaPath(workingDirectory string, rootDir string, logOutputView *tview.TextView) ([]generator.GeneratorMeta, []generator.GeneratorMeta, []generator.GeneratorMeta, []generator.GeneratorMeta) {
+func discoverGeneratorsByCategoryViaPath(workingDirectory string, rootDir string, logOutputView *tview.TextView) ([]generator.GeneratorMeta, []generator.GeneratorMeta, []generator.GeneratorMeta) {
 	logToOutput(logOutputView, "Getting locations")
 	locations, err := getGeneratorLocations(workingDirectory)
 	if err != nil {
@@ -68,12 +67,10 @@ func discoverGeneratorsByCategoryViaPath(workingDirectory string, rootDir string
 
 	appsPaths := map[string]string{}
 	infrastructurePaths := map[string]string{}
-	istioPaths := map[string]string{}
 	monitoringPaths := map[string]string{}
 
 	apps := []generator.GeneratorMeta{}
 	infrastructure := []generator.GeneratorMeta{}
-	istio := []generator.GeneratorMeta{}
 	monitoring := []generator.GeneratorMeta{}
 
 	exposedGenerators := ExposedGenerators{}
@@ -93,9 +90,6 @@ func discoverGeneratorsByCategoryViaPath(workingDirectory string, rootDir string
 			case generator.Infrastructure:
 				infrastructure = append(infrastructure, *meta)
 				infrastructurePaths[meta.Name] = location
-			case generator.Istio:
-				istio = append(istio, *meta)
-				istioPaths[meta.Name] = location
 			case generator.Monitoring:
 				monitoring = append(monitoring, *meta)
 				monitoringPaths[meta.Name] = location
@@ -106,12 +100,11 @@ func discoverGeneratorsByCategoryViaPath(workingDirectory string, rootDir string
 	discoveredGenerators := DiscoveredGenerators{
 		Apps:           appsPaths,
 		Infrastructure: infrastructurePaths,
-		Istio:          istioPaths,
 		Monitoring:     monitoringPaths,
 	}
 
 	WriteToJSONFile(filepath.Join(rootDir, "clidata/discoveredgenerators.json"), discoveredGenerators, logOutputView)
 	WriteToJSONFile(filepath.Join(rootDir, "clidata/exposedgenerators.json"), exposedGenerators, logOutputView)
 
-	return apps, infrastructure, istio, monitoring
+	return apps, infrastructure, monitoring
 }

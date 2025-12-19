@@ -2,6 +2,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  labels:
-    istio-injection: disabled
   name: cnpg-system

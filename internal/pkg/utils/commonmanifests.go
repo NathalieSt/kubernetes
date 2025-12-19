@@ -40,20 +40,11 @@ func GenerateKustomization(name string, resources []string) []any {
 	}
 }
 
-func GenerateNamespace(name string, isIstioEnabled bool) []any {
-	istioInjection := ""
-	if isIstioEnabled {
-		istioInjection = "enabled"
-	} else {
-		istioInjection = "disabled"
-	}
+func GenerateNamespace(name string) []any {
 
 	return []any{
 		core.NewNamespace(meta.ObjectMeta{
 			Name: name,
-			Labels: map[string]string{
-				"istio-injection": istioInjection,
-			},
 		}),
 	}
 

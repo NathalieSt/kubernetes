@@ -14,7 +14,7 @@ import (
 func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)

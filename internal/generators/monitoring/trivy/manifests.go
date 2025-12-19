@@ -10,7 +10,7 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, false),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
@@ -20,9 +20,6 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			},
 			"trivy": map[string]any{
 				"storageClassName": generators.DebianStorageClass,
-			},
-			"trivyOperator": map[string]any{
-				"scanJobAnnotations": "sidecar.istio.io/inject=false",
 			},
 		},
 		nil,

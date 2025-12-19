@@ -12,7 +12,7 @@ import (
 func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)

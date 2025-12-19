@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/istio"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
@@ -14,7 +13,7 @@ import (
 func createSearXNGManifests(generatorMeta generator.GeneratorMeta, rootDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace, true),
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
 	valkeyMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/valkey"))
@@ -170,28 +169,6 @@ outgoing:
 		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
 	}
 
-	proxyServiceEntry := utils.ManifestConfig{
-		Filename: "proxy-service-entry.yaml",
-		Manifests: []any{
-			istio.NewServiceEntry(
-				meta.ObjectMeta{
-					Name: "searxng-proxy-service-entry",
-				},
-				istio.ServiceEntrySpec{
-					Hosts: []string{proxyMeta.ClusterUrl},
-					Ports: []istio.ServiceEntryPorts{
-						{
-							Number:   proxyMeta.Port,
-							Name:     "tcp",
-							Protocol: "TCP",
-						},
-					},
-					Location:   "MESH_EXTERNAL",
-					Resolution: "DNS",
-				}),
-		},
-	}
-
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -199,10 +176,9 @@ outgoing:
 			deployment.Filename,
 			configmap.Filename,
 			service.Filename,
-			proxyServiceEntry.Filename,
 			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, proxyServiceEntry, scaledObject}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject}), nil
 }
