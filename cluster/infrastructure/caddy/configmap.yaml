@@ -6,7 +6,16 @@ metadata:
 data:
   Caddyfile: |-
     
-    booklore.cluster.netbird.selfhosted:443 {
+    redlib.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy redlib.redlib.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    booklore.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
     	reverse_proxy booklore.booklore.svc.cluster.local:6060 {
     		header_up Host {host}
@@ -15,52 +24,7 @@ data:
     	
     }
     		
-    kiali.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy kiali.istio-system.svc.cluster.local:20001 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    mealie.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy mealie.mealie.svc.cluster.local:9000 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    perses.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy perses.perses.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    searxng.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy searxng.searxng.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    matrix.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy synapse.synapse.svc.cluster.local:8008 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    code.cluster.netbird.selfhosted:443 {
+    code.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
     	reverse_proxy forgejo-http.forgejo.svc.cluster.local:3000 {
     		header_up Host {host}
@@ -69,16 +33,7 @@ data:
     	
     }
     		
-    glance.cluster.netbird.selfhosted:443 {
-    	tls internal
-    	reverse_proxy glance.glance.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    jellyfin.cluster.netbird.selfhosted:443 {
+    jellyfin.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
     	reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096 {
     		header_up Host {host}
@@ -89,24 +44,60 @@ data:
     		header Connection *Upgrade*
     		header Upgrade    websocket
     	}
-    	reverse_proxy @websockets 10.43.173.132:80 {
+    	reverse_proxy @websockets jellyfin.jellyfin.svc.cluster.local:80 {
     		header_up Host {host}
     	}
     		
     }
     		
-    redlib.cluster.netbird.selfhosted:443 {
+    searxng.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
-    	reverse_proxy redlib.redlib.svc.cluster.local:8080 {
+    	reverse_proxy searxng.searxng.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}
     	
     }
     		
-    vault.cluster.netbird.selfhosted:443 {
+    matrix.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy synapse.synapse.svc.cluster.local:8008 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    vault.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
     	reverse_proxy vault.vault.svc.cluster.local:8200 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    glance.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy glance.glance.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    mealie.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy mealie.mealie.svc.cluster.local:9000 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    perses.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy perses.perses.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}

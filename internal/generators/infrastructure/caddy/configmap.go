@@ -40,7 +40,7 @@ func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 	caddyfileBuffer := bytes.Buffer{}
 	for _, meta := range exposedServicesMeta {
 		caddyfileBuffer.WriteString(fmt.Sprintf(`
-%v.netbird.selfhosted:443 {
+%v.cloud.nathalie-stiefsohn.eu:443 {
 	tls internal
 	reverse_proxy %v:%v {
 		header_up Host {host}
