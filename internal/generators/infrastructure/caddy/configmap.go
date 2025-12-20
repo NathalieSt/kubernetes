@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"kubernetes/internal/generators"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
@@ -40,7 +41,7 @@ func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 	caddyfileBuffer := bytes.Buffer{}
 	for _, meta := range exposedServicesMeta {
 		caddyfileBuffer.WriteString(fmt.Sprintf(`
-%v.cloud.nathalie-stiefsohn.eu:443 {
+%v.%v:443 {
 	tls internal
 	reverse_proxy %v:%v {
 		header_up Host {host}
@@ -50,6 +51,7 @@ func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 }
 		`,
 			meta.Caddy.DNSName,
+			generators.NetbirdDomainBase,
 			meta.ClusterUrl,
 			meta.Port,
 			forwardHeadersIfRequried(meta.Caddy.HeaderForwardingIsRequired),

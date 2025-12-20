@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
@@ -72,7 +73,7 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": "remote-fs.netbird.selfhosted",
+						"server": fmt.Sprintf("remote-fs.%v", generators.NetbirdDomainBase),
 						"share":  "/mnt/HC_Volume_103061115",
 					},
 					ReclaimPolicy:        "Retain",

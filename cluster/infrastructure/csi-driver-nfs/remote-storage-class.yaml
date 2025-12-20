@@ -5,7 +5,7 @@ metadata:
   name: nfs-remote
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: remote-fs.netbird.selfhosted
+  server: remote-fs.cloud.nathalie-stiefsohn.eu
   share: /mnt/HC_Volume_103061115
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
