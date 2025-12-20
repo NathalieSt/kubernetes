@@ -17,10 +17,6 @@ spec:
         app.kubernetes.io/name: caddy
         app.kubernetes.io/version: 2.10.0-alpine
     spec:
-      dnsPolicy: ClusterFirst
-      dnsConfig:
-        nameservers:
-          - 10.96.0.10
       containers:
         - image: caddy:2.10.0-alpine
           name: caddy
