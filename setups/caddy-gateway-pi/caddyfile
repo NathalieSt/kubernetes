@@ -1,16 +1,10 @@
-{
-    acme_dns hetzner <insert token here>
-}
-
-
-webserver.cloud.nathalie-stiefsohn.eu {
-    reverse_proxy nathispc.cloud.nathalie-stiefsohn.eu {
-        # Use TLS when connecting to the upstream (HTTPS → HTTPS)
-        transport http {
-            tls
-        }
+jellyfin.cloud.nathalie-stiefsohn.eu {
+    reverse_proxy jellyfin.cluster.cloud.nathalie-stiefsohn.eu {
+        header_up Host {host}
+        
     }
     tls {
+        acme_dns hetzner <insert token here>
         propagation_delay 30s
-    }
+    }    
 }
