@@ -17,44 +17,48 @@ spec:
         app.kubernetes.io/name: caddy
         app.kubernetes.io/version: 2.10.0-alpine
     spec:
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        nameservers:
+          - 10.96.0.10
       containers:
-      - image: caddy:2.10.0-alpine
-        name: caddy
-        ports:
-        - containerPort: 80
+        - image: caddy:2.10.0-alpine
           name: caddy
-        volumeMounts:
-        - mountPath: /etc/caddy/
-          name: caddy-config-volume
-        - mountPath: /data/caddy/pki/authorities/local/
-          name: caddy-cert-pvc-volume
-      - image: netbirdio/netbird:latest
-        name: netbird-agent
-        env:
-        - name: NB_SETUP_KEY
-          valueFrom:
-            secretKeyRef:
-              key: setup-key
-              name: netbird-setup-key-vault-secret
-        - name: NB_HOSTNAME
-          value: cluster
-        - name: NB_MANAGEMENT_URL
-          value: https://netbird.nathalie-stiefsohn.eu
-        - name: NB_EXTRA_DNS_LABELS
-          value: redlib.cluster,booklore.cluster,code.cluster,jellyfin.cluster,searxng.cluster,matrix.cluster,vault.cluster,glance.cluster,mealie.cluster,perses.cluster
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 100m
-            memory: 128Mi
-        securityContext:
-          privileged: true
+          ports:
+            - containerPort: 80
+              name: caddy
+          volumeMounts:
+            - mountPath: /etc/caddy/
+              name: caddy-config-volume
+            - mountPath: /data/caddy/pki/authorities/local/
+              name: caddy-cert-pvc-volume
+        - image: netbirdio/netbird:latest
+          name: netbird-agent
+          env:
+            - name: NB_SETUP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: setup-key
+                  name: netbird-setup-key-vault-secret
+            - name: NB_HOSTNAME
+              value: cluster
+            - name: NB_MANAGEMENT_URL
+              value: https://netbird.nathalie-stiefsohn.eu
+            - name: NB_EXTRA_DNS_LABELS
+              value: redlib.cluster,booklore.cluster,code.cluster,jellyfin.cluster,searxng.cluster,matrix.cluster,vault.cluster,glance.cluster,mealie.cluster,perses.cluster
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            privileged: true
       volumes:
-      - name: caddy-config-volume
-        configMap:
-          name: caddy-configmap
-      - name: caddy-cert-pvc-volume
-        persistentVolumeClaim:
-          claimName: caddy-cert-pvc
+        - name: caddy-config-volume
+          configMap:
+            name: caddy-configmap
+        - name: caddy-cert-pvc-volume
+          persistentVolumeClaim:
+            claimName: caddy-cert-pvc
