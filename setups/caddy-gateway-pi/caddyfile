@@ -1,0 +1,16 @@
+{
+    acme_dns hetzner <insert token here>
+}
+
+
+webserver.cloud.nathalie-stiefsohn.eu {
+    reverse_proxy nathispc.cloud.nathalie-stiefsohn.eu {
+        # Use TLS when connecting to the upstream (HTTPS → HTTPS)
+        transport http {
+            tls
+        }
+    }
+    tls {
+        propagation_delay 30s
+    }
+}
