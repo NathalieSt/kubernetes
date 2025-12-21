@@ -303,4 +303,4 @@ spec:
   wait: true
   timeout: "10m"
   dependsOn:
-    - netbird-operator
+    - name: netbird-operator
