@@ -53,7 +53,11 @@ func createCertManagerManifests(generatorMeta generator.GeneratorMeta) map[strin
 							Retries: 3,
 						},
 					},
-					Values: map[string]any{},
+					Values: map[string]any{
+						"crds": map[string]any{
+							"enabled": true,
+						},
+					},
 				}),
 		},
 	}

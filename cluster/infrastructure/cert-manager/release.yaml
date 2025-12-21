@@ -13,3 +13,6 @@ spec:
   install:
     remediation:
       retries: 3
+  values:
+    crds:
+      enabled: true
