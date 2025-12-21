@@ -18,7 +18,9 @@ func createNetbirdOperatorManifests(generatorMeta generator.GeneratorMeta) map[s
 		"ingress": map[string]any{
 			"enabled": true,
 			"kubernetesAPI": map[string]any{
-				"enabled": true,
+				"enabled":  true,
+				"groups":   []string{"api-group"},
+				"policies": []string{"api-policy"},
 			},
 			"router": map[string]any{
 				"enabled": true,
