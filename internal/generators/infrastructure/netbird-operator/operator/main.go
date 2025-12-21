@@ -18,7 +18,7 @@ func main() {
 	generatorType := generator.Infrastructure
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "netbird",
+		Namespace:     "netbird-operator",
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Chart:   "kubernetes-operator",

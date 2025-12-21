@@ -33,9 +33,9 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		Path:       "netbird/mgmt-api-key",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "netbird",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "netbird-operator",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "netbird",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "netbird-operator",
 		},
 	}
 
