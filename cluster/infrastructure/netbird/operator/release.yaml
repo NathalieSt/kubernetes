@@ -16,12 +16,6 @@ spec:
   values:
     ingress:
       enabled: true
-      kubernetesAPI:
-        enabled: true
-        groups:
-        - api-group
-        policies:
-        - api-policy
       router:
         enabled: true
     managementURL: https://netbird.nathalie-stiefsohn.eu
