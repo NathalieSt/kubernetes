@@ -21,3 +21,8 @@ spec:
         storageClass: nfs-local-v2
       media:
         existingClaim: jellyfin-pvc
+    service:
+      annotations:
+        netbird.io/expose: "true"
+        netbird.io/groups: cluster-services
+        netbird.io/resource-name: jellyfin

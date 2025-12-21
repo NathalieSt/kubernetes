@@ -44,6 +44,13 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			"nodeSelector": map[string]any{
 				"kubernetes.io/hostname": "debian",
 			},
+			"service": map[string]any{
+				"annotations": map[string]any{
+					"netbird.io/expose":        "true",
+					"netbird.io/groups":        "cluster-services",
+					"netbird.io/resource-name": "jellyfin",
+				},
+			},
 		},
 		nil,
 	)
