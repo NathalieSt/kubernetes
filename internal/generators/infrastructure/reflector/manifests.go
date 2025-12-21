@@ -27,6 +27,18 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
+	netbirdMgmtAPIKey := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-netbird-mgmt-api-key-static-secret", generatorMeta.Name),
+		SecretName: generators.NetbirdAPIKeySecretName,
+		Path:       "netbird/mgmt-api-key",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "netbird",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "netbird",
+		},
+	}
+
 	postgresSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-postgres-static-secret", generatorMeta.Name),
 		SecretName: generators.PostgresCredsSecret,
@@ -119,6 +131,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 			"vault-secrets-operator",
 			[]utils.StaticSecretConfig{
 				netbirdSecretConfig,
+				netbirdMgmtAPIKey,
 				postgresSecretConfig,
 				forgejoPGSecretConfig,
 				matrixPGSecretConfig,
