@@ -16,6 +16,9 @@ func createNetbirdOperatorManifests(generatorMeta generator.GeneratorMeta) map[s
 		"managementURL": "https://netbird.nathalie-stiefsohn.eu",
 		"ingress": map[string]any{
 			"enabled": true,
+			"router": map[string]any{
+				"enabled": false,
+			},
 		},
 		"netbirdAPI": map[string]any{
 			"keyFromSecret": map[string]any{

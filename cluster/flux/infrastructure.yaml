@@ -287,20 +287,4 @@ spec:
   timeout: "10m"
   dependsOn: []
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: netbird-operator-config
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: netbird-operator
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/infrastructure/netbird/operator-config"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn:
-    - name: netbird-operator
+
