@@ -25,4 +25,3 @@ spec:
       annotations:
         netbird.io/expose: "true"
         netbird.io/groups: cluster-services
-        netbird.io/resource-name: jellyfin

@@ -46,9 +46,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			},
 			"service": map[string]any{
 				"annotations": map[string]any{
-					"netbird.io/expose":        "true",
-					"netbird.io/groups":        "cluster-services",
-					"netbird.io/resource-name": "jellyfin",
+					"netbird.io/expose": "true",
+					"netbird.io/groups": "cluster-services",
+					//"netbird.io/resource-name": "jellyfin",
 				},
 			},
 		},
