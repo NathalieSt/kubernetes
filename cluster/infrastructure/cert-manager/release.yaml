@@ -1,0 +1,15 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager
+spec:
+  interval: 24h
+  chartRef:
+    kind: OCIRepository
+    name: cert-manager-repo
+  timeout: 10m
+  releaseName: cert-manager
+  install:
+    remediation:
+      retries: 3

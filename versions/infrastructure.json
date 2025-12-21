@@ -1,5 +1,6 @@
 {
     "caddy": "2.10.0-alpine",
+    "cert-manager": "v1.19.2",
     "cnpg": "0.26.0",
     "csi-driver-nfs": "4.11.0",
     "gluetun-proxy": "v3.40",
