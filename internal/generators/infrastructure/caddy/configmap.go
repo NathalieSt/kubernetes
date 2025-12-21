@@ -43,13 +43,6 @@ func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 		caddyfileBuffer.WriteString(fmt.Sprintf(`
 %v.%v:443 {
 	tls internal
-	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-    @already_https {
-        header X-Forwarded-Proto https
-    }
-    # This matcher does nothing but satisfies Caddy's “handler” slot,
-    # preventing the built-in redirect from firing.
-    redir @already_https /
 	reverse_proxy %v:%v {
 		header_up Host {host}
 		%v

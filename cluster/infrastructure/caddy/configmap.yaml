@@ -6,112 +6,9 @@ metadata:
 data:
   Caddyfile: |-
     
-    code.cluster.cloud.nathalie-stiefsohn.eu:443 {
-    	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
-    	reverse_proxy forgejo-http.forgejo.svc.cluster.local:3000 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    mealie.cluster.cloud.nathalie-stiefsohn.eu:443 {
-    	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
-    	reverse_proxy mealie.mealie.svc.cluster.local:9000 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    perses.cluster.cloud.nathalie-stiefsohn.eu:443 {
-    	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
-    	reverse_proxy perses.perses.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    matrix.cluster.cloud.nathalie-stiefsohn.eu:443 {
-    	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
-    	reverse_proxy synapse.synapse.svc.cluster.local:8008 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    vault.cluster.cloud.nathalie-stiefsohn.eu:443 {
-    	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
-    	reverse_proxy vault.vault.svc.cluster.local:8200 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
     booklore.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
     	reverse_proxy booklore.booklore.svc.cluster.local:6060 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    glance.cluster.cloud.nathalie-stiefsohn.eu:443 {
-    	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
-    	reverse_proxy glance.glance.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}
@@ -120,13 +17,6 @@ data:
     		
     jellyfin.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
     	reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096 {
     		header_up Host {host}
     		
@@ -142,16 +32,18 @@ data:
     		
     }
     		
-    redlib.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    mealie.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
-    	reverse_proxy redlib.redlib.svc.cluster.local:8080 {
+    	reverse_proxy mealie.mealie.svc.cluster.local:9000 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    perses.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy perses.perses.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}
@@ -160,14 +52,52 @@ data:
     		
     searxng.cluster.cloud.nathalie-stiefsohn.eu:443 {
     	tls internal
-    	# Skip the automatic HTTPS redirect if X-Forwarded-Proto = https
-        @already_https {
-            header X-Forwarded-Proto https
-        }
-        # This matcher does nothing but satisfies Caddy's “handler” slot,
-        # preventing the built-in redirect from firing.
-        redir @already_https /
     	reverse_proxy searxng.searxng.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    vault.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy vault.vault.svc.cluster.local:8200 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    code.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy forgejo-http.forgejo.svc.cluster.local:3000 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    glance.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy glance.glance.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    redlib.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy redlib.redlib.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    matrix.cluster.cloud.nathalie-stiefsohn.eu:443 {
+    	tls internal
+    	reverse_proxy synapse.synapse.svc.cluster.local:8008 {
     		header_up Host {host}
     		
     	}
