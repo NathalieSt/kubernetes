@@ -16,6 +16,10 @@ spec:
   values:
     ingress:
       enabled: true
+      kubernetesAPI:
+        enabled: true
+      router:
+        enabled: true
     managementURL: https://netbird.nathalie-stiefsohn.eu
     netbirdAPI:
       keyFromSecret:

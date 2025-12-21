@@ -14,10 +14,14 @@ func createNetbirdOperatorManifests(generatorMeta generator.GeneratorMeta) map[s
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm, map[string]any{
 		"managementURL": "https://netbird.nathalie-stiefsohn.eu",
+
 		"ingress": map[string]any{
 			"enabled": true,
+			"kubernetesAPI": map[string]any{
+				"enabled": true,
+			},
 			"router": map[string]any{
-				"enabled": false,
+				"enabled": true,
 			},
 		},
 		"netbirdAPI": map[string]any{
