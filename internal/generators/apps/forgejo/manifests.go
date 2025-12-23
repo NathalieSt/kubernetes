@@ -113,6 +113,14 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 							"enabled":      true,
 							"storageClass": generators.NFSRemoteClass,
 						},
+						"service": map[string]any{
+							"http": map[string]any{
+								"annotations": map[string]any{
+									"netbird.io/expose": "true",
+									"netbird.io/groups": "cluster-services",
+								},
+							},
+						},
 					},
 				}),
 		},

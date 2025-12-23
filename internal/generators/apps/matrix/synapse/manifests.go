@@ -263,6 +263,10 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
 					},
+					Annotations: map[string]string{
+						"netbird.io/expose": "true",
+						"netbird.io/groups": "cluster-services",
+					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
 						"app.kubernetes.io/name": generatorMeta.Name,

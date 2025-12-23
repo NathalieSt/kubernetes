@@ -92,6 +92,10 @@ func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
 					},
+					Annotations: map[string]string{
+						"netbird.io/expose": "true",
+						"netbird.io/groups": "cluster-services",
+					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
 						"app.kubernetes.io/name": generatorMeta.Name,

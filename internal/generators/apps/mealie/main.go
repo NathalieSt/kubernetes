@@ -48,7 +48,7 @@ func main() {
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
 			manifests, err := createMealieManifests(gm, flags.RootDir)
 			if err != nil {
-				fmt.Println("An error happened while generating Forgejo Manifests")
+				fmt.Println("An error happened while generating Mealie Manifests")
 				fmt.Printf("Reason:\n %v", err)
 				return nil
 			}

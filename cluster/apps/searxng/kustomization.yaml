@@ -4,8 +4,8 @@ kind: Kustomization
 metadata:
   name: searxng
 resources:
-  - namespace.yaml
-  - deployment.yaml
-  - configmap.yaml
-  - service.yaml
-  - scaled-object.yaml
+- namespace.yaml
+- deployment.yaml
+- configmap.yaml
+- service.yaml
+- scaled-object.yaml

@@ -17,6 +17,10 @@ func createVaultManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		map[string]any{
 			"ui": map[string]any{
 				"enabled": true,
+				"annotations": map[string]string{
+					"netbird.io/expose": "true",
+					"netbird.io/groups": "cluster-services",
+				},
 			},
 			"server": map[string]any{
 				"dataStorage": map[string]any{

@@ -44,7 +44,7 @@ spec:
         - name: POSTGRES_DB
           value: mealie
         - name: BASE_URL
-          value: https://mealie.cluster.netbird.selfhosted
+          value: https://mealie.netbird.selfhosted
       volumes:
       - name: mealie-pvc
         persistentVolumeClaim:

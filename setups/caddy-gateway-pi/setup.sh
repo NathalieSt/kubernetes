@@ -15,4 +15,4 @@ xcaddy build \
     --with github.com/libdns/hetzner/v2 \
     --with github.com/caddy-dns/hetzner/v2 
 
-./caddy run --config=caddy.json
+./caddy run --config=caddyfile

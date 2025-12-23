@@ -23,10 +23,10 @@ spec:
       config:
         database:
           DB_TYPE: postgres
-          HOST: postgres-rw.postgres.svc.cluster.local:5432
+          HOST: forgejo-pg-rw.forgejo-pg-cluster.svc.cluster.local:5432
           NAME: forgejo
         server:
-          ROOT_URL: https://code.cluster.netbird.selfhosted
+          ROOT_URL: https://code.netbird.selfhosted
       queue:
         CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
         TYPE: redis
@@ -36,12 +36,17 @@ spec:
     persistence:
       enabled: true
       storageClass: nfs-remote
+    service:
+      http:
+        annotations:
+          netbird.io/expose: "true"
+          netbird.io/groups: cluster-services
   valuesFrom:
   - kind: Secret
-    name: postgres-creds-secret
+    name: forgejo-pg-creds-secret
     valuesKey: username
     targetPath: gitea.config.database.USER
   - kind: Secret
-    name: postgres-creds-secret
+    name: forgejo-pg-creds-secret
     valuesKey: password
     targetPath: gitea.config.database.PASSWD

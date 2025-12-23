@@ -34,7 +34,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/main-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
@@ -145,6 +145,10 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 					Labels: map[string]string{
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+					Annotations: map[string]string{
+						"netbird.io/expose": "true",
+						"netbird.io/groups": "cluster-services",
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
