@@ -93,7 +93,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									"NAME":    "forgejo",
 								},
 								"server": map[string]any{
-									"ROOT_URL": fmt.Sprintf("https://%v.netbird.selfhosted", generatorMeta.Caddy.DNSName),
+									"ROOT_URL": fmt.Sprintf("https://%v.%v", generatorMeta.Caddy.DNSName, generators.NetbirdDomainBase),
 								},
 							},
 							"queue": map[string]any{

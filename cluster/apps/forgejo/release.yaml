@@ -26,7 +26,7 @@ spec:
           HOST: forgejo-pg-rw.forgejo-pg-cluster.svc.cluster.local:5432
           NAME: forgejo
         server:
-          ROOT_URL: https://code.netbird.selfhosted
+          ROOT_URL: https://code.cloud.nathalie-stiefsohn.eu
       queue:
         CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
         TYPE: redis
