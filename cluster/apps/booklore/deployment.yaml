@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: booklore
-    app.kubernetes.io/version: " v1.15.0"
+    app.kubernetes.io/version: v1.15.0
   name: booklore
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: booklore
-        app.kubernetes.io/version: " v1.15.0"
+        app.kubernetes.io/version: v1.15.0
     spec:
       containers:
-      - image: "booklore/booklore: v1.15.0"
+      - image: booklore/booklore:v1.15.0
         name: booklore
         ports:
         - containerPort: 6060
