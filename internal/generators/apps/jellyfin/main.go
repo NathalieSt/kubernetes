@@ -29,7 +29,7 @@ func main() {
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName:                    "jellyfin.cluster",
+			DNSName:                    "jellyfin",
 			WebsocketSupportIsRequired: true,
 		},
 		KedaScaling: &keda.ScaledObjectTriggerMeta{

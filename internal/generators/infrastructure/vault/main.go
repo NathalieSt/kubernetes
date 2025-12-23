@@ -28,7 +28,7 @@ func main() {
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName: "vault.cluster",
+			DNSName: "vault",
 		},
 		DependsOnGenerators: []string{},
 	}

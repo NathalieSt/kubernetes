@@ -28,7 +28,7 @@ func main() {
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName: "redlib.cluster",
+			DNSName: "redlib",
 		},
 		KedaScaling: &keda.ScaledObjectTriggerMeta{
 			Timezone:        "Europe/Vienna",

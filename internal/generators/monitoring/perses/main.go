@@ -29,7 +29,7 @@ func main() {
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName: "perses.cluster",
+			DNSName: "perses",
 		},
 		KedaScaling: &keda.ScaledObjectTriggerMeta{
 			Timezone:        "Europe/Vienna",

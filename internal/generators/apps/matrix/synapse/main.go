@@ -27,7 +27,7 @@ func main() {
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName: "matrix.cluster",
+			DNSName: "matrix",
 		},
 		DependsOnGenerators: []string{
 			"postgres",

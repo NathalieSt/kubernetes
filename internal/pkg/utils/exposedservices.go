@@ -11,7 +11,7 @@ import (
 
 type ExposedGenerators map[string]string
 
-func GetExposedGenerators(rootDir string) (*ExposedGenerators, error) {
+func getExposedGenerators(rootDir string) (*ExposedGenerators, error) {
 
 	file, err := os.Open(filepath.Join(rootDir, "clidata/exposedgenerators.json"))
 	if err != nil {
@@ -35,7 +35,7 @@ func GetExposedGenerators(rootDir string) (*ExposedGenerators, error) {
 }
 
 func GetMetaForExposedGenerators(rootDir string) (generator.GeneratorMetas, error) {
-	exposedGenerators, err := GetExposedGenerators(rootDir)
+	exposedGenerators, err := getExposedGenerators(rootDir)
 	if err != nil {
 		fmt.Printf("Failed to get exposed generators \n")
 		return nil, err

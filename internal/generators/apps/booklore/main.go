@@ -28,7 +28,7 @@ func main() {
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName: "booklore.cluster",
+			DNSName: "booklore",
 		},
 		KedaScaling: &keda.ScaledObjectTriggerMeta{
 			Timezone:        "Europe/Vienna",
