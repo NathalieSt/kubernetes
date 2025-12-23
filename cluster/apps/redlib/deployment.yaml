@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: redlib
-    app.kubernetes.io/version: sha-a989d19
+    app.kubernetes.io/version: sha-ba98178
   name: redlib
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: redlib
-        app.kubernetes.io/version: sha-a989d19
+        app.kubernetes.io/version: sha-ba98178
     spec:
       containers:
-      - image: quay.io/redlib/redlib:sha-a989d19
+      - image: quay.io/redlib/redlib:sha-ba98178
         name: redlib
         ports:
         - containerPort: 8080
