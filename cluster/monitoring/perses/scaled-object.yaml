@@ -5,7 +5,7 @@ metadata:
   name: perses-scaledobject
 spec:
   scaleTargetRef:
-    name: perses
+    name: perses-0
   minReplicaCount: 0
   cooldownPeriod: 300
   triggers:
