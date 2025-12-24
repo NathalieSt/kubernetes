@@ -15,25 +15,30 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"elasticsearch": map[string]any{
-				"spec": map[string]any{
-					"nodeSets": map[string]any{
-						"volumeClaimTemplates": []map[string]any{
-							{
-								"metadata": map[string]any{
-									"name": "elasticsearch-data",
+				"nodeSets": map[string]any{
+					"volumeClaimTemplates": []map[string]any{
+						{
+							"metadata": map[string]any{
+								"name": "elasticsearch-data",
+							},
+							"spec": map[string]any{
+								"accessModes": []string{
+									"ReadWriteOnce",
 								},
-								"spec": map[string]any{
-									"accessModes": []string{
-										"ReadWriteOnce",
-									},
-									"storageClassName": generators.NFSRemoteClass,
-									"resources": map[string]any{
-										"requests": map[string]any{
-											"storage": "20Gi",
-										},
+								"storageClassName": generators.NFSRemoteClass,
+								"resources": map[string]any{
+									"requests": map[string]any{
+										"storage": "20Gi",
 									},
 								},
 							},
+						},
+					},
+				},
+				"http": map[string]any{
+					"tls": map[string]any{
+						"selfSignedCertificate": map[string]any{
+							"disabled": true,
 						},
 					},
 				},

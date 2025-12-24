@@ -15,15 +15,18 @@ spec:
       retries: 3
   values:
     elasticsearch:
-      spec:
-        nodeSets:
-          volumeClaimTemplates:
-          - metadata:
-              name: elasticsearch-data
-            spec:
-              accessModes:
-              - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 20Gi
-              storageClassName: nfs-remote
+      http:
+        tls:
+          selfSignedCertificate:
+            disabled: true
+      nodeSets:
+        volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 20Gi
+            storageClassName: nfs-remote
