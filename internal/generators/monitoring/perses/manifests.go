@@ -30,10 +30,8 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 	)
 
 	scaledObject := utils.ManifestConfig{
-		Filename: "scaled-object.yaml",
-		//FIXME: maybe there is an option to use labels instead of the pod name?
-		// Another instance of perses would be called perses-1
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), "perses-0", generatorMeta.KedaScaling),
+		Filename:  "scaled-object.yaml",
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
 	}
 
 	kustomization := utils.ManifestConfig{
