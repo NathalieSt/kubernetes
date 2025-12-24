@@ -1,0 +1,32 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: elastic-stack
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: elastic-stack-chart
+  timeout: 10m
+  releaseName: elastic-stack
+  install:
+    remediation:
+      retries: 3
+  values:
+    eck-beats:
+      enabled: true
+      type: filebeat
+    elasticsearch:
+      spec:
+        nodeSets:
+          volumeClaimTemplates:
+          - metadata:
+              name: elasticsearch-data
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 20Gi
+              storageClassName: nfs-remote

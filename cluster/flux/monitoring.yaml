@@ -51,3 +51,20 @@ spec:
   prune: true
   wait: true
   timeout: "10m"
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: elastic-stack
+  namespace: flux-system
+spec:
+  interval: "24h"
+  targetNamespace: elastic-stack
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: "./cluster/monitoring/elastic-stack"
+  prune: true
+  wait: true
+  timeout: "10m"
