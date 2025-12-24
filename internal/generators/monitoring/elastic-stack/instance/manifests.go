@@ -41,6 +41,13 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 			"eck-beats": map[string]any{
 				"enabled": true,
 				"type":    "filebeat",
+				"elasticsearchRef": map[string]any{
+					"name": "elasticsearch-es-default",
+				},
+				"kibanaRef": map[string]any{
+					"name": "elastic-stack-instance-eck-kibana-kb",
+				},
+
 				"daemonSet": map[string]any{
 					"podTemplate": map[string]any{
 						"spec": map[string]any{

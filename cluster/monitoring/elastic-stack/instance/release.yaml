@@ -20,7 +20,11 @@ spec:
           spec:
             securityContext:
               runAsUser: 0
+      elasticsearchRef:
+        name: elasticsearch-es-default
       enabled: true
+      kibanaRef:
+        name: elastic-stack-instance-eck-kibana-kb
       type: filebeat
     elasticsearch:
       spec:
