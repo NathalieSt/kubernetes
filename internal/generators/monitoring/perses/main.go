@@ -24,9 +24,10 @@ func main() {
 		GeneratorType: generatorType,
 		ClusterUrl:    "perses.perses.svc.cluster.local",
 		Port:          8080,
-		Docker: &generator.Docker{
-			Registry: "persesdev/perses",
-			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+		Helm: &generator.Helm{
+			Url:     "https://perses.github.io/helm-charts",
+			Chart:   "perses",
+			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "perses",

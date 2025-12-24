@@ -1,0 +1,23 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: perses
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: perses-chart
+  timeout: 10m
+  releaseName: perses
+  install:
+    remediation:
+      retries: 3
+  values:
+    persistence:
+      enabled: true
+      storageClass: nfs-remote
+    service:
+      annotations:
+        netbird.io/expose: "true"
+        netbird.io/groups: cluster-services

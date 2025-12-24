@@ -5,7 +5,7 @@ metadata:
   name: perses
 resources:
 - namespace.yaml
-- pvc.yaml
-- deployment.yaml
-- service.yaml
+- repo.yaml
+- chart.yaml
+- release.yaml
 - scaled-object.yaml

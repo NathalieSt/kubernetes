@@ -1,6 +1,6 @@
 {
     "kiali": "2.14.0",
-    "perses": "v0.52",
+    "perses": "0.19.2",
     "victoria-metrics": "0.59.3",
     "trivy": "0.31.0"
 }
