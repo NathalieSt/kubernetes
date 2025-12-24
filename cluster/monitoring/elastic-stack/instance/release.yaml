@@ -20,7 +20,7 @@ spec:
           selfSignedCertificate:
             disabled: true
       nodeSets:
-        volumeClaimTemplates:
+      - volumeClaimTemplates:
         - metadata:
             name: elasticsearch-data
           spec:
