@@ -5,9 +5,16 @@ import (
 	"kubernetes/pkg/schema/shared"
 )
 
+type Kind string
+
+const (
+	Deployment  Kind = "Deployment"
+	StatefulSet Kind = "StatefulSet"
+)
+
 type ScaleTargetRef struct {
 	ApiVersion string `yaml:"apiVersion,omitempty"`
-	Kind       string `yaml:",omitempty"`
+	Kind       Kind   `yaml:",omitempty"`
 	Name       string `yaml:",omitempty"`
 }
 

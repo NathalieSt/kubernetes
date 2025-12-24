@@ -5,6 +5,7 @@ metadata:
   name: perses-scaledobject
 spec:
   scaleTargetRef:
+    kind: StatefulSet
     name: perses
   minReplicaCount: 0
   cooldownPeriod: 300

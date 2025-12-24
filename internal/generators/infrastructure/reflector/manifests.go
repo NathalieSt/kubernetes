@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 )
 
@@ -145,7 +146,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
 	}
 
 	kustomization := utils.ManifestConfig{

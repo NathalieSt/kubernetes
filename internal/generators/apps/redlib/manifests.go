@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
@@ -92,7 +93,7 @@ func createRedlibManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, generatorMeta.KedaScaling),
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
 	}
 
 	kustomization := utils.ManifestConfig{

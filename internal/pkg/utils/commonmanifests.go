@@ -7,7 +7,7 @@ import (
 	"kubernetes/pkg/schema/kustomize"
 )
 
-func GenerateCronScaler(name string, targetName string, kedaScaling *keda.ScaledObjectTriggerMeta) []any {
+func GenerateCronScaler(name string, targetName string, kind keda.Kind, kedaScaling *keda.ScaledObjectTriggerMeta) []any {
 	return []any{
 		keda.NewScaledObject(
 			meta.ObjectMeta{
@@ -15,6 +15,7 @@ func GenerateCronScaler(name string, targetName string, kedaScaling *keda.Scaled
 			}, keda.ScaledObjectSpec{
 				ScaleTargetRef: keda.ScaleTargetRef{
 					Name: targetName,
+					Kind: kind,
 				},
 				MinReplicaCount: 0,
 				CooldownPeriod:  300,

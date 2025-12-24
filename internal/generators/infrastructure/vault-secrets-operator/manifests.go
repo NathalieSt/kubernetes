@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 )
 
@@ -19,7 +20,7 @@ func createVaultSecretsOperatorManifests(rootDir string, generatorMeta generator
 
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), "vault-secrets-operator-controller-manager", generatorMeta.KedaScaling),
+		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), "vault-secrets-operator-controller-manager", keda.Deployment, generatorMeta.KedaScaling),
 	}
 
 	kustomization := utils.ManifestConfig{
