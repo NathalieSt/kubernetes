@@ -9,3 +9,4 @@ spec:
   sourceRef:
     kind: HelmRepository
     name: vector-repo
+  version: 0.50.0
