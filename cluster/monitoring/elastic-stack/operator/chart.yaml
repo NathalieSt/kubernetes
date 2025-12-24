@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: elastic-stack-operator-chart
+spec:
+  interval: 24h
+  chart: eck-operator
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: elastic-stack-operator-repo
+  version: 3.2.0

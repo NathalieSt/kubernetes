@@ -2,9 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: elastic-stack
+  name: elastic-stack-operator
 resources:
-- namespace.yaml
 - repo.yaml
 - chart.yaml
 - release.yaml

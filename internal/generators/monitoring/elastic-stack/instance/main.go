@@ -14,11 +14,11 @@ func main() {
 		return
 	}
 
-	name := "elastic-stack"
+	name := "elastic-stack-instance"
 	generatorType := generator.Monitoring
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "elastic-stack",
+		Namespace:     "elastic-stack-instance",
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Url:     "https://helm.elastic.co",
@@ -31,7 +31,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/monitoring/elastic-stack/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/monitoring/elastic-stack/instance"),
 		CreateManifests:  createElasticStackManifests,
 	})
 }

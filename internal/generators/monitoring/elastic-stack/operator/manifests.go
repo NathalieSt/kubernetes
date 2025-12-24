@@ -1,0 +1,29 @@
+package main
+
+import (
+	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/generator"
+)
+
+func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+	namespace := utils.ManifestConfig{
+		Filename:  "namespace.yaml",
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
+	}
+
+	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
+		map[string]any{},
+		nil,
+	)
+
+	kustomization := utils.ManifestConfig{
+		Filename: "kustomization.yaml",
+		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
+			repo.Filename,
+			chart.Filename,
+			release.Filename,
+		}),
+	}
+
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release})
+}

@@ -1,0 +1,15 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: elastic-stack-operator
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: elastic-stack-operator-chart
+  timeout: 10m
+  releaseName: elastic-stack-operator
+  install:
+    remediation:
+      retries: 3
