@@ -35,5 +35,5 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release})
 }
