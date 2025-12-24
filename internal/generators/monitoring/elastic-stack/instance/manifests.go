@@ -4,6 +4,7 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/core"
 )
 
 func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -17,6 +18,11 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 			"eck-elasticsearch": map[string]any{
 				"nodeSets": []map[string]any{
 					{
+						"name":  "default",
+						"count": 1,
+						"config": map[string]any{
+							"node.store.allow_mmap": false,
+						},
 						"volumeClaimTemplates": []map[string]any{
 							{
 								"metadata": map[string]any{
@@ -30,6 +36,23 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 									"resources": map[string]any{
 										"requests": map[string]any{
 											"storage": "20Gi",
+										},
+									},
+								},
+							},
+						},
+						"podTemplate": core.PodTemplateSpec{
+							Spec: core.PodSpec{
+								Containers: []core.Container{
+									core.Container{
+										Name: "elasticsearch",
+										Resources: core.Resources{
+											Limits: map[string]string{
+												"memory": "2Gi",
+											},
+											Requests: map[string]string{
+												"memory": "2Gi",
+											},
 										},
 									},
 								},

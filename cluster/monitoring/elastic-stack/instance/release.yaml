@@ -20,7 +20,21 @@ spec:
           selfSignedCertificate:
             disabled: true
       nodeSets:
-      - volumeClaimTemplates:
+      - config:
+          node.store.allow_mmap: false
+        count: 1
+        name: default
+        podTemplate:
+          metadata: {}
+          spec:
+            containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  memory: 2Gi
+                limits:
+                  memory: 2Gi
+        volumeClaimTemplates:
         - metadata:
             name: elasticsearch-data
           spec:
