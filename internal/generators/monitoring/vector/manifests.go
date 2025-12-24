@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
-	"os"
 )
 
 func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -13,14 +11,30 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
-	config, err := os.ReadFile("./config.yaml")
-	if err != nil {
-		fmt.Printf("Error while reading config.yaml")
-	}
-
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
-			"customConfig": string(config),
+			"customConfig": map[string]any{
+				"data_dir": "/var/lib/vector",
+				"api": map[string]any{
+					"enabled": false,
+				},
+				"sources": map[string]any{
+					"k8s_in": map[string]any{
+						"type": "kubernetes_logs",
+					},
+				},
+				"sinks": map[string]any{
+					"es_cluster": map[string]any{
+						"inputs": []string{
+							"k8s_in",
+						},
+						"type": "elasticsearch",
+						"endpoints": []string{
+							"http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200",
+						},
+					},
+				},
+			},
 		},
 		nil,
 	)

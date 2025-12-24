@@ -14,19 +14,17 @@ spec:
     remediation:
       retries: 3
   values:
-    customConfig: |
-      data_dir: "/var/lib/vector"
+    customConfig:
       api:
         enabled: false
-      sources:
-        k8s_in:
-          type: "kubernetes_logs"
+      data_dir: /var/lib/vector
       sinks:
         es_cluster:
-          inputs:
-            - "k8s_in"
-          type: "elasticsearch"
           endpoints:
-            - "http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200"
-          bulk:
-            index: "vector-%Y-%m-%d" # daily indices
+          - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
+          inputs:
+          - k8s_in
+          type: elasticsearch
+      sources:
+        k8s_in:
+          type: kubernetes_logs
