@@ -5,6 +5,7 @@ metadata:
   name: vector-chart
 spec:
   interval: 24h
+  chart: vector
   reconcileStrategy: ChartVersion
   sourceRef:
     kind: HelmRepository

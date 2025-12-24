@@ -22,6 +22,7 @@ func main() {
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Url:     "https://helm.vector.dev",
+			Chart:   "vector",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
