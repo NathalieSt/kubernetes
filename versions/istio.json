@@ -1,6 +1,0 @@
-{
-    "base": "1.27.0",
-    "istio-ingress": "1.27.0",
-    "istiod": "1.27.0",
-    "prometheus": "v3.5.0"
-}
