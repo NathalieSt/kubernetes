@@ -16,6 +16,8 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"eck-elasticsearch": map[string]any{
+				"enabled":          true,
+				"fullnameOverride": "elasticsearch",
 				"nodeSets": []map[string]any{
 					{
 						"name":  "default",
@@ -66,6 +68,12 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 							"disabled": true,
 						},
 					},
+				},
+			},
+			"eck-kibana": map[string]any{
+				"enabled": true,
+				"elasticsearchRef": map[string]any{
+					"name": "elasticsearch",
 				},
 			},
 		},
