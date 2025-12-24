@@ -14,7 +14,7 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
-			"elasticsearch": map[string]any{
+			"eck-elasticsearch": map[string]any{
 				"nodeSets": map[string]any{
 					"volumeClaimTemplates": []map[string]any{
 						{

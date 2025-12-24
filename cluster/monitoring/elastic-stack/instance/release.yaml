@@ -14,7 +14,7 @@ spec:
     remediation:
       retries: 3
   values:
-    elasticsearch:
+    eck-elasticsearch:
       http:
         tls:
           selfSignedCertificate:
