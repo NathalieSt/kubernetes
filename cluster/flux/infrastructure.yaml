@@ -216,7 +216,23 @@ spec:
   wait: true
   timeout: "10m"
   dependsOn: []
-
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: forgejo-pg-cluster
+  namespace: flux-system
+spec:
+  interval: "24h"
+  targetNamespace: forgejo-pg-cluster
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: "./cluster/infrastructure/postgres/forgejo"
+  prune: true
+  wait: true
+  timeout: "10m"
+  dependsOn: []
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
