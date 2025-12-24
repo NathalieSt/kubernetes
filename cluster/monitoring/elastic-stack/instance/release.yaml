@@ -22,6 +22,11 @@ spec:
               paths:
                 - /var/log/containers/*.log
               symlinks: true
+            - output.elasticsearch:
+              hosts:
+                [
+                  "http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200",
+                ]
       daemonSet:
         podTemplate:
           spec:
