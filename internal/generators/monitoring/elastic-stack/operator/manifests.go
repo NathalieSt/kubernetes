@@ -19,6 +19,7 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
+			namespace.Filename,
 			repo.Filename,
 			chart.Filename,
 			release.Filename,

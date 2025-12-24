@@ -4,6 +4,7 @@ kind: Kustomization
 metadata:
   name: elastic-stack-operator
 resources:
+- namespace.yaml
 - repo.yaml
 - chart.yaml
 - release.yaml
