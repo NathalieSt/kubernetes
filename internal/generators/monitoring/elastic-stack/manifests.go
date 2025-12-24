@@ -41,6 +41,15 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 			"eck-beats": map[string]any{
 				"enabled": true,
 				"type":    "filebeat",
+				"daemonSet": map[string]any{
+					"podTemplate": map[string]any{
+						"spec": map[string]any{
+							"securityContext": map[string]any{
+								"runAsUser": 0,
+							},
+						},
+					},
+				},
 			},
 		},
 		nil,
