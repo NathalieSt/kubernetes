@@ -20,12 +20,18 @@ spec:
       data_dir: /var/lib/vector
       sinks:
         es_cluster:
+          api_version: auto
           auth:
             strategy: basic
+          bulk:
+            action: create
+          compression: none
+          doc_type: _doc
           endpoints:
           - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
           inputs:
           - k8s_in
+          mode: bulk
           type: elasticsearch
       sources:
         k8s_in:

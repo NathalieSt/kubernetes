@@ -41,6 +41,13 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 						"auth": map[string]any{
 							"strategy": "basic",
 						},
+						"api_version": "auto",
+						"compression": "none",
+						"doc_type":    "_doc",
+						"mode":        "bulk",
+						"bulk": map[string]any{
+							"action": "create",
+						},
 					},
 				},
 			},
