@@ -51,7 +51,7 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 				Name: generatorMeta.Name,
 			}, []authorization.Rule{
 				{
-					APIGroups: []string{},
+					APIGroups: []string{""},
 					Resources: []string{"namespaces", "nodes", "pods"},
 					Verbs:     []string{"list", "watch"},
 				},
