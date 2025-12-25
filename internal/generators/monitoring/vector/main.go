@@ -20,10 +20,9 @@ func main() {
 		Name:          name,
 		Namespace:     "vector",
 		GeneratorType: generatorType,
-		Helm: &generator.Helm{
-			Url:     "https://helm.vector.dev",
-			Chart:   "vector",
-			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+		Docker: &generator.Docker{
+			Registry: "timberio/vector",
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
 	}

@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vector
+data:
+  agent.yaml: |
+    api:
+      enabled: false
+    data_dir: /vector-data-dir
+    sources:
+      k8s_in:
+        auto_partial_merge: true
+        delay_deletion_ms: 60000
+        fingerprint_lines: 1
+        glob_minimum_cooldown_ms: 60000
+        ignore_older_secs: 600
+        insert_namespace_fields: true
+        self_node_name: ${VECTOR_SELF_NODE_NAME}
+        timezone: local
+        type: kubernetes_logs
+    sinks:
+      es_cluster:
+        api_version: auto
+        auth:
+          strategy: basic
+        bulk:
+          action: create
+          index: vector-%Y-%m-%d
+        compression: none
+        doc_type: _doc
+        endpoints:
+          - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
+        inputs:
+          - k8s_in
+        mode: bulk
+        type: elasticsearch

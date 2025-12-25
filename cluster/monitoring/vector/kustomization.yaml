@@ -5,6 +5,7 @@ metadata:
   name: vector
 resources:
 - namespace.yaml
-- repo.yaml
-- chart.yaml
-- release.yaml
+- daemonset.yaml
+- serviceaccount.yaml
+- configmap.yaml
+- rbac.yaml

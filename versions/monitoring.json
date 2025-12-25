@@ -5,5 +5,5 @@
     "trivy": "0.31.0",
     "elastic-stack-operator": "3.2.0",
     "elastic-stack-instance": "0.17.0",
-    "vector": "0.49.0"
+    "vector": "0.52.0-alpine"
 }

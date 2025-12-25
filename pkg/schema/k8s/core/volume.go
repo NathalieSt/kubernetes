@@ -34,10 +34,15 @@ type SecretVolumeSource struct {
 	Items      []SecretVolumeItem `yaml:"items,omitempty"`
 }
 
+type HostPath struct {
+	Path string `yaml:"path,omitempty"`
+}
+
 type Volume struct {
 	Name                  string                `yaml:",omitempty"`
 	ConfigMap             ConfigMapVolumeSource `yaml:"configMap,omitempty"`
 	PersistentVolumeClaim PVCVolumeSource       `yaml:"persistentVolumeClaim,omitempty"`
 	EmptyDir              EmptyDirVolumeSource  `yaml:"emptyDir,omitempty"`
 	Secret                SecretVolumeSource    `yaml:"secret,omitempty"`
+	HostPath              HostPath              `yaml:"hostPath,omitempty"`
 }

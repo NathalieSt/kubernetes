@@ -1,10 +1,14 @@
 package main
 
 import (
-	"kubernetes/internal/generators"
+	"fmt"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/apps"
+	"kubernetes/pkg/schema/k8s/authorization"
+	"kubernetes/pkg/schema/k8s/core"
+	"kubernetes/pkg/schema/k8s/meta"
+	"os"
 )
 
 func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -13,80 +17,223 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
-	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
-		map[string]any{
-			"role": "Agent",
-			"service": map[string]any{
-				"enabled": false,
-			},
-			"customConfig": map[string]any{
-				"data_dir": "/var/lib/vector",
-				"api": map[string]any{
-					"enabled": false,
+	serviceAccountName := generatorMeta.Name
+	serviceAccount := utils.ManifestConfig{
+		Filename: "serviceaccount.yaml",
+		Manifests: []any{
+			core.NewServiceAccount(meta.ObjectMeta{
+				Name: serviceAccountName,
+			}),
+		},
+	}
+
+	config, err := os.ReadFile("./agent.yaml")
+	if err != nil {
+		fmt.Printf("Error while reading config.yaml")
+	}
+
+	configmapName := generatorMeta.Name
+	configmap := utils.ManifestConfig{
+		Filename: "configmap.yaml",
+		Manifests: []any{
+			core.NewConfigMap(meta.ObjectMeta{
+				Name: configmapName,
+			}, map[string]string{
+				"agent.yaml": string(config),
+			}),
+		},
+	}
+
+	rbac := utils.ManifestConfig{
+		Filename: "rbac.yaml",
+		Manifests: []any{
+			authorization.NewClusterRole(meta.ObjectMeta{
+				Name: generatorMeta.Name,
+			}, []authorization.Rule{
+				{
+					APIGroups: []string{},
+					Resources: []string{"namespaces", "nodes", "pods"},
+					Verbs:     []string{"list", "watch"},
 				},
-				"sources": map[string]any{
-					"k8s_in": map[string]any{
-						"type":                     "kubernetes_logs",
-						"auto_partial_merge":       true,
-						"data_dir":                 "/var/local/lib/vector/",
-						"delay_deletion_ms":        60000,
-						"fingerprint_lines":        1,
-						"glob_minimum_cooldown_ms": 60000,
-						"insert_namespace_fields":  true,
-						"ignore_older_secs":        600,
-						"self_node_name":           "${VECTOR_SELF_NODE_NAME}",
-						"timezone":                 "local",
+			}),
+			authorization.NewClusterRoleBinding(meta.ObjectMeta{
+				Name: generatorMeta.Name,
+			}, authorization.RoleRef{
+				APIGroup: "rbac.authorization.k8s.io",
+				Kind:     "ClusterRole",
+				Name:     generatorMeta.Name,
+			}, []authorization.Subject{
+				{
+					Kind:      "ServiceAccount",
+					Name:      serviceAccountName,
+					Namespace: generatorMeta.Namespace,
+				},
+			}),
+		},
+	}
+
+	daemonset := utils.ManifestConfig{
+		Filename: "daemonset.yaml",
+		Manifests: []any{
+			apps.NewDaemonSet(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
 					},
 				},
-				"sinks": map[string]any{
-					"es_cluster": map[string]any{
-						"inputs": []string{
-							"k8s_in",
+				apps.DaemonSetSpec{
+					Selector: meta.LabelSelector{
+						MatchLabels: map[string]string{
+							"app.kubernetes.io/name": generatorMeta.Name,
 						},
-						"type": "elasticsearch",
-						"endpoints": []string{
-							"http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200",
+					},
+					Template: core.PodTemplateSpec{
+						Metadata: meta.ObjectMeta{
+							Labels: map[string]string{
+								"app.kubernetes.io/name":    generatorMeta.Name,
+								"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							},
 						},
-						"auth": map[string]any{
-							"strategy": "basic",
-						},
-						"api_version": "auto",
-						"compression": "none",
-						"doc_type":    "_doc",
-						"mode":        "bulk",
-						"bulk": map[string]any{
-							"action": "create",
-							"index":  "vector-%Y-%m-%d",
+						Spec: core.PodSpec{
+							ServiceAccountName: serviceAccountName,
+							DNSPolicy:          core.ClusterFirst,
+							Containers: []core.Container{
+								{
+									Name: generatorMeta.Name,
+									Args: []string{
+										"--config-dir",
+										"/etc/vector/",
+									},
+									Env: []core.Env{
+										{
+											Name:  "VECTOR_LOG",
+											Value: "info",
+										},
+										{
+											Name: "VECTOR_SELF_NODE_NAME",
+											ValueFrom: core.ValueFrom{
+												FieldRef: core.FieldRef{
+													FieldPath: "spec.nodeName",
+												},
+											},
+										},
+										{
+											Name: "VECTOR_SELF_POD_NAME",
+											ValueFrom: core.ValueFrom{
+												FieldRef: core.FieldRef{
+													FieldPath: "metadata.name",
+												},
+											},
+										},
+										{
+											Name: "VECTOR_SELF_POD_NAMESPACE",
+											ValueFrom: core.ValueFrom{
+												FieldRef: core.FieldRef{
+													FieldPath: "metadata.namespace",
+												},
+											},
+										},
+										{
+											Name:  "PROCFS_ROOT",
+											Value: "/host/proc",
+										},
+										{
+											Name:  "SYSFS_ROOT",
+											Value: "/host/sys",
+										},
+									},
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Ports: []core.Port{
+										{
+											ContainerPort: 9090,
+											Name:          "prom-exporter",
+										},
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											Name:      "data",
+											MountPath: "/vector-data-dir",
+										},
+										{
+											Name:      "config",
+											MountPath: "/etc/vector/",
+										},
+										{
+											Name:      "var-log",
+											MountPath: "/var/log/",
+										},
+										{
+											Name:      "var-lib",
+											MountPath: "/var/lib",
+										},
+										{
+											Name:      "procfs",
+											MountPath: "/host/proc",
+										},
+										{
+											Name:      "sysfs",
+											MountPath: "/host/sys",
+										},
+									},
+								},
+							},
+							Volumes: []core.Volume{
+								{
+									Name: "config",
+									ConfigMap: core.ConfigMapVolumeSource{
+										Name: configmapName,
+									},
+								},
+								{
+									Name: "data",
+									HostPath: core.HostPath{
+										Path: "/var/lib/vector",
+									},
+								},
+								{
+									Name: "var-log",
+									HostPath: core.HostPath{
+										Path: "/var/log/",
+									},
+								},
+								{
+									Name: "var-lib",
+									HostPath: core.HostPath{
+										Path: "/var/lib/",
+									},
+								},
+								{
+									Name: "procfs",
+									HostPath: core.HostPath{
+										Path: "/proc",
+									},
+								},
+								{
+									Name: "sysfs",
+									HostPath: core.HostPath{
+										Path: "/sys",
+									},
+								},
+							},
 						},
 					},
 				},
-			},
+			),
 		},
-		[]helm.ReleaseValuesFrom{
-			{
-				Kind:       helm.Secret,
-				Name:       generators.ElasticSearchVectorSecretName,
-				TargetPath: "customConfig.sinks.es_cluster.auth.password",
-				ValuesKey:  "password",
-			},
-			{
-				Kind:       helm.Secret,
-				Name:       generators.ElasticSearchVectorSecretName,
-				TargetPath: "customConfig.sinks.es_cluster.auth.user",
-				ValuesKey:  "username",
-			},
-		},
-	)
+	}
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
-			repo.Filename,
-			chart.Filename,
-			release.Filename,
+			daemonset.Filename,
+			serviceAccount.Filename,
+			configmap.Filename,
+			rbac.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, daemonset, rbac, serviceAccount, configmap})
 }

@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/name: vector
+    app.kubernetes.io/version: 0.52.0-alpine
+  name: vector
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vector
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vector
+        app.kubernetes.io/version: 0.52.0-alpine
+    spec:
+      serviceAccountName: vector
+      dnsPolicy: ClusterFirst
+      containers:
+      - image: timberio/vector:0.52.0-alpine
+        name: vector
+        ports:
+        - containerPort: 9090
+          name: prom-exporter
+        volumeMounts:
+        - mountPath: /vector-data-dir
+          name: data
+        - mountPath: /etc/vector/
+          name: config
+        - mountPath: /var/log/
+          name: var-log
+        - mountPath: /var/lib
+          name: var-lib
+        - mountPath: /host/proc
+          name: procfs
+        - mountPath: /host/sys
+          name: sysfs
+      volumes:
+      - name: config
+        configMap:
+          name: vector
+      - name: data
+        hostPath:
+          path: /var/lib/vector
+      - name: var-log
+        hostPath:
+          path: /var/log/
+      - name: var-lib
+        hostPath:
+          path: /var/lib/
+      - name: procfs
+        hostPath:
+          path: /proc
+      - name: sysfs
+        hostPath:
+          path: /sys

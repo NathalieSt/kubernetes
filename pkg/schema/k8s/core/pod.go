@@ -14,6 +14,15 @@ type Port struct {
 	Name          string `yaml:"name,omitempty"`
 }
 
+type FieldRef struct {
+	FieldPath string `yaml:"fieldPath,omitempty"`
+}
+
+type ValueFrom struct {
+	SecretKeyRef SecretKeyRef `yaml:"secretKeyRef,omitempty"`
+	FieldRef     FieldRef     `yaml:"fieldRef,omitempty"`
+}
+
 type Env struct {
 	Name      string    `yaml:"name,omitempty"`
 	Value     string    `yaml:"value,omitempty"`
@@ -23,10 +32,6 @@ type Env struct {
 type SecretKeyRef struct {
 	Key  string `yaml:"key,omitempty"`
 	Name string `yaml:"name,omitempty"`
-}
-
-type ValueFrom struct {
-	SecretKeyRef SecretKeyRef `yaml:"secretKeyRef,omitempty"`
 }
 
 type Capabilities struct {
@@ -61,12 +66,20 @@ type Container struct {
 	SecurityContext ContainerSecurityContext `yaml:"securityContext,omitempty"`
 }
 
+type DNSPolicy = string
+
+const (
+	ClusterFirst DNSPolicy = "ClusterFirst"
+)
+
 type PodSpec struct {
-	InitContainers  []Container        `yaml:"initContainers,omitempty"`
-	Containers      []Container        `yaml:"containers,omitempty"`
-	Volumes         []Volume           `yaml:"volumes,omitempty"`
-	SecurityContext PodSecurityContext `yaml:"securityContext,omitempty"`
-	NodeSelector    map[string]string  `yaml:"nodeSelector,omitempty"`
+	InitContainers     []Container        `yaml:"initContainers,omitempty"`
+	ServiceAccountName string             `yaml:"serviceAccountName,omitempty"`
+	DNSPolicy          DNSPolicy          `yaml:"dnsPolicy,omitempty"`
+	Containers         []Container        `yaml:"containers,omitempty"`
+	Volumes            []Volume           `yaml:"volumes,omitempty"`
+	SecurityContext    PodSecurityContext `yaml:"securityContext,omitempty"`
+	NodeSelector       map[string]string  `yaml:"nodeSelector,omitempty"`
 }
 
 type Pod struct {
