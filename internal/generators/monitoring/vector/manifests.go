@@ -13,6 +13,7 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
+			"role": "Agent",
 			"customConfig": map[string]any{
 				"data_dir": "/var/lib/vector",
 				"api": map[string]any{
