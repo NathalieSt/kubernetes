@@ -17,8 +17,10 @@ spec:
     logLevel: debug
     customConfig:
       api:
-        enabled: false
-      data_dir: /var/lib/vector
+        enabled: true
+        address: 127.0.0.1:8686
+        playground: true
+      data_dir: /vector-data-dir
       sinks:
         es_cluster:
           api_version: auto
