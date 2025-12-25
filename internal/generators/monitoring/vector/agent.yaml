@@ -19,59 +19,68 @@ sources:
 # TRANSFORMS - filter / sample / prune
 # -------------------------------------------------
 transforms:
-  # -------------------------------------------------
-  # Drop DEBUG-level entries (still a filter)
-  # -------------------------------------------------
-  drop_debug:
+  drop_noisy_logs:
     type: filter
     inputs:
       - k8s_in
-    condition: '.level != "debug"'
+    condition: |
+      !(
+        .kubernetes.container_name == "kube-proxy" ||
+        .kubernetes.container_name == "kube-apiserver" ||
+        .kubernetes.container_name == "coredns" && contains!(.message, "health")
+      )
 
-  # -------------------------------------------------
-  # Filter the health-check / success logs you want to sample
-  # -------------------------------------------------
-  filter_health:
+  drop_debug_logs:
     type: filter
     inputs:
-      - drop_debug
-    # Adjust the field name to whatever your pods emit.
-    # Many containers use `status`, `http_status`, or `code`.
-    condition: ".status == 200 or .http_status == 200"
+      - drop_noisy_logs
+    condition: |
+      !(
+        downcase!(.level) == "debug" ||
+        downcase!(.level) == "trace"
+      )
 
-  # -------------------------------------------------
-  # Sample the *already-filtered* health logs
-  # -------------------------------------------------
-  sample_health:
-    type: sample
-    inputs:
-      - filter_health
-    # Keep roughly 5% of the matching events (tweak as needed)
-    rate: 0.05
-
-  # -------------------------------------------------
-  # Prune large / unused fields
-  # -------------------------------------------------
-  prune_fields:
+  remove_k8s_noise:
     type: remap
     inputs:
-      - sample_health
+      - drop_debug_logs
     source: |
-      . = del(.["stacktrace"])
-      . = del(.["message_raw"])
-      . = del(.["container_image"])
-      . = del(.["pod_annotations"])
-      . = del(.["kubernetes"]["labels"]["some-noisy-label"])
+      # Keep only essential Kubernetes metadata
+      del(.kubernetes.pod_uid)
+      del(.kubernetes.container_id)
+      del(.kubernetes.container_image_id)
+      del(.kubernetes.node_labels)
+      del(.kubernetes.pod_labels)
+      del(.kubernetes.namespace_labels)
+      del(.kubernetes.annotations)
 
-  # -------------------------------------------------
-  # Normalise timestamps to UTC
-  # -------------------------------------------------
-  normalize_ts:
+  normalize_logs:
     type: remap
     inputs:
-      - prune_fields
+      - remove_k8s_noise
     source: |
-      .["@timestamp"] = to_timestamp!(.["@timestamp"]).to_rfc3339()
+      # Rename message to short key
+      .msg = .message
+      del(.message)
+
+      # Normalize level
+      if exists(.level) {
+        .lvl = downcase!(.level)
+        del(.level)
+      }
+
+      # Remove empty fields
+      if is_null(.msg) { del(.msg) }
+
+  truncate_messages:
+    type: remap
+    inputs:
+      - normalize_logs
+    source: |
+      max_len = 2048
+      if exists(.msg) && length!(.msg) > max_len {
+        .msg = slice!(.msg, 0, max_len) + "...(truncated)"
+      }
 
 # -------------------------------------------------
 # SINK - Elasticsearch
@@ -91,6 +100,6 @@ sinks:
     endpoints:
       - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
     inputs:
-      - normalize_ts
+      - truncate_messages
     mode: bulk
     type: elasticsearch
