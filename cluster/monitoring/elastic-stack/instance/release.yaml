@@ -2,14 +2,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: elastic-stack-instance
+  name: elastic-stack
 spec:
   interval: 24h
   chartRef:
     kind: HelmChart
-    name: elastic-stack-instance-chart
+    name: elastic-stack-chart
   timeout: 10m
-  releaseName: elastic-stack-instance
+  releaseName: elastic-stack
   install:
     remediation:
       retries: 3

@@ -13,7 +13,7 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
-			"managedNamespaces": []string{"elastic-stack-instance"},
+			"managedNamespaces": []string{"elastic-stack"},
 		},
 		nil,
 	)

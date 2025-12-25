@@ -14,11 +14,11 @@ func main() {
 		return
 	}
 
-	name := "elastic-stack-instance"
+	name := "elastic-stack"
 	generatorType := generator.Monitoring
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "elastic-stack-instance",
+		Namespace:     "elastic-stack",
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Url:     "https://helm.elastic.co",

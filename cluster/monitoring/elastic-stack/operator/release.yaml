@@ -15,4 +15,4 @@ spec:
       retries: 3
   values:
     managedNamespaces:
-    - elastic-stack-instance
+    - elastic-stack

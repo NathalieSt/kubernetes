@@ -2,12 +2,11 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmChart
 metadata:
-  name: elastic-stack-instance-chart
+  name: elastic-stack-chart
 spec:
   interval: 24h
   chart: eck-stack
   reconcileStrategy: ChartVersion
   sourceRef:
     kind: HelmRepository
-    name: elastic-stack-instance-repo
-  version: 0.17.0
+    name: elastic-stack-repo
