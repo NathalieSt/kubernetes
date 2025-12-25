@@ -29,3 +29,5 @@ spec:
         k8s_in:
           type: kubernetes_logs
     role: Agent
+    service:
+      enabled: false
