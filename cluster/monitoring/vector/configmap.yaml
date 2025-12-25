@@ -9,7 +9,7 @@ data:
       enabled: false
     data_dir: /vector-data-dir
     # -------------------------------------------------
-    # SOURCE – Kubernetes pod/container logs
+    # SOURCE - Kubernetes pod/container logs
     # -------------------------------------------------
     sources:
       k8s_in:
@@ -23,11 +23,11 @@ data:
         timezone: local
         type: kubernetes_logs
     # -------------------------------------------------
-    # TRANSFORMS – filter / sample / prune
+    # TRANSFORMS - filter / sample / prune
     # -------------------------------------------------
     transforms:
       # -------------------------------------------------
-      # 2a. Drop DEBUG‑level entries (most noisy)
+      # 2a. Drop DEBUG-level entries (most noisy)
       # -------------------------------------------------
       drop_debug:
         type: filter
@@ -38,15 +38,15 @@ data:
         condition: '.level != "debug"'
     
       # -------------------------------------------------
-      # 2b. Sample high‑frequency health‑check logs
+      # 2b. Sample high-frequency health-check logs
       # -------------------------------------------------
       sample_health:
         type: sample
         inputs:
           - drop_debug
-        # Keep ~5 % of matching events (tweak the rate as you like)
+        # Keep ~5% of matching events (tweak the rate as you like)
         rate: 0.05
-        # Example condition – adapt to the fields you actually have.
+        # Example condition - adapt to the fields you actually have.
         # Many containers log `http.status_code` or `response_code`.
         condition: ".status == 200 or .http_status == 200"
     
@@ -66,7 +66,7 @@ data:
           . = del(.["kubernetes"]["labels"]["some-noisy-label"])
     
       # -------------------------------------------------
-      # 2d. Force UTC timestamps – helps ILM & Kibana
+      # 2d. Force UTC timestamps - helps ILM & Kibana
       # -------------------------------------------------
       normalize_ts:
         type: remap
@@ -76,7 +76,7 @@ data:
           # If the source already provides @timestamp, just ensure it's UTC.
           .["@timestamp"] = to_timestamp!(.["@timestamp"]).to_rfc3339()
     # -------------------------------------------------
-    # SINK – Elasticsearch
+    # SINK - Elasticsearch
     # -------------------------------------------------
     sinks:
       es_cluster:
