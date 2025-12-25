@@ -18,7 +18,7 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 			"eck-elasticsearch": map[string]any{
 				"enabled":          true,
 				"fullnameOverride": "elasticsearch",
-				"auth:": map[string]any{
+				"auth": map[string]any{
 					"fileRealm": []map[string]string{
 						{
 							"secretName": generators.ElasticSearchAdminSecretName,

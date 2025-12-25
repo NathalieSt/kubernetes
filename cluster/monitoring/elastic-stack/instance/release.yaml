@@ -15,7 +15,7 @@ spec:
       retries: 3
   values:
     eck-elasticsearch:
-      "auth:":
+      auth:
         fileRealm:
         - secretName: elastic-search-admin-secret
         - secretName: elastic-search-vector-secret
