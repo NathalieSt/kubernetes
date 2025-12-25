@@ -5,22 +5,23 @@ metadata:
   name: vector-role
 stringData:
   roles.yml: |
-    cluster:
-      - monitor
-      - manage_ilm
+    vector_writer:
+      cluster:
+        - monitor
+        - manage_ilm
     
-    indices:
-      - names: ["vector-*"]
-        privileges:
-          - create_index
-          - write
-          - create
-          - manage
-          - manage_ilm
+      indices:
+        - names: ["vector-*"]
+          privileges:
+            - create_index
+            - write
+            - create
+            - manage
+            - manage_ilm
     
-    applications: []
+      applications: []
     
-    run_as: []
+      run_as: []
     
-    metadata:
-      description: "Role for Vector log ingestion"
+      metadata:
+        description: "Role for Vector log ingestion"
