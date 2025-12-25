@@ -72,8 +72,9 @@ transforms:
     source: |
       max_len = 2048
 
-      if exists(.msg) && is_string(.msg) && length(.msg) > max_len {
-        .msg = substring(.msg, 0, max_len) + "...(truncated)"
+      msg = to_string(.msg) ?? null
+      if msg != null && length!(msg) > max_len {
+        .msg = truncate!(msg, max_len, "...Truncated")
       }
 
 # -------------------------------------------------
