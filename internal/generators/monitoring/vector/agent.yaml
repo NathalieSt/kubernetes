@@ -1,6 +1,9 @@
 api:
   enabled: false
 data_dir: /vector-data-dir
+# -------------------------------------------------
+# SOURCE – Kubernetes pod/container logs
+# -------------------------------------------------
 sources:
   k8s_in:
     auto_partial_merge: true
@@ -12,6 +15,62 @@ sources:
     self_node_name: ${VECTOR_SELF_NODE_NAME}
     timezone: local
     type: kubernetes_logs
+# -------------------------------------------------
+# TRANSFORMS – filter / sample / prune
+# -------------------------------------------------
+transforms:
+  # -------------------------------------------------
+  # 2a. Drop DEBUG‑level entries (most noisy)
+  # -------------------------------------------------
+  drop_debug:
+    type: filter
+    inputs:
+      - k8s_in
+    # Most Kubernetes log emitters include a `level` field;
+    # adjust the field name if yours is different (e.g., `severity`).
+    condition: '.level != "debug"'
+
+  # -------------------------------------------------
+  # 2b. Sample high‑frequency health‑check logs
+  # -------------------------------------------------
+  sample_health:
+    type: sample
+    inputs:
+      - drop_debug
+    # Keep ~5 % of matching events (tweak the rate as you like)
+    rate: 0.05
+    # Example condition – adapt to the fields you actually have.
+    # Many containers log `http.status_code` or `response_code`.
+    condition: ".status == 200 or .http_status == 200"
+
+  # -------------------------------------------------
+  # 2c. Prune large/unneeded fields
+  # -------------------------------------------------
+  prune_fields:
+    type: remap
+    inputs:
+      - sample_health
+    source: |
+      # Remove fields you never query. List each field you want gone.
+      . = del(.["stacktrace"])          # huge stack traces
+      . = del(.["message_raw"])        # raw message copies
+      . = del(.["container_image"])    # optional if you already have `image` elsewhere
+      . = del(.["pod_annotations"])   # often huge and not needed for log analysis
+      . = del(.["kubernetes"]["labels"]["some-noisy-label"])
+
+  # -------------------------------------------------
+  # 2d. Force UTC timestamps – helps ILM & Kibana
+  # -------------------------------------------------
+  normalize_ts:
+    type: remap
+    inputs:
+      - prune_fields
+    source: |
+      # If the source already provides @timestamp, just ensure it's UTC.
+      .["@timestamp"] = to_timestamp!(.["@timestamp"]).to_rfc3339()
+# -------------------------------------------------
+# SINK – Elasticsearch
+# -------------------------------------------------
 sinks:
   es_cluster:
     api_version: auto
@@ -22,11 +81,11 @@ sinks:
     bulk:
       action: create
       index: vector-%Y-%m-%d
-    compression: none
+    compression: gzip
     doc_type: _doc
     endpoints:
       - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
     inputs:
-      - k8s_in
+      - normalize_ts
     mode: bulk
     type: elasticsearch
