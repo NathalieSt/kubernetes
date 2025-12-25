@@ -47,6 +47,7 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 						"mode":        "bulk",
 						"bulk": map[string]any{
 							"action": "create",
+							"index":  "vector-%Y-%m-%d",
 						},
 					},
 				},
