@@ -20,54 +20,59 @@ sources:
 # -------------------------------------------------
 transforms:
   # -------------------------------------------------
-  # 2a. Drop DEBUG-level entries (most noisy)
+  # Drop DEBUG-level entries (still a filter)
   # -------------------------------------------------
   drop_debug:
     type: filter
     inputs:
       - k8s_in
-    # Most Kubernetes log emitters include a `level` field;
-    # adjust the field name if yours is different (e.g., `severity`).
     condition: '.level != "debug"'
 
   # -------------------------------------------------
-  # 2b. Sample high-frequency health-check logs
+  # Filter the health-check / success logs you want to sample
+  # -------------------------------------------------
+  filter_health:
+    type: filter
+    inputs:
+      - drop_debug
+    # Adjust the field name to whatever your pods emit.
+    # Many containers use `status`, `http_status`, or `code`.
+    condition: ".status == 200 or .http_status == 200"
+
+  # -------------------------------------------------
+  # Sample the *already-filtered* health logs
   # -------------------------------------------------
   sample_health:
     type: sample
     inputs:
-      - drop_debug
-    # Keep ~5% of matching events (tweak the rate as you like)
+      - filter_health
+    # Keep roughly 5% of the matching events (tweak as needed)
     rate: 0.05
-    # Example condition - adapt to the fields you actually have.
-    # Many containers log `http.status_code` or `response_code`.
-    condition: ".status == 200 or .http_status == 200"
 
   # -------------------------------------------------
-  # 2c. Prune large/unneeded fields
+  # Prune large / unused fields
   # -------------------------------------------------
   prune_fields:
     type: remap
     inputs:
       - sample_health
     source: |
-      # Remove fields you never query. List each field you want gone.
-      . = del(.["stacktrace"])          # huge stack traces
-      . = del(.["message_raw"])        # raw message copies
-      . = del(.["container_image"])    # optional if you already have `image` elsewhere
-      . = del(.["pod_annotations"])   # often huge and not needed for log analysis
+      . = del(.["stacktrace"])
+      . = del(.["message_raw"])
+      . = del(.["container_image"])
+      . = del(.["pod_annotations"])
       . = del(.["kubernetes"]["labels"]["some-noisy-label"])
 
   # -------------------------------------------------
-  # 2d. Force UTC timestamps - helps ILM & Kibana
+  # Normalise timestamps to UTC
   # -------------------------------------------------
   normalize_ts:
     type: remap
     inputs:
       - prune_fields
     source: |
-      # If the source already provides @timestamp, just ensure it's UTC.
       .["@timestamp"] = to_timestamp!(.["@timestamp"]).to_rfc3339()
+
 # -------------------------------------------------
 # SINK - Elasticsearch
 # -------------------------------------------------
