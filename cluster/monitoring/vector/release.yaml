@@ -29,15 +29,14 @@ spec:
           compression: none
           doc_type: _doc
           endpoints:
-          - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
+            - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
           inputs:
-          - k8s_in
+            - k8s_in
           mode: bulk
           type: elasticsearch
       sources:
         k8s_in:
           auto_partial_merge: true
-          data_dir: /var/local/lib/vector/
           delay_deletion_ms: 60000
           fingerprint_lines: 1
           glob_minimum_cooldown_ms: 60000
@@ -50,11 +49,11 @@ spec:
     service:
       enabled: false
   valuesFrom:
-  - kind: Secret
-    name: elastic-search-vector-secret
-    valuesKey: password
-    targetPath: customConfig.sinks.es_cluster.auth.password
-  - kind: Secret
-    name: elastic-search-vector-secret
-    valuesKey: username
-    targetPath: customConfig.sinks.es_cluster.auth.user
+    - kind: Secret
+      name: elastic-search-vector-secret
+      valuesKey: password
+      targetPath: customConfig.sinks.es_cluster.auth.password
+    - kind: Secret
+      name: elastic-search-vector-secret
+      valuesKey: username
+      targetPath: customConfig.sinks.es_cluster.auth.user
