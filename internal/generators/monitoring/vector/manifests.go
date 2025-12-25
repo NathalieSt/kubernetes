@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
@@ -132,6 +133,24 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 											ValueFrom: core.ValueFrom{
 												FieldRef: core.FieldRef{
 													FieldPath: "metadata.namespace",
+												},
+											},
+										},
+										{
+											Name: "ELASTIC_USER",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: generators.ElasticSearchVectorSecretName,
+													Key:  "username",
+												},
+											},
+										},
+										{
+											Name: "ELASTIC_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: generators.ElasticSearchVectorSecretName,
+													Key:  "password",
 												},
 											},
 										},

@@ -17,6 +17,8 @@ sinks:
     api_version: auto
     auth:
       strategy: basic
+      user: ${ELASTIC_USER}
+      password: ${ELASTIC_PASSWORD}
     bulk:
       action: create
       index: vector-%Y-%m-%d
