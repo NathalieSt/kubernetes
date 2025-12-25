@@ -38,7 +38,7 @@ data:
         inputs:
           - drop_noisy_logs
         condition: |
-          !(downcase!(.level) == "debug" || downcase!(.level) == "trace")
+          .status_code != 200 && !includes(["info", "debug"], .severity)
     
       remove_k8s_noise:
         type: remap
