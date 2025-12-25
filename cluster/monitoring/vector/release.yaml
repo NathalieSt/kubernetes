@@ -36,6 +36,15 @@ spec:
           type: elasticsearch
       sources:
         k8s_in:
+          auto_partial_merge: true
+          data_dir: /var/local/lib/vector/
+          delay_deletion_ms: 60000
+          fingerprint_lines: 1
+          glob_minimum_cooldown_ms: 60000
+          ignore_older_secs: 600
+          insert_namespace_fields: true
+          self_node_name: ${VECTOR_SELF_NODE_NAME}
+          timezone: local
           type: kubernetes_logs
     role: Agent
     service:

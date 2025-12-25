@@ -26,7 +26,16 @@ func createVectorManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 				},
 				"sources": map[string]any{
 					"k8s_in": map[string]any{
-						"type": "kubernetes_logs",
+						"type":                     "kubernetes_logs",
+						"auto_partial_merge":       true,
+						"data_dir":                 "/var/local/lib/vector/",
+						"delay_deletion_ms":        60000,
+						"fingerprint_lines":        1,
+						"glob_minimum_cooldown_ms": 60000,
+						"insert_namespace_fields":  true,
+						"ignore_older_secs":        600,
+						"self_node_name":           "${VECTOR_SELF_NODE_NAME}",
+						"timezone":                 "local",
 					},
 				},
 				"sinks": map[string]any{
