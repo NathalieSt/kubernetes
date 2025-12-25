@@ -14,6 +14,7 @@ type StaticSecretConfig struct {
 	Path              string
 	SecretLabels      map[string]string
 	SecretAnnotations map[string]string
+	Type              vaultsecretsoperator.SecretType
 }
 
 func generateStaticSecrets(secretsConfig []StaticSecretConfig, authName string) []any {
@@ -34,6 +35,7 @@ func generateStaticSecrets(secretsConfig []StaticSecretConfig, authName string) 
 					Name:        secret.SecretName,
 					Labels:      secret.SecretLabels,
 					Annotations: secret.SecretAnnotations,
+					Type:        secret.Type,
 				},
 			},
 		))

@@ -18,6 +18,16 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 			"eck-elasticsearch": map[string]any{
 				"enabled":          true,
 				"fullnameOverride": "elasticsearch",
+				"auth:": map[string]any{
+					"fileRealm": []map[string]string{
+						{
+							"secretName": generators.ElasticSearchAdminSecretName,
+						},
+						{
+							"secretName": generators.ElasticSearchVectorSecretName,
+						},
+					},
+				},
 				"nodeSets": []map[string]any{
 					{
 						"name":  "default",
@@ -46,7 +56,7 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 						"podTemplate": core.PodTemplateSpec{
 							Spec: core.PodSpec{
 								Containers: []core.Container{
-									core.Container{
+									{
 										Name: "elasticsearch",
 										Resources: core.Resources{
 											Limits: map[string]string{

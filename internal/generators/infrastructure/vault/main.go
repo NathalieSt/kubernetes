@@ -20,7 +20,7 @@ func main() {
 		Name:          name,
 		Namespace:     "vault",
 		GeneratorType: generatorType,
-		ClusterUrl:    "vault.vault.svc.cluster.local",
+		ClusterUrl:    "vault-ui.vault.svc.cluster.local",
 		Port:          8200,
 		Helm: &generator.Helm{
 			Chart:   "vault",

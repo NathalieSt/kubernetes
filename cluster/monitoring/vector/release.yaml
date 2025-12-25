@@ -20,6 +20,8 @@ spec:
       data_dir: /var/lib/vector
       sinks:
         es_cluster:
+          auth:
+            strategy: basic
           endpoints:
           - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
           inputs:
@@ -31,3 +33,12 @@ spec:
     role: Agent
     service:
       enabled: false
+  valuesFrom:
+  - kind: Secret
+    name: elastic-search-vector-secret
+    valuesKey: password
+    targetPath: customConfig.sinks.es_cluster.auth.password
+  - kind: Secret
+    name: elastic-search-vector-secret
+    valuesKey: username
+    targetPath: customConfig.sinks.es_cluster.auth.user

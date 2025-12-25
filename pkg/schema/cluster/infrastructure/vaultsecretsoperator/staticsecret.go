@@ -5,11 +5,19 @@ import (
 	"kubernetes/pkg/schema/shared"
 )
 
+type SecretType = string
+
+const (
+	Opaque    SecretType = "Opaque"
+	BasicAuth SecretType = "kubernetes.io/basic-auth"
+)
+
 type Destination struct {
 	Create      bool              `yaml:"create,omitempty"`
 	Name        string            `yaml:"name,omitempty"`
 	Labels      map[string]string `yaml:"labels,omitempty"`
 	Annotations map[string]string `yaml:"annotations,omitempty"`
+	Type        SecretType        `yaml:"type,omitempty"`
 }
 type StaticSecretSpec struct {
 	AuthRef      string      `yaml:"vaultAuthRef,omitempty"`

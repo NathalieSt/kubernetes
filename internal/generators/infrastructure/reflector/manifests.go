@@ -5,6 +5,7 @@ import (
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
+	"kubernetes/pkg/schema/cluster/infrastructure/vaultsecretsoperator"
 	"kubernetes/pkg/schema/generator"
 )
 
@@ -124,6 +125,32 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
+	elasticAdminSecret := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-elastic-search-admin-static-secret", generatorMeta.Name),
+		SecretName: generators.ElasticSearchAdminSecretName,
+		Path:       "elastic-search/admin",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "elastic-stack",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "elastic-stack",
+		},
+		Type: vaultsecretsoperator.BasicAuth,
+	}
+
+	elasticVectorSecret := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-elastic-search-vector-static-secret", generatorMeta.Name),
+		SecretName: generators.ElasticSearchVectorSecretName,
+		Path:       "elastic-search/vector",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "elastic-stack,vector",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "elastic-stack,vector",
+		},
+		Type: vaultsecretsoperator.BasicAuth,
+	}
+
 	vaultSecrets := utils.ManifestConfig{
 		Filename: "vault-secrets.yaml",
 		Manifests: utils.GenerateVaultAccessManifests(
@@ -140,6 +167,8 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 				synapseSecret,
 				discordBridgeSecret,
 				whatsappBridgeSecret,
+				elasticAdminSecret,
+				elasticVectorSecret,
 			},
 		),
 	}
