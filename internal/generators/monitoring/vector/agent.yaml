@@ -24,21 +24,14 @@ transforms:
     inputs:
       - k8s_in
     condition: |
-      !(
-        .kubernetes.container_name == "kube-proxy" ||
-        .kubernetes.container_name == "kube-apiserver" ||
-        .kubernetes.container_name == "coredns" && contains!(.message, "health")
-      )
+      !(.kubernetes.container_name == "kube-proxy" || .kubernetes.container_name == "kube-apiserver" || .kubernetes.container_name == "coredns" && contains!(.message, "health"))
 
   drop_debug_logs:
     type: filter
     inputs:
       - drop_noisy_logs
     condition: |
-      !(
-        downcase!(.level) == "debug" ||
-        downcase!(.level) == "trace"
-      )
+      !(downcase!(.level) == "debug" || downcase!(.level) == "trace")
 
   remove_k8s_noise:
     type: remap
@@ -78,8 +71,9 @@ transforms:
       - normalize_logs
     source: |
       max_len = 2048
-      if exists(.msg) && length!(.msg) > max_len {
-        .msg = slice!(.msg, 0, max_len) + "...(truncated)"
+
+      if exists(.msg) && is_string(.msg) && length(.msg) > max_len {
+        .msg = substring(.msg, 0, max_len) + "...(truncated)"
       }
 
 # -------------------------------------------------
