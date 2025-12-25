@@ -1,16 +1,38 @@
 package main
 
 import (
+	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
+	"kubernetes/pkg/schema/k8s/meta"
+	"os"
 )
 
 func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
+	}
+
+	vectorRoleConfig, err := os.ReadFile("./vector-role.yaml")
+	if err != nil {
+		fmt.Printf("Error while reading vector-role,yaml")
+	}
+
+	vectorRoleName := "vector-role"
+	vectorRole := utils.ManifestConfig{
+		Filename: "vector-role.yaml",
+		Manifests: []any{
+			core.NewSecret(meta.ObjectMeta{
+				Name: vectorRoleName,
+			}, core.SecretConfig{
+				StringData: map[string]string{
+					"roles.yml": string(vectorRoleConfig),
+				},
+			}),
+		},
 	}
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
@@ -25,6 +47,11 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 						},
 						{
 							"secretName": generators.ElasticSearchVectorSecretName,
+						},
+					},
+					"roles": []map[string]string{
+						{
+							"secretName": vectorRoleName,
 						},
 					},
 				},
@@ -97,8 +124,9 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 			repo.Filename,
 			chart.Filename,
 			release.Filename,
+			vectorRole.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vectorRole})
 }

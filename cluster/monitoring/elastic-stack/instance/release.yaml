@@ -19,6 +19,8 @@ spec:
         fileRealm:
         - secretName: elastic-search-admin-secret
         - secretName: elastic-search-vector-secret
+        roles:
+        - secretName: vector-role
       enabled: true
       fullnameOverride: elasticsearch
       http:
