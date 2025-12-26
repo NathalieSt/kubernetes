@@ -41,9 +41,11 @@ data:
           # Normalize log level from severity or level
           if exists(.severity) {
             .lvl = downcase!(.severity)
-          } else if(exists(.level)){
+          }
+          if exists(.level){
             .lvl = downcase!(.level)
-          } else {
+          } 
+          if !exists(.severity) && !exists(.level) {
             .lvl = ""
           }
     
