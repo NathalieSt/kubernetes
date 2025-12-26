@@ -37,6 +37,7 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 						"memory": "512Mi",
 					},
 				},
+				"infraAssessmentScannerEnabled": false,
 				"scanJobPodTemplateContainerSecurityContext": map[string]any{
 					"runAsUser":                0,
 					"runAsGroup":               0,
