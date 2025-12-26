@@ -26,7 +26,7 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 					Size:         "20Gi",
 				},
 				SuperuserSecret: cnpg.SuperuserSecret{
-					Name: generators.PostgresCredsSecret,
+					Name: generators.ForgejoPGCredsSecret,
 				},
 				EnableSuperuserAccess: true,
 			}),

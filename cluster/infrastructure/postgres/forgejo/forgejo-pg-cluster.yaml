@@ -9,5 +9,5 @@ spec:
     storageClass: nfs-remote
     size: 20Gi
   superuserSecret:
-    name: postgres-creds-secret
+    name: forgejo-pg-creds-secret
   enableSuperuserAccess: true
