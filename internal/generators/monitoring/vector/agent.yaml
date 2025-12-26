@@ -51,7 +51,7 @@ transforms:
     inputs:
       - normalize_level
     condition: |
-      !includes(["info", "debug"], .lvl ?? "")
+      !includes(["info", "debug"], .lvl)
 
   remove_k8s_noise:
     type: remap
