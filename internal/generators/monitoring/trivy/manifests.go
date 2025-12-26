@@ -23,6 +23,7 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"debug":            true,
 			},
 			"operator": map[string]any{
+				"scanJobTTL":              "5m",
 				"scanJobsConcurrentLimit": 2,
 				"logDevMode":              true,
 				"scanJobSchedule":         "0 */6 * * *",
