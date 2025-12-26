@@ -29,7 +29,7 @@ transforms:
 
       if err == null && is_object(parsed) {
         # Merge parsed fields into root
-        . = merge(., parsed)
+        . = merge!(., parsed)
 
         # Optional: keep original message
         .original_message = .message
