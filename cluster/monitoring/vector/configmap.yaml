@@ -26,7 +26,7 @@ data:
     # TRANSFORMS - filter / sample / prune
     # -------------------------------------------------
     transforms:
-      parse_json_message:
+      parse_message:
         type: remap
         inputs:
           - k8s_in
@@ -47,10 +47,17 @@ data:
             }
           }
     
+          if err != null && is_string(.message) {
+            parsed = parse_syslog(.message) ?? parse_key_value(.message) ?? null
+            if parsed != null {
+              . = merge!(., parsed)
+            }
+          }
+    
       drop_noisy_logs:
         type: filter
         inputs:
-          - parse_json_message
+          - parse_message
         condition: |
           !(.kubernetes.container_name == "kube-proxy" || .kubernetes.container_name == "kube-apiserver" || .kubernetes.container_name == "coredns" && contains!(.message, "health"))
     
@@ -62,9 +69,11 @@ data:
           # Normalize log level from severity or level
           if exists(.severity) {
             .lvl = downcase!(.severity)
+            del(.severity)
           }
           if exists(.level){
             .lvl = downcase!(.level)
+            del(.level)
           } 
           if !exists(.severity) && !exists(.level) {
             .lvl = ""
