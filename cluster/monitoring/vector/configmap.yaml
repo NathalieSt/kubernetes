@@ -79,7 +79,7 @@ data:
         inputs:
           - normalize_level
         condition: |
-          !includes(["info", "debug"], .lvl) || .lvl != ""
+          !includes(["info", "debug"], .lvl) && .lvl != ""
     
       remove_k8s_noise:
         type: remap
