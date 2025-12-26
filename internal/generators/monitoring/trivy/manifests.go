@@ -22,7 +22,8 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"storageClassName": generators.DebianStorageClass,
 				"resources": map[string]any{
 					"limits": map[string]any{
-						"memory": "1500M",
+						"cpu":    "1",
+						"memory": "1Gi",
 					},
 				},
 				"debug": true,

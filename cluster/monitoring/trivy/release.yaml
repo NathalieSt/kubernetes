@@ -23,5 +23,6 @@ spec:
       debug: true
       resources:
         limits:
-          memory: 1500M
+          cpu: "1"
+          memory: 1Gi
       storageClassName: debian-storage
