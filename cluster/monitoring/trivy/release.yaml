@@ -17,8 +17,10 @@ spec:
     alternateReportStorage:
       storageClassName: debian-storage
     operator:
+      logDevMode: false
       scanJobsConcurrentLimit: 2
     trivy:
+      debug: true
       resources:
         limits:
           memory: 1500M

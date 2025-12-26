@@ -25,9 +25,11 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 						"memory": "1500M",
 					},
 				},
+				"debug": true,
 			},
 			"operator": map[string]any{
 				"scanJobsConcurrentLimit": 2,
+				"logDevMode":              false,
 			},
 		},
 		nil,
