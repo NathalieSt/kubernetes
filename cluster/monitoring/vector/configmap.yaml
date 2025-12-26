@@ -75,9 +75,7 @@ data:
             .lvl = downcase!(.level)
             del(.level)
           } 
-          if !exists(.severity) && !exists(.level) {
-            .lvl = ""
-          }
+          if !exists(.lvl) { .lvl = "" }
     
           # Optional: map common variants
           if .lvl == "warn" { .lvl = "warning" }
