@@ -56,10 +56,3 @@ spec:
       elasticsearchRef:
         name: elasticsearch
       enabled: true
-      http:
-        service:
-          metadata:
-            annotations:
-              netbird.io/expose: "true"
-              netbird.io/groups: cluster-services
-            name: kibana
