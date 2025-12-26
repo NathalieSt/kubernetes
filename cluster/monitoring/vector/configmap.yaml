@@ -39,8 +39,12 @@ data:
           - drop_noisy_logs
         source: |
           # Normalize log level from severity or level
-          if exists(.severity) || exists(.level) {
-            .lvl = downcase!(.severity ?? .level)
+          if exists(.severity) {
+            .lvl = downcase!(.severity)
+          } else if(exists(.level)){
+            .lvl = downcase!(.level)
+          } else {
+            .lvl = ""
           }
     
           # Optional: map common variants
