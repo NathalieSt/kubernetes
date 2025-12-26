@@ -112,6 +112,17 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 				"elasticsearchRef": map[string]any{
 					"name": "elasticsearch",
 				},
+				"http": map[string]any{
+					"service": map[string]any{
+						"metadata": meta.ObjectMeta{
+							Name: "kibana",
+							Annotations: map[string]string{
+								"netbird.io/expose": "true",
+								"netbird.io/groups": "cluster-services",
+							},
+						},
+					},
+				},
 			},
 		},
 		nil,
