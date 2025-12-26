@@ -29,7 +29,7 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			},
 			"operator": map[string]any{
 				"scanJobsConcurrentLimit": 2,
-				"logDevMode":              false,
+				"logDevMode":              true,
 			},
 		},
 		nil,

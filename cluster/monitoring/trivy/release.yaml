@@ -17,7 +17,7 @@ spec:
     alternateReportStorage:
       storageClassName: debian-storage
     operator:
-      logDevMode: false
+      logDevMode: true
       scanJobsConcurrentLimit: 2
     trivy:
       debug: true
