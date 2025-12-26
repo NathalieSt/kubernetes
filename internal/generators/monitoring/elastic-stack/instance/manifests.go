@@ -112,40 +112,21 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 				"elasticsearchRef": map[string]any{
 					"name": "elasticsearch",
 				},
+				"http": map[string]any{
+					"service": map[string]any{
+						"metadata": meta.ObjectMeta{
+							Name: "kibana",
+							Annotations: map[string]string{
+								"netbird.io/expose": "true",
+								"netbird.io/groups": "cluster-services",
+							},
+						},
+					},
+				},
 			},
 		},
 		nil,
 	)
-
-	service := utils.ManifestConfig{
-		Filename: "service.yaml",
-		Manifests: []any{
-			core.NewService(
-				meta.ObjectMeta{
-					Name: "kibana",
-					Labels: map[string]string{
-						"app.kubernetes.io/name":    "eck-kibana",
-						"app.kubernetes.io/version": generatorMeta.Helm.Version,
-					},
-					Annotations: map[string]string{
-						"netbird.io/expose": "true",
-						"netbird.io/groups": "cluster-services",
-					},
-				}, core.ServiceSpec{
-					Selector: map[string]string{
-						"common.k8s.elastic.co/type": "kibana",
-					},
-					Ports: []core.ServicePort{
-						{
-							Name:       "http-kibana",
-							Port:       5601,
-							TargetPort: 5601,
-						},
-					},
-				},
-			),
-		},
-	}
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
@@ -155,9 +136,8 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 			chart.Filename,
 			release.Filename,
 			vectorRole.Filename,
-			service.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vectorRole, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vectorRole})
 }

@@ -25,7 +25,8 @@ func main() {
 			Chart:   "eck-stack",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
-		ClusterUrl: "kibana.elastic-stack.svc.cluster.local",
+		ClusterUrl: "elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local",
+		Port:       5601,
 		Caddy: &generator.Caddy{
 			DNSName: "kibana",
 		},

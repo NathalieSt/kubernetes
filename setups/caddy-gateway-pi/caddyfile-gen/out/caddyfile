@@ -1,10 +1,34 @@
 
-matrix.cloud.nathalie-stiefsohn.eu {
+vault.cloud.nathalie-stiefsohn.eu {
 	tls {
         dns hetzner {$API_TOKEN}
         propagation_delay 30s
     }    
-	reverse_proxy http://synapse.synapse.svc.cluster.local:8008 {
+	reverse_proxy http://vault-ui.vault.svc.cluster.local:8200 {
+		header_up Host {host}
+		
+	}
+	
+}
+		
+booklore.cloud.nathalie-stiefsohn.eu {
+	tls {
+        dns hetzner {$API_TOKEN}
+        propagation_delay 30s
+    }    
+	reverse_proxy http://booklore.booklore.svc.cluster.local:6060 {
+		header_up Host {host}
+		
+	}
+	
+}
+		
+glance.cloud.nathalie-stiefsohn.eu {
+	tls {
+        dns hetzner {$API_TOKEN}
+        propagation_delay 30s
+    }    
+	reverse_proxy http://glance.glance.svc.cluster.local:8080 {
 		header_up Host {host}
 		
 	}
@@ -31,24 +55,12 @@ jellyfin.cloud.nathalie-stiefsohn.eu {
 		
 }
 		
-vault.cloud.nathalie-stiefsohn.eu {
+matrix.cloud.nathalie-stiefsohn.eu {
 	tls {
         dns hetzner {$API_TOKEN}
         propagation_delay 30s
     }    
-	reverse_proxy http://vault-ui.vault.svc.cluster.local:8200 {
-		header_up Host {host}
-		
-	}
-	
-}
-		
-booklore.cloud.nathalie-stiefsohn.eu {
-	tls {
-        dns hetzner {$API_TOKEN}
-        propagation_delay 30s
-    }    
-	reverse_proxy http://booklore.booklore.svc.cluster.local:6060 {
+	reverse_proxy http://synapse.synapse.svc.cluster.local:8008 {
 		header_up Host {host}
 		
 	}
@@ -61,18 +73,6 @@ code.cloud.nathalie-stiefsohn.eu {
         propagation_delay 30s
     }    
 	reverse_proxy http://forgejo-http.forgejo.svc.cluster.local:3000 {
-		header_up Host {host}
-		
-	}
-	
-}
-		
-glance.cloud.nathalie-stiefsohn.eu {
-	tls {
-        dns hetzner {$API_TOKEN}
-        propagation_delay 30s
-    }    
-	reverse_proxy http://glance.glance.svc.cluster.local:8080 {
 		header_up Host {host}
 		
 	}
@@ -97,6 +97,18 @@ perses.cloud.nathalie-stiefsohn.eu {
         propagation_delay 30s
     }    
 	reverse_proxy http://perses.perses.svc.cluster.local:8080 {
+		header_up Host {host}
+		
+	}
+	
+}
+		
+kibana.cloud.nathalie-stiefsohn.eu {
+	tls {
+        dns hetzner {$API_TOKEN}
+        propagation_delay 30s
+    }    
+	reverse_proxy http://elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
 		header_up Host {host}
 		
 	}

@@ -83,8 +83,11 @@ func main() {
 	caddyfilestring := getCaddyFile(
 		exposedGenerators,
 	)
-
-	print(fmt.Sprintf("Run setup command for netbird with this argument: --extra-dns-labels %v", strings.Join(exposedGenerators.GetDNSNames(), ",")))
+	println("Use the following script:")
+	print(fmt.Sprintf(`
+		netbird deregister
+		netbird up --management-url https://netbird.nathalie-stiefsohn.eu --setup-key <insert-token here> --extra-dns-labels %v
+	`, strings.Join(exposedGenerators.GetDNSNames(), ",")))
 
 	if err := os.WriteFile("./out/caddyfile", []byte(caddyfilestring), 0666); err != nil {
 		log.Fatal(err)

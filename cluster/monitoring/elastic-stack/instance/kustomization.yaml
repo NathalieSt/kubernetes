@@ -9,4 +9,3 @@ resources:
 - chart.yaml
 - release.yaml
 - vector-role.yaml
-- service.yaml
