@@ -19,10 +19,31 @@ sources:
 # TRANSFORMS - filter / sample / prune
 # -------------------------------------------------
 transforms:
+  parse_json_message:
+    type: remap
+    inputs:
+      - k8s_in
+    source: |
+      # Try parsing message as JSON
+      parsed, err = parse_json(.message)
+
+      if err == null && is_object(parsed) {
+        # Merge parsed fields into root
+        . = merge(., parsed)
+
+        # Optional: keep original message
+        .original_message = .message
+
+        # Replace message with a readable string if present
+        if exists(parsed.message) {
+          .message = parsed.message
+        }
+      }
+
   drop_noisy_logs:
     type: filter
     inputs:
-      - k8s_in
+      - parse_json_message
     condition: |
       !(.kubernetes.container_name == "kube-proxy" || .kubernetes.container_name == "kube-apiserver" || .kubernetes.container_name == "coredns" && contains!(.message, "health"))
 
@@ -51,7 +72,7 @@ transforms:
     inputs:
       - normalize_level
     condition: |
-      !includes(["info", "debug"], .lvl)
+      !includes(["info", "debug"], .lvl) || .lvl != ""
 
   remove_k8s_noise:
     type: remap
