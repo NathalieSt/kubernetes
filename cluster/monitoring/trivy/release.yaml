@@ -34,6 +34,7 @@ spec:
         requests:
           cpu: 500m
           memory: 512Mi
+      scanJobSchedule: 0 */6 * * *
       scanJobsConcurrentLimit: 2
     trivy:
       debug: true

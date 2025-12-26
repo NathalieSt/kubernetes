@@ -25,6 +25,7 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			"operator": map[string]any{
 				"scanJobsConcurrentLimit": 2,
 				"logDevMode":              true,
+				"scanJobSchedule":         "0 */6 * * *",
 				"scanJobPodTemplateResources": map[string]any{
 					"limits": map[string]any{
 						"cpu":    "1",
