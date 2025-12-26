@@ -16,5 +16,10 @@ spec:
   values:
     alternateReportStorage:
       storageClassName: debian-storage
+    operator:
+      scanJobsConcurrentLimit: 2
     trivy:
+      resources:
+        limits:
+          memory: 1500M
       storageClassName: debian-storage
