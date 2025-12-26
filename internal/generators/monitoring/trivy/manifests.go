@@ -20,17 +20,31 @@ func createKialiManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			},
 			"trivy": map[string]any{
 				"storageClassName": generators.DebianStorageClass,
-				"resources": map[string]any{
-					"limits": map[string]any{
-						"cpu":    "1",
-						"memory": "1Gi",
-					},
-				},
-				"debug": true,
+				"debug":            true,
 			},
 			"operator": map[string]any{
 				"scanJobsConcurrentLimit": 2,
 				"logDevMode":              true,
+				"scanJobPodTemplateResources": map[string]any{
+					"limits": map[string]any{
+						"cpu":    "1",
+						"memory": "1Gi",
+					},
+					"requests": map[string]any{
+						"cpu":    "500m",
+						"memory": "512Mi",
+					},
+				},
+				"scanJobPodTemplateContainerSecurityContext": map[string]any{
+					"runAsUser":                0,
+					"runAsGroup":               0,
+					"readOnlyRootFilesystem":   false,
+					"allowPrivilegeEscalation": false,
+					"capabilities": map[string]any{
+						"drop": []string{"ALL"},
+					},
+					"privileged": false,
+				},
 			},
 		},
 		nil,

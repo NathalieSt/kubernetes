@@ -18,11 +18,23 @@ spec:
       storageClassName: debian-storage
     operator:
       logDevMode: true
-      scanJobsConcurrentLimit: 2
-    trivy:
-      debug: true
-      resources:
+      scanJobPodTemplateContainerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: false
+        runAsGroup: 0
+        runAsUser: 0
+      scanJobPodTemplateResources:
         limits:
           cpu: "1"
           memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 512Mi
+      scanJobsConcurrentLimit: 2
+    trivy:
+      debug: true
       storageClassName: debian-storage
