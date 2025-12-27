@@ -23,6 +23,7 @@ spec:
         command:
         - sh
         - -c
+        image: alpine:latest
         name: init-redis-datadir
         volumeMounts:
         - mountPath: /data

@@ -79,6 +79,7 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 						Spec: core.PodSpec{
 							InitContainers: []core.Container{
 								{
+									Image:   "alpine:latest",
 									Name:    "init-redis-datadir",
 									Command: []string{"sh", "-c"},
 									Args:    []string{"mkdir -p /data/redis"},
