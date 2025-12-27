@@ -17,6 +17,9 @@ spec:
     persistence:
       enabled: true
       storageClass: nfs-remote
+    provisioningPersistence:
+      enabled: true
+      storageClass: nfs-remote
     service:
       annotations:
         netbird.io/expose: "true"

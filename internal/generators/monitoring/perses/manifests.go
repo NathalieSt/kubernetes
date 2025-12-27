@@ -20,6 +20,10 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 				"enabled":      true,
 				"storageClass": generators.NFSRemoteClass,
 			},
+			"provisioningPersistence": map[string]any{
+				"enabled":      true,
+				"storageClass": generators.NFSRemoteClass,
+			},
 			"service": map[string]any{
 				"annotations": map[string]any{
 					"netbird.io/expose": "true",
