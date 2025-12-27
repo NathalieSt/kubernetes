@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: postgres
 resources:
-  - namespace.yaml
-  - cnpg-cluster.yaml
-  - forgejo-db.yaml
-  - dawarich-db.yaml
+- namespace.yaml
+- cnpg-cluster.yaml
+- dawarich-db.yaml
