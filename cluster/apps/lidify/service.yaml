@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    netbird.io/expose: "true"
+    netbird.io/groups: cluster-services
+  labels:
+    app.kubernetes.io/name: lidify
+    app.kubernetes.io/version: v1.0.2
+  name: lidify
+spec:
+  selector:
+    app.kubernetes.io/name: lidify
+  ports:
+  - name: http-lidify
+    port: 3030
+    targetport: 3030

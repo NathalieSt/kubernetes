@@ -1,0 +1,18 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: lidify-scaledobject
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: lidify
+  minReplicaCount: 0
+  cooldownPeriod: 300
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Europe/Vienna
+      start: 0 7 * * *
+      end: 0 1 * * *
+      desiredReplicas: "1"
