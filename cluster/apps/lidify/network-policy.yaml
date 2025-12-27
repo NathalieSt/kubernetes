@@ -1,13 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: deny-all-traffic
+  name: lidify-policy
 spec:
   podSelector: {}
   policyTypes:
-    ingress:
-      - from:
-          - podSelector:
-              matchLabels:
-                app.kubernetes.io/name: netbird-router
-    egress:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: netbird-router
+  egress:
