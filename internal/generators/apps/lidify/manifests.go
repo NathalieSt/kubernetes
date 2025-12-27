@@ -40,7 +40,7 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
 				Name: configPVCName,
 			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
+				AccessModes: []string{"ReadWriteOnce"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "30Gi",
 				}},
