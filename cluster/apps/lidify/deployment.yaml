@@ -35,7 +35,5 @@ spec:
       - name: music-volume
         persistentVolumeClaim:
           claimName: lidify-music-pvc
-      securityContext:
-        fsGroup: 999
       nodeSelector:
         kubernetes.io/hostname: debian

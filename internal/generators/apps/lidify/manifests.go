@@ -44,7 +44,7 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "30Gi",
 				}},
-				StorageClassName: generators.NFSRemoteClass,
+				StorageClassName: "local-path",
 			}),
 		},
 	}
@@ -80,9 +80,6 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 							// use while no arm image is available
 							NodeSelector: map[string]string{
 								"kubernetes.io/hostname": "debian",
-							},
-							SecurityContext: core.PodSecurityContext{
-								FsGroup: 999,
 							},
 							Containers: []core.Container{
 								{
