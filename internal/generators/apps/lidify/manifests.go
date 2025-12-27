@@ -77,6 +77,13 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 							},
 						},
 						Spec: core.PodSpec{
+							// use while no arm image is available
+							NodeSelector: map[string]string{
+								"kubernetes.io/hostname": "debian",
+							},
+							SecurityContext: core.PodSecurityContext{
+								FsGroup: 999,
+							},
 							Containers: []core.Container{
 								{
 									Name:  generatorMeta.Name,
