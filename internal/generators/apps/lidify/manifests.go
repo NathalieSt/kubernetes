@@ -101,6 +101,12 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 											Name:      configVolumeName,
 										},
 									},
+									Env: []core.Env{
+										{
+											Name:  "REDIS_URL",
+											Value: "redis://redis.redis.svc.cluster.local:6379",
+										},
+									},
 								},
 							},
 							Volumes: []core.Volume{

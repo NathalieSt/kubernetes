@@ -28,6 +28,9 @@ spec:
           name: music-volume
         - mountPath: /data
           name: config-volume
+        env:
+        - name: REDIS_URL
+          value: redis://redis.redis.svc.cluster.local:6379
       volumes:
       - name: config-volume
         persistentVolumeClaim:
