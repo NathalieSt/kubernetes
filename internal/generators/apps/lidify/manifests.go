@@ -94,7 +94,7 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										},
 										{
 											MountPath: "/data",
-											Name:      configPVCName,
+											Name:      configVolumeName,
 										},
 									},
 								},

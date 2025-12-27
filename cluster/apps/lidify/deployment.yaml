@@ -27,7 +27,7 @@ spec:
         - mountPath: /music
           name: music-volume
         - mountPath: /data
-          name: lidify-config-pvc
+          name: config-volume
       volumes:
       - name: config-volume
         persistentVolumeClaim:
