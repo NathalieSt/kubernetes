@@ -77,6 +77,19 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 							},
 						},
 						Spec: core.PodSpec{
+							InitContainers: []core.Container{
+								{
+									Name:    "init-redis-datadir",
+									Command: []string{"sh", "-c"},
+									Args:    []string{"mkdir -p /data/redis"},
+									VolumeMounts: []core.VolumeMount{
+										{
+											Name:      configVolumeName,
+											MountPath: "/data",
+										},
+									},
+								},
+							},
 							// use while no arm image is available
 							NodeSelector: map[string]string{
 								"kubernetes.io/hostname": "debian",
@@ -99,12 +112,6 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										{
 											MountPath: "/data",
 											Name:      configVolumeName,
-										},
-									},
-									Env: []core.Env{
-										{
-											Name:  "REDIS_URL",
-											Value: "redis://redis.redis.svc.cluster.local:6379",
 										},
 									},
 								},

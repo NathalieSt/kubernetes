@@ -17,6 +17,16 @@ spec:
         app.kubernetes.io/name: lidify
         app.kubernetes.io/version: v1.0.2
     spec:
+      initContainers:
+      - args:
+        - mkdir -p /data/redis
+        command:
+        - sh
+        - -c
+        name: init-redis-datadir
+        volumeMounts:
+        - mountPath: /data
+          name: config-volume
       containers:
       - image: chevron7locked/lidify:v1.0.2
         name: lidify
@@ -28,9 +38,6 @@ spec:
           name: music-volume
         - mountPath: /data
           name: config-volume
-        env:
-        - name: REDIS_URL
-          value: redis://redis.redis.svc.cluster.local:6379
       volumes:
       - name: config-volume
         persistentVolumeClaim:
