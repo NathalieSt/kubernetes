@@ -106,7 +106,7 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										ClaimName: configPVCName,
 									},
 								}, {
-									Name: musicPVCName,
+									Name: musicVolumeName,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: musicPVCName,
 									},
