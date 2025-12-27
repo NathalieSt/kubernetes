@@ -11,3 +11,9 @@ spec:
   superuserSecret:
     name: postgres-creds-secret
   enableSuperuserAccess: true
+  probes:
+    readiness:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6

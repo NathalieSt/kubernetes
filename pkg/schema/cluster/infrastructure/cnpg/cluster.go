@@ -30,6 +30,17 @@ type AffinityConfiguration struct {
 	NodeSelector map[string]string `yaml:"nodeSelector,omitempty"`
 }
 
+type ProbeWithStrategy struct {
+	InitialDelaySeconds int `yaml:"initialDelaySeconds,omitempty"`
+	PeriodSeconds       int `yaml:"periodSeconds,omitempty"`
+	TimeoutSeconds      int `yaml:"timeoutSeconds,omitempty"`
+	FailureThreshold    int `yaml:"failureThreshold,omitempty"`
+}
+
+type ProbesConfiguration struct {
+	Readiness ProbeWithStrategy `yaml:"readiness,omitempty"`
+}
+
 type ClusterSpec struct {
 	Instances             int                   `yaml:"instances"`
 	ImageName             string                `yaml:"imageName,omitempty"`
@@ -39,6 +50,7 @@ type ClusterSpec struct {
 	SuperuserSecret       SuperuserSecret       `yaml:"superuserSecret,omitempty"`
 	EnableSuperuserAccess bool                  `yaml:"enableSuperuserAccess,omitempty"`
 	Affinity              AffinityConfiguration `yaml:"affinity,omitempty"`
+	Probes                ProbesConfiguration   `yaml:"probes,omitempty"`
 }
 
 type Cluster struct {

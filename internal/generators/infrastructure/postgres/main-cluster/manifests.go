@@ -30,6 +30,14 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 					Name: generators.PostgresCredsSecret,
 				},
 				EnableSuperuserAccess: true,
+				Probes: cnpg.ProbesConfiguration{
+					Readiness: cnpg.ProbeWithStrategy{
+						InitialDelaySeconds: 30,
+						PeriodSeconds:       10,
+						TimeoutSeconds:      5,
+						FailureThreshold:    6,
+					},
+				},
 			}),
 		},
 	}
