@@ -4,9 +4,10 @@ kind: Kustomization
 metadata:
   name: lidify
 resources:
-- namespace.yaml
-- deployment.yaml
-- service.yaml
-- config-pvc.yaml
-- music-pvc.yaml
-- scaled-object.yaml
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
+  - config-pvc.yaml
+  - music-pvc.yaml
+  - scaled-object.yaml
+  - network-policy.yaml
