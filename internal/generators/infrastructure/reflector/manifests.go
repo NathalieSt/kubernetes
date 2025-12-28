@@ -23,21 +23,21 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		Path:       "netbird/setup-key",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "netbird",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "netbird",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "caddy",
 		},
 	}
 
-	netbirdMgmtAPIKey := utils.StaticSecretConfig{
-		Name:       fmt.Sprintf("%v-netbird-mgmt-api-key-static-secret", generatorMeta.Name),
-		SecretName: generators.NetbirdAPIKeySecretName,
-		Path:       "netbird/mgmt-api-key",
+	hetznerAPITokenSecret := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-hetzner-api-key-static-secret", generatorMeta.Name),
+		SecretName: generators.HetznerAPITokenSecretName,
+		Path:       "hetzner/api-key",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "netbird-operator",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "netbird-operator",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "caddy",
 		},
 	}
 
@@ -159,7 +159,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 			"vault-secrets-operator",
 			[]utils.StaticSecretConfig{
 				netbirdSecretConfig,
-				netbirdMgmtAPIKey,
+				hetznerAPITokenSecret,
 				postgresSecretConfig,
 				forgejoPGSecretConfig,
 				matrixPGSecretConfig,

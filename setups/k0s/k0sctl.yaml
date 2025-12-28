@@ -7,7 +7,7 @@ spec:
   hosts:
     # debian
     - ssh:
-        address: <ip>
+        address: 100.127.173.130
         user: root
         port: 22
         keyPath: ~/cluster_key
@@ -15,7 +15,7 @@ spec:
       os: debian
     # rpi-0
     - ssh:
-        address: <ip>
+        address: 100.127.96.123
         user: root
         port: 22
         keyPath: ~/cluster_key
@@ -23,7 +23,7 @@ spec:
       os: debian
     # rpi-1
     - ssh:
-        address: <ip>
+        address: 100.127.102.4
         user: root
         port: 22
         keyPath: ~/cluster_key
@@ -31,7 +31,7 @@ spec:
       os: debian
     # rpi-2
     - ssh:
-        address: <ip>
+        address: 100.127.200.29
         user: root
         port: 22
         keyPath: ~/cluster_key

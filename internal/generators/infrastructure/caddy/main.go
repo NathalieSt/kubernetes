@@ -14,23 +14,26 @@ func main() {
 		return
 	}
 
-	name := "netbird"
+	name := "caddy"
 	generatorType := generator.Infrastructure
-	meta := generator.GeneratorMeta{
+	caddy := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "netbird",
+		Namespace:     "caddy",
 		GeneratorType: generatorType,
+		ClusterUrl:    "caddy.caddy.svc.cluster.local",
+		Port:          80,
 		Docker: &generator.Docker{
-			Registry: "netbirdio/netbird",
+			Registry: "caddy",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
-		DependsOnGenerators: []string{},
 	}
 
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
-		Meta:             meta,
+		Meta:             caddy,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/netbird/"),
-		CreateManifests:  createNetbirdManifests,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/caddy/"),
+		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
+			return createCaddyManifests(flags.RootDir, gm)
+		},
 	})
 }
