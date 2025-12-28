@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/cluster/infrastructure/vaultsecretsoperator"
 	"kubernetes/pkg/schema/generator"
 )
@@ -173,11 +172,6 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		),
 	}
 
-	scaledObject := utils.ManifestConfig{
-		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
-	}
-
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -186,9 +180,8 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 			chart.Filename,
 			release.Filename,
 			vaultSecrets.Filename,
-			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vaultSecrets, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, vaultSecrets})
 }
