@@ -30,9 +30,9 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 	}
 
 	hetznerAPITokenSecret := utils.StaticSecretConfig{
-		Name:       fmt.Sprintf("%v-hetzner-api-key-static-secret", generatorMeta.Name),
+		Name:       fmt.Sprintf("%v-hetzner-api-token-static-secret", generatorMeta.Name),
 		SecretName: generators.HetznerAPITokenSecretName,
-		Path:       "hetzner/api-key",
+		Path:       "hetzner/api-token",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
 			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy",
