@@ -20,8 +20,6 @@ spec:
       containers:
       - image: netbirdio/netbird:latest
         name: netbird
-        ports:
-        - name: netbird
         env:
         - name: NB_SETUP_KEY
           valueFrom:

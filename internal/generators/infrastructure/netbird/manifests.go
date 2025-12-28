@@ -46,12 +46,6 @@ func createNetbirdManifests(generatorMeta generator.GeneratorMeta) map[string][]
 								{
 									Name:  generatorMeta.Name,
 									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Ports: []core.Port{
-										{
-											ContainerPort: generatorMeta.Port,
-											Name:          generatorMeta.Name,
-										},
-									},
 									Env: []core.Env{
 										{
 											Name: "NB_SETUP_KEY",
