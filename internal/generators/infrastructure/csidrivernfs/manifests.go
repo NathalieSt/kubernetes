@@ -15,7 +15,9 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
-	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm, nil, nil)
+	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm, map[string]any{
+		"kubeletDir": "/var/lib/k0s/kubelet",
+	}, nil)
 
 	localStorageClass := utils.ManifestConfig{
 		Filename: "local-storage-class-v2.yaml",
