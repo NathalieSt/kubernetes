@@ -68,6 +68,10 @@ func createNetbirdManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											Name:  "ENABLE_ROSENPASS",
 											Value: "true",
 										},
+										{
+											Name:  "NB_MANAGEMENT_URL",
+											Value: "https://netbird.nathalie-stiefsohn.eu",
+										},
 									},
 									SecurityContext: core.ContainerSecurityContext{
 										Capabilities: core.Capabilities{

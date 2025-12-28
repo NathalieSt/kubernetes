@@ -32,6 +32,8 @@ spec:
           value: debug
         - name: ENABLE_ROSENPASS
           value: "true"
+        - name: NB_MANAGEMENT_URL
+          value: https://netbird.nathalie-stiefsohn.eu
         securityContext:
           capabilities:
             add:
