@@ -44,7 +44,7 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "30Gi",
 				}},
-				StorageClassName: "local-path",
+				StorageClassName: generators.NFSRemoteClass,
 			}),
 		},
 	}
