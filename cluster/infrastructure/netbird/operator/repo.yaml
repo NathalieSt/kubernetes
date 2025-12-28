@@ -1,9 +1,0 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: operator-repo
-spec:
-  type: default
-  url: https://netbirdio.github.io/helms
-  interval: 24h
