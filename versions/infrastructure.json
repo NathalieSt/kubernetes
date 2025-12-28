@@ -13,5 +13,6 @@
     "valkey": "8-alpine3.22",
     "vault": "0.30.1",
     "vault-secrets-operator": "0.10.0",
-    "mariadb": "11.4.5"
+    "mariadb": "11.4.5",
+    "netbird": "latest"
 }

@@ -19,13 +19,13 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	netbirdSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-netbird-static-secret", generatorMeta.Name),
-		SecretName: generators.NetbirdNecretName,
+		SecretName: generators.NetbirdSecretName,
 		Path:       "netbird/setup-key",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "netbird",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "caddy",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "netbird",
 		},
 	}
 
