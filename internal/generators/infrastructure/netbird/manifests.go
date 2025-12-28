@@ -58,6 +58,7 @@ func createNetbirdManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Name: generators.NetbirdSecretName,
+													Key:  "setup-key",
 												},
 											},
 										},

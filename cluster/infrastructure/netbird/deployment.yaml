@@ -26,6 +26,7 @@ spec:
         - name: NB_SETUP_KEY
           valueFrom:
             secretKeyRef:
+              key: setup-key
               name: netbird-setup-key-vault-secret
         - name: NB_HOSTNAME
           value: netbird-k8s-router
