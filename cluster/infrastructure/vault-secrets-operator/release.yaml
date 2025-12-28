@@ -13,7 +13,3 @@ spec:
   install:
     remediation:
       retries: 3
-  values:
-    controller:
-      annotations:
-        traffic.sidecar.istio.io/excludeOutboundPorts: "8200"
