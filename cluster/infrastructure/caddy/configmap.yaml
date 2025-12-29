@@ -5,7 +5,7 @@ metadata:
   name: caddy-configmap
 data:
   Caddyfile: |-
-    
+
     vault.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
@@ -127,7 +127,7 @@ data:
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
-    	reverse_proxy elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
+    	reverse_proxy http://elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
     		header_up Host {host}
     		
     	}
@@ -145,4 +145,4 @@ data:
     	}
     	
     }
-    		
+
