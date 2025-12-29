@@ -23,7 +23,7 @@ func main() {
 		ClusterUrl:    "caddy.caddy.svc.cluster.local",
 		Port:          80,
 		Docker: &generator.Docker{
-			Registry: "caddy",
+			Registry: "registry.cloud.nathalie-stiefsohn.eu/caddy-hetzner",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 	}

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: caddy
-    app.kubernetes.io/version: 2.10.0-alpine
+    app.kubernetes.io/version: latest
   name: caddy
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: caddy
-        app.kubernetes.io/version: 2.10.0-alpine
+        app.kubernetes.io/version: latest
     spec:
       containers:
-      - image: caddy:2.10.0-alpine
+      - image: registry.cloud.nathalie-stiefsohn.eu/caddy-hetzner:latest
         name: caddy
         ports:
         - containerPort: 80
@@ -45,7 +45,7 @@ spec:
         - name: NB_MANAGEMENT_URL
           value: https://netbird.nathalie-stiefsohn.eu
         - name: NB_EXTRA_DNS_LABELS
-          value: code,mealie,redlib,searxng,matrix,vault,glance,jellyfin,perses,kibana,booklore
+          value: vault,code,glance,jellyfin,mealie,perses,redlib,matrix,booklore,kibana,searxng
         resources:
           requests:
             cpu: 50m

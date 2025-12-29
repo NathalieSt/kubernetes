@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: caddy
-    app.kubernetes.io/version: 2.10.0-alpine
+    app.kubernetes.io/version: latest
   name: caddy
 spec:
   selector:
