@@ -129,7 +129,9 @@ data:
         }    
     	reverse_proxy https://elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
     		header_up Host {host}
-    		
+    		transport https:// {
+            skip_verify true
+        }
     	}
     	
     }
