@@ -127,7 +127,7 @@ data:
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
-    	reverse_proxy http://elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
+    	reverse_proxy https://elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
     		header_up Host {host}
     		
     	}
@@ -145,4 +145,3 @@ data:
     	}
     	
     }
-
