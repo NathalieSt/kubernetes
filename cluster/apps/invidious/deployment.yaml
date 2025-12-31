@@ -46,7 +46,7 @@ spec:
       - image: quay.io/invidious/invidious:2025.12.22-9603f51
         name: invidious
         ports:
-        - containerPort: 80
+        - containerPort: 3000
           name: invidious
         volumeMounts:
         - mountPath: /config/

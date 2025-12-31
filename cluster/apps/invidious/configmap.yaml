@@ -16,6 +16,6 @@ data:
       - private_url: "http://localhost:8282/companion"
     invidious_companion_key: "${COMPANION_KEY}"
     hmac_key: "${HMAC_KEY}"
-    port: 80
-    external_port: 80
+    port: 3000
+    external_port: 3000
     domain: "invidious.cloud.nathalie-stiefsohn.eu"

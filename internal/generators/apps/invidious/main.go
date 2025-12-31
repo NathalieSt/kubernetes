@@ -21,7 +21,7 @@ func main() {
 		Namespace:     "invidious",
 		GeneratorType: generatorType,
 		ClusterUrl:    "invidious.invidious.svc.cluster.local",
-		Port:          80,
+		Port:          3000,
 		Caddy: &generator.Caddy{
 			DNSName: "invidious",
 		},

@@ -11,5 +11,5 @@ spec:
     app.kubernetes.io/name: invidious
   ports:
   - name: http-invidious
-    port: 80
-    targetport: 80
+    port: 3000
+    targetport: 3000
