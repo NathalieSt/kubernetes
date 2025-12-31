@@ -28,7 +28,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSRemoteClass,
+				StorageClassName: generators.NFSLocalClass,
 			},
 			),
 		},
