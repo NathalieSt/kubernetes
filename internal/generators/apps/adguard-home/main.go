@@ -31,7 +31,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/booklore/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/adguard-home/"),
 		CreateManifests:  createBookloreManifests,
 	})
 }

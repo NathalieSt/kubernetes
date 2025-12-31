@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: adguard-home
+    app.kubernetes.io/version: v0.107.71
+  name: adguard-home
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: adguard-home
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: adguard-home
+        app.kubernetes.io/version: v0.107.71
+    spec:
+      containers:
+      - image: adguard/adguardhome:v0.107.71
+        name: adguard-home
+        ports:
+        - name: adguard-home
+        volumeMounts:
+        - mountPath: /app/data
+          name: conf-volume
+        - mountPath: /books
+          name: work-volume
+      - image: netbirdio/netbird:latest
+        name: netbird-agent
+        env:
+        - name: NB_SETUP_KEY
+          valueFrom:
+            secretKeyRef:
+              key: setup-key
+              name: netbird-setup-key-vault-secret
+        - name: NB_HOSTNAME
+          value: adguard-home
+        - name: NB_MANAGEMENT_URL
+          value: https://netbird.nathalie-stiefsohn.eu
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          privileged: true
+      volumes:
+      - name: conf-volume
+        persistentVolumeClaim:
+          claimName: config-pvc
+      - name: work-volume
+        persistentVolumeClaim:
+          claimName: work-pvc
