@@ -21,7 +21,10 @@ spec:
       - image: adguard/adguardhome:v0.107.71
         name: adguard-home
         ports:
-        - name: adguard-home
+        - containerPort: 53
+          name: dns
+        - containerPort: 80
+          name: web-ui
         volumeMounts:
         - mountPath: /app/data
           name: conf-volume
