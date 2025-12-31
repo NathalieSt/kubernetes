@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: localai-chart
+spec:
+  interval: 24h
+  chart: local-ai
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: localai-repo
+  version: latest-aio-cpu

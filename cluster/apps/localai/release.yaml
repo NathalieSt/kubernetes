@@ -1,0 +1,23 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: localai
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: localai-chart
+  timeout: 10m
+  releaseName: localai
+  install:
+    remediation:
+      retries: 3
+  values:
+    nodeSelector:
+      kubernetes.io/hostname: debian
+    persistence:
+      pvc:
+        enabled: true
+        size: 100Gi
+        storageClass: nfs-local-v2

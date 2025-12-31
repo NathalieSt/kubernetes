@@ -1,0 +1,9 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: localai-repo
+spec:
+  type: default
+  url: https://go-skynet.github.io/helm-charts/
+  interval: 24h
