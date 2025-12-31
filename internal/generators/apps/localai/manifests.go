@@ -25,6 +25,7 @@ func createLocalAIManifests(generatorMeta generator.GeneratorMeta) map[string][]
 					"enabled":      true,
 					"size":         "100Gi",
 					"storageClass": generators.NFSLocalClass,
+					"accessModes":  []string{"ReadWriteMany"},
 				},
 			},
 			"nodeSelector": map[string]any{

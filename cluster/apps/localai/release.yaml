@@ -21,6 +21,8 @@ spec:
       kubernetes.io/hostname: debian
     persistence:
       pvc:
+        accessModes:
+        - ReadWriteMany
         enabled: true
         size: 100Gi
         storageClass: nfs-local-v2
