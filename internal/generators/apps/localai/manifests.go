@@ -23,11 +23,17 @@ func createLocalAIManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				},
 			},
 			"persistence": map[string]any{
-				"pvc": map[string]any{
+				"models": map[string]any{
 					"enabled":      true,
+					"storageClass": generators.NFSRemoteClass,
+					"accessModes":  []string{"ReadWriteMany"},
 					"size":         "100Gi",
+				},
+				"output": map[string]any{
+					"enabled":      true,
 					"storageClass": generators.NFSLocalClass,
 					"accessModes":  []string{"ReadWriteMany"},
+					"size":         "20Gi",
 				},
 			},
 			"nodeSelector": map[string]any{

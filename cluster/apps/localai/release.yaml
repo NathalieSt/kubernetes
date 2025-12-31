@@ -21,9 +21,15 @@ spec:
     nodeSelector:
       kubernetes.io/hostname: debian
     persistence:
-      pvc:
+      models:
         accessModes:
         - ReadWriteMany
         enabled: true
         size: 100Gi
+        storageClass: nfs-remote
+      output:
+        accessModes:
+        - ReadWriteMany
+        enabled: true
+        size: 20Gi
         storageClass: nfs-local-v2
