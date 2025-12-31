@@ -23,7 +23,7 @@ spec:
         - -c
         - |-
           apk update && apk add gettext;
-          envsubst < /template/config.yaml > /data/config.yaml;
+          envsubst < /template/config.yaml > /data/config.yml;
           										
         image: alpine:latest
         name: config-init
