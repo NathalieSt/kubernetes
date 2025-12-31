@@ -111,11 +111,11 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 											Name: "INVIDIOUS_CONFIG",
 											Value: `
 db:
-	dbname: 1234
-	user: test
-	password: test
-	host: test.svc.cluster.local
-	port: 5432
+  dbname: 1234
+  user: test
+  password: test
+  host: test.svc.cluster.local
+  port: 5432
 check_tables: true
 hmac_key: 1234567890123456
 channel_threads: 4
@@ -124,9 +124,9 @@ pool_size: 2000
 captcha_enabled: false
 disable_proxy: false
 default_user_preferences:
-	local: true
-	quality: dash
-	quality_dash: auto
+local: true
+quality: dash
+quality_dash: auto
 											`,
 										},
 									},
