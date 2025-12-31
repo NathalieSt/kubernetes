@@ -5,7 +5,8 @@ metadata:
   name: localai
 resources:
 - namespace.yaml
-- repo.yaml
-- chart.yaml
-- release.yaml
+- model-pvc.yaml
+- output-pvc.yaml
+- deployment.yaml
+- service.yaml
 - scaled-object.yaml

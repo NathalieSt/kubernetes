@@ -34,8 +34,15 @@ type SecretVolumeSource struct {
 	Items      []SecretVolumeItem `yaml:"items,omitempty"`
 }
 
+type HostPathType = string
+
+const (
+	Directory HostPathType = "Directory"
+)
+
 type HostPath struct {
-	Path string `yaml:"path,omitempty"`
+	Path string       `yaml:"path,omitempty"`
+	Type HostPathType `yaml:"type,omitempty"`
 }
 
 type Volume struct {

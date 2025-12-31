@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: localai
+    app.kubernetes.io/version: v3.9.0-aio-gpu-intel
+  name: localai
+spec:
+  selector:
+    app.kubernetes.io/name: localai
+  ports:
+  - name: http-localai
+    port: 8080
+    targetport: 8080

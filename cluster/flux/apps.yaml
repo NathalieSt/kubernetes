@@ -197,30 +197,6 @@ spec:
   prune: true
   wait: true
   timeout: "10m"
-  patches:
-    - target:
-        kind: Deployment
-        name: localai-local-ai
-      patch: |-
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: localai-local-ai
-          namespace: localai
-        spec:
-          template:
-            spec:
-              volumes:
-                - name: dri
-                  hostPath:
-                    path: /dev/dri
-                    type: Directory
-              containers:
-                - name: localai-local-ai
-                  volumeMounts:
-                    - name: dri
-                      mountPath: /dev/dri
-                      readOnly: true
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1

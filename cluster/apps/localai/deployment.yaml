@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: localai
+    app.kubernetes.io/version: v3.9.0-aio-gpu-intel
+  name: localai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: localai
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: localai
+        app.kubernetes.io/version: v3.9.0-aio-gpu-intel
+    spec:
+      containers:
+      - image: quay.io/go-skynet/local-ai:v3.9.0-aio-gpu-intel
+        name: localai
+        ports:
+        - containerPort: 8080
+          name: localai
+        volumeMounts:
+        - mountPath: /models
+          name: model-volume
+        - mountPath: /tmp/generated
+          name: output-volume
+        - mountPath: /dev/dri
+          name: dri
+          readonly: true
+        resources:
+          limits:
+            gpu.intel.com/i915: "1"
+      volumes:
+      - name: model-volume
+        persistentVolumeClaim:
+          claimName: model-pvc
+      - name: output-volume
+        persistentVolumeClaim:
+          claimName: output-pvc
+      - name: dri
+        hostPath:
+          path: /dev/dri
+          type: Directory

@@ -10,7 +10,7 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir string, relativeDir string) (map[string][]byte, error) {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
@@ -33,7 +33,19 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
-	cacheVolume := "cache-volume"
+	configMapName := "discord-bridge-configmap"
+	configMap, err := getInvidiousConfigMap(rootDir, relativeDir, configMapName)
+	if err != nil {
+		fmt.Println("An error occurred while getting the configMap for discord-bridge")
+		return nil, err
+	}
+
+	configMapManifest := utils.ManifestConfig{
+		Filename:  "configmap.yaml",
+		Manifests: []any{*configMap},
+	}
+
+	configMapVolumeName := "configmap-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -102,16 +114,16 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 									VolumeMounts: []core.VolumeMount{
 										core.VolumeMount{
 											MountPath: "/var/tmp/youtubei.js",
-											Name:      cacheVolume,
+											Name:      configMapVolumeName,
 										},
 									},
 								},
 							},
 							Volumes: []core.Volume{
 								{
-									Name: cacheVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: cachePVCName,
+									Name: configMapVolumeName,
+									ConfigMap: core.ConfigMapVolumeSource{
+										Name: configMapName,
 									},
 								},
 							},
@@ -155,8 +167,9 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			service.Filename,
 			cachePVC.Filename,
 			deployment.Filename,
+			configMapManifest.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cachePVC, deployment, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cachePVC, deployment, service, configMapManifest}), nil
 }

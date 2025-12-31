@@ -32,10 +32,19 @@ func main() {
 		DependsOnGenerators: []string{},
 	}
 
+	relativeDir := "internal/generators/apps/matrix/discord-bridge"
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/adguard-home/"),
-		CreateManifests:  createBookloreManifests,
+		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
+			manifests, err := createInvidiousManifests(gm, flags.RootDir, relativeDir)
+			if err != nil {
+				fmt.Println("An error happened while generating Discord Bridge Manifests")
+				fmt.Printf("Reason:\n %v", err)
+				return nil
+			}
+			return manifests
+		},
 	})
 }

@@ -6,47 +6,164 @@ import (
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/apps"
+	"kubernetes/pkg/schema/k8s/core"
+	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createLocalAIManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
-	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
-		map[string]any{
-			"deployment": map[string]any{
-				"image": map[string]any{
-					"repository": "quay.io/go-skynet/local-ai",
-					"tag":        "v3.9.0-aio-gpu-intel",
-				},
+	modelPVCName := "model-pvc"
+	modelPVC := utils.ManifestConfig{
+		Filename: "model-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: modelPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "100Gi",
+				}},
+				StorageClassName: generators.NFSRemoteClass,
 			},
-			"resources": map[string]any{
-				"limits": map[string]any{
-					"gpu.intel.com/i915": "1",
-				},
-			},
-			"persistence": map[string]any{
-				"models": map[string]any{
-					"enabled":      true,
-					"storageClass": generators.NFSRemoteClass,
-					"accessModes":  []string{"ReadWriteMany"},
-					"size":         "100Gi",
-				},
-				"output": map[string]any{
-					"enabled":      true,
-					"storageClass": generators.NFSLocalClass,
-					"accessModes":  []string{"ReadWriteMany"},
-					"size":         "20Gi",
-				},
-			},
-			"nodeSelector": map[string]any{
-				"kubernetes.io/hostname": "debian",
-			},
+			),
 		},
-		nil,
-	)
+	}
+
+	outputPVCName := "output-pvc"
+	outputPVC := utils.ManifestConfig{
+		Filename: "output-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: outputPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "10Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			},
+			),
+		},
+	}
+
+	modelVolume := "model-volume"
+	outputVolume := "output-volume"
+	deployment := utils.ManifestConfig{
+		Filename: "deployment.yaml",
+		Manifests: []any{
+			apps.NewDeployment(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+				},
+				apps.DeploymentSpec{
+					Replicas: 1,
+					Selector: meta.LabelSelector{
+						MatchLabels: map[string]string{
+							"app.kubernetes.io/name": generatorMeta.Name,
+						},
+					},
+					Template: core.PodTemplateSpec{
+						Metadata: meta.ObjectMeta{
+							Labels: map[string]string{
+								"app.kubernetes.io/name":    generatorMeta.Name,
+								"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							},
+						},
+						Spec: core.PodSpec{
+							Containers: []core.Container{
+								{
+									Name:  generatorMeta.Name,
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Ports: []core.Port{
+										{
+											ContainerPort: generatorMeta.Port,
+											Name:          generatorMeta.Name,
+										},
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/models",
+											Name:      modelVolume,
+										},
+										{
+											MountPath: "/tmp/generated",
+											Name:      outputVolume,
+										},
+										{
+											MountPath: "/dev/dri",
+											Name:      "dri",
+											Readonly:  true,
+										},
+									},
+									Resources: core.Resources{
+										Limits: map[string]string{
+											"gpu.intel.com/i915": "1",
+										},
+									},
+								},
+							},
+							Volumes: []core.Volume{
+								{
+									Name: modelVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: modelPVCName,
+									},
+								},
+								{
+									Name: outputVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: outputPVCName,
+									},
+								},
+								{
+									Name: "dri",
+									HostPath: core.HostPath{
+										Path: "/dev/dri",
+										Type: core.Directory,
+									},
+								},
+							},
+						},
+					},
+				},
+			),
+		},
+	}
+
+	service := utils.ManifestConfig{
+		Filename: "service.yaml",
+		Manifests: []any{
+			core.NewService(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+				}, core.ServiceSpec{
+					Selector: map[string]string{
+						"app.kubernetes.io/name": generatorMeta.Name,
+					},
+					Ports: []core.ServicePort{
+						{
+							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
+							Port:       generatorMeta.Port,
+							TargetPort: generatorMeta.Port,
+						},
+					},
+				},
+			),
+		},
+	}
 
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
@@ -57,12 +174,13 @@ func createLocalAIManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
-			repo.Filename,
-			chart.Filename,
-			release.Filename,
+			modelPVC.Filename,
+			outputPVC.Filename,
+			deployment.Filename,
+			service.Filename,
 			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, modelPVC, outputPVC, kustomization, deployment, service, scaledObject})
 }

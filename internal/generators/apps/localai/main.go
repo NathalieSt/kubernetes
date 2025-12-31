@@ -23,11 +23,9 @@ func main() {
 		GeneratorType: generatorType,
 		ClusterUrl:    "localai.localai.svc.cluster.local",
 		Port:          8080,
-		Helm: &generator.Helm{
-
-			Url:     "https://go-skynet.github.io/helm-charts/",
-			Chart:   "local-ai",
-			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
+		Docker: &generator.Docker{
+			Registry: "quay.io/go-skynet/local-ai",
+			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
 			DNSName: "ai",
@@ -45,6 +43,6 @@ func main() {
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/localai/"),
-		CreateManifests:  createLocalAIManifests,
+		CreateManifests:  createLocalAiManifests,
 	})
 }
