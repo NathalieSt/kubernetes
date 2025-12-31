@@ -1,0 +1,15 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nfd
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: nfd-chart
+  timeout: 10m
+  releaseName: nfd
+  install:
+    remediation:
+      retries: 3

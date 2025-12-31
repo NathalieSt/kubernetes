@@ -14,5 +14,8 @@
     "vault": "0.30.1",
     "vault-secrets-operator": "0.10.0",
     "mariadb": "11.4.5",
-    "netbird": "latest"
+    "netbird": "latest",
+    "nfd": "0.18.3",
+    "intel-device-operator": "0.34.1",
+    "intel-device-gpu-plugin": "0.34.1"
 }

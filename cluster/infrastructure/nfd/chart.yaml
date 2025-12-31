@@ -1,0 +1,12 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: nfd-chart
+spec:
+  interval: 24h
+  chart: node-feature-discovery
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: nfd-repo

@@ -1,0 +1,12 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: intel-device-gpu-plugin-chart
+spec:
+  interval: 24h
+  chart: intel-device-plugins-gpu
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: intel-device-gpu-plugin-repo
