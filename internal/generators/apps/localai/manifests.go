@@ -17,8 +17,10 @@ func createLocalAIManifests(generatorMeta generator.GeneratorMeta) map[string][]
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"deployment": map[string]any{
-				"image": "quay.io/go-skynet/local-ai",
-				"tag":   "master-aio-cpu",
+				"image": map[string]any{
+					"repository": "quay.io/go-skynet/local-ai",
+					"tag":        "master-aio-cpu",
+				},
 			},
 			"persistence": map[string]any{
 				"pvc": map[string]any{

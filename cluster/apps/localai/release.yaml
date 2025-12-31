@@ -15,8 +15,9 @@ spec:
       retries: 3
   values:
     deployment:
-      image: quay.io/go-skynet/local-ai
-      tag: master-aio-cpu
+      image:
+        repository: quay.io/go-skynet/local-ai
+        tag: master-aio-cpu
     nodeSelector:
       kubernetes.io/hostname: debian
     persistence:
