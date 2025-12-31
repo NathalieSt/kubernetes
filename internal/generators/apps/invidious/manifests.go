@@ -100,6 +100,7 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 										"-c",
 										`apk update && apk add gettext;
 envsubst < /template/config.yaml > /data/config.yml;
+cat /data/config.yml
 										`,
 									},
 									VolumeMounts: []core.VolumeMount{
