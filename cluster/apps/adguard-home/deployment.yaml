@@ -23,7 +23,7 @@ spec:
         ports:
         - containerPort: 53
           name: dns
-        - containerPort: 80
+        - containerPort: 3000
           name: web-ui
         volumeMounts:
         - mountPath: /app/data

@@ -88,7 +88,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Name:          "dns",
 										},
 										{
-											ContainerPort: 80,
+											ContainerPort: 3000,
 											Name:          "web-ui",
 										},
 									},
