@@ -40,7 +40,7 @@ func main() {
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
 			manifests, err := createInvidiousManifests(gm, flags.RootDir, relativeDir)
 			if err != nil {
-				fmt.Println("An error happened while generating Discord Bridge Manifests")
+				fmt.Println("An error happened while generating Invidious manifests")
 				fmt.Printf("Reason:\n %v", err)
 				return nil
 			}
