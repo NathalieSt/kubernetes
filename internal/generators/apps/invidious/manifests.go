@@ -8,6 +8,7 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"regexp"
 )
 
 func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir string, relativeDir string) (map[string][]byte, error) {
@@ -69,6 +70,28 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 
 	*/
 
+	input := `	
+db:
+  dbname: 1234
+  user: test
+  password: test
+  host: test.svc.cluster.local
+  port: 5432
+check_tables: true
+hmac_key: 1234567890123456
+channel_threads: 4
+feed_threads: 4
+pool_size: 2000
+captcha_enabled: false
+disable_proxy: false
+default_user_preferences:
+local: true
+quality: dash
+quality_dash: auto`
+
+	re := regexp.MustCompile(`[^\w \n]+`)
+	result := re.ReplaceAllString(input, "")
+
 	cachePVCVolume := "cache-pvc-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
@@ -108,26 +131,8 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 									},
 									Env: []core.Env{
 										core.Env{
-											Name: "INVIDIOUS_CONFIG",
-											Value: `
-db:
-  dbname: 1234
-  user: test
-  password: test
-  host: test.svc.cluster.local
-  port: 5432
-check_tables: true
-hmac_key: 1234567890123456
-channel_threads: 4
-feed_threads: 4
-pool_size: 2000
-captcha_enabled: false
-disable_proxy: false
-default_user_preferences:
-local: true
-quality: dash
-quality_dash: auto
-											`,
+											Name:  "INVIDIOUS_CONFIG",
+											Value: result,
 										},
 									},
 								},
