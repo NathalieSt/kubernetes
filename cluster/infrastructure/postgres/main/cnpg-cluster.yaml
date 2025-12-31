@@ -14,6 +14,6 @@ spec:
   probes:
     readiness:
       initialDelaySeconds: 30
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
+      periodSeconds: 30
+      timeoutSeconds: 30
+      failureThreshold: 10
