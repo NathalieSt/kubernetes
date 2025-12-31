@@ -21,6 +21,10 @@ func main() {
 		Namespace:     "adguard-home",
 		GeneratorType: generatorType,
 		ClusterUrl:    "adguard-home.adguard-home.svc.cluster.local",
+		Port:          80,
+		Caddy: &generator.Caddy{
+			DNSName: "adguard-home",
+		},
 		Docker: &generator.Docker{
 			Registry: "adguard/adguardhome",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),

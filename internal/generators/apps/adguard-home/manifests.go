@@ -161,16 +161,46 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	service := utils.ManifestConfig{
+		Filename: "service.yaml",
+		Manifests: []any{
+			core.NewService(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+					Annotations: map[string]string{
+						"netbird.io/expose": "true",
+						"netbird.io/groups": "cluster-services",
+					},
+				}, core.ServiceSpec{
+					Selector: map[string]string{
+						"app.kubernetes.io/name": generatorMeta.Name,
+					},
+					Ports: []core.ServicePort{
+						{
+							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
+							Port:       generatorMeta.Port,
+							TargetPort: generatorMeta.Port,
+						},
+					},
+				},
+			),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
 			confPVC.Filename,
 			workPVC.Filename,
-
+			service.Filename,
 			deployment.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, workPVC, confPVC, kustomization, deployment})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, workPVC, confPVC, kustomization, deployment, service})
 }

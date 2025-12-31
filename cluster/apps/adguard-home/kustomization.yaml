@@ -7,4 +7,5 @@ resources:
 - namespace.yaml
 - conf-pvc.yaml
 - work-pvc.yaml
+- service.yaml
 - deployment.yaml
