@@ -33,37 +33,6 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 		},
 	}
 
-	configMapName := "invidious-cm"
-	configMap, err := getInvidiousConfigMap(rootDir, relativeDir, configMapName)
-	if err != nil {
-		fmt.Println("An error occurred while getting the configMap for discord-bridge")
-		return nil, err
-	}
-
-	configMapManifest := utils.ManifestConfig{
-		Filename:  "configmap.yaml",
-		Manifests: []any{*configMap},
-	}
-
-	configPVCName := "config-pvc"
-	configPVC := utils.ManifestConfig{
-		Filename: "config-pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: configPVCName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
-				}},
-				StorageClassName: generators.NFSRemoteClass,
-			},
-			),
-		},
-	}
-
-	configPVCVolumeName := "config-pvc-volume"
-	configMapVolumeName := "configmap-volume"
 	cachePVCVolume := "cache-pvc-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
@@ -91,49 +60,6 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 							},
 						},
 						Spec: core.PodSpec{
-							InitContainers: []core.Container{
-								{
-									Name:  "config-init",
-									Image: "alpine:latest",
-									Command: []string{
-										"/bin/sh",
-										"-c",
-										`apk update && apk add gettext;
-envsubst < /template/config.yaml > /data/config.yml;
-cat /data/config.yml
-										`,
-									},
-									VolumeMounts: []core.VolumeMount{
-										{
-											Name:      configMapVolumeName,
-											MountPath: "/template",
-										},
-										{
-											Name:      configPVCVolumeName,
-											MountPath: "/data",
-										},
-									},
-									Env: []core.Env{
-										{
-											Name:  "PG_USER",
-											Value: "Test",
-										},
-										{
-											Name:  "PG_PASSWORD",
-											Value: "Test stuff",
-										},
-
-										{
-											Name:  "HMAC_KEY",
-											Value: "1234567890123456",
-										},
-										{
-											Name:  "COMPANION_KEY",
-											Value: "1234567890123456",
-										},
-									},
-								},
-							},
 							Containers: []core.Container{
 								{
 									Name:  generatorMeta.Name,
@@ -144,10 +70,28 @@ cat /data/config.yml
 											Name:          generatorMeta.Name,
 										},
 									},
-									VolumeMounts: []core.VolumeMount{
-										{
-											MountPath: "/config/",
-											Name:      configPVCVolumeName,
+									Env: []core.Env{
+										core.Env{
+											Name: "INVIDIOUS_CONFIG",
+											Value: `
+db:
+	dbname: __dbname
+	user: __user
+	password: __password
+	host: __host
+	port: 5432
+check_tables: true
+hmac_key: 1234567890123456
+channel_threads: 4
+feed_threads: 4
+pool_size: 2000
+captcha_enabled: false
+disable_proxy: false
+default_user_preferences:
+	local: true
+	quality: dash
+	quality_dash: auto
+											`,
 										},
 									},
 								},
@@ -158,24 +102,12 @@ cat /data/config.yml
 									VolumeMounts: []core.VolumeMount{
 										{
 											MountPath: "/var/tmp/youtubei.js",
-											Name:      configMapVolumeName,
+											Name:      cachePVCVolume,
 										},
 									},
 								},
 							},
 							Volumes: []core.Volume{
-								{
-									Name: configMapVolumeName,
-									ConfigMap: core.ConfigMapVolumeSource{
-										Name: configMapName,
-									},
-								},
-								{
-									Name: configPVCVolumeName,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: configPVCName,
-									},
-								},
 								{
 									Name: cachePVCVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
@@ -209,6 +141,7 @@ cat /data/config.yml
 							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
 							Port:       generatorMeta.Port,
 							TargetPort: generatorMeta.Port,
+							Protocol:   core.TCP,
 						},
 					},
 				},
@@ -223,10 +156,8 @@ cat /data/config.yml
 			service.Filename,
 			cachePVC.Filename,
 			deployment.Filename,
-			configMapManifest.Filename,
-			configPVC.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cachePVC, deployment, service, configMapManifest, configPVC}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cachePVC, deployment, service}), nil
 }

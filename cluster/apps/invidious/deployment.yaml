@@ -17,52 +17,40 @@ spec:
         app.kubernetes.io/name: invidious
         app.kubernetes.io/version: 2025.12.22-9603f51
     spec:
-      initContainers:
-      - command:
-        - /bin/sh
-        - -c
-        - |-
-          apk update && apk add gettext;
-          envsubst < /template/config.yaml > /data/config.yml;
-          cat /data/config.yml
-          										
-        image: alpine:latest
-        name: config-init
-        volumeMounts:
-        - mountPath: /template
-          name: configmap-volume
-        - mountPath: /data
-          name: config-pvc-volume
-        env:
-        - name: PG_USER
-          value: Test
-        - name: PG_PASSWORD
-          value: Test stuff
-        - name: HMAC_KEY
-          value: "1234567890123456"
-        - name: COMPANION_KEY
-          value: "1234567890123456"
       containers:
       - image: quay.io/invidious/invidious:2025.12.22-9603f51
         name: invidious
         ports:
         - containerPort: 3000
           name: invidious
-        volumeMounts:
-        - mountPath: /config/
-          name: config-pvc-volume
+        env:
+        - name: INVIDIOUS_CONFIG
+          value: |-
+            
+            db:
+            	dbname: __dbname
+            	user: __user
+            	password: __password
+            	host: __host
+            	port: 5432
+            check_tables: true
+            hmac_key: 1234567890123456
+            channel_threads: 4
+            feed_threads: 4
+            pool_size: 2000
+            captcha_enabled: false
+            disable_proxy: false
+            default_user_preferences:
+            	local: true
+            	quality: dash
+            	quality_dash: auto
+            											
       - image: quay.io/invidious/invidious-companion:latest
         name: invidious-companion
         volumeMounts:
         - mountPath: /var/tmp/youtubei.js
-          name: configmap-volume
+          name: cache-pvc-volume
       volumes:
-      - name: configmap-volume
-        configMap:
-          name: invidious-cm
-      - name: config-pvc-volume
-        persistentVolumeClaim:
-          claimName: config-pvc
       - name: cache-pvc-volume
         persistentVolumeClaim:
           claimName: cache-pvc

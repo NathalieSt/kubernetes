@@ -5,16 +5,25 @@ import (
 	"kubernetes/pkg/schema/shared"
 )
 
+type Protocol = string
+
+const (
+	SCTP Protocol = "SCTP"
+	TCP  Protocol = "TCP"
+	UDP  Protocol = "UDP"
+)
+
 type ServicePort struct {
-	Name       string `yaml:",omitempty"`
-	Port       int64  `yaml:",omitempty"`
-	TargetPort int64  `yaml:",omitempty"`
+	Name       string   `yaml:"name,omitempty"`
+	Port       int64    `yaml:"port,omitempty"`
+	TargetPort int64    `yaml:"targetPort,omitempty"`
+	Protocol   Protocol `yaml:"protocol,omitempty"`
 }
 
 type ServiceSpec struct {
-	Selector map[string]string `yaml:",omitempty"`
-	Ports    []ServicePort     `yaml:",omitempty"`
-	Type     string            `yaml:",omitempty"`
+	Selector map[string]string `yaml:"selector,omitempty"`
+	Ports    []ServicePort     `yaml:"ports,omitempty"`
+	Type     string            `yaml:"type,omitempty"`
 }
 
 type Service struct {

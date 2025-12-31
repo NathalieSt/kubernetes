@@ -8,5 +8,3 @@ resources:
 - service.yaml
 - cache-pvc.yaml
 - deployment.yaml
-- configmap.yaml
-- config-pvc.yaml
