@@ -18,9 +18,16 @@ type FieldRef struct {
 	FieldPath string `yaml:"fieldPath,omitempty"`
 }
 
+type ConfigMapKeySelector struct {
+	Key      string `yaml:"key,omitempty"`
+	name     string `yaml:"name,omitempty"`
+	optional bool   `yaml:"optional,omitempty"`
+}
+
 type ValueFrom struct {
-	SecretKeyRef SecretKeyRef `yaml:"secretKeyRef,omitempty"`
-	FieldRef     FieldRef     `yaml:"fieldRef,omitempty"`
+	SecretKeyRef    SecretKeyRef         `yaml:"secretKeyRef,omitempty"`
+	FieldRef        FieldRef             `yaml:"fieldRef,omitempty"`
+	ConfigMapKeyRef ConfigMapKeySelector `yaml:"configMapKeyRef,omitempty"`
 }
 
 type Env struct {

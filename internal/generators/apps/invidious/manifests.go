@@ -16,16 +16,16 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
-	confPVCName := "config-pvc"
-	confPVC := utils.ManifestConfig{
-		Filename: "conf-pvc.yaml",
+	cachePVCName := "cache-pvc"
+	cachePVC := utils.ManifestConfig{
+		Filename: "cache-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: confPVCName,
+				Name: cachePVCName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
+					"storage": "10Gi",
 				}},
 				StorageClassName: generators.NFSRemoteClass,
 			},
@@ -33,25 +33,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
-	workPVCName := "work-pvc"
-	workPVC := utils.ManifestConfig{
-		Filename: "work-pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: workPVCName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
-				}},
-				StorageClassName: generators.NFSRemoteClass,
-			},
-			),
-		},
-	}
-
-	confVolume := "conf-volume"
-	workVolume := "work-volume"
+	cacheVolume := "cache-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -84,28 +66,20 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
 									Ports: []core.Port{
 										{
-											ContainerPort: 53,
-											Name:          "dns",
-										},
-										{
-											ContainerPort: 3000,
-											Name:          "web-ui",
+											ContainerPort: generatorMeta.Port,
+											Name:          generatorMeta.Name,
 										},
 									},
-									VolumeMounts: []core.VolumeMount{
-										{
-											MountPath: "/app/data",
-											Name:      confVolume,
-										},
-										{
-											MountPath: "/books",
-											Name:      workVolume,
+									Env: []core.Env{
+										core.Env{
+											Name:      "INVIDIOUS_CONFIG",
+											ValueFrom: core.ValueFrom{},
 										},
 									},
 								},
 								{
-									Name:  "netbird-agent",
-									Image: "netbirdio/netbird:latest",
+									Name:  "invidious-companion",
+									Image: "quay.io/invidious/invidious-companion:latest",
 									Env: []core.Env{
 										{
 											Name: "NB_SETUP_KEY",
@@ -125,32 +99,19 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Value: "https://netbird.nathalie-stiefsohn.eu",
 										},
 									},
-									Resources: core.Resources{
-										Requests: map[string]string{
-											"cpu":    "50m",
-											"memory": "64Mi",
+									VolumeMounts: []core.VolumeMount{
+										core.VolumeMount{
+											MountPath: "/var/tmp/youtubei.js",
+											Name:      cacheVolume,
 										},
-										Limits: map[string]string{
-											"cpu":    "100m",
-											"memory": "128Mi",
-										},
-									},
-									SecurityContext: core.ContainerSecurityContext{
-										Privileged: true,
 									},
 								},
 							},
 							Volumes: []core.Volume{
 								{
-									Name: confVolume,
+									Name: cacheVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: confPVCName,
-									},
-								},
-								{
-									Name: workVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: workPVCName,
+										ClaimName: cachePVCName,
 									},
 								},
 							},
@@ -191,12 +152,11 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
-			confPVC.Filename,
-			workPVC.Filename,
 			service.Filename,
+			cachePVC.Filename,
 			deployment.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, workPVC, confPVC, kustomization, deployment, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cachePVC, deployment, service})
 }

@@ -197,6 +197,12 @@ spec:
   prune: true
   wait: true
   timeout: "10m"
+  patches:
+    - target:
+        kind: Deployment
+        name: localai-local-ai
+      patch: |-
+        $(cat flux-patches/localai-gpu.yml)
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
