@@ -26,24 +26,22 @@ spec:
         env:
         - name: INVIDIOUS_CONFIG
           value: |-
-            
-            db
-              dbname 1234
-              user test
-              password test
-              host testsvcclusterlocal
-              port 5432
-            check_tables true
-            hmac_key 1234567890123456
-            channel_threads 4
-            feed_threads 4
-            pool_size 2000
-            captcha_enabled false
-            disable_proxy false
-            default_user_preferences
-            local true
-            quality dash
-            quality_dash auto
+            db:
+              dbname: 1234
+              user: test
+              password: test
+              host: testsvcclusterlocal
+              port: 5432
+            checktables: true
+            hmackey: 1234567890123456
+            channelthreads: 4
+            feedthreads: 4
+            poolsize: 2000
+            captchaenabled: false
+            disableproxy: false
+            local: true
+            quality: dash
+            qualitydash: auto
       - image: quay.io/invidious/invidious-companion:latest
         name: invidious-companion
         volumeMounts:

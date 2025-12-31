@@ -70,8 +70,7 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 
 	*/
 
-	input := `	
-db:
+	input := `db:
   dbname: 1234
   user: test
   password: test
@@ -84,12 +83,11 @@ feed_threads: 4
 pool_size: 2000
 captcha_enabled: false
 disable_proxy: false
-default_user_preferences:
 local: true
 quality: dash
 quality_dash: auto`
 
-	re := regexp.MustCompile(`[^\w \n]+`)
+	re := regexp.MustCompile(`[^\p{L}\p{N} :\n]+`)
 	result := re.ReplaceAllString(input, "")
 
 	cachePVCVolume := "cache-pvc-volume"
