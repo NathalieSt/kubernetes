@@ -33,6 +33,42 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 		},
 	}
 
+	/*
+			TODO: do it like this
+			        - command: ['/bin/sh']
+		          args:
+		            - -c
+		            - |
+		              export INVIDIOUS_CONFIG=$(echo "$INVIDIOUS_CONFIG" | sed \
+		                -e "s/__dbname/$INVIDIOUS_DB_DBNAME/" \
+		                -e "s/__user/$INVIDIOUS_DB_USER/" \
+		                -e "s/__password/$INVIDIOUS_DB_PASSWORD/" \
+		                -e "s/__host/$INVIDIOUS_DB_HOST/" \
+		                -e "s/__hmac_key/$INVIDIOUS_HMAC_KEY/")
+		              exec /invidious/invidious
+		          env:
+		            - name: INVIDIOUS_CONFIG
+		              value: |
+		                db:
+		                  dbname: __dbname
+		                  user: __user
+		                  password: __password
+		                  host: __host
+		                  port: 5432
+		                check_tables: true
+		                hmac_key: __hmac_key
+		                channel_threads: 4
+		                feed_threads: 4
+		                pool_size: 2000
+		                captcha_enabled: false
+		                disable_proxy: false
+		                default_user_preferences:
+		                  local: true
+		                  quality: dash
+		                  quality_dash: auto
+
+	*/
+
 	cachePVCVolume := "cache-pvc-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
@@ -75,10 +111,10 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 											Name: "INVIDIOUS_CONFIG",
 											Value: `
 db:
-	dbname: __dbname
-	user: __user
-	password: __password
-	host: __host
+	dbname: 1234
+	user: test
+	password: test
+	host: test.svc.cluster.local
 	port: 5432
 check_tables: true
 hmac_key: 1234567890123456
