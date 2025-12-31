@@ -1,0 +1,172 @@
+package main
+
+import (
+	"fmt"
+	"kubernetes/internal/generators"
+	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/apps"
+	"kubernetes/pkg/schema/k8s/core"
+	"kubernetes/pkg/schema/k8s/meta"
+)
+
+func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+	namespace := utils.ManifestConfig{
+		Filename:  "namespace.yaml",
+		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
+	}
+
+	confPVCName := "config-pvc"
+	confPVC := utils.ManifestConfig{
+		Filename: "conf-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: confPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSRemoteClass,
+			},
+			),
+		},
+	}
+
+	workPVCName := "work-pvc"
+	workPVC := utils.ManifestConfig{
+		Filename: "work-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: workPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSRemoteClass,
+			},
+			),
+		},
+	}
+
+	confVolume := "conf-volume"
+	workVolume := "work-volume"
+	deployment := utils.ManifestConfig{
+		Filename: "deployment.yaml",
+		Manifests: []any{
+			apps.NewDeployment(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+				},
+				apps.DeploymentSpec{
+					Replicas: 1,
+					Selector: meta.LabelSelector{
+						MatchLabels: map[string]string{
+							"app.kubernetes.io/name": generatorMeta.Name,
+						},
+					},
+					Template: core.PodTemplateSpec{
+						Metadata: meta.ObjectMeta{
+							Labels: map[string]string{
+								"app.kubernetes.io/name":    generatorMeta.Name,
+								"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							},
+						},
+						Spec: core.PodSpec{
+							Containers: []core.Container{
+								{
+									Name:  generatorMeta.Name,
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Ports: []core.Port{
+										{
+											ContainerPort: generatorMeta.Port,
+											Name:          generatorMeta.Name,
+										},
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/app/data",
+											Name:      confVolume,
+										},
+										{
+											MountPath: "/books",
+											Name:      workVolume,
+										},
+									},
+								},
+								{
+									Name:  "netbird-agent",
+									Image: "netbirdio/netbird:latest",
+									Env: []core.Env{
+										{
+											Name: "NB_SETUP_KEY",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: generators.NetbirdSecretName,
+													Key:  "setup-key",
+												},
+											},
+										},
+										{
+											Name:  "NB_HOSTNAME",
+											Value: "adguard-home",
+										},
+										{
+											Name:  "NB_MANAGEMENT_URL",
+											Value: "https://netbird.nathalie-stiefsohn.eu",
+										},
+									},
+									Resources: core.Resources{
+										Requests: map[string]string{
+											"cpu":    "50m",
+											"memory": "64Mi",
+										},
+										Limits: map[string]string{
+											"cpu":    "100m",
+											"memory": "128Mi",
+										},
+									},
+									SecurityContext: core.ContainerSecurityContext{
+										Privileged: true,
+									},
+								},
+							},
+							Volumes: []core.Volume{
+								{
+									Name: confVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: confPVCName,
+									},
+								},
+								{
+									Name: workVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: workPVCName,
+									},
+								},
+							},
+						},
+					},
+				},
+			),
+		},
+	}
+
+	kustomization := utils.ManifestConfig{
+		Filename: "kustomization.yaml",
+		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
+			namespace.Filename,
+			confPVC.Filename,
+			workPVC.Filename,
+
+			deployment.Filename,
+		}),
+	}
+
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, workPVC, confPVC, kustomization, deployment})
+}
