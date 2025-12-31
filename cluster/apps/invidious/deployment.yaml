@@ -38,9 +38,9 @@ spec:
         - name: PG_PASSWORD
           value: Test stuff
         - name: HMAC_KEY
-          value: STUUFF
+          value: "1234567890123456"
         - name: COMPANION_KEY
-          value: MORE_STUFF
+          value: "1234567890123456"
       containers:
       - image: quay.io/invidious/invidious:2025.12.22-9603f51
         name: invidious
@@ -48,7 +48,7 @@ spec:
         - containerPort: 80
           name: invidious
         volumeMounts:
-        - mountPath: /invidious/config/
+        - mountPath: /config/
           name: config-pvc-volume
       - image: quay.io/invidious/invidious-companion:latest
         name: invidious-companion

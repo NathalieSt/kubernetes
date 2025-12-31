@@ -124,11 +124,11 @@ envsubst < /template/config.yaml > /data/config.yaml;
 
 										{
 											Name:  "HMAC_KEY",
-											Value: "STUUFF",
+											Value: "1234567890123456",
 										},
 										{
 											Name:  "COMPANION_KEY",
-											Value: "MORE_STUFF",
+											Value: "1234567890123456",
 										},
 									},
 								},
@@ -144,8 +144,8 @@ envsubst < /template/config.yaml > /data/config.yaml;
 										},
 									},
 									VolumeMounts: []core.VolumeMount{
-										core.VolumeMount{
-											MountPath: "/invidious/config/",
+										{
+											MountPath: "/config/",
 											Name:      configPVCVolumeName,
 										},
 									},
