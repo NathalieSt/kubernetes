@@ -10,4 +10,4 @@ spec:
   sourceRef:
     kind: HelmRepository
     name: localai-repo
-  version: master-aio-cpu
+  version: 3.4.2

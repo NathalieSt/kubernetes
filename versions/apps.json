@@ -1,5 +1,5 @@
 {
-    "localai": "master-aio-cpu",
+    "localai": "3.4.2",
     "lidify": "v1.0.2",
     "forgejo": "14.0.0",
     "glance": "v0.8.4",
