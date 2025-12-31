@@ -19,7 +19,12 @@ func createLocalAIManifests(generatorMeta generator.GeneratorMeta) map[string][]
 			"deployment": map[string]any{
 				"image": map[string]any{
 					"repository": "quay.io/go-skynet/local-ai",
-					"tag":        "master-aio-cpu",
+					"tag":        "v3.9.0-aio-gpu-intel",
+				},
+			},
+			"resources": map[string]any{
+				"limits": map[string]any{
+					"gpu.intel.com/i915": "1",
 				},
 			},
 			"persistence": map[string]any{
