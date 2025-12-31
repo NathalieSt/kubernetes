@@ -33,7 +33,7 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 		},
 	}
 
-	configMapName := "discord-bridge-configmap"
+	configMapName := "invidious-cm"
 	configMap, err := getInvidiousConfigMap(rootDir, relativeDir, configMapName)
 	if err != nil {
 		fmt.Println("An error occurred while getting the configMap for discord-bridge")
@@ -45,7 +45,26 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 		Manifests: []any{*configMap},
 	}
 
+	configPVCName := "config-pvc"
+	configPVC := utils.ManifestConfig{
+		Filename: "config-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: configPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSRemoteClass,
+			},
+			),
+		},
+	}
+
+	configPVCVolumeName := "config-pvc-volume"
 	configMapVolumeName := "configmap-volume"
+	cachePVCVolume := "cache-pvc-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -72,6 +91,48 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 							},
 						},
 						Spec: core.PodSpec{
+							InitContainers: []core.Container{
+								{
+									Name:  "config-init",
+									Image: "alpine:latest",
+									Command: []string{
+										"/bin/sh",
+										"-c",
+										`apk update && apk add gettext;
+envsubst < /template/config.yaml > /data/config.yaml;
+										`,
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											Name:      configMapVolumeName,
+											MountPath: "/template",
+										},
+										{
+											Name:      configPVCVolumeName,
+											MountPath: "/data",
+										},
+									},
+									Env: []core.Env{
+										{
+											Name:  "PG_USER",
+											Value: "Test",
+										},
+										{
+											Name:  "PG_PASSWORD",
+											Value: "Test stuff",
+										},
+
+										{
+											Name:  "HMAC_KEY",
+											Value: "STUUFF",
+										},
+										{
+											Name:  "COMPANION_KEY",
+											Value: "MORE_STUFF",
+										},
+									},
+								},
+							},
 							Containers: []core.Container{
 								{
 									Name:  generatorMeta.Name,
@@ -82,37 +143,19 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 											Name:          generatorMeta.Name,
 										},
 									},
-									Env: []core.Env{
-										core.Env{
-											Name:      "INVIDIOUS_CONFIG",
-											ValueFrom: core.ValueFrom{},
+									VolumeMounts: []core.VolumeMount{
+										core.VolumeMount{
+											MountPath: "/invidious/config/",
+											Name:      configPVCVolumeName,
 										},
 									},
 								},
 								{
 									Name:  "invidious-companion",
 									Image: "quay.io/invidious/invidious-companion:latest",
-									Env: []core.Env{
-										{
-											Name: "NB_SETUP_KEY",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Name: generators.NetbirdSecretName,
-													Key:  "setup-key",
-												},
-											},
-										},
-										{
-											Name:  "NB_HOSTNAME",
-											Value: "adguard-home",
-										},
-										{
-											Name:  "NB_MANAGEMENT_URL",
-											Value: "https://netbird.nathalie-stiefsohn.eu",
-										},
-									},
+									Env:   []core.Env{},
 									VolumeMounts: []core.VolumeMount{
-										core.VolumeMount{
+										{
 											MountPath: "/var/tmp/youtubei.js",
 											Name:      configMapVolumeName,
 										},
@@ -124,6 +167,18 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 									Name: configMapVolumeName,
 									ConfigMap: core.ConfigMapVolumeSource{
 										Name: configMapName,
+									},
+								},
+								{
+									Name: configPVCVolumeName,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: configPVCName,
+									},
+								},
+								{
+									Name: cachePVCVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: cachePVCName,
 									},
 								},
 							},
@@ -168,8 +223,9 @@ func createInvidiousManifests(generatorMeta generator.GeneratorMeta, rootDir str
 			cachePVC.Filename,
 			deployment.Filename,
 			configMapManifest.Filename,
+			configPVC.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cachePVC, deployment, service, configMapManifest}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cachePVC, deployment, service, configMapManifest, configPVC}), nil
 }

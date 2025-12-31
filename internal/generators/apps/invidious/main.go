@@ -14,29 +14,29 @@ func main() {
 		return
 	}
 
-	name := "adguard-home"
+	name := "invidious"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "adguard-home",
+		Namespace:     "invidious",
 		GeneratorType: generatorType,
-		ClusterUrl:    "adguard-home.adguard-home.svc.cluster.local",
+		ClusterUrl:    "invidious.invidious.svc.cluster.local",
 		Port:          80,
 		Caddy: &generator.Caddy{
-			DNSName: "adguard-home",
+			DNSName: "invidious",
 		},
 		Docker: &generator.Docker{
-			Registry: "adguard/adguardhome",
+			Registry: "quay.io/invidious/invidious",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		DependsOnGenerators: []string{},
 	}
 
-	relativeDir := "internal/generators/apps/matrix/discord-bridge"
+	relativeDir := "internal/generators/apps/invidious"
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/adguard-home/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/invidious/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
 			manifests, err := createInvidiousManifests(gm, flags.RootDir, relativeDir)
 			if err != nil {

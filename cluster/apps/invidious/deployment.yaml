@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: invidious
+    app.kubernetes.io/version: 2025.12.22-9603f51
+  name: invidious
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: invidious
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: invidious
+        app.kubernetes.io/version: 2025.12.22-9603f51
+    spec:
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - |-
+          apk update && apk add gettext;
+          envsubst < /template/config.yaml > /data/config.yaml;
+          										
+        image: alpine:latest
+        name: config-init
+        volumeMounts:
+        - mountPath: /template
+          name: configmap-volume
+        - mountPath: /data
+          name: config-pvc-volume
+        env:
+        - name: PG_USER
+          value: Test
+        - name: PG_PASSWORD
+          value: Test stuff
+        - name: HMAC_KEY
+          value: STUUFF
+        - name: COMPANION_KEY
+          value: MORE_STUFF
+      containers:
+      - image: quay.io/invidious/invidious:2025.12.22-9603f51
+        name: invidious
+        ports:
+        - containerPort: 80
+          name: invidious
+        volumeMounts:
+        - mountPath: /invidious/config/
+          name: config-pvc-volume
+      - image: quay.io/invidious/invidious-companion:latest
+        name: invidious-companion
+        volumeMounts:
+        - mountPath: /var/tmp/youtubei.js
+          name: configmap-volume
+      volumes:
+      - name: configmap-volume
+        configMap:
+          name: invidious-cm
+      - name: config-pvc-volume
+        persistentVolumeClaim:
+          claimName: config-pvc
+      - name: cache-pvc-volume
+        persistentVolumeClaim:
+          claimName: cache-pvc
