@@ -6,6 +6,50 @@ metadata:
 data:
   Caddyfile: |-
     
+    ai.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy localai.localai.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    code.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy forgejo-http.forgejo.svc.cluster.local:3000 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    jellyfin.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    	@websockets {
+    		header Connection *Upgrade*
+    		header Upgrade    websocket
+    	}
+    	reverse_proxy @websockets http://jellyfin.jellyfin.svc.cluster.local:8096 {
+    		header_up Host {host}
+    	}
+    		
+    }
+    		
     mealie.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
@@ -18,36 +62,24 @@ data:
     	
     }
     		
-    kibana.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    piped-backend.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy piped-backend.piped.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
     perses.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
     	reverse_proxy perses.perses.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    searxng.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy searxng.searxng.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}
@@ -78,36 +110,12 @@ data:
     	
     }
     		
-    adguard-home.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy adguard-home.adguard-home.svc.cluster.local:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
     booklore.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
     	reverse_proxy booklore.booklore.svc.cluster.local:6060 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    code.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy forgejo-http.forgejo.svc.cluster.local:3000 {
     		header_up Host {host}
     		
     	}
@@ -126,80 +134,24 @@ data:
     	
     }
     		
+    kibana.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
     redlib.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
     	reverse_proxy redlib.redlib.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    piped.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy piped-frontend.piped.svc.cluster.local:80 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    jellyfin.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    	@websockets {
-    		header Connection *Upgrade*
-    		header Upgrade    websocket
-    	}
-    	reverse_proxy @websockets http://jellyfin.jellyfin.svc.cluster.local:8096 {
-    		header_up Host {host}
-    	}
-    		
-    }
-    		
-    searxng.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy searxng.searxng.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    piped-ytproxy.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy piped-ytproxy.piped.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    ai.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy localai.localai.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}
