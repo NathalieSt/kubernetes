@@ -41,12 +41,18 @@ spec:
           value: protonvpn
         - name: VPN_TYPE
           value: openvpn
-        - name: OPENVPN_USER
-          value: test
-        - name: OPENVPN_PASSWORD
-          value: test
         - name: SERVER_COUNTRIES
           value: Netherlands
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: jellyfin-vpn
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: jellyfin-vpn
         securityContext:
           capabilities:
             add:

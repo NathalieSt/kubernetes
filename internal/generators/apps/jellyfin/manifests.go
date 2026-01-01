@@ -89,6 +89,22 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		nil,
 	)
 
+	vpnSecretConfig := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-vpn", generatorMeta.Name),
+		SecretName: fmt.Sprintf("%v-vpn", generatorMeta.Name),
+		Path:       "vpn",
+	}
+
+	vpnVaultSecret := utils.ManifestConfig{
+		Filename: "vault-secret.yaml",
+		Manifests: utils.GenerateVaultAccessManifests(
+			generatorMeta.Name,
+			//FIXME: get this from VSO generator meta
+			"vault-secrets-operator",
+			[]utils.StaticSecretConfig{vpnSecretConfig},
+		),
+	}
+
 	qbitConfigVolume := "qbit-config-volume"
 	quiConfigVolume := "qui-config-volume"
 	mediaVolume := "media-volume"
@@ -170,16 +186,26 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Value: "openvpn",
 										},
 										{
-											Name:  "OPENVPN_USER",
-											Value: "test",
-										},
-										{
-											Name:  "OPENVPN_PASSWORD",
-											Value: "test",
-										},
-										{
 											Name:  "SERVER_COUNTRIES",
 											Value: "Netherlands",
+										},
+										{
+											Name: "OPENVPN_USER",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: vpnSecretConfig.SecretName,
+													Key:  "user",
+												},
+											},
+										},
+										{
+											Name: "OPENVPN_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: vpnSecretConfig.SecretName,
+													Key:  "password",
+												},
+											},
 										},
 									},
 								},
@@ -228,8 +254,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			scaledObject.Filename,
 			quiConfigPVC.Filename,
 			qbitConfigPVC.Filename,
+			vpnVaultSecret.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, quiConfigPVC, qbitConfigPVC})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, quiConfigPVC, qbitConfigPVC, vpnVaultSecret})
 }
