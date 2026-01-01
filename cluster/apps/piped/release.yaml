@@ -19,10 +19,13 @@ spec:
       FRONTEND_URL: http://frontend
       PROXY_PART: http://proxy
       config:
-        connection_url: jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped
+        database:
+          connection_url: jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          driver_class: org.postgresql.Driver
     frontend:
       env:
-        BACKEND_HOSTNAME: http://backend
+        BACKEND_HOSTNAME: backend
   valuesFrom:
   - kind: Secret
     name: postgres-creds-secret
