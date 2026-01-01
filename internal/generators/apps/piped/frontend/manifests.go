@@ -75,6 +75,11 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 						"dialect":        "org.hibernate.dialect.PostgreSQLDialect",
 					},
 				},
+				"service": map[string]any{
+					"backend": map[string]any{
+						"enabled": "false",
+					},
+				},
 			},
 			"ytproxy": map[string]any{
 				"enabled": false,

@@ -24,6 +24,9 @@ spec:
           dialect: org.hibernate.dialect.PostgreSQLDialect
           driver_class: org.postgresql.Driver
       enabled: false
+      service:
+        backend:
+          enabled: "false"
     controller:
       enabled: true
     frontend:
