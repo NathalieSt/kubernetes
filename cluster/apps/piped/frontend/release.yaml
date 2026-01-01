@@ -16,6 +16,8 @@ spec:
   values:
     backend:
       enabled: false
+    controller:
+      enabled: true
     frontend:
       additionalContainers:
         netbird-agent:

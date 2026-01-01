@@ -63,6 +63,9 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 					"enabled": false,
 				},
 			},
+			"controller": map[string]any{
+				"enabled": true,
+			},
 		},
 		nil,
 	)
