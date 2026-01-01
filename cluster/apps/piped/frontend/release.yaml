@@ -40,7 +40,7 @@ spec:
               memory: 128Mi
           securityContext:
             privileged: true
-      env:
+      config:
         BACKEND_HOSTNAME: piped-backend.cloud.nathalie-stiefsohn.eu
         PROXY_PART: https://piped-ytproxy.cloud.nathalie-stiefsohn.eu
       podSecurityContext:

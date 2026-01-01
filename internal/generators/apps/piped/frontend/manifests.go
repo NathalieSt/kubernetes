@@ -15,7 +15,7 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"podSecurityContext": map[string]any{
 					"runAsUser": 0,
 				},
-				"env": map[string]any{
+				"config": map[string]any{
 					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",
 					"PROXY_PART":       "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
 				},
