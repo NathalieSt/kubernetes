@@ -33,6 +33,17 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 					},
 				},
 			},
+			"ingress": map[string]any{
+				"main": map[string]any{
+					"enabled": false,
+				},
+				"backend": map[string]any{
+					"enabled": false,
+				},
+				"ytproxy": map[string]any{
+					"enabled": false,
+				},
+			},
 		},
 		[]helm.ReleaseValuesFrom{
 			{

@@ -26,6 +26,13 @@ spec:
     frontend:
       env:
         BACKEND_HOSTNAME: backend
+    ingress:
+      backend:
+        enabled: false
+      main:
+        enabled: false
+      ytproxy:
+        enabled: false
   valuesFrom:
   - kind: Secret
     name: postgres-creds-secret
