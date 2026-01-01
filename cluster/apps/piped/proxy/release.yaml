@@ -60,5 +60,5 @@ spec:
               memory: 128Mi
           securityContext:
             privileged: true
-      config:
-        env: {}
+      config: {}
+      env: {}
