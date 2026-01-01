@@ -70,13 +70,7 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"enabled": false,
 			},
 			"ingress": map[string]any{
-				"main": map[string]any{
-					"enabled": false,
-				},
 				"backend": map[string]any{
-					"enabled": false,
-				},
-				"ytproxy": map[string]any{
 					"enabled": false,
 				},
 			},

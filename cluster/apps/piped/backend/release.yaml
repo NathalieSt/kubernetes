@@ -48,10 +48,6 @@ spec:
     ingress:
       backend:
         enabled: false
-      main:
-        enabled: false
-      ytproxy:
-        enabled: false
     ytproxy:
       enabled: false
   valuesFrom:
