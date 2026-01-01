@@ -44,6 +44,10 @@ spec:
           connection_url: jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped
           dialect: org.hibernate.dialect.PostgreSQLDialect
           driver_class: org.postgresql.Driver
+      labels:
+        selectorLabels:
+          app.kubernetes.io/instance: piped-backend
+          app.kubernetes.io/name: piped-backend
     controller:
       enabled: true
     frontend:
