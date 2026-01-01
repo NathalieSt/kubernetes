@@ -21,7 +21,7 @@ func main() {
 		Namespace:     "piped",
 		GeneratorType: generatorType,
 		ClusterUrl:    "piped-backend.piped.svc.cluster.local",
-		Port:          8200,
+		Port:          8080,
 		Helm: &generator.Helm{
 			Chart:   "piped",
 			Url:     "https://helm.piped.video",
