@@ -2,11 +2,11 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmChart
 metadata:
-  name: piped-chart
+  name: piped-frontend-chart
 spec:
   interval: 24h
   chart: piped
   reconcileStrategy: ChartVersion
   sourceRef:
     kind: HelmRepository
-    name: piped-repo
+    name: piped-frontend-repo

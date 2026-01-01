@@ -14,7 +14,7 @@ func main() {
 		return
 	}
 
-	name := "piped"
+	name := "piped-frontend"
 	generatorType := generator.Infrastructure
 	var Piped = generator.GeneratorMeta{
 		Name:          name,

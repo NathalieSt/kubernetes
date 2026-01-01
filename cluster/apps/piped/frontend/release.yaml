@@ -2,14 +2,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: piped
+  name: piped-frontend
 spec:
   interval: 24h
   chartRef:
     kind: HelmChart
-    name: piped-chart
+    name: piped-frontend-chart
   timeout: 10m
-  releaseName: piped
+  releaseName: piped-frontend
   install:
     remediation:
       retries: 3
