@@ -46,9 +46,9 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		Path:       "postgres",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,dawarich,mealie,forgejo,keycloak",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "postgres,mealie,forgejo,piped",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "postgres,dawarich,mealie,forgejo,keycloak",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "postgres,mealie,forgejo,piped",
 		},
 	}
 

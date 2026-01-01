@@ -1,0 +1,34 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: piped
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: piped-chart
+  timeout: 10m
+  releaseName: piped
+  install:
+    remediation:
+      retries: 3
+  values:
+    backend:
+      API_URL: http://backend
+      FRONTEND_URL: http://frontend
+      PROXY_PART: http://proxy
+      config:
+        connection_url: jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped
+    frontend:
+      env:
+        BACKEND_HOSTNAME: http://backend
+  valuesFrom:
+  - kind: Secret
+    name: postgres-creds-secret
+    valuesKey: username
+    targetPath: backend.config.database.username
+  - kind: Secret
+    name: postgres-creds-secret
+    valuesKey: password
+    targetPath: backend.config.database.password

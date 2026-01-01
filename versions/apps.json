@@ -12,5 +12,6 @@
     "discord-bridge": "v0.7.5",
     "whatsapp-bridge": "v0.7.5",
     "signal-bridge": "v0.7.5",
-    "redlib": "sha-ba98178"
+    "redlib": "sha-ba98178",
+    "piped": "8.0.31"
 }
