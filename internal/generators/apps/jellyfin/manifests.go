@@ -220,6 +220,10 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Value: "on",
 										},
 										{
+											Name:  "FIREWALL_DEBUG",
+											Value: "on",
+										},
+										{
 											Name:  "FIREWALL_OUTBOUND_SUBNETS",
 											Value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16",
 										},
