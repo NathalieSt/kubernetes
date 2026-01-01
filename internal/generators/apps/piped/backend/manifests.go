@@ -122,8 +122,8 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
-						"app.kubernetes.io/instance": "piped",
-						"app.kubernetes.io/name":     "piped-frontend",
+						"app.kubernetes.io/instance": "piped-backend",
+						"app.kubernetes.io/name":     "piped-backend",
 					},
 					Ports: []core.ServicePort{
 						{
