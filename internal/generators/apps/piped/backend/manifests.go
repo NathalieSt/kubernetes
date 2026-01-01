@@ -21,10 +21,12 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"enabled": false,
 			},
 			"backend": map[string]any{
-				"labels": map[string]any{
-					"app.kubernetes.io/instance": "piped-backend",
-					"app.kubernetes.io/name":     "piped-backend",
+				"service": map[string]any{
+					"main": map[string]any{
+						"enabled": "false",
+					},
 				},
+
 				"config": map[string]any{
 					"API_URL":      "https://piped-backend.cloud.nathalie-stiefsohn.eu",
 					"PROXY_PART":   "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",

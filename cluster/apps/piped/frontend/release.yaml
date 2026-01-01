@@ -52,11 +52,11 @@ spec:
         PROXY_PART: https://piped-ytproxy.cloud.nathalie-stiefsohn.eu
       env:
         BACKEND_HOSTNAME: piped-backend.cloud.nathalie-stiefsohn.eu
-      labels:
-        app.kubernetes.io/instance: piped
-        app.kubernetes.io/name: piped-frontend
       podSecurityContext:
         runAsUser: 0
+      service:
+        main:
+          enabled: "false"
     ingress:
       backend:
         enabled: true

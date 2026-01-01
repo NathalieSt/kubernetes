@@ -12,9 +12,10 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"frontend": map[string]any{
-				"labels": map[string]any{
-					"app.kubernetes.io/instance": "piped",
-					"app.kubernetes.io/name":     "piped-frontend",
+				"service": map[string]any{
+					"main": map[string]any{
+						"enabled": "false",
+					},
 				},
 				"env": map[string]any{
 					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",

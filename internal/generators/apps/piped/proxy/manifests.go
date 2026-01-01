@@ -31,9 +31,10 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				},
 			},
 			"ytproxy": map[string]any{
-				"labels": map[string]any{
-					"app.kubernetes.io/instance": "piped",
-					"app.kubernetes.io/name":     "piped-frontend",
+				"service": map[string]any{
+					"main": map[string]any{
+						"enabled": "false",
+					},
 				},
 				"config": map[string]any{},
 				"env":    map[string]any{},

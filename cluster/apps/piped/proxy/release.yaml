@@ -62,6 +62,6 @@ spec:
             privileged: true
       config: {}
       env: {}
-      labels:
-        app.kubernetes.io/instance: piped
-        app.kubernetes.io/name: piped-frontend
+      service:
+        main:
+          enabled: "false"
