@@ -22,10 +22,10 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				},
 			},
 			"backend": map[string]any{
-				"API_URL":      "http://backend",
-				"PROXY_PART":   "http://proxy",
-				"FRONTEND_URL": "http://frontend",
 				"config": map[string]any{
+					"API_URL":      "http://backend",
+					"PROXY_PART":   "http://proxy",
+					"FRONTEND_URL": "http://frontend",
 					"database": map[string]any{
 						"connection_url": "jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped",
 						"driver_class":   "org.postgresql.Driver",
