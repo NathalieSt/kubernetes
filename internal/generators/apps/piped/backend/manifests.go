@@ -31,8 +31,8 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 						"dialect":        "org.hibernate.dialect.PostgreSQLDialect",
 					},
 				},
-				"additionalContainers": []core.Container{
-					{
+				"additionalContainers": map[string]any{
+					"netbird-agent": core.Container{
 						Name:  "netbird-agent",
 						Image: "netbirdio/netbird:latest",
 						Env: []core.Env{
@@ -73,6 +73,9 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"backend": map[string]any{
 					"enabled": false,
 				},
+			},
+			"controller": map[string]any{
+				"enabled": true,
 			},
 		},
 		[]helm.ReleaseValuesFrom{
