@@ -17,6 +17,7 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				},
 				"env": map[string]any{
 					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",
+					"PROXY_PART":       "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
 				},
 				"additionalContainers": map[string]any{
 					"netbird-agent": core.Container{
