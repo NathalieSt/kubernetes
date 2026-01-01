@@ -190,6 +190,14 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Value: "Netherlands",
 										},
 										{
+											Name:  "VPN_PORT_FORWARDING",
+											Value: "on",
+										},
+										{
+											Name:  "VPN_PORT_FORWARDING_PROVIDER",
+											Value: "protonvpn",
+										},
+										{
 											Name: "OPENVPN_USER",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
