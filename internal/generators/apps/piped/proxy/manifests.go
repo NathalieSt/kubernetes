@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
+	"kubernetes/pkg/schema/k8s/meta"
 )
 
 func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -91,6 +93,33 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		nil,
 	)
 
+	service := utils.ManifestConfig{
+		Filename: "service.yaml",
+		Manifests: []any{
+			core.NewService(
+				meta.ObjectMeta{
+					Name: generatorMeta.Name,
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/version": generatorMeta.Helm.Version,
+					},
+				}, core.ServiceSpec{
+					Selector: map[string]string{
+						"app.kubernetes.io/instance": "piped",
+						"app.kubernetes.io/name":     "piped-frontend",
+					},
+					Ports: []core.ServicePort{
+						{
+							Name:       fmt.Sprintf("http-%v", generatorMeta.Name),
+							Port:       generatorMeta.Port,
+							TargetPort: generatorMeta.Port,
+						},
+					},
+				},
+			),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -98,10 +127,11 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			[]string{
 				repo.Filename,
 				chart.Filename,
+				service.Filename,
 				release.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, repo, chart, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, repo, chart, release, service})
 }

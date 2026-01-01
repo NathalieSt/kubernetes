@@ -6,4 +6,5 @@ metadata:
 resources:
 - repo.yaml
 - chart.yaml
+- service.yaml
 - release.yaml
