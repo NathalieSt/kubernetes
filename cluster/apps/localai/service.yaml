@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: localai
-    app.kubernetes.io/version: v3.9.0-aio-gpu-intel
+    app.kubernetes.io/version: localai:v3.9.0-aio-cpu
   name: localai
 spec:
   selector:

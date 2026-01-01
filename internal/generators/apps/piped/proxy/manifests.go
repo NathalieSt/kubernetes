@@ -17,8 +17,8 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"enabled": false,
 			},
 			"ytproxy": map[string]any{
-				"additionalContainers": []core.Container{
-					{
+				"additionalContainers": map[string]any{
+					"netbird-agent": core.Container{
 						Name:  "netbird-agent",
 						Image: "netbirdio/netbird:latest",
 						Env: []core.Env{

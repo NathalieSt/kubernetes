@@ -18,8 +18,8 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				"env": map[string]any{
 					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",
 				},
-				"additionalContainers": []core.Container{
-					{
+				"additionalContainers": map[string]any{
+					"netbird-agent": core.Container{
 						Name:  "netbird-agent",
 						Image: "netbirdio/netbird:latest",
 						Env: []core.Env{
