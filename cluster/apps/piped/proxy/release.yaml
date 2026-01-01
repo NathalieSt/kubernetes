@@ -28,9 +28,10 @@ spec:
       enabled: true
     frontend:
       config:
-        BACKEND_HOSTNAME: piped-backend.cloud.nathalie-stiefsohn.eu
         PROXY_PART: https://piped-ytproxy.cloud.nathalie-stiefsohn.eu
       enabled: false
+      env:
+        BACKEND_HOSTNAME: piped-backend.cloud.nathalie-stiefsohn.eu
     ingress:
       backend:
         enabled: true

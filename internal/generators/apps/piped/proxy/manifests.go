@@ -14,9 +14,11 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		map[string]any{
 			"frontend": map[string]any{
 				"enabled": false,
-				"config": map[string]any{
+				"env": map[string]any{
 					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",
-					"PROXY_PART":       "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
+				},
+				"config": map[string]any{
+					"PROXY_PART": "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
 				},
 			},
 			"backend": map[string]any{
