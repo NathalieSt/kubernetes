@@ -9,4 +9,7 @@ resources:
 - chart.yaml
 - release.yaml
 - pvc.yaml
+- deployment.yaml
 - scaled-object.yaml
+- quic-config-pvc.yaml
+- qbit-config-pvc.yaml

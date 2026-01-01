@@ -6,6 +6,7 @@ import (
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
@@ -26,6 +27,38 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			}),
+		},
+	}
+
+	quiConfigPVCName := fmt.Sprintf("%v-qui-config-pvc", generatorMeta.Name)
+	quiConfigPVC := utils.ManifestConfig{
+		Filename: "quic-config-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			}),
+		},
+	}
+
+	qbitConfigPVCName := fmt.Sprintf("%v-qbit-config-pvc", generatorMeta.Name)
+	qbitConfigPVC := utils.ManifestConfig{
+		Filename: "qbit-config-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
 				}},
 				StorageClassName: generators.NFSLocalClass,
 			}),
@@ -56,6 +89,128 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		nil,
 	)
 
+	qbitConfigVolume := "qbit-config-volume"
+	quiConfigVolume := "qui-config-volume"
+	mediaVolume := "media-volume"
+	deployment := utils.ManifestConfig{
+		Filename: "deployment.yaml",
+		Manifests: []any{
+			apps.NewDeployment(
+				meta.ObjectMeta{
+					Name: "qbitsetup",
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    "qbitsetup",
+						"app.kubernetes.io/version": "1.0",
+					},
+				},
+				apps.DeploymentSpec{
+					Replicas: 1,
+					Selector: meta.LabelSelector{
+						MatchLabels: map[string]string{
+							"app.kubernetes.io/name":    "qbitsetup",
+							"app.kubernetes.io/version": "1.0",
+						},
+					},
+					Template: core.PodTemplateSpec{
+						Metadata: meta.ObjectMeta{
+							Labels: map[string]string{
+								"app.kubernetes.io/name":    "qbitsetup",
+								"app.kubernetes.io/version": "1.0",
+							},
+						},
+						Spec: core.PodSpec{
+							Containers: []core.Container{
+								{
+									Name:  "qui",
+									Image: "ghcr.io/autobrr/qui:latest",
+									Ports: []core.Port{
+										core.Port{
+											Name:          "qui",
+											ContainerPort: 7476,
+										},
+									},
+									VolumeMounts: []core.VolumeMount{
+										core.VolumeMount{
+											Name:      quiConfigVolume,
+											MountPath: "/config",
+										},
+									},
+								},
+								{
+									Name:  "qbittorrent",
+									Image: "linuxserver/qbittorrent:5.1.4",
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/downloads",
+											Name:      mediaVolume,
+										},
+										{
+											MountPath: "/config",
+											Name:      qbitConfigVolume,
+										},
+									},
+								},
+								{
+									Name:  "glue-tun",
+									Image: "qmcgaw/gluetun:v3.41",
+									SecurityContext: core.ContainerSecurityContext{
+										Capabilities: core.Capabilities{
+											Add: []string{
+												"NET_ADMIN",
+											},
+										},
+									},
+									Env: []core.Env{
+										{
+											Name:  "VPN_SERVICE_PROVIDER",
+											Value: "protonvpn",
+										},
+										{
+											Name:  "VPN_TYPE",
+											Value: "openvpn",
+										},
+										{
+											Name:  "OPENVPN_USER",
+											Value: "test",
+										},
+										{
+											Name:  "OPENVPN_PASSWORD",
+											Value: "test",
+										},
+										{
+											Name:  "SERVER_COUNTRIES",
+											Value: "Netherlands",
+										},
+									},
+								},
+							},
+							Volumes: []core.Volume{
+								{
+									Name: mediaVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: pvcName,
+									},
+								},
+								{
+									Name: quiConfigVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: quiConfigPVCName,
+									},
+								},
+								{
+									Name: qbitConfigVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: qbitConfigPVCName,
+									},
+								},
+							},
+						},
+					},
+				},
+			),
+		},
+	}
+
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
 		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
@@ -69,9 +224,12 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			chart.Filename,
 			release.Filename,
 			pvc.Filename,
+			deployment.Filename,
 			scaledObject.Filename,
+			quiConfigPVC.Filename,
+			qbitConfigPVC.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, quiConfigPVC, qbitConfigPVC})
 }

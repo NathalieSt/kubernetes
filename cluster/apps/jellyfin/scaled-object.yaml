@@ -5,6 +5,7 @@ metadata:
   name: jellyfin-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: jellyfin
   minReplicaCount: 0
   cooldownPeriod: 300

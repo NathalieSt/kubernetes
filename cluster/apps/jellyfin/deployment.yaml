@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: qbitsetup
+    app.kubernetes.io/version: "1.0"
+  name: qbitsetup
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qbitsetup
+      app.kubernetes.io/version: "1.0"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qbitsetup
+        app.kubernetes.io/version: "1.0"
+    spec:
+      containers:
+      - image: ghcr.io/autobrr/qui:latest
+        name: qui
+        ports:
+        - containerPort: 7476
+          name: qui
+        volumeMounts:
+        - mountPath: /config
+          name: qui-config-volume
+      - image: linuxserver/qbittorrent:5.1.4
+        name: qbittorrent
+        volumeMounts:
+        - mountPath: /downloads
+          name: media-volume
+        - mountPath: /config
+          name: qbit-config-volume
+      - image: qmcgaw/gluetun:v3.41
+        name: glue-tun
+        env:
+        - name: VPN_SERVICE_PROVIDER
+          value: protonvpn
+        - name: VPN_TYPE
+          value: openvpn
+        - name: OPENVPN_USER
+          value: test
+        - name: OPENVPN_PASSWORD
+          value: test
+        - name: SERVER_COUNTRIES
+          value: Netherlands
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+      volumes:
+      - name: media-volume
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc
+      - name: qui-config-volume
+        persistentVolumeClaim:
+          claimName: jellyfin-qui-config-pvc
+      - name: qbit-config-volume
+        persistentVolumeClaim:
+          claimName: jellyfin-qbit-config-pvc
