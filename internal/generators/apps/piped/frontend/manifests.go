@@ -13,10 +13,8 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		map[string]any{
 			"frontend": map[string]any{
 				"labels": map[string]any{
-					"selectorLabels": map[string]any{
-						"app.kubernetes.io/instance": "piped",
-						"app.kubernetes.io/name":     "piped-frontend",
-					},
+					"app.kubernetes.io/instance": "piped",
+					"app.kubernetes.io/name":     "piped-frontend",
 				},
 				"env": map[string]any{
 					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",

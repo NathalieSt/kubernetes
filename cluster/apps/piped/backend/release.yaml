@@ -45,10 +45,8 @@ spec:
           dialect: org.hibernate.dialect.PostgreSQLDialect
           driver_class: org.postgresql.Driver
       labels:
-        selectorLabels:
-          labels:
-            app.kubernetes.io/instance: piped-backend
-            app.kubernetes.io/name: piped-backend
+        app.kubernetes.io/instance: piped-backend
+        app.kubernetes.io/name: piped-backend
     controller:
       enabled: true
     frontend:

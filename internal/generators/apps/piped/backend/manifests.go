@@ -22,12 +22,8 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			},
 			"backend": map[string]any{
 				"labels": map[string]any{
-					"selectorLabels": map[string]any{
-						"labels": map[string]any{
-							"app.kubernetes.io/instance": "piped-backend",
-							"app.kubernetes.io/name":     "piped-backend",
-						},
-					},
+					"app.kubernetes.io/instance": "piped-backend",
+					"app.kubernetes.io/name":     "piped-backend",
 				},
 				"config": map[string]any{
 					"API_URL":      "https://piped-backend.cloud.nathalie-stiefsohn.eu",
