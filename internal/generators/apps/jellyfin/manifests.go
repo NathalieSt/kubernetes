@@ -182,6 +182,17 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 											},
 										},
 									},
+									/*
+
+																			FIREWALL: "on"
+										    FIREWALL_OUTBOUND_SUBNETS: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+										    DNS_ADDRESS: "1.1.1.1"
+										    HEALTH_SERVER_PORT: "8000"
+
+										    # Important: Add these settings to make networking work correctly with ingress
+										    SERVER_ALLOWLIST: "qbittorrent:8080"  # Allow accessing qBittorrent container
+										    FIREWALL_INPUT_PORTS: "8080"          # Allow ingress traffic to port 8080
+									*/
 									Env: []core.Env{
 										{
 											Name:  "VPN_SERVICE_PROVIDER",
@@ -199,9 +210,30 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Name:  "VPN_PORT_FORWARDING",
 											Value: "on",
 										},
+
 										{
 											Name:  "VPN_PORT_FORWARDING_PROVIDER",
 											Value: "protonvpn",
+										},
+										{
+											Name:  "FIREWALL",
+											Value: "on",
+										},
+										{
+											Name:  "FIREWALL_OUTBOUND_SUBNETS",
+											Value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16",
+										},
+										{
+											Name:  "DNS_ADDRESS",
+											Value: "1.1.1.1",
+										},
+										{
+											Name:  "SERVER_ALLOWLIST",
+											Value: "qbittorrent:8080",
+										},
+										{
+											Name:  "FIREWALL_INPUT_PORTS",
+											Value: "8080",
 										},
 										{
 											Name: "OPENVPN_USER",
