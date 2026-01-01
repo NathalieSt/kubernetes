@@ -46,8 +46,9 @@ spec:
           driver_class: org.postgresql.Driver
       labels:
         selectorLabels:
-          app.kubernetes.io/instance: piped-backend
-          app.kubernetes.io/name: piped-backend
+          labels:
+            app.kubernetes.io/instance: piped-backend
+            app.kubernetes.io/name: piped-backend
     controller:
       enabled: true
     frontend:
