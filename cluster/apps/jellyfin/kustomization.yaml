@@ -14,3 +14,4 @@ resources:
 - quic-config-pvc.yaml
 - qbit-config-pvc.yaml
 - vault-secret.yaml
+- service.yaml

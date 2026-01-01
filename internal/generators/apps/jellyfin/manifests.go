@@ -251,6 +251,33 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	service := utils.ManifestConfig{
+		Filename: "service.yaml",
+		Manifests: []any{
+			core.NewService(
+				meta.ObjectMeta{
+					Name: "qbit",
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    "qbitsetup",
+						"app.kubernetes.io/version": "1.0",
+					},
+				}, core.ServiceSpec{
+					Selector: map[string]string{
+						"app.kubernetes.io/name":    "qbitsetup",
+						"app.kubernetes.io/version": "1.0",
+					},
+					Ports: []core.ServicePort{
+						{
+							Name:       "http-qbit-webui",
+							Port:       8080,
+							TargetPort: 8080,
+						},
+					},
+				},
+			),
+		},
+	}
+
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
 		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
@@ -269,8 +296,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			quiConfigPVC.Filename,
 			qbitConfigPVC.Filename,
 			vpnVaultSecret.Filename,
+			service.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, quiConfigPVC, qbitConfigPVC, vpnVaultSecret})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, quiConfigPVC, qbitConfigPVC, vpnVaultSecret, service})
 }
