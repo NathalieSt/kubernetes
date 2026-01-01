@@ -165,6 +165,12 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Name:      qbitConfigVolume,
 										},
 									},
+									Ports: []core.Port{
+										{
+											Name:          "web-ui",
+											ContainerPort: 8080,
+										},
+									},
 								},
 								{
 									Name:  "glue-tun",

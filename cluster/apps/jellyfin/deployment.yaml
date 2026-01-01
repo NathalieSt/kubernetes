@@ -29,6 +29,9 @@ spec:
           name: qui-config-volume
       - image: linuxserver/qbittorrent:5.1.4
         name: qbittorrent
+        ports:
+        - containerPort: 8080
+          name: web-ui
         volumeMounts:
         - mountPath: /downloads
           name: media-volume
