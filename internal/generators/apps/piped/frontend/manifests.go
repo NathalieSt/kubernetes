@@ -12,13 +12,14 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"frontend": map[string]any{
-				"env": map[string]any{},
+				"env": map[string]any{
+					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",
+				},
 				"podSecurityContext": map[string]any{
 					"runAsUser": 0,
 				},
 				"config": map[string]any{
-					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",
-					"PROXY_PART":       "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
+					"PROXY_PART": "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
 				},
 				"additionalContainers": map[string]any{
 					"netbird-agent": core.Container{

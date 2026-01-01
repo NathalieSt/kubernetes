@@ -49,9 +49,9 @@ spec:
           securityContext:
             privileged: true
       config:
-        BACKEND_HOSTNAME: piped-backend.cloud.nathalie-stiefsohn.eu
         PROXY_PART: https://piped-ytproxy.cloud.nathalie-stiefsohn.eu
-      env: {}
+      env:
+        BACKEND_HOSTNAME: piped-backend.cloud.nathalie-stiefsohn.eu
       podSecurityContext:
         runAsUser: 0
     ingress:
