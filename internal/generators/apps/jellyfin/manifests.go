@@ -38,7 +38,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Filename: "quic-config-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
+				Name: quiConfigPVCName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
@@ -54,7 +54,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Filename: "qbit-config-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
+				Name: qbitConfigPVCName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
