@@ -17,6 +17,13 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"frontend": map[string]any{
+				"securityContext": map[string]any{
+					"capabilities": map[string]any{
+						"add": []string{
+							"NET_BIND_SERVICE",
+						},
+					},
+				},
 				"env": map[string]any{
 					"BACKEND_HOSTNAME": "backend",
 				},

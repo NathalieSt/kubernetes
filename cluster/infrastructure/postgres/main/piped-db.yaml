@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: piped-db
+spec:
+  name: piped
+  cluster:
+    name: postgres
+  owner: postgres

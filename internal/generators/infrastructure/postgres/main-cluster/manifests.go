@@ -33,22 +33,22 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Probes: cnpg.ProbesConfiguration{
 					Readiness: cnpg.ProbeWithStrategy{
 						InitialDelaySeconds: 30,
-						PeriodSeconds:       10,
-						TimeoutSeconds:      5,
-						FailureThreshold:    6,
+						PeriodSeconds:       30,
+						TimeoutSeconds:      30,
+						FailureThreshold:    10,
 					},
 				},
 			}),
 		},
 	}
 
-	dawarichDB := utils.ManifestConfig{
-		Filename: "dawarich-db.yaml",
+	pipedDB := utils.ManifestConfig{
+		Filename: "piped-db.yaml",
 		Manifests: []any{
 			cnpg.NewDatabase(meta.ObjectMeta{
-				Name: "dawarich-db",
+				Name: "piped-db",
 			}, cnpg.DatabaseSpec{
-				Name: "dawarich-development",
+				Name: "piped",
 				Cluster: cnpg.DatabaseCluster{
 					Name: clusterName,
 				},
@@ -64,10 +64,10 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 			[]string{
 				namespace.Filename,
 				cluster.Filename,
-				dawarichDB.Filename,
+				pipedDB.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, dawarichDB})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, pipedDB})
 }

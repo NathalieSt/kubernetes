@@ -6,4 +6,4 @@ metadata:
 resources:
 - namespace.yaml
 - cnpg-cluster.yaml
-- dawarich-db.yaml
+- piped-db.yaml
