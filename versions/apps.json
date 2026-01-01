@@ -1,6 +1,6 @@
 {
     "adguard-home": "v0.107.71",
-    "localai": "localai:v3.9.0-aio-cpu",
+    "localai": "v3.9.0-aio-cpu",
     "lidify": "v1.0.2",
     "forgejo": "14.0.0",
     "glance": "v0.8.4",

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: localai
-    app.kubernetes.io/version: localai:v3.9.0-aio-cpu
+    app.kubernetes.io/version: v3.9.0-aio-cpu
   name: localai
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: localai
-        app.kubernetes.io/version: localai:v3.9.0-aio-cpu
+        app.kubernetes.io/version: v3.9.0-aio-cpu
     spec:
       containers:
-      - image: quay.io/go-skynet/local-ai:localai:v3.9.0-aio-cpu
+      - image: quay.io/go-skynet/local-ai:v3.9.0-aio-cpu
         name: localai
         ports:
         - containerPort: 8080
