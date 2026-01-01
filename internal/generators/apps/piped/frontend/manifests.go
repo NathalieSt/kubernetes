@@ -12,6 +12,7 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"frontend": map[string]any{
+				"env": map[string]any{},
 				"podSecurityContext": map[string]any{
 					"runAsUser": 0,
 				},
