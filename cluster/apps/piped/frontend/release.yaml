@@ -15,6 +15,14 @@ spec:
       retries: 3
   values:
     backend:
+      config:
+        API_URL: https://piped-backend.cloud.nathalie-stiefsohn.eu
+        FRONTEND_URL: https://piped.cloud.nathalie-stiefsohn.eu
+        PROXY_PART: https://piped-ytproxy.cloud.nathalie-stiefsohn.eu
+        database:
+          connection_url: jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          driver_class: org.postgresql.Driver
       enabled: false
     controller:
       enabled: true
@@ -55,3 +63,4 @@ spec:
         enabled: true
     ytproxy:
       enabled: false
+      env: {}

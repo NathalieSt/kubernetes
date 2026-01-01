@@ -57,9 +57,20 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			},
 			"backend": map[string]any{
 				"enabled": false,
+				"config": map[string]any{
+					"API_URL":      "https://piped-backend.cloud.nathalie-stiefsohn.eu",
+					"PROXY_PART":   "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
+					"FRONTEND_URL": "https://piped.cloud.nathalie-stiefsohn.eu",
+					"database": map[string]any{
+						"connection_url": "jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped",
+						"driver_class":   "org.postgresql.Driver",
+						"dialect":        "org.hibernate.dialect.PostgreSQLDialect",
+					},
+				},
 			},
 			"ytproxy": map[string]any{
 				"enabled": false,
+				"env":     map[string]any{},
 			},
 			"ingress": map[string]any{
 				"main": map[string]any{

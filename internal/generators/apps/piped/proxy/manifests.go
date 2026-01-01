@@ -12,11 +12,28 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		map[string]any{
 			"frontend": map[string]any{
 				"enabled": false,
+				"config": map[string]any{
+					"BACKEND_HOSTNAME": "piped-backend.cloud.nathalie-stiefsohn.eu",
+					"PROXY_PART":       "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
+				},
 			},
 			"backend": map[string]any{
 				"enabled": false,
+				"config": map[string]any{
+					"API_URL":      "https://piped-backend.cloud.nathalie-stiefsohn.eu",
+					"PROXY_PART":   "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
+					"FRONTEND_URL": "https://piped.cloud.nathalie-stiefsohn.eu",
+					"database": map[string]any{
+						"connection_url": "jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped",
+						"driver_class":   "org.postgresql.Driver",
+						"dialect":        "org.hibernate.dialect.PostgreSQLDialect",
+					},
+				},
 			},
 			"ytproxy": map[string]any{
+				"config": map[string]any{
+					"env": map[string]any{},
+				},
 				"additionalContainers": map[string]any{
 					"netbird-agent": core.Container{
 						Name:  "netbird-agent",
