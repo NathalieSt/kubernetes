@@ -176,6 +176,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									Name:  "glue-tun",
 									Image: "qmcgaw/gluetun:v3.41",
 									SecurityContext: core.ContainerSecurityContext{
+										Privileged: true,
 										Capabilities: core.Capabilities{
 											Add: []string{
 												"NET_ADMIN",
