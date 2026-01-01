@@ -34,6 +34,23 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		},
 	}
 
+	backendsPVCName := "backends-pvc"
+	backendsPVC := utils.ManifestConfig{
+		Filename: "backends-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: backendsPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "100Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			},
+			),
+		},
+	}
+
 	outputPVCName := "output-pvc"
 	outputPVC := utils.ManifestConfig{
 		Filename: "output-pvc.yaml",
@@ -51,6 +68,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		},
 	}
 
+	backendsVolume := "backends-volume"
 	modelVolume := "model-volume"
 	outputVolume := "output-volume"
 	deployment := utils.ManifestConfig{
@@ -103,10 +121,20 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											Name:      "dri",
 											Readonly:  true,
 										},
+										{
+											MountPath: "/backends",
+											Name:      backendsVolume,
+										},
 									},
 									Resources: core.Resources{
 										Limits: map[string]string{
 											"gpu.intel.com/i915": "1",
+										},
+									},
+									Env: []core.Env{
+										core.Env{
+											Name:  "DEBUG",
+											Value: "true",
 										},
 									},
 								},
@@ -129,6 +157,12 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 									HostPath: core.HostPath{
 										Path: "/dev/dri",
 										Type: core.Directory,
+									},
+								},
+								{
+									Name: backendsVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: backendsPVCName,
 									},
 								},
 							},
@@ -176,11 +210,12 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 			namespace.Filename,
 			modelPVC.Filename,
 			outputPVC.Filename,
+			backendsPVC.Filename,
 			deployment.Filename,
 			service.Filename,
 			scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, modelPVC, outputPVC, kustomization, deployment, service, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, backendsPVC, modelPVC, outputPVC, kustomization, deployment, service, scaledObject})
 }

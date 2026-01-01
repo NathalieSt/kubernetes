@@ -7,6 +7,7 @@ resources:
 - namespace.yaml
 - model-pvc.yaml
 - output-pvc.yaml
+- backends-pvc.yaml
 - deployment.yaml
 - service.yaml
 - scaled-object.yaml

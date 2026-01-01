@@ -15,10 +15,10 @@ spec:
       retries: 3
   values:
     backend:
-      API_URL: http://backend
-      FRONTEND_URL: http://frontend
-      PROXY_PART: http://proxy
       config:
+        API_URL: http://backend
+        FRONTEND_URL: http://frontend
+        PROXY_PART: http://proxy
         database:
           connection_url: jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped
           dialect: org.hibernate.dialect.PostgreSQLDialect
