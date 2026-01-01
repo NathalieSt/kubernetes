@@ -14,13 +14,13 @@ func main() {
 		return
 	}
 
-	name := "piped"
+	name := "piped-backend"
 	generatorType := generator.Infrastructure
 	var Piped = generator.GeneratorMeta{
 		Name:          name,
 		Namespace:     "piped",
 		GeneratorType: generatorType,
-		ClusterUrl:    "piped-frontend.piped.svc.cluster.local",
+		ClusterUrl:    "piped-backend.piped.svc.cluster.local",
 		Port:          8200,
 		Helm: &generator.Helm{
 			Chart:   "piped",
@@ -28,7 +28,7 @@ func main() {
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Caddy: &generator.Caddy{
-			DNSName: "piped",
+			DNSName: "piped-backend",
 		},
 		DependsOnGenerators: []string{},
 	}
@@ -36,7 +36,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             Piped,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/piped/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/piped/backend"),
 		CreateManifests:  createPipedManifests,
 	})
 }

@@ -5,6 +5,7 @@ import (
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/core"
 )
 
 func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -17,28 +18,56 @@ func createPipedManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"frontend": map[string]any{
-				"securityContext": map[string]any{
-					"capabilities": map[string]any{
-						"add": []string{
-							"NET_BIND_SERVICE",
-						},
-					},
-				},
-				"env": map[string]any{
-					"BACKEND_HOSTNAME": "backend",
-				},
+				"enabled": false,
 			},
 			"backend": map[string]any{
 				"config": map[string]any{
-					"API_URL":      "http://backend",
-					"PROXY_PART":   "http://proxy",
-					"FRONTEND_URL": "http://frontend",
+					"API_URL":      "https://piped-backend.cloud.nathalie-stiefsohn.eu",
+					"PROXY_PART":   "https://piped-ytproxy.cloud.nathalie-stiefsohn.eu",
+					"FRONTEND_URL": "https://piped.cloud.nathalie-stiefsohn.eu",
 					"database": map[string]any{
 						"connection_url": "jdbc:postgresql://postgres-rw.postgres.svc.cluster.local:5432/piped",
 						"driver_class":   "org.postgresql.Driver",
 						"dialect":        "org.hibernate.dialect.PostgreSQLDialect",
 					},
 				},
+				"additionalContainers": []core.Container{
+					{
+						Name:  "netbird-agent",
+						Image: "netbirdio/netbird:latest",
+						Env: []core.Env{
+							{
+								Name: "NB_SETUP_KEY",
+								ValueFrom: core.ValueFrom{
+									SecretKeyRef: core.SecretKeyRef{
+										Name: generators.NetbirdSecretName,
+										Key:  "setup-key",
+									},
+								},
+							},
+							{
+								Name:  "NB_MANAGEMENT_URL",
+								Value: "https://netbird.nathalie-stiefsohn.eu",
+							},
+						},
+						Resources: core.Resources{
+							Requests: map[string]string{
+								"cpu":    "50m",
+								"memory": "64Mi",
+							},
+							Limits: map[string]string{
+								"cpu":    "100m",
+								"memory": "128Mi",
+							},
+						},
+						SecurityContext: core.ContainerSecurityContext{
+							Privileged: true,
+						},
+					},
+				},
+			},
+			"ytproxy": map[string]any{
+				"enabled": false,
 			},
 			"ingress": map[string]any{
 				"main": map[string]any{

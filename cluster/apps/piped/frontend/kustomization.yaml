@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: piped
 resources:
-- namespace.yaml
 - repo.yaml
 - chart.yaml
 - release.yaml

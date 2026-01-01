@@ -6,24 +6,60 @@ metadata:
 data:
   Caddyfile: |-
     
-    searxng.cloud.nathalie-stiefsohn.eu {
+    glance.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
-    	reverse_proxy searxng.searxng.svc.cluster.local:8080 {
+    	reverse_proxy glance.glance.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}
     	
     }
     		
-    matrix.cloud.nathalie-stiefsohn.eu {
+    vault.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
-    	reverse_proxy synapse.synapse.svc.cluster.local:8008 {
+    	reverse_proxy vault-ui.vault.svc.cluster.local:8200 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    mealie.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy mealie.mealie.svc.cluster.local:9000 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    perses.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy perses.perses.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    searxng.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy searxng.searxng.svc.cluster.local:8080 {
     		header_up Host {host}
     		
     	}
@@ -42,12 +78,72 @@ data:
     	
     }
     		
+    piped-backend.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy piped-backend.piped.svc.cluster.local:8200 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
     booklore.cloud.nathalie-stiefsohn.eu {
     	tls {
             dns hetzner {$API_TOKEN}
             propagation_delay 30s
         }    
     	reverse_proxy booklore.booklore.svc.cluster.local:6060 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    redlib.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy redlib.redlib.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    matrix.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy synapse.synapse.svc.cluster.local:8008 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    piped-ytproxy.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy piped-ytproxy.piped.svc.cluster.local:8080 {
+    		header_up Host {host}
+    		
+    	}
+    	
+    }
+    		
+    piped.cloud.nathalie-stiefsohn.eu {
+    	tls {
+            dns hetzner {$API_TOKEN}
+            propagation_delay 30s
+        }    
+    	reverse_proxy piped-frontend.piped.svc.cluster.local:80 {
     		header_up Host {host}
     		
     	}
@@ -84,66 +180,6 @@ data:
     		header_up Host {host}
     	}
     		
-    }
-    		
-    mealie.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy mealie.mealie.svc.cluster.local:9000 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    redlib.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy redlib.redlib.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    vault.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy vault-ui.vault.svc.cluster.local:8200 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    glance.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy glance.glance.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
-    }
-    		
-    perses.cloud.nathalie-stiefsohn.eu {
-    	tls {
-            dns hetzner {$API_TOKEN}
-            propagation_delay 30s
-        }    
-    	reverse_proxy perses.perses.svc.cluster.local:8080 {
-    		header_up Host {host}
-    		
-    	}
-    	
     }
     		
     kibana.cloud.nathalie-stiefsohn.eu {

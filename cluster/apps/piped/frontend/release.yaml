@@ -1,0 +1,52 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: piped
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: piped-chart
+  timeout: 10m
+  releaseName: piped
+  install:
+    remediation:
+      retries: 3
+  values:
+    backend:
+      enabled: false
+    frontend:
+      additionalContainers:
+      - image: netbirdio/netbird:latest
+        name: netbird-agent
+        env:
+        - name: NB_SETUP_KEY
+          valueFrom:
+            secretKeyRef:
+              key: setup-key
+              name: netbird-setup-key-vault-secret
+        - name: NB_MANAGEMENT_URL
+          value: https://netbird.nathalie-stiefsohn.eu
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          privileged: true
+      env:
+        BACKEND_HOSTNAME: piped-backend.cloud.nathalie-stiefsohn.eu
+      podSecurityContext:
+        runAsUser: 0
+    ingress:
+      backend:
+        enabled: false
+      main:
+        enabled: false
+      ytproxy:
+        enabled: false
+    ytproxy:
+      enabled: false

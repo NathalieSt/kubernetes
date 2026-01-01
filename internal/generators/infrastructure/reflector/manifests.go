@@ -22,9 +22,9 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		Path:       "netbird/setup-key",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy,adguard-home",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "caddy,adguard-home,piped",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "caddy,adguard-home",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "caddy,adguard-home,piped",
 		},
 	}
 
