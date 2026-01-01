@@ -22,11 +22,11 @@ spec:
       enabled: false
     ingress:
       backend:
-        enabled: false
+        enabled: true
       main:
-        enabled: false
+        enabled: true
       ytproxy:
-        enabled: false
+        enabled: true
     ytproxy:
       additionalContainers:
         netbird-agent:

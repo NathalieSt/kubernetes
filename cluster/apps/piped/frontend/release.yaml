@@ -47,10 +47,10 @@ spec:
         runAsUser: 0
     ingress:
       backend:
-        enabled: false
+        enabled: true
       main:
-        enabled: false
+        enabled: true
       ytproxy:
-        enabled: false
+        enabled: true
     ytproxy:
       enabled: false
