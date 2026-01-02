@@ -6,6 +6,7 @@ import (
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 )
 
 func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -42,17 +43,31 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
-	pipedDB := utils.ManifestConfig{
-		Filename: "piped-db.yaml",
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
 		Manifests: []any{
-			cnpg.NewDatabase(meta.ObjectMeta{
-				Name: "piped-db",
-			}, cnpg.DatabaseSpec{
-				Name: "piped",
-				Cluster: cnpg.DatabaseCluster{
-					Name: clusterName,
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: "mealie-networkpolicy",
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "mealie",
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "mealie",
+									},
+								},
+							},
+						},
+					},
 				},
-				Owner: "postgres",
 			}),
 		},
 	}
@@ -64,10 +79,10 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 			[]string{
 				namespace.Filename,
 				cluster.Filename,
-				pipedDB.Filename,
+				networkPolicy.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, pipedDB})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, networkPolicy})
 }

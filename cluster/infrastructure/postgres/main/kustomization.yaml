@@ -6,4 +6,4 @@ metadata:
 resources:
 - namespace.yaml
 - cnpg-cluster.yaml
-- piped-db.yaml
+- network-policy.yaml

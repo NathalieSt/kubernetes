@@ -179,7 +179,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 			networking.NewNetworkPolicy(meta.ObjectMeta{
 				Name: "mealie-networkpolicy",
 			}, networking.NetworkPolicySpec{
-				PolicyTypes: []networking.NetworkPolicyType{networking.Egress, networking.Ingress},
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
@@ -192,24 +192,6 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 								NamespaceSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
 										"kubernetes.io/metadata.name": "caddy",
-									},
-								},
-							},
-						},
-					},
-				},
-				Egress: []networking.NetworkPolicyEgressRule{
-					{
-						To: []networking.NetworkPolicyPeer{
-							{
-								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"cnpg.io/cluster": "postgres",
-									},
-								},
-								NamespaceSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "postgres",
 									},
 								},
 							},

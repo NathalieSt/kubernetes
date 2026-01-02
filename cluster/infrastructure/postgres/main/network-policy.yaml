@@ -10,7 +10,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: caddy
+          kubernetes.io/metadata.name: mealie
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: caddy
+          app.kubernetes.io/name: mealie
