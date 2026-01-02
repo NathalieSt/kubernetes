@@ -22,7 +22,10 @@ spec:
       - command:
         - /bin/sh
         - -c
-        - cp -r /readonly/* /tocopyto/
+        - |-
+          mkdir -p /tocopyto
+          										cp /readonly/* /tocopyto/
+          										chmod 644 /tocopyto/*
         image: alpine:latest
         name: config-init
         volumeMounts:
