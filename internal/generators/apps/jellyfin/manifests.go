@@ -79,7 +79,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		),
 	}
 
-	transPVCVPNName := fmt.Sprintf("trans-vpn-pvc", generatorMeta.Name)
+	transPVCVPNName := "trans-vpn-pvc"
 	transPVCVPN := utils.ManifestConfig{
 		Filename: "trans-pvc.yaml",
 		Manifests: []any{

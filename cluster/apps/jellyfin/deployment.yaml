@@ -65,7 +65,7 @@ spec:
       volumes:
       - name: trans-vpn-vpc-volume
         persistentVolumeClaim:
-          claimName: trans-vpn-pvc%!(EXTRA string=jellyfin)
+          claimName: trans-vpn-pvc
       - name: media-volume
         persistentVolumeClaim:
           claimName: jellyfin-pvc

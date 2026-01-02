@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: trans-vpn-pvc%!(EXTRA string=jellyfin)
+  name: trans-vpn-pvc
 spec:
   accessModes:
   - ReadWriteMany
