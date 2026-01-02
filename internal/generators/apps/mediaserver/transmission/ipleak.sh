@@ -1,6 +1,6 @@
 #!/bin/sh
 
-INTERVAL=300
+INTERVAL=900
 IP_API="https://ipapi.co/json/"
 
 while true; do
