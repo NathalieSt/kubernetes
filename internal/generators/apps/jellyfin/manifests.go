@@ -168,6 +168,10 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									},
 									Env: []core.Env{
 										{
+											Name:  "DEBUG",
+											Value: "true",
+										},
+										{
 											Name:  "OPENVPN_PROVIDER",
 											Value: "custom",
 										},
@@ -227,7 +231,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 										Items: []core.SecretVolumeItem{
 											{
 												Key:  "vpn-config",
-												Path: "node-nl.protonvpn.udp",
+												Path: "node-nl.protonvpn.udp.ovpn",
 											},
 											{
 												Key:  "rotate-script",

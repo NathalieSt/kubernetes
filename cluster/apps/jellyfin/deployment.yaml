@@ -42,6 +42,8 @@ spec:
         - mountPath: /etc/openvpn/custom/
           name: trans-vpn-vpc-volume
         env:
+        - name: DEBUG
+          value: "true"
         - name: OPENVPN_PROVIDER
           value: custom
         - name: OPENVPN_CONFIG
@@ -74,6 +76,6 @@ spec:
           secretName: trans-config
           items:
           - key: vpn-config
-            path: node-nl.protonvpn.udp
+            path: node-nl.protonvpn.udp.ovpn
           - key: rotate-script
             path: update-port.sh
