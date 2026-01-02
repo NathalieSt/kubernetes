@@ -9,8 +9,18 @@ spec:
   ingress:
   - from:
     - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: synapse
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          - synapse
+          - discord-bridge
+          - cnpg-system
       podSelector:
-        matchLabels:
-          app.kubernetes.io/name: synapse
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - synapse
+          - discord-bridge
+          - cloudnative-pg

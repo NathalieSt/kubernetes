@@ -9,8 +9,16 @@ spec:
   ingress:
   - from:
     - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: mealie
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          - forgejo
+          - cnpg-system
       podSelector:
-        matchLabels:
-          app.kubernetes.io/name: mealie
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - forgejo
+          - cloudnative-pg

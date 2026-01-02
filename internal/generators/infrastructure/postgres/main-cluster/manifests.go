@@ -56,13 +56,27 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 						From: []networking.NetworkPolicyPeer{
 							{
 								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "mealie",
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "app.kubernetes.io/name",
+											Operator: meta.In,
+											Values: []string{
+												"mealie",
+												"cloudnative-pg",
+											},
+										},
 									},
 								},
 								NamespaceSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "mealie",
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "kubernetes.io/metadata.name",
+											Operator: meta.In,
+											Values: []string{
+												"mealie",
+												"cnpg-system",
+											},
+										},
 									},
 								},
 							},

@@ -112,13 +112,29 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 						From: []networking.NetworkPolicyPeer{
 							{
 								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "synapse",
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "app.kubernetes.io/name",
+											Operator: meta.In,
+											Values: []string{
+												"synapse",
+												"discord-bridge",
+												"cloudnative-pg",
+											},
+										},
 									},
 								},
 								NamespaceSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "synapse",
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "kubernetes.io/metadata.name",
+											Operator: meta.In,
+											Values: []string{
+												"synapse",
+												"discord-bridge",
+												"cnpg-system",
+											},
+										},
 									},
 								},
 							},
