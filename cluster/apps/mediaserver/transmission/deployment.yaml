@@ -39,15 +39,12 @@ spec:
         - -c
         - |-
           chown -R 1000:1000 /config
-          										 chmod +x /scripts/ipleak.sh
           										
         image: alpine:latest
         name: fix-file-permissions
         volumeMounts:
         - mountPath: /config
           name: flood-config-volume
-        - mountPath: /scripts
-          name: ip-leak-volume
       containers:
       - image: jesec/flood:4.11
         name: flood-ui
@@ -98,8 +95,8 @@ spec:
       - command:
         - /bin/sh
         - -c
-        - /scripts/ipleak.sh
-        image: alpine:latest
+        - sh /scripts/ipleak.sh
+        image: busybox:1.37.0
         name: ipleak
         volumeMounts:
         - mountPath: /scripts/
