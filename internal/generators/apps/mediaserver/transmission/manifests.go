@@ -259,7 +259,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 								},
 								{
 									Name:    "ipleak",
-									Image:   "busybox:1.37.0",
+									Image:   "curlimages/curl:8.17.0",
 									Command: []string{"/bin/sh", "-c", "sh /scripts/ipleak.sh"},
 									VolumeMounts: []core.VolumeMount{
 										{

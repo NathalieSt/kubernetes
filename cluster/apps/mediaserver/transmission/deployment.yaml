@@ -96,7 +96,7 @@ spec:
         - /bin/sh
         - -c
         - sh /scripts/ipleak.sh
-        image: busybox:1.37.0
+        image: curlimages/curl:8.17.0
         name: ipleak
         volumeMounts:
         - mountPath: /scripts/
