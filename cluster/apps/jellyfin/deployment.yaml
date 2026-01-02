@@ -18,6 +18,18 @@ spec:
         app.kubernetes.io/name: transsetup
         app.kubernetes.io/version: "1.0"
     spec:
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - cp -r /readonly/* /tocopyto/
+        image: alpine:latest
+        name: config-init
+        volumeMounts:
+        - mountPath: /readonly
+          name: trans-vpn-volume
+        - mountPath: /tocopyto
+          name: trans-vpn-vpc-volume
       containers:
       - image: haugene/transmission-openvpn:5.3.2
         name: transmission-openvpn
@@ -28,12 +40,12 @@ spec:
         - mountPath: /data
           name: media-volume
         - mountPath: /etc/openvpn/custom/
-          name: trans-vpn-volume
+          name: trans-vpn-vpc-volume
         env:
         - name: OPENVPN_PROVIDER
           value: custom
         - name: OPENVPN_CONFIG
-          value: node-nl.protonvpn.udp
+          value: nl.protonvpn.udp
         - name: OPENVPN_USERNAME
           valueFrom:
             secretKeyRef:
@@ -51,6 +63,9 @@ spec:
             add:
             - NET_ADMIN
       volumes:
+      - name: trans-vpn-vpc-volume
+        persistentVolumeClaim:
+          claimName: trans-vpn-pvc%!(EXTRA string=jellyfin)
       - name: media-volume
         persistentVolumeClaim:
           claimName: jellyfin-pvc

@@ -13,3 +13,4 @@ resources:
 - scaled-object.yaml
 - vault-secret.yaml
 - service.yaml
+- trans-pvc.yaml

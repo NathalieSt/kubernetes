@@ -79,7 +79,24 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		),
 	}
 
+	transPVCVPNName := fmt.Sprintf("trans-vpn-pvc", generatorMeta.Name)
+	transPVCVPN := utils.ManifestConfig{
+		Filename: "trans-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: transPVCVPNName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			}),
+		},
+	}
+
 	transVPNVolume := "trans-vpn-volume"
+	transVPNPVCVolume := "trans-vpn-vpc-volume"
 	mediaVolume := "media-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
@@ -108,6 +125,27 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 							},
 						},
 						Spec: core.PodSpec{
+							InitContainers: []core.Container{
+								{
+									Name:  "config-init",
+									Image: "alpine:latest",
+									Command: []string{
+										"/bin/sh",
+										"-c",
+										"cp -r /readonly/* /tocopyto/",
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											Name:      transVPNVolume,
+											MountPath: "/readonly",
+										},
+										{
+											Name:      transVPNPVCVolume,
+											MountPath: "/tocopyto",
+										},
+									},
+								},
+							},
 							Containers: []core.Container{
 								{
 									Name:  "transmission-openvpn",
@@ -119,7 +157,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 										},
 										{
 											MountPath: "/etc/openvpn/custom/",
-											Name:      transVPNVolume,
+											Name:      transVPNPVCVolume,
 										},
 									},
 									Ports: []core.Port{
@@ -135,7 +173,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 										},
 										{
 											Name:  "OPENVPN_CONFIG",
-											Value: "node-nl.protonvpn.udp",
+											Value: "nl.protonvpn.udp",
 										},
 										{
 											Name: "OPENVPN_USERNAME",
@@ -170,6 +208,12 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 								},
 							},
 							Volumes: []core.Volume{
+								{
+									Name: transVPNPVCVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: transPVCVPNName,
+									},
+								},
 								{
 									Name: mediaVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
@@ -244,8 +288,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			scaledObject.Filename,
 			vpnVaultSecret.Filename,
 			service.Filename,
+			transPVCVPN.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, vpnVaultSecret, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, vpnVaultSecret, service, transPVCVPN})
 }
