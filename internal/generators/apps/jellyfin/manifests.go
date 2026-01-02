@@ -227,7 +227,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 										Items: []core.SecretVolumeItem{
 											{
 												Key:  "vpn-config",
-												Path: "nl.protonvpn.udp.ovpn",
+												Path: "nl.protonvpn.udp",
 											},
 											{
 												Key:  "rotate-script",

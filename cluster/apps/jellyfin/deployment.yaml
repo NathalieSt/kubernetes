@@ -74,6 +74,6 @@ spec:
           secretName: trans-config
           items:
           - key: vpn-config
-            path: nl.protonvpn.udp.ovpn
+            path: nl.protonvpn.udp
           - key: rotate-script
             path: update-port.sh
