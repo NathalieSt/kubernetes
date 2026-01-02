@@ -198,7 +198,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			networking.NewNetworkPolicy(meta.ObjectMeta{
 				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
-				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress, networking.Egress},
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
@@ -213,12 +213,12 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 										"kubernetes.io/metadata.name": "caddy",
 									},
 								},
+								IpBlock: networking.IPBlock{
+									CIDR: "100.127.0.0/16",
+								},
 							},
 						},
 					},
-				},
-				Egress: []networking.NetworkPolicyEgressRule{
-					utils.GetCoreDNSEgressRule(),
 				},
 			}),
 		},
