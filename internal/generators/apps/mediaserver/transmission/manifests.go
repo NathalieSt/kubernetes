@@ -137,6 +137,21 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 										},
 									},
 								},
+								{
+									Name:  "fix-file-permissions",
+									Image: "alpine:latest",
+									Command: []string{
+										"/bin/sh",
+										"-c",
+										"chown -R 1000:1000 /config",
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											Name:      floodConfigVolume,
+											MountPath: "/config",
+										},
+									},
+								},
 							},
 							Containers: []core.Container{
 								{

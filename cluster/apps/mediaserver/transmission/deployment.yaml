@@ -34,6 +34,15 @@ spec:
           name: trans-vpn-volume
         - mountPath: /tocopyto
           name: trans-vpn-vpc-volume
+      - command:
+        - /bin/sh
+        - -c
+        - chown -R 1000:1000 /config
+        image: alpine:latest
+        name: fix-file-permissions
+        volumeMounts:
+        - mountPath: /config
+          name: flood-config-volume
       containers:
       - image: jesec/flood:4.11
         name: flood-ui
