@@ -33,38 +33,6 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
-	quiConfigPVCName := fmt.Sprintf("%v-qui-config-pvc", generatorMeta.Name)
-	quiConfigPVC := utils.ManifestConfig{
-		Filename: "quic-config-pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: quiConfigPVCName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
-				}},
-				StorageClassName: generators.NFSLocalClass,
-			}),
-		},
-	}
-
-	qbitConfigPVCName := fmt.Sprintf("%v-qbit-config-pvc", generatorMeta.Name)
-	qbitConfigPVC := utils.ManifestConfig{
-		Filename: "qbit-config-pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: qbitConfigPVCName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
-				}},
-				StorageClassName: generators.NFSLocalClass,
-			}),
-		},
-	}
-
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"persistence": map[string]any{
@@ -95,27 +63,32 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Path:       "vpn",
 	}
 
+	transConfigSecret := utils.StaticSecretConfig{
+		Name:       "trans-config",
+		SecretName: "trans-config",
+		Path:       "vpn/vpn-nl-country-config",
+	}
+
 	vpnVaultSecret := utils.ManifestConfig{
 		Filename: "vault-secret.yaml",
 		Manifests: utils.GenerateVaultAccessManifests(
 			generatorMeta.Name,
 			//FIXME: get this from VSO generator meta
 			"vault-secrets-operator",
-			[]utils.StaticSecretConfig{vpnSecretConfig},
+			[]utils.StaticSecretConfig{vpnSecretConfig, transConfigSecret},
 		),
 	}
 
-	qbitConfigVolume := "qbit-config-volume"
-	quiConfigVolume := "qui-config-volume"
+	transVPNVolume := "trans-vpn-volume"
 	mediaVolume := "media-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
 			apps.NewDeployment(
 				meta.ObjectMeta{
-					Name: "qbitsetup",
+					Name: "transsetup",
 					Labels: map[string]string{
-						"app.kubernetes.io/name":    "qbitsetup",
+						"app.kubernetes.io/name":    "transsetup",
 						"app.kubernetes.io/version": "1.0",
 					},
 				},
@@ -123,125 +96,49 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 					Replicas: 1,
 					Selector: meta.LabelSelector{
 						MatchLabels: map[string]string{
-							"app.kubernetes.io/name":    "qbitsetup",
+							"app.kubernetes.io/name":    "transsetup",
 							"app.kubernetes.io/version": "1.0",
 						},
 					},
 					Template: core.PodTemplateSpec{
 						Metadata: meta.ObjectMeta{
 							Labels: map[string]string{
-								"app.kubernetes.io/name":    "qbitsetup",
+								"app.kubernetes.io/name":    "transsetup",
 								"app.kubernetes.io/version": "1.0",
 							},
 						},
 						Spec: core.PodSpec{
 							Containers: []core.Container{
 								{
-									Name:  "qui",
-									Image: "ghcr.io/autobrr/qui:latest",
-									Ports: []core.Port{
-										core.Port{
-											Name:          "qui",
-											ContainerPort: 7476,
-										},
-									},
-									VolumeMounts: []core.VolumeMount{
-										core.VolumeMount{
-											Name:      quiConfigVolume,
-											MountPath: "/config",
-										},
-									},
-								},
-								{
-									Name:  "qbittorrent",
-									Image: "linuxserver/qbittorrent:5.1.4",
+									Name:  "transmission-openvpn",
+									Image: "haugene/transmission-openvpn:5.3.2",
 									VolumeMounts: []core.VolumeMount{
 										{
-											MountPath: "/downloads",
+											MountPath: "/data",
 											Name:      mediaVolume,
 										},
 										{
-											MountPath: "/config",
-											Name:      qbitConfigVolume,
+											MountPath: "/etc/openvpn/custom/",
+											Name:      transVPNVolume,
 										},
 									},
 									Ports: []core.Port{
 										{
 											Name:          "web-ui",
-											ContainerPort: 8080,
+											ContainerPort: 9091,
 										},
 									},
-								},
-								{
-									Name:  "glue-tun",
-									Image: "qmcgaw/gluetun:v3.41",
-									SecurityContext: core.ContainerSecurityContext{
-										Privileged: true,
-										Capabilities: core.Capabilities{
-											Add: []string{
-												"NET_ADMIN",
-											},
-										},
-									},
-									/*
-
-																			FIREWALL: "on"
-										    FIREWALL_OUTBOUND_SUBNETS: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
-										    DNS_ADDRESS: "1.1.1.1"
-										    HEALTH_SERVER_PORT: "8000"
-
-										    # Important: Add these settings to make networking work correctly with ingress
-										    SERVER_ALLOWLIST: "qbittorrent:8080"  # Allow accessing qBittorrent container
-										    FIREWALL_INPUT_PORTS: "8080"          # Allow ingress traffic to port 8080
-									*/
 									Env: []core.Env{
 										{
-											Name:  "VPN_SERVICE_PROVIDER",
-											Value: "protonvpn",
+											Name:  "OPENVPN_PROVIDER",
+											Value: "custom",
 										},
 										{
-											Name:  "VPN_TYPE",
-											Value: "openvpn",
+											Name:  "OPENVPN_CONFIG",
+											Value: "node-nl.protonvpn.udp",
 										},
 										{
-											Name:  "SERVER_COUNTRIES",
-											Value: "Netherlands",
-										},
-										{
-											Name:  "VPN_PORT_FORWARDING",
-											Value: "on",
-										},
-
-										{
-											Name:  "VPN_PORT_FORWARDING_PROVIDER",
-											Value: "protonvpn",
-										},
-										{
-											Name:  "FIREWALL",
-											Value: "on",
-										},
-										{
-											Name:  "FIREWALL_DEBUG",
-											Value: "on",
-										},
-										{
-											Name:  "FIREWALL_OUTBOUND_SUBNETS",
-											Value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16",
-										},
-										{
-											Name:  "DNS_ADDRESS",
-											Value: "1.1.1.1",
-										},
-										{
-											Name:  "SERVER_ALLOWLIST",
-											Value: "qbittorrent:8080",
-										},
-										{
-											Name:  "FIREWALL_INPUT_PORTS",
-											Value: "8080",
-										},
-										{
-											Name: "OPENVPN_USER",
+											Name: "OPENVPN_USERNAME",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Name: vpnSecretConfig.SecretName,
@@ -258,6 +155,17 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 												},
 											},
 										},
+										{
+											Name:  "LOCAL_NETWORK",
+											Value: "10.0.0.0/24",
+										},
+									},
+									SecurityContext: core.ContainerSecurityContext{
+										Capabilities: core.Capabilities{
+											Add: []string{
+												"NET_ADMIN",
+											},
+										},
 									},
 								},
 							},
@@ -269,15 +177,19 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									},
 								},
 								{
-									Name: quiConfigVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: quiConfigPVCName,
-									},
-								},
-								{
-									Name: qbitConfigVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: qbitConfigPVCName,
+									Name: transVPNVolume,
+									Secret: core.SecretVolumeSource{
+										SecretName: "trans-config",
+										Items: []core.SecretVolumeItem{
+											{
+												Key:  "vpn-config",
+												Path: "nl.protonvpn.udp.ovpn",
+											},
+											{
+												Key:  "rotate-script",
+												Path: "update-port.sh",
+											},
+										},
 									},
 								},
 							},
@@ -293,21 +205,21 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Manifests: []any{
 			core.NewService(
 				meta.ObjectMeta{
-					Name: "qbit",
+					Name: "transmission",
 					Labels: map[string]string{
-						"app.kubernetes.io/name":    "qbitsetup",
+						"app.kubernetes.io/name":    "transsetup",
 						"app.kubernetes.io/version": "1.0",
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
-						"app.kubernetes.io/name":    "qbitsetup",
+						"app.kubernetes.io/name":    "transsetup",
 						"app.kubernetes.io/version": "1.0",
 					},
 					Ports: []core.ServicePort{
 						{
-							Name:       "http-qbit-webui",
-							Port:       8080,
-							TargetPort: 8080,
+							Name:       "http-trans-webui",
+							Port:       9091,
+							TargetPort: 9091,
 						},
 					},
 				},
@@ -330,12 +242,10 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			pvc.Filename,
 			deployment.Filename,
 			scaledObject.Filename,
-			quiConfigPVC.Filename,
-			qbitConfigPVC.Filename,
 			vpnVaultSecret.Filename,
 			service.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, quiConfigPVC, qbitConfigPVC, vpnVaultSecret, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, vpnVaultSecret, service})
 }

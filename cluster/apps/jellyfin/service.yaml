@@ -3,14 +3,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: qbitsetup
+    app.kubernetes.io/name: transsetup
     app.kubernetes.io/version: "1.0"
-  name: qbit
+  name: transmission
 spec:
   selector:
-    app.kubernetes.io/name: qbitsetup
+    app.kubernetes.io/name: transsetup
     app.kubernetes.io/version: "1.0"
   ports:
-  - name: http-qbit-webui
-    port: 8080
-    targetPort: 8080
+  - name: http-trans-webui
+    port: 9091
+    targetPort: 9091

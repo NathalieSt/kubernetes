@@ -11,7 +11,5 @@ resources:
 - pvc.yaml
 - deployment.yaml
 - scaled-object.yaml
-- quic-config-pvc.yaml
-- qbit-config-pvc.yaml
 - vault-secret.yaml
 - service.yaml

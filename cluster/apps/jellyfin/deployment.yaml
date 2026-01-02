@@ -3,66 +3,38 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: qbitsetup
+    app.kubernetes.io/name: transsetup
     app.kubernetes.io/version: "1.0"
-  name: qbitsetup
+  name: transsetup
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: qbitsetup
+      app.kubernetes.io/name: transsetup
       app.kubernetes.io/version: "1.0"
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: qbitsetup
+        app.kubernetes.io/name: transsetup
         app.kubernetes.io/version: "1.0"
     spec:
       containers:
-      - image: ghcr.io/autobrr/qui:latest
-        name: qui
+      - image: haugene/transmission-openvpn:5.3.2
+        name: transmission-openvpn
         ports:
-        - containerPort: 7476
-          name: qui
-        volumeMounts:
-        - mountPath: /config
-          name: qui-config-volume
-      - image: linuxserver/qbittorrent:5.1.4
-        name: qbittorrent
-        ports:
-        - containerPort: 8080
+        - containerPort: 9091
           name: web-ui
         volumeMounts:
-        - mountPath: /downloads
+        - mountPath: /data
           name: media-volume
-        - mountPath: /config
-          name: qbit-config-volume
-      - image: qmcgaw/gluetun:v3.41
-        name: glue-tun
+        - mountPath: /etc/openvpn/custom/
+          name: trans-vpn-volume
         env:
-        - name: VPN_SERVICE_PROVIDER
-          value: protonvpn
-        - name: VPN_TYPE
-          value: openvpn
-        - name: SERVER_COUNTRIES
-          value: Netherlands
-        - name: VPN_PORT_FORWARDING
-          value: "on"
-        - name: VPN_PORT_FORWARDING_PROVIDER
-          value: protonvpn
-        - name: FIREWALL
-          value: "on"
-        - name: FIREWALL_DEBUG
-          value: "on"
-        - name: FIREWALL_OUTBOUND_SUBNETS
-          value: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-        - name: DNS_ADDRESS
-          value: 1.1.1.1
-        - name: SERVER_ALLOWLIST
-          value: qbittorrent:8080
-        - name: FIREWALL_INPUT_PORTS
-          value: "8080"
-        - name: OPENVPN_USER
+        - name: OPENVPN_PROVIDER
+          value: custom
+        - name: OPENVPN_CONFIG
+          value: node-nl.protonvpn.udp
+        - name: OPENVPN_USERNAME
           valueFrom:
             secretKeyRef:
               key: user
@@ -72,18 +44,21 @@ spec:
             secretKeyRef:
               key: password
               name: jellyfin-vpn
+        - name: LOCAL_NETWORK
+          value: 10.0.0.0/24
         securityContext:
           capabilities:
             add:
             - NET_ADMIN
-          privileged: true
       volumes:
       - name: media-volume
         persistentVolumeClaim:
           claimName: jellyfin-pvc
-      - name: qui-config-volume
-        persistentVolumeClaim:
-          claimName: jellyfin-qui-config-pvc
-      - name: qbit-config-volume
-        persistentVolumeClaim:
-          claimName: jellyfin-qbit-config-pvc
+      - name: trans-vpn-volume
+        secret:
+          secretName: trans-config
+          items:
+          - key: vpn-config
+            path: nl.protonvpn.udp.ovpn
+          - key: rotate-script
+            path: update-port.sh
