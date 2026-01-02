@@ -45,7 +45,7 @@ spec:
         - name: OPENVPN_PROVIDER
           value: custom
         - name: OPENVPN_CONFIG
-          value: nl.protonvpn.udp
+          value: node-nl.protonvpn.udp
         - name: OPENVPN_USERNAME
           valueFrom:
             secretKeyRef:
@@ -74,6 +74,6 @@ spec:
           secretName: trans-config
           items:
           - key: vpn-config
-            path: nl.protonvpn.udp
+            path: node-nl.protonvpn.udp
           - key: rotate-script
             path: update-port.sh
