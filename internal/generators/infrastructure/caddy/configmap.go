@@ -10,59 +10,38 @@ import (
 	"strings"
 )
 
-func forwardHeadersIfRequried(required bool) string {
-	if required {
-		return `
-		header_up X-Forwarded-Proto {scheme}
-		header_up X-Forwarded-Host {host}
-		header_up X-Forwarded-Port {server_port}
-		header_up X-Real-IP {remote_host}
-		header_up X-Forwarded-Uri {uri}
-		`
-	}
-	return ""
-}
-
-func getWebsocketSupportIfRequired(required bool, clusterUrl string, port int64) string {
-	if required {
-		return fmt.Sprintf(`
-	@websockets {
-		header Connection *Upgrade*
-		header Upgrade    websocket
-	}
-	reverse_proxy @websockets http://%v:%v {
-		header_up Host {host}
-	}
-		`, clusterUrl, port)
-	}
-	return ""
-}
-
 func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 	caddyfileBuffer := bytes.Buffer{}
-	for _, meta := range exposedServicesMeta {
-		caddyfileBuffer.WriteString(fmt.Sprintf(`
-%v.%v {
+	caddyfileBuffer.WriteString(`
+*.cloud.nathalie-stiefsohn.eu {	
 	tls {
         dns hetzner {$API_TOKEN}
         propagation_delay 30s
-    }    
-	reverse_proxy %v:%v {
-		header_up Host {host}
-		%v
-	}
-	%v
-}
+    }
+	`)
+	for index, meta := range exposedServicesMeta {
+		caddyfileBuffer.WriteString(fmt.Sprintf(`
+	@svc%v host %v.%v
+	
+	handle @svc%v {
+		reverse_proxy %v:%v
+	} 
 		`,
+			index,
 			strings.ReplaceAll(meta.Caddy.DNSName, ".cluster", ""),
 			generators.NetbirdDomainBase,
+			index,
 			meta.ClusterUrl,
 			meta.Port,
-			forwardHeadersIfRequried(meta.Caddy.HeaderForwardingIsRequired),
-			getWebsocketSupportIfRequired(meta.Caddy.WebsocketSupportIsRequired, meta.ClusterUrl, meta.Port),
 		),
 		)
 	}
+	caddyfileBuffer.WriteString(`
+    handle {
+        respond "Not Found" 404
+    }
+}
+	`)
 
 	return caddyfileBuffer.String()
 }
