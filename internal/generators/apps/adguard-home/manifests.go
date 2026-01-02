@@ -99,11 +99,11 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											MountPath: "/app/data",
+											MountPath: "/opt/adguardhome/conf",
 											Name:      confVolume,
 										},
 										{
-											MountPath: "/books",
+											MountPath: "/opt/adguardhome/work",
 											Name:      workVolume,
 										},
 									},

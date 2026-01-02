@@ -28,9 +28,9 @@ spec:
         - containerPort: 80
           name: web-ui
         volumeMounts:
-        - mountPath: /app/data
+        - mountPath: /opt/adguardhome/conf
           name: conf-volume
-        - mountPath: /books
+        - mountPath: /opt/adguardhome/work
           name: work-volume
       - image: netbirdio/netbird:latest
         name: netbird-agent
