@@ -5,6 +5,7 @@ metadata:
   name: valkey-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: valkey
   minReplicaCount: 0
   cooldownPeriod: 300

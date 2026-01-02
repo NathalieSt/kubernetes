@@ -5,6 +5,7 @@ metadata:
   name: booklore-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: booklore
   minReplicaCount: 0
   cooldownPeriod: 300

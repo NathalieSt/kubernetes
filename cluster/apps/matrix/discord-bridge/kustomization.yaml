@@ -4,8 +4,9 @@ kind: Kustomization
 metadata:
   name: discord-bridge
 resources:
-  - namespace.yaml
-  - deployment.yaml
-  - data-pvc.yaml
-  - service.yaml
-  - configmap.yaml
+- namespace.yaml
+- deployment.yaml
+- data-pvc.yaml
+- service.yaml
+- configmap.yaml
+- network-policy.yaml

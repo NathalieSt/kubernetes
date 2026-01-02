@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 )
 
 func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -98,6 +100,35 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 		},
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "synapse",
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "synapse",
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -109,6 +140,7 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 				discordBridgeDB.Filename,
 				whatsAppBridgeDB.Filename,
 				signalBridgeDB.Filename,
+				networkPolicy.Filename,
 			},
 		),
 	}
@@ -121,5 +153,6 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 		discordBridgeDB,
 		whatsAppBridgeDB,
 		signalBridgeDB,
+		networkPolicy,
 	})
 }

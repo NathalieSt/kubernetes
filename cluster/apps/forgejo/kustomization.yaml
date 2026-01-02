@@ -8,3 +8,4 @@ resources:
 - repo.yaml
 - release.yaml
 - scaled-object.yaml
+- network-policy.yaml

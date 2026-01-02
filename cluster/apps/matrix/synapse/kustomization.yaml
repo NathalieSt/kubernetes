@@ -9,3 +9,4 @@ resources:
 - data-pvc.yaml
 - service.yaml
 - configmap.yaml
+- network-policy.yaml

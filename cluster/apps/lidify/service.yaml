@@ -15,4 +15,4 @@ spec:
   ports:
   - name: http-lidify
     port: 3030
-    targetport: 3030
+    targetPort: 3030

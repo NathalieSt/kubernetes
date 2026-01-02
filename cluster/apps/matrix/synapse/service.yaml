@@ -15,4 +15,4 @@ spec:
   ports:
   - name: http-synapse
     port: 8008
-    targetport: 8008
+    targetPort: 8008

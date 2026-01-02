@@ -8,6 +8,7 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 )
 
 func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -118,6 +119,35 @@ func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "caddy",
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "caddy",
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -126,8 +156,9 @@ func createGlanceManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 			configmap.Filename,
 			service.Filename,
 			scaledObject.Filename,
+			networkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject, networkPolicy})
 }

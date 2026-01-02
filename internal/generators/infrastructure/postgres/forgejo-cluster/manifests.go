@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 )
 
 func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -48,6 +50,35 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "mealie",
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "mealie",
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -56,9 +87,10 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				namespace.Filename,
 				cluster.Filename,
 				forgejoDB.Filename,
+				networkPolicy.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, forgejoDB})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, forgejoDB, networkPolicy})
 }

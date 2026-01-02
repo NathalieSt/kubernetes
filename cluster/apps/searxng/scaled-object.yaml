@@ -5,6 +5,7 @@ metadata:
   name: searxng-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: searxng
   minReplicaCount: 0
   cooldownPeriod: 300

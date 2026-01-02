@@ -10,3 +10,4 @@ spec:
   sourceRef:
     kind: HelmRepository
     name: nfd-repo
+  version: 0.18.3

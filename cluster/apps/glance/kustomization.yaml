@@ -9,3 +9,4 @@ resources:
 - configmap.yaml
 - service.yaml
 - scaled-object.yaml
+- network-policy.yaml

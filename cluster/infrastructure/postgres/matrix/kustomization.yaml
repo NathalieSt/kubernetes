@@ -4,9 +4,10 @@ kind: Kustomization
 metadata:
   name: matrix-pg
 resources:
-  - namespace.yaml
-  - matrix-cluster.yaml
-  - synapse-db.yaml
-  - discord-bridge-db.yaml
-  - whatsapp-bridge-db.yaml
-  - signal-bridge-db.yaml
+- namespace.yaml
+- matrix-cluster.yaml
+- synapse-db.yaml
+- discord-bridge-db.yaml
+- whatsapp-bridge-db.yaml
+- signal-bridge-db.yaml
+- network-policy.yaml

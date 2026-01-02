@@ -5,6 +5,7 @@ metadata:
   name: glance-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: glance
   minReplicaCount: 0
   cooldownPeriod: 300

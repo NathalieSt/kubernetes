@@ -15,4 +15,4 @@ spec:
   ports:
   - name: http-glance
     port: 8080
-    targetport: 8080
+    targetPort: 8080

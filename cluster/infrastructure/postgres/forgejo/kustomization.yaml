@@ -7,3 +7,4 @@ resources:
 - namespace.yaml
 - forgejo-pg-cluster.yaml
 - forgejo-db.yaml
+- network-policy.yaml

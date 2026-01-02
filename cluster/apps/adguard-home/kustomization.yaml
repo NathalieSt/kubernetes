@@ -9,3 +9,4 @@ resources:
 - work-pvc.yaml
 - service.yaml
 - deployment.yaml
+- network-policy.yaml

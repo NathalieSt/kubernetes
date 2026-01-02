@@ -9,6 +9,7 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 )
 
 func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -199,6 +200,35 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		},
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "caddy",
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "caddy",
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
 		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
@@ -214,8 +244,9 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 			deployment.Filename,
 			service.Filename,
 			scaledObject.Filename,
+			networkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, backendsPVC, modelPVC, outputPVC, kustomization, deployment, service, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, backendsPVC, modelPVC, outputPVC, kustomization, deployment, service, scaledObject, networkPolicy})
 }

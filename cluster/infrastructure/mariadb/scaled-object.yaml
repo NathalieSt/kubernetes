@@ -5,6 +5,7 @@ metadata:
   name: mariadb-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: mariadb
   minReplicaCount: 0
   cooldownPeriod: 300

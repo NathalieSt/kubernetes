@@ -11,9 +11,3 @@ spec:
   superuserSecret:
     name: forgejo-pg-creds-secret
   enableSuperuserAccess: true
-  probes:
-    readiness:
-      initialDelaySeconds: 30
-      periodSeconds: 30
-      timeoutSeconds: 30
-      failureThreshold: 10

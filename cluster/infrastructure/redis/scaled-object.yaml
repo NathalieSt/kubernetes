@@ -5,6 +5,7 @@ metadata:
   name: redis-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: redis
   minReplicaCount: 0
   cooldownPeriod: 300

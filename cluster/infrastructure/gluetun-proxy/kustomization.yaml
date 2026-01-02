@@ -8,3 +8,4 @@ resources:
 - deployment.yaml
 - service.yaml
 - vault-secret.yaml
+- network-policy.yaml

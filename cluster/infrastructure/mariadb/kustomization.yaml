@@ -9,3 +9,4 @@ resources:
 - service.yaml
 - pvc.yaml
 - scaled-object.yaml
+- network-policy.yaml

@@ -12,4 +12,4 @@ spec:
   ports:
   - name: tcp-redis
     port: 6379
-    targetport: 6379
+    targetPort: 6379

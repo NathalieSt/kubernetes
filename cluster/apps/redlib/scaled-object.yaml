@@ -5,6 +5,7 @@ metadata:
   name: redlib-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: redlib
   minReplicaCount: 0
   cooldownPeriod: 300

@@ -5,6 +5,7 @@ metadata:
   name: forgejo-scaledobject
 spec:
   scaleTargetRef:
+    kind: Deployment
     name: forgejo
   minReplicaCount: 0
   cooldownPeriod: 300
