@@ -213,6 +213,8 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 										"kubernetes.io/metadata.name": "caddy",
 									},
 								},
+							},
+							networking.NetworkPolicyPeer{
 								IpBlock: networking.IPBlock{
 									CIDR: "100.127.0.0/16",
 								},

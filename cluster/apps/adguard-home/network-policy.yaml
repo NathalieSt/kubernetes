@@ -8,11 +8,11 @@ spec:
   - Ingress
   ingress:
   - from:
-    - ipBlock:
-        cidr: 100.127.0.0/16
-      namespaceSelector:
+    - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: caddy
       podSelector:
         matchLabels:
           app.kubernetes.io/name: caddy
+    - ipBlock:
+        cidr: 100.127.0.0/16
