@@ -91,6 +91,22 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 										},
 									},
 								},
+								{
+									Name:  "fix-file-permissions",
+									Image: "alpine:latest",
+									Command: []string{
+										"/bin/sh",
+										"-c",
+										`chown -R 1000:1000 /data
+										`,
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											Name:      configVolumeName,
+											MountPath: "/data",
+										},
+									},
+								},
 							},
 							// use while no arm image is available
 							NodeSelector: map[string]string{

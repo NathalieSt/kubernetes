@@ -28,6 +28,17 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: config-volume
+      - command:
+        - /bin/sh
+        - -c
+        - |-
+          chown -R 1000:1000 /data
+          										
+        image: alpine:latest
+        name: fix-file-permissions
+        volumeMounts:
+        - mountPath: /data
+          name: config-volume
       containers:
       - image: chevron7locked/lidify:v1.0.2
         name: lidify
