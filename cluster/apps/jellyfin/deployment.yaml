@@ -43,6 +43,8 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: media-volume
+        - mountPath: /config
+          name: flood-config-volume
       - image: haugene/transmission-openvpn:5.3.2
         name: transmission-openvpn
         ports:
@@ -53,6 +55,8 @@ spec:
           name: media-volume
         - mountPath: /etc/openvpn/custom/
           name: trans-vpn-vpc-volume
+        - mountPath: /config
+          name: trans-config-volume
         env:
         - name: DEBUG
           value: "true"
@@ -77,6 +81,12 @@ spec:
             add:
             - NET_ADMIN
       volumes:
+      - name: trans-config-volume
+        persistentVolumeClaim:
+          claimName: trans-config-pvc
+      - name: flood-config-volume
+        persistentVolumeClaim:
+          claimName: flood-config-pvc
       - name: trans-vpn-vpc-volume
         persistentVolumeClaim:
           claimName: trans-vpn-pvc

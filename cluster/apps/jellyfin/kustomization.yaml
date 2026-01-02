@@ -14,3 +14,5 @@ resources:
 - vault-secret.yaml
 - service.yaml
 - trans-pvc.yaml
+- trans-config-pvc.yaml
+- flood-config-pvc.yaml

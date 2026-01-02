@@ -95,6 +95,40 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	transConfigPVCName := "trans-config-pvc"
+	transConfigPVC := utils.ManifestConfig{
+		Filename: "trans-config-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: transConfigPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			}),
+		},
+	}
+
+	floodConfigPVCName := "flood-config-pvc"
+	floodConfigPVC := utils.ManifestConfig{
+		Filename: "flood-config-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: floodConfigPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			}),
+		},
+	}
+
+	transConfigVolume := "trans-config-volume"
+	floodConfigVolume := "flood-config-volume"
 	transVPNVolume := "trans-vpn-volume"
 	transVPNPVCVolume := "trans-vpn-vpc-volume"
 	mediaVolume := "media-volume"
@@ -158,6 +192,10 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 											MountPath: "/data",
 											Name:      mediaVolume,
 										},
+										{
+											MountPath: "/config",
+											Name:      floodConfigVolume,
+										},
 									},
 									Ports: []core.Port{
 										{
@@ -177,6 +215,10 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 										{
 											MountPath: "/etc/openvpn/custom/",
 											Name:      transVPNPVCVolume,
+										},
+										{
+											MountPath: "/config",
+											Name:      transConfigVolume,
 										},
 									},
 									Ports: []core.Port{
@@ -231,6 +273,18 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 								},
 							},
 							Volumes: []core.Volume{
+								{
+									Name: transConfigVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: transConfigPVCName,
+									},
+								},
+								{
+									Name: floodConfigVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: floodConfigPVCName,
+									},
+								},
 								{
 									Name: transVPNPVCVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
@@ -312,8 +366,10 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			vpnVaultSecret.Filename,
 			service.Filename,
 			transPVCVPN.Filename,
+			transConfigPVC.Filename,
+			floodConfigPVC.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, vpnVaultSecret, service, transPVCVPN})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, vpnVaultSecret, service, transPVCVPN, transConfigPVC, floodConfigPVC})
 }
