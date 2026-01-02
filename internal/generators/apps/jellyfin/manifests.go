@@ -132,7 +132,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									Command: []string{
 										"/bin/sh",
 										"-c",
-										"cp -r /readonly/* /tocopyto/",
+										`mkdir -p /tocopyto
+										cp /readonly/* /tocopyto/
+										chmod 644 /tocopyto/*`,
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
