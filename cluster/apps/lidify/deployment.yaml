@@ -32,7 +32,8 @@ spec:
         - /bin/sh
         - -c
         - |-
-          chown -R 1000:1000 /data
+          	mkdir /data/postgres
+          											chown -R 999:999 /data/postgres
           										
         image: alpine:latest
         name: fix-file-permissions

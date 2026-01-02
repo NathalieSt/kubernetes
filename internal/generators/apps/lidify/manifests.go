@@ -97,7 +97,8 @@ func createLidifyManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 									Command: []string{
 										"/bin/sh",
 										"-c",
-										`chown -R 1000:1000 /data
+										`	mkdir /data/postgres
+											chown -R 999:999 /data/postgres
 										`,
 									},
 									VolumeMounts: []core.VolumeMount{
