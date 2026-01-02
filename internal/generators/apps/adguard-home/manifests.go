@@ -194,7 +194,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			networking.NewNetworkPolicy(meta.ObjectMeta{
 				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
-				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress, networking.Egress},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
@@ -212,6 +212,9 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 							},
 						},
 					},
+				},
+				Egress: []networking.NetworkPolicyEgressRule{
+					utils.GetCoreDNSEgressRule(),
 				},
 			}),
 		},
