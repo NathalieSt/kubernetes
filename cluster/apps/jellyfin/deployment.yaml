@@ -26,6 +26,7 @@ spec:
           mkdir -p /tocopyto
           										cp /readonly/* /tocopyto/
           										chmod 644 /tocopyto/*
+          										chmod 755 /tocopyto/update-port.sh
         image: alpine:latest
         name: config-init
         volumeMounts:

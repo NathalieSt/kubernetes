@@ -134,7 +134,8 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 										"-c",
 										`mkdir -p /tocopyto
 										cp /readonly/* /tocopyto/
-										chmod 644 /tocopyto/*`,
+										chmod 644 /tocopyto/*
+										chmod 755 /tocopyto/update-port.sh`,
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
