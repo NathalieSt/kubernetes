@@ -189,6 +189,11 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 										"app.kubernetes.io/name": "caddy",
 									},
 								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "caddy",
+									},
+								},
 							},
 						},
 					},
@@ -200,6 +205,11 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
 										"cnpg.io/cluster": "postgres",
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "postgres",
 									},
 								},
 							},
