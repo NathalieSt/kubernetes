@@ -68,12 +68,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: user
-              name: jellyfin-vpn
+              name: transmission-vpn
         - name: OPENVPN_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: jellyfin-vpn
+              name: transmission-vpn
         - name: LOCAL_NETWORK
           value: 10.0.0.0/24
         securityContext:

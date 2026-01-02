@@ -14,3 +14,6 @@ spec:
   - name: http-trans-webui
     port: 9091
     targetPort: 9091
+  - name: http-flood-webui
+    port: 3000
+    targetPort: 3000

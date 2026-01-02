@@ -2,15 +2,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: jellyfin
+  name: transmission
 resources:
-- namespace.yaml
-- repo.yaml
-- chart.yaml
-- release.yaml
-- pvc.yaml
 - deployment.yaml
-- scaled-object.yaml
 - vault-secret.yaml
 - service.yaml
 - trans-pvc.yaml

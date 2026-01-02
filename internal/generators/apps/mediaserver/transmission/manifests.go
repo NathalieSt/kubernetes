@@ -4,58 +4,13 @@ import (
 	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
-	namespace := utils.ManifestConfig{
-		Filename:  "namespace.yaml",
-		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
-	}
-
-	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
-	pvc := utils.ManifestConfig{
-		Filename: "pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "100Gi",
-				}},
-				StorageClassName: generators.NFSLocalClass,
-			}),
-		},
-	}
-
-	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
-		map[string]any{
-			"persistence": map[string]any{
-				"media": map[string]any{
-					"existingClaim": pvcName,
-				},
-				"config": map[string]any{
-					"storageClass": generators.NFSLocalClass,
-				},
-			},
-			"nodeSelector": map[string]any{
-				"kubernetes.io/hostname": "debian",
-			},
-			"service": map[string]any{
-				"annotations": map[string]any{
-					"netbird.io/expose": "true",
-					"netbird.io/groups": "cluster-services",
-					//"netbird.io/resource-name": "jellyfin",
-				},
-			},
-		},
-		nil,
-	)
+func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 
 	vpnSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-vpn", generatorMeta.Name),
@@ -294,7 +249,8 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 								{
 									Name: mediaVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
+										//FIXME: get from jellyfin generator
+										ClaimName: "jellyfin-pvc",
 									},
 								},
 								{
@@ -353,21 +309,10 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
-	scaledObject := utils.ManifestConfig{
-		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
-	}
-
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
-			namespace.Filename,
-			repo.Filename,
-			chart.Filename,
-			release.Filename,
-			pvc.Filename,
 			deployment.Filename,
-			scaledObject.Filename,
 			vpnVaultSecret.Filename,
 			service.Filename,
 			transPVCVPN.Filename,
@@ -376,5 +321,5 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, deployment, vpnVaultSecret, service, transPVCVPN, transConfigPVC, floodConfigPVC})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, vpnVaultSecret, service, transPVCVPN, transConfigPVC, floodConfigPVC})
 }
