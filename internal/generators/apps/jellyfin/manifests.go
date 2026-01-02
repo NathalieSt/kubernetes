@@ -151,7 +151,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 							},
 							Containers: []core.Container{
 								{
-									Name:  "transmission-openvpn",
+									Name:  "flood-ui",
 									Image: "jesec/flood:4.11",
 									VolumeMounts: []core.VolumeMount{
 										{
