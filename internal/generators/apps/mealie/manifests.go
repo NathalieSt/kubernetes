@@ -179,7 +179,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 			networking.NewNetworkPolicy(meta.ObjectMeta{
 				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
-				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress, networking.Egress},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
@@ -192,6 +192,29 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 								NamespaceSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
 										"kubernetes.io/metadata.name": "caddy",
+									},
+								},
+							},
+						},
+					},
+				},
+				Egress: []networking.NetworkPolicyEgressRule{
+					{
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:     53,
+								Protocol: networking.UDP,
+							},
+							{
+								Port:     53,
+								Protocol: networking.TCP,
+							},
+						},
+						To: []networking.NetworkPolicyPeer{
+							{
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "kube-system",
 									},
 								},
 							},

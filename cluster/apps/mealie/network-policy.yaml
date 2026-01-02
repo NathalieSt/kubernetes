@@ -6,6 +6,7 @@ metadata:
 spec:
   policyTypes:
   - Ingress
+  - Egress
   ingress:
   - from:
     - namespaceSelector:
@@ -14,3 +15,13 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: caddy
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
