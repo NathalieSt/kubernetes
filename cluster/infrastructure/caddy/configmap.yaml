@@ -12,94 +12,94 @@ data:
             propagation_delay 30s
         }
     	
-    	@svc0 host code.cloud.nathalie-stiefsohn.eu
+    	@svc0 host adguard-home.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc0 {
-    		reverse_proxy forgejo-http.forgejo.svc.cluster.local:3000
+    		reverse_proxy adguard-home.adguard-home.svc.cluster.local:80
     	} 
     		
-    	@svc1 host perses.cloud.nathalie-stiefsohn.eu
+    	@svc1 host booklore.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc1 {
-    		reverse_proxy perses.perses.svc.cluster.local:8080
+    		reverse_proxy booklore.booklore.svc.cluster.local:6060
     	} 
     		
-    	@svc2 host vault.cloud.nathalie-stiefsohn.eu
+    	@svc2 host glance.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc2 {
-    		reverse_proxy vault-ui.vault.svc.cluster.local:8200
-    	} 
-    		
-    	@svc3 host kibana.cloud.nathalie-stiefsohn.eu
-    	
-    	handle @svc3 {
-    		reverse_proxy elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601
-    	} 
-    		
-    	@svc4 host glance.cloud.nathalie-stiefsohn.eu
-    	
-    	handle @svc4 {
     		reverse_proxy glance.glance.svc.cluster.local:8080
     	} 
     		
-    	@svc5 host jellyfin.cloud.nathalie-stiefsohn.eu
+    	@svc3 host vault.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc3 {
+    		reverse_proxy vault-ui.vault.svc.cluster.local:8200
+    	} 
+    		
+    	@svc4 host kibana.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc4 {
+    		reverse_proxy elastic-stack-eck-kibana-kb-http.elastic-stack.svc.cluster.local:5601
+    	} 
+    		
+    	@svc5 host code.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc5 {
-    		reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096
+    		reverse_proxy forgejo-http.forgejo.svc.cluster.local:3000
     	} 
     		
     	@svc6 host jellyfin.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc6 {
-    		reverse_proxy lidify.lidify.svc.cluster.local:3030
+    		reverse_proxy jellyfin.jellyfin.svc.cluster.local:8096
     	} 
     		
-    	@svc7 host searxng.cloud.nathalie-stiefsohn.eu
+    	@svc7 host ai.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc7 {
-    		reverse_proxy searxng.searxng.svc.cluster.local:8080
-    	} 
-    		
-    	@svc8 host transmission.cloud.nathalie-stiefsohn.eu
-    	
-    	handle @svc8 {
-    		reverse_proxy transmission.jellyfin.svc.cluster.local:3000
-    	} 
-    		
-    	@svc9 host booklore.cloud.nathalie-stiefsohn.eu
-    	
-    	handle @svc9 {
-    		reverse_proxy booklore.booklore.svc.cluster.local:6060
-    	} 
-    		
-    	@svc10 host ai.cloud.nathalie-stiefsohn.eu
-    	
-    	handle @svc10 {
     		reverse_proxy localai.localai.svc.cluster.local:8080
     	} 
     		
-    	@svc11 host matrix.cloud.nathalie-stiefsohn.eu
+    	@svc8 host mealie.cloud.nathalie-stiefsohn.eu
     	
-    	handle @svc11 {
-    		reverse_proxy synapse.synapse.svc.cluster.local:8008
-    	} 
-    		
-    	@svc12 host adguard-home.cloud.nathalie-stiefsohn.eu
-    	
-    	handle @svc12 {
-    		reverse_proxy adguard-home.adguard-home.svc.cluster.local:80
-    	} 
-    		
-    	@svc13 host mealie.cloud.nathalie-stiefsohn.eu
-    	
-    	handle @svc13 {
+    	handle @svc8 {
     		reverse_proxy mealie.mealie.svc.cluster.local:9000
     	} 
     		
-    	@svc14 host redlib.cloud.nathalie-stiefsohn.eu
+    	@svc9 host redlib.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc9 {
+    		reverse_proxy redlib.redlib.svc.cluster.local:8080
+    	} 
+    		
+    	@svc10 host matrix.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc10 {
+    		reverse_proxy synapse.synapse.svc.cluster.local:8008
+    	} 
+    		
+    	@svc11 host transmission.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc11 {
+    		reverse_proxy transmission.jellyfin.svc.cluster.local:3000
+    	} 
+    		
+    	@svc12 host lidify.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc12 {
+    		reverse_proxy lidify.lidify.svc.cluster.local:3030
+    	} 
+    		
+    	@svc13 host perses.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc13 {
+    		reverse_proxy perses.perses.svc.cluster.local:8080
+    	} 
+    		
+    	@svc14 host searxng.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc14 {
-    		reverse_proxy redlib.redlib.svc.cluster.local:8080
+    		reverse_proxy searxng.searxng.svc.cluster.local:8080
     	} 
     		
         handle {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
@@ -30,10 +31,26 @@ func createCaddyManifests(rootDir string, generatorMeta generator.GeneratorMeta)
 
 	servicesDNSName := exposedGeneratorsMeta.GetDNSNames()
 
+	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
+	pvc := utils.ManifestConfig{
+		Filename: "pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: generators.NFSLocalClass,
+			}),
+		},
+	}
+
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
-			getDeployment(generatorMeta, configmapName, strings.Join(servicesDNSName, ",")),
+			getDeployment(generatorMeta, configmapName, strings.Join(servicesDNSName, ","), pvcName),
 		},
 	}
 
@@ -72,9 +89,10 @@ func createCaddyManifests(rootDir string, generatorMeta generator.GeneratorMeta)
 				deployment.Filename,
 				service.Filename,
 				configmap.Filename,
+				pvc.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, configmap, deployment, service})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, configmap, deployment, service, pvc})
 }

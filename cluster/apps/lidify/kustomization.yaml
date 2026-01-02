@@ -10,3 +10,4 @@ resources:
 - config-pvc.yaml
 - music-pvc.yaml
 - scaled-object.yaml
+- network-policy.yaml

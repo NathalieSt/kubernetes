@@ -9,8 +9,9 @@ import (
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
-func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, servicesDNSName string) apps.Deployment {
+func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, servicesDNSName string, pvcName string) apps.Deployment {
 	configmapVolume := "caddy-config-volume"
+	pvcVolume := "caddy-pvc-volume"
 	return apps.NewDeployment(
 		meta.ObjectMeta{
 			Name: generatorMeta.Name,
@@ -48,6 +49,10 @@ func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, 
 								{
 									MountPath: "/etc/caddy/",
 									Name:      configmapVolume,
+								},
+								{
+									MountPath: "/data",
+									Name:      pvcVolume,
 								},
 							},
 							Env: []core.Env{
@@ -108,6 +113,12 @@ func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, 
 							Name: configmapVolume,
 							ConfigMap: core.ConfigMapVolumeSource{
 								Name: configmapName,
+							},
+						},
+						{
+							Name: pvcVolume,
+							PersistentVolumeClaim: core.PVCVolumeSource{
+								ClaimName: pvcName,
 							},
 						},
 					},
