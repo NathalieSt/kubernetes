@@ -152,6 +152,12 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 											Name:      floodConfigVolume,
 										},
 									},
+									Env: []core.Env{
+										{
+											Name:  "HOME",
+											Value: "/config",
+										},
+									},
 									Ports: []core.Port{
 										{
 											Name:          "flood-web-ui",

@@ -45,6 +45,9 @@ spec:
           name: media-volume
         - mountPath: /config
           name: flood-config-volume
+        env:
+        - name: HOME
+          value: /config
       - image: haugene/transmission-openvpn:5.3.2
         name: transmission-openvpn
         ports:
