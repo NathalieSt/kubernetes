@@ -75,7 +75,7 @@ spec:
               key: password
               name: transmission-vpn
         - name: LOCAL_NETWORK
-          value: 10.0.0.0/24
+          value: 10.244.0.0/16
         securityContext:
           capabilities:
             add:
