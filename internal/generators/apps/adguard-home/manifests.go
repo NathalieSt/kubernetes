@@ -90,6 +90,10 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 										},
 										{
 											ContainerPort: 3000,
+											Name:          "setup-ui",
+										},
+										{
+											ContainerPort: 80,
 											Name:          "web-ui",
 										},
 									},
