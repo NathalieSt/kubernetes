@@ -9,6 +9,7 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 	"path"
 )
 
@@ -172,6 +173,43 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: "mealie-networkpolicy",
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Egress, networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "caddy",
+									},
+								},
+							},
+						},
+					},
+				},
+				Egress: []networking.NetworkPolicyEgressRule{
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"cnpg.io/cluster": "postgres",
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -180,8 +218,9 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 			pvc.Filename,
 			service.Filename,
 			scaledObject.Filename,
+			networkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, pvc, service, scaledObject, networkPolicy}), nil
 }

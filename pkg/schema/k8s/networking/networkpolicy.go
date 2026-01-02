@@ -40,9 +40,16 @@ type NetworkPolicyIngressRule struct {
 	Ports []NetworkPolicyPort `yaml:"ports,omitempty"`
 }
 
+type NetworkPolicyType string
+
+const (
+	Ingress NetworkPolicyType = "Ingress"
+	Egress  NetworkPolicyType = "Egress"
+)
+
 type NetworkPolicySpec struct {
 	PodSelector meta.LabelSelector         `yaml:"podSelector,omitempty"`
-	PolicyTypes []string                   `yaml:"policyTypes,omitempty"`
+	PolicyTypes []NetworkPolicyType        `yaml:"policyTypes,omitempty"`
 	Ingress     []NetworkPolicyIngressRule `yaml:"ingress,omitempty"`
 	Egress      []NetworkPolicyEgressRule  `yaml:"egress,omitempty"`
 }
