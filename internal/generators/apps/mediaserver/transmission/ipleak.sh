@@ -25,7 +25,9 @@ while true; do
     srv_country=$(echo "$geo_srv" | grep -o '"country": *"[^"]*' | cut -d '"' -f4)
     echo "[$TIMESTAMP] DNS $srv is in $srv_country"
 
-    if [ "$srv_country" != "NL" ]; then
+    if ["$srv_country" != ""]; then
+      echo "[$TIMESTAMP] ❓ No country could be detected for the dns server"  
+    elif [ "$srv_country" != "NL"]; then
       echo "[$TIMESTAMP] ⚠️ DNS is leaking!"
     else
       echo "[$TIMESTAMP] ✅ No DNS leak."
