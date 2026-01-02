@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
@@ -47,7 +48,7 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Filename: "network-policy.yaml",
 		Manifests: []any{
 			networking.NewNetworkPolicy(meta.ObjectMeta{
-				Name: "mealie-networkpolicy",
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
 				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
 				Ingress: []networking.NetworkPolicyIngressRule{
