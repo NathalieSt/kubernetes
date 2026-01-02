@@ -152,6 +152,22 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 							Containers: []core.Container{
 								{
 									Name:  "transmission-openvpn",
+									Image: "jesec/flood:4.11",
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/data",
+											Name:      mediaVolume,
+										},
+									},
+									Ports: []core.Port{
+										{
+											Name:          "flood-web-ui",
+											ContainerPort: 3000,
+										},
+									},
+								},
+								{
+									Name:  "transmission-openvpn",
 									Image: "haugene/transmission-openvpn:5.3.2",
 									VolumeMounts: []core.VolumeMount{
 										{
@@ -165,7 +181,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									},
 									Ports: []core.Port{
 										{
-											Name:          "web-ui",
+											Name:          "trans-web-ui",
 											ContainerPort: 9091,
 										},
 									},

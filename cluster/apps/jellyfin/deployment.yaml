@@ -35,11 +35,19 @@ spec:
         - mountPath: /tocopyto
           name: trans-vpn-vpc-volume
       containers:
+      - image: jesec/flood:4.11
+        name: transmission-openvpn
+        ports:
+        - containerPort: 3000
+          name: flood-web-ui
+        volumeMounts:
+        - mountPath: /data
+          name: media-volume
       - image: haugene/transmission-openvpn:5.3.2
         name: transmission-openvpn
         ports:
         - containerPort: 9091
-          name: web-ui
+          name: trans-web-ui
         volumeMounts:
         - mountPath: /data
           name: media-volume
