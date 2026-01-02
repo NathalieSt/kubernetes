@@ -85,7 +85,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
 									Ports: []core.Port{
 										{
-											ContainerPort: 53,
+											ContainerPort: 54,
 											Name:          "dns",
 										},
 										{

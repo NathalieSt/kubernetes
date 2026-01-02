@@ -21,7 +21,7 @@ spec:
       - image: adguard/adguardhome:v0.107.71
         name: adguard-home
         ports:
-        - containerPort: 53
+        - containerPort: 54
           name: dns
         - containerPort: 3000
           name: web-ui
