@@ -156,12 +156,18 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 									Command: []string{
 										"/bin/sh",
 										"-c",
-										"chown -R 1000:1000 /config",
+										`chown -R 1000:1000 /config
+										 chmod +x /scripts/ipleak.sh
+										`,
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
 											Name:      floodConfigVolume,
 											MountPath: "/config",
+										},
+										{
+											Name:      ipLeakVolume,
+											MountPath: "/scripts",
 										},
 									},
 								},
