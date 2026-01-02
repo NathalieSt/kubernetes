@@ -1,0 +1,36 @@
+#!/bin/sh
+
+INTERVAL=300
+IP_API="https://ipapi.co/json/"
+
+while true; do
+  TIMESTAMP=$(date +%Y-%m-%dT%H:%M:%SZ)
+  # --- External IP & country ---
+  geo=$(curl -s "$IP_API")
+  PUBLIC_IP=$(echo "$geo" | grep -o '"ip": *"[^"]*' | cut -d '"' -f4)
+  IP_COUNTRY=$(echo "$geo" | grep -o '"country": *"[^"]*' | cut -d '"' -f4)
+
+  echo "[$TIMESTAMP] External IP: $PUBLIC_IP (Country: $IP_COUNTRY)"
+
+  if [ "$IP_COUNTRY" != "NL" ]; then
+    echo "[$TIMESTAMP] ⚠️ IP is leaking!"
+  else
+    echo "[$TIMESTAMP] ✅ No IP leak."
+  fi
+
+  # --- DNS servers and country ---
+  DNS_SERVERS=$(awk '/nameserver/ {print $2}' /etc/resolv.conf)
+  for srv in $DNS_SERVERS; do
+    geo_srv=$(curl -s https://ipapi.co/$srv/json/)
+    srv_country=$(echo "$geo_srv" | grep -o '"country": *"[^"]*' | cut -d '"' -f4)
+    echo "[$TIMESTAMP] DNS $srv is in $srv_country"
+
+    if [ "$srv_country" != "NL" ]; then
+      echo "[$TIMESTAMP] ⚠️ DNS is leaking!"
+    else
+      echo "[$TIMESTAMP] ✅ No DNS leak."
+    fi
+  done
+
+  sleep $INTERVAL
+done

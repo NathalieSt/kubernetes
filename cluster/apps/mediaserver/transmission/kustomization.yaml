@@ -10,3 +10,4 @@ resources:
 - trans-pvc.yaml
 - trans-config-pvc.yaml
 - flood-config-pvc.yaml
+- configmap.yaml

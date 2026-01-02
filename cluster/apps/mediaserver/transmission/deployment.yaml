@@ -70,8 +70,6 @@ spec:
         - mountPath: /config
           name: trans-config-volume
         env:
-        - name: DEBUG
-          value: "true"
         - name: OPENVPN_PROVIDER
           value: custom
         - name: OPENVPN_CONFIG
@@ -92,6 +90,15 @@ spec:
           capabilities:
             add:
             - NET_ADMIN
+      - command:
+        - /bin/sh
+        - -c
+        - /scripts/ipleak.sh
+        image: alpine:latest
+        name: ipleak
+        volumeMounts:
+        - mountPath: /scripts/
+          name: ip-leak-volume
       volumes:
       - name: trans-config-volume
         persistentVolumeClaim:
@@ -105,6 +112,12 @@ spec:
       - name: media-volume
         persistentVolumeClaim:
           claimName: jellyfin-pvc
+      - name: ip-leak-volume
+        configMap:
+          name: discord-bridge-configmap
+          items:
+          - key: ipleak.sh
+            path: ipleak.sh
       - name: trans-vpn-volume
         secret:
           secretName: trans-config

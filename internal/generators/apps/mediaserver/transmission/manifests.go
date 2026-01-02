@@ -82,6 +82,19 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 		},
 	}
 
+	ipLeakConfigMapName := "discord-bridge-configmap"
+	ipLeakConfigMap, err := getIPLeakConfigMap(ipLeakConfigMapName)
+	if err != nil {
+		fmt.Println("An error occurred while getting the configMap for ip-leak")
+		return nil
+	}
+
+	ipLeakConfigMapManifest := utils.ManifestConfig{
+		Filename:  "configmap.yaml",
+		Manifests: []any{*ipLeakConfigMap},
+	}
+
+	ipLeakVolume := "ip-leak-volume"
 	transConfigVolume := "trans-config-volume"
 	floodConfigVolume := "flood-config-volume"
 	transVPNVolume := "trans-vpn-volume"
@@ -205,10 +218,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 									},
 									Env: []core.Env{
 										{
-											Name:  "DEBUG",
-											Value: "true",
-										},
-										{
 											Name:  "OPENVPN_PROVIDER",
 											Value: "custom",
 										},
@@ -247,6 +256,17 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 										},
 									},
 								},
+								{
+									Name:    "ipleak",
+									Image:   "alpine:latest",
+									Command: []string{"/bin/sh", "-c", "/scripts/ipleak.sh"},
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/scripts/",
+											Name:      ipLeakVolume,
+										},
+									},
+								},
 							},
 							Volumes: []core.Volume{
 								{
@@ -272,6 +292,18 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										//FIXME: get from jellyfin generator
 										ClaimName: "jellyfin-pvc",
+									},
+								},
+								{
+									Name: ipLeakVolume,
+									ConfigMap: core.ConfigMapVolumeSource{
+										Name: ipLeakConfigMapName,
+										Items: []core.VolumeConfigMapItem{
+											{
+												Key:  "ipleak.sh",
+												Path: "ipleak.sh",
+											},
+										},
 									},
 								},
 								{
@@ -339,8 +371,9 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 			transPVCVPN.Filename,
 			transConfigPVC.Filename,
 			floodConfigPVC.Filename,
+			ipLeakConfigMapManifest.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, vpnVaultSecret, service, transPVCVPN, transConfigPVC, floodConfigPVC})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, vpnVaultSecret, service, transPVCVPN, transConfigPVC, floodConfigPVC, ipLeakConfigMapManifest})
 }
