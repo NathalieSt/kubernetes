@@ -23,7 +23,7 @@ func createCaddyManifests(rootDir string, generatorMeta generator.GeneratorMeta)
 
 	manuallyDefinedMetas := []generator.GeneratorMeta{
 		{
-			ClusterUrl: "6173e1f9872e.cloud.nathalie-stiefsohn.eu",
+			ClusterUrl: "crowdsec-ui-agent.cloud.nathalie-stiefsohn.eu",
 			Caddy: &generator.Caddy{
 				DNSName: "crowdsec",
 			},

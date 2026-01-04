@@ -7,6 +7,10 @@ sudo apt install ufw
 
 sudo ufw allow in ssh
 
+# just to make absolutely sure no one can access crowdsec api or ui
+sudo ufw deny 8080/tcp
+sudo ufw deny 3000/tcp
+
 # allow netbird
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp

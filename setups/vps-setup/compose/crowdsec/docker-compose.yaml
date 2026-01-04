@@ -4,13 +4,16 @@ services:
       - "../crowdsec.env"
     image: docker.io/crowdsecurity/crowdsec:latest
     container_name: crowdsec
+    ports:
+      - "127.0.0.1:8080:8080"
     environment:
       - GID=1000
       - COLLECTIONS=crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/whitelist-good-actors
     volumes:
       - crowdsec-db:/var/lib/crowdsec/data/
-      - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml
+      - ./crowdsec-config:/etc/crowdsec/acquis.d
       - caddy-logs:/var/log/caddy:ro
+      - /var/log/auth.log:/var/log/auth.log:ro
     networks: [crowdsec, caddy]
     restart: unless-stopped
     security_opt:

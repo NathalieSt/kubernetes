@@ -47,7 +47,7 @@ spec:
         - name: NB_MANAGEMENT_URL
           value: https://netbird.nathalie-stiefsohn.eu
         - name: NB_EXTRA_DNS_LABELS
-          value: transmission,adguard-home,lidify,searxng,matrix,vault,code,ai,perses,booklore,kibana,glance,jellyfin,mealie,redlib,crowdsec
+          value: matrix,transmission,booklore,code,ai,redlib,searxng,jellyfin,mealie,perses,vault,adguard-home,kibana,lidify,glance,crowdsec
         resources:
           requests:
             cpu: 50m

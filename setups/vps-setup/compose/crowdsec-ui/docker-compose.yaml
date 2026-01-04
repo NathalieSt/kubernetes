@@ -1,9 +1,9 @@
 services:
-  crowdsec-web-ui:
+  crowdsec-ui:
     env_file:
       - "../crowdsec.env"
     image: ghcr.io/theduffman85/crowdsec-web-ui:latest
-    container_name: crowdsec_web_ui
+    container_name: crowdsec-ui
     environment:
       - CROWDSEC_URL=http://crowdsec:8080
       # Optional: Lookback period for alerts/stats (default: 168h/7d)
@@ -29,7 +29,7 @@ services:
       - "./netbird-agent.env"
     image: netbirdio/netbird:latest
     container_name: netbird
-    hostname: crowdsec-ui
+    hostname: crowdsec-ui-netbird-agent
     cap_add:
       - NET_ADMIN
       - SYS_ADMIN
