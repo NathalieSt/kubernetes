@@ -1,0 +1,43 @@
+version: "3.4"
+volumes:
+  postgres_data:
+    driver: local
+services:
+  postgres:
+    env_file:
+      - "./keycloak.env"
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: ${KC_DB_USER}
+      POSTGRES_PASSWORD: ${KC_DB_PASSWORD}
+    healthcheck:
+      test: "exit 0"
+    ports:
+      - 5432:5432
+    networks:
+      - keycloak
+  keycloak:
+    env_file:
+      - "./keycloak.env"
+    image: quay.io/keycloak/keycloak
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_SCHEMA: public
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KC_HOSTNAME: ${KC_HOSTNAME}
+    expose:
+      - 8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - keycloak

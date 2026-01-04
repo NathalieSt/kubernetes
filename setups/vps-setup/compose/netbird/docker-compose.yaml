@@ -1,0 +1,79 @@
+version: "3.4"
+services:
+  # UI dashboard
+  dashboard:
+    image: netbirdio/dashboard:latest
+    restart: unless-stopped
+    networks: [netbird, caddy]
+    env_file:
+      - ./dashboard.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+  # Signal
+  signal:
+    image: netbirdio/signal:latest
+    restart: unless-stopped
+    networks: [netbird, caddy]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+  # Relay
+  relay:
+    image: netbirdio/relay:latest
+    restart: unless-stopped
+    networks: [netbird, caddy]
+    env_file:
+      - ./relay.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+  # Management
+  management:
+    image: netbirdio/management:latest
+    restart: unless-stopped
+    networks: [netbird, caddy]
+    volumes:
+      - netbird_management:/var/lib/netbird
+      - ./management.json:/etc/netbird/management.json
+    command:
+      [
+        "--port",
+        "80",
+        "--log-file",
+        "console",
+        "--log-level",
+        "info",
+        "--disable-anonymous-metrics=false",
+        "--single-account-mode-domain=netbird.selfhosted",
+        "--dns-domain=netbird.selfhosted",
+        "--idp-sign-key-refresh-enabled",
+      ]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+  # Coturn, AKA relay server
+  coturn:
+    image: coturn/coturn
+    restart: unless-stopped
+    #domainname: netbird.relay.selfhosted
+    volumes:
+      - ./turnserver.conf:/etc/turnserver.conf:ro
+    network_mode: host
+    command:
+      - -c /etc/turnserver.conf
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+volumes:
+  netbird_management:

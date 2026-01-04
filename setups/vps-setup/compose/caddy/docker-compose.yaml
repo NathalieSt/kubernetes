@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  caddy:
+    build:
+      context: ./
+      target: caddy
+    env_file:
+      - "crowdsec.env"
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+      - caddy-logs:/var/log/caddy
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    networks: [caddy, crowdsec, crowdsec-ui, netbird, zitadel]
+    security_opt:
+      - no-new-privileges=true

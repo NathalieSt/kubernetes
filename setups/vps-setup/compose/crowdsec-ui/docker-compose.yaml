@@ -1,0 +1,51 @@
+version: "3.4"
+
+services:
+  crowdsec-web-ui:
+    env_file:
+      - "crowdsec.env"
+    image: ghcr.io/theduffman85/crowdsec-web-ui:latest
+    container_name: crowdsec_web_ui
+    ports:
+      - "3000:3000"
+    environment:
+      - CROWDSEC_URL=http://crowdsec:8080
+      - CROWDSEC_USER=crowdsec-web-ui
+      - CROWDSEC_PASSWORD=${CROWDSEC_UI_PASSWORD}
+      # Optional: Lookback period for alerts/stats (default: 168h/7d)
+      - CROWDSEC_LOOKBACK_PERIOD=5d
+      # Optional: Backend auto-refresh interval. Values: 0 (Off), 5s, 30s (default), 1m, 5m
+      - CROWDSEC_REFRESH_INTERVAL=30s
+      # Optional: Idle Mode settings to save resources
+      # Interval to use when no users are active (default: 5m)
+      - CROWDSEC_IDLE_REFRESH_INTERVAL=5m
+      # Time without API requests to consider system idle (default: 2m)
+      - CROWDSEC_IDLE_THRESHOLD=2m
+      # Optional: Interval for full cache refresh (default: 5m)
+      # Forces a complete data reload when active, skipped when idle.
+      - CROWDSEC_FULL_REFRESH_INTERVAL=5m
+    network_mode: "service:netbird"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+  netbird:
+    env_file:
+      - "./netbird-agent.env"
+    image: netbirdio/netbird:latest
+    container_name: netbird
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - netbird-data:/etc/netbird
+    command: >
+      netbird up
+      --management-url https://netbird.nathalie-stiefsohn.eu
+      --setup-key ${NETBIRD_SETUP_KEY}
+    restart: unless-stopped
+    networks: [crowdsec]
+
+volumes:
+  netbird-data:
