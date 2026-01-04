@@ -29,6 +29,7 @@ services:
       - "./netbird-agent.env"
     image: netbirdio/netbird:latest
     container_name: netbird
+    hostname: crowdsec-ui
     cap_add:
       - NET_ADMIN
       - SYS_ADMIN

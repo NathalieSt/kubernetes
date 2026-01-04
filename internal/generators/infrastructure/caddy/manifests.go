@@ -21,6 +21,18 @@ func createCaddyManifests(rootDir string, generatorMeta generator.GeneratorMeta)
 		fmt.Printf("An error happened while getting metadata for exposed services: \n %v", err)
 	}
 
+	manuallyDefinedMetas := []generator.GeneratorMeta{
+		{
+			ClusterUrl: "6173e1f9872e.cloud.nathalie-stiefsohn.eu",
+			Caddy: &generator.Caddy{
+				DNSName: "crowdsec",
+			},
+			Port: 3000,
+		},
+	}
+
+	exposedGeneratorsMeta = append(exposedGeneratorsMeta, manuallyDefinedMetas...)
+
 	configmapName := "caddy-configmap"
 	configmap := utils.ManifestConfig{
 		Filename: "configmap.yaml",
