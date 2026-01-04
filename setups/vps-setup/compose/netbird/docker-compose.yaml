@@ -1,10 +1,9 @@
-version: "3.4"
 services:
   # UI dashboard
   dashboard:
     image: netbirdio/dashboard:latest
     restart: unless-stopped
-    networks: [netbird, caddy]
+    networks: [netbird, caddy, zitadel]
     env_file:
       - ./dashboard.env
     logging:
@@ -16,7 +15,7 @@ services:
   signal:
     image: netbirdio/signal:latest
     restart: unless-stopped
-    networks: [netbird, caddy]
+    networks: [netbird, caddy, zitadel]
     logging:
       driver: "json-file"
       options:
@@ -26,7 +25,7 @@ services:
   relay:
     image: netbirdio/relay:latest
     restart: unless-stopped
-    networks: [netbird, caddy]
+    networks: [netbird, caddy, zitadel]
     env_file:
       - ./relay.env
     logging:
@@ -38,7 +37,7 @@ services:
   management:
     image: netbirdio/management:latest
     restart: unless-stopped
-    networks: [netbird, caddy]
+    networks: [netbird, caddy, zitadel]
     volumes:
       - netbird_management:/var/lib/netbird
       - ./management.json:/etc/netbird/management.json
