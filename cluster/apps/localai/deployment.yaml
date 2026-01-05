@@ -28,17 +28,11 @@ spec:
           name: model-volume
         - mountPath: /tmp/generated
           name: output-volume
-        - mountPath: /dev/dri
-          name: dri
-          readonly: true
         - mountPath: /backends
           name: backends-volume
         env:
         - name: DEBUG
           value: "true"
-        resources:
-          limits:
-            gpu.intel.com/i915: "1"
       volumes:
       - name: model-volume
         persistentVolumeClaim:
@@ -46,10 +40,6 @@ spec:
       - name: output-volume
         persistentVolumeClaim:
           claimName: output-pvc
-      - name: dri
-        hostPath:
-          path: /dev/dri
-          type: Directory
       - name: backends-volume
         persistentVolumeClaim:
           claimName: backends-pvc

@@ -14,6 +14,13 @@ spec:
     remediation:
       retries: 3
   values:
+    extraVolumeMounts:
+      mountPath: /dev/dri
+      name: hwa-volume
+    extraVolumes:
+      name: hwa-volume
+      hostPath:
+        path: /dev/dri
     nodeSelector:
       kubernetes.io/hostname: debian
     persistence:
@@ -21,3 +28,10 @@ spec:
         storageClass: nfs-local-v2
       media:
         existingClaim: jellyfin-pvc
+    resources:
+      requests:
+        gpu.intel.com/i915: "1"
+    securityContext:
+      capabilities:
+        add:
+        - SYS_ADMIN

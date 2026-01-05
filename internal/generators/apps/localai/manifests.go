@@ -118,22 +118,12 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											Name:      outputVolume,
 										},
 										{
-											MountPath: "/dev/dri",
-											Name:      "dri",
-											Readonly:  true,
-										},
-										{
 											MountPath: "/backends",
 											Name:      backendsVolume,
 										},
 									},
-									Resources: core.Resources{
-										Limits: map[string]string{
-											"gpu.intel.com/i915": "1",
-										},
-									},
 									Env: []core.Env{
-										core.Env{
+										{
 											Name:  "DEBUG",
 											Value: "true",
 										},
@@ -151,13 +141,6 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 									Name: outputVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: outputPVCName,
-									},
-								},
-								{
-									Name: "dri",
-									HostPath: core.HostPath{
-										Path: "/dev/dri",
-										Type: core.Directory,
 									},
 								},
 								{

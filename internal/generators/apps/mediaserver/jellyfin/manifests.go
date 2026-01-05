@@ -33,6 +33,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	hwaVolumeName := "hwa-volume"
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
 			"persistence": map[string]any{
@@ -45,6 +46,27 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			},
 			"nodeSelector": map[string]any{
 				"kubernetes.io/hostname": "debian",
+			},
+			"resources": core.Resources{
+				Requests: map[string]string{
+					"gpu.intel.com/i915": "1",
+				},
+			},
+			"securityContext": core.ContainerSecurityContext{
+				Capabilities: core.Capabilities{
+					Add: []string{"SYS_ADMIN"},
+				},
+				Privileged: false,
+			},
+			"extraVolumes": core.Volume{
+				Name: hwaVolumeName,
+				HostPath: core.HostPath{
+					Path: "/dev/dri",
+				},
+			},
+			"extraVolumeMounts": core.VolumeMount{
+				Name:      hwaVolumeName,
+				MountPath: "/dev/dri",
 			},
 		},
 		nil,
