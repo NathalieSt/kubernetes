@@ -6,6 +6,7 @@ import (
 
 type VolumeMount struct {
 	MountPath string `yaml:"mountPath,omitempty"`
+	SubPath   string `yaml:"subPath,omitempty"`
 	Name      string `yaml:"name,omitempty"`
 	Readonly  bool   `yaml:"readonly,omitempty"`
 }

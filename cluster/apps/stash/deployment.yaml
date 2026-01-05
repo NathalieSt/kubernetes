@@ -25,28 +25,21 @@ spec:
           name: stash
         volumeMounts:
         - mountPath: /root/.stash
-          name: config-volume
+          subPath: /config
+          name: volume
         - mountPath: /data
-          name: data-volume
+          subPath: /data
+          name: volume
         - mountPath: /metadata
-          name: metadata-volume
+          subPath: /metadata
+          name: volume
         - mountPath: /blobs
-          name: blobs-volume
+          subPath: /blobs
+          name: volume
         - mountPath: /generated
-          name: generated-volume
+          subPath: /generated
+          name: volume
       volumes:
-      - name: config-volume
-        persistentVolumeClaim:
-          claimName: stash-pvc
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: stash-pvc
-      - name: metadata-volume
-        persistentVolumeClaim:
-          claimName: stash-pvc
-      - name: blobs-volume
-        persistentVolumeClaim:
-          claimName: stash-pvc
-      - name: generated-volume
+      - name: volume
         persistentVolumeClaim:
           claimName: stash-pvc

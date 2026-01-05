@@ -34,11 +34,7 @@ func createStashManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 		},
 	}
 
-	configVolume := "config-volume"
-	dataVolume := "data-volume"
-	metadataVolume := "metadata-volume"
-	blobsVolume := "blobs-volume"
-	generatedVolume := "generated-volume"
+	volume := "volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -77,55 +73,36 @@ func createStashManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											Name:      configVolume,
+											Name:      volume,
 											MountPath: "/root/.stash",
+											SubPath:   "/config",
 										},
 										{
-											Name:      dataVolume,
+											Name:      volume,
 											MountPath: "/data",
+											SubPath:   "/data",
 										},
 										{
-											Name:      metadataVolume,
+											Name:      volume,
 											MountPath: "/metadata",
+											SubPath:   "/metadata",
 										},
 										{
-											Name:      blobsVolume,
+											Name:      volume,
 											MountPath: "/blobs",
+											SubPath:   "/blobs",
 										},
 										{
-											Name:      generatedVolume,
+											Name:      volume,
 											MountPath: "/generated",
+											SubPath:   "/generated",
 										},
 									},
 								},
 							},
 							Volumes: []core.Volume{
 								{
-									Name: configVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
-									},
-								},
-								{
-									Name: dataVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
-									},
-								},
-								{
-									Name: metadataVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
-									},
-								},
-								{
-									Name: blobsVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
-									},
-								},
-								{
-									Name: generatedVolume,
+									Name: volume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: pvcName,
 									},
