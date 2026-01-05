@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: stash
+    app.kubernetes.io/version: v0.30.0
+  name: stash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: stash
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: stash
+        app.kubernetes.io/version: v0.30.0
+    spec:
+      containers:
+      - image: stashapp/stash:v0.30.0
+        name: stash
+        ports:
+        - containerPort: 9999
+          name: stash
+        volumeMounts:
+        - mountPath: /root/.stash
+          name: config-volume
+        - mountPath: /data
+          name: data-volume
+        - mountPath: /metadata
+          name: metadata-volume
+        - mountPath: /blobs
+          name: blobs-volume
+        - mountPath: /generated
+          name: generated-volume
+      volumes:
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: stash-pvc
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: stash-pvc
+      - name: metadata-volume
+        persistentVolumeClaim:
+          claimName: stash-pvc
+      - name: blobs-volume
+        persistentVolumeClaim:
+          claimName: stash-pvc
+      - name: generated-volume
+        persistentVolumeClaim:
+          claimName: stash-pvc
