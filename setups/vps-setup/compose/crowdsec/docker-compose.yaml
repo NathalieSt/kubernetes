@@ -2,7 +2,7 @@ services:
   crowdsec:
     env_file:
       - "../crowdsec.env"
-    image: docker.io/crowdsecurity/crowdsec:latest
+    image: docker.io/crowdsecurity/crowdsec:latest-debian
     container_name: crowdsec
     ports:
       - "127.0.0.1:8080:8080"
@@ -13,7 +13,8 @@ services:
       - crowdsec-db:/var/lib/crowdsec/data/
       - ./crowdsec-config:/etc/crowdsec/acquis.d
       - caddy-logs:/var/log/caddy:ro
-      - /var/log/auth.log:/var/log/auth.log:ro
+      - /run/log/journal:/run/log/journal:ro
+      - /var/log/journal:/var/log/journal:ro
     networks: [crowdsec, caddy]
     restart: unless-stopped
     security_opt:

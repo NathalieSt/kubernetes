@@ -1,4 +1,7 @@
-filenames:
-  - /var/log/auth.log
+source: journalctl
+journalctl_filter:
+  - "-D"
+  - "/var/log/journal"
+  - "_COMM=sshd"
 labels:
   type: syslog

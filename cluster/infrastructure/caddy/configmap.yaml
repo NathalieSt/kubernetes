@@ -5,7 +5,7 @@ metadata:
   name: caddy-configmap
 data:
   Caddyfile: |-
-    
+
     *.cloud.nathalie-stiefsohn.eu {	
     	tls {
             dns hetzner {$API_TOKEN}
