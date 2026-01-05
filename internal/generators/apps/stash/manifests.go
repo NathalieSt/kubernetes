@@ -75,27 +75,27 @@ func createStashManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 										{
 											Name:      volume,
 											MountPath: "/root/.stash",
-											SubPath:   "/config",
+											SubPath:   "config",
 										},
 										{
 											Name:      volume,
 											MountPath: "/data",
-											SubPath:   "/data",
+											SubPath:   "data",
 										},
 										{
 											Name:      volume,
 											MountPath: "/metadata",
-											SubPath:   "/metadata",
+											SubPath:   "metadata",
 										},
 										{
 											Name:      volume,
 											MountPath: "/blobs",
-											SubPath:   "/blobs",
+											SubPath:   "blobs",
 										},
 										{
 											Name:      volume,
 											MountPath: "/generated",
-											SubPath:   "/generated",
+											SubPath:   "generated",
 										},
 									},
 								},

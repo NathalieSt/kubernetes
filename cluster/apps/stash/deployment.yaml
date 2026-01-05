@@ -25,19 +25,19 @@ spec:
           name: stash
         volumeMounts:
         - mountPath: /root/.stash
-          subPath: /config
+          subPath: config
           name: volume
         - mountPath: /data
-          subPath: /data
+          subPath: data
           name: volume
         - mountPath: /metadata
-          subPath: /metadata
+          subPath: metadata
           name: volume
         - mountPath: /blobs
-          subPath: /blobs
+          subPath: blobs
           name: volume
         - mountPath: /generated
-          subPath: /generated
+          subPath: generated
           name: volume
       volumes:
       - name: volume
