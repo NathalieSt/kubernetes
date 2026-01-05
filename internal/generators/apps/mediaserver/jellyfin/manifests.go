@@ -51,6 +51,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Requests: map[string]string{
 					"gpu.intel.com/i915": "1",
 				},
+				Limits: map[string]string{
+					"gpu.intel.com/i915": "1",
+				},
 			},
 			"securityContext": core.ContainerSecurityContext{
 				Capabilities: core.Capabilities{
