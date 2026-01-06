@@ -30,8 +30,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": dataPV.Capacity,
 				}},
-				StorageClassName: dataPV.StorageClass,
-				VolumeName:       dataPV.Name,
+				VolumeName: dataPV.Name,
 			},
 			),
 		},
@@ -49,8 +48,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": booksPV.Capacity,
 				}},
-				StorageClassName: booksPV.StorageClass,
-				VolumeName:       booksPV.Name,
+				VolumeName: booksPV.Name,
 			},
 			),
 		},
@@ -68,8 +66,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": bookdropPV.Capacity,
 				}},
-				StorageClassName: bookdropPV.StorageClass,
-				VolumeName:       bookdropPV.Name,
+				VolumeName: bookdropPV.Name,
 			},
 			),
 		},
