@@ -124,7 +124,7 @@ spec:
   wait: true
   timeout: "10m"
   dependsOn:
-    - nfs-volumes
+    - name: nfs-volumes
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
