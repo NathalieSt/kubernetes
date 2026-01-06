@@ -16,7 +16,7 @@ spec:
   values:
     server:
       dataStorage:
-        storageClass: nfs-local-v2
+        storageClass: nfs-local-next
     ui:
       annotations:
         netbird.io/expose: "true"

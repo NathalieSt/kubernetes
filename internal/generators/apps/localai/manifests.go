@@ -29,7 +29,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: generators.NFSLocalClassNext,
 			},
 			),
 		},
@@ -46,7 +46,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: generators.NFSLocalClassNext,
 			},
 			),
 		},
@@ -63,7 +63,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "10Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: generators.NFSLocalClassNext,
 			},
 			),
 		},
