@@ -30,7 +30,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: generators.NFSLocalClassNext,
 			},
 			),
 		},
