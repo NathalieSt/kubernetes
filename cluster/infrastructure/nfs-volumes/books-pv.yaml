@@ -14,4 +14,4 @@ spec:
     volumeHandle: raspberry-pi-5-0/mnt/external_ssd/booklore/books-pv/
     volumeAttributes:
       server: raspberry-pi-5-0
-      share: /mnt/external_ssd
+      share: /mnt/external_ssd/booklore/books-pv/
