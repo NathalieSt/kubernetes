@@ -18,7 +18,6 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
-	dataPV := generatorMeta.NFSVolumes["data"]
 	datapvcName := "data-pvc"
 	datapvc := utils.ManifestConfig{
 		Filename: "data-pvc.yaml",
@@ -28,15 +27,14 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": dataPV.Capacity,
+					"storage": "10Gi",
 				}},
-				VolumeName: dataPV.Name,
+				StorageClassName: generators.NFSRemoteClass,
 			},
 			),
 		},
 	}
 
-	booksPV := generatorMeta.NFSVolumes["books"]
 	bookspvcName := "books-pvc"
 	bookspvc := utils.ManifestConfig{
 		Filename: "books-pvc.yaml",
@@ -46,15 +44,14 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": booksPV.Capacity,
+					"storage": "100Gi",
 				}},
-				VolumeName: booksPV.Name,
+				StorageClassName: generators.NFSLocalClass,
 			},
 			),
 		},
 	}
 
-	bookdropPV := generatorMeta.NFSVolumes["bookdrop"]
 	bookdroppvcName := "bookdroppvc-pvc"
 	bookdroppvc := utils.ManifestConfig{
 		Filename: "bookdrop-pvc.yaml",
@@ -64,9 +61,9 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": bookdropPV.Capacity,
+					"storage": "10Gi",
 				}},
-				VolumeName: bookdropPV.Name,
+				StorageClassName: generators.NFSLocalClass,
 			},
 			),
 		},

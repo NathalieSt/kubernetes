@@ -8,5 +8,5 @@ spec:
   - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
-  volumeName: data-pv
+      storage: 10Gi
+  storageClassName: nfs-remote

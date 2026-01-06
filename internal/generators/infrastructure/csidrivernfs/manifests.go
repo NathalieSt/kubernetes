@@ -30,6 +30,7 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 					Parameters: map[string]string{
 						"server": generators.NFSLocalServer,
 						"share":  generators.NFSLocalShare,
+						"subDir": "${pvc.metadata.namespace}/${pvc.metadata.name}",
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",

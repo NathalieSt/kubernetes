@@ -9,4 +9,4 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  volumeName: books-pv
+  storageClassName: nfs-local-v2
