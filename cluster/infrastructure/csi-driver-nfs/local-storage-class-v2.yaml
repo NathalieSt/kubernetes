@@ -7,7 +7,6 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: raspberry-pi-5-0
   share: /mnt/external_ssd
-  subDir: ${pvc.metadata.namespace}/${pvc.metadata.name}
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
 allowVolumeExpansion: true

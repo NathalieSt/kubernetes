@@ -5,7 +5,7 @@ metadata:
   name: nfs-local-next
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: nfs-local-next
+  server: raspberry-pi-5-0
   share: /mnt/external_ssd
   subDir: ${pvc.metadata.namespace}/${pvc.metadata.name}
 reclaimPolicy: Retain

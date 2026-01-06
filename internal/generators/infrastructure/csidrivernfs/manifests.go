@@ -30,7 +30,6 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 					Parameters: map[string]string{
 						"server": generators.NFSLocalServer,
 						"share":  generators.NFSLocalShare,
-						"subDir": "${pvc.metadata.namespace}/${pvc.metadata.name}",
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",
@@ -41,6 +40,7 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				}),
 		},
 	}
+
 	localStorageClassNext := utils.ManifestConfig{
 		Filename: "local-storage-class-next.yaml",
 		Manifests: []any{
@@ -51,7 +51,7 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": generators.NFSLocalClassNext,
+						"server": generators.NFSLocalServerNext,
 						"share":  generators.NFSLocalShareNext,
 						"subDir": "${pvc.metadata.namespace}/${pvc.metadata.name}",
 					},
