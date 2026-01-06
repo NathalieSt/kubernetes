@@ -5,11 +5,10 @@ metadata:
   name: data-pv
 spec:
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   capacity:
     storage: 1Gi
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-remote
   csi:
     driver: nfs.csi.k8s.io
     volumeHandle: remote-fs.cloud.nathalie-stiefsohn.eu/mnt/HC_Volume_103061115/booklore/data-pv/
