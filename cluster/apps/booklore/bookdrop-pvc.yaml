@@ -10,4 +10,4 @@ spec:
     requests:
       storage: 10Gi
   storageClassName: nfs-local-v2
-  volumeName: data-pv
+  volumeName: bookdrop-pv
