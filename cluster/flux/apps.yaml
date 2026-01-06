@@ -123,7 +123,8 @@ spec:
   prune: true
   wait: true
   timeout: "10m"
-  dependsOn: []
+  dependsOn:
+    - nfs-volumes
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1

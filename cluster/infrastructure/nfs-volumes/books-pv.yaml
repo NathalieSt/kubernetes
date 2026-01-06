@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: books-pv
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-local-v2
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: raspberry-pi-5-0/mnt/external_ssd/booklore/books-pv/
+    volumeAttributes:
+      server: raspberry-pi-5-0
+      share: /mnt/external_ssd

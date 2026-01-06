@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"kubernetes/internal/generators"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
@@ -29,8 +28,8 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": "raspberry-pi-5-0",
-						"share":  "/mnt/external_ssd",
+						"server": generators.NFSLocalServer,
+						"share":  generators.NFSLocalShare,
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",
@@ -52,8 +51,8 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": "debian",
-						"share":  "/srv/nfs",
+						"server": generators.DebianServer,
+						"share":  generators.DebianShare,
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",
@@ -75,8 +74,8 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": fmt.Sprintf("remote-fs.%v", generators.NetbirdDomainBase),
-						"share":  "/mnt/HC_Volume_103061115",
+						"server": generators.NFSRemoteServer,
+						"share":  generators.NFSRemoteShare,
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",

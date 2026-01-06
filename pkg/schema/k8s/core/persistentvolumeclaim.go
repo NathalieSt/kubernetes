@@ -11,10 +11,11 @@ type VolumeResourceRequirements struct {
 }
 
 type PersistentVolumeClaimSpec struct {
-	AccessModes      []string                   `yaml:"accessModes,omitempty"`
-	Selector         meta.LabelSelector         `yaml:",omitempty"`
-	Resources        VolumeResourceRequirements `yaml:",omitempty"`
+	AccessModes      []AccessModes              `yaml:"accessModes,omitempty"`
+	Selector         meta.LabelSelector         `yaml:"selector,omitempty"`
+	Resources        VolumeResourceRequirements `yaml:"resources,omitempty"`
 	StorageClassName string                     `yaml:"storageClassName,omitempty"`
+	VolumeName       string                     `yaml:"volumeName,omitempty"`
 }
 
 type PersistentVolumeClaim struct {

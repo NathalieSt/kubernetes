@@ -18,6 +18,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
+	dataPV := generatorMeta.NFSVolumes["data"]
 	datapvcName := "data-pvc"
 	datapvc := utils.ManifestConfig{
 		Filename: "data-pvc.yaml",
@@ -27,14 +28,16 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
+					"storage": dataPV.Capacity,
 				}},
-				StorageClassName: generators.NFSRemoteClass,
+				StorageClassName: dataPV.StorageClass,
+				VolumeName:       dataPV.Name,
 			},
 			),
 		},
 	}
 
+	booksPV := generatorMeta.NFSVolumes["books"]
 	bookspvcName := "books-pvc"
 	bookspvc := utils.ManifestConfig{
 		Filename: "books-pvc.yaml",
@@ -44,14 +47,16 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "100Gi",
+					"storage": booksPV.Capacity,
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: booksPV.StorageClass,
+				VolumeName:       booksPV.Name,
 			},
 			),
 		},
 	}
 
+	bookdropPV := generatorMeta.NFSVolumes["bookdrop"]
 	bookdroppvcName := "bookdroppvc-pvc"
 	bookdroppvc := utils.ManifestConfig{
 		Filename: "bookdrop-pvc.yaml",
@@ -61,9 +66,10 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "10Gi",
+					"storage": bookdropPV.Capacity,
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: bookdropPV.StorageClass,
+				VolumeName:       bookdropPV.Name,
 			},
 			),
 		},

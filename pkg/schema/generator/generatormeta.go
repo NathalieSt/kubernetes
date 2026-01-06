@@ -49,6 +49,13 @@ type GeneratorFlags struct {
 	ShouldReturnMeta bool
 }
 
+type GeneratorNFSVolume struct {
+	Name         string
+	StorageClass string
+	Path         string
+	Capacity     string
+}
+
 type GeneratorMeta struct {
 	Name                string
 	Namespace           string
@@ -61,6 +68,7 @@ type GeneratorMeta struct {
 	VirtualService      *VirtualServiceConfig
 	KedaScaling         *keda.ScaledObjectTriggerMeta
 	DependsOnGenerators []string
+	NFSVolumes          map[string]GeneratorNFSVolume
 }
 
 type GeneratorMetas []GeneratorMeta

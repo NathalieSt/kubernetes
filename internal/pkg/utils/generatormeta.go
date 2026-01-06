@@ -5,11 +5,43 @@ import (
 	"flag"
 	"fmt"
 	"kubernetes/pkg/schema/generator"
+	"maps"
 	"os"
 	"os/exec"
 	"path"
+	"slices"
 	"sync"
 )
+
+type DiscoveredGenerators struct {
+	Apps           map[string]string
+	Infrastructure map[string]string
+	Monitoring     map[string]string
+}
+
+func GetDiscoveredGeneratorsMeta(rootDir string) ([]generator.GeneratorMeta, error) {
+	data, err := os.ReadFile(path.Join(rootDir, "clidata/discoveredgenerators.json"))
+	if err != nil {
+		return nil, err
+	}
+
+	var discoveredGenerators DiscoveredGenerators
+	if err := json.Unmarshal(data, &discoveredGenerators); err != nil {
+		return nil, err
+	}
+
+	generatorPaths := []string{}
+	appPaths := slices.Collect(maps.Values(discoveredGenerators.Apps))
+	infraPaths := slices.Collect(maps.Values(discoveredGenerators.Infrastructure))
+	monitoringPaths := slices.Collect(maps.Values(discoveredGenerators.Monitoring))
+	generatorPaths = append(generatorPaths, appPaths...)
+	generatorPaths = append(generatorPaths, infraPaths...)
+	generatorPaths = append(generatorPaths, monitoringPaths...)
+
+	generatorMetas := GetGeneratorMetasByPaths(rootDir, generatorPaths)
+
+	return generatorMetas, nil
+}
 
 func RunGeneratorMain(path string, flags []string) ([]byte, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
