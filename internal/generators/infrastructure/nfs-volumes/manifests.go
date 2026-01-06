@@ -53,7 +53,9 @@ func createNFSVolumesManifests(rootDir string, generatorMeta generator.Generator
 								AccessModes: []core.AccessModes{
 									core.ReadWriteMany,
 								},
-								Capacity:                      volume.Capacity,
+								Capacity: core.VolumeCapacity{
+									Storage: volume.Capacity,
+								},
 								PersistentVolumeReclaimPolicy: core.Retain,
 								StorageClassName:              volume.StorageClass,
 								CSIDriverNFS: core.CSIDriverNFS{

@@ -43,9 +43,13 @@ type CSIDriverNFS struct {
 	VolumeAttributes CSIDriverNFSVolumeAttributes `yaml:"volumeAttributes,omitempty"`
 }
 
+type VolumeCapacity struct {
+	Storage string `yaml:"storage,omitempty"`
+}
+
 type PersistentVolumeSpec struct {
 	AccessModes                   []AccessModes                 `yaml:"accessModes,omitempty"`
-	Capacity                      string                        `yaml:"capacity,omitempty"`
+	Capacity                      VolumeCapacity                `yaml:"capacity,omitempty"`
 	ClaimRef                      ObjectReference               `yaml:"claimRef,omitempty"`
 	MountOptions                  []string                      `yaml:"mountOptions,omitempty"`
 	PersistentVolumeReclaimPolicy PersistentVolumeReclaimPolicy `yaml:"persistentVolumeReclaimPolicy,omitempty"`

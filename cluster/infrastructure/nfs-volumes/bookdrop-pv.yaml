@@ -6,7 +6,8 @@ metadata:
 spec:
   accessModes:
   - ReadWriteMany
-  capacity: 10Gi
+  capacity:
+    storage: 10Gi
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-local-v2
   csi:

@@ -6,7 +6,8 @@ metadata:
 spec:
   accessModes:
   - ReadWriteMany
-  capacity: 1Gi
+  capacity:
+    storage: 1Gi
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-remote
   csi:
