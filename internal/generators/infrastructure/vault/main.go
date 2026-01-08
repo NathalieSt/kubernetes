@@ -40,7 +40,7 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:    "./cluster/infrastructure/valkey",
+			Path:    "./cluster/infrastructure/vault",
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",

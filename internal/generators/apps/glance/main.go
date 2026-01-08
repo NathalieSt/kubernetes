@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	name := "glance"
+	name := shared.Glance
 	namespace := "glance"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{

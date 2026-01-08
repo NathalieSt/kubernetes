@@ -46,6 +46,7 @@ func main() {
 			Timeout: "10m",
 			DependsOn: []string{
 				shared.CSIDriverNFS,
+				shared.Vector,
 			},
 		},
 	}

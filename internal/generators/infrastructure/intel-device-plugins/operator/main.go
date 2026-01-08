@@ -36,7 +36,7 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:    "./cluster/infrastructure/intel-device-plugins/gpu-plugin",
+			Path:    "./cluster/infrastructure/intel-device-plugins/operator",
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
