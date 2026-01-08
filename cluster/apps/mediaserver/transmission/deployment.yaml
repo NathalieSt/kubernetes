@@ -19,19 +19,6 @@ spec:
         app.kubernetes.io/version: "1.0"
     spec:
       containers:
-      - image: jesec/flood:4.11
-        name: flood-ui
-        ports:
-        - containerPort: 3000
-          name: flood-web-ui
-        volumeMounts:
-        - mountPath: /data
-          name: media-volume
-        - mountPath: /config
-          name: flood-config-volume
-        env:
-        - name: HOME
-          value: /config
       - image: haugene/transmission-openvpn:5.3.2
         name: transmission-openvpn
         ports:
@@ -78,9 +65,6 @@ spec:
       - name: trans-config-volume
         persistentVolumeClaim:
           claimName: trans-config-pvc
-      - name: flood-config-volume
-        persistentVolumeClaim:
-          claimName: flood-config-pvc
       - name: trans-vpn-vpc-volume
         persistentVolumeClaim:
           claimName: trans-vpn-pvc

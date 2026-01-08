@@ -61,6 +61,26 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: flood
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/mediaserver/flood
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: jellyfin
+  - name: transmission
+  - name: csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: forgejo
   namespace: flux-system
 spec:

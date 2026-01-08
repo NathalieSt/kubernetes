@@ -16,14 +16,18 @@ func main() {
 		return
 	}
 
-	name := shared.Transmission
+	name := shared.Flood
 	namespace := "jellyfin"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
 		Namespace:     namespace,
 		GeneratorType: generatorType,
+		ClusterUrl:    "flood.jellyfin.svc.cluster.local",
 		Port:          3000,
+		Caddy: &generator.Caddy{
+			DNSName: "transmission",
+		},
 		Flux: &kustomization.KustomizationSpec{
 			Interval:        "24h",
 			TargetNamespace: namespace,
@@ -31,12 +35,13 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:    "./cluster/apps/mediaserver/transmission",
+			Path:    "./cluster/apps/mediaserver/flood",
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
 			DependsOn: []kustomization.KustomizationDependency{
 				{Name: shared.Jellyfin},
+				{Name: shared.Transmission},
 				{Name: shared.CSIDriverNFS},
 			},
 		},
@@ -45,7 +50,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/mediaserver/transmission/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/mediaserver/flood/"),
 		CreateManifests:  createTransmissionManifests,
 	})
 }

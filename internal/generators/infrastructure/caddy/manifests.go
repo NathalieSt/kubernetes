@@ -7,6 +7,7 @@ import (
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"sort"
 	"strings"
 )
 
@@ -32,6 +33,10 @@ func createCaddyManifests(rootDir string, generatorMeta generator.GeneratorMeta)
 	}
 
 	exposedGeneratorsMeta = append(exposedGeneratorsMeta, manuallyDefinedMetas...)
+
+	sort.Slice(exposedGeneratorsMeta, func(i, j int) bool {
+		return exposedGeneratorsMeta[i].Name < exposedGeneratorsMeta[j].Name
+	})
 
 	configmapName := "caddy-configmap"
 	configmap := utils.ManifestConfig{

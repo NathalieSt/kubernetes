@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: flood
+    app.kubernetes.io/version: "1.0"
+  name: flood
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flood
+      app.kubernetes.io/version: "1.0"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flood
+        app.kubernetes.io/version: "1.0"
+    spec:
+      containers:
+      - image: jesec/flood:4.11
+        name: flood-ui
+        ports:
+        - containerPort: 3000
+          name: flood-web-ui
+        volumeMounts:
+        - mountPath: /data
+          name: media-volume
+        - mountPath: /config
+          name: flood-config-volume
+        env:
+        - name: HOME
+          value: /config
+      volumes:
+      - name: flood-config-volume
+        persistentVolumeClaim:
+          claimName: flood-config-pvc
+      - name: media-volume
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc

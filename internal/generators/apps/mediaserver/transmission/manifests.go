@@ -66,22 +66,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 		},
 	}
 
-	floodConfigPVCName := "flood-config-pvc"
-	floodConfigPVC := utils.ManifestConfig{
-		Filename: "flood-config-pvc.yaml",
-		Manifests: []any{
-			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: floodConfigPVCName,
-			}, core.PersistentVolumeClaimSpec{
-				AccessModes: []string{"ReadWriteMany"},
-				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
-					"storage": "1Gi",
-				}},
-				StorageClassName: shared.NFSLocalClass,
-			}),
-		},
-	}
-
 	ipLeakConfigMapName := "discord-bridge-configmap"
 	ipLeakConfigMap, err := getIPLeakConfigMap(ipLeakConfigMapName)
 	if err != nil {
@@ -96,7 +80,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 
 	ipLeakVolume := "ip-leak-volume"
 	transConfigVolume := "trans-config-volume"
-	floodConfigVolume := "flood-config-volume"
 	transVPNVolume := "trans-vpn-volume"
 	transVPNPVCVolume := "trans-vpn-vpc-volume"
 	mediaVolume := "media-volume"
@@ -128,32 +111,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 						},
 						Spec: core.PodSpec{
 							Containers: []core.Container{
-								{
-									Name:  "flood-ui",
-									Image: "jesec/flood:4.11",
-									VolumeMounts: []core.VolumeMount{
-										{
-											MountPath: "/data",
-											Name:      mediaVolume,
-										},
-										{
-											MountPath: "/config",
-											Name:      floodConfigVolume,
-										},
-									},
-									Env: []core.Env{
-										{
-											Name:  "HOME",
-											Value: "/config",
-										},
-									},
-									Ports: []core.Port{
-										{
-											Name:          "flood-web-ui",
-											ContainerPort: 3000,
-										},
-									},
-								},
 								{
 									Name:  "transmission-openvpn",
 									Image: "haugene/transmission-openvpn:5.3.2",
@@ -237,12 +194,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 									},
 								},
 								{
-									Name: floodConfigVolume,
-									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: floodConfigPVCName,
-									},
-								},
-								{
 									Name: transVPNPVCVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: transPVCVPNName,
@@ -312,11 +263,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 							Port:       9091,
 							TargetPort: 9091,
 						},
-						{
-							Name:       "http-flood-webui",
-							Port:       3000,
-							TargetPort: 3000,
-						},
 					},
 				},
 			),
@@ -331,10 +277,9 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 			service.Filename,
 			transPVCVPN.Filename,
 			transConfigPVC.Filename,
-			floodConfigPVC.Filename,
 			ipLeakConfigMapManifest.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, vpnVaultSecret, service, transPVCVPN, transConfigPVC, floodConfigPVC, ipLeakConfigMapManifest})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, vpnVaultSecret, service, transPVCVPN, transConfigPVC, ipLeakConfigMapManifest})
 }

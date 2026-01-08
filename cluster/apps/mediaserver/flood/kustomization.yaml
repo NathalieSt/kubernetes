@@ -2,11 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: transmission
+  name: flood
 resources:
 - deployment.yaml
-- vault-secret.yaml
 - service.yaml
-- trans-pvc.yaml
-- trans-config-pvc.yaml
-- configmap.yaml
+- flood-config-pvc.yaml
