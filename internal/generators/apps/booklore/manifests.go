@@ -46,7 +46,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: shared.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClass,
 			},
 			),
 		},
@@ -63,7 +63,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "10Gi",
 				}},
-				StorageClassName: shared.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClass,
 			},
 			),
 		},

@@ -2,7 +2,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: nfs-local-next
+  name: nfs-local
 provisioner: nfs.csi.k8s.io
 parameters:
   server: raspberry-pi-5-0

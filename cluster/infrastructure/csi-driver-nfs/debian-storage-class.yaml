@@ -7,6 +7,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: debian
   share: /srv/nfs
+  subDir: ${pvc.metadata.namespace}/${pvc.metadata.name}
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
 allowVolumeExpansion: true

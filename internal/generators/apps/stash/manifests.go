@@ -29,7 +29,7 @@ func createStashManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "200Gi",
 				}},
-				StorageClassName: shared.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClass,
 			}),
 		},
 	}

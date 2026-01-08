@@ -8,7 +8,6 @@ resources:
 - repo.yaml
 - chart.yaml
 - release.yaml
-- local-storage-class-v2.yaml
+- local-storage-class.yaml
 - remote-storage-class.yaml
 - debian-storage-class.yaml
-- local-storage-class-next.yaml

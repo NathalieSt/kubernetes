@@ -19,7 +19,7 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 	}, nil)
 
 	localStorageClass := utils.ManifestConfig{
-		Filename: "local-storage-class-v2.yaml",
+		Filename: "local-storage-class.yaml",
 		Manifests: []any{
 			storage.NewStorageClass(
 				meta.ObjectMeta{
@@ -30,29 +30,6 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 					Parameters: map[string]string{
 						"server": shared.NFSLocalServer,
 						"share":  shared.NFSLocalShare,
-					},
-					ReclaimPolicy:        "Retain",
-					VolumeBindingMode:    "Immediate",
-					AllowVolumeExpansion: true,
-					MountOptions: []string{
-						"nfsvers=4.1",
-					},
-				}),
-		},
-	}
-
-	localStorageClassNext := utils.ManifestConfig{
-		Filename: "local-storage-class-next.yaml",
-		Manifests: []any{
-			storage.NewStorageClass(
-				meta.ObjectMeta{
-					Name: shared.NFSLocalClassNext,
-				},
-				storage.StorageClassData{
-					Provisioner: "nfs.csi.k8s.io",
-					Parameters: map[string]string{
-						"server": shared.NFSLocalServerNext,
-						"share":  shared.NFSLocalShareNext,
 						"subDir": "${pvc.metadata.namespace}/${pvc.metadata.name}",
 					},
 					ReclaimPolicy:        "Retain",
@@ -77,6 +54,7 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 					Parameters: map[string]string{
 						"server": shared.DebianServer,
 						"share":  shared.DebianShare,
+						"subDir": "${pvc.metadata.namespace}/${pvc.metadata.name}",
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",
@@ -100,6 +78,7 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 					Parameters: map[string]string{
 						"server": shared.NFSRemoteServer,
 						"share":  shared.NFSRemoteShare,
+						"subDir": "${pvc.metadata.namespace}/${pvc.metadata.name}",
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",
@@ -124,10 +103,9 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 				localStorageClass.Filename,
 				remoteStorageClass.Filename,
 				debianStorageClass.Filename,
-				localStorageClassNext.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, namespace, repo, chart, release, release, localStorageClass, remoteStorageClass, debianStorageClass, localStorageClassNext})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, namespace, repo, chart, release, release, localStorageClass, remoteStorageClass, debianStorageClass})
 }

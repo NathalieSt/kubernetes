@@ -28,7 +28,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: shared.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClass,
 			}),
 		},
 	}
@@ -41,7 +41,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 					"existingClaim": pvcName,
 				},
 				"config": map[string]any{
-					"storageClass": shared.NFSLocalClassNext,
+					"storageClass": shared.NFSLocalClass,
 				},
 			},
 			"nodeSelector": map[string]any{

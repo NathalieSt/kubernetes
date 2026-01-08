@@ -27,7 +27,7 @@ func createVaultManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			},
 			"server": map[string]any{
 				"dataStorage": map[string]any{
-					"storageClass": shared.NFSLocalClassNext,
+					"storageClass": shared.NFSLocalClass,
 				},
 			},
 		},

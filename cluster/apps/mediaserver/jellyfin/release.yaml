@@ -25,7 +25,7 @@ spec:
       kubernetes.io/hostname: debian
     persistence:
       config:
-        storageClass: nfs-local-next
+        storageClass: nfs-local
       media:
         existingClaim: jellyfin-pvc
     resources:

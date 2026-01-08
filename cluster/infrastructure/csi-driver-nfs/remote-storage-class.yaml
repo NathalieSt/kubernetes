@@ -7,6 +7,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: remote-fs.cloud.nathalie-stiefsohn.eu
   share: /mnt/HC_Volume_103061115
+  subDir: ${pvc.metadata.namespace}/${pvc.metadata.name}
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
