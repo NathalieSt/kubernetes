@@ -47,7 +47,7 @@ func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/shared/infrastructure/postgres/matrix-cluster"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/matrix-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
