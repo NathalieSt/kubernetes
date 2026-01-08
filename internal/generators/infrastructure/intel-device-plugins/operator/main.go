@@ -36,11 +36,13 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:      "./cluster/infrastructure/intel-device-plugins/operator",
-			Prune:     true,
-			Wait:      true,
-			Timeout:   "10m",
-			DependsOn: []kustomization.KustomizationDependency{},
+			Path:    "./cluster/infrastructure/intel-device-plugins/operator",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.CertManager},
+			},
 		},
 	}
 

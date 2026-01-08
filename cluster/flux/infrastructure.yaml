@@ -138,6 +138,8 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  dependsOn:
+  - name: cert-manager
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
