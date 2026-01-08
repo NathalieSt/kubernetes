@@ -18,33 +18,6 @@ spec:
         app.kubernetes.io/name: transsetup
         app.kubernetes.io/version: "1.0"
     spec:
-      initContainers:
-      - command:
-        - /bin/sh
-        - -c
-        - |-
-          mkdir -p /tocopyto
-          										cp /readonly/* /tocopyto/
-          										chmod 644 /tocopyto/*
-          										chmod 755 /tocopyto/update-port.sh
-        image: alpine:latest
-        name: config-init
-        volumeMounts:
-        - mountPath: /readonly
-          name: trans-vpn-volume
-        - mountPath: /tocopyto
-          name: trans-vpn-vpc-volume
-      - command:
-        - /bin/sh
-        - -c
-        - |-
-          chown -R 1000:1000 /config
-          										
-        image: alpine:latest
-        name: fix-file-permissions
-        volumeMounts:
-        - mountPath: /config
-          name: flood-config-volume
       containers:
       - image: jesec/flood:4.11
         name: flood-ui

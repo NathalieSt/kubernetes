@@ -127,46 +127,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 							},
 						},
 						Spec: core.PodSpec{
-							InitContainers: []core.Container{
-								{
-									Name:  "config-init",
-									Image: "alpine:latest",
-									Command: []string{
-										"/bin/sh",
-										"-c",
-										`mkdir -p /tocopyto
-										cp /readonly/* /tocopyto/
-										chmod 644 /tocopyto/*
-										chmod 755 /tocopyto/update-port.sh`,
-									},
-									VolumeMounts: []core.VolumeMount{
-										{
-											Name:      transVPNVolume,
-											MountPath: "/readonly",
-										},
-										{
-											Name:      transVPNPVCVolume,
-											MountPath: "/tocopyto",
-										},
-									},
-								},
-								{
-									Name:  "fix-file-permissions",
-									Image: "alpine:latest",
-									Command: []string{
-										"/bin/sh",
-										"-c",
-										`chown -R 1000:1000 /config
-										`,
-									},
-									VolumeMounts: []core.VolumeMount{
-										{
-											Name:      floodConfigVolume,
-											MountPath: "/config",
-										},
-									},
-								},
-							},
 							Containers: []core.Container{
 								{
 									Name:  "flood-ui",
