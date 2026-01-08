@@ -128,3 +128,6 @@ spec:
             path: node-nl.protonvpn.udp.ovpn
           - key: rotate-script
             path: update-port.sh
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1001
