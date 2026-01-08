@@ -15,8 +15,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - vector
+  - name: csi-driver-nfs
+  - name: vector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -50,8 +50,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - victoria-metrics
-  - csi-driver-nfs
+  - name: victoria-metrics
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -69,7 +69,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -87,4 +87,4 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
+  - name: csi-driver-nfs

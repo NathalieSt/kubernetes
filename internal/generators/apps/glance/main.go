@@ -50,8 +50,8 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.Keda,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.Keda},
 			},
 		},
 	}

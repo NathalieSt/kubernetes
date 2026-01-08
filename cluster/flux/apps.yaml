@@ -15,8 +15,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - reflector
+  - name: csi-driver-nfs
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -34,9 +34,9 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - keda
-  - mariadb
+  - name: csi-driver-nfs
+  - name: keda
+  - name: mariadb
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -54,9 +54,9 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - matrix-pg
-  - synapse
-  - csi-driver-nfs
+  - name: matrix-pg
+  - name: synapse
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -74,9 +74,9 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - forgejo-pg
-  - valkey
-  - keda
+  - name: forgejo-pg
+  - name: valkey
+  - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -94,7 +94,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - keda
+  - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -112,9 +112,9 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - keda
-  - intel-device-gpu-plugin
+  - name: csi-driver-nfs
+  - name: keda
+  - name: intel-device-gpu-plugin
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -132,8 +132,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - keda
+  - name: csi-driver-nfs
+  - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -151,8 +151,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - main-pg
-  - csi-driver-nfs
+  - name: main-pg
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -170,7 +170,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - keda
+  - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -188,9 +188,9 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - gluetun-proxy
-  - valkey
-  - keda
+  - name: gluetun-proxy
+  - name: valkey
+  - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -208,8 +208,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - keda
-  - csi-driver-nfs
+  - name: keda
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -227,8 +227,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - matrix-pg
-  - csi-driver-nfs
+  - name: matrix-pg
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -246,5 +246,5 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - jellyfin
-  - csi-driver-nfs
+  - name: jellyfin
+  - name: csi-driver-nfs

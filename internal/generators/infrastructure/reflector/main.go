@@ -46,9 +46,9 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.Keda,
-				shared.VaultSecretsOperatorConfig,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.Keda},
+				{Name: shared.VaultSecretsOperatorConfig},
 			},
 		},
 	}

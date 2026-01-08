@@ -17,6 +17,15 @@ spec:
         app.kubernetes.io/name: localai
         app.kubernetes.io/version: v3.9.0-aio-cpu
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: exclusive
+                operator: In
+                values:
+                - localai
       containers:
       - image: quay.io/go-skynet/local-ai:v3.9.0-aio-cpu
         name: localai
@@ -43,3 +52,8 @@ spec:
       - name: backends-volume
         persistentVolumeClaim:
           claimName: backends-pvc
+      tolerations:
+      - key: exclusive
+        operator: Equal
+        value: localai
+        effect: NoSchedule

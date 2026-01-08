@@ -39,9 +39,9 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.Jellyfin,
-				shared.CSIDriverNFS,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.Jellyfin},
+				{Name: shared.CSIDriverNFS},
 			},
 		},
 	}

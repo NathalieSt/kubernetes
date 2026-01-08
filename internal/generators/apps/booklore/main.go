@@ -49,10 +49,10 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.CSIDriverNFS,
-				shared.Keda,
-				shared.MariaDB,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.CSIDriverNFS},
+				{Name: shared.Keda},
+				{Name: shared.MariaDB},
 			},
 		},
 	}

@@ -40,10 +40,10 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.MatrixPostgres,
-				shared.MatrixSynapse,
-				shared.CSIDriverNFS,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.MatrixPostgres},
+				{Name: shared.MatrixSynapse},
+				{Name: shared.CSIDriverNFS},
 			},
 		},
 	}

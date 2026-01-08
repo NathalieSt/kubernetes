@@ -40,8 +40,8 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.CSIDriverNFS,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.CSIDriverNFS},
 			},
 		},
 	}

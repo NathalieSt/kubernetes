@@ -52,10 +52,10 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.CSIDriverNFS,
-				shared.Keda,
-				shared.IntelDeviceGPUPlugin,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.CSIDriverNFS},
+				{Name: shared.Keda},
+				{Name: shared.IntelDeviceGPUPlugin},
 			},
 		},
 	}

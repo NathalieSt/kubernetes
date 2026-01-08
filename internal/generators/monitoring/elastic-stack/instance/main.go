@@ -44,9 +44,9 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.CSIDriverNFS,
-				shared.Vector,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.CSIDriverNFS},
+				{Name: shared.Vector},
 			},
 		},
 	}

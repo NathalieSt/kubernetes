@@ -50,9 +50,9 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.MainPostgres,
-				shared.CSIDriverNFS,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.MainPostgres},
+				{Name: shared.CSIDriverNFS},
 			},
 		},
 	}

@@ -90,6 +90,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							"app.kubernetes.io/name": generatorMeta.Name,
 						},
 					},
+
 					Template: core.PodTemplateSpec{
 						Metadata: meta.ObjectMeta{
 							Labels: map[string]string{
@@ -98,6 +99,33 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							},
 						},
 						Spec: core.PodSpec{
+							Tolerations: []core.PodToleration{
+								{
+									Key:      "exclusive",
+									Operator: "Equal",
+									Value:    "localai",
+									Effect:   "NoSchedule",
+								},
+							},
+							Affinity: core.PodAffinity{
+								NodeAffinity: core.PodNodeAffinity{
+									RequiredDuringSchedulingIgnoredDuringExecution: core.PodNodeRequiredDuringSchedulingIgnoredDuringExecution{
+										NodeSelectorTerms: []core.NodeSelectorTerm{
+											{
+												MatchExpressions: []core.MatchExpression{
+													{
+														Key:      "exclusive",
+														Operator: "In",
+														Values: []string{
+															"localai",
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
 							Containers: []core.Container{
 								{
 									Name:  generatorMeta.Name,

@@ -50,10 +50,10 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.ForgejoPostgres,
-				shared.Valkey,
-				shared.Keda,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.ForgejoPostgres},
+				{Name: shared.Valkey},
+				{Name: shared.Keda},
 			},
 		},
 	}

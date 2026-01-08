@@ -50,9 +50,9 @@ func main() {
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
-			DependsOn: []string{
-				shared.Keda,
-				shared.CSIDriverNFS,
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.Keda},
+				{Name: shared.CSIDriverNFS},
 			},
 		},
 	}

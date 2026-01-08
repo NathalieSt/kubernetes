@@ -39,15 +39,19 @@ type SourceRef struct {
 	Name string        `yaml:"name,omitempty"`
 }
 
+type KustomizationDependency struct {
+	Name string `yaml:"name,omitempty"`
+}
+
 type KustomizationSpec struct {
-	Interval        string    `yaml:"interval,omitempty"`
-	TargetNamespace string    `yaml:"targetNamespace,omitempty"`
-	SourceRef       SourceRef `yaml:"sourceRef,omitempty"`
-	Path            string    `yaml:"path,omitempty"`
-	Prune           bool      `yaml:"prune,omitempty"`
-	Wait            bool      `yaml:"wait,omitempty"`
-	Timeout         string    `yaml:"timeout,omitempty"`
-	DependsOn       []string  `yaml:"dependsOn,omitempty"`
+	Interval        string                    `yaml:"interval,omitempty"`
+	TargetNamespace string                    `yaml:"targetNamespace,omitempty"`
+	SourceRef       SourceRef                 `yaml:"sourceRef,omitempty"`
+	Path            string                    `yaml:"path,omitempty"`
+	Prune           bool                      `yaml:"prune,omitempty"`
+	Wait            bool                      `yaml:"wait,omitempty"`
+	Timeout         string                    `yaml:"timeout,omitempty"`
+	DependsOn       []KustomizationDependency `yaml:"dependsOn,omitempty"`
 }
 
 type Kustomization struct {

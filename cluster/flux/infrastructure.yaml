@@ -15,7 +15,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -49,7 +50,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -83,8 +84,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - vault-secrets-operator-config
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -102,7 +103,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - vault-secrets-operator-config
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -120,7 +121,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - intel-device-plugins-operator
+  - name: intel-device-plugins-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -137,8 +138,6 @@ spec:
   prune: true
   wait: true
   timeout: 10m
-  dependsOn:
-  - intel-device-plugins-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -172,8 +171,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - vault-secrets-operator-config
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -191,8 +190,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - vault-secrets-operator-config
-  - csi-driver-nfs
+  - name: vault-secrets-operator-config
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -210,8 +209,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
-  - vault-secrets-operator-config
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -228,8 +227,6 @@ spec:
   prune: true
   wait: true
   timeout: 10m
-  dependsOn:
-  - intel-device-plugins-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -247,8 +244,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - keda
-  - csi-driver-nfs
+  - name: keda
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -266,8 +263,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - keda
-  - vault-secrets-operator-config
+  - name: keda
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -285,8 +282,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - keda
-  - csi-driver-nfs
+  - name: keda
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -304,7 +301,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - csi-driver-nfs
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -322,7 +319,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - vault
+  - name: vault
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -340,4 +337,4 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - vault-secrets-operator
+  - name: vault-secrets-operator

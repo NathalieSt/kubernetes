@@ -81,7 +81,40 @@ const (
 	ClusterFirst DNSPolicy = "ClusterFirst"
 )
 
+type PodToleration struct {
+	Key string `yaml:"key,omitempty"`
+	// FIXME: can be narrowed down to enum
+	Operator string `yaml:"operator,omitempty"`
+	Value    string `yaml:"value,omitempty"`
+	// FIXME: can probably be narrowed down
+	Effect string `yaml:"effect,omitempty"`
+}
+
+type MatchExpression struct {
+	Key string `yaml:"key,omitempty"`
+	// FIXME: can be narrowed down to enum
+	Operator string   `yaml:"operator,omitempty"`
+	Values   []string `yaml:"values,omitempty"`
+}
+
+type NodeSelectorTerm struct {
+	MatchExpressions []MatchExpression `yaml:"matchExpressions,omitempty"`
+}
+
+type PodNodeRequiredDuringSchedulingIgnoredDuringExecution struct {
+	NodeSelectorTerms []NodeSelectorTerm `yaml:"nodeSelectorTerms,omitempty"`
+}
+
+type PodNodeAffinity struct {
+	RequiredDuringSchedulingIgnoredDuringExecution PodNodeRequiredDuringSchedulingIgnoredDuringExecution `yaml:"requiredDuringSchedulingIgnoredDuringExecution,omitempty"`
+}
+
+type PodAffinity struct {
+	NodeAffinity PodNodeAffinity `yaml:"nodeAffinity,omitempty"`
+}
+
 type PodSpec struct {
+	Affinity           PodAffinity        `yaml:"affinity,omitempty"`
 	InitContainers     []Container        `yaml:"initContainers,omitempty"`
 	ServiceAccountName string             `yaml:"serviceAccountName,omitempty"`
 	DNSPolicy          DNSPolicy          `yaml:"dnsPolicy,omitempty"`
@@ -89,6 +122,7 @@ type PodSpec struct {
 	Volumes            []Volume           `yaml:"volumes,omitempty"`
 	SecurityContext    PodSecurityContext `yaml:"securityContext,omitempty"`
 	NodeSelector       map[string]string  `yaml:"nodeSelector,omitempty"`
+	Tolerations        []PodToleration    `yaml:"tolerations,omitempty"`
 }
 
 type Pod struct {
