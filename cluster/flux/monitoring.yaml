@@ -2,55 +2,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: victoria-metrics
+  name: elastic-stack-instance
   namespace: flux-system
 spec:
-  interval: "24h"
-  targetNamespace: victoria-metrics
+  interval: 24h
+  targetNamespace: elastic-stack
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./cluster/monitoring/victoria-metrics"
+  path: ./cluster/monitoring/elastic-stack/instance
   prune: true
   wait: true
-  timeout: "10m"
-  dependsOn: []
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: perses
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: perses
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/monitoring/perses"
-  prune: true
-  wait: true
-  timeout: "10m"
+  timeout: 10m
   dependsOn:
-    - name: victoria-metrics
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: vector
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: vector
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/monitoring/vector"
-  prune: true
-  wait: true
-  timeout: "10m"
+  - csi-driver-nfs
+  - vector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -58,30 +24,67 @@ metadata:
   name: elastic-stack-operator
   namespace: flux-system
 spec:
-  interval: "24h"
+  interval: 24h
   targetNamespace: elastic-stack-operator
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./cluster/monitoring/elastic-stack/operator"
+  path: ./cluster/monitoring/elastic-stack/operator
   prune: true
   wait: true
-  timeout: "10m"
+  timeout: 10m
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: elastic-stack
+  name: perses
   namespace: flux-system
 spec:
-  interval: "24h"
-  targetNamespace: elastic-stack
+  interval: 24h
+  targetNamespace: perses
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./cluster/monitoring/elastic-stack/instance"
+  path: ./cluster/monitoring/perses
   prune: true
   wait: true
-  timeout: "10m"
+  timeout: 10m
   dependsOn:
-    - name: elastic-stack-operator
+  - victoria-metrics
+  - csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vector
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: vector
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/monitoring/vector
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: victoria-metrics
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: victoria-metrics
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/monitoring/victoria-metrics
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - csi-driver-nfs

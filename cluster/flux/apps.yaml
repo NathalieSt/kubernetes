@@ -1,219 +1,3 @@
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: jellyfin
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: jellyfin
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/mediaserver/jellyfin"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn: []
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: transmission
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: jellyfin
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/mediaserver/transmission"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn:
-    - name: jellyfin
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: forgejo
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: forgejo
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/forgejo"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn: []
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: searxng
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: searxng
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/searxng"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn:
-    - name: valkey
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: mealie
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: mealie
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/mealie"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn:
-    - name: reflector
-    - name: postgres
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: glance
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: glance
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/glance"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn: []
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: booklore
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: booklore
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/booklore"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn: []
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: synapse
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: synapse
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/matrix/synapse"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn:
-    - name: matrix-pg
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: discord-bridge
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: discord-bridge
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/matrix/discord-bridge"
-  prune: true
-  wait: true
-  timeout: "10m"
-  dependsOn:
-    - name: matrix-pg
-    - name: synapse
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: redlib
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: redlib
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/redlib"
-  prune: true
-  wait: true
-  timeout: "10m"
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: lidify
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: lidify
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/lidify"
-  prune: true
-  wait: true
-  timeout: "10m"
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: localai
-  namespace: flux-system
-spec:
-  interval: "24h"
-  targetNamespace: localai
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: "./cluster/apps/localai"
-  prune: true
-  wait: true
-  timeout: "10m"
-
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -221,15 +5,192 @@ metadata:
   name: adguard-home
   namespace: flux-system
 spec:
-  interval: "24h"
+  interval: 24h
   targetNamespace: adguard-home
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./cluster/apps/adguard-home"
+  path: ./cluster/apps/adguard-home
   prune: true
   wait: true
-  timeout: "10m"
+  timeout: 10m
+  dependsOn:
+  - csi-driver-nfs
+  - reflector
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: booklore
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: booklore
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/booklore
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - csi-driver-nfs
+  - keda
+  - mariadb
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: discord-bridge
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: discord-bridge
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/matrix/discord-bridge
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - matrix-pg
+  - synapse
+  - csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: forgejo
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: forgejo
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/forgejo
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - forgejo-pg
+  - valkey
+  - keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: glance
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: glance
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/glance
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: jellyfin
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/mediaserver/jellyfin
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - csi-driver-nfs
+  - keda
+  - intel-device-gpu-plugin
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: localai
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: localai
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/localai
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - csi-driver-nfs
+  - keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mealie
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: mealie
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/mealie
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - main-pg
+  - csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: redlib
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: redlib
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/redlib
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: searxng
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: searxng
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/searxng
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - gluetun-proxy
+  - valkey
+  - keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -237,14 +198,53 @@ metadata:
   name: stash
   namespace: flux-system
 spec:
-  interval: "24h"
+  interval: 24h
   targetNamespace: stash
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./cluster/apps/stash"
+  path: ./cluster/apps/stash
   prune: true
   wait: true
-  timeout: "10m"
+  timeout: 10m
+  dependsOn:
+  - keda
+  - csi-driver-nfs
 ---
-
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: synapse
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: synapse
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/matrix/synapse
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - matrix-pg
+  - csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: transmission
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/mediaserver/transmission
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - jellyfin
+  - csi-driver-nfs

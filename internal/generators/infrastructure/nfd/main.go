@@ -36,13 +36,11 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:    "./cluster/infrastructure/nfd",
-			Prune:   true,
-			Wait:    true,
-			Timeout: "10m",
-			DependsOn: []string{
-				shared.IntelDevicePluginsOperator,
-			},
+			Path:      "./cluster/infrastructure/nfd",
+			Prune:     true,
+			Wait:      true,
+			Timeout:   "10m",
+			DependsOn: []string{},
 		},
 	}
 

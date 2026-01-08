@@ -48,8 +48,8 @@ func main() {
 			Wait:    true,
 			Timeout: "10m",
 			DependsOn: []string{
-				shared.IntelDevicePluginsOperator,
 				shared.VaultSecretsOperatorConfig,
+				shared.CSIDriverNFS,
 			},
 		},
 	}

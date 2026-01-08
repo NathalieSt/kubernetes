@@ -5,6 +5,7 @@ import (
 	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
+	"sort"
 	"sync"
 )
 
@@ -22,42 +23,50 @@ func createFluxKustomizationManifests(rootDir string) map[string][]byte {
 		return nil
 	}
 
-	print(metas)
 	appMetas, infraMetas, monitoringMetas := metas.GetMetasSeparatedByCategories()
 
-	appManifests := []any{}
-	infraManifests := []any{}
-	monitoringManifests := []any{}
+	appKustomizations := []any{}
+	infraKustomizations := []any{}
+	monitoringKustomizations := []any{}
 
 	var wg sync.WaitGroup
 	wg.Go(func() {
+		sort.Slice(appMetas, func(i, j int) bool {
+			return appMetas[i].Name < appMetas[j].Name
+		})
 		for _, meta := range appMetas {
-			appManifests = append(appManifests, metaToFluxKustomizationManifest(meta))
+			appKustomizations = append(appKustomizations, metaToFluxKustomizationManifest(meta))
 		}
 	})
 	wg.Go(func() {
+		sort.Slice(infraMetas, func(i, j int) bool {
+			return infraMetas[i].Name < infraMetas[j].Name
+		})
 		for _, meta := range infraMetas {
-			infraManifests = append(appManifests, metaToFluxKustomizationManifest(meta))
+			infraKustomizations = append(infraKustomizations, metaToFluxKustomizationManifest(meta))
 		}
 	})
 	wg.Go(func() {
+		sort.Slice(monitoringMetas, func(i, j int) bool {
+			return monitoringMetas[i].Name < monitoringMetas[j].Name
+		})
 		for _, meta := range monitoringMetas {
-			monitoringManifests = append(appManifests, metaToFluxKustomizationManifest(meta))
+			monitoringKustomizations = append(monitoringKustomizations, metaToFluxKustomizationManifest(meta))
 		}
 	})
 	wg.Wait()
 
 	appManifestsConfig := utils.ManifestConfig{
 		Filename:  "apps.yaml",
-		Manifests: appManifests,
+		Manifests: appKustomizations,
 	}
 	infraManifestsConfig := utils.ManifestConfig{
 		Filename:  "infrastructure.yaml",
-		Manifests: infraManifests,
+		Manifests: infraKustomizations,
 	}
 	monitoringManifestsConfig := utils.ManifestConfig{
 		Filename:  "monitoring.yaml",
-		Manifests: monitoringManifests,
+		Manifests: monitoringKustomizations,
 	}
 
 	return utils.MarshalManifests([]utils.ManifestConfig{appManifestsConfig, infraManifestsConfig, monitoringManifestsConfig})
