@@ -18,49 +18,51 @@ spec:
         app.kubernetes.io/version: latest
     spec:
       containers:
-      - image: registry.cloud.nathalie-stiefsohn.eu/caddy-hetzner:latest
-        name: caddy
-        ports:
-        - containerPort: 80
+        - image: registry.cloud.nathalie-stiefsohn.eu/caddy-hetzner:latest
           name: caddy
-        volumeMounts:
-        - mountPath: /etc/caddy/
-          name: caddy-config-volume
-        - mountPath: /data
-          name: caddy-pvc-volume
-        env:
-        - name: API_TOKEN
-          valueFrom:
-            secretKeyRef:
-              key: api-token
-              name: hetzner-api-token-secret
-      - image: netbirdio/netbird:latest
-        name: netbird-agent
-        env:
-        - name: NB_SETUP_KEY
-          valueFrom:
-            secretKeyRef:
-              key: setup-key
-              name: netbird-setup-key-vault-secret
-        - name: NB_HOSTNAME
-          value: Caddy
-        - name: NB_MANAGEMENT_URL
-          value: https://netbird.nathalie-stiefsohn.eu
-        - name: NB_EXTRA_DNS_LABELS
-          value: stash,booklore,kibana,glance,perses,searxng,matrix,redlib,adguard-home,code,jellyfin,ai,mealie,transmission,vault,crowdsec
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 100m
-            memory: 128Mi
-        securityContext:
-          privileged: true
+          ports:
+            - containerPort: 80
+              name: caddy
+          volumeMounts:
+            - mountPath: /etc/caddy/
+              name: caddy-config-volume
+            - mountPath: /data
+              name: caddy-pvc-volume
+          env:
+            - name: API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: api-token
+                  name: hetzner-api-token-secret
+        - image: netbirdio/netbird:latest
+          name: netbird-agent
+          env:
+            - name: NB_SETUP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: setup-key
+                  name: netbird-setup-key-vault-secret
+            - name: NB_HOSTNAME
+              value: Caddy
+            - name: NB_MANAGEMENT_URL
+              value: https://netbird.nathalie-stiefsohn.eu
+            - name: NB_EXTRA_DNS_LABELS
+              value: vault,booklore,jellyfin,redlib,stash,matrix,adguard-home,kibana,mealie,transmission,code,glance,ai,perses,searxng,crowdsec
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            privileged: true
       volumes:
-      - name: caddy-config-volume
-        configMap:
-          name: caddy-configmap
-      - name: caddy-pvc-volume
-        persistentVolumeClaim:
-          claimName: caddy-pvc
+        - name: caddy-config-volume
+          configMap:
+            name: caddy-configmap
+        - name: caddy-pvc-volume
+          persistentVolumeClaim:
+            claimName: caddy-pvc
+      nodeSelector:
+        kubernetes.io/hostname: debian

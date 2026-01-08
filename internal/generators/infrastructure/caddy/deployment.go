@@ -35,6 +35,9 @@ func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, 
 					},
 				},
 				Spec: core.PodSpec{
+					NodeSelector: map[string]string{
+						"kubernetes.io/hostname": "debian",
+					},
 					Containers: []core.Container{
 						{
 							Name:  generatorMeta.Name,

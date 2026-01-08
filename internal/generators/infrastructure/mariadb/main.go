@@ -48,7 +48,7 @@ func main() {
 			Wait:    true,
 			Timeout: "10m",
 			DependsOn: []kustomization.KustomizationDependency{
-				{Name: shared.VaultSecretsOperatorConfig},
+				{Name: shared.Reflector},
 				{Name: shared.CSIDriverNFS},
 			},
 		},

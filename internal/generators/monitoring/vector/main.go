@@ -40,6 +40,7 @@ func main() {
 			Timeout: "10m",
 			DependsOn: []kustomization.KustomizationDependency{
 				{Name: shared.CSIDriverNFS},
+				{Name: shared.Reflector},
 			},
 		},
 	}

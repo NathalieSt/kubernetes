@@ -192,7 +192,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - name: vault-secrets-operator-config
+  - name: reflector
   - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
