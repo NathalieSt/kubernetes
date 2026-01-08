@@ -127,10 +127,6 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 							},
 						},
 						Spec: core.PodSpec{
-							SecurityContext: core.PodSecurityContext{
-								RunAsUser:  1000,
-								RunAsGroup: 1001,
-							},
 							InitContainers: []core.Container{
 								{
 									Name:  "config-init",
