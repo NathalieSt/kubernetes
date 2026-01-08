@@ -63,7 +63,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/infrastructure/csidrivernfs
+  path: ./cluster/infrastructure/csi-driver-nfs
   prune: true
   wait: true
   timeout: 10m

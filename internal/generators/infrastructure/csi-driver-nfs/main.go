@@ -35,7 +35,7 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:      "./cluster/infrastructure/csidrivernfs",
+			Path:      "./cluster/infrastructure/csi-driver-nfs",
 			Prune:     true,
 			Wait:      true,
 			Timeout:   "10m",
