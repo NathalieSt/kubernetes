@@ -1,4 +1,4 @@
-package flux
+package kustomize
 
 import (
 	"kubernetes/pkg/schema/k8s/meta"

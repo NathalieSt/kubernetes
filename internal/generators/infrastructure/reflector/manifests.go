@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/vaultsecretsoperator"
 	"kubernetes/pkg/schema/generator"
@@ -18,7 +18,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	netbirdSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-netbird-static-secret", generatorMeta.Name),
-		SecretName: generators.NetbirdSecretName,
+		SecretName: shared.NetbirdSecretName,
 		Path:       "netbird/setup-key",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -30,7 +30,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	hetznerAPITokenSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-hetzner-api-token-static-secret", generatorMeta.Name),
-		SecretName: generators.HetznerAPITokenSecretName,
+		SecretName: shared.HetznerAPITokenSecretName,
 		Path:       "hetzner/api-token",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -42,7 +42,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	postgresSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-postgres-static-secret", generatorMeta.Name),
-		SecretName: generators.PostgresCredsSecret,
+		SecretName: shared.PostgresCredsSecret,
 		Path:       "postgres",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -54,7 +54,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	forgejoPGSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-forgejo-pg-static-secret", generatorMeta.Name),
-		SecretName: generators.ForgejoPGCredsSecret,
+		SecretName: shared.ForgejoPGCredsSecret,
 		Path:       "postgres-clusters/forgejo",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -66,7 +66,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	matrixPGSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-matrix-pg-static-secret", generatorMeta.Name),
-		SecretName: generators.MatrixPGCredsSecret,
+		SecretName: shared.MatrixPGCredsSecret,
 		Path:       "postgres-clusters/matrix",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -78,7 +78,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	mariaDBSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-mariadb-static-secret", generatorMeta.Name),
-		SecretName: generators.MariaDBCredsSecret,
+		SecretName: shared.MariaDBCredsSecret,
 		Path:       "mariadb",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -90,7 +90,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	synapseSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-synapse-static-secret", generatorMeta.Name),
-		SecretName: generators.SynapseSecretName,
+		SecretName: shared.SynapseSecretName,
 		Path:       "matrix/synapse",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -102,7 +102,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	discordBridgeSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-discord-bridge-static-secret", generatorMeta.Name),
-		SecretName: generators.DiscordBridgeSecretName,
+		SecretName: shared.DiscordBridgeSecretName,
 		Path:       "matrix/discord-bridge",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -114,7 +114,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	whatsappBridgeSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-whatsapp-bridge-static-secret", generatorMeta.Name),
-		SecretName: generators.WhatsappBridgeSecretName,
+		SecretName: shared.WhatsappBridgeSecretName,
 		Path:       "matrix/whatsapp-bridge",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -126,7 +126,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	elasticAdminSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-elastic-search-admin-static-secret", generatorMeta.Name),
-		SecretName: generators.ElasticSearchAdminSecretName,
+		SecretName: shared.ElasticSearchAdminSecretName,
 		Path:       "elastic-search/admin",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
@@ -139,7 +139,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	elasticVectorSecret := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-elastic-search-vector-static-secret", generatorMeta.Name),
-		SecretName: generators.ElasticSearchVectorSecretName,
+		SecretName: shared.ElasticSearchVectorSecretName,
 		Path:       "elastic-search/vector",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",

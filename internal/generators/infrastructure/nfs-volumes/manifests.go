@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
@@ -30,15 +30,15 @@ func createNFSVolumesManifests(rootDir string, generatorMeta generator.Generator
 				server := ""
 				share := ""
 				switch volume.StorageClass {
-				case generators.NFSLocalClass:
-					server = generators.NFSLocalServer
-					share = generators.NFSLocalShare
-				case generators.NFSRemoteClass:
-					server = generators.NFSRemoteServer
-					share = generators.NFSRemoteShare
-				case generators.DebianStorageClass:
-					server = generators.DebianServer
-					share = generators.DebianShare
+				case shared.NFSLocalClass:
+					server = shared.NFSLocalServer
+					share = shared.NFSLocalShare
+				case shared.NFSRemoteClass:
+					server = shared.NFSRemoteServer
+					share = shared.NFSRemoteShare
+				case shared.DebianStorageClass:
+					server = shared.DebianServer
+					share = shared.DebianShare
 				}
 				fileName := fmt.Sprintf("%v.yaml", volume.Name)
 				fileNames = append(fileNames, fileName)

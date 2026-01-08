@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
@@ -15,11 +17,12 @@ func main() {
 		return
 	}
 
-	name := "searxng"
+	name := shared.SearXNG
+	namespace := "searxng"
 	generatorType := generator.App
 	var SearXNG = generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "searxng",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
 		ClusterUrl:    "searxng.searxng.svc.cluster.local",
 		Port:          8080,
@@ -33,12 +36,25 @@ func main() {
 		KedaScaling: &keda.ScaledObjectTriggerMeta{
 			Timezone:        "Europe/Vienna",
 			Start:           "0 7 * * *",
-			End:             "0 23 * * *",
+			End:             "0 01 * * *",
 			DesiredReplicas: "1",
 		},
-		DependsOnGenerators: []string{
-			"valkey",
-			"gluetun-proxy",
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:    "./cluster/apps/searxng",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []string{
+				shared.GluetunProxy,
+				shared.Valkey,
+				shared.Keda,
+			},
 		},
 	}
 

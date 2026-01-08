@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
 	"kubernetes/pkg/schema/generator"
@@ -24,7 +24,7 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 			}, cnpg.ClusterSpec{
 				Instances: 1,
 				Storage: cnpg.ClusterStorage{
-					StorageClass: generators.DebianStorageClass,
+					StorageClass: shared.DebianStorageClass,
 					Size:         "100Gi",
 				},
 				Affinity: cnpg.AffinityConfiguration{
@@ -33,7 +33,7 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 					},
 				},
 				SuperuserSecret: cnpg.SuperuserSecret{
-					Name: generators.MatrixPGCredsSecret,
+					Name: shared.MatrixPGCredsSecret,
 				},
 				EnableSuperuserAccess: true,
 			}),

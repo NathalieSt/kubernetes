@@ -37,6 +37,14 @@ spec:
         keyPath: ~/cluster_key
       role: worker
       os: debian
+    # ai-node
+    - ssh:
+        address: <ip>
+        user: ubuntu
+        port: 22
+        keyPath: ~/cluster_key
+      role: worker
+      os: ubuntu
   k0s:
     config:
       apiVersion: k0s.k0sproject.io/v1beta1

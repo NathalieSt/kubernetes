@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -30,13 +30,13 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			},
 			),
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/main-cluster"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/shared/infrastructure/postgres/main-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
@@ -93,7 +93,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "username",
-													Name: generators.PostgresCredsSecret,
+													Name: shared.PostgresCredsSecret,
 												},
 											},
 										},
@@ -102,7 +102,7 @@ func createMealieManifests(generatorMeta generator.GeneratorMeta, rootDir string
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "password",
-													Name: generators.PostgresCredsSecret,
+													Name: shared.PostgresCredsSecret,
 												},
 											},
 										},

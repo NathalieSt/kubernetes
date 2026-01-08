@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/cnpg"
 	"kubernetes/pkg/schema/generator"
@@ -24,11 +24,11 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, cnpg.ClusterSpec{
 				Instances: 1,
 				Storage: cnpg.ClusterStorage{
-					StorageClass: generators.NFSRemoteClass,
+					StorageClass: shared.NFSRemoteClass,
 					Size:         "20Gi",
 				},
 				SuperuserSecret: cnpg.SuperuserSecret{
-					Name: generators.ForgejoPGCredsSecret,
+					Name: shared.ForgejoPGCredsSecret,
 				},
 				EnableSuperuserAccess: true,
 			}),

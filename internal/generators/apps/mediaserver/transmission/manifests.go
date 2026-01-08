@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
@@ -45,7 +45,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: shared.NFSLocalClass,
 			}),
 		},
 	}
@@ -61,7 +61,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: shared.NFSLocalClass,
 			}),
 		},
 	}
@@ -77,7 +77,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: shared.NFSLocalClass,
 			}),
 		},
 	}

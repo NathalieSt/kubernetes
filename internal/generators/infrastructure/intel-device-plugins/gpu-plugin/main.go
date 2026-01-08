@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
@@ -14,18 +16,33 @@ func main() {
 		return
 	}
 
-	name := "intel-device-gpu-plugin"
+	name := shared.IntelDeviceGPUPlugin
+	namespace := "inteldeviceplugins-system"
 	generatorType := generator.Infrastructure
 	var Vault = generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "inteldeviceplugins-system",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Chart:   "intel-device-plugins-gpu",
 			Url:     "https://intel.github.io/helm-charts/",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
-		DependsOnGenerators: []string{},
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:    "./cluster/infrastructure/intel-device-plugins/gpu-plugin",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []string{
+				shared.IntelDevicePluginsOperator,
+			},
+		},
 	}
 
 	utils.RunGenerator(utils.GeneratorRunnerConfig{

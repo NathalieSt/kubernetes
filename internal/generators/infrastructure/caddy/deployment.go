@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
@@ -60,7 +60,7 @@ func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, 
 									Name: "API_TOKEN",
 									ValueFrom: core.ValueFrom{
 										SecretKeyRef: core.SecretKeyRef{
-											Name: generators.HetznerAPITokenSecretName,
+											Name: shared.HetznerAPITokenSecretName,
 											Key:  "api-token",
 										},
 									},
@@ -75,7 +75,7 @@ func getDeployment(generatorMeta generator.GeneratorMeta, configmapName string, 
 									Name: "NB_SETUP_KEY",
 									ValueFrom: core.ValueFrom{
 										SecretKeyRef: core.SecretKeyRef{
-											Name: generators.NetbirdSecretName,
+											Name: shared.NetbirdSecretName,
 											Key:  "setup-key",
 										},
 									},

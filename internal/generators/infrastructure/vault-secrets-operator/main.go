@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
@@ -15,7 +17,8 @@ func main() {
 		return
 	}
 
-	name := "vault-secrets-operator"
+	name := shared.VaultSecretsOperator
+	namespace := "vault-secrets-operator"
 	generatorType := generator.Infrastructure
 	meta := generator.GeneratorMeta{
 		Name:          name,
@@ -32,8 +35,20 @@ func main() {
 			End:             "0 22 * * *",
 			DesiredReplicas: "1",
 		},
-		DependsOnGenerators: []string{
-			"vault",
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:    "./cluster/infrastructure/vault-secrets-operator",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []string{
+				shared.Vault,
+			},
 		},
 	}
 

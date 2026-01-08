@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"log"
@@ -56,7 +56,7 @@ func getCaddyFile(exposedServicesMeta []generator.GeneratorMeta) string {
 }
 		`,
 			strings.ReplaceAll(meta.Caddy.DNSName, ".cluster", ""),
-			generators.NetbirdDomainBase,
+			shared.NetbirdDomainBase,
 			meta.ClusterUrl,
 			meta.Port,
 			forwardHeadersIfRequried(meta.Caddy.HeaderForwardingIsRequired),

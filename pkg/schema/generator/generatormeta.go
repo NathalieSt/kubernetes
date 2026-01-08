@@ -1,18 +1,7 @@
 package generator
 
-/*
-schema ClusterService:
-    name: str
-    namespace: str
-    type: "app" | "infrastructure" | "istio" | "monitoring"
-    cluster_url?: str
-    port?: int
-    gateway_config?: GatewayConfig
-    virtual_service_config?: VirtualServiceConfig
-    flux_kustomization: ClusterServiceFluxKustomization
-    keda_scaling?: keda.ScaledObjectTriggerMeta
-*/
 import (
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 )
 
@@ -40,7 +29,6 @@ type GeneratorType = int
 const (
 	App GeneratorType = iota
 	Infrastructure
-	Istio
 	Monitoring
 )
 
@@ -57,18 +45,17 @@ type GeneratorNFSVolume struct {
 }
 
 type GeneratorMeta struct {
-	Name                string
-	Namespace           string
-	GeneratorType       GeneratorType
-	ClusterUrl          string
-	Port                int64
-	Docker              *Docker
-	Helm                *Helm
-	Caddy               *Caddy
-	VirtualService      *VirtualServiceConfig
-	KedaScaling         *keda.ScaledObjectTriggerMeta
-	DependsOnGenerators []string
-	NFSVolumes          map[string]GeneratorNFSVolume
+	Name          string
+	Namespace     string
+	GeneratorType GeneratorType
+	ClusterUrl    string
+	Port          int64
+	Flux          *kustomization.KustomizationSpec
+	Docker        *Docker
+	Helm          *Helm
+	Caddy         *Caddy
+	KedaScaling   *keda.ScaledObjectTriggerMeta
+	NFSVolumes    map[string]GeneratorNFSVolume
 }
 
 type GeneratorMetas []GeneratorMeta
@@ -81,10 +68,9 @@ func (metas GeneratorMetas) GetDNSNames() []string {
 	return list
 }
 
-func (metas GeneratorMetas) GetMetasSeparatedByCategories() ([]GeneratorMeta, []GeneratorMeta, []GeneratorMeta, []GeneratorMeta) {
+func (metas GeneratorMetas) GetMetasSeparatedByCategories() ([]GeneratorMeta, []GeneratorMeta, []GeneratorMeta) {
 	apps := []GeneratorMeta{}
 	infrastructure := []GeneratorMeta{}
-	istio := []GeneratorMeta{}
 	monitoring := []GeneratorMeta{}
 
 	for _, meta := range metas {
@@ -93,11 +79,9 @@ func (metas GeneratorMetas) GetMetasSeparatedByCategories() ([]GeneratorMeta, []
 			apps = append(apps, meta)
 		case Infrastructure:
 			infrastructure = append(infrastructure, meta)
-		case Istio:
-			istio = append(istio, meta)
 		case Monitoring:
 			monitoring = append(monitoring, meta)
 		}
 	}
-	return apps, infrastructure, istio, monitoring
+	return apps, infrastructure, monitoring
 }

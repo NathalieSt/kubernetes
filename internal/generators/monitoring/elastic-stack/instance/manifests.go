@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
@@ -43,10 +43,10 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 				"auth": map[string]any{
 					"fileRealm": []map[string]string{
 						{
-							"secretName": generators.ElasticSearchAdminSecretName,
+							"secretName": shared.ElasticSearchAdminSecretName,
 						},
 						{
-							"secretName": generators.ElasticSearchVectorSecretName,
+							"secretName": shared.ElasticSearchVectorSecretName,
 						},
 					},
 					"roles": []map[string]string{
@@ -71,7 +71,7 @@ func createElasticStackManifests(generatorMeta generator.GeneratorMeta) map[stri
 									"accessModes": []string{
 										"ReadWriteOnce",
 									},
-									"storageClassName": generators.NFSRemoteClass,
+									"storageClassName": shared.NFSRemoteClass,
 									"resources": map[string]any{
 										"requests": map[string]any{
 											"storage": "20Gi",

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
@@ -54,7 +54,7 @@ func createCaddyManifests(rootDir string, generatorMeta generator.GeneratorMeta)
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: shared.NFSLocalClass,
 			}),
 		},
 	}

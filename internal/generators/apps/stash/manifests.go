@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -29,7 +29,7 @@ func createStashManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "200Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			}),
 		},
 	}

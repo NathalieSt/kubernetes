@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
@@ -41,13 +41,13 @@ func createDiscordBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: shared.NFSLocalClass,
 			},
 			),
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/matrix-cluster"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/shared/infrastructure/postgres/matrix-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
 		return nil, err
@@ -108,7 +108,7 @@ envsubst < /template/config.yaml > /data/config.yaml;
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "as_token",
-													Name: generators.DiscordBridgeSecretName,
+													Name: shared.DiscordBridgeSecretName,
 												},
 											},
 										},
@@ -117,7 +117,7 @@ envsubst < /template/config.yaml > /data/config.yaml;
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "hs_token",
-													Name: generators.DiscordBridgeSecretName,
+													Name: shared.DiscordBridgeSecretName,
 												},
 											},
 										},
@@ -134,7 +134,7 @@ envsubst < /template/config.yaml > /data/config.yaml;
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "username",
-													Name: generators.MatrixPGCredsSecret,
+													Name: shared.MatrixPGCredsSecret,
 												},
 											},
 										},
@@ -143,7 +143,7 @@ envsubst < /template/config.yaml > /data/config.yaml;
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "password",
-													Name: generators.MatrixPGCredsSecret,
+													Name: shared.MatrixPGCredsSecret,
 												},
 											},
 										},

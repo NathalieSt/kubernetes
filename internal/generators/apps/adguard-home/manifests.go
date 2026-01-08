@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/apps"
@@ -28,7 +28,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
 				}},
-				StorageClassName: generators.NFSRemoteClass,
+				StorageClassName: shared.NFSRemoteClass,
 			},
 			),
 		},
@@ -45,7 +45,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
 				}},
-				StorageClassName: generators.NFSRemoteClass,
+				StorageClassName: shared.NFSRemoteClass,
 			},
 			),
 		},
@@ -116,7 +116,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Name: "NB_SETUP_KEY",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
-													Name: generators.NetbirdSecretName,
+													Name: shared.NetbirdSecretName,
 													Key:  "setup-key",
 												},
 											},

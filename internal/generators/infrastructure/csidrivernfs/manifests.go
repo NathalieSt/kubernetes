@@ -1,7 +1,7 @@
 package main
 
 import (
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
@@ -23,13 +23,13 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 		Manifests: []any{
 			storage.NewStorageClass(
 				meta.ObjectMeta{
-					Name: generators.NFSLocalClass,
+					Name: shared.NFSLocalClass,
 				},
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": generators.NFSLocalServer,
-						"share":  generators.NFSLocalShare,
+						"server": shared.NFSLocalServer,
+						"share":  shared.NFSLocalShare,
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",
@@ -46,13 +46,13 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 		Manifests: []any{
 			storage.NewStorageClass(
 				meta.ObjectMeta{
-					Name: generators.NFSLocalClassNext,
+					Name: shared.NFSLocalClassNext,
 				},
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": generators.NFSLocalServerNext,
-						"share":  generators.NFSLocalShareNext,
+						"server": shared.NFSLocalServerNext,
+						"share":  shared.NFSLocalShareNext,
 						"subDir": "${pvc.metadata.namespace}/${pvc.metadata.name}",
 					},
 					ReclaimPolicy:        "Retain",
@@ -70,13 +70,13 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 		Manifests: []any{
 			storage.NewStorageClass(
 				meta.ObjectMeta{
-					Name: generators.DebianStorageClass,
+					Name: shared.DebianStorageClass,
 				},
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": generators.DebianServer,
-						"share":  generators.DebianShare,
+						"server": shared.DebianServer,
+						"share":  shared.DebianShare,
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",
@@ -93,13 +93,13 @@ func createCSIDriverNFSManifests(generatorMeta generator.GeneratorMeta) map[stri
 		Manifests: []any{
 			storage.NewStorageClass(
 				meta.ObjectMeta{
-					Name: generators.NFSRemoteClass,
+					Name: shared.NFSRemoteClass,
 				},
 				storage.StorageClassData{
 					Provisioner: "nfs.csi.k8s.io",
 					Parameters: map[string]string{
-						"server": generators.NFSRemoteServer,
-						"share":  generators.NFSRemoteShare,
+						"server": shared.NFSRemoteServer,
+						"share":  shared.NFSRemoteShare,
 					},
 					ReclaimPolicy:        "Retain",
 					VolumeBindingMode:    "Immediate",

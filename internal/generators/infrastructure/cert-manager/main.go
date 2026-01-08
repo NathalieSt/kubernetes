@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
@@ -14,18 +16,31 @@ func main() {
 		return
 	}
 
-	name := "cert-manager"
+	name := shared.CertManager
+	namespace := "cert-manager"
 	generatorType := generator.Infrastructure
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "cert-manager",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
 			Chart:   "cert-manager",
 			Url:     "oci://quay.io/jetstack/charts/cert-manager",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
-		DependsOnGenerators: []string{},
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:      "./cluster/infrastructure/cert-manager",
+			Prune:     true,
+			Wait:      true,
+			Timeout:   "10m",
+			DependsOn: []string{},
+		},
 	}
 
 	utils.RunGenerator(utils.GeneratorRunnerConfig{

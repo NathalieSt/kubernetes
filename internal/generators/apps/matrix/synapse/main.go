@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
@@ -14,11 +16,12 @@ func main() {
 		return
 	}
 
-	name := "synapse"
+	name := shared.MatrixSynapse
+	namespace := "synapse"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "synapse",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
 		ClusterUrl:    "synapse.synapse.svc.cluster.local",
 		Port:          8008,
@@ -29,8 +32,21 @@ func main() {
 		Caddy: &generator.Caddy{
 			DNSName: "matrix",
 		},
-		DependsOnGenerators: []string{
-			"postgres",
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:    "./cluster/apps/matrix/synapse",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []string{
+				shared.MatrixPostgres,
+				shared.CSIDriverNFS,
+			},
 		},
 	}
 

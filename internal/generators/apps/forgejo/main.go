@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
@@ -15,11 +17,12 @@ func main() {
 		return
 	}
 
-	name := "forgejo"
+	name := shared.Forgejo
+	namespace := "forgejo"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "forgejo",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
 		ClusterUrl:    "forgejo-http.forgejo.svc.cluster.local",
 		Port:          3000,
@@ -36,9 +39,22 @@ func main() {
 			End:             "0 22 * * *",
 			DesiredReplicas: "1",
 		},
-		DependsOnGenerators: []string{
-			"postgres",
-			"valkey",
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:    "./cluster/apps/forgejo",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []string{
+				shared.ForgejoPostgres,
+				shared.Valkey,
+				shared.Keda,
+			},
 		},
 	}
 

@@ -30,7 +30,6 @@ var dummyMeta = generator.GeneratorMeta{
 		End:             "0 1 * * *",
 		DesiredReplicas: "1",
 	},
-	DependsOnGenerators: []string{},
 }
 
 var generatedOutDir = "./internal/generators/apps/jellyfin"

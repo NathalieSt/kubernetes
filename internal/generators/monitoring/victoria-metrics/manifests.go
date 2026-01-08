@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/cluster/flux/oci"
@@ -61,7 +61,7 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 						"vmsingle": map[string]any{
 							"spec": map[string]any{
 								"storage": map[string]any{
-									"storageClassName": generators.NFSRemoteClass,
+									"storageClassName": shared.NFSRemoteClass,
 								},
 							},
 						},

@@ -14,21 +14,6 @@ import (
 	"github.com/rivo/tview"
 )
 
-/*
-type GeneratorMeta struct {
-    Name                string
-    Namespace           string
-    GeneratorType       GeneratorType
-    ClusterUrl          string
-    Port                int64
-    Docker              *Docker
-    Helm                *Helm
-    Caddy               *Caddy
-    VirtualService      *VirtualServiceConfig
-    KedaScaling         *keda.ScaledObjectTriggerMeta
-    DependsOnGenerators []string
-}*/
-
 func CapitalizeFirst(s string) string {
 	if len(s) == 0 {
 		return s
@@ -42,8 +27,6 @@ func GetGeneratorTypeString(generatorType generator.GeneratorType) string {
 		return "generator.App"
 	case generator.Infrastructure:
 		return "generator.Infrastructure"
-	case generator.Istio:
-		return "generator.Istio"
 	case generator.Monitoring:
 		return "generator.Monitoring"
 	default:
@@ -57,8 +40,6 @@ func GetGeneratorTypeSubfolderString(generatorType generator.GeneratorType) stri
 		return "apps"
 	case generator.Infrastructure:
 		return "infrastructure"
-	case generator.Istio:
-		return "istio"
 	case generator.Monitoring:
 		return "monitoring"
 	default:
@@ -374,8 +355,6 @@ func generateScaffoldingPageLayout(rootDir string, pages *tview.Pages, flex *tvi
 			generatorMeta.GeneratorType = generator.App
 		case "Infrastructure":
 			generatorMeta.GeneratorType = generator.Infrastructure
-		case "Istio":
-			generatorMeta.GeneratorType = generator.Istio
 		case "Monitoring":
 			generatorMeta.GeneratorType = generator.Monitoring
 		default:

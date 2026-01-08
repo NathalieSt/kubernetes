@@ -19,7 +19,7 @@ type DiscoveredGenerators struct {
 	Monitoring     map[string]string
 }
 
-func GetDiscoveredGeneratorsMeta(rootDir string) ([]generator.GeneratorMeta, error) {
+func GetDiscoveredGeneratorsMeta(rootDir string) (generator.GeneratorMetas, error) {
 	data, err := os.ReadFile(path.Join(rootDir, "clidata/discoveredgenerators.json"))
 	if err != nil {
 		return nil, err
@@ -132,8 +132,6 @@ func GetGeneratorVersionByType(rootDir string, name string, generatorType genera
 		fileName = "apps.json"
 	case generator.Infrastructure:
 		fileName = "infrastructure.json"
-	case generator.Istio:
-		fileName = "istio.json"
 	case generator.Monitoring:
 		fileName = "monitoring.json"
 	}

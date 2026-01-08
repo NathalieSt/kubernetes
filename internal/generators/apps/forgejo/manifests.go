@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/cluster/flux/oci"
@@ -37,13 +37,13 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/forgejo-cluster"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/shared/infrastructure/postgres/forgejo-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta for forgejo")
 		return nil, err
 	}
 
-	valkeyMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/valkey"))
+	valkeyMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/shared/infrastructure/valkey"))
 	if err != nil {
 		fmt.Println("An error happened while getting valkey meta for forgejo")
 		return nil, err
@@ -72,14 +72,14 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 					ValuesFrom: []helm.ReleaseValuesFrom{
 						{
 							Kind:       helm.Secret,
-							Name:       generators.ForgejoPGCredsSecret,
+							Name:       shared.ForgejoPGCredsSecret,
 							ValuesKey:  "username",
 							TargetPath: "gitea.config.database.USER",
 							Optional:   false,
 						},
 						{
 							Kind:       helm.Secret,
-							Name:       generators.ForgejoPGCredsSecret,
+							Name:       shared.ForgejoPGCredsSecret,
 							ValuesKey:  "password",
 							TargetPath: "gitea.config.database.PASSWD",
 							Optional:   false,
@@ -95,7 +95,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									"NAME":    "forgejo",
 								},
 								"server": map[string]any{
-									"ROOT_URL": fmt.Sprintf("https://%v.%v", generatorMeta.Caddy.DNSName, generators.NetbirdDomainBase),
+									"ROOT_URL": fmt.Sprintf("https://%v.%v", generatorMeta.Caddy.DNSName, shared.NetbirdDomainBase),
 								},
 							},
 							"queue": map[string]any{
@@ -113,7 +113,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 						},
 						"persistence": map[string]any{
 							"enabled":      true,
-							"storageClass": generators.NFSRemoteClass,
+							"storageClass": shared.NFSRemoteClass,
 						},
 						"service": map[string]any{
 							"http": map[string]any{

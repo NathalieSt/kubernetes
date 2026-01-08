@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -29,7 +29,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			},
 			),
 		},
@@ -46,7 +46,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			},
 			),
 		},
@@ -63,7 +63,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "10Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			},
 			),
 		},

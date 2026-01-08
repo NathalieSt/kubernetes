@@ -14,19 +14,18 @@ func main() {
 		return
 	}
 
-	name := "nfs-volumes"
-	generatorType := generator.Infrastructure
+	name := "flux-kustomizations"
 	meta := generator.GeneratorMeta{
-		Name:          name,
-		GeneratorType: generatorType,
+		Name:      name,
+		Namespace: "flux-system",
 	}
 
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/nfs-volumes/"),
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/flux/"),
 		CreateManifests: func(gm generator.GeneratorMeta) map[string][]byte {
-			return createNFSVolumesManifests(flags.RootDir, gm)
+			return createFluxKustomizationManifests(flags.RootDir)
 		},
 	})
 }

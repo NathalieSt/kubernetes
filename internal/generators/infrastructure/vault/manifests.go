@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
@@ -27,7 +27,7 @@ func createVaultManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 			},
 			"server": map[string]any{
 				"dataStorage": map[string]any{
-					"storageClass": generators.NFSLocalClassNext,
+					"storageClass": shared.NFSLocalClassNext,
 				},
 			},
 		},

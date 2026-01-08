@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -29,7 +29,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "10Gi",
 				}},
-				StorageClassName: generators.NFSRemoteClass,
+				StorageClassName: shared.NFSRemoteClass,
 			},
 			),
 		},
@@ -46,7 +46,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			},
 			),
 		},
@@ -63,7 +63,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "10Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			},
 			),
 		},
@@ -144,7 +144,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "password",
-													Name: generators.MariaDBCredsSecret,
+													Name: shared.MariaDBCredsSecret,
 												},
 											},
 										},
@@ -153,7 +153,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "username",
-													Name: generators.MariaDBCredsSecret,
+													Name: shared.MariaDBCredsSecret,
 												},
 											},
 										},

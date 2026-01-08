@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -28,7 +28,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "100Gi",
 				}},
-				StorageClassName: generators.NFSLocalClassNext,
+				StorageClassName: shared.NFSLocalClassNext,
 			}),
 		},
 	}
@@ -41,7 +41,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 					"existingClaim": pvcName,
 				},
 				"config": map[string]any{
-					"storageClass": generators.NFSLocalClassNext,
+					"storageClass": shared.NFSLocalClassNext,
 				},
 			},
 			"nodeSelector": map[string]any{

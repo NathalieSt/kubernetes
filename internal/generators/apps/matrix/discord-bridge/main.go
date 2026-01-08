@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
 )
@@ -14,11 +16,12 @@ func main() {
 		return
 	}
 
-	name := "discord-bridge"
+	name := shared.MatrixDiscordBridge
+	namespace := "discord-bridge"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "discord-bridge",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
 		ClusterUrl:    "discord-bridge.discord-bridge.svc.cluster.local",
 		Port:          29334,
@@ -26,8 +29,22 @@ func main() {
 			Registry: "dock.mau.dev/mautrix/discord",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
-		DependsOnGenerators: []string{
-			"postgres",
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:    "./cluster/apps/matrix/discord-bridge",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []string{
+				shared.MatrixPostgres,
+				shared.MatrixSynapse,
+				shared.CSIDriverNFS,
+			},
 		},
 	}
 

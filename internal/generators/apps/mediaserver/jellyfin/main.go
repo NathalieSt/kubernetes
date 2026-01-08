@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
+	"kubernetes/pkg/schema/cluster/flux/kustomization"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 	"path/filepath"
@@ -15,11 +17,12 @@ func main() {
 		return
 	}
 
-	name := "jellyfin"
+	name := shared.Jellyfin
+	namespace := "jellyfin"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "jellyfin",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
 		ClusterUrl:    "jellyfin.jellyfin.svc.cluster.local",
 		Port:          8096,
@@ -38,7 +41,23 @@ func main() {
 			End:             "0 1 * * *",
 			DesiredReplicas: "1",
 		},
-		DependsOnGenerators: []string{},
+		Flux: &kustomization.KustomizationSpec{
+			Interval:        "24h",
+			TargetNamespace: namespace,
+			SourceRef: kustomization.SourceRef{
+				Kind: kustomization.GitRepository,
+				Name: "flux-system",
+			},
+			Path:    "./cluster/apps/mediaserver/jellyfin",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []string{
+				shared.CSIDriverNFS,
+				shared.Keda,
+				shared.IntelDeviceGPUPlugin,
+			},
+		},
 	}
 
 	utils.RunGenerator(utils.GeneratorRunnerConfig{

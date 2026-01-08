@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -29,7 +29,7 @@ func createMariaDBManifests(generatorMeta generator.GeneratorMeta) map[string][]
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "10Gi",
 				}},
-				StorageClassName: generators.NFSLocalClass,
+				StorageClassName: shared.NFSLocalClass,
 			},
 			),
 		},
@@ -90,7 +90,7 @@ func createMariaDBManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "password",
-													Name: generators.MariaDBCredsSecret,
+													Name: shared.MariaDBCredsSecret,
 												},
 											},
 										},
@@ -99,7 +99,7 @@ func createMariaDBManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "username",
-													Name: generators.MariaDBCredsSecret,
+													Name: shared.MariaDBCredsSecret,
 												},
 											},
 										},
@@ -112,7 +112,7 @@ func createMariaDBManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "password",
-													Name: generators.MariaDBCredsSecret,
+													Name: shared.MariaDBCredsSecret,
 												},
 											},
 										},

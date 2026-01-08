@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -18,11 +18,11 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		map[string]any{
 			"persistence": map[string]any{
 				"enabled":      true,
-				"storageClass": generators.NFSRemoteClass,
+				"storageClass": shared.NFSRemoteClass,
 			},
 			"provisioningPersistence": map[string]any{
 				"enabled":      true,
-				"storageClass": generators.NFSRemoteClass,
+				"storageClass": shared.NFSRemoteClass,
 			},
 			"service": map[string]any{
 				"annotations": map[string]any{
