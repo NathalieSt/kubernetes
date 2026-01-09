@@ -1,6 +1,6 @@
 {
     "adguard-home": "v0.107.71",
-    "localai": "v1.40.0-gpu-nvidia-cuda-12",
+    "localai": "master-gpu-nvidia-cuda-12",
     "lidify": "v1.0.2",
     "forgejo": "14.0.0",
     "glance": "v0.8.4",
