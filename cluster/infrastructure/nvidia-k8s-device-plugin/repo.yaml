@@ -2,8 +2,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: nvidia-gpu-operator-repo
+  name: nvidia-k8s-device-plugin-repo
 spec:
   type: default
-  url: https://helm.ngc.nvidia.com/nvidia
+  url: https://nvidia.github.io/k8s-device-plugin
   interval: 24h

@@ -233,15 +233,15 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: nvidia-gpu-operator
+  name: nvidia-k8s-device-plugin
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: nvidia-gpu-operator
+  targetNamespace: nvidia-k8s-device-plugin
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/infrastructure/nvidia-gpu-operator
+  path: ./cluster/infrastructure/nvidia-k8s-device-plugin
   prune: true
   wait: true
   timeout: 10m

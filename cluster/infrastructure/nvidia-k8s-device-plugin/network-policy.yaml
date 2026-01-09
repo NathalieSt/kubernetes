@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: nvidia-gpu-operator-networkpolicy
+  name: nvidia-k8s-device-plugin-networkpolicy
 spec:
   policyTypes:
   - Ingress

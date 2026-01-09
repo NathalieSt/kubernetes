@@ -2,12 +2,12 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmChart
 metadata:
-  name: nvidia-gpu-operator-chart
+  name: nvidia-k8s-device-plugin-chart
 spec:
   interval: 24h
-  chart: gpu-operator
+  chart: nvidia-device-plugin
   reconcileStrategy: ChartVersion
   sourceRef:
     kind: HelmRepository
-    name: nvidia-gpu-operator-repo
-  version: v25.10.1
+    name: nvidia-k8s-device-plugin-repo
+  version: v0.17.1

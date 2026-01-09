@@ -16,16 +16,16 @@ func main() {
 		return
 	}
 
-	name := shared.NVIDIAGPUOperator
-	namespace := "nvidia-gpu-operator"
+	name := shared.NVIDIAK8sDevicePlugin
+	namespace := "nvidia-k8s-device-plugin"
 	generatorType := generator.Infrastructure
 	var Vault = generator.GeneratorMeta{
 		Name:          name,
 		Namespace:     namespace,
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
-			Chart:   "gpu-operator",
-			Url:     "https://helm.ngc.nvidia.com/nvidia",
+			Chart:   "nvidia-device-plugin",
+			Url:     "https://nvidia.github.io/k8s-device-plugin",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
 		Flux: &kustomization.KustomizationSpec{
@@ -35,20 +35,18 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:    "./cluster/infrastructure/nvidia-gpu-operator",
-			Prune:   true,
-			Wait:    true,
-			Timeout: "10m",
-			DependsOn: []kustomization.KustomizationDependency{
-				{Name: shared.NFD},
-			},
+			Path:      "./cluster/infrastructure/nvidia-k8s-device-plugin",
+			Prune:     true,
+			Wait:      true,
+			Timeout:   "10m",
+			DependsOn: []kustomization.KustomizationDependency{},
 		},
 	}
 
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             Vault,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/nvidia-gpu-operator/"),
+		OutputDir:        filepath.Join(flags.RootDir, "./cluster/infrastructure/nvidia-k8s-device-plugin"),
 		CreateManifests:  createNVIDIAGPUOperatorManifests,
 	})
 }
