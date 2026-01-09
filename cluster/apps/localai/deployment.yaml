@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: localai
         app.kubernetes.io/version: v3.9.0-aio-cpu
     spec:
+      runtimeClassName: nvidia
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

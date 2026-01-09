@@ -114,6 +114,7 @@ type PodAffinity struct {
 }
 
 type PodSpec struct {
+	RuntimeClassName   string             `yaml:"runtimeClassName,omitempty"`
 	Affinity           PodAffinity        `yaml:"affinity,omitempty"`
 	InitContainers     []Container        `yaml:"initContainers,omitempty"`
 	ServiceAccountName string             `yaml:"serviceAccountName,omitempty"`

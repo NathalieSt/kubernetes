@@ -99,6 +99,7 @@ func createLocalAiManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							},
 						},
 						Spec: core.PodSpec{
+							RuntimeClassName: "nvidia",
 							Tolerations: []core.PodToleration{
 								{
 									Key:      "exclusive",
