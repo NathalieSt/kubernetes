@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: nvidia-gpu-operator-chart
+spec:
+  interval: 24h
+  chart: gpu-operator
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: nvidia-gpu-operator-repo
+  version: v25.10.1

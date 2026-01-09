@@ -39,6 +39,7 @@ var Valkey = "valkey"
 var Vault = "vault"
 var VaultSecretsOperator = "vault-secrets-operator"
 var VaultSecretsOperatorConfig = "vault-secrets-operator-config"
+var NVIDIAGPUOperator = "nvidia-gpu-operator"
 
 // Monitoring
 

@@ -233,6 +233,22 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: nvidia-gpu-operator
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: nvidia-gpu-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/nvidia-gpu-operator
+  prune: true
+  wait: true
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: redis
   namespace: flux-system
 spec:
