@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: localai
-    app.kubernetes.io/version: master-gpu-nvidia-cuda-12
+    app.kubernetes.io/version: master-nvidia-l4t-arm64
   name: localai
 spec:
   selector:
