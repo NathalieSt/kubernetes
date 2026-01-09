@@ -16,7 +16,11 @@ func createNVIDIAGPUOperatorManifests(generatorMeta generator.GeneratorMeta) map
 	}
 
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
-		nil,
+		map[string]any{
+			"nfd": map[string]any{
+				"enabled": false,
+			},
+		},
 		nil,
 	)
 

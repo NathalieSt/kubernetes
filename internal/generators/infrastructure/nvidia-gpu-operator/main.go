@@ -35,11 +35,13 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:      "./cluster/infrastructure/nvidia-gpu-operator",
-			Prune:     true,
-			Wait:      true,
-			Timeout:   "10m",
-			DependsOn: []kustomization.KustomizationDependency{},
+			Path:    "./cluster/infrastructure/nvidia-gpu-operator",
+			Prune:   true,
+			Wait:    true,
+			Timeout: "10m",
+			DependsOn: []kustomization.KustomizationDependency{
+				{Name: shared.NFD},
+			},
 		},
 	}
 
