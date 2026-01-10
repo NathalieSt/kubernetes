@@ -56,10 +56,26 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 							},
 						},
 						Spec: core.PodSpec{
+							InitContainers: []core.Container{
+								{
+									Image:   "busybox",
+									Command: []string{"sh", "-c", "chown -R 1000:1001 /config"},
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/config",
+											Name:      floodConfigVolume,
+										},
+									},
+								},
+							},
 							Containers: []core.Container{
 								{
 									Name:  "flood-ui",
 									Image: "jesec/flood:4.11",
+									SecurityContext: core.ContainerSecurityContext{
+										RunAsUser:  1000,
+										RunAsGroup: 1001,
+									},
 									VolumeMounts: []core.VolumeMount{
 										{
 											MountPath: "/data",

@@ -50,6 +50,8 @@ type Capabilities struct {
 type ContainerSecurityContext struct {
 	Capabilities Capabilities `yaml:"capabilities,omitempty"`
 	Privileged   bool         `yaml:"privileged,omitempty"`
+	RunAsUser    int64        `yaml:"runAsUser,omitempty"`
+	RunAsGroup   int64        `yaml:"runAsGroup,omitempty"`
 }
 
 type PodSecurityContext struct {

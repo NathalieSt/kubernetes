@@ -18,6 +18,15 @@ spec:
         app.kubernetes.io/name: flood
         app.kubernetes.io/version: "1.0"
     spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 1000:1001 /config
+        image: busybox
+        volumeMounts:
+        - mountPath: /config
+          name: flood-config-volume
       containers:
       - image: jesec/flood:4.11
         name: flood-ui
@@ -32,6 +41,9 @@ spec:
         env:
         - name: HOME
           value: /config
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1001
       volumes:
       - name: flood-config-volume
         persistentVolumeClaim:
