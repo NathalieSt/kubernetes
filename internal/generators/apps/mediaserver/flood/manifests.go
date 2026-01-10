@@ -58,6 +58,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 						Spec: core.PodSpec{
 							InitContainers: []core.Container{
 								{
+									Name:    "permission-fix",
 									Image:   "busybox",
 									Command: []string{"sh", "-c", "chown -R 1000:1001 /config"},
 									VolumeMounts: []core.VolumeMount{

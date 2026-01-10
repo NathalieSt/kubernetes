@@ -24,6 +24,7 @@ spec:
         - -c
         - chown -R 1000:1001 /config
         image: busybox
+        name: permission-fix
         volumeMounts:
         - mountPath: /config
           name: flood-config-volume
