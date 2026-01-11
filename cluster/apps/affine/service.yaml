@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: affine
-    app.kubernetes.io/version: v0.25.7
+    app.kubernetes.io/version: 2026.1.11-canary.904
   name: affine
 spec:
   selector:

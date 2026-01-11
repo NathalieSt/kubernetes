@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: affine
-    app.kubernetes.io/version: v0.25.7
+    app.kubernetes.io/version: 2026.1.11-canary.904
   name: affine
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: affine
-        app.kubernetes.io/version: v0.25.7
+        app.kubernetes.io/version: 2026.1.11-canary.904
     spec:
       containers:
-      - image: ghcr.io/toeverything/affine:v0.25.7
+      - image: ghcr.io/toeverything/affine:2026.1.11-canary.904
         name: affine
         ports:
         - containerPort: 3010
