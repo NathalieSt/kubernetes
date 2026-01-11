@@ -2,6 +2,25 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: affine-pg
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: affine-pg-cluster
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/postgres/affine
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+  - name: reflector
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: caddy
   namespace: flux-system
 spec:
@@ -85,7 +104,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: csi-driver-nfs
-  - name: vault-secrets-operator-config
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -174,7 +193,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: csi-driver-nfs
-  - name: vault-secrets-operator-config
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -212,7 +231,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: csi-driver-nfs
-  - name: vault-secrets-operator-config
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
