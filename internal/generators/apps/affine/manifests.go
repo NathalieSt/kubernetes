@@ -113,29 +113,7 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 										},
 										{
 											Name:  "DATABASE_URL",
-											Value: fmt.Sprintf("postgresql://${DB_USERNAME}:${DB_PASSWORD}@%v:%v/${DB_DATABASE}", postgresMeta.ClusterUrl, postgresMeta.Port),
-										},
-										{
-											Name: "DB_USERNAME",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "username",
-													Name: shared.AffinePGCredsSecret,
-												},
-											},
-										},
-										{
-											Name: "DB_PASSWORD",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
-													Name: shared.AffinePGCredsSecret,
-												},
-											},
-										},
-										{
-											Name:  "DB_DATABASE",
-											Value: "affine-db",
+											Value: fmt.Sprintf("postgresql://${username}:${password}@%v:%v/affine-db", postgresMeta.ClusterUrl, postgresMeta.Port),
 										},
 									},
 								},

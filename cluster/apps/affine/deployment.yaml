@@ -32,19 +32,7 @@ spec:
         - name: REDIS_SERVER_HOST
           value: redis.redis.svc.cluster.local
         - name: DATABASE_URL
-          value: postgresql://${DB_USERNAME}:${DB_PASSWORD}@affine-pg-rw.affine-pg-cluster.svc.cluster.local:5432/${DB_DATABASE}
-        - name: DB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              key: username
-              name: affine-pg-creds-secret
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: password
-              name: affine-pg-creds-secret
-        - name: DB_DATABASE
-          value: affine-db
+          value: postgresql://${username}:${password}@affine-pg-rw.affine-pg-cluster.svc.cluster.local:5432/affine-db
       volumes:
       - name: conf-volume
         persistentVolumeClaim:
