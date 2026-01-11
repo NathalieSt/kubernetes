@@ -6,8 +6,9 @@ type VolumeConfigMapItem struct {
 }
 
 type ConfigMapVolumeSource struct {
-	Name  string                `yaml:"name,"`
-	Items []VolumeConfigMapItem `yaml:"items,omitempty"`
+	Name        string                `yaml:"name,"`
+	Items       []VolumeConfigMapItem `yaml:"items,omitempty"`
+	DefaultMode int32                 `yaml:"defaultMode,omitempty"`
 }
 
 type PVCVolumeSource struct {
