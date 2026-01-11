@@ -12,3 +12,4 @@ data:
     echo "Setting DATABASE_URL"
     export DATABASE_URL="postgresql://${DB_USERNAME}:${DB_PASSWORD}@affine-pg-rw.affine-pg-cluster.svc.cluster.local:5432/${DB_DATABASE}"
     echo "Done!"
+    exec "$@"

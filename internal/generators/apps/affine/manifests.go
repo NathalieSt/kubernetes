@@ -73,6 +73,7 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 echo "Setting DATABASE_URL"
 export DATABASE_URL="postgresql://${DB_USERNAME}:${DB_PASSWORD}@%v:%v/${DB_DATABASE}"
 echo "Done!"
+exec "$@"
 `, postgresMeta.ClusterUrl, postgresMeta.Port),
 			},
 			),
@@ -112,7 +113,7 @@ echo "Done!"
 								{
 									Name:    generatorMeta.Name,
 									Image:   fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Command: []string{"/bin/sh", "-c", "/scripts/entrypoint.sh && node ./dist/main.js"},
+									Command: []string{"/bin/sh", "-c", "/scripts/entrypoint.sh node ./dist/main.js"},
 									Ports: []core.Port{
 										{
 											ContainerPort: generatorMeta.Port,

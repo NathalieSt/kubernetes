@@ -21,7 +21,7 @@ spec:
       - command:
         - /bin/sh
         - -c
-        - /scripts/entrypoint.sh && node ./dist/main.js
+        - /scripts/entrypoint.sh node ./dist/main.js
         image: ghcr.io/toeverything/affine:2026.1.11-canary.904
         name: affine
         ports:
