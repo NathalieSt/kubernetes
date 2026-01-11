@@ -78,7 +78,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 
 	affinePGSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-affine-pg-static-secret", generatorMeta.Name),
-		SecretName: shared.MatrixPGCredsSecret,
+		SecretName: shared.AffinePGCredsSecret,
 		Path:       "postgres-clusters/affine",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
