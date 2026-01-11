@@ -6,8 +6,9 @@ metadata:
     app.kubernetes.io/name: affine
   name: affine-configmap
 data:
-  entrypoint.sh: |-
+  entrypoint.sh: |
     
     #!/bin/sh
+    echo "Setting DATABASE_URL"
     export DATABASE_URL="postgresql://${DB_USERNAME}:${DB_PASSWORD}@affine-pg-rw.affine-pg-cluster.svc.cluster.local:5432/${DB_DATABASE}"
-    exec "$@"
+    echo "Done!"
