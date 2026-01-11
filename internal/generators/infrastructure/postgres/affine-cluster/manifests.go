@@ -41,7 +41,7 @@ func createAffineManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 			cnpg.NewDatabase(meta.ObjectMeta{
 				Name: "affine-db",
 			}, cnpg.DatabaseSpec{
-				Name: "affine",
+				Name: "affine-db",
 				Cluster: cnpg.DatabaseCluster{
 					Name: generatorMeta.Name,
 				},

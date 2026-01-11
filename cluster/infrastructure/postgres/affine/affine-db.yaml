@@ -4,7 +4,7 @@ kind: Database
 metadata:
   name: affine-db
 spec:
-  name: affine
+  name: affine-db
   cluster:
     name: affine-pg
   owner: postgres
