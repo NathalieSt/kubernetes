@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: affine-db
+spec:
+  name: affine
+  cluster:
+    name: affine-pg
+  owner: postgres

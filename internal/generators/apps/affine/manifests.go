@@ -8,37 +8,43 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 	"path"
 )
 
-func createWhatsappBridgeManifests(generatorMeta generator.GeneratorMeta, rootDir string, relativeDir string) (map[string][]byte, error) {
+func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
 	}
 
-	configMapName := "whatsapp-bridge-configmap"
-	configMap, err := getWhatsappBridgeConfigMap(configMapName, rootDir, relativeDir)
-	if err != nil {
-		fmt.Println("An error occurred while getting the configMap for whatsapp-bridge")
-		return nil, err
-	}
-
-	configMapManifest := utils.ManifestConfig{
-		Filename:  "configmap.yaml",
-		Manifests: []any{*configMap},
-	}
-
-	datapvcName := fmt.Sprintf("%v-data-pvc", generatorMeta.Name)
-	datapvc := utils.ManifestConfig{
-		Filename: "data-pvc.yaml",
+	confPVCName := "config-pvc"
+	confPVC := utils.ManifestConfig{
+		Filename: "conf-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: datapvcName,
+				Name: confPVCName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
 					"storage": "1Gi",
+				}},
+				StorageClassName: shared.NFSRemoteClass,
+			},
+			),
+		},
+	}
+
+	dataPVCName := "data-pvc"
+	dataPVC := utils.ManifestConfig{
+		Filename: "data-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: dataPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "100Gi",
 				}},
 				StorageClassName: shared.NFSLocalClass,
 			},
@@ -46,14 +52,14 @@ func createWhatsappBridgeManifests(generatorMeta generator.GeneratorMeta, rootDi
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/matrix-cluster"))
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/affine-cluster"))
 	if err != nil {
 		fmt.Println("An error happened while getting postgres meta ")
-		return nil, err
+		return nil
 	}
 
-	configVolumeName := "config-volume"
-	dataVolumeName := "data-volume"
+	confVolume := "conf-volume"
+	dataVolume := "data-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -80,79 +86,6 @@ func createWhatsappBridgeManifests(generatorMeta generator.GeneratorMeta, rootDi
 							},
 						},
 						Spec: core.PodSpec{
-							InitContainers: []core.Container{
-								{
-									Name:  "config-init",
-									Image: "alpine:latest",
-									Command: []string{
-										"/bin/sh",
-										"-c",
-										`apk update && apk add gettext;
-envsubst < /template/config.yaml > /data/config.yaml;
-										`,
-									},
-									VolumeMounts: []core.VolumeMount{
-										{
-											Name:      configVolumeName,
-											MountPath: "/template",
-										},
-										{
-											Name:      dataVolumeName,
-											MountPath: "/data",
-										},
-									},
-									Env: []core.Env{
-										{
-											Name: "AS_TOKEN",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "as_token",
-													Name: shared.WhatsappBridgeSecretName,
-												},
-											},
-										},
-										{
-											Name: "HS_TOKEN",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "hs_token",
-													Name: shared.WhatsappBridgeSecretName,
-												},
-											},
-										},
-										{
-											Name:  "POSTGRES_SERVER",
-											Value: postgresMeta.ClusterUrl,
-										},
-										{
-											Name:  "POSTGRES_PORT",
-											Value: fmt.Sprintf("%v", postgresMeta.Port),
-										},
-										{
-											Name: "POSTGRES_USERNAME",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "username",
-													Name: shared.MatrixPGCredsSecret,
-												},
-											},
-										},
-										{
-											Name: "POSTGRES_PASSWORD",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Key:  "password",
-													Name: shared.MatrixPGCredsSecret,
-												},
-											},
-										},
-										{
-											Name:  "POSTGRES_DB",
-											Value: "whatsapp-bridge-db",
-										},
-									},
-								},
-							},
 							Containers: []core.Container{
 								{
 									Name:  generatorMeta.Name,
@@ -160,28 +93,64 @@ envsubst < /template/config.yaml > /data/config.yaml;
 									Ports: []core.Port{
 										{
 											ContainerPort: generatorMeta.Port,
-											Name:          generatorMeta.Name,
+											Name:          "affine-ui",
 										},
 									},
 									VolumeMounts: []core.VolumeMount{
 										{
-											Name:      dataVolumeName,
-											MountPath: "/data",
+											MountPath: "/root/.affine/config",
+											Name:      confVolume,
+										},
+										{
+											MountPath: "/root/.affine/storage",
+											Name:      dataVolume,
+										},
+									},
+									Env: []core.Env{
+										{
+											Name:  "REDIS_SERVER_HOST",
+											Value: "redis.redis.svc.cluster.local",
+										},
+										{
+											Name:  "DATABASE_URL",
+											Value: fmt.Sprintf("postgresql://${DB_USERNAME}:${DB_PASSWORD}@%v:%v/${DB_DATABASE}", postgresMeta.ClusterUrl, postgresMeta.Port),
+										},
+										{
+											Name: "DB_USERNAME",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "username",
+													Name: shared.AffinePGCredsSecret,
+												},
+											},
+										},
+										{
+											Name: "DB_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: shared.AffinePGCredsSecret,
+												},
+											},
+										},
+										{
+											Name:  "DB_DATABASE",
+											Value: "affine-db",
 										},
 									},
 								},
 							},
 							Volumes: []core.Volume{
 								{
-									Name: configVolumeName,
-									ConfigMap: core.ConfigMapVolumeSource{
-										Name: configMapName,
+									Name: confVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: confPVCName,
 									},
 								},
 								{
-									Name: dataVolumeName,
+									Name: dataVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: datapvcName,
+										ClaimName: dataPVCName,
 									},
 								},
 							},
@@ -218,16 +187,46 @@ envsubst < /template/config.yaml > /data/config.yaml;
 		},
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "caddy",
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "caddy",
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
-			deployment.Filename,
-			datapvc.Filename,
+			confPVC.Filename,
+			dataPVC.Filename,
 			service.Filename,
-			configMapManifest.Filename,
+			deployment.Filename,
+			networkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, service, configMapManifest, datapvc}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, dataPVC, confPVC, kustomization, deployment, service, networkPolicy})
 }

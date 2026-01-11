@@ -76,6 +76,18 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
+	affinePGSecretConfig := utils.StaticSecretConfig{
+		Name:       fmt.Sprintf("%v-affine-pg-static-secret", generatorMeta.Name),
+		SecretName: shared.MatrixPGCredsSecret,
+		Path:       "postgres-clusters/affine",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "affine,affine-pg-cluster",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "affine,affine-pg-cluster",
+		},
+	}
+
 	mariaDBSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-mariadb-static-secret", generatorMeta.Name),
 		SecretName: shared.MariaDBCredsSecret,
@@ -163,6 +175,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 				forgejoPGSecretConfig,
 				matrixPGSecretConfig,
 				mariaDBSecretConfig,
+				affinePGSecretConfig,
 				synapseSecret,
 				discordBridgeSecret,
 				whatsappBridgeSecret,

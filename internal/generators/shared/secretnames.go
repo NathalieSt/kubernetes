@@ -3,6 +3,7 @@ package shared
 var PostgresCredsSecret = "postgres-creds-secret"
 var MatrixPGCredsSecret = "matrix-pg-creds-secret"
 var ForgejoPGCredsSecret = "forgejo-pg-creds-secret"
+var AffinePGCredsSecret = "affine-pg-creds-secret"
 var MariaDBCredsSecret = "mariadb-creds-secret"
 var NetbirdSecretName = "netbird-setup-key-vault-secret"
 var NetbirdAPIKeySecretName = "netbird-mgmt-api-key"

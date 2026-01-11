@@ -16,14 +16,14 @@ func main() {
 		return
 	}
 
-	name := shared.MainPostgres
-	namespace := "postgres"
+	name := shared.AffinePostgres
+	namespace := "affine-pg-cluster"
 	generatorType := generator.Infrastructure
 	meta := generator.GeneratorMeta{
 		Name:          name,
-		Namespace:     "postgres",
+		Namespace:     namespace,
 		GeneratorType: generatorType,
-		ClusterUrl:    "postgres-rw.postgres.svc.cluster.local",
+		ClusterUrl:    "affine-pg-rw.affine-pg-cluster.svc.cluster.local",
 		Docker: &generator.Docker{
 			Registry: "ghcr.io/cloudnative-pg/postgresql",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
@@ -36,7 +36,7 @@ func main() {
 				Kind: kustomization.GitRepository,
 				Name: "flux-system",
 			},
-			Path:    "./cluster/infrastructure/postgres/main",
+			Path:    "./cluster/infrastructure/postgres/affine",
 			Prune:   true,
 			Wait:    true,
 			Timeout: "10m",
@@ -50,7 +50,7 @@ func main() {
 	utils.RunGenerator(utils.GeneratorRunnerConfig{
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
-		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/postgres/main"),
-		CreateManifests:  createPostgresManifests,
+		OutputDir:        filepath.Join(flags.RootDir, "/cluster/infrastructure/postgres/affine"),
+		CreateManifests:  createAffineManifests,
 	})
 }

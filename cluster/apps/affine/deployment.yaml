@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: affine
+    app.kubernetes.io/version: v0.25.7
+  name: affine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: affine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: affine
+        app.kubernetes.io/version: v0.25.7
+    spec:
+      containers:
+      - image: ghcr.io/toeverything/affine:v0.25.7
+        name: affine
+        ports:
+        - containerPort: 3010
+          name: affine-ui
+        volumeMounts:
+        - mountPath: /root/.affine/config
+          name: conf-volume
+        - mountPath: /root/.affine/storage
+          name: data-volume
+        env:
+        - name: REDIS_SERVER_HOST
+          value: redis.redis.svc.cluster.local
+        - name: DATABASE_URL
+          value: postgresql://${DB_USERNAME}:${DB_PASSWORD}@affine-pg-rw.affine-pg-cluster.svc.cluster.local:5432/${DB_DATABASE}
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: affine-pg-creds-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: affine-pg-creds-secret
+        - name: DB_DATABASE
+          value: affine-db
+      volumes:
+      - name: conf-volume
+        persistentVolumeClaim:
+          claimName: config-pvc
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-pvc

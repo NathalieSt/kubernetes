@@ -2,6 +2,7 @@ package shared
 
 // Apps
 var AdguardHome = "adguard-home"
+var Affine = "affine"
 var Booklore = "booklore"
 var Forgejo = "forgejo"
 var Glance = "glance"
@@ -33,6 +34,7 @@ var NFD = "nfd"
 var ForgejoPostgres = "forgejo-pg"
 var MainPostgres = "main-pg"
 var MatrixPostgres = "matrix-pg"
+var AffinePostgres = "affine-pg"
 var Redis = "redis"
 var Reflector = "reflector"
 var Valkey = "valkey"

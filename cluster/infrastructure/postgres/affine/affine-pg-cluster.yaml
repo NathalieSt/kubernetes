@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: affine-pg
+spec:
+  instances: 1
+  storage:
+    storageClass: nfs-local
+    size: 20Gi
+  superuserSecret:
+    name: affine-pg-creds-secret
+  enableSuperuserAccess: true
