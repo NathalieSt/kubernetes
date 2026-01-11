@@ -37,13 +37,6 @@ spec:
     - name: csi-driver-nfs
     - name: reflector
     - name: affine-pg
-  postBuild:
-    substitute:
-      username: "NOT SET"
-      password: "NOT SET"
-    substituteFrom:
-      - kind: Secret
-        name: affine-pg-creds-secret
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

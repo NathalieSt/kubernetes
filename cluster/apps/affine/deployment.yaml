@@ -18,7 +18,11 @@ spec:
         app.kubernetes.io/version: 2026.1.11-canary.904
     spec:
       containers:
-      - image: ghcr.io/toeverything/affine:2026.1.11-canary.904
+      - command:
+        - /bin/sh
+        - -c
+        - /scripts/entrypoint.sh
+        image: ghcr.io/toeverything/affine:2026.1.11-canary.904
         name: affine
         ports:
         - containerPort: 3010
@@ -28,11 +32,24 @@ spec:
           name: conf-volume
         - mountPath: /root/.affine/storage
           name: data-volume
+        - mountPath: /scripts/entrypoint.sh
+          subPath: entrypoint.sh
+          name: entrypoint-volume
         env:
         - name: REDIS_SERVER_HOST
           value: redis.redis.svc.cluster.local
-        - name: DATABASE_URL
-          value: postgresql://${username}:${password}@affine-pg-rw.affine-pg-cluster.svc.cluster.local:5432/affine-db
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: affine-pg-creds-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: affine-pg-creds-secret
+        - name: DB_DATABASE
+          value: affine-db
       volumes:
       - name: conf-volume
         persistentVolumeClaim:
@@ -40,3 +57,6 @@ spec:
       - name: data-volume
         persistentVolumeClaim:
           claimName: data-pvc
+      - name: entrypoint-volume
+        configMap:
+          name: affine-configmap

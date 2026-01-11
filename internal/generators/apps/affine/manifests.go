@@ -58,8 +58,28 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 		return nil
 	}
 
+	entrypointConfigMapName := fmt.Sprintf("%v-configmap", generatorMeta.Name)
+	entrypointConfigMap := utils.ManifestConfig{
+		Filename: "configmap.yaml",
+		Manifests: []any{
+			core.NewConfigMap(meta.ObjectMeta{
+				Name: entrypointConfigMapName,
+				Annotations: map[string]string{
+					"app.kubernetes.io/name": generatorMeta.Name,
+				},
+			}, map[string]string{
+				"entrypoint.sh": fmt.Sprintf(`
+#!/bin/sh
+export DATABASE_URL="postgresql://${DB_USERNAME}:${DB_PASSWORD}@%v:%v/${DB_DATABASE}"
+exec "$@"`, postgresMeta.ClusterUrl, postgresMeta.Port),
+			},
+			),
+		},
+	}
+
 	confVolume := "conf-volume"
 	dataVolume := "data-volume"
+	entrypointVolume := "entrypoint-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -88,8 +108,9 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 						Spec: core.PodSpec{
 							Containers: []core.Container{
 								{
-									Name:  generatorMeta.Name,
-									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Name:    generatorMeta.Name,
+									Image:   fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Command: []string{"/bin/sh", "-c", "/scripts/entrypoint.sh"},
 									Ports: []core.Port{
 										{
 											ContainerPort: generatorMeta.Port,
@@ -105,6 +126,11 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 											MountPath: "/root/.affine/storage",
 											Name:      dataVolume,
 										},
+										{
+											MountPath: "/scripts/entrypoint.sh",
+											SubPath:   "entrypoint.sh",
+											Name:      entrypointVolume,
+										},
 									},
 									Env: []core.Env{
 										{
@@ -112,8 +138,26 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 											Value: "redis.redis.svc.cluster.local",
 										},
 										{
-											Name:  "DATABASE_URL",
-											Value: fmt.Sprintf("postgresql://${username}:${password}@%v:%v/affine-db", postgresMeta.ClusterUrl, postgresMeta.Port),
+											Name: "DB_USERNAME",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "username",
+													Name: shared.AffinePGCredsSecret,
+												},
+											},
+										},
+										{
+											Name: "DB_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: shared.AffinePGCredsSecret,
+												},
+											},
+										},
+										{
+											Name:  "DB_DATABASE",
+											Value: "affine-db",
 										},
 									},
 								},
@@ -129,6 +173,12 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 									Name: dataVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: dataPVCName,
+									},
+								},
+								{
+									Name: entrypointVolume,
+									ConfigMap: core.ConfigMapVolumeSource{
+										Name: entrypointConfigMapName,
 									},
 								},
 							},
@@ -202,9 +252,10 @@ func createAffineManifests(rootDir string, generatorMeta generator.GeneratorMeta
 			dataPVC.Filename,
 			service.Filename,
 			deployment.Filename,
+			entrypointConfigMap.Filename,
 			networkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, dataPVC, confPVC, kustomization, deployment, service, networkPolicy})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, dataPVC, confPVC, kustomization, deployment, service, entrypointConfigMap, networkPolicy})
 }

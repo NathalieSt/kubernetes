@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    app.kubernetes.io/name: affine
+  name: affine-configmap
+data:
+  entrypoint.sh: |-
+    
+    #!/bin/sh
+    export DATABASE_URL="postgresql://${DB_USERNAME}:${DB_PASSWORD}@affine-pg-rw.affine-pg-cluster.svc.cluster.local:5432/${DB_DATABASE}"
+    exec "$@"
