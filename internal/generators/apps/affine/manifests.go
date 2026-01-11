@@ -179,7 +179,7 @@ exec "$@"`, postgresMeta.ClusterUrl, postgresMeta.Port),
 									Name: entrypointVolume,
 									ConfigMap: core.ConfigMapVolumeSource{
 										Name:        entrypointConfigMapName,
-										DefaultMode: 0755,
+										DefaultMode: 0777,
 									},
 								},
 							},

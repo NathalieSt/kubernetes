@@ -60,4 +60,4 @@ spec:
       - name: entrypoint-volume
         configMap:
           name: affine-configmap
-          defaultMode: 493
+          defaultMode: 511
