@@ -45,7 +45,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: audiomuse-ai
+  targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
     name: flux-system

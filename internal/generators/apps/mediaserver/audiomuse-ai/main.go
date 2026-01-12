@@ -17,7 +17,7 @@ func main() {
 	}
 
 	name := shared.AudiomuseAI
-	namespace := "audiomuse-ai"
+	namespace := "jellyfin"
 	generatorType := generator.App
 	meta := generator.GeneratorMeta{
 		Name:          name,
