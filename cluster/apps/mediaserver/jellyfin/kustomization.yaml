@@ -11,3 +11,4 @@ resources:
 - pvc.yaml
 - scaled-object.yaml
 - network-policy.yaml
+- jellyfin-audiomuse-network-policy.yaml

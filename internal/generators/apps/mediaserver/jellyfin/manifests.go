@@ -104,6 +104,42 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	jellyfinAudiomuseNetworkPolicy := utils.ManifestConfig{
+		Filename: "jellyfin-audiomuse-network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-audiomuse-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PodSelector: meta.LabelSelector{
+					MatchLabels: map[string]string{
+						"app.kubernetes.io/name": generatorMeta.Name,
+					},
+				},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "audiomuse-ai-flask",
+									},
+								},
+							},
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "audiomuse-ai-worker",
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	scaledObject := utils.ManifestConfig{
 		Filename:  "scaled-object.yaml",
 		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.Deployment, generatorMeta.KedaScaling),
@@ -119,8 +155,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			pvc.Filename,
 			scaledObject.Filename,
 			networkPolicy.Filename,
+			jellyfinAudiomuseNetworkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, networkPolicy})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, networkPolicy, jellyfinAudiomuseNetworkPolicy})
 }
