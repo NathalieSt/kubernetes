@@ -361,7 +361,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 							Containers: []core.Container{
 								{
 									Name:  "nvidia-audiomuse-ai-worker",
-									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Image: fmt.Sprintf("%v:%v-nvidia", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
 									Env: []core.Env{
 										{
 											Name:  "SERVICE_TYPE",
@@ -402,6 +402,14 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 													Key:  "password",
 												},
 											},
+										},
+										{
+											Name:  "NVIDIA_VISIBLE_DEVICES",
+											Value: "0",
+										},
+										{
+											Name:  "NVIDIA_DRIVER_CAPABILITIES",
+											Value: "compute,utility",
 										},
 									},
 									EnvFrom: []core.EnvReference{

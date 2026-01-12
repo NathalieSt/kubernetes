@@ -29,7 +29,7 @@ spec:
                 values:
                 - localai
       containers:
-      - image: ghcr.io/neptunehub/audiomuse-ai:0.8.6
+      - image: ghcr.io/neptunehub/audiomuse-ai:0.8.6-nvidia
         name: nvidia-audiomuse-ai-worker
         ports:
         - containerPort: 8000
@@ -60,6 +60,10 @@ spec:
             secretKeyRef:
               key: password
               name: postgres-creds-secret
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: "0"
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: compute,utility
         envFrom:
         - configMapRef:
             name: audiomuse-configmap
