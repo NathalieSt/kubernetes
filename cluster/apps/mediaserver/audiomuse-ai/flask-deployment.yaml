@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: audiomuse-ai-flask
+    app.kubernetes.io/version: 0.8.6
+  name: audiomuse-ai-flask
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: audiomuse-ai-flask
+      app.kubernetes.io/version: 0.8.6
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: audiomuse-ai-flask
+        app.kubernetes.io/version: 0.8.6
+    spec:
+      containers:
+      - image: ghcr.io/neptunehub/audiomuse-ai:0.8.6
+        name: audiomuse-ai-flask
+        ports:
+        - containerPort: 8000
+          name: audiomuse-ai-flask
+        env:
+        - name: SERVICE_TYPE
+          value: flask
+        - name: JELLYFIN_USER_ID
+          valueFrom:
+            secretKeyRef:
+              key: userid
+              name: jellyfin-creds
+        - name: JELLYFIN_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: jellyfin-creds
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        envFrom:
+        - configMapRef:
+            name: audiomuse-configmap

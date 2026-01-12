@@ -65,6 +65,14 @@ type Resources struct {
 	Limits   map[string]string `yaml:"limits,omitempty"`
 }
 
+type ConfigMapRef struct {
+	Name string `yaml:"name,omitempty"`
+}
+
+type EnvReference struct {
+	ConfigMapRef `yaml:"configMapRef,omitempty"`
+}
+
 type Container struct {
 	Args            []string                 `yaml:"args,omitempty"`
 	Command         []string                 `yaml:"command,omitempty"`
@@ -73,6 +81,7 @@ type Container struct {
 	Ports           []Port                   `yaml:"ports,omitempty"`
 	VolumeMounts    []VolumeMount            `yaml:"volumeMounts,omitempty"`
 	Env             []Env                    `yaml:"env,omitempty"`
+	EnvFrom         []EnvReference           `yaml:"envFrom,omitempty"`
 	Resources       Resources                `yaml:"resources,omitempty"`
 	SecurityContext ContainerSecurityContext `yaml:"securityContext,omitempty"`
 }
