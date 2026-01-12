@@ -56,7 +56,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 				Name: configMapName,
 			}, map[string]string{
 				"MEDIASERVER_TYPE": "jellyfin",
-				"JELLYFIN_URL":     jellyfinMeta.ClusterUrl,
+				"JELLYFIN_URL":     fmt.Sprintf("http://%v", jellyfinMeta.ClusterUrl),
 				"POSTGRES_HOST":    postgresMeta.ClusterUrl,
 				"POSTGRES_PORT":    fmt.Sprint(postgresMeta.Port),
 				"REDIS_URL":        fmt.Sprintf("redis://%v:%v/0", redisMeta.ClusterUrl, redisMeta.Port),
