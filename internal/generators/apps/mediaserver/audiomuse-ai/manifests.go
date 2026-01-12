@@ -217,12 +217,22 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 											},
 										},
 										{
-											Name:  "POSTGRES_USER",
-											Value: "worker",
+											Name: "POSTGRES_USER",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: shared.PostgresCredsSecret,
+													Key:  "username",
+												},
+											},
 										},
 										{
-											Name:  "POSTGRES_PASSWORD",
-											Value: "worker",
+											Name: "POSTGRES_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: shared.PostgresCredsSecret,
+													Key:  "password",
+												},
+											},
 										},
 									},
 									EnvFrom: []core.EnvReference{

@@ -38,9 +38,15 @@ spec:
               key: token
               name: jellyfin-creds
         - name: POSTGRES_USER
-          value: worker
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
         - name: POSTGRES_PASSWORD
-          value: worker
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
         envFrom:
         - configMapRef:
             name: audiomuse-configmap
