@@ -24,6 +24,9 @@ spec:
         ports:
         - containerPort: 8000
           name: flask
+        volumeMounts:
+        - mountPath: /app/temp_audio
+          name: temp-volume
         env:
         - name: SERVICE_TYPE
           value: flask
@@ -50,3 +53,7 @@ spec:
         envFrom:
         - configMapRef:
             name: audiomuse-configmap
+      volumes:
+      - name: temp-volume
+        persistentVolumeClaim:
+          claimName: audiomuse-ai-pvc

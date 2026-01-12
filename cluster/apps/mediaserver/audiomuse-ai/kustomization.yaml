@@ -9,3 +9,4 @@ resources:
 - service.yaml
 - configmap.yaml
 - vault-secret.yaml
+- pvc.yaml

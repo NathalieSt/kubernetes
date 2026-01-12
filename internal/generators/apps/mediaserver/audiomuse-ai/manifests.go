@@ -48,6 +48,22 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 		return nil
 	}
 
+	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
+	pvc := utils.ManifestConfig{
+		Filename: "pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "1Gi",
+				}},
+				StorageClassName: shared.NFSRemoteClass,
+			}),
+		},
+	}
+
 	configMapName := "audiomuse-configmap"
 	configMap := utils.ManifestConfig{
 		Filename: "configmap.yaml",
@@ -66,6 +82,8 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 			}),
 		},
 	}
+
+	tempVolumeName := "temp-volume"
 
 	flaskDeployment := utils.ManifestConfig{
 		Filename: "flask-deployment.yaml",
@@ -152,6 +170,20 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 											Name:          "flask",
 											ContainerPort: generatorMeta.Port,
 										},
+									},
+									VolumeMounts: []core.VolumeMount{
+										core.VolumeMount{
+											Name:      tempVolumeName,
+											MountPath: "/app/temp_audio",
+										},
+									},
+								},
+							},
+							Volumes: []core.Volume{
+								core.Volume{
+									Name: tempVolumeName,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: pvcName,
 									},
 								},
 							},
@@ -248,6 +280,20 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 											ContainerPort: generatorMeta.Port,
 										},
 									},
+									VolumeMounts: []core.VolumeMount{
+										core.VolumeMount{
+											Name:      tempVolumeName,
+											MountPath: "/app/temp_audio",
+										},
+									},
+								},
+							},
+							Volumes: []core.Volume{
+								core.Volume{
+									Name: tempVolumeName,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: pvcName,
+									},
 								},
 							},
 						},
@@ -292,8 +338,9 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 			service.Filename,
 			configMap.Filename,
 			jellyfinCredsVaultSecret.Filename,
+			pvc.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, workerDeployment, flaskDeployment, service, configMap, jellyfinCredsVaultSecret})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, workerDeployment, flaskDeployment, service, configMap, jellyfinCredsVaultSecret, pvc})
 }
