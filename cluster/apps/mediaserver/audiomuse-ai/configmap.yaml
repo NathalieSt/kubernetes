@@ -5,7 +5,7 @@ metadata:
   name: audiomuse-configmap
 data:
   CLAP_ENABLED: "true"
-  JELLYFIN_URL: http://jellyfin.jellyfin.svc.cluster.local
+  JELLYFIN_URL: http://jellyfin.jellyfin.svc.cluster.local:8096
   MEDIASERVER_TYPE: jellyfin
   POSTGRES_DB: audiomuseai
   POSTGRES_HOST: postgres-rw.postgres.svc.cluster.local
