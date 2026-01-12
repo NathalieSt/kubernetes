@@ -10,3 +10,4 @@ resources:
 - configmap.yaml
 - vault-secret.yaml
 - pvc.yaml
+- nvidia-worker-deployment.yaml

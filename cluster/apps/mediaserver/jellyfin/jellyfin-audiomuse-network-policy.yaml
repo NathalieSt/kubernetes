@@ -17,3 +17,6 @@ spec:
     - podSelector:
         matchLabels:
           app.kubernetes.io/name: audiomuse-ai-worker
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: audiomuse-ai-nvidia-worker

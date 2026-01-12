@@ -303,6 +303,143 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 		},
 	}
 
+	nvidiaWorkerDeployment := utils.ManifestConfig{
+		Filename: "nvidia-worker-deployment.yaml",
+		Manifests: []any{
+			apps.NewDeployment(
+				meta.ObjectMeta{
+					Name: "nvidia-audiomuse-ai-worker",
+					Labels: map[string]string{
+						"app.kubernetes.io/name":    fmt.Sprintf("%v-nvidia-worker", generatorMeta.Name),
+						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+				},
+				apps.DeploymentSpec{
+					Replicas: 1,
+					Selector: meta.LabelSelector{
+						MatchLabels: map[string]string{
+							"app.kubernetes.io/name":    fmt.Sprintf("%v-nvidia-worker", generatorMeta.Name),
+							"app.kubernetes.io/version": generatorMeta.Docker.Version,
+						},
+					},
+					Template: core.PodTemplateSpec{
+						Metadata: meta.ObjectMeta{
+							Labels: map[string]string{
+								"app.kubernetes.io/name":    fmt.Sprintf("%v-nvidia-worker", generatorMeta.Name),
+								"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							},
+						},
+						Spec: core.PodSpec{
+							RuntimeClassName: "nvidia",
+							Tolerations: []core.PodToleration{
+								{
+									Key:      "exclusive",
+									Operator: "Equal",
+									Value:    "localai",
+									Effect:   "NoSchedule",
+								},
+							},
+							Affinity: core.PodAffinity{
+								NodeAffinity: core.PodNodeAffinity{
+									RequiredDuringSchedulingIgnoredDuringExecution: core.PodNodeRequiredDuringSchedulingIgnoredDuringExecution{
+										NodeSelectorTerms: []core.NodeSelectorTerm{
+											{
+												MatchExpressions: []core.MatchExpression{
+													{
+														Key:      "exclusive",
+														Operator: "In",
+														Values: []string{
+															"localai",
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+							Containers: []core.Container{
+								{
+									Name:  "nvidia-audiomuse-ai-worker",
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Env: []core.Env{
+										{
+											Name:  "SERVICE_TYPE",
+											Value: "worker",
+										},
+										{
+											Name: "JELLYFIN_USER_ID",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: secretName,
+													Key:  "userid",
+												},
+											},
+										},
+										{
+											Name: "JELLYFIN_TOKEN",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: secretName,
+													Key:  "token",
+												},
+											},
+										},
+										{
+											Name: "POSTGRES_USER",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: shared.PostgresCredsSecret,
+													Key:  "username",
+												},
+											},
+										},
+										{
+											Name: "POSTGRES_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Name: shared.PostgresCredsSecret,
+													Key:  "password",
+												},
+											},
+										},
+									},
+									EnvFrom: []core.EnvReference{
+										{
+											ConfigMapRef: core.ConfigMapRef{
+												Name: configMapName,
+											},
+										},
+									},
+									Ports: []core.Port{
+										{
+											Name:          "worker",
+											ContainerPort: generatorMeta.Port,
+										},
+									},
+									VolumeMounts: []core.VolumeMount{
+										{
+											Name:      tempVolumeName,
+											MountPath: "/app/temp_audio",
+										},
+									},
+								},
+							},
+							Volumes: []core.Volume{
+								{
+									Name: tempVolumeName,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: pvcName,
+									},
+								},
+							},
+						},
+					},
+				},
+			),
+		},
+	}
+
 	service := utils.ManifestConfig{
 		Filename: "service.yaml",
 		Manifests: []any{
@@ -339,8 +476,9 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 			configMap.Filename,
 			jellyfinCredsVaultSecret.Filename,
 			pvc.Filename,
+			nvidiaWorkerDeployment.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, workerDeployment, flaskDeployment, service, configMap, jellyfinCredsVaultSecret, pvc})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, workerDeployment, flaskDeployment, service, configMap, jellyfinCredsVaultSecret, pvc, nvidiaWorkerDeployment})
 }

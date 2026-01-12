@@ -133,6 +133,13 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									},
 								},
 							},
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "audiomuse-ai-nvidia-worker",
+									},
+								},
+							},
 						},
 					},
 				},
