@@ -33,7 +33,7 @@ data:
     	@svc3 host audiomuse.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc3 {
-    		reverse_proxy audiomuse.jellyfin.svc.cluster.local:8000
+    		reverse_proxy audiomuse-ai.jellyfin.svc.cluster.local:8000
     	} 
     		
     	@svc4 host booklore.cloud.nathalie-stiefsohn.eu

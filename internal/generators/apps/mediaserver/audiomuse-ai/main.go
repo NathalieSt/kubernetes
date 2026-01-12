@@ -23,7 +23,7 @@ func main() {
 		Name:          name,
 		Namespace:     namespace,
 		GeneratorType: generatorType,
-		ClusterUrl:    "audiomuse.jellyfin.svc.cluster.local",
+		ClusterUrl:    "audiomuse-ai.jellyfin.svc.cluster.local",
 		Port:          8000,
 		Docker: &generator.Docker{
 			Registry: "ghcr.io/neptunehub/audiomuse-ai",
