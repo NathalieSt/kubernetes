@@ -149,7 +149,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 									},
 									Ports: []core.Port{
 										{
-											Name:          "audiomuse-ai-flask",
+											Name:          "flask",
 											ContainerPort: generatorMeta.Port,
 										},
 									},
@@ -234,7 +234,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 									},
 									Ports: []core.Port{
 										{
-											Name:          "audiomuse-ai-worker",
+											Name:          "worker",
 											ContainerPort: generatorMeta.Port,
 										},
 									},
@@ -264,7 +264,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 					},
 					Ports: []core.ServicePort{
 						{
-							Name:       "http-audiomuse-ai",
+							Name:       "http-audiomuse",
 							Port:       generatorMeta.Port,
 							TargetPort: generatorMeta.Port,
 						},

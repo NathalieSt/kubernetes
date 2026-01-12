@@ -23,7 +23,7 @@ spec:
         name: audiomuse-ai-worker
         ports:
         - containerPort: 8000
-          name: audiomuse-ai-worker
+          name: worker
         env:
         - name: SERVICE_TYPE
           value: worker

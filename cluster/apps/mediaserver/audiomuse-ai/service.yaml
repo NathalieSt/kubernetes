@@ -11,6 +11,6 @@ spec:
     app.kubernetes.io/name: audiomuse-ai
     app.kubernetes.io/version: 0.8.6
   ports:
-  - name: http-audiomuse-ai
+  - name: http-audiomuse
     port: 8000
     targetPort: 8000

@@ -23,7 +23,7 @@ spec:
         name: audiomuse-ai-flask
         ports:
         - containerPort: 8000
-          name: audiomuse-ai-flask
+          name: flask
         env:
         - name: SERVICE_TYPE
           value: flask
