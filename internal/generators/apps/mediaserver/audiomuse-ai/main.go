@@ -29,6 +29,9 @@ func main() {
 			Registry: "ghcr.io/neptunehub/audiomuse-ai",
 			Version:  utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},
+		Caddy: &generator.Caddy{
+			DNSName: "audiomuse",
+		},
 		Flux: &kustomization.KustomizationSpec{
 			Interval:        "24h",
 			TargetNamespace: namespace,

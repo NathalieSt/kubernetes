@@ -269,7 +269,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
-						"app.kubernetes.io/name":    generatorMeta.Name,
+						"app.kubernetes.io/name":    fmt.Sprintf("%v-flask", generatorMeta.Name),
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
 					},
 					Ports: []core.ServicePort{
