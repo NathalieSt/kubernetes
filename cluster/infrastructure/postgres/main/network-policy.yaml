@@ -22,5 +22,6 @@ spec:
           operator: In
           values:
           - mealie
-          - jellyfin
+          - audiomuse-ai-worker
+          - audiomuse-ai-flask
           - cloudnative-pg

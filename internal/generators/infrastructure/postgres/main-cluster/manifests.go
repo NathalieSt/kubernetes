@@ -62,7 +62,8 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Operator: meta.In,
 											Values: []string{
 												"mealie",
-												"jellyfin",
+												"audiomuse-ai-worker",
+												"audiomuse-ai-flask",
 												"cloudnative-pg",
 											},
 										},
