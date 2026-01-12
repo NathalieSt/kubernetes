@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/version: 0.8.6
   name: audiomuse-ai-worker
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app.kubernetes.io/name: audiomuse-ai-worker
