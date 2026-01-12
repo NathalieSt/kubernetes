@@ -23,5 +23,6 @@ spec:
           values:
           - mealie
           - audiomuse-ai-worker
+          - audiomuse-ai-nvidia-worker
           - audiomuse-ai-flask
           - cloudnative-pg
