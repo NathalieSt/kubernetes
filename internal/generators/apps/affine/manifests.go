@@ -109,6 +109,56 @@ exec "$@"
 							},
 						},
 						Spec: core.PodSpec{
+							InitContainers: []core.Container{
+								{
+									Name:    "affine-database-migration",
+									Image:   fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
+									Command: []string{"/bin/sh", "-c", "/scripts/entrypoint.sh node ./scripts/self-host-predeploy.js"},
+									VolumeMounts: []core.VolumeMount{
+										{
+											MountPath: "/root/.affine/config",
+											Name:      confVolume,
+										},
+										{
+											MountPath: "/root/.affine/storage",
+											Name:      dataVolume,
+										},
+										{
+											MountPath: "/scripts/entrypoint.sh",
+											SubPath:   "entrypoint.sh",
+											Name:      entrypointVolume,
+										},
+									},
+									Env: []core.Env{
+										{
+											Name:  "REDIS_SERVER_HOST",
+											Value: "redis.redis.svc.cluster.local",
+										},
+										{
+											Name: "DB_USERNAME",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "username",
+													Name: shared.AffinePGCredsSecret,
+												},
+											},
+										},
+										{
+											Name: "DB_PASSWORD",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "password",
+													Name: shared.AffinePGCredsSecret,
+												},
+											},
+										},
+										{
+											Name:  "DB_DATABASE",
+											Value: "affine-db",
+										},
+									},
+								},
+							},
 							Containers: []core.Container{
 								{
 									Name:    generatorMeta.Name,

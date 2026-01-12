@@ -17,6 +17,36 @@ spec:
         app.kubernetes.io/name: affine
         app.kubernetes.io/version: 2026.1.11-canary.904
     spec:
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - /scripts/entrypoint.sh node ./scripts/self-host-predeploy.js
+        image: ghcr.io/toeverything/affine:2026.1.11-canary.904
+        name: affine-database-migration
+        volumeMounts:
+        - mountPath: /root/.affine/config
+          name: conf-volume
+        - mountPath: /root/.affine/storage
+          name: data-volume
+        - mountPath: /scripts/entrypoint.sh
+          subPath: entrypoint.sh
+          name: entrypoint-volume
+        env:
+        - name: REDIS_SERVER_HOST
+          value: redis.redis.svc.cluster.local
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: affine-pg-creds-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: affine-pg-creds-secret
+        - name: DB_DATABASE
+          value: affine-db
       containers:
       - command:
         - /bin/sh
