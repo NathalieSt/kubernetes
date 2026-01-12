@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: postgres-networkpolicy
+  name: main-pg-networkpolicy
 spec:
   policyTypes:
   - Ingress
@@ -14,6 +14,7 @@ spec:
           operator: In
           values:
           - mealie
+          - jellyfin
           - cnpg-system
       podSelector:
         matchExpressions:
@@ -21,4 +22,5 @@ spec:
           operator: In
           values:
           - mealie
+          - jellyfin
           - cloudnative-pg

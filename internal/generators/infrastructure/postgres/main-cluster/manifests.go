@@ -23,7 +23,7 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 			cnpg.NewCluster(meta.ObjectMeta{
 				Name: clusterName,
 			}, cnpg.ClusterSpec{
-				Instances: 3,
+				Instances: 1,
 				Storage: cnpg.ClusterStorage{
 					StorageClass: shared.NFSRemoteClass,
 					Size:         "15Gi",
@@ -62,6 +62,7 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Operator: meta.In,
 											Values: []string{
 												"mealie",
+												"jellyfin",
 												"cloudnative-pg",
 											},
 										},
@@ -74,6 +75,7 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 											Operator: meta.In,
 											Values: []string{
 												"mealie",
+												"jellyfin",
 												"cnpg-system",
 											},
 										},
