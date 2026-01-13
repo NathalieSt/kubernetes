@@ -40,6 +40,8 @@ spec:
         env:
         - name: SERVICE_TYPE
           value: worker
+        - name: CLAP_ENABLED
+          value: "false"
         - name: JELLYFIN_USER_ID
           valueFrom:
             secretKeyRef:

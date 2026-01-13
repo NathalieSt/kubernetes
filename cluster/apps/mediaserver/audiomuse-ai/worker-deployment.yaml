@@ -1,13 +1,12 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   labels:
     app.kubernetes.io/name: audiomuse-ai-worker
     app.kubernetes.io/version: 0.8.6
   name: audiomuse-ai-worker
 spec:
-  replicas: 4
   selector:
     matchLabels:
       app.kubernetes.io/name: audiomuse-ai-worker
@@ -30,6 +29,8 @@ spec:
         env:
         - name: SERVICE_TYPE
           value: worker
+        - name: CLAP_ENABLED
+          value: "false"
         - name: JELLYFIN_USER_ID
           valueFrom:
             secretKeyRef:

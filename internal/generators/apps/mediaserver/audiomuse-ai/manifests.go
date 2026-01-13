@@ -122,6 +122,10 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 											Value: "flask",
 										},
 										{
+											Name:  "CLAP_ENABLED",
+											Value: "false",
+										},
+										{
 											Name: "JELLYFIN_USER_ID",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
@@ -197,7 +201,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 	workerDeployment := utils.ManifestConfig{
 		Filename: "worker-deployment.yaml",
 		Manifests: []any{
-			apps.NewDeployment(
+			apps.NewDaemonSet(
 				meta.ObjectMeta{
 					Name: "audiomuse-ai-worker",
 					Labels: map[string]string{
@@ -205,8 +209,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
 					},
 				},
-				apps.DeploymentSpec{
-					Replicas: 4,
+				apps.DaemonSetSpec{
 					Selector: meta.LabelSelector{
 						MatchLabels: map[string]string{
 							"app.kubernetes.io/name":    fmt.Sprintf("%v-worker", generatorMeta.Name),
@@ -229,6 +232,10 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 										{
 											Name:  "SERVICE_TYPE",
 											Value: "worker",
+										},
+										{
+											Name:  "CLAP_ENABLED",
+											Value: "false",
 										},
 										{
 											Name: "JELLYFIN_USER_ID",
@@ -281,7 +288,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 										},
 									},
 									VolumeMounts: []core.VolumeMount{
-										core.VolumeMount{
+										{
 											Name:      tempVolumeName,
 											MountPath: "/app/temp_audio",
 										},
@@ -289,7 +296,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 								},
 							},
 							Volumes: []core.Volume{
-								core.Volume{
+								{
 									Name: tempVolumeName,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: pvcName,
@@ -366,6 +373,10 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 										{
 											Name:  "SERVICE_TYPE",
 											Value: "worker",
+										},
+										{
+											Name:  "CLAP_ENABLED",
+											Value: "false",
 										},
 										{
 											Name: "JELLYFIN_USER_ID",

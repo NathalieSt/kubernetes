@@ -30,6 +30,8 @@ spec:
         env:
         - name: SERVICE_TYPE
           value: flask
+        - name: CLAP_ENABLED
+          value: "false"
         - name: JELLYFIN_USER_ID
           valueFrom:
             secretKeyRef:
