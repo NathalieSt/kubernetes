@@ -70,9 +70,9 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		Path:       "postgres-clusters/matrix",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
-			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "matrix-pg-cluster,synapse,discord-bridge",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "matrix-pg-cluster,synapse,discord-bridge,whatsapp-bridge",
 			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
-			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "matrix-pg-cluster,synapse,discord-bridge",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "matrix-pg-cluster,synapse,discord-bridge,whatsapp-bridge",
 		},
 	}
 
