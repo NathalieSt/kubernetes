@@ -31,8 +31,8 @@ func getSynapseConfigMap(name string, rootDir string, relativeDir string) (*core
 		Name: name,
 	}, map[string]string{
 		"homeserver.yaml": string(homeserver),
-		"matrix.cluster.netbird.selfhosted.log.config": string(logConfig),
-		"discord-registration.yaml":                    string(discordRegistration),
+		"matrix.cloud.nathalie-stiefsohn.eu.log.config": string(logConfig),
+		"discord-registration.yaml":                     string(discordRegistration),
 	})
 
 	return &configMap, nil

@@ -50,7 +50,7 @@ data:
       - server_name: "matrix.org"
     app_service_config_files:
       - /data/discord-registration.yaml
-  matrix.cluster.netbird.selfhosted.log.config: |-
+  matrix.cloud.nathalie-stiefsohn.eu.log.config: |-
     version: 1
     
     formatters:
