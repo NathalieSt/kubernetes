@@ -119,6 +119,7 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 											Values: []string{
 												"synapse",
 												"discord-bridge",
+												"whatsapp-bridge",
 												"cloudnative-pg",
 											},
 										},
@@ -132,6 +133,7 @@ func createMatrixClusterManifests(generatorMeta generator.GeneratorMeta) map[str
 											Values: []string{
 												"synapse",
 												"discord-bridge",
+												"whatsapp-bridge",
 												"cnpg-system",
 											},
 										},

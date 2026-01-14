@@ -15,6 +15,7 @@ spec:
           values:
           - synapse
           - discord-bridge
+          - whatsapp-bridge
           - cnpg-system
       podSelector:
         matchExpressions:
@@ -23,4 +24,5 @@ spec:
           values:
           - synapse
           - discord-bridge
+          - whatsapp-bridge
           - cloudnative-pg
