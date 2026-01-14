@@ -270,6 +270,11 @@ envsubst < /template/config.yaml > /data/config.yaml;
 									},
 								},
 							},
+							{
+								IpBlock: networking.IPBlock{
+									CIDR: "0.0.0.0/0",
+								},
+							},
 						},
 					},
 				},

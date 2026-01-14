@@ -37,3 +37,5 @@ spec:
         matchLabels:
           app.kubernetes.io/name: synapse
           cnpg.io/cluster: matrix-pg
+    - ipBlock:
+        cidr: 0.0.0.0/0
