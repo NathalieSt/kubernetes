@@ -329,33 +329,61 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 						To: []networking.NetworkPolicyPeer{
 							{
 								NamespaceSelector: meta.LabelSelector{
-									MachExpressions: []meta.MatchExpression{
-										{
-											Key:      "kubernetes.io/metadata.name",
-											Operator: meta.In,
-											Values: []string{
-												"matrix-pg-cluster",
-												"discord-bridge",
-												"signal-bridge",
-												"whatsapp-bridge",
-											},
-										},
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "matrix-pg-cluster",
 									},
 								},
 								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
 										"cnpg.io/cluster": "matrix-pg",
 									},
-									MachExpressions: []meta.MatchExpression{
-										{
-											Key:      "app.kubernetes.io/name",
-											Operator: meta.In,
-											Values: []string{
-												shared.MatrixDiscordBridge,
-												shared.MatrixWhatsappBridge,
-												shared.MatrixSignalBridge,
-											},
-										},
+								},
+							},
+						},
+					},
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "discord-bridge",
+									},
+								},
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": shared.MatrixDiscordBridge,
+									},
+								},
+							},
+						},
+					},
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "whatsapp-bridge",
+									},
+								},
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": shared.MatrixWhatsappBridge,
+									},
+								},
+							},
+						},
+					},
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "signal-bridge",
+									},
+								},
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": shared.MatrixSignalBridge,
 									},
 								},
 							},

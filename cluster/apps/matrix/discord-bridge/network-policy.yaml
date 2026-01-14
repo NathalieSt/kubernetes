@@ -27,15 +27,18 @@ spec:
       protocol: TCP
   - to:
     - namespaceSelector:
-        matchExpressions:
-        - key: kubernetes.io/metadata.name
-          operator: In
-          values:
-          - synapse
-          - matrix-pg-cluster
+        matchLabels:
+          kubernetes.io/metadata.name: synapse
       podSelector:
         matchLabels:
           app.kubernetes.io/name: synapse
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: matrix-pg-cluster
+      podSelector:
+        matchLabels:
           cnpg.io/cluster: matrix-pg
+  - to:
     - ipBlock:
         cidr: 0.0.0.0/0

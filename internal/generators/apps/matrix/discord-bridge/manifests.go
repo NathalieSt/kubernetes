@@ -252,24 +252,36 @@ envsubst < /template/config.yaml > /data/config.yaml;
 						To: []networking.NetworkPolicyPeer{
 							{
 								NamespaceSelector: meta.LabelSelector{
-									MachExpressions: []meta.MatchExpression{
-										{
-											Key:      "kubernetes.io/metadata.name",
-											Operator: meta.In,
-											Values: []string{
-												"synapse",
-												"matrix-pg-cluster",
-											},
-										},
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "synapse",
 									},
 								},
 								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
-										"cnpg.io/cluster":        "matrix-pg",
 										"app.kubernetes.io/name": "synapse",
 									},
 								},
 							},
+						},
+					},
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								NamespaceSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"kubernetes.io/metadata.name": "matrix-pg-cluster",
+									},
+								},
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"cnpg.io/cluster": "matrix-pg",
+									},
+								},
+							},
+						},
+					},
+					{
+						To: []networking.NetworkPolicyPeer{
 							{
 								IpBlock: networking.IPBlock{
 									CIDR: "0.0.0.0/0",
