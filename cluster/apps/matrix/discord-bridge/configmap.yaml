@@ -10,7 +10,7 @@ data:
       # The address that this appservice can use to connect to the homeserver.
       address: http://synapse.synapse.svc.cluster.local:8008
       # The domain of the homeserver (also known as server_name, used for MXIDs, etc).
-      domain: matrix.cluster.netbird.selfhosted
+      domain: matrix.cloud.nathalie-stiefsohn.eu
     
       # What software is the homeserver running?
       # Standard Matrix homeservers like Synapse, Dendrite and Conduit should just use "standard" here.
@@ -371,8 +371,8 @@ data:
       #     mxid - Specific user
       permissions:
         "*": relay
-        "matrix.cluster.netbird.selfhosted": user
-        "@admin:matrix.cluster.netbird.selfhosted": admin
+        "matrix.cloud.nathalie-stiefsohn.eu": user
+        "@admin:matrix.cloud.nathalie-stiefsohn.eu": admin
     
     # Logging config. See https://github.com/tulir/zeroconfig for details.
     logging:

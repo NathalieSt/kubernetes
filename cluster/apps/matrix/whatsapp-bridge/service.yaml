@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: whatsapp-bridge
-    app.kubernetes.io/version: v0.7.5
+    app.kubernetes.io/version: v25.12
   name: whatsapp-bridge
 spec:
   selector:

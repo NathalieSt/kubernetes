@@ -10,9 +10,9 @@
     "mealie": "v3.0.2",
     "searxng": "2025.8.3-2e62eb5",
     "booklore": "v1.15.0",
-    "synapse": "sha-6f9fab1",
+    "synapse": "sha-8eb9d78",
     "discord-bridge": "v0.7.5",
-    "whatsapp-bridge": "v0.7.5",
+    "whatsapp-bridge": "v25.12",
     "signal-bridge": "v0.7.5",
     "redlib": "sha-ba98178",
     "stash": "v0.30.0"

@@ -225,7 +225,7 @@ envsubst < /template/config.yaml > /data/config.yaml;
 			networking.NewNetworkPolicy(meta.ObjectMeta{
 				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
-				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress, networking.Egress},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
@@ -238,6 +238,35 @@ envsubst < /template/config.yaml > /data/config.yaml;
 								NamespaceSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
 										"kubernetes.io/metadata.name": "synapse",
+									},
+								},
+							},
+						},
+					},
+				},
+				//FIXME: get label from corresponding generators
+				//Might need an update of GeneratorMeta struct with those labels
+				Egress: []networking.NetworkPolicyEgressRule{
+					utils.GetCoreDNSEgressRule(),
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								NamespaceSelector: meta.LabelSelector{
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "kubernetes.io/metadata.name",
+											Operator: meta.In,
+											Values: []string{
+												"synapse",
+												"matrix-pg-cluster",
+											},
+										},
+									},
+								},
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"cnpg.io/cluster":        "matrix-pg",
+										"app.kubernetes.io/name": "synapse",
 									},
 								},
 							},

@@ -9,8 +9,50 @@ spec:
   ingress:
   - from:
     - namespaceSelector:
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          - caddy
+          - discord-bridge
+          - signal-bridge
+          - whatsapp-bridge
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - caddy
+          - discord-bridge
+          - whatsapp-bridge
+          - signal-bridge
+  egress:
+  - to:
+    - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: caddy
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          - matrix-pg-cluster
+          - discord-bridge
+          - signal-bridge
+          - whatsapp-bridge
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: caddy
+          cnpg.io/cluster: matrix-pg
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - discord-bridge
+          - whatsapp-bridge
+          - signal-bridge

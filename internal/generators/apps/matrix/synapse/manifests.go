@@ -98,7 +98,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 										`apk update && apk add gettext;
 envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
 envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
-cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
+cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 										`,
 									},
 									VolumeMounts: []core.VolumeMount{
@@ -241,7 +241,7 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 										Items: []core.SecretVolumeItem{
 											{
 												Key:  "signing-key",
-												Path: "matrix.cluster.netbird.selfhosted.signing.key",
+												Path: "matrix.cloud.nathalie-stiefsohn.eu.signing.key",
 											},
 										},
 									},
@@ -263,10 +263,6 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 					Labels: map[string]string{
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
-					},
-					Annotations: map[string]string{
-						"netbird.io/expose": "true",
-						"netbird.io/groups": "cluster-services",
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
@@ -295,14 +291,71 @@ cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
 					{
 						From: []networking.NetworkPolicyPeer{
 							{
-								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "caddy",
+								NamespaceSelector: meta.LabelSelector{
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "kubernetes.io/metadata.name",
+											Operator: meta.In,
+											Values: []string{
+												"caddy",
+												"discord-bridge",
+												"signal-bridge",
+												"whatsapp-bridge",
+											},
+										},
 									},
 								},
+								PodSelector: meta.LabelSelector{
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "app.kubernetes.io/name",
+											Operator: meta.In,
+											Values: []string{
+												shared.Caddy,
+												shared.MatrixDiscordBridge,
+												shared.MatrixWhatsappBridge,
+												shared.MatrixSignalBridge,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				Egress: []networking.NetworkPolicyEgressRule{
+					utils.GetCoreDNSEgressRule(),
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
 								NamespaceSelector: meta.LabelSelector{
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "kubernetes.io/metadata.name",
+											Operator: meta.In,
+											Values: []string{
+												"matrix-pg-cluster",
+												"discord-bridge",
+												"signal-bridge",
+												"whatsapp-bridge",
+											},
+										},
+									},
+								},
+								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "caddy",
+										"cnpg.io/cluster": "matrix-pg",
+									},
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "app.kubernetes.io/name",
+											Operator: meta.In,
+											Values: []string{
+												shared.MatrixDiscordBridge,
+												shared.MatrixWhatsappBridge,
+												shared.MatrixSignalBridge,
+											},
+										},
 									},
 								},
 							},

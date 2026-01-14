@@ -6,9 +6,9 @@ sender_localpart: ${SENDER_LOCALPART}
 rate_limited: false
 namespaces:
   users:
-    - regex: ^@discordbot:matrix\.cluster\.netbird\.selfhosted$
+    - regex: ^@discordbot:matrix\.cloud\.nathalie-stiefsohn\.eu$
       exclusive: true
-    - regex: ^@discord_.*:matrix\.cluster\.netbird\.selfhosted$
+    - regex: ^@discord_.*:matrix\.cloud\.nathalie-stiefsohn\.eu$
       exclusive: true
 de.sorunome.msc2409.push_ephemeral: true
 push_ephemeral: true

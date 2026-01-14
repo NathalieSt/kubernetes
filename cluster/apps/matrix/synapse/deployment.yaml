@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: synapse
-    app.kubernetes.io/version: sha-6f9fab1
+    app.kubernetes.io/version: sha-8eb9d78
   name: synapse
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: synapse
-        app.kubernetes.io/version: sha-6f9fab1
+        app.kubernetes.io/version: sha-8eb9d78
     spec:
       initContainers:
       - command:
@@ -25,7 +25,7 @@ spec:
           apk update && apk add gettext;
           envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
           envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
-          cp /template/matrix.cluster.netbird.selfhosted.log.config /data;
+          cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
           										
         image: alpine:latest
         name: config-init
@@ -82,7 +82,7 @@ spec:
               key: form_secret
               name: synpase-secret
       containers:
-      - image: ghcr.io/element-hq/synapse:sha-6f9fab1
+      - image: ghcr.io/element-hq/synapse:sha-8eb9d78
         name: synapse
         ports:
         - containerPort: 8008
@@ -104,7 +104,7 @@ spec:
           secretName: synpase-secret
           items:
           - key: signing-key
-            path: matrix.cluster.netbird.selfhosted.signing.key
+            path: matrix.cloud.nathalie-stiefsohn.eu.signing.key
       securityContext:
         fsGroup: 991
       nodeSelector:

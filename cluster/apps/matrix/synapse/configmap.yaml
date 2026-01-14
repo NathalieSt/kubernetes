@@ -13,14 +13,14 @@ data:
     rate_limited: false
     namespaces:
       users:
-        - regex: ^@discordbot:matrix\.cluster\.netbird\.selfhosted$
+        - regex: ^@discordbot:matrix\.cloud\.nathalie-stiefsohn\.eu$
           exclusive: true
-        - regex: ^@discord_.*:matrix\.cluster\.netbird\.selfhosted$
+        - regex: ^@discord_.*:matrix\.cloud\.nathalie-stiefsohn\.eu$
           exclusive: true
     de.sorunome.msc2409.push_ephemeral: true
     push_ephemeral: true
   homeserver.yaml: |
-    server_name: "matrix.cluster.netbird.selfhosted"
+    server_name: "matrix.cloud.nathalie-stiefsohn.eu"
     pid_file: /data/homeserver.pid
     listeners:
       - port: 8008
@@ -39,13 +39,13 @@ data:
         host: ${POSTGRES_SERVER}
         cp_min: 5
         cp_max: 10
-    log_config: "/data/matrix.cluster.netbird.selfhosted.log.config"
+    log_config: "/data/matrix.cloud.nathalie-stiefsohn.eu.log.config"
     media_store_path: /data/media_store
     registration_shared_secret: "${REGISTRATION_SHARED_SECRET}"
     report_stats: true
     macaroon_secret_key: "${MACAROON_SECRET_KEY}"
     form_secret: "${FORM_SECRET}"
-    signing_key_path: "/signing/matrix.cluster.netbird.selfhosted.signing.key"
+    signing_key_path: "/signing/matrix.cloud.nathalie-stiefsohn.eu.signing.key"
     trusted_key_servers:
       - server_name: "matrix.org"
     app_service_config_files:
