@@ -98,6 +98,7 @@ func createSynapseManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 										`apk update && apk add gettext;
 envsubst < /template/homeserver.yaml > /data/homeserver.yaml;
 envsubst < /template/discord-registration.yaml > /data/discord-registration.yaml;
+envsubst < /template/whatsapp-registration.yaml > /data/whatsapp-registration.yaml;
 cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 										`,
 									},
@@ -113,7 +114,7 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 									},
 									Env: []core.Env{
 										{
-											Name: "AS_TOKEN",
+											Name: "DISCORD_AS_TOKEN",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "as_token",
@@ -122,7 +123,7 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 											},
 										},
 										{
-											Name: "HS_TOKEN",
+											Name: "DISCORD_HS_TOKEN",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "hs_token",
@@ -131,11 +132,38 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 											},
 										},
 										{
-											Name: "SENDER_LOCALPART",
+											Name: "DISCORD_SENDER_LOCALPART",
 											ValueFrom: core.ValueFrom{
 												SecretKeyRef: core.SecretKeyRef{
 													Key:  "sender_localpart",
 													Name: shared.DiscordBridgeSecretName,
+												},
+											},
+										},
+										{
+											Name: "WHATSAPP_AS_TOKEN",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "as_token",
+													Name: shared.WhatsappBridgeSecretName,
+												},
+											},
+										},
+										{
+											Name: "WHATSAPP_HS_TOKEN",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "hs_token",
+													Name: shared.WhatsappBridgeSecretName,
+												},
+											},
+										},
+										{
+											Name: "WHATSAPP_SENDER_LOCALPART",
+											ValueFrom: core.ValueFrom{
+												SecretKeyRef: core.SecretKeyRef{
+													Key:  "sender_localpart",
+													Name: shared.WhatsappBridgeSecretName,
 												},
 											},
 										},

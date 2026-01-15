@@ -1,8 +1,8 @@
 id: discord
 url: http://discord-bridge.discord-bridge.svc.cluster.local:29334
-as_token: ${AS_TOKEN}
-hs_token: ${HS_TOKEN}
-sender_localpart: ${SENDER_LOCALPART}
+as_token: ${DISCORD_AS_TOKEN}
+hs_token: ${DISCORD_HS_TOKEN}
+sender_localpart: ${DISCORD_SENDER_LOCALPART}
 rate_limited: false
 namespaces:
   users:

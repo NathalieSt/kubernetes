@@ -27,12 +27,19 @@ func getSynapseConfigMap(name string, rootDir string, relativeDir string) (*core
 		return nil, err
 	}
 
+	whatsappRegistration, err := os.ReadFile(path.Join(rootDir, relativeDir, "whatsapp-registration.yaml"))
+	if err != nil {
+		fmt.Printf("Error while reading discord-registration.yaml")
+		return nil, err
+	}
+
 	configMap := core.NewConfigMap(meta.ObjectMeta{
 		Name: name,
 	}, map[string]string{
 		"homeserver.yaml": string(homeserver),
 		"matrix.cloud.nathalie-stiefsohn.eu.log.config": string(logConfig),
 		"discord-registration.yaml":                     string(discordRegistration),
+		"whatsapp-registration.yaml":                    string(whatsappRegistration),
 	})
 
 	return &configMap, nil

@@ -7,9 +7,9 @@ data:
   discord-registration.yaml: |
     id: discord
     url: http://discord-bridge.discord-bridge.svc.cluster.local:29334
-    as_token: ${AS_TOKEN}
-    hs_token: ${HS_TOKEN}
-    sender_localpart: ${SENDER_LOCALPART}
+    as_token: ${DISCORD_AS_TOKEN}
+    hs_token: ${DISCORD_HS_TOKEN}
+    sender_localpart: ${DISCORD_SENDER_LOCALPART}
     rate_limited: false
     namespaces:
       users:
@@ -90,3 +90,18 @@ data:
     
     
     disable_existing_loggers: false
+  whatsapp-registration.yaml: |
+    id: whatsapp
+    url: http://whatsapp-bridge.whatsapp-bridge.svc.cluster.local:29334
+    as_token: ${WHATSAPP_AS_TOKEN}
+    hs_token: ${WHATSAPP_HS_TOKEN}
+    sender_localpart: ${WHATSAPP_SENDER_LOCALPART}
+    rate_limited: false
+    namespaces:
+      users:
+        - regex: ^@whatsapp_bot:matrix\.cloud\.nathalie-stiefsohn\.eu$
+          exclusive: true
+        - regex: ^@whatsapp_.*:matrix\.cloud\.nathalie-stiefsohn\.eu$
+          exclusive: true
+    de.sorunome.msc2409.push_ephemeral: true
+    push_ephemeral: true
