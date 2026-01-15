@@ -93,7 +93,7 @@ data:
     disable_existing_loggers: false
   whatsapp-registration.yaml: |
     id: whatsapp
-    url: http://whatsapp-bridge.whatsapp-bridge.svc.cluster.local:29334
+    url: http://whatsapp-bridge.whatsapp-bridge.svc.cluster.local:29318
     as_token: ${WHATSAPP_AS_TOKEN}
     hs_token: ${WHATSAPP_HS_TOKEN}
     sender_localpart: ${WHATSAPP_SENDER_LOCALPART}
