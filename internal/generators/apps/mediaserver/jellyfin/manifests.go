@@ -88,6 +88,13 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 							{
 								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "flood",
+									},
+								},
+							},
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
 										"app.kubernetes.io/name": "caddy",
 									},
 								},

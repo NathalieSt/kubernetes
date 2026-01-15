@@ -8,6 +8,9 @@ spec:
   - Ingress
   ingress:
   - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: flood
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: caddy
