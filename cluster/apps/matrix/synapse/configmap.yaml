@@ -50,6 +50,7 @@ data:
       - server_name: "matrix.org"
     app_service_config_files:
       - /data/discord-registration.yaml
+      - /data/whatsapp-registration.yaml
   matrix.cloud.nathalie-stiefsohn.eu.log.config: |-
     version: 1
     
