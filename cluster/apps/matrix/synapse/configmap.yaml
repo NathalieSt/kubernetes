@@ -102,7 +102,7 @@ data:
       users:
         - regex: ^@whatsappbot:matrix\.cloud\.nathalie-stiefsohn\.eu$
           exclusive: true
-        - regex: ^@whatsapp.*:matrix\.cloud\.nathalie-stiefsohn\.eu$
+        - regex: ^@whatsapp_.*:matrix\.cloud\.nathalie-stiefsohn\.eu$
           exclusive: true
     de.sorunome.msc2409.push_ephemeral: true
-    push_ephemeral: true
+    receive_ephemeral: true
