@@ -6,6 +6,7 @@ metadata:
 spec:
   policyTypes:
   - Ingress
+  - Egress
   ingress:
   - from:
     - namespaceSelector:

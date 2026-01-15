@@ -314,7 +314,7 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 			networking.NewNetworkPolicy(meta.ObjectMeta{
 				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
-				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress, networking.Egress},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
