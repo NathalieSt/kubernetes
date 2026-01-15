@@ -6,9 +6,9 @@ sender_localpart: ${WHATSAPP_SENDER_LOCALPART}
 rate_limited: false
 namespaces:
   users:
-    - regex: ^@whatsapp_bot:matrix\.cloud\.nathalie-stiefsohn\.eu$
+    - regex: ^@whatsappbot:matrix\.cloud\.nathalie-stiefsohn\.eu$
       exclusive: true
-    - regex: ^@whatsapp_.*:matrix\.cloud\.nathalie-stiefsohn\.eu$
+    - regex: ^@whatsapp.*:matrix\.cloud\.nathalie-stiefsohn\.eu$
       exclusive: true
 de.sorunome.msc2409.push_ephemeral: true
 push_ephemeral: true
