@@ -65,3 +65,6 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: signal-bridge
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0

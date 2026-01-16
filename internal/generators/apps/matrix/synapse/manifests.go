@@ -417,6 +417,15 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 							},
 						},
 					},
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								IpBlock: networking.IPBlock{
+									CIDR: "0.0.0.0/0",
+								},
+							},
+						},
+					},
 				},
 			}),
 		},
