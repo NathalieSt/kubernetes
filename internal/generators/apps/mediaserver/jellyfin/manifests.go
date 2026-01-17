@@ -36,6 +36,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 	hwaVolumeName := "hwa-volume"
 	repo, chart, release := utils.GetGenericHelmDeploymentManifests(generatorMeta.Name, generatorMeta.Helm,
 		map[string]any{
+			"image": map[string]any{
+				"tag": "10.10.7",
+			},
 			"persistence": map[string]any{
 				"media": map[string]any{
 					"existingClaim": pvcName,
