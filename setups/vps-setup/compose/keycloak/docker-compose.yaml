@@ -12,8 +12,6 @@ services:
       POSTGRES_DB: keycloak
     healthcheck:
       test: "exit 0"
-    ports:
-      - 5432
     networks:
       - keycloak
   keycloak:
