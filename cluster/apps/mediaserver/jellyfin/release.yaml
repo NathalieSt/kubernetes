@@ -21,8 +21,6 @@ spec:
       name: hwa-volume
       hostPath:
         path: /dev/dri
-    image:
-      tag: 10.10.7
     nodeSelector:
       kubernetes.io/hostname: debian
     persistence:

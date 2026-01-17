@@ -10,4 +10,4 @@ spec:
   sourceRef:
     kind: HelmRepository
     name: jellyfin-repo
-  version: 2.3.0
+  version: 2.7.0
