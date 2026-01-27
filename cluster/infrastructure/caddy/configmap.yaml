@@ -87,7 +87,7 @@ data:
     	@svc12 host openclarity.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc12 {
-    		reverse_proxy openclarity-gateway.openclarity.svc.cluster.local:8080
+    		reverse_proxy openclarity-gateway.openclarity.svc.cluster.local:80
     	} 
     		
     	@svc13 host perses.cloud.nathalie-stiefsohn.eu

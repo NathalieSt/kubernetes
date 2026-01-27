@@ -24,7 +24,7 @@ func main() {
 		Namespace:     namespace,
 		GeneratorType: generatorType,
 		ClusterUrl:    "openclarity-gateway.openclarity.svc.cluster.local",
-		Port:          8080,
+		Port:          80,
 		Helm: &generator.Helm{
 			Url:     "oci://ghcr.io/openclarity/charts/openclarity",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
