@@ -14,6 +14,11 @@ spec:
     remediation:
       retries: 3
   values:
+    crDiscoveryServer:
+      containerRuntimePaths:
+      - name: k0s-containerd
+        path: /run/k0s/containerd
+        readOnly: true
     orchestrator:
       provider: kubernetes
       serviceAccount:

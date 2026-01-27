@@ -71,6 +71,15 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 								"automountServiceAccountToken": true,
 							},
 						},
+						"crDiscoveryServer": map[string]any{
+							"containerRuntimePaths": []map[string]any{
+								{
+									"name":     "k0s-containerd",
+									"path":     "/run/k0s/containerd",
+									"readOnly": true,
+								},
+							},
+						},
 					},
 				}),
 		},
