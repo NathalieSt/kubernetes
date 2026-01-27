@@ -72,13 +72,13 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 									"enabled": true,
 									"host":    postgresMeta.ClusterUrl,
 									"port":    postgresMeta.Port,
+									"auth": map[string]any{
+										"existingSecret": shared.MainPostgresOpenClarityCredsSecret,
+									},
 								},
 								"postgresql": map[string]any{
 									"enabled": false,
 								},
-							},
-							"auth": map[string]any{
-								"existingSecret": shared.MainPostgresOpenClarityCredsSecret,
 							},
 						},
 						"orchestrator": map[string]any{

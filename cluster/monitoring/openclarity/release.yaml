@@ -15,10 +15,10 @@ spec:
       retries: 3
   values:
     apiserver:
-      auth:
-        existingSecret: postgres-openclarity-creds-secret
       database:
         externalPostgresql:
+          auth:
+            existingSecret: postgres-openclarity-creds-secret
           enabled: true
           host: postgres-rw.postgres.svc.cluster.local
           port: 5432
