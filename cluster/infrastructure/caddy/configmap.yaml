@@ -84,39 +84,45 @@ data:
     		reverse_proxy mealie.mealie.svc.cluster.local:9000
     	} 
     		
-    	@svc12 host perses.cloud.nathalie-stiefsohn.eu
+    	@svc12 host openclarity.cloud.nathalie-stiefsohn.eu
     	
     	handle @svc12 {
+    		reverse_proxy openclarity-ui.openclarity.svc.cluster.local:8080
+    	} 
+    		
+    	@svc13 host perses.cloud.nathalie-stiefsohn.eu
+    	
+    	handle @svc13 {
     		reverse_proxy perses.perses.svc.cluster.local:8080
     	} 
     		
-    	@svc13 host redlib.cloud.nathalie-stiefsohn.eu
+    	@svc14 host redlib.cloud.nathalie-stiefsohn.eu
     	
-    	handle @svc13 {
+    	handle @svc14 {
     		reverse_proxy redlib.redlib.svc.cluster.local:8080
     	} 
     		
-    	@svc14 host searxng.cloud.nathalie-stiefsohn.eu
+    	@svc15 host searxng.cloud.nathalie-stiefsohn.eu
     	
-    	handle @svc14 {
+    	handle @svc15 {
     		reverse_proxy searxng.searxng.svc.cluster.local:8080
     	} 
     		
-    	@svc15 host stash.cloud.nathalie-stiefsohn.eu
+    	@svc16 host stash.cloud.nathalie-stiefsohn.eu
     	
-    	handle @svc15 {
+    	handle @svc16 {
     		reverse_proxy stash.stash.svc.cluster.local:9999
     	} 
     		
-    	@svc16 host matrix.cloud.nathalie-stiefsohn.eu
+    	@svc17 host matrix.cloud.nathalie-stiefsohn.eu
     	
-    	handle @svc16 {
+    	handle @svc17 {
     		reverse_proxy synapse.synapse.svc.cluster.local:8008
     	} 
     		
-    	@svc17 host vault.cloud.nathalie-stiefsohn.eu
+    	@svc18 host vault.cloud.nathalie-stiefsohn.eu
     	
-    	handle @svc17 {
+    	handle @svc18 {
     		reverse_proxy vault-ui.vault.svc.cluster.local:8200
     	} 
     		

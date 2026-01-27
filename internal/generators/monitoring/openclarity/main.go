@@ -23,7 +23,7 @@ func main() {
 		Name:          name,
 		Namespace:     namespace,
 		GeneratorType: generatorType,
-		ClusterUrl:    "openclarity.openclarity.svc.cluster.local",
+		ClusterUrl:    "openclarity-ui.openclarity.svc.cluster.local",
 		Port:          8080,
 		Helm: &generator.Helm{
 			Url:     "oci://ghcr.io/openclarity/charts/openclarity",
