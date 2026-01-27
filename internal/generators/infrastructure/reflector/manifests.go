@@ -52,6 +52,27 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 		},
 	}
 
+	postgresOpenClaritySecretConfig := utils.StaticSecretConfig{
+		Name: fmt.Sprintf("%v-postgres-openclarity-static-secret", generatorMeta.Name),
+		// Same end-secret name as postgresSecretConfig, as this is the same secret but with the database added for openclarity
+		SecretName: shared.PostgresCredsSecret,
+		Path:       "postgres",
+		SecretAnnotations: map[string]string{
+			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
+			"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces": "openclarity",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-enabled":       "true",
+			"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces":    "openclarity",
+		},
+		Transformation: vaultsecretsoperator.Transformation{
+			Templates: map[string]vaultsecretsoperator.Template{
+				"database": {
+					Name: "database-template",
+					Text: `{{- print "openclarity" -}}`,
+				},
+			},
+		},
+	}
+
 	forgejoPGSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-forgejo-pg-static-secret", generatorMeta.Name),
 		SecretName: shared.ForgejoPGCredsSecret,
@@ -172,6 +193,7 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 				netbirdSecretConfig,
 				hetznerAPITokenSecret,
 				postgresSecretConfig,
+				postgresOpenClaritySecretConfig,
 				forgejoPGSecretConfig,
 				matrixPGSecretConfig,
 				mariaDBSecretConfig,

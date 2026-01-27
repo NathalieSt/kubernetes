@@ -51,6 +51,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: main-pg
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

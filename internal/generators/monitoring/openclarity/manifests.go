@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/cluster/flux/oci"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"path"
 )
 
 func createOpenclarityManifests(rootDir string, generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -35,6 +35,12 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 		},
 	}
 
+	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/main-cluster"))
+	if err != nil {
+		fmt.Println("An error happened while getting postgres meta for main-cluster")
+		return nil
+	}
+
 	release := utils.ManifestConfig{
 		Filename: "release.yaml",
 		Manifests: []any{
@@ -57,13 +63,15 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 					},
 					Values: map[string]any{
 						"postgresql": map[string]any{
-							"primary": map[string]any{
-								"persistence": map[string]any{
-									"storageClass": shared.NFSRemoteClass,
+							"enabled": false,
+						},
+						"apiserver": map[string]any{
+							"database": map[string]any{
+								"externalPostgresql": map[string]any{
+									"enabled": true,
+									"host":    postgresMeta.ClusterUrl,
+									"port":    postgresMeta.Port,
 								},
-							},
-							"image": map[string]any{
-								"digest": "sha256:e9d4bdd350e8446c630d84dfd56da4ab1c9779802d47d043948861eff452b895",
 							},
 						},
 						"orchestrator": map[string]any{
