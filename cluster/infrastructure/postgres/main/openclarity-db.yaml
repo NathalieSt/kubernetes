@@ -6,5 +6,5 @@ metadata:
 spec:
   name: openclarity
   cluster:
-    name: main-pg
+    name: postgres
   owner: postgres

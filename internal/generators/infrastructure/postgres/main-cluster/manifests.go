@@ -101,7 +101,7 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 			}, cnpg.DatabaseSpec{
 				Name: "openclarity",
 				Cluster: cnpg.DatabaseCluster{
-					Name: generatorMeta.Name,
+					Name: "postgres",
 				},
 				Owner: "postgres",
 			}),
