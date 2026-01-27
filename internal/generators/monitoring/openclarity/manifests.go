@@ -82,7 +82,12 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 							"containerRuntimePaths": []map[string]any{
 								{
 									"name":     "k0s-containerd",
-									"path":     "/var/lib/k0s/containerd",
+									"path":     "/run/k0s/containerd",
+									"readOnly": true,
+								},
+								{
+									"name":     "k0s-containerd-sock",
+									"path":     "/run/k0s/containerd.sock",
 									"readOnly": true,
 								},
 							},

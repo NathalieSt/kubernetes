@@ -17,7 +17,10 @@ spec:
     crDiscoveryServer:
       containerRuntimePaths:
       - name: k0s-containerd
-        path: /var/lib/k0s/containerd
+        path: /run/k0s/containerd
+        readOnly: true
+      - name: k0s-containerd-sock
+        path: /run/k0s/containerd.sock
         readOnly: true
       env:
       - name: CONTAINERD_SOCK_ADDRESS
