@@ -124,6 +124,9 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 					{
 						From: []networking.NetworkPolicyPeer{
 							{
+								PodSelector: meta.LabelSelector{},
+							},
+							{
 								PodSelector: meta.LabelSelector{
 									MachExpressions: []meta.MatchExpression{
 										{
