@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/cluster/flux/oci"
@@ -72,6 +73,9 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 									"host":    postgresMeta.ClusterUrl,
 									"port":    postgresMeta.Port,
 								},
+							},
+							"auth": map[string]any{
+								"existingSecret": shared.MainPostgresOpenClarityCredsSecret,
 							},
 						},
 						"orchestrator": map[string]any{

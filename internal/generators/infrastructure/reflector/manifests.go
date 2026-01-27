@@ -53,9 +53,8 @@ func createReflectorManifests(generatorMeta generator.GeneratorMeta) map[string]
 	}
 
 	postgresOpenClaritySecretConfig := utils.StaticSecretConfig{
-		Name: fmt.Sprintf("%v-postgres-openclarity-static-secret", generatorMeta.Name),
-		// Same end-secret name as postgresSecretConfig, as this is the same secret but with the database added for openclarity
-		SecretName: shared.PostgresCredsSecret,
+		Name:       fmt.Sprintf("%v-postgres-openclarity-static-secret", generatorMeta.Name),
+		SecretName: shared.MainPostgresOpenClarityCredsSecret,
 		Path:       "postgres",
 		SecretAnnotations: map[string]string{
 			"reflector.v1.k8s.emberstack.com/reflection-allowed":            "true",
