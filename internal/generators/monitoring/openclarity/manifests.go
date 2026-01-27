@@ -61,6 +61,9 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 									"storageClass": shared.NFSRemoteClass,
 								},
 							},
+							"image": map[string]any{
+								"digest": "sha256-e9d4bdd350e8446c630d84dfd56da4ab1c9779802d47d043948861eff452b895",
+							},
 						},
 						"orchestrator": map[string]any{
 							"provider": "kubernetes",
