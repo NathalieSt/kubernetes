@@ -8,7 +8,6 @@ import (
 	"kubernetes/pkg/schema/cluster/flux/oci"
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/meta"
-	"path"
 )
 
 func createOpenclarityManifests(rootDir string, generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -35,11 +34,6 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 		},
 	}
 
-	postgresMeta, err := utils.GetGeneratorMeta(rootDir, path.Join(rootDir, "internal/generators/infrastructure/postgres/main-cluster"))
-	if err != nil {
-		fmt.Println("An error happened while getting postgres meta for main cluster")
-		return nil
-	}
 	release := utils.ManifestConfig{
 		Filename: "release.yaml",
 		Manifests: []any{
@@ -61,19 +55,9 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 						},
 					},
 					Values: map[string]any{
-						"apiserver": map[string]any{
-							"database": map[string]any{
-								"postgresql": map[string]any{
-									"enabled": false,
-								},
-								"externalPostgresql": map[string]any{
-									"enabled": true,
-									"host":    postgresMeta.ClusterUrl,
-									"port":    postgresMeta.Port,
-									"auth": map[string]any{
-										"existingSecret": shared.PostgresCredsSecret,
-									},
-								},
+						"postgresql": map[string]any{
+							"persistence": map[string]any{
+								"storageClass": shared.NFSRemoteClass,
 							},
 						},
 						"orchestrator": map[string]any{

@@ -14,17 +14,10 @@ spec:
     remediation:
       retries: 3
   values:
-    apiserver:
-      database:
-        externalPostgresql:
-          auth:
-            existingSecret: postgres-creds-secret
-          enabled: true
-          host: postgres-rw.postgres.svc.cluster.local
-          port: 5432
-        postgresql:
-          enabled: false
     orchestrator:
       provider: kubernetes
       serviceAccount:
         automountServiceAccountToken: true
+    postgresql:
+      persistence:
+        storageClass: nfs-remote
