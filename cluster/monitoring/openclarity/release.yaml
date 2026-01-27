@@ -19,5 +19,6 @@ spec:
       serviceAccount:
         automountServiceAccountToken: true
     postgresql:
-      persistence:
-        storageClass: nfs-remote
+      primary:
+        persistence:
+          storageClass: nfs-remote

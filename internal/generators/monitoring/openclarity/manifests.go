@@ -56,8 +56,10 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 					},
 					Values: map[string]any{
 						"postgresql": map[string]any{
-							"persistence": map[string]any{
-								"storageClass": shared.NFSRemoteClass,
+							"primary": map[string]any{
+								"persistence": map[string]any{
+									"storageClass": shared.NFSRemoteClass,
+								},
 							},
 						},
 						"orchestrator": map[string]any{
