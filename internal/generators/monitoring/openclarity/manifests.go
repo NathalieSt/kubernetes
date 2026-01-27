@@ -7,6 +7,7 @@ import (
 	"kubernetes/pkg/schema/cluster/flux/helm"
 	"kubernetes/pkg/schema/cluster/flux/oci"
 	"kubernetes/pkg/schema/generator"
+	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
 )
 
@@ -72,6 +73,12 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 							},
 						},
 						"crDiscoveryServer": map[string]any{
+							"env": []core.Env{
+								{
+									Name:  "CONTAINERD_SOCK_ADDRESS",
+									Value: "/run/k0s/containerd.sock",
+								},
+							},
 							"containerRuntimePaths": []map[string]any{
 								{
 									"name":     "k0s-containerd",
