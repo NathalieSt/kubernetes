@@ -22,6 +22,8 @@ spec:
           enabled: true
           host: postgres-rw.postgres.svc.cluster.local
           port: 5432
+        postgresql:
+          enabled: false
     crDiscoveryServer:
       containerRuntimePaths:
       - name: k0s-containerd
