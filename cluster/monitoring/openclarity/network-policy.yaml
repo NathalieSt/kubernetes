@@ -12,6 +12,7 @@ spec:
   ingress:
   - from:
     - podSelector: {}
+  - from:
     - namespaceSelector:
         matchExpressions:
         - key: kubernetes.io/metadata.name
