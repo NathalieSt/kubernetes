@@ -7,3 +7,4 @@ resources:
 - namespace.yaml
 - repo.yaml
 - release.yaml
+- network-policy.yaml

@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: main-pg-networkpolicy
+  name: openclarity-networkpolicy
 spec:
   policyTypes:
   - Ingress
@@ -13,18 +13,10 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - mealie
-          - jellyfin
-          - cnpg-system
-          - openclarity
+          - caddy
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - mealie
-          - audiomuse-ai-worker
-          - audiomuse-ai-nvidia-worker
-          - audiomuse-ai-flask
-          - cloudnative-pg
-          - openclarity
+          - caddy

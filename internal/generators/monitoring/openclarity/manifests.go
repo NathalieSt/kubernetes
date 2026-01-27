@@ -9,6 +9,7 @@ import (
 	"kubernetes/pkg/schema/generator"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 	"path"
 )
 
@@ -112,14 +113,56 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 		},
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "app.kubernetes.io/name",
+											Operator: meta.In,
+											Values: []string{
+												"caddy",
+											},
+										},
+									},
+								},
+								NamespaceSelector: meta.LabelSelector{
+									MachExpressions: []meta.MatchExpression{
+										{
+											Key:      "kubernetes.io/metadata.name",
+											Operator: meta.In,
+											Values: []string{
+												"caddy",
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
 			namespace.Filename,
 			repo.Filename,
 			release.Filename,
+			networkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, release})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, release, networkPolicy})
 }
