@@ -48,6 +48,7 @@ var NVIDIAK8sDevicePlugin = "nvidia-k8s-device-plugin"
 
 var ElasticStackInstance = "elastic-stack-instance"
 var ElasticStackOperator = "elastic-stack-operator"
+var Openclarity = "openclarity"
 var Perses = "perses"
 var Vector = "vector"
 var VictoriaMetrics = "victoria-metrics"

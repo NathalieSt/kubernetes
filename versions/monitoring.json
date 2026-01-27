@@ -1,6 +1,6 @@
 {
-    "kiali": "2.14.0",
     "perses": "0.19.2",
+    "openclarity": "1.1.2",
     "victoria-metrics": "0.59.3",
     "elastic-stack-operator": "3.2.0",
     "elastic-stack": "0.17.0",

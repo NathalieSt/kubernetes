@@ -1,0 +1,30 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openclarity
+spec:
+  interval: 24h
+  chartRef:
+    kind: OCIRepository
+    name: openclarity-repo
+  timeout: 10m
+  releaseName: openclarity
+  install:
+    remediation:
+      retries: 3
+  values:
+    apiserver:
+      database:
+        externalPostgresql:
+          auth:
+            existingSecret: postgres-creds-secret
+          enabled: true
+          host: postgres-rw.postgres.svc.cluster.local
+          port: 5432
+        postgresql:
+          enabled: false
+    orchestrator:
+      provider: kubernetes
+      serviceAccount:
+        automountServiceAccountToken: true
