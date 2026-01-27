@@ -93,6 +93,21 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	openclarity := utils.ManifestConfig{
+		Filename: "openclarity-db.yaml",
+		Manifests: []any{
+			cnpg.NewDatabase(meta.ObjectMeta{
+				Name: "openclarity-db",
+			}, cnpg.DatabaseSpec{
+				Name: "openclarity",
+				Cluster: cnpg.DatabaseCluster{
+					Name: generatorMeta.Name,
+				},
+				Owner: "postgres",
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(
@@ -101,9 +116,10 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 				namespace.Filename,
 				cluster.Filename,
 				networkPolicy.Filename,
+				openclarity.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, networkPolicy})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, networkPolicy, openclarity})
 }
