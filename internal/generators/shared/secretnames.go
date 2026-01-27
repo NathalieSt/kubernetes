@@ -1,7 +1,6 @@
 package shared
 
 var PostgresCredsSecret = "postgres-creds-secret"
-var MainPostgresOpenClarityCredsSecret = "postgres-openclarity-creds-secret"
 var MatrixPGCredsSecret = "matrix-pg-creds-secret"
 var ForgejoPGCredsSecret = "forgejo-pg-creds-secret"
 var AffinePGCredsSecret = "affine-pg-creds-secret"

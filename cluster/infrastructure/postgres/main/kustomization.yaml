@@ -7,4 +7,3 @@ resources:
 - namespace.yaml
 - cnpg-cluster.yaml
 - network-policy.yaml
-- openclarity-db.yaml
