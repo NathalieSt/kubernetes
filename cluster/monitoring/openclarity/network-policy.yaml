@@ -4,6 +4,9 @@ kind: NetworkPolicy
 metadata:
   name: openclarity-networkpolicy
 spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: openclarity
   policyTypes:
   - Ingress
   ingress:

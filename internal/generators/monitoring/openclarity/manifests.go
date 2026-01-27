@@ -120,6 +120,11 @@ func createOpenclarityManifests(rootDir string, generatorMeta generator.Generato
 				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
 				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PodSelector: meta.LabelSelector{
+					MatchLabels: map[string]string{
+						"app.kubernetes.io/name": "openclarity",
+					},
+				},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
