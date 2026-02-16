@@ -54,8 +54,8 @@ spec:
       spec:
         api:
           extraArgs:
-            oidc-issuer-url: https://ganzir.nathalie-stiefsohn.eu/realms/Kubernetes-API
-            oidc-client-id: kubernetes
+            oidc-issuer-url: https://ganzir.nathalie-stiefsohn.eu/application/o/kubernetes-api/
+            oidc-client-id: kube-apiserver
             oidc-groups-claim: groups
             oidc-groups-prefix: "idp-groups:"
             oidc-username-prefix: "idp:"
