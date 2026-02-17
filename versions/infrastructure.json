@@ -8,6 +8,8 @@
     "postgres": "17.5",
     "forgejo-pg": "17.5",
     "matrix-pg": "17.5",
+    "netbird-operator": "0.1.15",
+    "netbird-operator-config": "0.1.0",
     "redis": "8.2.1",
     "reflector": "9.1.27",
     "valkey": "8-alpine3.22",

@@ -1,0 +1,18 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: netbird-operator-config
+spec:
+  interval: 24h
+  chartRef:
+    kind: HelmChart
+    name: netbird-operator-config-chart
+  timeout: 10m
+  releaseName: netbird-operator-config
+  install:
+    remediation:
+      retries: 3
+  values:
+    router:
+      enabled: true

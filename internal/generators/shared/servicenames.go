@@ -22,6 +22,7 @@ var Stash = "stash"
 
 // Infrastructure
 
+var AffinePostgres = "affine-pg"
 var Caddy = "caddy"
 var CertManager = "cert-manager"
 var CNPG = "cnpg"
@@ -35,7 +36,8 @@ var NFD = "nfd"
 var ForgejoPostgres = "forgejo-pg"
 var MainPostgres = "main-pg"
 var MatrixPostgres = "matrix-pg"
-var AffinePostgres = "affine-pg"
+var NetbirdOperator = "netbird-operator"
+var NetbirdOperatorConfig = "netbird-operator-config"
 var Redis = "redis"
 var Reflector = "reflector"
 var Valkey = "valkey"

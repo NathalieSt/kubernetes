@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: netbird-operator-config-chart
+spec:
+  interval: 24h
+  chart: netbird-operator-config
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: netbird-operator-config-repo
+  version: 0.1.0
