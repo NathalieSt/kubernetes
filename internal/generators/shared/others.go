@@ -1,3 +1,3 @@
 package shared
 
-var NetbirdDomainBase = "cloud.nathalie-stiefsohn.eu"
+var NetbirdDomainBase = "netbird.nathalie-stiefsohn.eu"
