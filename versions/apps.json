@@ -1,7 +1,6 @@
 {
     "adguard-home": "v0.107.71",
     "affine": "2026.1.11-canary.904",
-    "localai": "master-nvidia-l4t-arm64",
     "lidify": "v1.0.2",
     "forgejo": "14.0.0",
     "glance": "v0.8.4",
