@@ -24,7 +24,7 @@ func main() {
 		Namespace:     namespace,
 		GeneratorType: generatorType,
 		Helm: &generator.Helm{
-			Chart:   "netbirdio/kubernetes-operator",
+			Chart:   "kubernetes-operator",
 			Url:     "https://netbirdio.github.io/kubernetes-operator",
 			Version: utils.GetGeneratorVersionByType(flags.RootDir, name, generatorType),
 		},

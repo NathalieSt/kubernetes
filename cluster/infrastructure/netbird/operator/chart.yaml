@@ -5,7 +5,7 @@ metadata:
   name: netbird-operator-chart
 spec:
   interval: 24h
-  chart: netbirdio/kubernetes-operator
+  chart: kubernetes-operator
   reconcileStrategy: ChartVersion
   sourceRef:
     kind: HelmRepository
