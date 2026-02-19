@@ -13,5 +13,3 @@ spec:
   install:
     remediation:
       retries: 3
-  values:
-    kubeletDir: /var/lib/k0s/kubelet
