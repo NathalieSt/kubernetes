@@ -5,12 +5,12 @@ metadata:
   name: glance-networkpolicy
 spec:
   policyTypes:
-  - Ingress
+    - Ingress
   ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: caddy
-      podSelector:
-        matchLabels:
-          app.kubernetes.io/name: caddy
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: netbird
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: netbird-router
