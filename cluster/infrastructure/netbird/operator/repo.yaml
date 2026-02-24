@@ -1,0 +1,9 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: netbird-operator-repo
+spec:
+  type: default
+  url: https://netbirdio.github.io/kubernetes-operator
+  interval: 24h
