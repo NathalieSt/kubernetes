@@ -15,8 +15,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: csi-driver-nfs
-    - name: reflector
+  - name: csi-driver-nfs
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -50,7 +50,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: csi-driver-nfs
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -84,8 +84,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: csi-driver-nfs
-    - name: reflector
+  - name: csi-driver-nfs
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -103,7 +103,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: vault-secrets-operator-config
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -121,7 +121,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: intel-device-plugins-operator
+  - name: intel-device-plugins-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -139,7 +139,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: cert-manager
+  - name: cert-manager
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -173,8 +173,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: csi-driver-nfs
-    - name: reflector
+  - name: csi-driver-nfs
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -192,8 +192,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: reflector
-    - name: csi-driver-nfs
+  - name: reflector
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -211,8 +211,42 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: csi-driver-nfs
-    - name: reflector
+  - name: csi-driver-nfs
+  - name: reflector
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: netbird-operator
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: netbird
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/netbird/operator
+  prune: true
+  wait: true
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: netbird-operator-config
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: netbird
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/netbird/config
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: netbird-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -262,8 +296,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: keda
-    - name: csi-driver-nfs
+  - name: keda
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -281,8 +315,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: keda
-    - name: vault-secrets-operator-config
+  - name: keda
+  - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -300,8 +334,8 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: keda
-    - name: csi-driver-nfs
+  - name: keda
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -319,7 +353,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: csi-driver-nfs
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -337,7 +371,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: vault
+  - name: vault
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -355,4 +389,4 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: vault-secrets-operator
+  - name: vault-secrets-operator
