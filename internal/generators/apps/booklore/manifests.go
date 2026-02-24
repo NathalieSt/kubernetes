@@ -243,12 +243,12 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 							{
 								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "caddy",
+										"app.kubernetes.io/name": "netbird-router",
 									},
 								},
 								NamespaceSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "caddy",
+										"kubernetes.io/metadata.name": "netbird",
 									},
 								},
 							},
