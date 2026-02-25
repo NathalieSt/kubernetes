@@ -13,7 +13,7 @@ spec:
           app.kubernetes.io/name: flood
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: caddy
+          kubernetes.io/metadata.name: netbird
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: caddy
+          app.kubernetes.io/name: netbird-router

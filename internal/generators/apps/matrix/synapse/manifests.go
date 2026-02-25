@@ -292,6 +292,10 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
 					},
+					Annotations: map[string]string{
+						"netbird.io/expose": "true",
+						"netbird.io/groups": "cluster-services",
+					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
 						"app.kubernetes.io/name": generatorMeta.Name,
@@ -325,7 +329,7 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 											Key:      "kubernetes.io/metadata.name",
 											Operator: meta.In,
 											Values: []string{
-												"caddy",
+												"netbird",
 												"discord-bridge",
 												"signal-bridge",
 												"whatsapp-bridge",
@@ -339,7 +343,7 @@ cp /template/matrix.cloud.nathalie-stiefsohn.eu.log.config /data;
 											Key:      "app.kubernetes.io/name",
 											Operator: meta.In,
 											Values: []string{
-												shared.Caddy,
+												"netbird-router",
 												shared.MatrixDiscordBridge,
 												shared.MatrixWhatsappBridge,
 												shared.MatrixSignalBridge,

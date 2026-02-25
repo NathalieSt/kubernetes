@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
 	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
@@ -107,18 +108,7 @@ func createRedlibManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
-							{
-								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "caddy",
-									},
-								},
-								NamespaceSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "caddy",
-									},
-								},
-							},
+							shared.ExternalIngressNetworkPolicyPeer,
 						},
 					},
 				},

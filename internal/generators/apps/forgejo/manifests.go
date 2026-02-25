@@ -143,18 +143,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
-							{
-								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "caddy",
-									},
-								},
-								NamespaceSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "caddy",
-									},
-								},
-							},
+							shared.ExternalIngressNetworkPolicyPeer,
 						},
 					},
 				},

@@ -240,18 +240,7 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
-							{
-								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "netbird-router",
-									},
-								},
-								NamespaceSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "netbird",
-									},
-								},
-							},
+							shared.ExternalIngressNetworkPolicyPeer,
 						},
 					},
 				},

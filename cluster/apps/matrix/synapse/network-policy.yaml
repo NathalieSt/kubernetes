@@ -14,7 +14,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - caddy
+          - netbird
           - discord-bridge
           - signal-bridge
           - whatsapp-bridge
@@ -23,7 +23,7 @@ spec:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - caddy
+          - netbird-router
           - discord-bridge
           - whatsapp-bridge
           - signal-bridge
@@ -32,6 +32,7 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: kube-system
+      podSelector: {}
     ports:
     - port: 53
       protocol: UDP
@@ -68,3 +69,4 @@ spec:
   - to:
     - ipBlock:
         cidr: 0.0.0.0/0
+      podSelector: {}

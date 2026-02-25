@@ -71,6 +71,12 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Name:      hwaVolumeName,
 				MountPath: "/dev/dri",
 			},
+			"service": map[string]any{
+				"annotations": map[string]string{
+					"netbird.io/expose": "true",
+					"netbird.io/groups": "cluster-services",
+				},
+			},
 		},
 		nil,
 	)
@@ -92,18 +98,7 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									},
 								},
 							},
-							{
-								PodSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "caddy",
-									},
-								},
-								NamespaceSelector: meta.LabelSelector{
-									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "caddy",
-									},
-								},
-							},
+							shared.ExternalIngressNetworkPolicyPeer,
 						},
 					},
 				},

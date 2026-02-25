@@ -16,3 +16,4 @@ spec:
           app.kubernetes.io/name: caddy
     - ipBlock:
         cidr: 100.127.0.0/16
+      podSelector: {}

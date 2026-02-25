@@ -176,7 +176,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 										},
 									},
 									VolumeMounts: []core.VolumeMount{
-										core.VolumeMount{
+										{
 											Name:      tempVolumeName,
 											MountPath: "/app/temp_audio",
 										},
@@ -184,7 +184,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 								},
 							},
 							Volumes: []core.Volume{
-								core.Volume{
+								{
 									Name: tempVolumeName,
 									PersistentVolumeClaim: core.PVCVolumeSource{
 										ClaimName: pvcName,
@@ -319,6 +319,10 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 					Labels: map[string]string{
 						"app.kubernetes.io/name":    generatorMeta.Name,
 						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+					},
+					Annotations: map[string]string{
+						"netbird.io/expose": "true",
+						"netbird.io/groups": "cluster-services",
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{

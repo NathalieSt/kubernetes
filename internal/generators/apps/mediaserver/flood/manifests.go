@@ -134,6 +134,10 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 						"app.kubernetes.io/name":    "flood",
 						"app.kubernetes.io/version": "1.0",
 					},
+					Annotations: map[string]string{
+						"netbird.io/expose": "true",
+						"netbird.io/groups": "cluster-services",
+					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
 						"app.kubernetes.io/name":    "flood",
