@@ -13,12 +13,12 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - netbird-router
+          - netbird
           - vault-secrets-operator
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - netbird
+          - netbird-router
           - vault-secrets-operator

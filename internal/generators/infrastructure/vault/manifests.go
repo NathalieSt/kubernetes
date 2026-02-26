@@ -51,7 +51,7 @@ func createVaultManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 											Key:      "app.kubernetes.io/name",
 											Operator: meta.In,
 											Values: []string{
-												"netbird",
+												"netbird-router",
 												"vault-secrets-operator",
 											},
 										},
@@ -63,7 +63,7 @@ func createVaultManifests(generatorMeta generator.GeneratorMeta) map[string][]by
 											Key:      "kubernetes.io/metadata.name",
 											Operator: meta.In,
 											Values: []string{
-												"netbird-router",
+												"netbird",
 												"vault-secrets-operator",
 											},
 										},
