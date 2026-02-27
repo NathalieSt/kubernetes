@@ -26,7 +26,12 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: configmap-volume
+        - mountPath: /usr/local/searxng/searx
+          name: pvc-volume
       volumes:
       - name: configmap-volume
         configMap:
           name: searxng-configmap
+      - name: pvc-volume
+        persistentVolumeClaim:
+          claimName: searxng-pvc

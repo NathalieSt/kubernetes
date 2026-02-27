@@ -81,7 +81,25 @@ outgoing:
 		},
 	}
 
+	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
+	pvc := utils.ManifestConfig{
+		Filename: "pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "10Gi",
+				}},
+				StorageClassName: shared.NFSRemoteClass,
+			},
+			),
+		},
+	}
+
 	volumeName := "configmap-volume"
+	pvcVolume := "pvc-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -123,6 +141,10 @@ outgoing:
 											MountPath: "/etc/searxng",
 											Name:      volumeName,
 										},
+										{
+											MountPath: "/usr/local/searxng/searx",
+											Name:      pvcVolume,
+										},
 									},
 								},
 							},
@@ -131,6 +153,12 @@ outgoing:
 									Name: volumeName,
 									ConfigMap: core.ConfigMapVolumeSource{
 										Name: configmapName,
+									},
+								},
+								{
+									Name: pvcVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: pvcName,
 									},
 								},
 							},
@@ -203,8 +231,9 @@ outgoing:
 			service.Filename,
 			scaledObject.Filename,
 			networkPolicy.Filename,
+			pvc.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject, networkPolicy}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject, networkPolicy, pvc}), nil
 }
