@@ -81,12 +81,29 @@ outgoing:
 		},
 	}
 
-	pvcName := fmt.Sprintf("%v-pvc", generatorMeta.Name)
-	pvc := utils.ManifestConfig{
-		Filename: "pvc.yaml",
+	staticPVCName := fmt.Sprintf("%v-static-pvc", generatorMeta.Name)
+	staticPVC := utils.ManifestConfig{
+		Filename: "static-pvc.yaml",
 		Manifests: []any{
 			core.NewPersistentVolumeClaim(meta.ObjectMeta{
-				Name: pvcName,
+				Name: staticPVCName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "10Gi",
+				}},
+				StorageClassName: shared.NFSRemoteClass,
+			},
+			),
+		},
+	}
+
+	templatesPVCName := fmt.Sprintf("%v-templates-pvc", generatorMeta.Name)
+	templatesPVC := utils.ManifestConfig{
+		Filename: "templates-pvc.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: templatesPVCName,
 			}, core.PersistentVolumeClaimSpec{
 				AccessModes: []string{"ReadWriteMany"},
 				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
@@ -99,7 +116,8 @@ outgoing:
 	}
 
 	volumeName := "configmap-volume"
-	pvcVolume := "pvc-volume"
+	staticPVCVolume := "static-pvc-volume"
+	templatesPVCVolume := "templates-pvc-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -142,8 +160,12 @@ outgoing:
 											Name:      volumeName,
 										},
 										{
-											MountPath: "/usr/local/searxng/searx",
-											Name:      pvcVolume,
+											MountPath: "/usr/local/searxng/searx/templates",
+											Name:      templatesPVCVolume,
+										},
+										{
+											MountPath: "/usr/local/searxng/searx/static",
+											Name:      staticPVCVolume,
 										},
 									},
 								},
@@ -156,9 +178,15 @@ outgoing:
 									},
 								},
 								{
-									Name: pvcVolume,
+									Name: staticPVCVolume,
 									PersistentVolumeClaim: core.PVCVolumeSource{
-										ClaimName: pvcName,
+										ClaimName: staticPVCName,
+									},
+								},
+								{
+									Name: templatesPVCVolume,
+									PersistentVolumeClaim: core.PVCVolumeSource{
+										ClaimName: templatesPVCName,
 									},
 								},
 							},
@@ -231,9 +259,10 @@ outgoing:
 			service.Filename,
 			scaledObject.Filename,
 			networkPolicy.Filename,
-			pvc.Filename,
+			staticPVC.Filename,
+			templatesPVC.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject, networkPolicy, pvc}), nil
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, deployment, configmap, service, scaledObject, networkPolicy, staticPVC, templatesPVC}), nil
 }

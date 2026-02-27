@@ -26,12 +26,17 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: configmap-volume
-        - mountPath: /usr/local/searxng/searx
-          name: pvc-volume
+        - mountPath: /usr/local/searxng/searx/templates
+          name: templates-pvc-volume
+        - mountPath: /usr/local/searxng/searx/static
+          name: static-pvc-volume
       volumes:
       - name: configmap-volume
         configMap:
           name: searxng-configmap
-      - name: pvc-volume
+      - name: static-pvc-volume
         persistentVolumeClaim:
-          claimName: searxng-pvc
+          claimName: searxng-static-pvc
+      - name: templates-pvc-volume
+        persistentVolumeClaim:
+          claimName: searxng-templates-pvc

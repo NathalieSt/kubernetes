@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: searxng-pvc
+  name: searxng-templates-pvc
 spec:
   accessModes:
   - ReadWriteMany
