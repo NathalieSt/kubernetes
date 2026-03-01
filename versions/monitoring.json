@@ -1,6 +1,6 @@
 {
-    "perses": "0.19.2",
-    "victoria-metrics": "0.59.3",
+    "perses": "0.20.0",
+    "victoria-metrics": "0.72.2",
     "elastic-stack-operator": "3.2.0",
     "elastic-stack": "0.17.0",
     "vector": "0.52.0-alpine"
