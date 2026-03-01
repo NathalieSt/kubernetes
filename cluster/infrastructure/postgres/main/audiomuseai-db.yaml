@@ -6,5 +6,5 @@ metadata:
 spec:
   name: audiomuseai
   cluster:
-    name: main-pg
+    name: postgres
   owner: postgres
