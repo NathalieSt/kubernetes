@@ -11,7 +11,7 @@ import (
 	"kubernetes/pkg/schema/k8s/networking"
 )
 
-func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
+func createAdguardHomeManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
 	namespace := utils.ManifestConfig{
 		Filename:  "namespace.yaml",
 		Manifests: utils.GenerateNamespace(generatorMeta.Namespace),
@@ -108,42 +108,6 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 										},
 									},
 								},
-								{
-									Name:  "netbird-agent",
-									Image: "netbirdio/netbird:latest",
-									Env: []core.Env{
-										{
-											Name: "NB_SETUP_KEY",
-											ValueFrom: core.ValueFrom{
-												SecretKeyRef: core.SecretKeyRef{
-													Name: shared.NetbirdSecretName,
-													Key:  "setup-key",
-												},
-											},
-										},
-										{
-											Name:  "NB_HOSTNAME",
-											Value: "adguard-home",
-										},
-										{
-											Name:  "NB_MANAGEMENT_URL",
-											Value: "https://netbird.nathalie-stiefsohn.eu",
-										},
-									},
-									Resources: core.Resources{
-										Requests: map[string]string{
-											"cpu":    "50m",
-											"memory": "64Mi",
-										},
-										Limits: map[string]string{
-											"cpu":    "100m",
-											"memory": "128Mi",
-										},
-									},
-									SecurityContext: core.ContainerSecurityContext{
-										Privileged: true,
-									},
-								},
 							},
 							Volumes: []core.Volume{
 								{
@@ -209,18 +173,13 @@ func createBookloreManifests(generatorMeta generator.GeneratorMeta) map[string][
 							{
 								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
-										"app.kubernetes.io/name": "caddy",
+										"app.kubernetes.io/name": "netbird-router",
 									},
 								},
 								NamespaceSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
-										"kubernetes.io/metadata.name": "caddy",
+										"kubernetes.io/metadata.name": "netbird",
 									},
-								},
-							},
-							{
-								IpBlock: networking.IPBlock{
-									CIDR: "100.127.0.0/16",
 								},
 							},
 						},

@@ -32,27 +32,6 @@ spec:
           name: conf-volume
         - mountPath: /opt/adguardhome/work
           name: work-volume
-      - image: netbirdio/netbird:latest
-        name: netbird-agent
-        env:
-        - name: NB_SETUP_KEY
-          valueFrom:
-            secretKeyRef:
-              key: setup-key
-              name: netbird-setup-key-vault-secret
-        - name: NB_HOSTNAME
-          value: adguard-home
-        - name: NB_MANAGEMENT_URL
-          value: https://netbird.nathalie-stiefsohn.eu
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 100m
-            memory: 128Mi
-        securityContext:
-          privileged: true
       volumes:
       - name: conf-volume
         persistentVolumeClaim:

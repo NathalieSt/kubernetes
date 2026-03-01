@@ -54,6 +54,6 @@ func main() {
 		Meta:             meta,
 		ShouldReturnMeta: flags.ShouldReturnMeta,
 		OutputDir:        filepath.Join(flags.RootDir, "/cluster/apps/adguard-home/"),
-		CreateManifests:  createBookloreManifests,
+		CreateManifests:  createAdguardHomeManifests,
 	})
 }
