@@ -7,12 +7,12 @@ metadata:
     netbird.io/groups: cluster-services
   labels:
     app.kubernetes.io/name: audiomuse-ai
-    app.kubernetes.io/version: 0.8.6
+    app.kubernetes.io/version: 0.8.12
   name: audiomuse-ai
 spec:
   selector:
     app.kubernetes.io/name: audiomuse-ai-flask
-    app.kubernetes.io/version: 0.8.6
+    app.kubernetes.io/version: 0.8.12
   ports:
   - name: http-audiomuse
     port: 8000

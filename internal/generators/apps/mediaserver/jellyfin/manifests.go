@@ -91,6 +91,29 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
 						From: []networking.NetworkPolicyPeer{
+							shared.ExternalIngressNetworkPolicyPeer,
+						},
+					},
+				},
+			}),
+		},
+	}
+
+	floodTransmissionNetworkPolicy := utils.ManifestConfig{
+		Filename: "flood-transmission-network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-flood-transmission-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PodSelector: meta.LabelSelector{
+					MatchLabels: map[string]string{
+						"app.kubernetes.io/name": "transsetup",
+					},
+				},
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
 							{
 								PodSelector: meta.LabelSelector{
 									MatchLabels: map[string]string{
@@ -98,7 +121,6 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 									},
 								},
 							},
-							shared.ExternalIngressNetworkPolicyPeer,
 						},
 					},
 				},
@@ -165,8 +187,9 @@ func createJellyfinManifests(generatorMeta generator.GeneratorMeta) map[string][
 			scaledObject.Filename,
 			networkPolicy.Filename,
 			jellyfinAudiomuseNetworkPolicy.Filename,
+			floodTransmissionNetworkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, networkPolicy, jellyfinAudiomuseNetworkPolicy})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, pvc, scaledObject, networkPolicy, jellyfinAudiomuseNetworkPolicy, floodTransmissionNetworkPolicy})
 }

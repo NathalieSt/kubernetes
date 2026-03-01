@@ -1,0 +1,16 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: jellyfin-flood-transmission-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: transsetup
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: flood

@@ -1,11 +1,10 @@
 {
     "adguard-home": "v0.107.71",
     "affine": "2026.1.11-canary.904",
-    "lidify": "v1.0.2",
-    "forgejo": "14.0.0",
+    "forgejo": "16.2.0",
     "glance": "v0.8.4",
     "jellyfin": "2.7.0",
-    "audiomuse-ai": "0.8.6",
+    "audiomuse-ai": "0.8.12",
     "mealie": "v3.0.2",
     "searxng": "2025.8.3-2e62eb5",
     "booklore": "v1.15.0",
