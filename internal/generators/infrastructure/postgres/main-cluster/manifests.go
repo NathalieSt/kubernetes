@@ -44,6 +44,21 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 		},
 	}
 
+	audiomuseaiDB := utils.ManifestConfig{
+		Filename: "audiomuseai-db.yaml",
+		Manifests: []any{
+			cnpg.NewDatabase(meta.ObjectMeta{
+				Name: "audiomuseai",
+			}, cnpg.DatabaseSpec{
+				Name: "audiomuseai",
+				Cluster: cnpg.DatabaseCluster{
+					Name: generatorMeta.Name,
+				},
+				Owner: "postgres",
+			}),
+		},
+	}
+
 	networkPolicy := utils.ManifestConfig{
 		Filename: "network-policy.yaml",
 		Manifests: []any{
@@ -100,10 +115,11 @@ func createPostgresManifests(generatorMeta generator.GeneratorMeta) map[string][
 			[]string{
 				namespace.Filename,
 				cluster.Filename,
+				audiomuseaiDB.Filename,
 				networkPolicy.Filename,
 			},
 		),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, cluster, networkPolicy})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, audiomuseaiDB, cluster, networkPolicy})
 }
