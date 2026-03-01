@@ -1,0 +1,413 @@
+kind: Dashboard
+metadata:
+  name: kubernetes-nodes
+  project: kubernetes
+spec:
+  display:
+    name: "Kubernetes – Node Overview"
+  duration: 1h
+  refreshInterval: 30s
+
+  variables:
+    - kind: ListVariable
+      spec:
+        name: node
+        display:
+          name: Node
+        allowAllValue: true
+        allowMultiple: true
+        plugin:
+          kind: PrometheusLabelValuesVariable
+          spec:
+            labelName: node
+            matchers:
+              - kube_node_info
+
+  panels:
+
+    # ── Row 1: Status stats ────────────────────────────────────────────────────
+    nodes-ready:
+      kind: Panel
+      spec:
+        display:
+          name: Nodes Ready
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: decimal
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: red
+                  value: 0
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(kube_node_status_condition{condition="Ready",status="true"})'
+
+    pod-capacity:
+      kind: Panel
+      spec:
+        display:
+          name: Pod Capacity Used
+          description: "Running pods as % of total pod capacity across all nodes."
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: percent
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: yellow
+                  value: 80
+                - color: red
+                  value: 90
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 * sum(kubelet_running_pods) / sum(kube_node_status_capacity{resource="pods"})'
+
+    node-conditions:
+      kind: Panel
+      spec:
+        display:
+          name: Nodes with Pressure Conditions
+          description: "Nodes reporting DiskPressure, MemoryPressure, PIDPressure, or NetworkUnavailable."
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: decimal
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: red
+                  value: 1
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(kube_node_status_condition{condition=~"DiskPressure|MemoryPressure|PIDPressure|NetworkUnavailable",status="true"})'
+
+    # ── Row 2: CPU ─────────────────────────────────────────────────────────────
+    node-cpu-usage:
+      kind: Panel
+      spec:
+        display:
+          name: CPU Usage per Node
+          description: "Percentage of CPU actively used on each node."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.2
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: percent
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 - (avg by (node) (rate(node_cpu_seconds_total{mode="idle",node=~"$node"}[$__rate_interval])) * 100)'
+                  seriesNameFormat: "{{node}}"
+
+    node-cpu-requests:
+      kind: Panel
+      spec:
+        display:
+          name: CPU Requests & Limits vs Allocatable
+          description: "Pod CPU requests and limits compared to node allocatable."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (node) (kube_pod_container_resource_requests{resource="cpu",node=~"$node"})'
+                  seriesNameFormat: "requests · {{node}}"
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (node) (kube_pod_container_resource_limits{resource="cpu",node=~"$node"})'
+                  seriesNameFormat: "limits · {{node}}"
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'kube_node_status_allocatable{resource="cpu",node=~"$node"}'
+                  seriesNameFormat: "allocatable · {{node}}"
+
+    # ── Row 3: Memory ──────────────────────────────────────────────────────────
+    node-mem-usage:
+      kind: Panel
+      spec:
+        display:
+          name: Memory Usage per Node
+          description: "Percentage of total memory in use per node."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.2
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: percent
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 * (1 - (node_memory_MemAvailable_bytes{node=~"$node"} / node_memory_MemTotal_bytes{node=~"$node"}))'
+                  seriesNameFormat: "{{node}}"
+
+    node-mem-bytes:
+      kind: Panel
+      spec:
+        display:
+          name: Memory Available vs Total
+          description: "Available and total memory in bytes per node."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.15
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'node_memory_MemAvailable_bytes{node=~"$node"}'
+                  seriesNameFormat: "available · {{node}}"
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'node_memory_MemTotal_bytes{node=~"$node"}'
+                  seriesNameFormat: "total · {{node}}"
+
+    # ── Row 4: Disk ────────────────────────────────────────────────────────────
+    node-disk-read:
+      kind: Panel
+      spec:
+        display:
+          name: Disk Read Throughput
+          description: "Bytes read from disk per second per node."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes/sec
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (node) (rate(node_disk_read_bytes_total{node=~"$node"}[$__rate_interval]))'
+                  seriesNameFormat: "{{node}}"
+
+    node-disk-write:
+      kind: Panel
+      spec:
+        display:
+          name: Disk Write Throughput
+          description: "Bytes written to disk per second per node."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes/sec
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (node) (rate(node_disk_written_bytes_total{node=~"$node"}[$__rate_interval]))'
+                  seriesNameFormat: "{{node}}"
+
+    # ── Row 5: Network ─────────────────────────────────────────────────────────
+    node-net-recv:
+      kind: Panel
+      spec:
+        display:
+          name: Network Receive Throughput
+          description: "Bytes received per second per node (virtual interfaces excluded)."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes/sec
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (node) (rate(node_network_receive_bytes_total{node=~"$node",device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
+                  seriesNameFormat: "{{node}}"
+
+    node-net-send:
+      kind: Panel
+      spec:
+        display:
+          name: Network Transmit Throughput
+          description: "Bytes transmitted per second per node (virtual interfaces excluded)."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes/sec
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (node) (rate(node_network_transmit_bytes_total{node=~"$node",device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
+                  seriesNameFormat: "{{node}}"
+
+  layouts:
+    - kind: Grid
+      spec:
+        display:
+          title: Node Status
+        items:
+          - x: 0;  y: 0;  width: 8;  height: 5
+            content: { $ref: "#/spec/panels/nodes-ready" }
+          - x: 8;  y: 0;  width: 8;  height: 5
+            content: { $ref: "#/spec/panels/pod-capacity" }
+          - x: 16; y: 0;  width: 8;  height: 5
+            content: { $ref: "#/spec/panels/node-conditions" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: CPU
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-cpu-usage" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-cpu-requests" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Memory
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-mem-usage" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-mem-bytes" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Disk
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-disk-read" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-disk-write" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Network
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-net-recv" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/node-net-send" }

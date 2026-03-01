@@ -1,0 +1,529 @@
+kind: Dashboard
+metadata:
+  name: kubernetes-control-plane
+  project: kubernetes
+spec:
+  display:
+    name: "Kubernetes – Control Plane"
+  duration: 1h
+  refreshInterval: 30s
+
+  panels:
+
+    # ── API Server ─────────────────────────────────────────────────────────────
+    apiserver-rps:
+      kind: Panel
+      spec:
+        display:
+          name: API Server Request Rate
+          description: "Requests per second to the Kubernetes API server, grouped by verb."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: requests/sec
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (verb) (rate(apiserver_request_total[$__rate_interval]))'
+                  seriesNameFormat: "{{verb}}"
+
+    apiserver-errors:
+      kind: Panel
+      spec:
+        display:
+          name: API Server Error Rate (4xx / 5xx)
+          description: "Percentage of API server requests returning error status codes."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.2
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: percent
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 * sum by (code) (rate(apiserver_request_total{code=~"4..|5.."}[$__rate_interval])) / sum(rate(apiserver_request_total[$__rate_interval]))'
+                  seriesNameFormat: "HTTP {{code}}"
+
+    apiserver-latency-p50-p90:
+      kind: Panel
+      spec:
+        display:
+          name: API Server Latency p50 / p90
+          description: "Median and 90th-percentile response latency by verb (excludes WATCH/CONNECT)."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: milliseconds
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'histogram_quantile(0.50, sum by (verb, le) (rate(apiserver_request_duration_seconds_bucket{subresource!="log",verb!~"WATCH|CONNECT"}[$__rate_interval]))) * 1000'
+                  seriesNameFormat: "p50 · {{verb}}"
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'histogram_quantile(0.90, sum by (verb, le) (rate(apiserver_request_duration_seconds_bucket{subresource!="log",verb!~"WATCH|CONNECT"}[$__rate_interval]))) * 1000'
+                  seriesNameFormat: "p90 · {{verb}}"
+
+    apiserver-latency-p99:
+      kind: Panel
+      spec:
+        display:
+          name: API Server Latency p99
+          description: "99th-percentile response latency by verb — highlights tail latency issues."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.15
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: milliseconds
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'histogram_quantile(0.99, sum by (verb, le) (rate(apiserver_request_duration_seconds_bucket{subresource!="log",verb!~"WATCH|CONNECT"}[$__rate_interval]))) * 1000'
+                  seriesNameFormat: "p99 · {{verb}}"
+
+    # ── etcd ───────────────────────────────────────────────────────────────────
+    etcd-has-leader:
+      kind: Panel
+      spec:
+        display:
+          name: etcd Has Leader
+          description: "Whether etcd currently has a leader (1 = yes, 0 = no leader — critical)."
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: decimal
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: red
+                  value: 0
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'min(etcd_server_has_leader)'
+
+    etcd-proposals:
+      kind: Panel
+      spec:
+        display:
+          name: etcd Proposals (committed / failed)
+          description: "Rate of committed and failed Raft proposals. Failed proposals indicate instability."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(rate(etcd_server_proposals_committed_total[$__rate_interval]))'
+                  seriesNameFormat: committed
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(rate(etcd_server_proposals_failed_total[$__rate_interval]))'
+                  seriesNameFormat: failed
+
+    etcd-db-size:
+      kind: Panel
+      spec:
+        display:
+          name: etcd DB Size
+          description: "etcd backend database size. Watch for growth toward the default 8 GiB quota."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.2
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (endpoint) (etcd_mvcc_db_total_size_in_bytes)'
+                  seriesNameFormat: "db size · {{endpoint}}"
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (endpoint) (etcd_mvcc_db_total_size_in_use_in_bytes)'
+                  seriesNameFormat: "db in-use · {{endpoint}}"
+
+    etcd-wal-fsync:
+      kind: Panel
+      spec:
+        display:
+          name: etcd WAL fsync Duration p99
+          description: "99th-percentile WAL fsync duration. Should stay under 10 ms on healthy SSD storage."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: milliseconds
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'histogram_quantile(0.99, sum by (le, endpoint) (rate(etcd_disk_wal_fsync_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  seriesNameFormat: "p99 WAL · {{endpoint}}"
+
+    etcd-commit-duration:
+      kind: Panel
+      spec:
+        display:
+          name: etcd Disk Commit Duration p99
+          description: "99th-percentile time to commit Raft log entries to disk. Should stay under 25 ms."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: milliseconds
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'histogram_quantile(0.99, sum by (le, endpoint) (rate(etcd_disk_backend_commit_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  seriesNameFormat: "p99 commit · {{endpoint}}"
+
+    # ── Scheduler ──────────────────────────────────────────────────────────────
+    scheduler-attempts:
+      kind: Panel
+      spec:
+        display:
+          name: Scheduling Attempts by Result
+          description: "Rate of scheduler attempts: scheduled, unschedulable, or error."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (result) (rate(scheduler_schedule_attempts_total[$__rate_interval]))'
+                  seriesNameFormat: "{{result}}"
+
+    scheduler-latency:
+      kind: Panel
+      spec:
+        display:
+          name: Scheduling E2E Latency p99
+          description: "Time from pod creation to pod binding. High values indicate scheduler pressure."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: milliseconds
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'histogram_quantile(0.99, sum by (le) (rate(scheduler_e2e_scheduling_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  seriesNameFormat: p99 e2e scheduling
+
+    # ── Controller Manager ─────────────────────────────────────────────────────
+    controller-queue-depth:
+      kind: Panel
+      spec:
+        display:
+          name: Controller Work Queue Depth
+          description: "Depth of controller work queues. Growing queues mean controllers are falling behind."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (name) (workqueue_depth{job=~"kube-controller-manager"})'
+                  seriesNameFormat: "{{name}}"
+
+    controller-retries:
+      kind: Panel
+      spec:
+        display:
+          name: Controller Work Queue Retries
+          description: "Rate of work-queue retries — a proxy for reconciliation errors per controller."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.2
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (name) (rate(workqueue_retries_total{job=~"kube-controller-manager"}[$__rate_interval]))'
+                  seriesNameFormat: "{{name}}"
+
+    # ── Kubelet ────────────────────────────────────────────────────────────────
+    kubelet-running-pods:
+      kind: Panel
+      spec:
+        display:
+          name: Running Pods per Node (Kubelet)
+          description: "Number of pods currently running on each node as reported by the kubelet."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'kubelet_running_pods'
+                  seriesNameFormat: "{{node}}"
+
+    kubelet-pod-start:
+      kind: Panel
+      spec:
+        display:
+          name: Pod Start Duration p99 (excl. image pull)
+          description: "Time for the kubelet to start a pod, excluding image pull time."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: milliseconds
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'histogram_quantile(0.99, sum by (le) (rate(kubelet_pod_start_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  seriesNameFormat: p99 pod start
+
+  layouts:
+    - kind: Grid
+      spec:
+        display:
+          title: API Server
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/apiserver-rps" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/apiserver-errors" }
+          - x: 0;  y: 9;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/apiserver-latency-p50-p90" }
+          - x: 12; y: 9;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/apiserver-latency-p99" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: etcd
+        items:
+          - x: 0;  y: 0;  width: 6;  height: 5
+            content: { $ref: "#/spec/panels/etcd-has-leader" }
+          - x: 6;  y: 0;  width: 18; height: 9
+            content: { $ref: "#/spec/panels/etcd-db-size" }
+          - x: 0;  y: 5;  width: 6;  height: 9
+            content: { $ref: "#/spec/panels/etcd-proposals" }
+          - x: 0;  y: 14; width: 12; height: 9
+            content: { $ref: "#/spec/panels/etcd-wal-fsync" }
+          - x: 12; y: 9;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/etcd-commit-duration" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Scheduler
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/scheduler-attempts" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/scheduler-latency" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Controller Manager
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/controller-queue-depth" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/controller-retries" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Kubelet
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/kubelet-running-pods" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/kubelet-pod-start" }

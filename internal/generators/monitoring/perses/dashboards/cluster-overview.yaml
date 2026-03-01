@@ -1,0 +1,478 @@
+kind: Dashboard
+metadata:
+  name: kubernetes-cluster-overview
+  project: kubernetes
+spec:
+  display:
+    name: "Kubernetes – Cluster Overview"
+  duration: 1h
+  refreshInterval: 30s
+
+  # ── Panels ──────────────────────────────────────────────────────────────────
+  panels:
+
+    # ── Row 1: Health stats ────────────────────────────────────────────────────
+    nodes-ready:
+      kind: Panel
+      spec:
+        display:
+          name: Nodes Ready
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: decimal
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: red
+                  value: 0
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(kube_node_status_condition{condition="Ready",status="true"})'
+
+    pods-running:
+      kind: Panel
+      spec:
+        display:
+          name: Running Pods
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: decimal
+            thresholds:
+              defaultColor: green
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(kube_pod_status_phase{phase="Running"})'
+
+    pods-not-running:
+      kind: Panel
+      spec:
+        display:
+          name: Non-Running Pods
+          description: "Pods in Pending, Failed, or Unknown state."
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: decimal
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: yellow
+                  value: 1
+                - color: red
+                  value: 5
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(kube_pod_status_phase{phase=~"Pending|Failed|Unknown"})'
+
+    pods-crashloop:
+      kind: Panel
+      spec:
+        display:
+          name: CrashLoopBackOff Pods
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: decimal
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: red
+                  value: 1
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"})'
+
+    cluster-cpu-util:
+      kind: Panel
+      spec:
+        display:
+          name: Cluster CPU Utilisation
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: percent
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: yellow
+                  value: 70
+                - color: red
+                  value: 85
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 * (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[$__rate_interval])))'
+
+    cluster-mem-util:
+      kind: Panel
+      spec:
+        display:
+          name: Cluster Memory Utilisation
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last
+            format:
+              unit: percent
+            thresholds:
+              defaultColor: green
+              steps:
+                - color: yellow
+                  value: 75
+                - color: red
+                  value: 90
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))'
+
+    # ── Row 2: Resource Consumption ───────────────────────────────────────────
+    cluster-cpu-usage:
+      kind: Panel
+      spec:
+        display:
+          name: Cluster CPU Usage
+          description: "Total CPU cores used vs allocatable across the whole cluster."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.25
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(rate(node_cpu_seconds_total{mode!="idle"}[$__rate_interval]))'
+                  seriesNameFormat: used (cores)
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(kube_node_status_allocatable{resource="cpu"})'
+                  seriesNameFormat: allocatable
+
+    cluster-mem-usage:
+      kind: Panel
+      spec:
+        display:
+          name: Cluster Memory Usage
+          description: "Memory used vs total across the whole cluster."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.25
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(node_memory_MemTotal_bytes) - sum(node_memory_MemAvailable_bytes)'
+                  seriesNameFormat: used
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(node_memory_MemTotal_bytes)'
+                  seriesNameFormat: total
+
+    cluster-network:
+      kind: Panel
+      spec:
+        display:
+          name: Cluster Network Throughput
+          description: "Total bytes received and transmitted per second across all nodes."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes/sec
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(rate(node_network_receive_bytes_total{device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
+                  seriesNameFormat: receive
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum(rate(node_network_transmit_bytes_total{device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
+                  seriesNameFormat: transmit
+
+    # ── Row 3: Requests vs Allocatable ───────────────────────────────────────
+    cpu-requests-vs-allocatable:
+      kind: Panel
+      spec:
+        display:
+          name: CPU Requests vs Allocatable (per Node)
+          description: "CPU requests as % of allocatable per node. >100% = overcommitted."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: percent
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 * sum by (node) (kube_pod_container_resource_requests{resource="cpu"}) / sum by (node) (kube_node_status_allocatable{resource="cpu"})'
+                  seriesNameFormat: "{{node}}"
+
+    mem-requests-vs-allocatable:
+      kind: Panel
+      spec:
+        display:
+          name: Memory Requests vs Allocatable (per Node)
+          description: "Memory requests as % of allocatable per node."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: percent
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: '100 * sum by (node) (kube_pod_container_resource_requests{resource="memory"}) / sum by (node) (kube_node_status_allocatable{resource="memory"})'
+                  seriesNameFormat: "{{node}}"
+
+    # ── Row 4: Persistent Volumes ─────────────────────────────────────────────
+    pv-status:
+      kind: Panel
+      spec:
+        display:
+          name: PV Status by Phase
+          description: "PV count by phase: Bound, Available, Released, Failed."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (phase) (kube_persistentvolume_status_phase)'
+                  seriesNameFormat: "{{phase}}"
+
+    pvc-capacity:
+      kind: Panel
+      spec:
+        display:
+          name: PVC Capacity by Storage Class
+          description: "Total PVC capacity requested, grouped by storage class."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.1
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: bytes
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (storageclass) (kube_persistentvolumeclaim_resource_requests_storage_bytes)'
+                  seriesNameFormat: "{{storageclass}}"
+
+    # ── Row 5: Events ─────────────────────────────────────────────────────────
+    warning-events:
+      kind: Panel
+      spec:
+        display:
+          name: Warning Event Rate
+          description: "Rate of Warning events from the Kubernetes API server. Spikes indicate cluster trouble."
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: table
+            visual:
+              display: line
+              areaOpacity: 0.2
+              palette:
+                mode: auto
+            yAxis:
+              format:
+                unit: decimal
+        queries:
+          - kind: TimeSeriesQuery
+            spec:
+              plugin:
+                kind: PrometheusTimeSeriesQuery
+                spec:
+                  query: 'sum by (reason) (rate(kube_event_count{type="Warning"}[$__rate_interval]))'
+                  seriesNameFormat: "{{reason}}"
+
+  # ── Layouts ─────────────────────────────────────────────────────────────────
+  layouts:
+    - kind: Grid
+      spec:
+        display:
+          title: Cluster Health
+        items:
+          - x: 0;  y: 0;  width: 4;  height: 5
+            content: { $ref: "#/spec/panels/nodes-ready" }
+          - x: 4;  y: 0;  width: 4;  height: 5
+            content: { $ref: "#/spec/panels/pods-running" }
+          - x: 8;  y: 0;  width: 4;  height: 5
+            content: { $ref: "#/spec/panels/pods-not-running" }
+          - x: 12; y: 0;  width: 4;  height: 5
+            content: { $ref: "#/spec/panels/pods-crashloop" }
+          - x: 16; y: 0;  width: 4;  height: 5
+            content: { $ref: "#/spec/panels/cluster-cpu-util" }
+          - x: 20; y: 0;  width: 4;  height: 5
+            content: { $ref: "#/spec/panels/cluster-mem-util" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Resource Consumption
+        items:
+          - x: 0;  y: 0;  width: 8;  height: 9
+            content: { $ref: "#/spec/panels/cluster-cpu-usage" }
+          - x: 8;  y: 0;  width: 8;  height: 9
+            content: { $ref: "#/spec/panels/cluster-mem-usage" }
+          - x: 16; y: 0;  width: 8;  height: 9
+            content: { $ref: "#/spec/panels/cluster-network" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Requests vs Allocatable
+        items:
+          - x: 0;  y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/cpu-requests-vs-allocatable" }
+          - x: 12; y: 0;  width: 12; height: 9
+            content: { $ref: "#/spec/panels/mem-requests-vs-allocatable" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Persistent Volumes
+        items:
+          - x: 0;  y: 0;  width: 12; height: 8
+            content: { $ref: "#/spec/panels/pv-status" }
+          - x: 12; y: 0;  width: 12; height: 8
+            content: { $ref: "#/spec/panels/pvc-capacity" }
+
+    - kind: Grid
+      spec:
+        display:
+          title: Kubernetes Events
+        items:
+          - x: 0;  y: 0;  width: 24; height: 8
+            content: { $ref: "#/spec/panels/warning-events" }

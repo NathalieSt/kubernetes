@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"kubernetes/internal/generators/shared"
 	"kubernetes/internal/pkg/utils"
-	"kubernetes/pkg/schema/cluster/infrastructure/keda"
 	"kubernetes/pkg/schema/generator"
 )
 
@@ -34,10 +32,10 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 		nil,
 	)
 
-	scaledObject := utils.ManifestConfig{
-		Filename:  "scaled-object.yaml",
-		Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.StatefulSet, generatorMeta.KedaScaling),
-	}
+	//scaledObject := utils.ManifestConfig{
+	//	Filename:  "scaled-object.yaml",
+	//	Manifests: utils.GenerateCronScaler(fmt.Sprintf("%v-scaledobject", generatorMeta.Name), generatorMeta.Name, keda.StatefulSet, generatorMeta.KedaScaling),
+	//}
 
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
@@ -46,9 +44,9 @@ func createPersesManifests(generatorMeta generator.GeneratorMeta) map[string][]b
 			repo.Filename,
 			chart.Filename,
 			release.Filename,
-			scaledObject.Filename,
+			//scaledObject.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release, scaledObject})
+	return utils.MarshalManifests([]utils.ManifestConfig{namespace, kustomization, repo, chart, release /*scaledObject*/})
 }
