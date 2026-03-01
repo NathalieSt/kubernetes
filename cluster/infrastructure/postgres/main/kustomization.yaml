@@ -6,4 +6,5 @@ metadata:
 resources:
 - namespace.yaml
 - cnpg-cluster.yaml
+- audiomuseai-db.yaml
 - network-policy.yaml

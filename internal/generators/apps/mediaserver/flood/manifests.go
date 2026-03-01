@@ -44,8 +44,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 					Replicas: 1,
 					Selector: meta.LabelSelector{
 						MatchLabels: map[string]string{
-							"app.kubernetes.io/name":    "flood",
-							"app.kubernetes.io/version": "1.0",
+							"app.kubernetes.io/name": "flood",
 						},
 					},
 					Template: core.PodTemplateSpec{
@@ -140,8 +139,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
-						"app.kubernetes.io/name":    "flood",
-						"app.kubernetes.io/version": "1.0",
+						"app.kubernetes.io/name": "flood",
 					},
 					Ports: []core.ServicePort{
 						{

@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: audiomuseai
+spec:
+  name: audiomuseai
+  cluster:
+    name: main-pg
+  owner: postgres

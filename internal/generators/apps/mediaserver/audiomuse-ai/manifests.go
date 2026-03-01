@@ -100,8 +100,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 					Replicas: 1,
 					Selector: meta.LabelSelector{
 						MatchLabels: map[string]string{
-							"app.kubernetes.io/name":    fmt.Sprintf("%v-flask", generatorMeta.Name),
-							"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							"app.kubernetes.io/name": fmt.Sprintf("%v-flask", generatorMeta.Name),
 						},
 					},
 					Template: core.PodTemplateSpec{
@@ -212,8 +211,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 				apps.DaemonSetSpec{
 					Selector: meta.LabelSelector{
 						MatchLabels: map[string]string{
-							"app.kubernetes.io/name":    fmt.Sprintf("%v-worker", generatorMeta.Name),
-							"app.kubernetes.io/version": generatorMeta.Docker.Version,
+							"app.kubernetes.io/name": fmt.Sprintf("%v-worker", generatorMeta.Name),
 						},
 					},
 					Template: core.PodTemplateSpec{
@@ -326,8 +324,7 @@ func createAudiomuseAIManifests(rootDir string, generatorMeta generator.Generato
 					},
 				}, core.ServiceSpec{
 					Selector: map[string]string{
-						"app.kubernetes.io/name":    fmt.Sprintf("%v-flask", generatorMeta.Name),
-						"app.kubernetes.io/version": generatorMeta.Docker.Version,
+						"app.kubernetes.io/name": fmt.Sprintf("%v-flask", generatorMeta.Name),
 					},
 					Ports: []core.ServicePort{
 						{
