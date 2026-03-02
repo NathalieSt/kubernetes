@@ -136,11 +136,88 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
       target_label: pod
     - target_label: job
       replacement: hubble
-`,
+`},
+						},
+
+						"kubelet": map[string]any{
+							"enabled": true,
+							"vmScrapes": map[string]any{
+								"cadvisor": map[string]any{
+									"enabled": true,
+									"spec": map[string]any{
+										"path":            "/metrics/cadvisor",
+										"scheme":          "https",
+										"honorLabels":     true,
+										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig": map[string]any{
+											"insecureSkipVerify": true,
+										},
+										"metricRelabelConfigs": []map[string]any{
+											{
+												"action":       "keep",
+												"sourceLabels": []string{"__name__"},
+												"regex": "container_cpu_usage_seconds_total|" +
+													"container_cpu_cfs_periods_total|" +
+													"container_cpu_cfs_throttled_periods_total|" +
+													"container_cpu_cfs_throttled_seconds_total|" +
+													"container_memory_rss|" +
+													"container_memory_working_set_bytes|" +
+													"container_memory_cache|" +
+													"container_memory_swap|" +
+													"container_memory_usage_bytes|" +
+													"container_oom_events_total|" +
+													"container_fs_reads_bytes_total|" +
+													"container_fs_writes_bytes_total|" +
+													"container_network_receive_bytes_total|" +
+													"container_network_transmit_bytes_total|" +
+													"container_spec_cpu_quota|" +
+													"container_spec_cpu_period|" +
+													"container_spec_memory_limit_bytes|" +
+													"machine_cpu_cores|" +
+													"machine_memory_bytes|" +
+													"cadvisor_version_info",
+											},
+										},
+									},
+								},
+								"resource": map[string]any{
+									"enabled": true,
+									"spec": map[string]any{
+										"path":            "/metrics/resource",
+										"scheme":          "https",
+										"honorLabels":     true,
+										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig": map[string]any{
+											"insecureSkipVerify": true,
+										},
+									},
+								},
+								"kubelet": map[string]any{
+									"enabled": true,
+									"spec": map[string]any{
+										"scheme":          "https",
+										"honorLabels":     true,
+										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig": map[string]any{
+											"insecureSkipVerify": true,
+										},
+									},
+								},
+								"probes": map[string]any{
+									"enabled": true,
+									"spec": map[string]any{
+										"path":            "/metrics/probes",
+										"scheme":          "https",
+										"honorLabels":     true,
+										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig": map[string]any{
+											"insecureSkipVerify": true,
+										},
+									},
+								},
 							},
 						},
-					},
-				},
+					}},
 			),
 		},
 	}

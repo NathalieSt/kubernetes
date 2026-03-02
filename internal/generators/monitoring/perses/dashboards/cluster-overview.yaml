@@ -8,9 +8,7 @@ spec:
   duration: 1h
   refreshInterval: 30s
 
-  # ── Panels ──────────────────────────────────────────────────────────────────
   panels:
-    # ── Row 1: Health stats ────────────────────────────────────────────────────
     nodes-ready:
       kind: Panel
       spec:
@@ -159,13 +157,11 @@ spec:
                 spec:
                   query: "100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))"
 
-    # ── Row 2: Resource Consumption ───────────────────────────────────────────
     cluster-cpu-usage:
       kind: Panel
       spec:
         display:
-          name: Cluster CPU Usage
-          description: "Total CPU cores used vs allocatable across the whole cluster."
+          name: Cluster CPU Usage vs Allocatable
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -200,8 +196,7 @@ spec:
       kind: Panel
       spec:
         display:
-          name: Cluster Memory Usage
-          description: "Memory used vs total across the whole cluster."
+          name: Cluster Memory Usage vs Total
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -232,49 +227,12 @@ spec:
                   query: "sum(node_memory_MemTotal_bytes)"
                   seriesNameFormat: total
 
-    cluster-network:
-      kind: Panel
-      spec:
-        display:
-          name: Cluster Network Throughput
-          description: "Total bytes received and transmitted per second across all nodes."
-        plugin:
-          kind: TimeSeriesChart
-          spec:
-            legend:
-              position: bottom
-              mode: table
-            visual:
-              display: line
-              areaOpacity: 0.1
-              palette:
-                mode: auto
-            yAxis:
-              format:
-                unit: bytes/sec
-        queries:
-          - kind: TimeSeriesQuery
-            spec:
-              plugin:
-                kind: PrometheusTimeSeriesQuery
-                spec:
-                  query: 'sum(rate(node_network_receive_bytes_total{device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
-                  seriesNameFormat: receive
-          - kind: TimeSeriesQuery
-            spec:
-              plugin:
-                kind: PrometheusTimeSeriesQuery
-                spec:
-                  query: 'sum(rate(node_network_transmit_bytes_total{device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
-                  seriesNameFormat: transmit
-
-    # ── Row 3: Requests vs Allocatable ───────────────────────────────────────
     cpu-requests-vs-allocatable:
       kind: Panel
       spec:
         display:
           name: CPU Requests vs Allocatable (per Node)
-          description: "CPU requests as % of allocatable per node. >100% = overcommitted."
+          description: ">100% means the node is overcommitted."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -303,7 +261,6 @@ spec:
       spec:
         display:
           name: Memory Requests vs Allocatable (per Node)
-          description: "Memory requests as % of allocatable per node."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -327,13 +284,11 @@ spec:
                   query: '100 * sum by (node) (kube_pod_container_resource_requests{resource="memory"}) / sum by (node) (kube_node_status_allocatable{resource="memory"})'
                   seriesNameFormat: "{{node}}"
 
-    # ── Row 4: Persistent Volumes ─────────────────────────────────────────────
     pv-status:
       kind: Panel
       spec:
         display:
           name: PV Status by Phase
-          description: "PV count by phase: Bound, Available, Released, Failed."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -362,7 +317,6 @@ spec:
       spec:
         display:
           name: PVC Capacity by Storage Class
-          description: "Total PVC capacity requested, grouped by storage class."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -386,13 +340,12 @@ spec:
                   query: "sum by (storageclass) (kube_persistentvolumeclaim_resource_requests_storage_bytes)"
                   seriesNameFormat: "{{storageclass}}"
 
-    # ── Row 5: Events ─────────────────────────────────────────────────────────
     warning-events:
       kind: Panel
       spec:
         display:
-          name: Warning Event Rate
-          description: "Rate of Warning events from the Kubernetes API server. Spikes indicate cluster trouble."
+          name: Warning Event Rate by Reason
+          description: "Spikes indicate cluster trouble worth investigating."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -416,7 +369,6 @@ spec:
                   query: 'sum by (reason) (rate(kube_event_count{type="Warning"}[$__rate_interval]))'
                   seriesNameFormat: "{{reason}}"
 
-  # ── Layouts ─────────────────────────────────────────────────────────────────
   layouts:
     - kind: Grid
       spec:
@@ -467,22 +419,16 @@ spec:
         items:
           - x: 0
             y: 0
-            width: 8
+            width: 12
             height: 9
             content:
               $ref: "#/spec/panels/cluster-cpu-usage"
-          - x: 8
+          - x: 12
             y: 0
-            width: 8
+            width: 12
             height: 9
             content:
               $ref: "#/spec/panels/cluster-mem-usage"
-          - x: 16
-            y: 0
-            width: 8
-            height: 9
-            content:
-              $ref: "#/spec/panels/cluster-network"
 
     - kind: Grid
       spec:

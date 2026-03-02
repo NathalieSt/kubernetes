@@ -24,7 +24,6 @@ spec:
               - kube_node_info
 
   panels:
-    # ── Row 1: Status stats ────────────────────────────────────────────────────
     nodes-ready:
       kind: Panel
       spec:
@@ -54,7 +53,7 @@ spec:
       spec:
         display:
           name: Pod Capacity Used
-          description: "Running pods as % of total pod capacity across all nodes."
+          description: "Running pods as % of total pod capacity."
         plugin:
           kind: StatChart
           spec:
@@ -80,8 +79,8 @@ spec:
       kind: Panel
       spec:
         display:
-          name: Nodes with Pressure Conditions
-          description: "Nodes reporting DiskPressure, MemoryPressure, PIDPressure, or NetworkUnavailable."
+          name: Nodes with Pressure
+          description: "Nodes reporting DiskPressure, MemoryPressure, or PIDPressure."
         plugin:
           kind: StatChart
           spec:
@@ -99,15 +98,13 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum(kube_node_status_condition{condition=~"DiskPressure|MemoryPressure|PIDPressure|NetworkUnavailable",status="true"})'
+                  query: 'sum(kube_node_status_condition{condition=~"DiskPressure|MemoryPressure|PIDPressure",status="true"})'
 
-    # ── Row 2: CPU ─────────────────────────────────────────────────────────────
     node-cpu-usage:
       kind: Panel
       spec:
         display:
           name: CPU Usage per Node
-          description: "Percentage of CPU actively used on each node."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -136,7 +133,6 @@ spec:
       spec:
         display:
           name: CPU Requests & Limits vs Allocatable
-          description: "Pod CPU requests and limits compared to node allocatable."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -174,13 +170,11 @@ spec:
                   query: 'kube_node_status_allocatable{resource="cpu",node=~"$node"}'
                   seriesNameFormat: "allocatable · {{node}}"
 
-    # ── Row 3: Memory ──────────────────────────────────────────────────────────
     node-mem-usage:
       kind: Panel
       spec:
         display:
           name: Memory Usage per Node
-          description: "Percentage of total memory in use per node."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -209,7 +203,6 @@ spec:
       spec:
         display:
           name: Memory Available vs Total
-          description: "Available and total memory in bytes per node."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -240,13 +233,11 @@ spec:
                   query: 'node_memory_MemTotal_bytes{node=~"$node"}'
                   seriesNameFormat: "total · {{node}}"
 
-    # ── Row 4: Disk ────────────────────────────────────────────────────────────
     node-disk-read:
       kind: Panel
       spec:
         display:
           name: Disk Read Throughput
-          description: "Bytes read from disk per second per node."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -275,7 +266,6 @@ spec:
       spec:
         display:
           name: Disk Write Throughput
-          description: "Bytes written to disk per second per node."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -299,13 +289,12 @@ spec:
                   query: 'sum by (node) (rate(node_disk_written_bytes_total{node=~"$node"}[$__rate_interval]))'
                   seriesNameFormat: "{{node}}"
 
-    # ── Row 5: Network ─────────────────────────────────────────────────────────
-    node-net-recv:
+    node-disk-iops:
       kind: Panel
       spec:
         display:
-          name: Network Receive Throughput
-          description: "Bytes received per second per node (virtual interfaces excluded)."
+          name: Disk IOPS
+          description: "Read and write operations per second per node."
         plugin:
           kind: TimeSeriesChart
           spec:
@@ -319,44 +308,22 @@ spec:
                 mode: auto
             yAxis:
               format:
-                unit: bytes/sec
+                unit: decimal
         queries:
           - kind: TimeSeriesQuery
             spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (node) (rate(node_network_receive_bytes_total{node=~"$node",device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
-                  seriesNameFormat: "{{node}}"
-
-    node-net-send:
-      kind: Panel
-      spec:
-        display:
-          name: Network Transmit Throughput
-          description: "Bytes transmitted per second per node (virtual interfaces excluded)."
-        plugin:
-          kind: TimeSeriesChart
-          spec:
-            legend:
-              position: bottom
-              mode: table
-            visual:
-              display: line
-              areaOpacity: 0.1
-              palette:
-                mode: auto
-            yAxis:
-              format:
-                unit: bytes/sec
-        queries:
+                  query: 'sum by (node) (rate(node_disk_reads_completed_total{node=~"$node"}[$__rate_interval]))'
+                  seriesNameFormat: "reads · {{node}}"
           - kind: TimeSeriesQuery
             spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (node) (rate(node_network_transmit_bytes_total{node=~"$node",device!~"lo|veth.+|docker.+|flannel.+|cali.+|cbr.+"}[$__rate_interval]))'
-                  seriesNameFormat: "{{node}}"
+                  query: 'sum by (node) (rate(node_disk_writes_completed_total{node=~"$node"}[$__rate_interval]))'
+                  seriesNameFormat: "writes · {{node}}"
 
   layouts:
     - kind: Grid
@@ -426,31 +393,19 @@ spec:
         items:
           - x: 0
             y: 0
-            width: 12
+            width: 8
             height: 9
             content:
               $ref: "#/spec/panels/node-disk-read"
-          - x: 12
+          - x: 8
             y: 0
-            width: 12
+            width: 8
             height: 9
             content:
               $ref: "#/spec/panels/node-disk-write"
-
-    - kind: Grid
-      spec:
-        display:
-          title: Network
-        items:
-          - x: 0
+          - x: 16
             y: 0
-            width: 12
+            width: 8
             height: 9
             content:
-              $ref: "#/spec/panels/node-net-recv"
-          - x: 12
-            y: 0
-            width: 12
-            height: 9
-            content:
-              $ref: "#/spec/panels/node-net-send"
+              $ref: "#/spec/panels/node-disk-iops"
