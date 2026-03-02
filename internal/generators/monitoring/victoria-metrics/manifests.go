@@ -34,6 +34,48 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 		},
 	}
 
+	// Helper to build the NFD labeldrop relabelConfig — reused across all kubelet scrape jobs
+	nfdLabelDrop := []map[string]any{
+		{
+			"action": "labeldrop",
+			// Drops ALL of: feature_node_kubernetes_io_*, beta_kubernetes_io_*,
+			// gpu_intel_com_*, intel_feature_node_kubernetes_io_*, node_kubernetes_io_*
+			// These are scheduler labels from NFD — useless for monitoring.
+			"regex": "^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*",
+		},
+	}
+
+	// cadvisor keep-list + NFD drop combined
+	cadvisorRelabelConfigs := append(
+		[]map[string]any{
+			{
+				"action":       "keep",
+				"sourceLabels": []string{"__name__"},
+				"regex": "container_cpu_usage_seconds_total|" +
+					"container_cpu_cfs_periods_total|" +
+					"container_cpu_cfs_throttled_periods_total|" +
+					"container_cpu_cfs_throttled_seconds_total|" +
+					"container_memory_rss|" +
+					"container_memory_working_set_bytes|" +
+					"container_memory_cache|" +
+					"container_memory_swap|" +
+					"container_memory_usage_bytes|" +
+					"container_oom_events_total|" +
+					"container_fs_reads_bytes_total|" +
+					"container_fs_writes_bytes_total|" +
+					"container_network_receive_bytes_total|" +
+					"container_network_transmit_bytes_total|" +
+					"container_spec_cpu_quota|" +
+					"container_spec_cpu_period|" +
+					"container_spec_memory_limit_bytes|" +
+					"machine_cpu_cores|" +
+					"machine_memory_bytes|" +
+					"cadvisor_version_info",
+			},
+		},
+		nfdLabelDrop...,
+	)
+
 	release := utils.ManifestConfig{
 		Filename: "release.yaml",
 		Manifests: []any{
@@ -68,21 +110,18 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 						"vmagent": map[string]any{
 							"spec": map[string]any{
 								"inlineScrapeConfig": `
-# cilium-agent — port 9962, one pod per node
 - job_name: cilium-agent
   kubernetes_sd_configs:
     - role: pod
       namespaces:
-        names:
-          - kube-system
+        names: [kube-system]
   relabel_configs:
     - source_labels: [__meta_kubernetes_pod_label_k8s_app]
       regex: cilium
       action: keep
-    - source_labels: [__address__]
-      regex: '(.+):\d+'
-      replacement: "${1}:9962"
-      target_label: __address__
+    - source_labels: [__meta_kubernetes_pod_container_port_number]
+      regex: "9962"
+      action: keep
     - source_labels: [__meta_kubernetes_pod_node_name]
       target_label: node
     - source_labels: [__meta_kubernetes_pod_name]
@@ -92,21 +131,18 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
     - target_label: job
       replacement: cilium-agent
 
-# cilium-operator — port 9963
 - job_name: cilium-operator
   kubernetes_sd_configs:
     - role: pod
       namespaces:
-        names:
-          - kube-system
+        names: [kube-system]
   relabel_configs:
     - source_labels: [__meta_kubernetes_pod_label_name]
       regex: cilium-operator
       action: keep
-    - source_labels: [__address__]
-      regex: '(.+):\d+'
-      replacement: "${1}:9963"
-      target_label: __address__
+    - source_labels: [__meta_kubernetes_pod_container_port_number]
+      regex: "9963"
+      action: keep
     - source_labels: [__meta_kubernetes_pod_node_name]
       target_label: node
     - source_labels: [__meta_kubernetes_pod_name]
@@ -115,27 +151,6 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
       target_label: namespace
     - target_label: job
       replacement: cilium-operator
-# hubble — port 9965
-- job_name: hubble
-  kubernetes_sd_configs:
-    - role: pod
-      namespaces:
-        names:
-          - kube-system
-  relabel_configs:
-    - source_labels: [__meta_kubernetes_pod_label_k8s_app]
-      regex: cilium
-      action: keep
-    - source_labels: [__address__]
-      regex: '(.+):\d+'
-      replacement: "${1}:9965"
-      target_label: __address__
-    - source_labels: [__meta_kubernetes_pod_node_name]
-      target_label: node
-    - source_labels: [__meta_kubernetes_pod_name]
-      target_label: pod
-    - target_label: job
-      replacement: hubble
 `},
 						},
 
@@ -145,74 +160,44 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 								"cadvisor": map[string]any{
 									"enabled": true,
 									"spec": map[string]any{
-										"path":            "/metrics/cadvisor",
-										"scheme":          "https",
-										"honorLabels":     true,
-										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
-										"tlsConfig": map[string]any{
-											"insecureSkipVerify": true,
-										},
-										"metricRelabelConfigs": []map[string]any{
-											{
-												"action":       "keep",
-												"sourceLabels": []string{"__name__"},
-												"regex": "container_cpu_usage_seconds_total|" +
-													"container_cpu_cfs_periods_total|" +
-													"container_cpu_cfs_throttled_periods_total|" +
-													"container_cpu_cfs_throttled_seconds_total|" +
-													"container_memory_rss|" +
-													"container_memory_working_set_bytes|" +
-													"container_memory_cache|" +
-													"container_memory_swap|" +
-													"container_memory_usage_bytes|" +
-													"container_oom_events_total|" +
-													"container_fs_reads_bytes_total|" +
-													"container_fs_writes_bytes_total|" +
-													"container_network_receive_bytes_total|" +
-													"container_network_transmit_bytes_total|" +
-													"container_spec_cpu_quota|" +
-													"container_spec_cpu_period|" +
-													"container_spec_memory_limit_bytes|" +
-													"machine_cpu_cores|" +
-													"machine_memory_bytes|" +
-													"cadvisor_version_info",
-											},
-										},
+										"path":                 "/metrics/cadvisor",
+										"scheme":               "https",
+										"honorLabels":          true,
+										"bearerTokenFile":      "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig":            map[string]any{"insecureSkipVerify": true},
+										"metricRelabelConfigs": cadvisorRelabelConfigs,
 									},
 								},
 								"resource": map[string]any{
 									"enabled": true,
 									"spec": map[string]any{
-										"path":            "/metrics/resource",
-										"scheme":          "https",
-										"honorLabels":     true,
-										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
-										"tlsConfig": map[string]any{
-											"insecureSkipVerify": true,
-										},
+										"path":                 "/metrics/resource",
+										"scheme":               "https",
+										"honorLabels":          true,
+										"bearerTokenFile":      "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig":            map[string]any{"insecureSkipVerify": true},
+										"metricRelabelConfigs": nfdLabelDrop,
 									},
 								},
 								"kubelet": map[string]any{
 									"enabled": true,
 									"spec": map[string]any{
-										"scheme":          "https",
-										"honorLabels":     true,
-										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
-										"tlsConfig": map[string]any{
-											"insecureSkipVerify": true,
-										},
+										"scheme":               "https",
+										"honorLabels":          true,
+										"bearerTokenFile":      "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig":            map[string]any{"insecureSkipVerify": true},
+										"metricRelabelConfigs": nfdLabelDrop,
 									},
 								},
 								"probes": map[string]any{
 									"enabled": true,
 									"spec": map[string]any{
-										"path":            "/metrics/probes",
-										"scheme":          "https",
-										"honorLabels":     true,
-										"bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
-										"tlsConfig": map[string]any{
-											"insecureSkipVerify": true,
-										},
+										"path":                 "/metrics/probes",
+										"scheme":               "https",
+										"honorLabels":          true,
+										"bearerTokenFile":      "/var/run/secrets/kubernetes.io/serviceaccount/token",
+										"tlsConfig":            map[string]any{"insecureSkipVerify": true},
+										"metricRelabelConfigs": nfdLabelDrop,
 									},
 								},
 							},
