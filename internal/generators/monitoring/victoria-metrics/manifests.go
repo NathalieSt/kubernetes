@@ -110,6 +110,22 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 								},
 							},
 						},
+						"prometheus-node-exporter": map[string]any{
+							"prometheus": map[string]any{
+								"monitor": map[string]any{
+									"relabelings": []map[string]any{
+										{
+											"sourceLabels": []string{"__meta_kubernetes_node_name"},
+											"targetLabel":  "node",
+										},
+										{
+											"action": "labeldrop",
+											"regex":  "^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*",
+										},
+									},
+								},
+							},
+						},
 						"vmagent": map[string]any{
 							"spec": map[string]any{
 								"inlineScrapeConfig": `
