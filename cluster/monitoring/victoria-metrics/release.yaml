@@ -74,14 +74,21 @@ spec:
               insecureSkipVerify: true
     nameOverride: vmks
     prometheus-node-exporter:
-      prometheus:
-        monitor:
-          relabelings:
-          - sourceLabels:
-            - __meta_kubernetes_node_name
-            targetLabel: node
-          - action: labeldrop
-            regex: ^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*
+      vmScrape:
+        spec:
+          endpoints:
+          - metricRelabelConfigs:
+            - action: drop
+              regex: /var/lib/kubelet/pods.+
+              source_labels:
+              - mountpoint
+            - action: labeldrop
+              regex: ^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*
+            port: metrics
+            relabelConfigs:
+            - sourceLabels:
+              - __meta_kubernetes_node_name
+              targetLabel: node
     vmagent:
       spec:
         inlineScrapeConfig: |
