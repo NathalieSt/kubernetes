@@ -1,0 +1,24 @@
+kind: Datasource
+metadata:
+  name: victoriametrics
+  project: kubernetes
+spec:
+  display:
+    name: VictoriaMetrics
+  default: true
+  plugin:
+    kind: PrometheusDatasource
+    spec:
+      # The proxy approach is recommended when Perses and VictoriaMetrics are both
+      # inside the cluster — queries are routed through the Perses server rather
+      # than directly from the browser.
+      #
+      # vmselect service name pattern for vm-k8s-stack:
+      #   <release-name>-victoria-metrics-cluster-vmselect.<namespace>.svc.cluster.local
+      #
+      # Replace "vm-stack" below with your actual Helm release name.
+      # Run: kubectl get svc -n victoria-metrics | grep vmselect
+      proxy:
+        kind: HTTPProxy
+        spec:
+          url: "http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428"

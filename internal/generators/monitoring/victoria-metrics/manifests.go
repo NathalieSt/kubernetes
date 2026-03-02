@@ -65,6 +65,80 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 								},
 							},
 						},
+						"vmagent": map[string]any{
+							"spec": map[string]any{
+								"inlineScrapeConfig": `
+# cilium-agent — port 9962, one pod per node
+- job_name: cilium-agent
+  kubernetes_sd_configs:
+    - role: pod
+      namespaces:
+        names:
+          - kube-system
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_pod_label_k8s_app]
+      regex: cilium
+      action: keep
+    - source_labels: [__address__]
+      regex: '(.+):\d+'
+      replacement: "${1}:9962"
+      target_label: __address__
+    - source_labels: [__meta_kubernetes_pod_node_name]
+      target_label: node
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: pod
+    - source_labels: [__meta_kubernetes_namespace]
+      target_label: namespace
+    - target_label: job
+      replacement: cilium-agent
+
+# cilium-operator — port 9963
+- job_name: cilium-operator
+  kubernetes_sd_configs:
+    - role: pod
+      namespaces:
+        names:
+          - kube-system
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_pod_label_name]
+      regex: cilium-operator
+      action: keep
+    - source_labels: [__address__]
+      regex: '(.+):\d+'
+      replacement: "${1}:9963"
+      target_label: __address__
+    - source_labels: [__meta_kubernetes_pod_node_name]
+      target_label: node
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: pod
+    - source_labels: [__meta_kubernetes_namespace]
+      target_label: namespace
+    - target_label: job
+      replacement: cilium-operator
+# hubble — port 9965
+- job_name: hubble
+  kubernetes_sd_configs:
+    - role: pod
+      namespaces:
+        names:
+          - kube-system
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_pod_label_k8s_app]
+      regex: cilium
+      action: keep
+    - source_labels: [__address__]
+      regex: '(.+):\d+'
+      replacement: "${1}:9965"
+      target_label: __address__
+    - source_labels: [__meta_kubernetes_pod_node_name]
+      target_label: node
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: pod
+    - target_label: job
+      replacement: hubble
+`,
+							},
+						},
 					},
 				},
 			),

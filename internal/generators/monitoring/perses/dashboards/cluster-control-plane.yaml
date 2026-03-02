@@ -9,7 +9,6 @@ spec:
   refreshInterval: 30s
 
   panels:
-
     # ── API Server ─────────────────────────────────────────────────────────────
     apiserver-rps:
       kind: Panel
@@ -37,7 +36,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (verb) (rate(apiserver_request_total[$__rate_interval]))'
+                  query: "sum by (verb) (rate(apiserver_request_total[$__rate_interval]))"
                   seriesNameFormat: "{{verb}}"
 
     apiserver-errors:
@@ -158,7 +157,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'min(etcd_server_has_leader)'
+                  query: "min(etcd_server_has_leader)"
 
     etcd-proposals:
       kind: Panel
@@ -186,14 +185,14 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum(rate(etcd_server_proposals_committed_total[$__rate_interval]))'
+                  query: "sum(rate(etcd_server_proposals_committed_total[$__rate_interval]))"
                   seriesNameFormat: committed
           - kind: TimeSeriesQuery
             spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum(rate(etcd_server_proposals_failed_total[$__rate_interval]))'
+                  query: "sum(rate(etcd_server_proposals_failed_total[$__rate_interval]))"
                   seriesNameFormat: failed
 
     etcd-db-size:
@@ -222,14 +221,14 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (endpoint) (etcd_mvcc_db_total_size_in_bytes)'
+                  query: "sum by (endpoint) (etcd_mvcc_db_total_size_in_bytes)"
                   seriesNameFormat: "db size · {{endpoint}}"
           - kind: TimeSeriesQuery
             spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (endpoint) (etcd_mvcc_db_total_size_in_use_in_bytes)'
+                  query: "sum by (endpoint) (etcd_mvcc_db_total_size_in_use_in_bytes)"
                   seriesNameFormat: "db in-use · {{endpoint}}"
 
     etcd-wal-fsync:
@@ -258,7 +257,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'histogram_quantile(0.99, sum by (le, endpoint) (rate(etcd_disk_wal_fsync_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  query: "histogram_quantile(0.99, sum by (le, endpoint) (rate(etcd_disk_wal_fsync_duration_seconds_bucket[$__rate_interval]))) * 1000"
                   seriesNameFormat: "p99 WAL · {{endpoint}}"
 
     etcd-commit-duration:
@@ -287,7 +286,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'histogram_quantile(0.99, sum by (le, endpoint) (rate(etcd_disk_backend_commit_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  query: "histogram_quantile(0.99, sum by (le, endpoint) (rate(etcd_disk_backend_commit_duration_seconds_bucket[$__rate_interval]))) * 1000"
                   seriesNameFormat: "p99 commit · {{endpoint}}"
 
     # ── Scheduler ──────────────────────────────────────────────────────────────
@@ -317,7 +316,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (result) (rate(scheduler_schedule_attempts_total[$__rate_interval]))'
+                  query: "sum by (result) (rate(scheduler_schedule_attempts_total[$__rate_interval]))"
                   seriesNameFormat: "{{result}}"
 
     scheduler-latency:
@@ -346,7 +345,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'histogram_quantile(0.99, sum by (le) (rate(scheduler_e2e_scheduling_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  query: "histogram_quantile(0.99, sum by (le) (rate(scheduler_e2e_scheduling_duration_seconds_bucket[$__rate_interval]))) * 1000"
                   seriesNameFormat: p99 e2e scheduling
 
     # ── Controller Manager ─────────────────────────────────────────────────────
@@ -435,7 +434,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'kubelet_running_pods'
+                  query: "kubelet_running_pods"
                   seriesNameFormat: "{{node}}"
 
     kubelet-pod-start:
@@ -464,7 +463,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'histogram_quantile(0.99, sum by (le) (rate(kubelet_pod_start_duration_seconds_bucket[$__rate_interval]))) * 1000'
+                  query: "histogram_quantile(0.99, sum by (le) (rate(kubelet_pod_start_duration_seconds_bucket[$__rate_interval]))) * 1000"
                   seriesNameFormat: p99 pod start
 
   layouts:
@@ -473,57 +472,117 @@ spec:
         display:
           title: API Server
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/apiserver-rps" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/apiserver-errors" }
-          - x: 0;  y: 9;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/apiserver-latency-p50-p90" }
-          - x: 12; y: 9;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/apiserver-latency-p99" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/apiserver-rps"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/apiserver-errors"
+          - x: 0
+            y: 9
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/apiserver-latency-p50-p90"
+          - x: 12
+            y: 9
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/apiserver-latency-p99"
 
     - kind: Grid
       spec:
         display:
           title: etcd
         items:
-          - x: 0;  y: 0;  width: 6;  height: 5
-            content: { $ref: "#/spec/panels/etcd-has-leader" }
-          - x: 6;  y: 0;  width: 18; height: 9
-            content: { $ref: "#/spec/panels/etcd-db-size" }
-          - x: 0;  y: 5;  width: 6;  height: 9
-            content: { $ref: "#/spec/panels/etcd-proposals" }
-          - x: 0;  y: 14; width: 12; height: 9
-            content: { $ref: "#/spec/panels/etcd-wal-fsync" }
-          - x: 12; y: 9;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/etcd-commit-duration" }
+          - x: 0
+            y: 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/etcd-has-leader"
+          - x: 6
+            y: 0
+            width: 18
+            height: 9
+            content:
+              $ref: "#/spec/panels/etcd-db-size"
+          - x: 0
+            y: 5
+            width: 6
+            height: 9
+            content:
+              $ref: "#/spec/panels/etcd-proposals"
+          - x: 0
+            y: 14
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/etcd-wal-fsync"
+          - x: 12
+            y: 9
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/etcd-commit-duration"
 
     - kind: Grid
       spec:
         display:
           title: Scheduler
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/scheduler-attempts" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/scheduler-latency" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/scheduler-attempts"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/scheduler-latency"
 
     - kind: Grid
       spec:
         display:
           title: Controller Manager
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/controller-queue-depth" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/controller-retries" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/controller-queue-depth"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/controller-retries"
 
     - kind: Grid
       spec:
         display:
           title: Kubelet
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/kubelet-running-pods" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/kubelet-pod-start" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/kubelet-running-pods"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/kubelet-pod-start"

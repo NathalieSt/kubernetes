@@ -37,7 +37,6 @@ spec:
               - 'kube_deployment_status_replicas{namespace=~"$namespace"}'
 
   panels:
-
     # ── Row 1: Pod phase stats ─────────────────────────────────────────────────
     pods-running:
       kind: Panel
@@ -435,61 +434,117 @@ spec:
         display:
           title: Pod Overview
         items:
-          - x: 0;  y: 0;  width: 6;  height: 5
-            content: { $ref: "#/spec/panels/pods-running" }
-          - x: 6;  y: 0;  width: 6;  height: 5
-            content: { $ref: "#/spec/panels/pods-pending" }
-          - x: 12; y: 0;  width: 6;  height: 5
-            content: { $ref: "#/spec/panels/pods-failed" }
-          - x: 18; y: 0;  width: 6;  height: 5
-            content: { $ref: "#/spec/panels/pods-crashloop" }
+          - x: 0
+            y: 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/pods-running"
+          - x: 6
+            y: 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/pods-pending"
+          - x: 12
+            y: 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/pods-failed"
+          - x: 18
+            y: 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/pods-crashloop"
 
     - kind: Grid
       spec:
         display:
           title: Deployment Health
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/deploy-available" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/deploy-unavailable" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/deploy-available"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/deploy-unavailable"
 
     - kind: Grid
       spec:
         display:
           title: Pod CPU
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/pod-cpu-usage" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/pod-cpu-throttle" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/pod-cpu-usage"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/pod-cpu-throttle"
 
     - kind: Grid
       spec:
         display:
           title: Pod Memory
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/pod-mem-rss" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/pod-mem-wss" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/pod-mem-rss"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/pod-mem-wss"
 
     - kind: Grid
       spec:
         display:
           title: Pod Network
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/pod-net-recv" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/pod-net-send" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/pod-net-recv"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/pod-net-send"
 
     - kind: Grid
       spec:
         display:
           title: Restarts & OOM Kills
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/container-restarts" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/container-oom" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/container-restarts"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/container-oom"

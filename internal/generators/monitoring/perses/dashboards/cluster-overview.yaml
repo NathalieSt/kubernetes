@@ -10,7 +10,6 @@ spec:
 
   # ── Panels ──────────────────────────────────────────────────────────────────
   panels:
-
     # ── Row 1: Health stats ────────────────────────────────────────────────────
     nodes-ready:
       kind: Panel
@@ -158,7 +157,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: '100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))'
+                  query: "100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))"
 
     # ── Row 2: Resource Consumption ───────────────────────────────────────────
     cluster-cpu-usage:
@@ -223,14 +222,14 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum(node_memory_MemTotal_bytes) - sum(node_memory_MemAvailable_bytes)'
+                  query: "sum(node_memory_MemTotal_bytes) - sum(node_memory_MemAvailable_bytes)"
                   seriesNameFormat: used
           - kind: TimeSeriesQuery
             spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum(node_memory_MemTotal_bytes)'
+                  query: "sum(node_memory_MemTotal_bytes)"
                   seriesNameFormat: total
 
     cluster-network:
@@ -355,7 +354,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (phase) (kube_persistentvolume_status_phase)'
+                  query: "sum by (phase) (kube_persistentvolume_status_phase)"
                   seriesNameFormat: "{{phase}}"
 
     pvc-capacity:
@@ -384,7 +383,7 @@ spec:
               plugin:
                 kind: PrometheusTimeSeriesQuery
                 spec:
-                  query: 'sum by (storageclass) (kube_persistentvolumeclaim_resource_requests_storage_bytes)'
+                  query: "sum by (storageclass) (kube_persistentvolumeclaim_resource_requests_storage_bytes)"
                   seriesNameFormat: "{{storageclass}}"
 
     # ── Row 5: Events ─────────────────────────────────────────────────────────
@@ -424,55 +423,111 @@ spec:
         display:
           title: Cluster Health
         items:
-          - x: 0;  y: 0;  width: 4;  height: 5
-            content: { $ref: "#/spec/panels/nodes-ready" }
-          - x: 4;  y: 0;  width: 4;  height: 5
-            content: { $ref: "#/spec/panels/pods-running" }
-          - x: 8;  y: 0;  width: 4;  height: 5
-            content: { $ref: "#/spec/panels/pods-not-running" }
-          - x: 12; y: 0;  width: 4;  height: 5
-            content: { $ref: "#/spec/panels/pods-crashloop" }
-          - x: 16; y: 0;  width: 4;  height: 5
-            content: { $ref: "#/spec/panels/cluster-cpu-util" }
-          - x: 20; y: 0;  width: 4;  height: 5
-            content: { $ref: "#/spec/panels/cluster-mem-util" }
+          - x: 0
+            y: 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/nodes-ready"
+          - x: 4
+            y: 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/pods-running"
+          - x: 8
+            y: 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/pods-not-running"
+          - x: 12
+            y: 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/pods-crashloop"
+          - x: 16
+            y: 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/cluster-cpu-util"
+          - x: 20
+            y: 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/cluster-mem-util"
 
     - kind: Grid
       spec:
         display:
           title: Resource Consumption
         items:
-          - x: 0;  y: 0;  width: 8;  height: 9
-            content: { $ref: "#/spec/panels/cluster-cpu-usage" }
-          - x: 8;  y: 0;  width: 8;  height: 9
-            content: { $ref: "#/spec/panels/cluster-mem-usage" }
-          - x: 16; y: 0;  width: 8;  height: 9
-            content: { $ref: "#/spec/panels/cluster-network" }
+          - x: 0
+            y: 0
+            width: 8
+            height: 9
+            content:
+              $ref: "#/spec/panels/cluster-cpu-usage"
+          - x: 8
+            y: 0
+            width: 8
+            height: 9
+            content:
+              $ref: "#/spec/panels/cluster-mem-usage"
+          - x: 16
+            y: 0
+            width: 8
+            height: 9
+            content:
+              $ref: "#/spec/panels/cluster-network"
 
     - kind: Grid
       spec:
         display:
           title: Requests vs Allocatable
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/cpu-requests-vs-allocatable" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/mem-requests-vs-allocatable" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/cpu-requests-vs-allocatable"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/mem-requests-vs-allocatable"
 
     - kind: Grid
       spec:
         display:
           title: Persistent Volumes
         items:
-          - x: 0;  y: 0;  width: 12; height: 8
-            content: { $ref: "#/spec/panels/pv-status" }
-          - x: 12; y: 0;  width: 12; height: 8
-            content: { $ref: "#/spec/panels/pvc-capacity" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/pv-status"
+          - x: 12
+            y: 0
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/pvc-capacity"
 
     - kind: Grid
       spec:
         display:
           title: Kubernetes Events
         items:
-          - x: 0;  y: 0;  width: 24; height: 8
-            content: { $ref: "#/spec/panels/warning-events" }
+          - x: 0
+            y: 0
+            width: 24
+            height: 8
+            content:
+              $ref: "#/spec/panels/warning-events"

@@ -24,7 +24,6 @@ spec:
               - kube_node_info
 
   panels:
-
     # ── Row 1: Status stats ────────────────────────────────────────────────────
     nodes-ready:
       kind: Panel
@@ -365,49 +364,93 @@ spec:
         display:
           title: Node Status
         items:
-          - x: 0;  y: 0;  width: 8;  height: 5
-            content: { $ref: "#/spec/panels/nodes-ready" }
-          - x: 8;  y: 0;  width: 8;  height: 5
-            content: { $ref: "#/spec/panels/pod-capacity" }
-          - x: 16; y: 0;  width: 8;  height: 5
-            content: { $ref: "#/spec/panels/node-conditions" }
+          - x: 0
+            y: 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/nodes-ready"
+          - x: 8
+            y: 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/pod-capacity"
+          - x: 16
+            y: 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/node-conditions"
 
     - kind: Grid
       spec:
         display:
           title: CPU
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-cpu-usage" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-cpu-requests" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-cpu-usage"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-cpu-requests"
 
     - kind: Grid
       spec:
         display:
           title: Memory
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-mem-usage" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-mem-bytes" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-mem-usage"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-mem-bytes"
 
     - kind: Grid
       spec:
         display:
           title: Disk
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-disk-read" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-disk-write" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-disk-read"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-disk-write"
 
     - kind: Grid
       spec:
         display:
           title: Network
         items:
-          - x: 0;  y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-net-recv" }
-          - x: 12; y: 0;  width: 12; height: 9
-            content: { $ref: "#/spec/panels/node-net-send" }
+          - x: 0
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-net-recv"
+          - x: 12
+            y: 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/node-net-send"
