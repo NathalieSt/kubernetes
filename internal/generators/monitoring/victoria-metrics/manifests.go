@@ -116,6 +116,12 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 									"endpoints": []map[string]any{
 										{
 											"port": "metrics",
+											"relabelConfigs": []map[string]any{
+												{
+													"sourceLabels": []string{"__meta_kubernetes_endpoint_node_name"},
+													"targetLabel":  "node",
+												},
+											},
 											"metricRelabelConfigs": []map[string]any{
 												{
 													"action":        "drop",
@@ -125,12 +131,6 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 												{
 													"action": "labeldrop",
 													"regex":  "^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*",
-												},
-											},
-											"relabelConfigs": []map[string]any{
-												{
-													"sourceLabels": []string{"__meta_kubernetes_node_name"},
-													"targetLabel":  "node",
 												},
 											},
 										},
