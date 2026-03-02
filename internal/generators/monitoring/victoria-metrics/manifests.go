@@ -105,6 +105,9 @@ func createVictoriaMetricsManifests(generatorMeta generator.GeneratorMeta) map[s
 								"storage": map[string]any{
 									"storageClassName": shared.NFSRemoteClass,
 								},
+								"extraArgs": map[string]any{
+									"maxLabelsPerTimeseries": "120",
+								},
 							},
 						},
 						"vmagent": map[string]any{

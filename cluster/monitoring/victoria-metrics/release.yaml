@@ -120,5 +120,7 @@ spec:
                 replacement: cilium-operator
     vmsingle:
       spec:
+        extraArgs:
+          maxLabelsPerTimeseries: "120"
         storage:
           storageClassName: nfs-remote
