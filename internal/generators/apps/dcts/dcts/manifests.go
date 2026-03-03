@@ -163,7 +163,7 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 									Name:  generatorMeta.Name,
 									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
 									Env: []core.Env{
-										{Name: "DB_HOST", Value: "remote-fs:3306"},
+										{Name: "DB_HOST", Value: "remote-fs.netbird.nathalie-stiefsohn.eu:3306"},
 										{
 											Name: "DB_USER",
 											ValueFrom: core.ValueFrom{
