@@ -35,9 +35,6 @@ spec:
         - mountPath: /etc/livekit.yaml
           subPath: livekit.yaml
           name: livekit-config-volume
-        - mountPath: /etc/livekit-keys.yaml
-          subPath: livekit-keys.yaml
-          name: livekit-key-volume
         env:
         - name: LIVEKIT_API_KEY
           valueFrom:
@@ -51,10 +48,6 @@ spec:
               name: livekit-secret
       volumes:
       - name: livekit-config-volume
-        configMap:
-          name: livekit-config
-          defaultMode: 493
-      - name: livekit-key-volume
         secret:
           secretName: livekit-secret
           defaultMode: 384

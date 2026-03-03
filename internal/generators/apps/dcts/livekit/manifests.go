@@ -60,7 +60,6 @@ keys: {}`,
 	}
 
 	livekitConfigVolumeName := "livekit-config-volume"
-	livekitKeyVolume := "livekit-key-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -124,24 +123,12 @@ keys: {}`,
 											MountPath: "/etc/livekit.yaml",
 											SubPath:   "livekit.yaml",
 										},
-										{
-											Name:      livekitKeyVolume,
-											MountPath: "/etc/livekit-keys.yaml",
-											SubPath:   "livekit-keys.yaml",
-										},
 									},
 								},
 							},
 							Volumes: []core.Volume{
 								{
 									Name: livekitConfigVolumeName,
-									ConfigMap: core.ConfigMapVolumeSource{
-										Name:        livekitCMName,
-										DefaultMode: 0755,
-									},
-								},
-								{
-									Name: livekitKeyVolume,
 									Secret: core.SecretVolumeSource{
 										SecretName:  secretName,
 										DefaultMode: 0600,
