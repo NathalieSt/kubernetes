@@ -31,6 +31,9 @@ spec:
         - mountPath: /etc/livekit.yaml
           subPath: livekit.yaml
           name: livekit-config-volume
+        - mountPath: /initialize.sh
+          subPath: initialize.sh
+          name: livekit-config-volume
         env:
         - name: LIVEKIT_API_KEY
           valueFrom:
