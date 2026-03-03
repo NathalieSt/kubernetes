@@ -91,7 +91,7 @@ keys: {}`,
 								{
 									Name:    generatorMeta.Name,
 									Image:   fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Command: []string{"sh", "-c", "/initialize.sh"},
+									Command: []string{"livekit-server", "--config", "/etc/livekit.yaml"},
 									Ports: []core.Port{
 										{
 											ContainerPort: generatorMeta.Port,

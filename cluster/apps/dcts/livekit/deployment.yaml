@@ -19,9 +19,9 @@ spec:
     spec:
       containers:
       - command:
-        - sh
-        - -c
-        - /initialize.sh
+        - livekit-server
+        - --config
+        - /etc/livekit.yaml
         image: livekit/livekit-server:latest
         name: livekit
         ports:
