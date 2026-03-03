@@ -55,12 +55,12 @@ turn:
   external_tls: true
 
 keys: {}`,
-				"initialize.sh": `#!/bin/sh exec livekit-server --config /etc/livekit.yaml`,
 			}),
 		},
 	}
 
 	livekitConfigVolumeName := "livekit-config-volume"
+	livekitKeyVolume := "livekit-key-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -91,7 +91,7 @@ keys: {}`,
 								{
 									Name:    generatorMeta.Name,
 									Image:   fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Command: []string{"livekit-server", "--config", "/etc/livekit.yaml"},
+									Command: []string{"/livekit-server", "--config", "/etc/livekit.yaml", "--port", "7880"},
 									Ports: []core.Port{
 										{
 											ContainerPort: generatorMeta.Port,
@@ -125,9 +125,9 @@ keys: {}`,
 											SubPath:   "livekit.yaml",
 										},
 										{
-											Name:      livekitConfigVolumeName,
-											MountPath: "/initialize.sh",
-											SubPath:   "initialize.sh",
+											Name:      livekitKeyVolume,
+											MountPath: "/etc/livekit-keys.yaml",
+											SubPath:   "livekit-keys.yaml",
 										},
 									},
 								},
@@ -138,6 +138,12 @@ keys: {}`,
 									ConfigMap: core.ConfigMapVolumeSource{
 										Name:        livekitCMName,
 										DefaultMode: 0755,
+									},
+								},
+								{
+									Name: livekitKeyVolume,
+									Secret: core.SecretVolumeSource{
+										SecretName: secretName,
 									},
 								},
 							},

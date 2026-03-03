@@ -19,9 +19,11 @@ spec:
     spec:
       containers:
       - command:
-        - livekit-server
+        - /livekit-server
         - --config
         - /etc/livekit.yaml
+        - --port
+        - "7880"
         image: livekit/livekit-server:latest
         name: livekit
         ports:
@@ -31,9 +33,9 @@ spec:
         - mountPath: /etc/livekit.yaml
           subPath: livekit.yaml
           name: livekit-config-volume
-        - mountPath: /initialize.sh
-          subPath: initialize.sh
-          name: livekit-config-volume
+        - mountPath: /etc/livekit-keys.yaml
+          subPath: livekit-keys.yaml
+          name: livekit-key-volume
         env:
         - name: LIVEKIT_API_KEY
           valueFrom:
@@ -50,3 +52,6 @@ spec:
         configMap:
           name: livekit-config
           defaultMode: 493
+      - name: livekit-key-volume
+        secret:
+          secretName: livekit-secret

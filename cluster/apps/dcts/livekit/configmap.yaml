@@ -4,7 +4,6 @@ kind: ConfigMap
 metadata:
   name: livekit-config
 data:
-  initialize.sh: "#!/bin/sh exec livekit-server --config /etc/livekit.yaml"
   livekit.yaml: |-
     
     port: 7880
