@@ -236,8 +236,9 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 								{Name: appThemesVolume, PersistentVolumeClaim: core.PVCVolumeSource{ClaimName: pvcAppThemesName}},
 								{
 									Name: livekitConfigVolumeName,
-									ConfigMap: core.ConfigMapVolumeSource{
-										Name: "livekit-config",
+									Secret: core.SecretVolumeSource{
+										SecretName:  "livekit-secret",
+										DefaultMode: 0600,
 									},
 								},
 							},

@@ -92,5 +92,6 @@ spec:
         persistentVolumeClaim:
           claimName: dcts-app-themes
       - name: livekit-volume
-        configMap:
-          name: livekit-config
+        secret:
+          secretName: livekit-secret
+          defaultMode: 384
