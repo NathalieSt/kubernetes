@@ -57,3 +57,4 @@ spec:
       - name: livekit-key-volume
         secret:
           secretName: livekit-secret
+          defaultMode: 384

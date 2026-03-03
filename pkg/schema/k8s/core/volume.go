@@ -31,8 +31,9 @@ type SecretVolumeItem struct {
 }
 
 type SecretVolumeSource struct {
-	SecretName string             `yaml:"secretName,omitempty"`
-	Items      []SecretVolumeItem `yaml:"items,omitempty"`
+	SecretName  string             `yaml:"secretName,omitempty"`
+	DefaultMode int64              `yaml:"defaultMode,omitempty"`
+	Items       []SecretVolumeItem `yaml:"items,omitempty"`
 }
 
 type HostPathType = string

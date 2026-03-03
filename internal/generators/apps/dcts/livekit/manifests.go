@@ -143,7 +143,8 @@ keys: {}`,
 								{
 									Name: livekitKeyVolume,
 									Secret: core.SecretVolumeSource{
-										SecretName: secretName,
+										SecretName:  secretName,
+										DefaultMode: 0600,
 									},
 								},
 							},
