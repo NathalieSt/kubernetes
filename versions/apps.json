@@ -13,5 +13,7 @@
     "whatsapp-bridge": "v25.12",
     "signal-bridge": "v0.7.5",
     "redlib": "sha-ba98178",
-    "stash": "v0.30.0"
+    "stash": "v0.30.0",
+    "livekit": "latest",
+    "dcts": "1.6.4.4"
 }

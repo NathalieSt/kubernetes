@@ -137,7 +137,7 @@ func GetGeneratorVersionByType(rootDir string, name string, generatorType genera
 	}
 
 	version, err := GetGeneratorVersionFromFile(path.Join(rootDir, "versions", fileName), name)
-	if err != nil {
+	if err != nil || version == "" {
 		fmt.Printf("❌ An error occurred while getting the version for generator: %v \n", name)
 		fmt.Println("Error: " + err.Error())
 	}

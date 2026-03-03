@@ -19,6 +19,8 @@ var Flood = "flood"
 var Redlib = "redlib"
 var SearXNG = "searxng"
 var Stash = "stash"
+var DCTS = "dcts"
+var Livekit = "livekit"
 
 // Infrastructure
 

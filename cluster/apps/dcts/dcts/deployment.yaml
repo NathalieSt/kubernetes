@@ -1,0 +1,96 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: dcts
+    app.kubernetes.io/version: 1.6.4.4
+  name: dcts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dcts
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dcts
+        app.kubernetes.io/version: 1.6.4.4
+    spec:
+      containers:
+      - image: ghcr.io/hackthedev/dcts-shipping:1.6.4.4
+        name: dcts
+        ports:
+        - containerPort: 2052
+          name: http
+        volumeMounts:
+        - mountPath: /app/sv
+          name: app-sv-volume
+        - mountPath: /app/configs
+          name: app-configs-volume
+        - mountPath: /app/public/uploads
+          name: app-uploads-volume
+        - mountPath: /app/public/emojis
+          name: app-emojis-volume
+        - mountPath: /app/plugins
+          name: app-plugins-volume
+        - mountPath: /app/themes
+          name: app-themes-volume
+        - mountPath: /etc/livekit.yaml
+          subPath: livekit.yaml
+          name: livekit-volume
+        env:
+        - name: DB_HOST
+          value: remote-fs:3306
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: dcts-secret
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: dcts-secret
+        - name: DB_NAME
+          value: dcts
+        - name: DEBUG
+          value: "false"
+        - name: LIVEKIT_URL
+          value: ws://livekit.nathi.lol:7880
+        - name: LIVEKIT_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: api-key
+              name: livekit-secret
+        - name: LIVEKIT_API_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: api-secret
+              name: livekit-secret
+        - name: REDIS_HOST
+          value: redis.redis.svc.cluster.local
+        - name: REDIS_PORT
+          value: "6379"
+      volumes:
+      - name: app-sv-volume
+        persistentVolumeClaim:
+          claimName: dcts-app-sv
+      - name: app-configs-volume
+        persistentVolumeClaim:
+          claimName: dcts-app-configs
+      - name: app-uploads-volume
+        persistentVolumeClaim:
+          claimName: dcts-app-uploads
+      - name: app-emojis-volume
+        persistentVolumeClaim:
+          claimName: dcts-app-emojis
+      - name: app-plugins-volume
+        persistentVolumeClaim:
+          claimName: dcts-app-plugins
+      - name: app-themes-volume
+        persistentVolumeClaim:
+          claimName: dcts-app-themes
+      - name: livekit-volume
+        configMap:
+          name: livekit-config

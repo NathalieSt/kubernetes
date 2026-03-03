@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    netbird.io/expose: "true"
+    netbird.io/groups: cluster-services
+  labels:
+    app.kubernetes.io/name: dcts
+    app.kubernetes.io/version: 1.6.4.4
+  name: dcts
+spec:
+  selector:
+    app.kubernetes.io/name: dcts
+  ports:
+  - name: http-dcts
+    port: 2052
+    targetPort: 2052
