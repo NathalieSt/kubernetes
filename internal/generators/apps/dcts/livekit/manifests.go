@@ -32,33 +32,6 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		),
 	}
 
-	livekitCMName := fmt.Sprintf("%v-config", generatorMeta.Name)
-	livekitConfigMap := utils.ManifestConfig{
-		Filename: "configmap.yaml",
-		Manifests: []any{
-			core.NewConfigMap(meta.ObjectMeta{
-				Name: livekitCMName,
-			}, map[string]string{
-				"livekit.yaml": `
-port: 7880
-rtc:
-  tcp_port: 7881
-  port_range_start: 50000
-  port_range_end: 50020
-  use_external_ip: false
-
-turn:
-  enabled: true
-  domain: livekit.nathi.lol
-  tls_port: 5349
-  udp_port: 3478
-  external_tls: true
-
-keys: {}`,
-			}),
-		},
-	}
-
 	livekitConfigVolumeName := "livekit-config-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
@@ -212,7 +185,6 @@ keys: {}`,
 			deployment.Filename,
 			service.Filename,
 			networkPolicy.Filename,
-			livekitConfigMap.Filename,
 			livekitVaultSecret.Filename,
 		}),
 	}
@@ -221,7 +193,6 @@ keys: {}`,
 		namespace,
 		kustomization,
 		deployment,
-		livekitConfigMap,
 		service,
 		networkPolicy,
 		livekitVaultSecret,
