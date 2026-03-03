@@ -24,6 +24,8 @@ spec:
         - /etc/livekit.yaml
         - --port
         - "7880"
+        - --key-file
+        - /etc/livekit-keys.yaml
         image: livekit/livekit-server:latest
         name: livekit
         ports:
