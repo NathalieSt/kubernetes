@@ -141,9 +141,21 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							Protocol:   core.TCP,
 						},
 						{
+							Name:       fmt.Sprintf("tcp-turn-%v", generatorMeta.Name),
+							Port:       5349,
+							TargetPort: 5349,
+							Protocol:   core.TCP,
+						},
+						{
 							Name:       fmt.Sprintf("udp-%v", generatorMeta.Name),
 							Port:       7882,
 							TargetPort: 7882,
+							Protocol:   core.UDP,
+						},
+						{
+							Name:       fmt.Sprintf("udp-turn-%v", generatorMeta.Name),
+							Port:       3478,
+							TargetPort: 3478,
 							Protocol:   core.UDP,
 						},
 					},

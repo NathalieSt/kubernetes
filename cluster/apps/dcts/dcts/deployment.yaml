@@ -41,7 +41,7 @@ spec:
           name: livekit-volume
         env:
         - name: DB_HOST
-          value: remote-fs.netbird.nathalie-stiefsohn.eu:3306
+          value: remote-fs.netbird.nathalie-stiefsohn.eu
         - name: DB_USER
           valueFrom:
             secretKeyRef:
