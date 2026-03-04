@@ -21,10 +21,10 @@ spec:
     port: 5349
     targetPort: 5349
     protocol: TCP
-  - name: udp-livekit
-    port: 7882
-    targetPort: 7882
-    protocol: UDP
+  - name: tcp-rtc-livekit
+    port: 7881
+    targetPort: 7881
+    protocol: TCP
   - name: udp-turn-livekit
     port: 3478
     targetPort: 3478
@@ -48,68 +48,4 @@ spec:
   - name: rtc-udp-50004
     port: 50004
     targetPort: 50004
-    protocol: UDP
-  - name: rtc-udp-50005
-    port: 50005
-    targetPort: 50005
-    protocol: UDP
-  - name: rtc-udp-50006
-    port: 50006
-    targetPort: 50006
-    protocol: UDP
-  - name: rtc-udp-50007
-    port: 50007
-    targetPort: 50007
-    protocol: UDP
-  - name: rtc-udp-50008
-    port: 50008
-    targetPort: 50008
-    protocol: UDP
-  - name: rtc-udp-50009
-    port: 50009
-    targetPort: 50009
-    protocol: UDP
-  - name: rtc-udp-50010
-    port: 50010
-    targetPort: 50010
-    protocol: UDP
-  - name: rtc-udp-50011
-    port: 50011
-    targetPort: 50011
-    protocol: UDP
-  - name: rtc-udp-50012
-    port: 50012
-    targetPort: 50012
-    protocol: UDP
-  - name: rtc-udp-50013
-    port: 50013
-    targetPort: 50013
-    protocol: UDP
-  - name: rtc-udp-50014
-    port: 50014
-    targetPort: 50014
-    protocol: UDP
-  - name: rtc-udp-50015
-    port: 50015
-    targetPort: 50015
-    protocol: UDP
-  - name: rtc-udp-50016
-    port: 50016
-    targetPort: 50016
-    protocol: UDP
-  - name: rtc-udp-50017
-    port: 50017
-    targetPort: 50017
-    protocol: UDP
-  - name: rtc-udp-50018
-    port: 50018
-    targetPort: 50018
-    protocol: UDP
-  - name: rtc-udp-50019
-    port: 50019
-    targetPort: 50019
-    protocol: UDP
-  - name: rtc-udp-50020
-    port: 50020
-    targetPort: 50020
     protocol: UDP
