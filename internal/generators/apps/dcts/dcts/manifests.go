@@ -160,9 +160,8 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 						Spec: core.PodSpec{
 							Containers: []core.Container{
 								{
-									Name:    generatorMeta.Name,
-									Image:   fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
-									Command: []string{"/livekit-server", "--config", "/etc/livekit.yaml", "--port", "7880"},
+									Name:  generatorMeta.Name,
+									Image: fmt.Sprintf("%v:%v", generatorMeta.Docker.Registry, generatorMeta.Docker.Version),
 									Env: []core.Env{
 										{Name: "DB_HOST", Value: "remote-fs.netbird.nathalie-stiefsohn.eu"},
 										{
@@ -222,7 +221,7 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 										{Name: appThemesVolume, MountPath: "/app/themes"},
 										{
 											Name:      livekitConfigVolumeName,
-											MountPath: "/etc/livekit.yaml",
+											MountPath: "/app/livekit/livekit.yaml",
 											SubPath:   "livekit.yaml",
 										},
 									},

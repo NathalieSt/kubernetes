@@ -18,13 +18,7 @@ spec:
         app.kubernetes.io/version: 1.6.4.4
     spec:
       containers:
-      - command:
-        - /livekit-server
-        - --config
-        - /etc/livekit.yaml
-        - --port
-        - "7880"
-        image: ghcr.io/hackthedev/dcts-shipping:1.6.4.4
+      - image: ghcr.io/hackthedev/dcts-shipping:1.6.4.4
         name: dcts
         ports:
         - containerPort: 2052
@@ -42,7 +36,7 @@ spec:
           name: app-plugins-volume
         - mountPath: /app/themes
           name: app-themes-volume
-        - mountPath: /etc/livekit.yaml
+        - mountPath: /app/livekit/livekit.yaml
           subPath: livekit.yaml
           name: livekit-volume
         env:

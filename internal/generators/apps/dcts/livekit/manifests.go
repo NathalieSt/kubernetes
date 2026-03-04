@@ -115,6 +115,42 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		},
 	}
 
+	ports := []core.ServicePort{
+		{
+			Name:       fmt.Sprintf("tcp-%v", generatorMeta.Name),
+			Port:       7880,
+			TargetPort: 7880,
+			Protocol:   core.TCP,
+		},
+		{
+			Name:       fmt.Sprintf("tcp-turn-%v", generatorMeta.Name),
+			Port:       5349,
+			TargetPort: 5349,
+			Protocol:   core.TCP,
+		},
+		{
+			Name:       fmt.Sprintf("udp-%v", generatorMeta.Name),
+			Port:       7882,
+			TargetPort: 7882,
+			Protocol:   core.UDP,
+		},
+		{
+			Name:       fmt.Sprintf("udp-turn-%v", generatorMeta.Name),
+			Port:       3478,
+			TargetPort: 3478,
+			Protocol:   core.UDP,
+		},
+	}
+
+	for i := int64(50000); i <= 50020; i++ {
+		ports = append(ports, core.ServicePort{
+			Name:       fmt.Sprintf("rtc-udp-%d", i),
+			Port:       i,
+			TargetPort: i,
+			Protocol:   "UDP",
+		})
+	}
+
 	service := utils.ManifestConfig{
 		Filename: "service.yaml",
 		Manifests: []any{
@@ -133,32 +169,7 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 					Selector: map[string]string{
 						"app.kubernetes.io/name": generatorMeta.Name,
 					},
-					Ports: []core.ServicePort{
-						{
-							Name:       fmt.Sprintf("tcp-%v", generatorMeta.Name),
-							Port:       7880,
-							TargetPort: 7880,
-							Protocol:   core.TCP,
-						},
-						{
-							Name:       fmt.Sprintf("tcp-turn-%v", generatorMeta.Name),
-							Port:       5349,
-							TargetPort: 5349,
-							Protocol:   core.TCP,
-						},
-						{
-							Name:       fmt.Sprintf("udp-%v", generatorMeta.Name),
-							Port:       7882,
-							TargetPort: 7882,
-							Protocol:   core.UDP,
-						},
-						{
-							Name:       fmt.Sprintf("udp-turn-%v", generatorMeta.Name),
-							Port:       3478,
-							TargetPort: 3478,
-							Protocol:   core.UDP,
-						},
-					},
+					Ports: ports,
 				},
 			),
 		},
