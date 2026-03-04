@@ -57,7 +57,7 @@ spec:
         - name: DEBUG
           value: "false"
         - name: LIVEKIT_URL
-          value: livekit.nathalie-stiefsohn.eu:7880
+          value: livekit.nathalie-stiefsohn.eu
         - name: LIVEKIT_API_KEY
           valueFrom:
             secretKeyRef:

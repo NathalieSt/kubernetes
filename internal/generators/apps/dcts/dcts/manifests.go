@@ -186,7 +186,7 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 										{Name: "DEBUG", Value: "false"},
 										{
 											Name:  "LIVEKIT_URL",
-											Value: "livekit.nathalie-stiefsohn.eu:7880",
+											Value: "livekit.nathalie-stiefsohn.eu",
 										},
 										{
 											Name: "LIVEKIT_API_KEY",
