@@ -33,6 +33,9 @@ spec:
         - mountPath: /etc/livekit.yaml
           subPath: livekit.yaml
           name: livekit-config-volume
+        - mountPath: /certs
+          name: livekit-certs-volume
+          readonly: true
         env:
         - name: LIVEKIT_API_KEY
           valueFrom:
@@ -49,3 +52,6 @@ spec:
         secret:
           secretName: livekit-secret
           defaultMode: 384
+      - name: livekit-certs-volume
+        secret:
+          secretName: livekit-tls

@@ -32,6 +32,7 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 		),
 	}
 
+	livekitCertVolumeName := "livekit-certs-volume"
 	livekitConfigVolumeName := "livekit-config-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
@@ -96,6 +97,11 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 											MountPath: "/etc/livekit.yaml",
 											SubPath:   "livekit.yaml",
 										},
+										{
+											Name:      livekitCertVolumeName,
+											MountPath: "/certs",
+											Readonly:  true,
+										},
 									},
 								},
 							},
@@ -105,6 +111,12 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 									Secret: core.SecretVolumeSource{
 										SecretName:  secretName,
 										DefaultMode: 0600,
+									},
+								},
+								{
+									Name: livekitCertVolumeName,
+									Secret: core.SecretVolumeSource{
+										SecretName: "livekit-tls",
 									},
 								},
 							},
