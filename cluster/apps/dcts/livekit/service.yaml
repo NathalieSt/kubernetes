@@ -13,6 +13,11 @@ spec:
   selector:
     app.kubernetes.io/name: livekit
   ports:
-  - name: http-livekit
+  - name: tcp-livekit
     port: 7880
     targetPort: 7880
+    protocol: TCP
+  - name: udp-livekit
+    port: 7882
+    targetPort: 7882
+    protocol: UDP
