@@ -2,11 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: livekit-networkpolicy
+  name: dcts-networkpolicy
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: livekit
+      app.kubernetes.io/name: dcts
   policyTypes:
   - Ingress
   - Egress
@@ -19,18 +19,8 @@ spec:
         matchLabels:
           app.kubernetes.io/name: netbird-router
     ports:
-    - port: 7881
+    - port: 2052
       protocol: TCP
-  - from:
-    - podSelector:
-        matchLabels:
-          app.kubernetes.io/name: dcts
-    ports:
-    - port: 7880
-      protocol: TCP
-  - ports:
-    - port: 50000
-      endPort: 50005
   egress:
   - to:
     - namespaceSelector:
@@ -42,6 +32,17 @@ spec:
       protocol: UDP
     - port: 53
       protocol: TCP
+  - to:
+    - ipBlock:
+        cidr: 100.87.188.103/32
+      podSelector: {}
   - ports:
-    - port: 50000
-      endPort: 50005
+    - port: 3306
+      protocol: TCP
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: livekit
+    ports:
+    - port: 7880
+      protocol: TCP

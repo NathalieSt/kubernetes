@@ -193,9 +193,15 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 			networking.NewNetworkPolicy(meta.ObjectMeta{
 				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
 			}, networking.NetworkPolicySpec{
-				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress},
+				PodSelector: meta.LabelSelector{
+					MatchLabels: map[string]string{
+						"app.kubernetes.io/name": generatorMeta.Name,
+					},
+				},
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress, networking.Egress},
 				Ingress: []networking.NetworkPolicyIngressRule{
 					{
+						// Access from Netbird
 						From: []networking.NetworkPolicyPeer{
 							{
 								PodSelector: meta.LabelSelector{
@@ -209,9 +215,51 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 									},
 								},
 							},
+						},
+						Ports: []networking.NetworkPolicyPort{
 							{
-								// Allow all traffic within the same namespace
-								PodSelector: meta.LabelSelector{},
+								Port:     7881,
+								Protocol: networking.TCP,
+							},
+						},
+					},
+					{
+						// Access from DCTS
+						From: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "dcts",
+									},
+								},
+							},
+						},
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:     7880,
+								Protocol: networking.TCP,
+							},
+						},
+					},
+					// Access from Clients for UDP
+					{
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:    50000,
+								EndPort: 50005,
+							},
+						},
+					},
+				},
+				Egress: []networking.NetworkPolicyEgressRule{
+					// Access to CoreDNS
+					utils.GetCoreDNSEgressRule(),
+					{
+						// Access to Clients for UDP
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:    50000,
+								EndPort: 50005,
 							},
 						},
 					},

@@ -31,12 +31,12 @@ type NetworkPolicyPort struct {
 }
 
 type NetworkPolicyEgressRule struct {
-	To    []NetworkPolicyPeer `yaml:"to,"`
+	To    []NetworkPolicyPeer `yaml:"to,omitempty"`
 	Ports []NetworkPolicyPort `yaml:"ports,omitempty"`
 }
 
 type NetworkPolicyIngressRule struct {
-	From  []NetworkPolicyPeer `yaml:"from,"`
+	From  []NetworkPolicyPeer `yaml:"from,omitempty"`
 	Ports []NetworkPolicyPort `yaml:"ports,omitempty"`
 }
 

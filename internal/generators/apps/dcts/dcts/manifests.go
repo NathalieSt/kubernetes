@@ -8,6 +8,7 @@ import (
 	"kubernetes/pkg/schema/k8s/apps"
 	"kubernetes/pkg/schema/k8s/core"
 	"kubernetes/pkg/schema/k8s/meta"
+	"kubernetes/pkg/schema/k8s/networking"
 )
 
 func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byte {
@@ -279,6 +280,76 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 		},
 	}
 
+	networkPolicy := utils.ManifestConfig{
+		Filename: "network-policy.yaml",
+		Manifests: []any{
+			networking.NewNetworkPolicy(meta.ObjectMeta{
+				Name: fmt.Sprintf("%v-networkpolicy", generatorMeta.Name),
+			}, networking.NetworkPolicySpec{
+				PolicyTypes: []networking.NetworkPolicyType{networking.Ingress, networking.Egress},
+				PodSelector: meta.LabelSelector{
+					MatchLabels: map[string]string{
+						"app.kubernetes.io/name": generatorMeta.Name,
+					},
+				},
+				// Access from Netbird
+				Ingress: []networking.NetworkPolicyIngressRule{
+					{
+						From: []networking.NetworkPolicyPeer{
+							shared.ExternalIngressNetworkPolicyPeer,
+						},
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:     int32(generatorMeta.Port),
+								Protocol: networking.TCP,
+							},
+						},
+					},
+				},
+				Egress: []networking.NetworkPolicyEgressRule{
+					// Access to CoreDNS
+					utils.GetCoreDNSEgressRule(),
+					// Access to MariaDB
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								IpBlock: networking.IPBlock{
+									CIDR: "100.87.188.103/32",
+								},
+							},
+						},
+					},
+					{
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:     3306,
+								Protocol: networking.TCP,
+							},
+						},
+					},
+					// Access to Livekit
+					{
+						To: []networking.NetworkPolicyPeer{
+							{
+								PodSelector: meta.LabelSelector{
+									MatchLabels: map[string]string{
+										"app.kubernetes.io/name": "livekit",
+									},
+								},
+							},
+						},
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:     7880,
+								Protocol: networking.TCP,
+							},
+						},
+					},
+				},
+			}),
+		},
+	}
+
 	kustomization := utils.ManifestConfig{
 		Filename: "kustomization.yaml",
 		Manifests: utils.GenerateKustomization(generatorMeta.Name, []string{
@@ -291,8 +362,9 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 			pvcAppThemes.Filename,
 			pvcAppUploads.Filename,
 			dctsVaultSecret.Filename,
+			networkPolicy.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, service, pvcAppConfigs, pvcAppEmojis, pvcAppEmojis, pvcAppPlugins, pvcAppSv, pvcAppThemes, pvcAppUploads, dctsVaultSecret})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, service, pvcAppConfigs, pvcAppEmojis, pvcAppEmojis, pvcAppPlugins, pvcAppSv, pvcAppThemes, pvcAppUploads, dctsVaultSecret, networkPolicy})
 }
