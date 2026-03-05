@@ -218,6 +218,10 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 						},
 						Ports: []networking.NetworkPolicyPort{
 							{
+								Port:     7880,
+								Protocol: networking.TCP,
+							},
+							{
 								Port:     7881,
 								Protocol: networking.TCP,
 							},
