@@ -135,12 +135,6 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 			Protocol:   core.TCP,
 		},
 		{
-			Name:       fmt.Sprintf("tcp-turn-%v", generatorMeta.Name),
-			Port:       5349,
-			TargetPort: 5349,
-			Protocol:   core.TCP,
-		},
-		{
 			Name:       fmt.Sprintf("tcp-rtc-%v", generatorMeta.Name),
 			Port:       7881,
 			TargetPort: 7881,
@@ -150,6 +144,18 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 			Name:       fmt.Sprintf("udp-turn-%v", generatorMeta.Name),
 			Port:       3478,
 			TargetPort: 3478,
+			Protocol:   core.UDP,
+		},
+		{
+			Name:       fmt.Sprintf("tcp-turns-%v", generatorMeta.Name),
+			Port:       5349,
+			TargetPort: 5349,
+			Protocol:   core.TCP,
+		},
+		{
+			Name:       fmt.Sprintf("udp-turns-%v", generatorMeta.Name),
+			Port:       5349,
+			TargetPort: 5349,
 			Protocol:   core.UDP,
 		},
 	}
@@ -245,12 +251,30 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							},
 						},
 					},
-					// Access from Clients for UDP
+					// Access from Clients for RTC UDP
 					{
 						Ports: []networking.NetworkPolicyPort{
 							{
 								Port:    50000,
 								EndPort: 50005,
+							},
+						},
+					},
+					{
+						// TURN/TURNS from anywhere (clients are external)
+						From: []networking.NetworkPolicyPeer{},
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:     3478,
+								Protocol: networking.UDP,
+							},
+							{
+								Port:     5349,
+								Protocol: networking.TCP,
+							},
+							{
+								Port:     5349,
+								Protocol: networking.UDP,
 							},
 						},
 					},
@@ -264,6 +288,24 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 							{
 								Port:    50000,
 								EndPort: 50005,
+							},
+						},
+					},
+					{
+						// TURN/TURNS from anywhere (clients are external)
+						To: []networking.NetworkPolicyPeer{},
+						Ports: []networking.NetworkPolicyPort{
+							{
+								Port:     3478,
+								Protocol: networking.UDP,
+							},
+							{
+								Port:     5349,
+								Protocol: networking.TCP,
+							},
+							{
+								Port:     5349,
+								Protocol: networking.UDP,
 							},
 						},
 					},

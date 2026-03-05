@@ -34,12 +34,12 @@ type NetworkPolicyPort struct {
 }
 
 type NetworkPolicyEgressRule struct {
-	To    []NetworkPolicyPeer `yaml:"to,omitempty"`
+	To    []NetworkPolicyPeer `yaml:"to,"` // FIXME: this sometimes has to be omitempty (IPBlocks) but most of the time not
 	Ports []NetworkPolicyPort `yaml:"ports,omitempty"`
 }
 
 type NetworkPolicyIngressRule struct {
-	From  []NetworkPolicyPeer `yaml:"from,omitempty"`
+	From  []NetworkPolicyPeer `yaml:"from,"` // FIXME: this sometimes has to be omitempty (IPBlocks) but most of the time not
 	Ports []NetworkPolicyPort `yaml:"ports,omitempty"`
 }
 

@@ -17,10 +17,6 @@ spec:
     port: 7880
     targetPort: 7880
     protocol: TCP
-  - name: tcp-turn-livekit
-    port: 5349
-    targetPort: 5349
-    protocol: TCP
   - name: tcp-rtc-livekit
     port: 7881
     targetPort: 7881
@@ -28,6 +24,14 @@ spec:
   - name: udp-turn-livekit
     port: 3478
     targetPort: 3478
+    protocol: UDP
+  - name: tcp-turns-livekit
+    port: 5349
+    targetPort: 5349
+    protocol: TCP
+  - name: udp-turns-livekit
+    port: 5349
+    targetPort: 5349
     protocol: UDP
   - name: rtc-udp-50000
     port: 50000

@@ -30,9 +30,18 @@ spec:
     ports:
     - port: 7880
       protocol: TCP
-  - ports:
+  - from: []
+    ports:
     - port: 50000
       endPort: 50005
+  - from: []
+    ports:
+    - port: 3478
+      protocol: UDP
+    - port: 5349
+      protocol: TCP
+    - port: 5349
+      protocol: UDP
   egress:
   - to:
     - namespaceSelector:
@@ -46,6 +55,15 @@ spec:
       protocol: UDP
     - port: 53
       protocol: TCP
-  - ports:
+  - to: []
+    ports:
     - port: 50000
       endPort: 50005
+  - to: []
+    ports:
+    - port: 3478
+      protocol: UDP
+    - port: 5349
+      protocol: TCP
+    - port: 5349
+      protocol: UDP
