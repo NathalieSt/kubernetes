@@ -13,7 +13,10 @@ type IPBlock struct {
 type NetworkPolicyPeer struct {
 	IpBlock           IPBlock            `yaml:"ipBlock,omitempty"`
 	NamespaceSelector meta.LabelSelector `yaml:"namespaceSelector,omitempty"`
-	PodSelector       meta.LabelSelector `yaml:"podSelector,"`
+	PodSelector       meta.LabelSelector `yaml:"podSelector,omitempty"`
+}
+
+type NetworkPolicyPeerIPBlock struct {
 }
 
 type PortProtocol string

@@ -24,6 +24,11 @@ func GetCoreDNSEgressRule() networking.NetworkPolicyEgressRule {
 						"kubernetes.io/metadata.name": "kube-system",
 					},
 				},
+				PodSelector: meta.LabelSelector{
+					MatchLabels: map[string]string{
+						"k8s-app": "kube-dns",
+					},
+				},
 			},
 		},
 	}
