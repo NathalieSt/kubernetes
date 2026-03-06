@@ -14,3 +14,4 @@ resources:
 - pvc-app-uploads.yaml
 - vault-secret.yaml
 - network-policy.yaml
+- pvc-app-graphs.yaml
