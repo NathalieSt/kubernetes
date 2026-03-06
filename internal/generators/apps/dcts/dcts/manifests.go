@@ -159,6 +159,9 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 							},
 						},
 						Spec: core.PodSpec{
+							SecurityContext: core.PodSecurityContext{
+								FsGroup: 1000,
+							},
 							Containers: []core.Container{
 								{
 									Name:  generatorMeta.Name,
@@ -248,7 +251,7 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 									Name: livekitConfigVolumeName,
 									Secret: core.SecretVolumeSource{
 										SecretName:  "livekit-secret",
-										DefaultMode: 0600,
+										DefaultMode: 0644,
 									},
 								},
 							},

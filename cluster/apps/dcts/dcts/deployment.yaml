@@ -101,4 +101,6 @@ spec:
       - name: livekit-volume
         secret:
           secretName: livekit-secret
-          defaultMode: 384
+          defaultMode: 420
+      securityContext:
+        fsGroup: 1000
