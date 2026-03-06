@@ -37,7 +37,8 @@ spec:
   - to:
     - ipBlock:
         cidr: 100.87.188.103/32
-  - ports:
+  - to: []
+    ports:
     - port: 3306
       protocol: TCP
   - to:

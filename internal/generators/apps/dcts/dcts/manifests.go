@@ -226,6 +226,15 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 											SubPath:   "livekit.yaml",
 										},
 									},
+									SecurityContext: core.ContainerSecurityContext{
+										RunAsUser:                1000,
+										RunAsNonRoot:             true,
+										AllowPrivilegeEscalation: false,
+										ReadOnlyRootFilesystem:   true,
+										Capabilities: core.Capabilities{
+											Drop: []string{"ALL"},
+										},
+									},
 								},
 							},
 							Volumes: []core.Volume{

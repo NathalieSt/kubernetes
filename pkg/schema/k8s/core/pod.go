@@ -44,14 +44,18 @@ type SecretKeyRef struct {
 }
 
 type Capabilities struct {
-	Add []string `yaml:"add,omitempty"`
+	Add  []string `yaml:"add,omitempty"`
+	Drop []string `yaml:"drop,omitempty"`
 }
 
 type ContainerSecurityContext struct {
-	Capabilities Capabilities `yaml:"capabilities,omitempty"`
-	Privileged   bool         `yaml:"privileged,omitempty"`
-	RunAsUser    int64        `yaml:"runAsUser,omitempty"`
-	RunAsGroup   int64        `yaml:"runAsGroup,omitempty"`
+	Capabilities             Capabilities `yaml:"capabilities,omitempty"`
+	Privileged               bool         `yaml:"privileged,omitempty"`
+	RunAsUser                int64        `yaml:"runAsUser,omitempty"`
+	RunAsGroup               int64        `yaml:"runAsGroup,omitempty"`
+	AllowPrivilegeEscalation bool         `yaml:"allowPrivilegeEscalation,omitempty"`
+	ReadOnlyRootFilesystem   bool         `yaml:"readOnlyRootFilesystem,omitempty"`
+	RunAsNonRoot             bool         `yaml:"runAsNonRoot,omitempty"`
 }
 
 type PodSecurityContext struct {

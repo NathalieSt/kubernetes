@@ -72,6 +72,13 @@ spec:
           value: redis.redis.svc.cluster.local
         - name: REDIS_PORT
           value: "6379"
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       volumes:
       - name: app-sv-volume
         persistentVolumeClaim:

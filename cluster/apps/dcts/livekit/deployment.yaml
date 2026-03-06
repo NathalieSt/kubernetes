@@ -47,6 +47,13 @@ spec:
             secretKeyRef:
               key: api-secret
               name: livekit-secret
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       volumes:
       - name: livekit-config-volume
         secret:
