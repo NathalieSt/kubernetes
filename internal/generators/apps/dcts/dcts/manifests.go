@@ -371,6 +371,14 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 					{
 						Ports: []networking.NetworkPolicyPort{
 							{
+								Port:     443,
+								Protocol: networking.TCP,
+							},
+						},
+					},
+					{
+						Ports: []networking.NetworkPolicyPort{
+							{
 								Port:     3306,
 								Protocol: networking.TCP,
 							},

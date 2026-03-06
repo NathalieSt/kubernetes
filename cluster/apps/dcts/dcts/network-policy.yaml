@@ -39,6 +39,10 @@ spec:
         cidr: 100.87.188.103/32
   - to: []
     ports:
+    - port: 443
+      protocol: TCP
+  - to: []
+    ports:
     - port: 3306
       protocol: TCP
   - to:
