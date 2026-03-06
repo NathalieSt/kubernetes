@@ -15,3 +15,4 @@ resources:
 - vault-secret.yaml
 - network-policy.yaml
 - pvc-app-graphs.yaml
+- pvc-app-backup.yaml

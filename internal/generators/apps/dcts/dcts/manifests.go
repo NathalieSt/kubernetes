@@ -125,6 +125,21 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 		},
 	}
 
+	pvcAppBackupName := "dcts-app-backup"
+	pvcAppBackup := utils.ManifestConfig{
+		Filename: "pvc-app-backup.yaml",
+		Manifests: []any{
+			core.NewPersistentVolumeClaim(meta.ObjectMeta{
+				Name: pvcAppBackupName,
+			}, core.PersistentVolumeClaimSpec{
+				AccessModes: []string{"ReadWriteMany"},
+				Resources: core.VolumeResourceRequirements{Requests: map[string]string{
+					"storage": "5Gi",
+				}},
+				StorageClassName: shared.NFSRemoteClass,
+			}),
+		},
+	}
 	secretName := fmt.Sprintf("%v-secret", generatorMeta.Name)
 	dctsSecretConfig := utils.StaticSecretConfig{
 		Name:       fmt.Sprintf("%v-secret", generatorMeta.Name),
@@ -150,6 +165,7 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 	appThemesVolume := "app-themes-volume"
 	livekitConfigVolumeName := "livekit-volume"
 	appGraphsVolume := "app-graphs-volume"
+	appBackupVolume := "app-backup-volume"
 	deployment := utils.ManifestConfig{
 		Filename: "deployment.yaml",
 		Manifests: []any{
@@ -241,6 +257,7 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 										{Name: appPluginsVolume, MountPath: "/app/plugins"},
 										{Name: appThemesVolume, MountPath: "/app/themes"},
 										{Name: appGraphsVolume, MountPath: "/app/public/graphs"},
+										{Name: appBackupVolume, MountPath: "/app/backups"},
 										{
 											Name:      livekitConfigVolumeName,
 											MountPath: "/app/livekit/livekit.yaml",
@@ -266,6 +283,7 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 								{Name: appPluginsVolume, PersistentVolumeClaim: core.PVCVolumeSource{ClaimName: pvcAppPluginsName}},
 								{Name: appThemesVolume, PersistentVolumeClaim: core.PVCVolumeSource{ClaimName: pvcAppThemesName}},
 								{Name: appGraphsVolume, PersistentVolumeClaim: core.PVCVolumeSource{ClaimName: pvcAppGraphsName}},
+								{Name: appBackupVolume, PersistentVolumeClaim: core.PVCVolumeSource{ClaimName: pvcAppBackupName}},
 								{
 									Name: livekitConfigVolumeName,
 									Secret: core.SecretVolumeSource{
@@ -395,8 +413,9 @@ func createDCTSManifests(generatorMeta generator.GeneratorMeta) map[string][]byt
 			dctsVaultSecret.Filename,
 			networkPolicy.Filename,
 			pvcAppGraphs.Filename,
+			pvcAppBackup.Filename,
 		}),
 	}
 
-	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, service, pvcAppConfigs, pvcAppGraphs, pvcAppEmojis, pvcAppEmojis, pvcAppPlugins, pvcAppSv, pvcAppThemes, pvcAppUploads, dctsVaultSecret, networkPolicy})
+	return utils.MarshalManifests([]utils.ManifestConfig{kustomization, deployment, service, pvcAppConfigs, pvcAppBackup, pvcAppGraphs, pvcAppEmojis, pvcAppEmojis, pvcAppPlugins, pvcAppSv, pvcAppThemes, pvcAppUploads, dctsVaultSecret, networkPolicy})
 }

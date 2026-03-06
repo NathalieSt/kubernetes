@@ -38,6 +38,8 @@ spec:
           name: app-themes-volume
         - mountPath: /app/public/graphs
           name: app-graphs-volume
+        - mountPath: /app/backups
+          name: app-backup-volume
         - mountPath: /app/livekit/livekit.yaml
           subPath: livekit.yaml
           name: livekit-volume
@@ -103,6 +105,9 @@ spec:
       - name: app-graphs-volume
         persistentVolumeClaim:
           claimName: dcts-app-graphs
+      - name: app-backup-volume
+        persistentVolumeClaim:
+          claimName: dcts-app-backup
       - name: livekit-volume
         secret:
           secretName: livekit-secret
