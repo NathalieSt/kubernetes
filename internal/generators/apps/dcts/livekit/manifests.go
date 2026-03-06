@@ -119,7 +119,7 @@ func createLivekitManifests(generatorMeta generator.GeneratorMeta) map[string][]
 									Name: livekitConfigVolumeName,
 									Secret: core.SecretVolumeSource{
 										SecretName:  secretName,
-										DefaultMode: 0600,
+										DefaultMode: 0644,
 									},
 								},
 								{

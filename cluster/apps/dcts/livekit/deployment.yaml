@@ -58,7 +58,7 @@ spec:
       - name: livekit-config-volume
         secret:
           secretName: livekit-secret
-          defaultMode: 384
+          defaultMode: 420
       - name: livekit-certs-volume
         secret:
           secretName: livekit-tls
