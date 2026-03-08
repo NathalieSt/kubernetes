@@ -87,7 +87,10 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 					},
 					Values: map[string]any{
 						"gitea": map[string]any{
-							"admin": map[string]any{"username": "Nathi"},
+							"admin": map[string]any{
+								"username":     "Nathi",
+								"passwordMode": "initialOnlyRequireReset",
+							},
 							"config": map[string]any{
 								"database": map[string]any{
 									"DB_TYPE": "postgres",

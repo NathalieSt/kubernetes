@@ -16,6 +16,7 @@ spec:
   values:
     gitea:
       admin:
+        passwordMode: initialOnlyRequireReset
         username: Nathi
       cache:
         ADAPTER: redis
