@@ -132,6 +132,7 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									"netbird.io/expose": "true",
 									"netbird.io/groups": "cluster-services",
 								},
+								"port": 2222,
 							},
 						},
 					},

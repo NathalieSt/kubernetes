@@ -48,6 +48,7 @@ spec:
         annotations:
           netbird.io/expose: "true"
           netbird.io/groups: cluster-services
+        port: 2222
   valuesFrom:
   - kind: Secret
     name: forgejo-pg-creds-secret
