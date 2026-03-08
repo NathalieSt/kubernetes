@@ -41,6 +41,10 @@ spec:
         annotations:
           netbird.io/expose: "true"
           netbird.io/groups: cluster-services
+      ssh:
+        annotations:
+          netbird.io/expose: "true"
+          netbird.io/groups: cluster-services
   valuesFrom:
   - kind: Secret
     name: forgejo-pg-creds-secret
