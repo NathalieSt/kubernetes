@@ -27,6 +27,8 @@ spec:
           NAME: forgejo
         server:
           ROOT_URL: https://code.nathi.lol
+          SSH_DOMAIN: code.nathi.lol
+          SSH_PORT: "2222"
       queue:
         CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
         TYPE: redis

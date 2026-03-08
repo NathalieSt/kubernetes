@@ -95,7 +95,9 @@ func createForgejoManifests(generatorMeta generator.GeneratorMeta, rootDir strin
 									"NAME":    "forgejo",
 								},
 								"server": map[string]any{
-									"ROOT_URL": "https://code.nathi.lol",
+									"ROOT_URL":   "https://code.nathi.lol",
+									"SSH_DOMAIN": "code.nathi.lol",
+									"SSH_PORT":   "2222",
 								},
 							},
 							"queue": map[string]any{
