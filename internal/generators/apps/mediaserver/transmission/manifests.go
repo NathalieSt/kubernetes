@@ -163,7 +163,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 										},
 										{
 											Name:  "LOCAL_NETWORK",
-											Value: "10.244.0.0/16",
+											Value: "10.42.0.0/16",
 										},
 									},
 									SecurityContext: core.ContainerSecurityContext{
