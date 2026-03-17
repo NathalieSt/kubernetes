@@ -28,7 +28,7 @@ spec:
         - mountPath: /config
           name: flood-config-volume
       containers:
-      - image: jesec/flood:4.11
+      - image: jesec/flood:4.13.0
         name: flood-ui
         ports:
         - containerPort: 3000

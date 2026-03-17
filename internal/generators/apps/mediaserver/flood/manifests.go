@@ -71,7 +71,7 @@ func createTransmissionManifests(generatorMeta generator.GeneratorMeta) map[stri
 							Containers: []core.Container{
 								{
 									Name:  "flood-ui",
-									Image: "jesec/flood:4.11",
+									Image: "jesec/flood:4.13.0",
 									SecurityContext: core.ContainerSecurityContext{
 										RunAsUser:  1000,
 										RunAsGroup: 1001,
