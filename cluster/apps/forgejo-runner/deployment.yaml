@@ -18,24 +18,22 @@ spec:
         app.kubernetes.io/version: 12.7.3
     spec:
       containers:
-      - args:
-        - daemon
-        - --config
-        - /data/.runner
-        image: code.forgejo.org/forgejo/runner:12.7.3
-        name: forgejo-runner
-        volumeMounts:
-        - mountPath: /data
-          name: runner-data
-        env:
-        - name: FORGEJO_INSTANCE_URL
-          value: https://code.nathi.lol
-        - name: FORGEJO_RUNNER_REGISTRATION_TOKEN
-          valueFrom:
-            secretKeyRef:
-              key: RUNNER_TOKEN
-              name: forgejo-runner-secret
+        - command:
+            - /bin/sh -c "sleep 5; forgejo-runner daemon"
+          image: code.forgejo.org/forgejo/runner:12.7.3
+          name: forgejo-runner
+          volumeMounts:
+            - mountPath: /data
+              name: runner-data
+          env:
+            - name: FORGEJO_INSTANCE_URL
+              value: https://code.nathi.lol
+            - name: FORGEJO_RUNNER_REGISTRATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: RUNNER_TOKEN
+                  name: forgejo-runner-secret
       volumes:
-      - name: runner-data
-        persistentVolumeClaim:
-          claimName: forgejo-runner-data-pvc
+        - name: runner-data
+          persistentVolumeClaim:
+            claimName: forgejo-runner-data-pvc

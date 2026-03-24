@@ -4,8 +4,7 @@ kind: Kustomization
 metadata:
   name: forgejo-runner
 resources:
-- namespace.yaml
-- vault-secret.yaml
-- data-pvc.yaml
-- deployment.yaml
-- network-policy.yaml
+  - namespace.yaml
+  - vault-secret.yaml
+  - data-pvc.yaml
+  - deployment.yaml
