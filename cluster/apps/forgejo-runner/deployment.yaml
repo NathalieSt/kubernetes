@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: forgejo-runner
-    app.kubernetes.io/version: 6.3.1
+    app.kubernetes.io/version: 12.7.3
   name: forgejo-runner
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: forgejo-runner
-        app.kubernetes.io/version: 6.3.1
+        app.kubernetes.io/version: 12.7.3
     spec:
       containers:
       - args:
         - daemon
         - --config
         - /data/.runner
-        image: code.forgejo.org/forgejo/runner:6.3.1
+        image: code.forgejo.org/forgejo/runner:12.7.3
         name: forgejo-runner
         volumeMounts:
         - mountPath: /data
