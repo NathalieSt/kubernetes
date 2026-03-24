@@ -26,9 +26,6 @@ spec:
             - sleep 5; [ -f /data/config.yml ] || forgejo-runner generate-config > /data/config.yml; [ -f /data/.runner ] || forgejo-runner register --no-interactive --instance "$FORGEJO_INSTANCE_URL" --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" --name forgejo-runner --labels ubuntu-latest:docker://node:20-bookworm --config /data/config.yml; forgejo-runner daemon --config /data/config.yml
           image: code.forgejo.org/forgejo/runner:12.7.3
           name: forgejo-runner
-          volumeMounts:
-            - mountPath: /data
-              name: runner-data
           env:
             - name: FORGEJO_INSTANCE_URL
               value: http://forgejo-http.forgejo.svc.cluster.local:3000
@@ -37,7 +34,32 @@ spec:
                 secretKeyRef:
                   key: RUNNER_TOKEN
                   name: forgejo-runner-secret
+            - name: DOCKER_HOST
+              value: tcp://localhost:2376
+            - name: DOCKER_TLS_CERTDIR
+              value: /certs
+            - name: DOCKER_CERT_PATH
+              value: /certs/client
+            - name: DOCKER_TLS_VERIFY
+              value: "1"
+          volumeMounts:
+            - mountPath: /data
+              name: runner-data
+            - mountPath: /certs
+              name: docker-certs
+        - name: docker
+          image: docker:27-dind
+          securityContext:
+            privileged: true
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: /certs
+          volumeMounts:
+            - mountPath: /certs
+              name: docker-certs
       volumes:
         - name: runner-data
           persistentVolumeClaim:
             claimName: forgejo-runner-data-pvc
+        - name: docker-certs
+          emptyDir: {}
