@@ -21,7 +21,7 @@ spec:
         - command:
             - /bin/sh
             - -c
-            - sleep 5; [ -f /data/.runner ] || forgejo-runner register --no-interactive --instance "$FORGEJO_INSTANCE_URL" --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" --name forgejo-runner --labels ubuntu-latest:docker://node:20-bookworm --config /data/config.yml; forgejo-runner daemon --config /data/config.yml
+            - sleep 5; [ -f /data/config.yml ] || forgejo-runner generate-config > /data/config.yml; [ -f /data/.runner ] || forgejo-runner register --no-interactive --instance "$FORGEJO_INSTANCE_URL" --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" --name forgejo-runner --labels ubuntu-latest:docker://node:20-bookworm --config /data/config.yml; forgejo-runner daemon --config /data/config.yml
           image: code.forgejo.org/forgejo/runner:12.7.3
           name: forgejo-runner
           volumeMounts:
