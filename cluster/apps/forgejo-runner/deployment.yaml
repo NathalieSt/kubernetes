@@ -17,6 +17,8 @@ spec:
         app.kubernetes.io/name: forgejo-runner
         app.kubernetes.io/version: 12.7.3
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - command:
             - /bin/sh
