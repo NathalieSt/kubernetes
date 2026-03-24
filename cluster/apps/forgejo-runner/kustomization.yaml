@@ -8,3 +8,4 @@ resources:
   - vault-secret.yaml
   - data-pvc.yaml
   - deployment.yaml
+  - scaled-object.yaml
