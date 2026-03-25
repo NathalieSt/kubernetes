@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: dcts
-    app.kubernetes.io/version: 1.6.4.4
+    app.kubernetes.io/version: 1.8.2.3.1
   name: dcts
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: dcts
-        app.kubernetes.io/version: 1.6.4.4
+        app.kubernetes.io/version: 1.8.2.3.1
     spec:
       containers:
-      - image: ghcr.io/hackthedev/dcts-shipping:1.6.4.4
+      - image: ghcr.io/hackthedev/dcts-shipping:1.8.2.3.1
         name: dcts
         ports:
         - containerPort: 2052
