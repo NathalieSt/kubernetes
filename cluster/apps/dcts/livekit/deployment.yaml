@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: livekit
-    app.kubernetes.io/version: latest
+    app.kubernetes.io/version: v1.10.0
   name: livekit
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: livekit
-        app.kubernetes.io/version: latest
+        app.kubernetes.io/version: v1.10.0
     spec:
       containers:
       - command:
@@ -24,7 +24,7 @@ spec:
         - /etc/livekit.yaml
         - --port
         - "7880"
-        image: livekit/livekit-server:latest
+        image: livekit/livekit-server:v1.10.0
         name: livekit
         ports:
         - containerPort: 7880

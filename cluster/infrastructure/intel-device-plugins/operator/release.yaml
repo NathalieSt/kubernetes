@@ -2,14 +2,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: intel-device-operator
+  name: intel-device-plugins-operator
 spec:
   interval: 24h
   chartRef:
     kind: HelmChart
-    name: intel-device-operator-chart
+    name: intel-device-plugins-operator-chart
   timeout: 10m
-  releaseName: intel-device-operator
+  releaseName: intel-device-plugins-operator
   install:
     remediation:
       retries: 3
