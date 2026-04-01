@@ -4,7 +4,8 @@ kind: Kustomization
 metadata:
   name: forgejo
 resources:
-  - namespace.yaml
-  - repo.yaml
-  - release.yaml
-  - network-policy.yaml
+- namespace.yaml
+- repo.yaml
+- release.yaml
+- scaled-object.yaml
+- network-policy.yaml
