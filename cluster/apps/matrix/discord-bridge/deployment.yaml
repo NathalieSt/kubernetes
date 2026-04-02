@@ -3,18 +3,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: discord-bridge
+    app.kubernetes.io/name: signal-bridge
     app.kubernetes.io/version: v0.7.5
-  name: discord-bridge
+  name: signal-bridge
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: discord-bridge
+      app.kubernetes.io/name: signal-bridge
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: discord-bridge
+        app.kubernetes.io/name: signal-bridge
         app.kubernetes.io/version: v0.7.5
     spec:
       initContainers:
@@ -60,18 +60,18 @@ spec:
         - name: POSTGRES_DB
           value: discord-bridge-db
       containers:
-      - image: dock.mau.dev/mautrix/discord:v0.7.5
-        name: discord-bridge
+      - image: dock.mau.dev/mautrix/signal:v0.7.5
+        name: signal-bridge
         ports:
         - containerPort: 29334
-          name: discord-bridge
+          name: signal-bridge
         volumeMounts:
         - mountPath: /data
           name: data-volume
       volumes:
       - name: config-volume
         configMap:
-          name: discord-bridge-configmap
+          name: signal-bridge-configmap
       - name: data-volume
         persistentVolumeClaim:
-          claimName: discord-bridge-data-pvc
+          claimName: signal-bridge-data-pvc

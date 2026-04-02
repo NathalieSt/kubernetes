@@ -3,13 +3,13 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: discord-bridge
+    app.kubernetes.io/name: signal-bridge
     app.kubernetes.io/version: v0.7.5
-  name: discord-bridge
+  name: signal-bridge
 spec:
   selector:
-    app.kubernetes.io/name: discord-bridge
+    app.kubernetes.io/name: signal-bridge
   ports:
-  - name: http-discord-bridge
+  - name: http-signal-bridge
     port: 29334
     targetPort: 29334
