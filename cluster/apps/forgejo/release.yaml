@@ -24,7 +24,7 @@ spec:
       config:
         database:
           DB_TYPE: postgres
-          HOST: forgejo-pg-rw.forgejo-pg-cluster.svc.cluster.local:5432
+          HOST: remote-fs.netbird.nathalie-stiefsohn.eu:5432
           NAME: forgejo
         server:
           ROOT_URL: https://code.nathi.lol
