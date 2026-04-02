@@ -155,7 +155,6 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-  - name: forgejo-pg
   - name: valkey
   - name: keda
 ---
