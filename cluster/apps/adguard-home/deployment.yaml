@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: adguard-home
         app.kubernetes.io/version: v0.107.71
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: adguard/adguardhome:v0.107.71
         name: adguard-home
@@ -32,6 +33,13 @@ spec:
           name: conf-volume
         - mountPath: /opt/adguardhome/work
           name: work-volume
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       volumes:
       - name: conf-volume
         persistentVolumeClaim:

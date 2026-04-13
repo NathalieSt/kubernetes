@@ -17,9 +17,17 @@ spec:
         app.kubernetes.io/name: redlib
         app.kubernetes.io/version: sha-ba98178
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: quay.io/redlib/redlib:sha-ba98178
         name: redlib
         ports:
         - containerPort: 8080
           name: redlib
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi

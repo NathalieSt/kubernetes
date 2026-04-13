@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: valkey
         app.kubernetes.io/version: 8-alpine3.22
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: valkey/valkey:8-alpine3.22
         name: valkey
@@ -26,6 +27,13 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: valkey-volume
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       volumes:
       - name: valkey-volume
         persistentVolumeClaim:

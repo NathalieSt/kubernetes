@@ -47,6 +47,7 @@ spec:
               name: affine-pg-creds-secret
         - name: DB_DATABASE
           value: affine-db
+      automountServiceAccountToken: false
       containers:
       - command:
         - /bin/sh
@@ -80,6 +81,13 @@ spec:
               name: affine-pg-creds-secret
         - name: DB_DATABASE
           value: affine-db
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       volumes:
       - name: conf-volume
         persistentVolumeClaim:

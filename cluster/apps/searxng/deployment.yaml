@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: searxng
         app.kubernetes.io/version: 2025.8.3-2e62eb5
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: searxng/searxng:2025.8.3-2e62eb5
         name: searxng
@@ -30,6 +31,13 @@ spec:
           name: templates-pvc-volume
         - mountPath: /usr/local/searxng/searx/static
           name: static-pvc-volume
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       volumes:
       - name: configmap-volume
         configMap:

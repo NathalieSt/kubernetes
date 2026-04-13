@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: forgejo-runner
         app.kubernetes.io/version: 12.7.3
     spec:
+      automountServiceAccountToken: false
       containers:
       - command:
         - /bin/sh
@@ -45,6 +46,13 @@ spec:
           value: /certs/client
         - name: DOCKER_TLS_VERIFY
           value: "1"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       - image: docker:27-dind
         name: docker
         volumeMounts:
@@ -53,6 +61,13 @@ spec:
         env:
         - name: DOCKER_TLS_CERTDIR
           value: /certs
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
         securityContext:
           privileged: true
       volumes:

@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: mealie
         app.kubernetes.io/version: v3.0.2
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: ghcr.io/mealie-recipes/mealie:v3.0.2
         name: mealie
@@ -45,6 +46,13 @@ spec:
           value: mealie
         - name: BASE_URL
           value: https://mealie.netbird.selfhosted
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       volumes:
       - name: mealie-pvc
         persistentVolumeClaim:

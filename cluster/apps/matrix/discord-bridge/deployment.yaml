@@ -59,6 +59,7 @@ spec:
               name: matrix-pg-creds-secret
         - name: POSTGRES_DB
           value: discord-bridge-db
+      automountServiceAccountToken: false
       containers:
       - image: dock.mau.dev/mautrix/discord:v0.7.5
         name: discord-bridge
@@ -68,6 +69,13 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: data-volume
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       volumes:
       - name: config-volume
         configMap:

@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: dcts
         app.kubernetes.io/version: 1.8.2.3.1
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: ghcr.io/hackthedev/dcts-shipping:1.8.2.3.1
         name: dcts
@@ -76,11 +77,19 @@ spec:
           value: redis.redis.svc.cluster.local
         - name: REDIS_PORT
           value: "6379"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
         securityContext:
           capabilities:
             drop:
             - ALL
           runAsUser: 1000
+          allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
       volumes:

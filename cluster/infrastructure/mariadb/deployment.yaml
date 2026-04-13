@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: mariadb
         app.kubernetes.io/version: 11.4.5
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: lscr.io/linuxserver/mariadb:11.4.5
         name: mariadb
@@ -50,6 +51,13 @@ spec:
             secretKeyRef:
               key: password
               name: mariadb-creds-secret
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
       volumes:
       - name: pvc-volume
         persistentVolumeClaim:
