@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: booklore
         app.kubernetes.io/version: v1.15.0
     spec:
+      automountServiceAccountToken: false
       containers:
       - image: booklore/booklore:v1.15.0
         name: booklore
@@ -53,6 +54,13 @@ spec:
           value: "6060"
         - name: SWAGGER_ENABLED
           value: "false"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       volumes:
       - name: data-volume
         persistentVolumeClaim:
