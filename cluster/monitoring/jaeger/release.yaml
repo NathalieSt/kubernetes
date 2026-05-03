@@ -14,22 +14,17 @@ spec:
     remediation:
       retries: 3
   values:
-    allInOne:
-      enabled: false
-    collector:
-      enabled: true
     provisionDataStore:
       cassandra: false
       elasticsearch: false
       kafka: false
-    query:
-      enabled: false
     userconfig: |
       extensions:
         healthcheckv2:
           use_v2: true
           http:
             endpoint: 0.0.0.0:13133
+      
       receivers:
         otlp:
           protocols:
@@ -39,15 +34,24 @@ spec:
               endpoint: 0.0.0.0:4318
         jaeger:
           protocols:
-            thrift_http:
-              endpoint: 0.0.0.0:14268
             grpc:
               endpoint: 0.0.0.0:14250
+            thrift_http:
+              endpoint: 0.0.0.0:14268
+            thrift_compact:
+              endpoint: 0.0.0.0:6831
+            thrift_binary:
+              endpoint: 0.0.0.0:6832
+      
       processors:
-        batch: {}
+        batch:
+      
       exporters:
         otlphttp:
           endpoint: http://victoria-traces.victoria-traces.svc.cluster.local:10428/insert/opentelemetry
+          tls:
+            insecure: true
+      
       service:
         extensions: [healthcheckv2]
         pipelines:
