@@ -6,8 +6,8 @@ metadata:
     netbird.io/expose: "true"
     netbird.io/groups: cluster-services
   labels:
-    app.kubernetes.io/name: audiomuse-ai
-    app.kubernetes.io/version: sha256:344c8d39bfc9cf4b2e83ab4d48c99692003786a5ebd2f0bc443099dc9e238de8
+    app.kubernetes.io/name: audiomuse-ai-flask
+    app.kubernetes.io/version: sha256_344c8d39bfc9c
   name: audiomuse-ai
 spec:
   selector:
