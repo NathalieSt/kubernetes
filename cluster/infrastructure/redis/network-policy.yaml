@@ -15,6 +15,7 @@ spec:
           values:
           - affine
           - dcts
+          - jellyfin
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
@@ -22,3 +23,5 @@ spec:
           values:
           - affine
           - dcts
+          - audiomuse-ai-flask
+          - audiomuse-ai-worker
