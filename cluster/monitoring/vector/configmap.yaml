@@ -86,7 +86,7 @@ data:
         inputs:
           - normalize_level
         condition: |
-          !includes(["info", "debug"], .lvl)
+          !includes(["debug", "trace"], .lvl)
     
       remove_k8s_noise:
         type: remap
@@ -101,6 +101,12 @@ data:
         inputs:
           - remove_k8s_noise
         source: |
+          # Promote k8s metadata to flat top-level fields used as VictoriaLogs stream labels
+          .namespace = string(.kubernetes.pod_namespace) ?? ""
+          .pod       = string(.kubernetes.pod_name) ?? ""
+          .container = string(.kubernetes.container_name) ?? ""
+          .node      = string(.kubernetes.pod_node_name) ?? ""
+    
           # Rename message to short key
           .msg = .message
           del(.message)
@@ -137,4 +143,4 @@ data:
         query:
           _msg_field: msg
           _time_field: timestamp
-          _stream_fields: kubernetes.pod_namespace,kubernetes.container_name
+          _stream_fields: namespace,pod,container,node
