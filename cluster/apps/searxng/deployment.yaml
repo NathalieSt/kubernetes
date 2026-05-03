@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: searxng
-    app.kubernetes.io/version: 2025.8.3-2e62eb5
+    app.kubernetes.io/version: sha256:b2211b2ad11fc9822ed8d94502a609a862d6587e13f052e18847559586c76b71
   name: searxng
 spec:
   replicas: 1
@@ -15,11 +15,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: searxng
-        app.kubernetes.io/version: 2025.8.3-2e62eb5
+        app.kubernetes.io/version: sha256:b2211b2ad11fc9822ed8d94502a609a862d6587e13f052e18847559586c76b71
     spec:
       automountServiceAccountToken: false
       containers:
-      - image: searxng/searxng:2025.8.3-2e62eb5
+      - image: searxng/searxng@sha256:b2211b2ad11fc9822ed8d94502a609a862d6587e13f052e18847559586c76b71
         name: searxng
         ports:
         - containerPort: 8080
