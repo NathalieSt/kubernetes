@@ -48,9 +48,7 @@ spec:
       
       exporters:
         otlphttp:
-          endpoint: http://victoria-traces.victoria-traces.svc.cluster.local:10428/insert/opentelemetry
-          tls:
-            insecure: true
+          traces_endpoint: http://victoria-traces.victoria-traces.svc.cluster.local:10428/insert/opentelemetry/v1/traces
       
       service:
         extensions: [healthcheckv2]
