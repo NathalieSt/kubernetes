@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: searxng
-    app.kubernetes.io/version: sha256_b22
+    app.kubernetes.io/version: sha256_b2211b2ad11fc
   name: searxng
 spec:
   replicas: 1
@@ -15,9 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: searxng
-        app.kubernetes.io/version: sha256_b22
+        app.kubernetes.io/version: sha256_b2211b2ad11fc
     spec:
       automountServiceAccountToken: false
+      enableServiceLinks: false
       containers:
       - image: searxng/searxng@sha256:b2211b2ad11fc9822ed8d94502a609a862d6587e13f052e18847559586c76b71
         name: searxng

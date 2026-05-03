@@ -7,7 +7,7 @@ metadata:
     netbird.io/groups: cluster-services
   labels:
     app.kubernetes.io/name: searxng
-    app.kubernetes.io/version: sha256_b22
+    app.kubernetes.io/version: sha256_b2211b2ad11fc
   name: searxng
 spec:
   selector:
