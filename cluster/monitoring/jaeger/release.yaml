@@ -18,40 +18,40 @@ spec:
       enabled: false
     collector:
       enabled: true
-    config:
-      exporters:
-        otlphttp:
-          endpoint: http://victoria-traces.victoria-traces.svc.cluster.local:10428/insert/opentelemetry
-      processors:
-        batch: {}
-      receivers:
-        jaeger:
-          protocols:
-            grpc:
-              endpoint: 0.0.0.0:14250
-            thrift_http:
-              endpoint: 0.0.0.0:14268
-        otlp:
-          protocols:
-            grpc:
-              endpoint: 0.0.0.0:4317
-            http:
-              endpoint: 0.0.0.0:4318
-      service:
-        extensions:
-        - healthcheckv2
-        pipelines:
-          traces:
-            exporters:
-            - otlphttp
-            processors:
-            - batch
-            receivers:
-            - otlp
-            - jaeger
     provisionDataStore:
       cassandra: false
       elasticsearch: false
       kafka: false
     query:
       enabled: false
+    userconfig: |
+      extensions:
+        healthcheckv2:
+          use_v2: true
+          http:
+            endpoint: 0.0.0.0:13133
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+        jaeger:
+          protocols:
+            thrift_http:
+              endpoint: 0.0.0.0:14268
+            grpc:
+              endpoint: 0.0.0.0:14250
+      processors:
+        batch: {}
+      exporters:
+        otlphttp:
+          endpoint: http://victoria-traces.victoria-traces.svc.cluster.local:10428/insert/opentelemetry
+      service:
+        extensions: [healthcheckv2]
+        pipelines:
+          traces:
+            receivers: [otlp, jaeger]
+            processors: [batch]
+            exporters: [otlphttp]
