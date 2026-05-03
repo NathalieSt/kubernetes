@@ -66,7 +66,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/monitoring/victoria-logs
+  path: ./cluster/monitoring/victoria-stack/victoria-logs
   prune: true
   wait: true
   timeout: 10m
@@ -84,7 +84,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/monitoring/victoria-metrics
+  path: ./cluster/monitoring/victoria-stack/victoria-metrics
   prune: true
   wait: true
   timeout: 10m
@@ -102,7 +102,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/monitoring/victoria-traces
+  path: ./cluster/monitoring/victoria-stack/victoria-traces
   prune: true
   wait: true
   timeout: 10m
