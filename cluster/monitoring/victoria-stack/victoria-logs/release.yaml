@@ -1,0 +1,23 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-logs
+spec:
+  interval: 24h
+  chartRef:
+    kind: OCIRepository
+    name: victoria-logs-repo
+  timeout: 10m
+  releaseName: victoria-logs
+  install:
+    remediation:
+      retries: 3
+  values:
+    server:
+      fullnameOverride: victoria-logs
+      persistentVolume:
+        enabled: true
+        size: 20Gi
+        storageClassName: nfs-remote
+      retentionPeriod: 4w
