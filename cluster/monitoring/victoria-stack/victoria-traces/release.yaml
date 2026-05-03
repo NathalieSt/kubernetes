@@ -1,0 +1,23 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-traces
+spec:
+  interval: 24h
+  chartRef:
+    kind: OCIRepository
+    name: victoria-traces-repo
+  timeout: 10m
+  releaseName: victoria-traces
+  install:
+    remediation:
+      retries: 3
+  values:
+    server:
+      fullnameOverride: victoria-traces
+      persistentVolume:
+        enabled: true
+        size: 20Gi
+        storageClassName: nfs-remote
+      retentionPeriod: 4w

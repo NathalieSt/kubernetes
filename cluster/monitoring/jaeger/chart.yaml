@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: jaeger-chart
+spec:
+  interval: 24h
+  chart: jaeger
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: jaeger-repo
+  version: 4.0.0

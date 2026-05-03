@@ -2,37 +2,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: elastic-stack-instance
+  name: jaeger
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: elastic-stack
+  targetNamespace: jaeger
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster/monitoring/elastic-stack/instance
+  path: ./cluster/monitoring/jaeger
   prune: true
   wait: true
   timeout: 10m
   dependsOn:
-  - name: csi-driver-nfs
-  - name: vector
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: elastic-stack-operator
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: elastic-stack-operator
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/monitoring/elastic-stack/operator
-  prune: true
-  wait: true
-  timeout: 10m
+  - name: victoria-traces
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -75,6 +58,24 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: victoria-logs
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: victoria-logs
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/monitoring/victoria-logs
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: victoria-metrics
   namespace: flux-system
 spec:
@@ -84,6 +85,24 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./cluster/monitoring/victoria-metrics
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: victoria-traces
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: victoria-traces
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/monitoring/victoria-traces
   prune: true
   wait: true
   timeout: 10m

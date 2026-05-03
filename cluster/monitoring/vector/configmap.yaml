@@ -74,7 +74,7 @@ data:
           if exists(.level){
             .lvl = downcase!(.level)
             del(.level)
-          } 
+          }
           if !exists(.lvl) { .lvl = "" }
     
           # Optional: map common variants
@@ -121,23 +121,20 @@ data:
           }
     
     # -------------------------------------------------
-    # SINK - Elasticsearch
+    # SINK - VictoriaLogs (via Elasticsearch-compatible insert API)
     # -------------------------------------------------
     sinks:
-      es_cluster:
-        api_version: auto
-        auth:
-          strategy: basic
-          user: ${ELASTIC_USER}
-          password: ${ELASTIC_PASSWORD}
-        bulk:
-          action: create
-          index: vector-%Y-%m-%d
-        compression: gzip
-        doc_type: _doc
-        endpoints:
-          - http://elasticsearch-es-internal-http.elastic-stack.svc.cluster.local:9200
+      vlogs:
+        type: elasticsearch
         inputs:
           - truncate_messages
-        mode: bulk
-        type: elasticsearch
+        endpoints:
+          - http://victoria-logs.victoria-logs.svc.cluster.local:9428/insert/elasticsearch/
+        api_version: v8
+        compression: gzip
+        healthcheck:
+          enabled: false
+        query:
+          _msg_field: msg
+          _time_field: timestamp
+          _stream_fields: kubernetes.pod_namespace,kubernetes.container_name
