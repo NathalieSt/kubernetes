@@ -62,26 +62,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: booklore
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: booklore
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/booklore
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: csi-driver-nfs
-  - name: keda
-  - name: mariadb
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: dcts
   namespace: flux-system
 spec:
@@ -98,26 +78,6 @@ spec:
   - name: livekit
   - name: redis
   - name: vault-secrets-operator-config
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: discord-bridge
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: discord-bridge
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/matrix/discord-bridge
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: matrix-pg
-  - name: synapse
-  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -275,25 +235,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: synapse
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: synapse
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/matrix/synapse
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: matrix-pg
-  - name: csi-driver-nfs
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: transmission
   namespace: flux-system
 spec:
@@ -308,24 +249,4 @@ spec:
   timeout: 10m
   dependsOn:
   - name: jellyfin
-  - name: csi-driver-nfs
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: whatsapp-bridge
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: whatsapp-bridge
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/matrix/whatsapp-bridge
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: matrix-pg
-  - name: synapse
   - name: csi-driver-nfs
