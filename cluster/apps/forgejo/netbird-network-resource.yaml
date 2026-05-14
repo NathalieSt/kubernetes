@@ -6,7 +6,7 @@ metadata:
   namespace: forgejo
 spec:
   networkRouterRef:
-    name: netbird-operator-config
+    name: k8s-network
     namespace: netbird
   serviceRef:
     name: forgejo-http
@@ -18,7 +18,7 @@ metadata:
   namespace: forgejo
 spec:
   networkRouterRef:
-    name: netbird-operator-config
+    name: k8s-network
     namespace: netbird
   serviceRef:
     name: forgejo-ssh
