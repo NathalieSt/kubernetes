@@ -10,3 +10,5 @@ spec:
     namespace: netbird
   serviceRef:
     name: dcts
+  groups:
+  - name: kubernetes

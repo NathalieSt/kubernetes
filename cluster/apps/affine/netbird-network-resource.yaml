@@ -10,3 +10,5 @@ spec:
     namespace: netbird
   serviceRef:
     name: affine
+  groups:
+  - name: kubernetes

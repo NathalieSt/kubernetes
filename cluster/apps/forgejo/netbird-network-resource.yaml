@@ -10,6 +10,8 @@ spec:
     namespace: netbird
   serviceRef:
     name: forgejo-http
+  groups:
+  - name: kubernetes
 ---
 apiVersion: netbird.io/v1alpha1
 kind: NetworkResource
@@ -22,3 +24,5 @@ spec:
     namespace: netbird
   serviceRef:
     name: forgejo-ssh
+  groups:
+  - name: kubernetes

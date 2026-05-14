@@ -10,3 +10,5 @@ spec:
     namespace: netbird
   serviceRef:
     name: perses
+  groups:
+  - name: kubernetes
