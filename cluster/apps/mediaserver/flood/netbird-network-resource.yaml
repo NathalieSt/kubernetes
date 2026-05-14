@@ -6,7 +6,9 @@ metadata:
   namespace: jellyfin
 spec:
   networkRouterRef:
-    name: netbird-operator-config
+    name: k8s-network
     namespace: netbird
   serviceRef:
     name: flood
+  groups:
+  - name: kubernetes

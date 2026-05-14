@@ -6,10 +6,12 @@ metadata:
   namespace: forgejo
 spec:
   networkRouterRef:
-    name: netbird-operator-config
+    name: k8s-network
     namespace: netbird
   serviceRef:
     name: forgejo-http
+  groups:
+  - name: kubernetes
 ---
 apiVersion: netbird.io/v1alpha1
 kind: NetworkResource
@@ -18,7 +20,9 @@ metadata:
   namespace: forgejo
 spec:
   networkRouterRef:
-    name: netbird-operator-config
+    name: k8s-network
     namespace: netbird
   serviceRef:
     name: forgejo-ssh
+  groups:
+  - name: kubernetes
