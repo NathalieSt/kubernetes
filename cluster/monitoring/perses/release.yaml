@@ -20,7 +20,3 @@ spec:
     provisioningPersistence:
       enabled: true
       storageClass: nfs-remote
-    service:
-      annotations:
-        netbird.io/expose: "true"
-        netbird.io/groups: cluster-services

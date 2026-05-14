@@ -6,8 +6,8 @@ metadata:
 spec:
   interval: 24h
   chartRef:
-    kind: HelmChart
-    name: netbird-operator-chart
+    kind: OCIRepository
+    name: netbird-operator-repo
   timeout: 10m
   releaseName: netbird-operator
   install:

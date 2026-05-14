@@ -12,3 +12,4 @@ resources:
 - network-policy.yaml
 - static-pvc.yaml
 - templates-pvc.yaml
+- netbird-network-resource.yaml

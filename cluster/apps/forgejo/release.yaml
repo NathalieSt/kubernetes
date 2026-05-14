@@ -40,14 +40,7 @@ spec:
       enabled: true
       storageClass: nfs-remote
     service:
-      http:
-        annotations:
-          netbird.io/expose: "true"
-          netbird.io/groups: cluster-services
       ssh:
-        annotations:
-          netbird.io/expose: "true"
-          netbird.io/groups: cluster-services
         port: 2222
   valuesFrom:
   - kind: Secret

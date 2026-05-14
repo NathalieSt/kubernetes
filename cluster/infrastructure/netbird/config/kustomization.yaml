@@ -4,6 +4,4 @@ kind: Kustomization
 metadata:
   name: netbird-operator-config
 resources:
-- repo.yaml
-- chart.yaml
-- release.yaml
+- network-router.yaml

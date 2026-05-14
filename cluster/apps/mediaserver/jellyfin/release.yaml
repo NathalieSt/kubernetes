@@ -37,7 +37,3 @@ spec:
       capabilities:
         add:
         - SYS_ADMIN
-    service:
-      annotations:
-        netbird.io/expose: "true"
-        netbird.io/groups: cluster-services

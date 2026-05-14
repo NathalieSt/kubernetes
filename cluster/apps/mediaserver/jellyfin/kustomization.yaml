@@ -13,3 +13,4 @@ resources:
 - network-policy.yaml
 - jellyfin-audiomuse-network-policy.yaml
 - flood-transmission-network-policy.yaml
+- netbird-network-resource.yaml

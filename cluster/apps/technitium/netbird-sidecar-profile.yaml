@@ -1,0 +1,12 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: SidecarProfile
+metadata:
+  name: technitium
+  namespace: technitium
+spec:
+  setupKeyRef:
+    name: technitium-sidecar
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: technitium

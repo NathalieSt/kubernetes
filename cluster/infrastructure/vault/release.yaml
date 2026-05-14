@@ -18,7 +18,4 @@ spec:
       dataStorage:
         storageClass: nfs-local
     ui:
-      annotations:
-        netbird.io/expose: "true"
-        netbird.io/groups: cluster-services
       enabled: true
