@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: technitium
+    app.kubernetes.io/version: sha256_23d3b63d959e9
+  name: technitium
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: technitium
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: technitium
+        app.kubernetes.io/version: sha256_23d3b63d959e9
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - image: technitium/dns-server@sha256:23d3b63d959e997800b095fe93009b3fae271b5258234ff2ade8535cb33682c8
+        name: technitium
+        ports:
+        - containerPort: 5380
+          name: web-ui
+        - containerPort: 53
+          name: dns
+        volumeMounts:
+        - mountPath: /etc/dns
+          name: data-volume
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-pvc

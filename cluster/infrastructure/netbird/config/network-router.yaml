@@ -1,0 +1,9 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkRouter
+metadata:
+  name: netbird-operator-config
+  namespace: netbird
+spec:
+  dnsZoneRef:
+    name: netbird.nathalie-stiefsohn.eu

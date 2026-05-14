@@ -9,3 +9,4 @@ resources:
 - service.yaml
 - network-policy.yaml
 - vault-secret.yaml
+- netbird-network-resource.yaml

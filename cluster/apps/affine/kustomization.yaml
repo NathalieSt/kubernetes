@@ -11,3 +11,4 @@ resources:
 - deployment.yaml
 - configmap.yaml
 - network-policy.yaml
+- netbird-network-resource.yaml

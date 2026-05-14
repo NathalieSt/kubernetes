@@ -16,3 +16,4 @@ resources:
 - network-policy.yaml
 - pvc-app-graphs.yaml
 - pvc-app-backup.yaml
+- netbird-network-resource.yaml

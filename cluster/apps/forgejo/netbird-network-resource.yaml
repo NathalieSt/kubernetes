@@ -1,0 +1,24 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: forgejo
+  namespace: forgejo
+spec:
+  networkRouterRef:
+    name: netbird-operator-config
+    namespace: netbird
+  serviceRef:
+    name: forgejo-http
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: forgejo-ssh
+  namespace: forgejo
+spec:
+  networkRouterRef:
+    name: netbird-operator-config
+    namespace: netbird
+  serviceRef:
+    name: forgejo-ssh

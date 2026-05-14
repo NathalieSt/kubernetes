@@ -2,25 +2,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: adguard-home
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: adguard-home
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/adguard-home
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: csi-driver-nfs
-  - name: reflector
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: affine
   namespace: flux-system
 spec:
@@ -231,6 +212,25 @@ spec:
   - name: gluetun-proxy
   - name: valkey
   - name: keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: technitium
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: technitium
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/technitium
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

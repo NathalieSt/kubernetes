@@ -1,0 +1,12 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: livekit
+  namespace: dcts
+spec:
+  networkRouterRef:
+    name: netbird-operator-config
+    namespace: netbird
+  serviceRef:
+    name: livekit
