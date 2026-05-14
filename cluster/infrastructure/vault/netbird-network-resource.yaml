@@ -6,7 +6,7 @@ metadata:
   namespace: vault
 spec:
   networkRouterRef:
-    name: netbird-operator-config
+    name: k8s-network
     namespace: netbird
   serviceRef:
     name: vault-ui

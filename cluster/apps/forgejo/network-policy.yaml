@@ -17,4 +17,4 @@ spec:
           kubernetes.io/metadata.name: netbird
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: netbird-router
+          app.kubernetes.io/name: networkrouter
