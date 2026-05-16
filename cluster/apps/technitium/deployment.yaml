@@ -32,6 +32,11 @@ spec:
         volumeMounts:
         - mountPath: /etc/dns
           name: data-volume
+        env:
+        - name: DNS_SERVER_LOCAL_END_POINTS
+          value: 0.0.0.0:53,[::]:53
+        - name: DNS_SERVER_WEB_SERVICE_LOCAL_ADDRESSES
+          value: 0.0.0.0
         resources:
           requests:
             cpu: 100m
