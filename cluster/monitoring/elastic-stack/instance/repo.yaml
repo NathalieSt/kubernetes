@@ -1,9 +1,0 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: elastic-stack-instance-repo
-spec:
-  type: default
-  url: https://helm.elastic.co
-  interval: 24h
