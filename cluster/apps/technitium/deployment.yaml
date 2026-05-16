@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/version: sha256_23d3b63d959e9
     spec:
       automountServiceAccountToken: false
-      hostnameOverride: technitium
+      hostname: technitium
       containers:
       - image: technitium/dns-server@sha256:23d3b63d959e997800b095fe93009b3fae271b5258234ff2ade8535cb33682c8
         name: technitium
