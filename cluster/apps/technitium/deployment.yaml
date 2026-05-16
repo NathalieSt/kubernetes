@@ -13,6 +13,8 @@ spec:
       app.kubernetes.io/name: technitium
   template:
     metadata:
+      annotations:
+        dummy: annotation
       labels:
         app.kubernetes.io/name: technitium
         app.kubernetes.io/version: sha256_23d3b63d959e9
