@@ -1,0 +1,14 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: technitium
+  namespace: technitium
+spec:
+  networkRouterRef:
+    name: k8s-network
+    namespace: netbird
+  serviceRef:
+    name: technitium
+  groups:
+  - name: kubernetes

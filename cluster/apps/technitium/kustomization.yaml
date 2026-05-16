@@ -9,5 +9,4 @@ resources:
 - service.yaml
 - deployment.yaml
 - network-policy.yaml
-- netbird-setup-key.yaml
-- netbird-sidecar-profile.yaml
+- netbird-network-resource.yaml
