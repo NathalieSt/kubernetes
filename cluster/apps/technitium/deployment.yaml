@@ -28,7 +28,11 @@ spec:
         - containerPort: 5380
           name: web-ui
         - containerPort: 53
-          name: dns
+          name: dns-tcp
+          protocol: TCP
+        - containerPort: 53
+          name: dns-udp
+          protocol: UDP
         volumeMounts:
         - mountPath: /etc/dns
           name: data-volume
