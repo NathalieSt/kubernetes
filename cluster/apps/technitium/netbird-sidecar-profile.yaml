@@ -10,5 +10,3 @@ spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/name: technitium
-  extraDNSLabels:
-  - technitium
