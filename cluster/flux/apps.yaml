@@ -216,25 +216,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: technitium
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: technitium
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/technitium
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: csi-driver-nfs
-  - name: reflector
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: transmission
   namespace: flux-system
 spec:
