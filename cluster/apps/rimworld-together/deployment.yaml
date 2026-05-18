@@ -24,6 +24,9 @@ spec:
         ports:
         - containerPort: 25555
           name: rim-http
+        volumeMounts:
+        - mountPath: /Data
+          name: rimworld-together-data
         resources:
           requests:
             cpu: 100m
@@ -31,5 +34,9 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+      volumes:
+      - name: rimworld-together-data
+        persistentVolumeClaim:
+          claimName: rimworld-together-data
       nodeSelector:
         kubernetes.io/hostname: debian

@@ -5,6 +5,7 @@ metadata:
   name: rimworld-together
 resources:
 - namespace.yaml
+- pvc.yaml
 - deployment.yaml
 - service.yaml
 - network-policy.yaml
