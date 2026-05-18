@@ -22,7 +22,7 @@ spec:
       - image: ghcr.io/rimworld-together/rimworld-together:sha256-a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285
         name: rimworld-together
         ports:
-        - containerPort: 8080
+        - containerPort: 25555
           name: rimworld-together
         resources:
           requests:
