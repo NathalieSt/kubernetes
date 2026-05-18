@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: rimworld-together
+    app.kubernetes.io/version: sha256-a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285
+  name: rimworld-together
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rimworld-together
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rimworld-together
+        app.kubernetes.io/version: sha256-a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - image: ghcr.io/rimworld-together/rimworld-together:sha256-a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285
+        name: rimworld-together
+        ports:
+        - containerPort: 8080
+          name: rimworld-together
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
