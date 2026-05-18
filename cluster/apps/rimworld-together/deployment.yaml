@@ -23,7 +23,7 @@ spec:
         name: rimworld-together
         ports:
         - containerPort: 25555
-          name: rimworld-together
+          name: rim-http
         resources:
           requests:
             cpu: 100m
