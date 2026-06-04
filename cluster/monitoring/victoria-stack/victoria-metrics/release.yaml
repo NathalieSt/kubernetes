@@ -90,11 +90,8 @@ spec:
               - __meta_kubernetes_endpoint_node_name
               targetLabel: node
     victoria-metrics-operator:
-      env:
-      - name: VM_ENABLEDPROMETHEUSCONVERTER_PROBE
-        value: "false"
-      - name: VM_ENABLEDPROMETHEUSCONVERTER_ALERTMANAGERCONFIG
-        value: "false"
+      operator:
+        disable_prometheus_converter: true
     vmagent:
       spec:
         inlineScrapeConfig: |
