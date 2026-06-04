@@ -93,6 +93,8 @@ spec:
       env:
       - name: VM_ENABLEDPROMETHEUSCONVERTER_PROBE
         value: "false"
+      - name: VM_ENABLEDPROMETHEUSCONVERTER_ALERTMANAGERCONFIG
+        value: "false"
     vmagent:
       spec:
         inlineScrapeConfig: |
