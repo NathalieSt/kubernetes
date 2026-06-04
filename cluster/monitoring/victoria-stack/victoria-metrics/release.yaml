@@ -89,6 +89,10 @@ spec:
             - sourceLabels:
               - __meta_kubernetes_endpoint_node_name
               targetLabel: node
+    victoria-metrics-operator:
+      env:
+      - name: VM_ENABLEDPROMETHEUSCONVERTER_PROBE
+        value: "false"
     vmagent:
       spec:
         inlineScrapeConfig: |
