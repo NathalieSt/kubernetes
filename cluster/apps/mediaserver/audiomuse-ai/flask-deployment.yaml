@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: audiomuse-ai-flask
-    app.kubernetes.io/version: sha256_344c8d39bfc9c
+    app.kubernetes.io/version: sha256_bffb01b86a4de
   name: audiomuse-ai-flask
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: audiomuse-ai-flask
-        app.kubernetes.io/version: sha256_344c8d39bfc9c
+        app.kubernetes.io/version: sha256_bffb01b86a4de
     spec:
       containers:
-      - image: ghcr.io/neptunehub/audiomuse-ai@sha256:344c8d39bfc9cf4b2e83ab4d48c99692003786a5ebd2f0bc443099dc9e238de8
+      - image: ghcr.io/neptunehub/audiomuse-ai@sha256:bffb01b86a4de0cd793a3064aa7bf20f8e76b535bbb2b8facce5334a9631d807
         name: audiomuse-ai-flask
         ports:
         - containerPort: 8000
