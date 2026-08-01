@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: forgejo-runner
-    app.kubernetes.io/version: sha256:e070b166b921f12a2abef432cf6108e63519d0183722c2a14ecbb8d0b0621652
+    app.kubernetes.io/version: sha256_e070b166b921f
   name: forgejo-runner
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: forgejo-runner
-        app.kubernetes.io/version: sha256:e070b166b921f12a2abef432cf6108e63519d0183722c2a14ecbb8d0b0621652
+        app.kubernetes.io/version: sha256_e070b166b921f
     spec:
       automountServiceAccountToken: false
       containers:
