@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: backup-dashboard
+  name: backup-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backup-dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: backup-dashboard
+    spec:
+      serviceAccountName: backup-dashboard
+      containers:
+      - image: code.nathi.lol/nathi/backup-dashboard:latest
+        name: backup-dashboard
+        ports:
+        - containerPort: 8080
+          name: backup-dashboard
+        volumeMounts:
+        - mountPath: /secrets/restic-repo
+          name: restic-repo
+        - mountPath: /secrets/garage-key
+          name: garage-key
+        env:
+        - name: BASIC_AUTH_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: backup-dashboard-basic-auth-secret
+        - name: BASIC_AUTH_PASS
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: backup-dashboard-basic-auth-secret
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+      volumes:
+      - name: restic-repo
+        secret:
+          secretName: restic-repo-password-secret
+      - name: garage-key
+        secret:
+          secretName: garage-backup-access-key-secret
