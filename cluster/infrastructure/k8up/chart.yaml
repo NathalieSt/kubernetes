@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: k8up-chart
+spec:
+  interval: 24h
+  chart: k8up
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: k8up-repo
+  version: 4.10.0
