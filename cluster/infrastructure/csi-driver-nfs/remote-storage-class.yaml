@@ -6,7 +6,7 @@ metadata:
 provisioner: nfs.csi.k8s.io
 parameters:
   server: remote-fs.netbird.nathalie-stiefsohn.eu
-  share: /mnt/HC_Volume_103061115
+  share: /mnt/storage
   subDir: ${pvc.metadata.namespace}/${pvc.metadata.name}
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
