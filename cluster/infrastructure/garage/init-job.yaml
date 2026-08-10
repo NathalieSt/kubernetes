@@ -52,6 +52,38 @@ spec:
           ADMIN_TOKEN=$(cat /secrets/admin_token)
           API="http://garage.garage.svc.cluster.local:3903"
           AUTH="Authorization: Bearer ${ADMIN_TOKEN}"
+          BUCKET_NAME="kubernetes-backups"
+
+          # api <method> <endpoint> [body] - wraps curl so a non-2xx response prints the
+          # status and the response body before exiting. Plain "curl -sf" swallows both
+          # (-s hides the body, -f collapses every HTTP error into exit code 22), which
+          # makes a failed bootstrap show up as an empty log and a bare "Error" pod.
+          api() {
+            api_method="$1"
+            api_endpoint="$2"
+            api_body="$3"
+
+            if [ -n "$api_body" ]; then
+              api_status=$(curl -s -o /tmp/api_response -w '%{http_code}' \
+                -H "$AUTH" -H "Content-Type: application/json" \
+                -X "$api_method" "$API/$api_endpoint" -d "$api_body")
+            else
+              api_status=$(curl -s -o /tmp/api_response -w '%{http_code}' \
+                -H "$AUTH" -X "$api_method" "$API/$api_endpoint")
+            fi
+
+            case "$api_status" in
+            2??) cat /tmp/api_response ;;
+            *)
+              echo "ERROR: $api_method $api_endpoint returned HTTP $api_status" >&2
+              echo "Request body: ${api_body:-<none>}" >&2
+              echo "Response body:" >&2
+              cat /tmp/api_response >&2
+              echo >&2
+              return 1
+              ;;
+            esac
+          }
 
           for i in $(seq 1 30); do
             curl -sf -H "$AUTH" "$API/v2/GetClusterStatus" >/tmp/status.json && break
@@ -59,39 +91,100 @@ spec:
             sleep 5
           done
 
-          NODE_ID=$(jq -r '.node' /tmp/status.json)
+          # GetClusterStatus has no top-level "node" field - the local node's ID is in
+          # the "nodes" array. Reading .node instead yielded the literal string "null",
+          # which UpdateClusterLayout rejected with a 400.
+          NODE_ID=$(jq -r '.nodes[] | select(.isUp) | .id' /tmp/status.json | head -n 1)
+          if [ -z "$NODE_ID" ] || [ "$NODE_ID" = "null" ]; then
+            echo "ERROR: could not determine node ID from GetClusterStatus:" >&2
+            cat /tmp/status.json >&2
+            exit 1
+          fi
+          echo "Bootstrapping layout for node ${NODE_ID}"
 
-          curl -sf -H "$AUTH" -H "Content-Type: application/json" \
-            -X POST "$API/v2/UpdateClusterLayout" \
-            -d "{\"roles\":[{\"id\":\"${NODE_ID}\",\"zone\":\"dc1\",\"capacity\":200000000000,\"tags\":[]}]}"
+          api POST v2/UpdateClusterLayout \
+            "{\"roles\":[{\"id\":\"${NODE_ID}\",\"zone\":\"dc1\",\"capacity\":200000000000,\"tags\":[]}]}"
 
-          LAYOUT_VERSION=$(curl -sf -H "$AUTH" "$API/v2/GetClusterLayout" | jq -r '.version')
-          curl -sf -H "$AUTH" -H "Content-Type: application/json" \
-            -X POST "$API/v2/ApplyClusterLayout" \
-            -d "{\"version\": $((LAYOUT_VERSION + 1))}"
+          LAYOUT_VERSION=$(api GET v2/GetClusterLayout | jq -r '.version')
+          api POST v2/ApplyClusterLayout "{\"version\": $((LAYOUT_VERSION + 1))}"
 
-          curl -s -H "$AUTH" -H "Content-Type: application/json" \
-            -X POST "$API/v2/CreateBucket" -d '{"globalAlias":"kubernetes-backups"}' > /tmp/bucket.json || true
-          BUCKET_ID=$(jq -r '.id' /tmp/bucket.json)
+          # Bucket and key endpoints return "Layout not ready" until the layout above is
+          # applied and settled, so give them a moment rather than racing the apply.
+          for i in $(seq 1 30); do
+            curl -sf -H "$AUTH" "$API/v2/ListBuckets" >/dev/null 2>&1 && break
+            echo "Waiting for layout to settle..."
+            sleep 2
+          done
 
-          curl -s -H "$AUTH" -H "Content-Type: application/json" \
-            -X POST "$API/v2/CreateKey" -d '{"name":"backup-key"}' > /tmp/key.json
+          # Re-runs are expected (the Job is retried on failure), so treat an existing
+          # bucket as success and look its ID up instead of failing.
+          if api POST v2/CreateBucket "{\"globalAlias\":\"${BUCKET_NAME}\"}" >/tmp/bucket.json 2>/dev/null; then
+            BUCKET_ID=$(jq -r '.id // .bucket.id' /tmp/bucket.json)
+          else
+            echo "CreateBucket failed - assuming ${BUCKET_NAME} already exists, looking it up"
+            BUCKET_ID=$(api GET "v2/GetBucketInfo?globalAlias=${BUCKET_NAME}" | jq -r '.id // .bucket.id')
+          fi
+          if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
+            echo "ERROR: could not determine bucket ID for ${BUCKET_NAME}" >&2
+            cat /tmp/bucket.json >&2
+            exit 1
+          fi
+
+          api POST v2/CreateKey '{"name":"backup-key"}' > /tmp/key.json
           ACCESS_KEY_ID=$(jq -r '.accessKeyId' /tmp/key.json)
           SECRET_ACCESS_KEY=$(jq -r '.secretAccessKey' /tmp/key.json)
+          if [ -z "$ACCESS_KEY_ID" ] || [ "$ACCESS_KEY_ID" = "null" ] ||
+            [ -z "$SECRET_ACCESS_KEY" ] || [ "$SECRET_ACCESS_KEY" = "null" ]; then
+            echo "ERROR: CreateKey response did not contain accessKeyId/secretAccessKey:" >&2
+            cat /tmp/key.json >&2
+            exit 1
+          fi
 
-          curl -sf -H "$AUTH" -H "Content-Type: application/json" \
-            -X POST "$API/v2/AllowBucketKey" \
-            -d "{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\",\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
+          PERMISSIONS='{"read":true,"write":true,"owner":false}'
+          api POST v2/AllowBucketKey \
+            "{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\",\"permissions\":${PERMISSIONS}}"
 
           K8S_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
           CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
           ACCESS_KEY_ID_B64=$(printf '%s' "$ACCESS_KEY_ID" | base64 | tr -d '\n')
           SECRET_ACCESS_KEY_B64=$(printf '%s' "$SECRET_ACCESS_KEY" | base64 | tr -d '\n')
 
-          curl -sf --cacert "$CACERT" -H "Authorization: Bearer ${K8S_TOKEN}" -H "Content-Type: application/json" \
-            -X POST "https://kubernetes.default.svc/api/v1/namespaces/garage/secrets" \
-            -d "{\"apiVersion\":\"v1\",\"kind\":\"Secret\",\"metadata\":{\"name\":\"garage-backup-access-key-secret\",\"annotations\":{\"reflector.v1.k8s.emberstack.com/reflection-allowed\":\"true\",\"reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces\":\"forgejo,backup-dashboard\",\"reflector.v1.k8s.emberstack.com/reflection-auto-enabled\":\"true\",\"reflector.v1.k8s.emberstack.com/reflection-auto-namespaces\":\"forgejo,backup-dashboard\"}},\"data\":{\"access-key-id\":\"${ACCESS_KEY_ID_B64}\",\"secret-access-key\":\"${SECRET_ACCESS_KEY_B64}\"}}" \
-            || echo "Secret may already exist - update it manually if the key was rotated"
+          REFLECTOR_PREFIX="reflector.v1.k8s.emberstack.com"
+          ANNOTATIONS="{\"${REFLECTOR_PREFIX}/reflection-allowed\":\"true\""
+          ANNOTATIONS="${ANNOTATIONS},\"${REFLECTOR_PREFIX}/reflection-allowed-namespaces\":\"forgejo,backup-dashboard\""
+          ANNOTATIONS="${ANNOTATIONS},\"${REFLECTOR_PREFIX}/reflection-auto-enabled\":\"true\""
+          ANNOTATIONS="${ANNOTATIONS},\"${REFLECTOR_PREFIX}/reflection-auto-namespaces\":\"forgejo,backup-dashboard\"}"
+
+          SECRET_DATA="{\"access-key-id\":\"${ACCESS_KEY_ID_B64}\""
+          SECRET_DATA="${SECRET_DATA},\"secret-access-key\":\"${SECRET_ACCESS_KEY_B64}\"}"
+
+          SECRET_BODY="{\"apiVersion\":\"v1\",\"kind\":\"Secret\""
+          SECRET_BODY="${SECRET_BODY},\"metadata\":{\"name\":\"garage-backup-access-key-secret\""
+          SECRET_BODY="${SECRET_BODY},\"annotations\":${ANNOTATIONS}}"
+          SECRET_BODY="${SECRET_BODY},\"data\":${SECRET_DATA}}"
+
+          SECRET_URL="https://kubernetes.default.svc/api/v1/namespaces/garage/secrets"
+          SECRET_STATUS=$(curl -s -o /tmp/secret_response -w '%{http_code}' --cacert "$CACERT" \
+            -H "Authorization: Bearer ${K8S_TOKEN}" -H "Content-Type: application/json" \
+            -X POST "$SECRET_URL" -d "$SECRET_BODY")
+
+          case "$SECRET_STATUS" in
+          2??)
+            echo "Wrote Secret garage-backup-access-key-secret in namespace garage"
+            ;;
+          409)
+            echo "WARNING: Secret garage-backup-access-key-secret already exists - it still holds the" >&2
+            echo "         PREVIOUS access key, but CreateKey just minted a new one. Update it manually:" >&2
+            echo "         kubectl -n garage delete secret garage-backup-access-key-secret" >&2
+            echo "         then re-run this job." >&2
+            ;;
+          *)
+            echo "ERROR: writing the access-key Secret returned HTTP $SECRET_STATUS" >&2
+            cat /tmp/secret_response >&2
+            echo >&2
+            exit 1
+            ;;
+          esac
 
           echo "Garage bucket + scoped backup key provisioned."
         image: alpine:3.20
