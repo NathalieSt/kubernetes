@@ -7,6 +7,8 @@ spec:
   allowedNamespaces:
   - reflector
   - gluetun-proxy
+  - garage
+  - backup-dashboard
   defaultAuthMethod: kubernetes
   kubernetes:
     audiences:
