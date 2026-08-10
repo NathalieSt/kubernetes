@@ -37,6 +37,8 @@ spec:
         PROVIDER: redis
         PROVIDER_CONFIG: valkey://valkey.valkey.svc.cluster.local:6379/2
     persistence:
+      annotations:
+        k8up.io/backup: "true"
       enabled: true
       storageClass: nfs-remote
     service:

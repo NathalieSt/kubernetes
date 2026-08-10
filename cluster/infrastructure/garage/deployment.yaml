@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: garage
+  name: garage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: garage
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: garage
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          set -e
+          RPC_SECRET=$(cat /secrets/rpc_secret)
+          ADMIN_TOKEN=$(cat /secrets/admin_token)
+          METRICS_TOKEN=$(cat /secrets/metrics_token)
+          sed -e "s/__RPC_SECRET__/${RPC_SECRET}/" -e "s/__ADMIN_TOKEN__/${ADMIN_TOKEN}/" -e "s/__METRICS_TOKEN__/${METRICS_TOKEN}/" \
+            /template/garage.toml.tmpl > /config/garage.toml
+        image: busybox:1.37
+        name: render-config
+        volumeMounts:
+        - mountPath: /template
+          name: config-template
+        - mountPath: /secrets
+          name: node-secrets
+        - mountPath: /config
+          name: config
+      serviceAccountName: garage-vault-serviceaccount
+      automountServiceAccountToken: true
+      containers:
+      - image: dxflrs/garage@sha256:8e854083d23122ccfb1f8d715fce298826dd7eca938f03694cb05a53a43dc0a4
+        name: garage
+        ports:
+        - containerPort: 3900
+          name: s3-api
+        - containerPort: 3901
+          name: rpc
+        - containerPort: 3903
+          name: admin
+        volumeMounts:
+        - mountPath: /etc/garage.toml
+          subPath: garage.toml
+          name: config
+        - mountPath: /var/lib/garage/data
+          name: data
+        - mountPath: /var/lib/garage/meta
+          name: meta
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+      volumes:
+      - name: config-template
+        configMap:
+          name: garage-config-template
+      - name: node-secrets
+        secret:
+          secretName: garage-node-secrets
+      - name: config
+        emptyDir: {}
+      - name: data
+        persistentVolumeClaim:
+          claimName: garage-data-pvc
+      - name: meta
+        persistentVolumeClaim:
+          claimName: garage-meta-pvc
