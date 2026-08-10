@@ -24,8 +24,31 @@ spec:
           RPC_SECRET=$(cat /secrets/rpc_secret)
           ADMIN_TOKEN=$(cat /secrets/admin_token)
           METRICS_TOKEN=$(cat /secrets/metrics_token)
-          sed -e "s/__RPC_SECRET__/${RPC_SECRET}/" -e "s/__ADMIN_TOKEN__/${ADMIN_TOKEN}/" -e "s/__METRICS_TOKEN__/${METRICS_TOKEN}/" \
-            /template/garage.toml.tmpl > /config/garage.toml
+          export RPC_SECRET ADMIN_TOKEN METRICS_TOKEN
+
+          for name in RPC_SECRET ADMIN_TOKEN METRICS_TOKEN; do
+            eval "value=\$$name"
+            if [ -z "$value" ]; then
+              echo "ERROR: $name is empty - is the garage-node-secrets Secret populated from Vault?" >&2
+              exit 1
+            fi
+          done
+
+          awk '
+          function subst(line, placeholder, value,   i, out) {
+            while ((i = index(line, placeholder)) > 0) {
+              out = out substr(line, 1, i - 1) value
+              line = substr(line, i + length(placeholder))
+            }
+            return out line
+          }
+          {
+            $0 = subst($0, "__RPC_SECRET__", ENVIRON["RPC_SECRET"])
+            $0 = subst($0, "__ADMIN_TOKEN__", ENVIRON["ADMIN_TOKEN"])
+            $0 = subst($0, "__METRICS_TOKEN__", ENVIRON["METRICS_TOKEN"])
+            print
+          }
+          ' /template/garage.toml.tmpl > /config/garage.toml
         image: busybox:1.37
         name: render-config
         volumeMounts:
