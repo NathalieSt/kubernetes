@@ -24,15 +24,41 @@ spec:
         - -c
         - |
 
-          sleep 5
-          [ -f /data/config.yml ] || forgejo-runner generate-config > /data/config.yml
-          [ -f /data/.runner ] || forgejo-runner register --no-interactive \
-            --instance "$FORGEJO_INSTANCE_URL" \
-            --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" \
-            --name forgejo-runner \
-            --labels ubuntu-latest:docker://node:20-bookworm,docker:docker://docker:27-cli \
-            --config /data/config.yml
-          forgejo-runner daemon --config /data/config.yml
+          set -eu
+
+          # The daemon refuses to start without a reachable Docker Engine, and the dind
+          # sidecar writes its client certificates before the TLS listener is up, so wait
+          # for both.
+          while [ ! -f /certs/client/cert.pem ] || ! nc -z 127.0.0.1 2376; do sleep 1; done
+
+          uuid=$(printf '%s' "$FORGEJO_RUNNER_SECRET" | cut -c1-16 | od -An -tx1 | tr -d ' \n' \
+            | sed 's/\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)\(.\{12\}\).*/\1-\2-\3-\4-\5/')
+
+          cat > /data/config.yml <<EOF
+          log:
+            level: info
+            job_level: info
+          runner:
+            capacity: 1
+            timeout: 3h
+            shutdown_timeout: 3h
+          cache:
+            enabled: true
+            dir: /data/cache
+          container:
+            docker_host: "-"
+          server:
+            connections:
+              forgejo:
+                url: $FORGEJO_INSTANCE_URL
+                uuid: $uuid
+                token: $FORGEJO_RUNNER_SECRET
+                labels:
+                  - ubuntu-latest:docker://node:20-bookworm
+                  - docker:docker://docker:27-cli
+          EOF
+
+          exec forgejo-runner daemon --config /data/config.yml
         image: code.forgejo.org/forgejo/runner:12.13
         name: forgejo-runner
         volumeMounts:
@@ -43,10 +69,10 @@ spec:
         env:
         - name: FORGEJO_INSTANCE_URL
           value: http://forgejo-http.forgejo.svc.cluster.local:3000
-        - name: FORGEJO_RUNNER_REGISTRATION_TOKEN
+        - name: FORGEJO_RUNNER_SECRET
           valueFrom:
             secretKeyRef:
-              key: RUNNER_TOKEN
+              key: RUNNER_SECRET
               name: forgejo-runner-secret
         - name: DOCKER_HOST
           value: tcp://localhost:2376
@@ -88,3 +114,4 @@ spec:
         emptyDir: {}
       securityContext:
         fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
