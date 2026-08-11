@@ -15,9 +15,11 @@ spec:
       labels:
         app.kubernetes.io/name: backup-dashboard
     spec:
+      imagePullSecrets:
+      - name: backup-dashboard-registry-secret
       serviceAccountName: backup-dashboard
       containers:
-      - image: code.nathi.lol/nathi/backup-dashboard:latest
+      - image: code.nathi.lol/my-homelab/backup-dashboard:latest
         name: backup-dashboard
         ports:
         - containerPort: 8080
