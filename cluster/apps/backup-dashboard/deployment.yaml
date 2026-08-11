@@ -21,7 +21,7 @@ spec:
         name: backup-dashboard
         ports:
         - containerPort: 8080
-          name: backup-dashboard
+          name: http
         volumeMounts:
         - mountPath: /secrets/restic-repo
           name: restic-repo
