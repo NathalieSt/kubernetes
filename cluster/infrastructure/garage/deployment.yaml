@@ -32,7 +32,37 @@ spec:
               echo "ERROR: $name is empty - is the garage-node-secrets Secret populated from Vault?" >&2
               exit 1
             fi
+            # A newline or a " / \ would produce a malformed TOML basic string, which
+            # surfaces as an opaque config parse error inside garage rather than here.
+            case "$value" in
+            *'"'* | *'\'*)
+              echo "ERROR: $name contains a quote or backslash and cannot be written to garage.toml" >&2
+              exit 1
+              ;;
+            esac
+            # Not folded into the case above: "$(printf '\n')" strips the trailing
+            # newline and yields an empty pattern, which matches every value.
+            if [ "$(printf '%s' "$value" | wc -l)" -ne 0 ]; then
+              echo "ERROR: $name contains a newline and cannot be written to garage.toml" >&2
+              exit 1
+            fi
           done
+
+          # garage requires rpc_secret to be exactly 32 bytes hex-encoded (64 hex chars).
+          # base64 - the obvious thing to reach for, and what "openssl rand -base64 32"
+          # gives you - is rejected at startup with "Invalid RPC secret key". Generate it
+          # with "openssl rand -hex 32".
+          case "$RPC_SECRET" in
+          *[!0-9a-fA-F]*)
+            echo "ERROR: rpc_secret must be hex-encoded (64 chars, 0-9a-f) - generate it with 'openssl rand -hex 32'" >&2
+            exit 1
+            ;;
+          esac
+          if [ ${#RPC_SECRET} -ne 64 ]; then
+            echo "ERROR: rpc_secret must be 64 hex chars (32 bytes), got ${#RPC_SECRET}" >&2
+            echo "       generate it with 'openssl rand -hex 32'" >&2
+            exit 1
+          fi
 
           awk '
           function subst(line, placeholder, value,   i, out) {

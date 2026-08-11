@@ -60,6 +60,18 @@ spec:
         volumeMounts:
         - mountPath: /scripts/
           name: ip-leak-volume
+        env:
+        - name: IPLEAK_EXPECTED_COUNTRY
+          value: NL
+        - name: IPLEAK_INTERVAL
+          value: "300"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
       volumes:
       - name: trans-config-volume
         persistentVolumeClaim:

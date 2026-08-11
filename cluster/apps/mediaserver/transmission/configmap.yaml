@@ -6,40 +6,125 @@ metadata:
 data:
   ipleak.sh: |
     #!/bin/sh
+    # VPN leak detector for the transmission/gluetun pod.
+    #
+    # Emits one JSON object per check so Vector's parse_message transform merges
+    # the fields into the log root - that makes them queryable in VictoriaLogs as
+    # `check:ip status:LEAK` rather than needing a substring match on the message.
+    #
+    # Tuning (all optional, set via container env):
+    #   IPLEAK_INTERVAL          seconds between cycles (default 300)
+    #   IPLEAK_EXPECTED_COUNTRY  ISO-3166-2 code the exit node should be in (default NL)
+    #   IPLEAK_TIMEOUT           per-request curl timeout in seconds (default 15)
+    #   IPLEAK_STARTUP_GRACE     seconds to wait before the first check (default 30)
+    #
+    # Do not set IPLEAK_INTERVAL below 60: each cycle makes up to 3 API calls and
+    # the free tiers of these services rate-limit aggressively. A rate-limited
+    # response is reported as UNKNOWN, not as a leak - see check_ip below.
     
-    INTERVAL=900
-    IP_API="https://ipapi.co/json/"
+    INTERVAL="${IPLEAK_INTERVAL:-300}"
+    EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"
+    TIMEOUT="${IPLEAK_TIMEOUT:-15}"
+    GRACE="${IPLEAK_STARTUP_GRACE:-30}"
     
-    while true; do
-      TIMESTAMP=$(date +%Y-%m-%dT%H:%M:%SZ)
-      # --- External IP & country ---
-      geo=$(curl -s "$IP_API")
-      PUBLIC_IP=$(echo "$geo" | grep -o '"ip": *"[^"]*' | cut -d '"' -f4)
-      IP_COUNTRY=$(echo "$geo" | grep -o '"country": *"[^"]*' | cut -d '"' -f4)
+    # Extract a top-level JSON string value without jq (not in curlimages/curl).
+    json_str() {
+      printf '%s' "$1" | tr -d '\n' |
+        sed -n 's/.*"'"$2"'"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'
+    }
     
-      echo "[$TIMESTAMP] External IP: $PUBLIC_IP (Country: $IP_COUNTRY)"
+    emit() {
+      # emit <level> <check> <status> <extra-json-fields>
+      printf '{"ts":"%s","level":"%s","check":"%s","status":"%s","expected":"%s"%s,"message":"%s/%s %s"}\n' \
+        "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" "$2" "$3" "$EXPECTED" "$4" "$2" "$3" "$5"
+    }
     
-      if [ "$IP_COUNTRY" != "NL" ]; then
-        echo "[$TIMESTAMP] ⚠️ IP is leaking!"
-      else
-        echo "[$TIMESTAMP] ✅ No IP leak."
+    fetch() {
+      curl -sfL --max-time "$TIMEOUT" "$1" 2>/dev/null
+    }
+    
+    # --- external IP -----------------------------------------------------------
+    # Tries several providers in turn. Only if EVERY provider fails do we report
+    # UNKNOWN. The old script treated "no country parsed" as a leak, so any API
+    # hiccup or rate-limit produced a false alarm.
+    check_ip() {
+      ip=""; country=""
+    
+      body="$(fetch https://api.country.is/)"
+      if [ -n "$body" ]; then
+        ip="$(json_str "$body" ip)"
+        country="$(json_str "$body" country)"
       fi
     
-      # --- DNS servers and country ---
-      DNS_SERVERS=$(awk '/nameserver/ {print $2}' /etc/resolv.conf)
-      for srv in $DNS_SERVERS; do
-        geo_srv=$(curl -s https://ipapi.co/$srv/json/)
-        srv_country=$(echo "$geo_srv" | grep -o '"country": *"[^"]*' | cut -d '"' -f4)
-        echo "[$TIMESTAMP] DNS $srv is in $srv_country"
-    
-        if ["$srv_country" != ""]; then
-          echo "[$TIMESTAMP] ❓ No country could be detected for the dns server"  
-        elif [ "$srv_country" != "NL"]; then
-          echo "[$TIMESTAMP] ⚠️ DNS is leaking!"
-        else
-          echo "[$TIMESTAMP] ✅ No DNS leak."
+      if [ -z "$country" ]; then
+        body="$(fetch https://ipwho.is/)"
+        if [ -n "$body" ]; then
+          ip="$(json_str "$body" ip)"
+          country="$(json_str "$body" country_code)"
         fi
-      done
+      fi
     
-      sleep $INTERVAL
+      if [ -z "$country" ]; then
+        body="$(fetch https://ipapi.co/json/)"
+        if [ -n "$body" ]; then
+          ip="$(json_str "$body" ip)"
+          country="$(json_str "$body" country)"
+        fi
+      fi
+    
+      if [ -z "$country" ]; then
+        emit error ip UNKNOWN "" "all providers failed or rate-limited - could not verify exit IP"
+        return
+      fi
+    
+      if [ "$country" = "$EXPECTED" ]; then
+        emit info ip OK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country"
+      else
+        emit error ip LEAK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country, expected $EXPECTED"
+      fi
+    }
+    
+    # --- DNS ------------------------------------------------------------------
+    # The old check geolocated the nameserver from /etc/resolv.conf. In-cluster
+    # that is always CoreDNS's ClusterIP (private RFC1918), which geo APIs reject,
+    # so it could never return a country and never detect anything.
+    #
+    # What actually matters is which *public* resolver ends up performing the
+    # lookup. edns.ip-api.com redirects to a randomized subdomain and reports the
+    # egress IP of whichever resolver queried it - that is the real leak signal.
+    # Requires -L to follow the redirect (fetch already passes it).
+    check_dns() {
+      body="$(fetch https://edns.ip-api.com/json)"
+      if [ -z "$body" ]; then
+        emit error dns UNKNOWN "" "could not determine resolver egress ip"
+        return
+      fi
+    
+      resolver="$(json_str "$body" ip)"
+      if [ -z "$resolver" ]; then
+        emit error dns UNKNOWN "" "resolver egress ip missing from response"
+        return
+      fi
+    
+      geo="$(fetch "https://api.country.is/$resolver")"
+      country="$(json_str "$geo" country)"
+      if [ -z "$country" ]; then
+        emit error dns UNKNOWN ",\"resolver\":\"$resolver\"" "resolver $resolver could not be geolocated"
+        return
+      fi
+    
+      if [ "$country" = "$EXPECTED" ]; then
+        emit info dns OK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country"
+      else
+        emit error dns LEAK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country, expected $EXPECTED - dns is bypassing the tunnel"
+      fi
+    }
+    
+    emit info startup OK ",\"interval\":$INTERVAL" "leak detector starting, waiting ${GRACE}s for tunnel"
+    sleep "$GRACE"
+    
+    while true; do
+      check_ip
+      check_dns
+      sleep "$INTERVAL"
     done
