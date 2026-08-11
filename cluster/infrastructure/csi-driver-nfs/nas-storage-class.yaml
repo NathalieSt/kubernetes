@@ -14,3 +14,4 @@ allowVolumeExpansion: true
 mountOptions:
 - nfsvers=3
 - hard
+- nolock

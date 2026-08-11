@@ -24,38 +24,59 @@ spec:
         - -c
         - |
 
-          sleep 5
-          [ -f /data/config.yml ] || forgejo-runner generate-config > /data/config.yml
-          [ -f /data/.runner ] || forgejo-runner register --no-interactive \
-            --instance "$FORGEJO_INSTANCE_URL" \
-            --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" \
-            --name forgejo-runner \
-            --labels ubuntu-latest:docker://node:20-bookworm,docker:docker://docker:27-cli \
-            --config /data/config.yml
-          forgejo-runner daemon --config /data/config.yml
+          set -eu
+
+          # The daemon refuses to start without a reachable Docker Engine, and the dind
+          # sidecar writes its client certificates before the TLS listener is up, so wait
+          # for the listener and the shared socket rather than for the certificates alone.
+          while [ ! -S /var/run/docker-shared/docker.sock ] || ! nc -z 127.0.0.1 2376; do sleep 1; done
+
+          uuid=$(printf '%s' "$FORGEJO_RUNNER_SECRET" | cut -c1-16 | od -An -tx1 | tr -d ' \n' \
+            | sed 's/\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)\(.\{12\}\).*/\1-\2-\3-\4-\5/')
+
+          cat > /data/config.yml <<EOF
+          log:
+            level: info
+            job_level: info
+          runner:
+            capacity: 1
+            timeout: 3h
+            shutdown_timeout: 3h
+          cache:
+            enabled: true
+            dir: /data/cache
+          container:
+            # Bind-mounted into every job container at /var/run/docker.sock so that steps
+            # can run docker themselves. The path is resolved by the dind daemon, which
+            # mounts the same volume, so it has to be identical on both sides.
+            docker_host: unix:///var/run/docker-shared/docker.sock
+          server:
+            connections:
+              forgejo:
+                url: $FORGEJO_INSTANCE_URL
+                uuid: $uuid
+                token: $FORGEJO_RUNNER_SECRET
+                labels:
+                  - ubuntu-latest:docker://node:20-bookworm
+                  - docker:docker://docker:27-cli
+          EOF
+
+          exec forgejo-runner daemon --config /data/config.yml
         image: code.forgejo.org/forgejo/runner:12.13
         name: forgejo-runner
         volumeMounts:
         - mountPath: /data
           name: runner-data
-        - mountPath: /certs
-          name: docker-certs
+        - mountPath: /var/run/docker-shared
+          name: docker-sock
         env:
         - name: FORGEJO_INSTANCE_URL
           value: http://forgejo-http.forgejo.svc.cluster.local:3000
-        - name: FORGEJO_RUNNER_REGISTRATION_TOKEN
+        - name: FORGEJO_RUNNER_SECRET
           valueFrom:
             secretKeyRef:
-              key: RUNNER_TOKEN
+              key: RUNNER_SECRET
               name: forgejo-runner-secret
-        - name: DOCKER_HOST
-          value: tcp://localhost:2376
-        - name: DOCKER_TLS_CERTDIR
-          value: /certs
-        - name: DOCKER_CERT_PATH
-          value: /certs/client
-        - name: DOCKER_TLS_VERIFY
-          value: "1"
         resources:
           requests:
             cpu: 100m
@@ -63,11 +84,16 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-      - image: docker:27-dind
+      - args:
+        - --host=unix:///var/run/docker-shared/docker.sock
+        - --group=1000
+        image: docker:27-dind
         name: docker
         volumeMounts:
         - mountPath: /certs
           name: docker-certs
+        - mountPath: /var/run/docker-shared
+          name: docker-sock
         env:
         - name: DOCKER_TLS_CERTDIR
           value: /certs
@@ -86,5 +112,8 @@ spec:
           claimName: forgejo-runner-data-pvc
       - name: docker-certs
         emptyDir: {}
+      - name: docker-sock
+        emptyDir: {}
       securityContext:
         fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
