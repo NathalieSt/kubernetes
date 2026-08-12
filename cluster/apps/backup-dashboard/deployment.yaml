@@ -27,6 +27,8 @@ spec:
         volumeMounts:
         - mountPath: /secrets/restic-seed
           name: restic-seed
+        - mountPath: /secrets/restic-overrides
+          name: restic-overrides
         - mountPath: /secrets/garage-key
           name: garage-key
         env:
@@ -51,6 +53,10 @@ spec:
       - name: restic-seed
         secret:
           secretName: restic-seed-password-secret
+      - name: restic-overrides
+        secret:
+          secretName: restic-override-passwords-secret
+          optional: true
       - name: garage-key
         secret:
           secretName: garage-backup-access-key-secret
