@@ -11,7 +11,7 @@ spec:
       key: password
     s3:
       endpoint: http://garage.garage.svc.cluster.local:3900
-      bucket: kubernetes-backups
+      bucket: kubernetes-backups-forgejo
       accessKeyIDSecretRef:
         name: garage-backup-access-key-secret
         key: access-key-id

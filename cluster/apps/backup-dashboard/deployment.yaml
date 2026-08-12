@@ -25,8 +25,8 @@ spec:
         - containerPort: 8080
           name: http
         volumeMounts:
-        - mountPath: /secrets/restic-repo
-          name: restic-repo
+        - mountPath: /secrets/restic-seed
+          name: restic-seed
         - mountPath: /secrets/garage-key
           name: garage-key
         env:
@@ -48,9 +48,9 @@ spec:
             cpu: 500m
             memory: 256Mi
       volumes:
-      - name: restic-repo
+      - name: restic-seed
         secret:
-          secretName: restic-repo-password-secret
+          secretName: restic-seed-password-secret
       - name: garage-key
         secret:
           secretName: garage-backup-access-key-secret
