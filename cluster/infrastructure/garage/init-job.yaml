@@ -5,7 +5,7 @@ metadata:
   name: garage-init
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: garage-init-secret-writer
 rules:
@@ -22,13 +22,29 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: garage-init-secret-writer-binding
+  namespace: forgejo
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: garage-init-secret-writer
 subjects:
 - kind: ServiceAccount
   name: garage-init
+  namespace: garage
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: garage-init-secret-writer-binding
+  namespace: backup-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: garage-init-secret-writer
+subjects:
+- kind: ServiceAccount
+  name: garage-init
+  namespace: garage
 ---
 apiVersion: batch/v1
 kind: Job
@@ -47,12 +63,20 @@ spec:
         - -c
         - |
           set -e
-          apk add --no-cache curl jq >/dev/null
+          # openssl provides the HMAC used to derive each namespace's repository password.
+          apk add --no-cache curl jq openssl >/dev/null
 
           ADMIN_TOKEN=$(cat /secrets/admin_token)
           API="http://garage.garage.svc.cluster.local:3903"
           AUTH="Authorization: Bearer ${ADMIN_TOKEN}"
-          BUCKET_NAME="kubernetes-backups"
+
+          # Every per-namespace restic password is derived from this one value, so a new
+          # namespace needs no new Vault entry and the passwords stay reproducible.
+          RESTIC_SEED=$(cat /secrets/restic-seed/password)
+
+          K8S_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+          CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          K8S_API="https://kubernetes.default.svc"
 
           # api <method> <endpoint> [body] - wraps curl so a non-2xx response prints the
           # status and the response body before exiting. Plain "curl -sf" swallows both
@@ -116,84 +140,131 @@ spec:
             sleep 2
           done
 
-          # Re-runs are expected (the Job is retried on failure), so treat an existing
-          # bucket as success and look its ID up instead of failing.
-          if api POST v2/CreateBucket "{\"globalAlias\":\"${BUCKET_NAME}\"}" >/tmp/bucket.json 2>/dev/null; then
-            BUCKET_ID=$(jq -r '.id // .bucket.id' /tmp/bucket.json)
-          else
-            echo "CreateBucket failed - assuming ${BUCKET_NAME} already exists, looking it up"
-            BUCKET_ID=$(api GET "v2/GetBucketInfo?globalAlias=${BUCKET_NAME}" | jq -r '.id // .bucket.id')
-          fi
+          # ensure_bucket <name> - prints the bucket id, creating it when missing.
+          ensure_bucket() {
+            eb_name="$1"
+            if api POST v2/CreateBucket "{\"globalAlias\":\"${eb_name}\"}" >/tmp/bucket.json 2>/dev/null; then
+              jq -r '.id // .bucket.id' /tmp/bucket.json
+              return 0
+            fi
+            api GET "v2/GetBucketInfo?globalAlias=${eb_name}" | jq -r '.id // .bucket.id'
+          }
+
+          # ensure_key <name> - prints "<accessKeyId> <secretAccessKey>", reusing an
+          # existing key of that name. Minting a fresh key on every run would invalidate
+          # the credentials already deployed in the namespaces, which is exactly what the
+          # previous single-key version did whenever this Job was retried.
+          ensure_key() {
+            ek_name="$1"
+            ek_id=$(api GET "v2/ListKeys" | jq -r --arg n "$ek_name" '.[] | select(.name == $n) | .id' | head -n 1)
+            if [ -n "$ek_id" ] && [ "$ek_id" != "null" ]; then
+              api GET "v2/GetKeyInfo?id=${ek_id}&showSecretKey=true" > /tmp/key.json
+            else
+              api POST v2/CreateKey "{\"name\":\"${ek_name}\"}" > /tmp/key.json
+            fi
+
+            ek_access=$(jq -r '.accessKeyId' /tmp/key.json)
+            ek_secret=$(jq -r '.secretAccessKey' /tmp/key.json)
+            if [ -z "$ek_access" ] || [ "$ek_access" = "null" ] ||
+              [ -z "$ek_secret" ] || [ "$ek_secret" = "null" ]; then
+              echo "ERROR: could not obtain credentials for key ${ek_name}:" >&2
+              cat /tmp/key.json >&2
+              return 1
+            fi
+            echo "${ek_access} ${ek_secret}"
+          }
+
+          # derive_password <namespace> - HMAC-SHA256 of the namespace under the seed.
+          derive_password() {
+            printf '%s' "$1" | openssl dgst -sha256 -hmac "$RESTIC_SEED" -binary | base64 | tr -d '\n'
+          }
+
+          # write_secret <namespace> <name> <json data map> - creates or replaces, so a
+          # re-run refreshes the contents instead of leaving stale credentials behind.
+          write_secret() {
+            ws_ns="$1"
+            ws_name="$2"
+            ws_data="$3"
+
+            ws_body="{\"apiVersion\":\"v1\",\"kind\":\"Secret\""
+            ws_body="${ws_body},\"metadata\":{\"name\":\"${ws_name}\",\"namespace\":\"${ws_ns}\"}"
+            ws_body="${ws_body},\"data\":${ws_data}}"
+
+            ws_url="${K8S_API}/api/v1/namespaces/${ws_ns}/secrets"
+            ws_status=$(curl -s -o /tmp/secret_response -w '%{http_code}' --cacert "$CACERT" \
+              -H "Authorization: Bearer ${K8S_TOKEN}" -H "Content-Type: application/json" \
+              -X POST "$ws_url" -d "$ws_body")
+
+            if [ "$ws_status" = "409" ]; then
+              ws_status=$(curl -s -o /tmp/secret_response -w '%{http_code}' --cacert "$CACERT" \
+                -H "Authorization: Bearer ${K8S_TOKEN}" -H "Content-Type: application/json" \
+                -X PUT "${ws_url}/${ws_name}" -d "$ws_body")
+            fi
+
+            case "$ws_status" in
+            2??) echo "  wrote Secret ${ws_name} in ${ws_ns}" ;;
+            *)
+              echo "ERROR: writing Secret ${ws_name} in ${ws_ns} returned HTTP $ws_status" >&2
+              cat /tmp/secret_response >&2
+              echo >&2
+              return 1
+              ;;
+            esac
+          }
+
+          b64() { printf '%s' "$1" | base64 | tr -d '\n'; }
+
+          echo "Provisioning backup repository for namespace forgejo"
+          BUCKET_ID=$(ensure_bucket "kubernetes-backups-forgejo")
           if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
-            echo "ERROR: could not determine bucket ID for ${BUCKET_NAME}" >&2
-            cat /tmp/bucket.json >&2
+            echo "ERROR: could not determine bucket ID for kubernetes-backups-forgejo" >&2
             exit 1
           fi
 
-          api POST v2/CreateKey '{"name":"backup-key"}' > /tmp/key.json
-          ACCESS_KEY_ID=$(jq -r '.accessKeyId' /tmp/key.json)
-          SECRET_ACCESS_KEY=$(jq -r '.secretAccessKey' /tmp/key.json)
-          if [ -z "$ACCESS_KEY_ID" ] || [ "$ACCESS_KEY_ID" = "null" ] ||
-            [ -z "$SECRET_ACCESS_KEY" ] || [ "$SECRET_ACCESS_KEY" = "null" ]; then
-            echo "ERROR: CreateKey response did not contain accessKeyId/secretAccessKey:" >&2
-            cat /tmp/key.json >&2
-            exit 1
-          fi
+          set -- $(ensure_key "backup-forgejo")
+          ACCESS_KEY_ID="$1"
+          SECRET_ACCESS_KEY="$2"
 
-          PERMISSIONS='{"read":true,"write":true,"owner":false}'
-          api POST v2/AllowBucketKey \
-            "{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\",\"permissions\":${PERMISSIONS}}"
+          # Scoped to this one bucket: the namespace holding these credentials must not
+          # be able to read or delete any other namespace's backups.
+          GRANT="{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\""
+          GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$GRANT"
 
-          K8S_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-          CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-          ACCESS_KEY_ID_B64=$(printf '%s' "$ACCESS_KEY_ID" | base64 | tr -d '\n')
-          SECRET_ACCESS_KEY_B64=$(printf '%s' "$SECRET_ACCESS_KEY" | base64 | tr -d '\n')
+          write_secret "forgejo" "garage-backup-access-key-secret" \
+            "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
 
-          REFLECTOR_PREFIX="reflector.v1.k8s.emberstack.com"
-          ANNOTATIONS="{\"${REFLECTOR_PREFIX}/reflection-allowed\":\"true\""
-          ANNOTATIONS="${ANNOTATIONS},\"${REFLECTOR_PREFIX}/reflection-allowed-namespaces\":\"forgejo,backup-dashboard\""
-          ANNOTATIONS="${ANNOTATIONS},\"${REFLECTOR_PREFIX}/reflection-auto-enabled\":\"true\""
-          ANNOTATIONS="${ANNOTATIONS},\"${REFLECTOR_PREFIX}/reflection-auto-namespaces\":\"forgejo,backup-dashboard\"}"
+          REPO_PASSWORD=$(derive_password "forgejo")
+          write_secret "forgejo" "restic-repo-password-secret" \
+            "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
-          SECRET_DATA="{\"access-key-id\":\"${ACCESS_KEY_ID_B64}\""
-          SECRET_DATA="${SECRET_DATA},\"secret-access-key\":\"${SECRET_ACCESS_KEY_B64}\"}"
+          echo "Provisioning read-only dashboard key"
+          set -- $(ensure_key "backup-dashboard-reader")
+          READER_ACCESS_KEY_ID="$1"
+          READER_SECRET_ACCESS_KEY="$2"
 
-          SECRET_BODY="{\"apiVersion\":\"v1\",\"kind\":\"Secret\""
-          SECRET_BODY="${SECRET_BODY},\"metadata\":{\"name\":\"garage-backup-access-key-secret\""
-          SECRET_BODY="${SECRET_BODY},\"annotations\":${ANNOTATIONS}}"
-          SECRET_BODY="${SECRET_BODY},\"data\":${SECRET_DATA}}"
+          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-forgejo")
+          READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
+          READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
+          READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$READER_GRANT"
 
-          SECRET_URL="https://kubernetes.default.svc/api/v1/namespaces/garage/secrets"
-          SECRET_STATUS=$(curl -s -o /tmp/secret_response -w '%{http_code}' --cacert "$CACERT" \
-            -H "Authorization: Bearer ${K8S_TOKEN}" -H "Content-Type: application/json" \
-            -X POST "$SECRET_URL" -d "$SECRET_BODY")
+          write_secret "backup-dashboard" "garage-backup-access-key-secret" \
+            "{\"access-key-id\":\"$(b64 "$READER_ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$READER_SECRET_ACCESS_KEY")\"}"
 
-          case "$SECRET_STATUS" in
-          2??)
-            echo "Wrote Secret garage-backup-access-key-secret in namespace garage"
-            ;;
-          409)
-            echo "WARNING: Secret garage-backup-access-key-secret already exists - it still holds the" >&2
-            echo "         PREVIOUS access key, but CreateKey just minted a new one. Update it manually:" >&2
-            echo "         kubectl -n garage delete secret garage-backup-access-key-secret" >&2
-            echo "         then re-run this job." >&2
-            ;;
-          *)
-            echo "ERROR: writing the access-key Secret returned HTTP $SECRET_STATUS" >&2
-            cat /tmp/secret_response >&2
-            echo >&2
-            exit 1
-            ;;
-          esac
-
-          echo "Garage bucket + scoped backup key provisioned."
+          echo "Per-namespace backup repositories provisioned."
         image: alpine:3.20
         name: init
         volumeMounts:
         - mountPath: /secrets
           name: node-secrets
+        - mountPath: /secrets/restic-seed
+          name: restic-seed
       volumes:
       - name: node-secrets
         secret:
           secretName: garage-node-secrets
+      - name: restic-seed
+        secret:
+          secretName: restic-seed-password-secret
       restartPolicy: OnFailure
