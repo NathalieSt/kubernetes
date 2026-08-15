@@ -7,4 +7,4 @@ spec:
   url: oci://ghcr.io/netbirdio/helm-charts/netbird-operator
   interval: 24h
   ref:
-    tag: 0.4.1
+    tag: 0.8.0

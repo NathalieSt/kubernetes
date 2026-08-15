@@ -275,14 +275,14 @@ spec:
             echo "             restic-repo-password-secret --from-literal=password=<password>" >&2
           fi
 
-          echo "Provisioning backup repository for namespace mealie"
-          BUCKET_ID=$(ensure_bucket "kubernetes-backups-mealie")
+          echo "Provisioning backup repository for namespace tandoor"
+          BUCKET_ID=$(ensure_bucket "kubernetes-backups-tandoor")
           if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
-            echo "ERROR: could not determine bucket ID for kubernetes-backups-mealie" >&2
+            echo "ERROR: could not determine bucket ID for kubernetes-backups-tandoor" >&2
             exit 1
           fi
 
-          set -- $(ensure_key "backup-mealie")
+          set -- $(ensure_key "backup-tandoor")
           ACCESS_KEY_ID="$1"
           SECRET_ACCESS_KEY="$2"
 
@@ -292,12 +292,37 @@ spec:
           GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
           api POST v2/AllowBucketKey "$GRANT"
 
-          write_secret "mealie" "garage-backup-access-key-secret" \
+          write_secret "tandoor" "garage-backup-access-key-secret" \
             "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
 
 
-          REPO_PASSWORD=$(derive_password "mealie")
-          write_secret "mealie" "restic-repo-password-secret" \
+          REPO_PASSWORD=$(derive_password "tandoor")
+          write_secret "tandoor" "restic-repo-password-secret" \
+            "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
+
+          echo "Provisioning backup repository for namespace kavita"
+          BUCKET_ID=$(ensure_bucket "kubernetes-backups-kavita")
+          if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
+            echo "ERROR: could not determine bucket ID for kubernetes-backups-kavita" >&2
+            exit 1
+          fi
+
+          set -- $(ensure_key "backup-kavita")
+          ACCESS_KEY_ID="$1"
+          SECRET_ACCESS_KEY="$2"
+
+          # Scoped to this one bucket: the namespace holding these credentials must not
+          # be able to read or delete any other namespace's backups.
+          GRANT="{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\""
+          GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$GRANT"
+
+          write_secret "kavita" "garage-backup-access-key-secret" \
+            "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
+
+
+          REPO_PASSWORD=$(derive_password "kavita")
+          write_secret "kavita" "restic-repo-password-secret" \
             "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
           echo "Provisioning read-only dashboard key"
@@ -323,7 +348,13 @@ spec:
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
           api POST v2/AllowBucketKey "$READER_GRANT"
 
-          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-mealie")
+          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-tandoor")
+          READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
+          READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
+          READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$READER_GRANT"
+
+          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-kavita")
           READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
           READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"

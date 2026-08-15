@@ -1,0 +1,9 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: headlamp-repo
+spec:
+  type: default
+  url: https://kubernetes-sigs.github.io/headlamp/
+  interval: 24h
