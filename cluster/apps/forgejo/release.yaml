@@ -27,8 +27,8 @@ spec:
           HOST: remote-fs.netbird.nathalie-stiefsohn.eu:5432
           NAME: forgejo
         server:
-          ROOT_URL: https://code.nathi.lol
-          SSH_DOMAIN: code.nathi.lol
+          ROOT_URL: https://code.netbird.nathalie-stiefsohn.eu
+          SSH_DOMAIN: code.netbird.nathalie-stiefsohn.eu
           SSH_PORT: "2222"
       queue:
         CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?

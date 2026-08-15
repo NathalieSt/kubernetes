@@ -22,3 +22,9 @@ spec:
           values:
           - networkrouter
           - vault-secrets-operator
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-gateway
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-gateway

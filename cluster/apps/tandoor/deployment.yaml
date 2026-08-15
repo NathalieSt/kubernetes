@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: tandoor
+    app.kubernetes.io/version: sha256_f6c58afdea7a7
+  name: tandoor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tandoor
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tandoor
+        app.kubernetes.io/version: sha256_f6c58afdea7a7
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: vabene1111/recipes@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
+        name: tandoor
+        ports:
+        - containerPort: 8080
+          name: tandoor
+        volumeMounts:
+        - mountPath: /opt/recipes/mediafiles
+          name: media-volume
+        - mountPath: /opt/recipes/staticfiles
+          name: static-volume
+        env:
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: secret-key
+              name: tandoor-secret
+        - name: TZ
+          value: Europe/Vienna
+        - name: TANDOOR_PORT
+          value: "8080"
+        - name: ALLOWED_HOSTS
+          value: tandoor.netbird.nathalie-stiefsohn.eu
+        - name: CSRF_TRUSTED_ORIGINS
+          value: https://tandoor.netbird.nathalie-stiefsohn.eu
+        - name: DB_ENGINE
+          value: django.db.backends.postgresql
+        - name: POSTGRES_HOST
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: POSTGRES_DB
+          value: tandoor
+        - name: ENABLE_SIGNUP
+          value: "0"
+        - name: ALLAUTH_TRUSTED_PROXY_COUNT
+          value: "1"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+      volumes:
+      - name: media-volume
+        persistentVolumeClaim:
+          claimName: tandoor-media-pvc
+      - name: static-volume
+        emptyDir: {}

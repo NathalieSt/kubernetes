@@ -1,0 +1,152 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: internal-gateway-dynamic
+data:
+  middlewares.yaml: |
+    http:
+      middlewares:
+        headlamp-basic-auth:
+          basicAuth:
+            usersFile: /auth/headlamp
+            realm: headlamp.netbird.nathalie-stiefsohn.eu
+            removeHeader: true
+  routers.yaml: |
+    http:
+      routers:
+        affine:
+          rule: Host(`affine.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: affine
+        audiomuse-ai:
+          rule: Host(`audiomuse.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: audiomuse-ai
+        backup-dashboard:
+          rule: Host(`backups.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: backup-dashboard
+        flood:
+          rule: Host(`transmission.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: flood
+        forgejo:
+          rule: Host(`code.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: forgejo
+        headlamp:
+          rule: Host(`headlamp.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: headlamp
+          middlewares:
+          - headlamp-basic-auth
+        jellyfin:
+          rule: Host(`jellyfin.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: jellyfin
+        kavita:
+          rule: Host(`kavita.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: kavita
+        perses:
+          rule: Host(`perses.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: perses
+        redlib:
+          rule: Host(`redlib.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: redlib
+        searxng:
+          rule: Host(`searxng.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: searxng
+        tandoor:
+          rule: Host(`tandoor.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: tandoor
+        vault:
+          rule: Host(`vault.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: vault
+  services.yaml: |
+    http:
+      services:
+        affine:
+          loadBalancer:
+            servers:
+            - url: http://affine.affine.svc.cluster.local:3010
+        audiomuse-ai:
+          loadBalancer:
+            servers:
+            - url: http://audiomuse-ai.jellyfin.svc.cluster.local:8000
+        backup-dashboard:
+          loadBalancer:
+            servers:
+            - url: http://backup-dashboard.backup-dashboard.svc.cluster.local:8080
+        flood:
+          loadBalancer:
+            servers:
+            - url: http://flood.jellyfin.svc.cluster.local:3000
+        forgejo:
+          loadBalancer:
+            servers:
+            - url: http://forgejo-http.forgejo.svc.cluster.local:3000
+        headlamp:
+          loadBalancer:
+            servers:
+            - url: http://headlamp.headlamp.svc.cluster.local:80
+        jellyfin:
+          loadBalancer:
+            servers:
+            - url: http://jellyfin.jellyfin.svc.cluster.local:8096
+        kavita:
+          loadBalancer:
+            servers:
+            - url: http://kavita.kavita.svc.cluster.local:5000
+        perses:
+          loadBalancer:
+            servers:
+            - url: http://perses.perses.svc.cluster.local:8080
+        redlib:
+          loadBalancer:
+            servers:
+            - url: http://redlib.redlib.svc.cluster.local:8080
+        searxng:
+          loadBalancer:
+            servers:
+            - url: http://searxng.searxng.svc.cluster.local:8080
+        tandoor:
+          loadBalancer:
+            servers:
+            - url: http://tandoor.tandoor.svc.cluster.local:8080
+        vault:
+          loadBalancer:
+            servers:
+            - url: http://vault-ui.vault.svc.cluster.local:8200
+  tcp.yaml: |
+    tcp:
+      routers:
+        forgejo-ssh:
+          rule: HostSNI(`*`)
+          entryPoints:
+          - forgejo-ssh
+          service: forgejo-ssh
+      services:
+        forgejo-ssh:
+          loadBalancer:
+            servers:
+            - address: forgejo-ssh.forgejo.svc.cluster.local:2222

@@ -163,6 +163,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: kavita
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: kavita
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/kavita
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+  - name: keda
+  - name: garage
+  - name: k8up
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: livekit
   namespace: flux-system
 spec:
@@ -177,25 +198,6 @@ spec:
   timeout: 10m
   dependsOn:
   - name: vault-secrets-operator-config
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: mealie
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: mealie
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/mealie
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: main-pg
-  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -250,6 +252,27 @@ spec:
   - name: gluetun-proxy
   - name: valkey
   - name: keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tandoor
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: tandoor
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/tandoor
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: main-pg
+  - name: csi-driver-nfs
+  - name: keda
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

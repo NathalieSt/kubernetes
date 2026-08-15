@@ -13,7 +13,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - mealie
+          - tandoor
           - jellyfin
           - cnpg-system
           - openclarity
@@ -22,7 +22,7 @@ spec:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - mealie
+          - tandoor
           - audiomuse-ai-worker
           - audiomuse-ai-nvidia-worker
           - audiomuse-ai-flask
