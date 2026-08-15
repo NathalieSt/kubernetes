@@ -1,0 +1,41 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: SetupKey
+metadata:
+  name: internal-gateway-setup-key
+  namespace: internal-gateway
+spec:
+  name: internal-gateway
+  ephemeral: true
+  allowExtraDnsLabels: true
+  autoGroups:
+  - name: kubernetes
+---
+apiVersion: netbird.io/v1alpha1
+kind: SidecarProfile
+metadata:
+  name: internal-gateway
+  namespace: internal-gateway
+spec:
+  setupKeyRef:
+    name: internal-gateway-setup-key
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: internal-gateway
+  extraDNSLabels:
+  - affine
+  - audiomuse
+  - backups
+  - transmission
+  - code
+  - headlamp
+  - jellyfin
+  - mealie
+  - perses
+  - redlib
+  - searxng
+  - vault
+  containerOverride:
+    env:
+    - name: NB_DISABLE_UPDATE_SETTINGS
+      value: "false"

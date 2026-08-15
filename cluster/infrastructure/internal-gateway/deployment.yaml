@@ -1,0 +1,133 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: internal-gateway
+    app.kubernetes.io/version: v3.6
+  name: internal-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: internal-gateway
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: internal-gateway
+        app.kubernetes.io/version: v3.6
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chmod 600 /letsencrypt/acme.json 2>/dev/null || true
+        image: traefik:v3.6
+        name: fix-acme-permissions
+        volumeMounts:
+        - mountPath: /letsencrypt
+          name: acme-storage
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+      automountServiceAccountToken: false
+      containers:
+      - args:
+        - --log.level=INFO
+        - --providers.file.directory=/dynamic
+        - --providers.file.watch=true
+        - --entrypoints.web.address=:80
+        - --entrypoints.websecure.address=:443
+        - --entrypoints.web.http.redirections.entrypoint.to=websecure
+        - --entrypoints.web.http.redirections.entrypoint.scheme=https
+        - --certificatesresolvers.acmedns.acme.dnschallenge=true
+        - --certificatesresolvers.acmedns.acme.dnschallenge.provider=acme-dns
+        - --certificatesresolvers.acmedns.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
+        - --certificatesresolvers.acmedns.acme.storage=/letsencrypt/acme.json
+        - --certificatesresolvers.acmedns.acme.email=$(ACME_EMAIL)
+        - --entrypoints.websecure.http.tls=true
+        - --entrypoints.websecure.http.tls.certResolver=acmedns
+        - --entrypoints.websecure.http.tls.domains[0].main=*.netbird.nathalie-stiefsohn.eu
+        - --api.dashboard=false
+        - --entrypoints.forgejo-ssh.address=:2222
+        image: traefik:v3.6
+        name: internal-gateway
+        ports:
+        - containerPort: 80
+          name: web
+        - containerPort: 443
+          name: websecure
+        - containerPort: 2222
+          name: forgejo-ssh
+        volumeMounts:
+        - mountPath: /dynamic
+          name: dynamic-config
+          readOnly: true
+        - mountPath: /letsencrypt
+          name: acme-storage
+        - mountPath: /acme-dns
+          name: acme-dns
+          readOnly: true
+        - mountPath: /auth
+          name: basic-auth
+          readOnly: true
+        env:
+        - name: ACME_DNS_API_BASE
+          value: https://auth.nathalie-stiefsohn.eu
+        - name: ACME_DNS_STORAGE_PATH
+          value: /acme-dns/storage.json
+        - name: ACME_EMAIL
+          valueFrom:
+            secretKeyRef:
+              key: acme-email
+              name: acme-dns-secret
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            add:
+            - NET_BIND_SERVICE
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+      volumes:
+      - name: dynamic-config
+        configMap:
+          name: internal-gateway-dynamic
+      - name: acme-storage
+        persistentVolumeClaim:
+          claimName: internal-gateway-acme
+      - name: acme-dns
+        secret:
+          secretName: acme-dns-secret
+      - name: basic-auth
+        secret:
+          secretName: internal-gateway-basic-auth-secret
+          optional: true
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault

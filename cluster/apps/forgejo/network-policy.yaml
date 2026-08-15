@@ -18,3 +18,9 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: networkrouter
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-gateway
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-gateway
