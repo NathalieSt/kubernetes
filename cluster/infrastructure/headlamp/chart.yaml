@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: headlamp-chart
+spec:
+  interval: 24h
+  chart: headlamp
+  reconcileStrategy: ChartVersion
+  sourceRef:
+    kind: HelmRepository
+    name: headlamp-repo
+  version: 0.44.0

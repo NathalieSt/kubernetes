@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: kavita
+    app.kubernetes.io/version: sha256_ca6af7a18d712
+  name: kavita
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kavita
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kavita
+        app.kubernetes.io/version: sha256_ca6af7a18d712
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 1000:1000 /kavita/config
+        image: busybox
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /kavita/config
+          name: config-volume
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: jvmilazz0/kavita@sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982
+        name: kavita
+        ports:
+        - containerPort: 5000
+          name: kavita
+        volumeMounts:
+        - mountPath: /kavita/config
+          name: config-volume
+        - mountPath: /books
+          name: library-volume
+          readOnly: true
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: kavita-config-pvc
+      - name: library-volume
+        persistentVolumeClaim:
+          claimName: kavita-library-pvc

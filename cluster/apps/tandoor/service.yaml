@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: tandoor
+    app.kubernetes.io/version: sha256_f6c58afdea7a7
+  name: tandoor
+spec:
+  selector:
+    app.kubernetes.io/name: tandoor
+  ports:
+  - name: http-tandoor
+    port: 8080
+    targetPort: 8080

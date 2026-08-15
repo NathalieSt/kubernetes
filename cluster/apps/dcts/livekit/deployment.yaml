@@ -36,7 +36,7 @@ spec:
           name: livekit-config-volume
         - mountPath: /certs
           name: livekit-certs-volume
-          readonly: true
+          readOnly: true
         env:
         - name: LIVEKIT_API_KEY
           valueFrom:
