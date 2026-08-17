@@ -86,6 +86,8 @@ spec:
           name: basic-auth
           readOnly: true
         env:
+        - name: GOMEMLIMIT
+          value: 440MiB
         - name: ACME_DNS_API_BASE
           value: https://auth.nathalie-stiefsohn.eu
         - name: ACME_DNS_STORAGE_PATH
@@ -98,10 +100,10 @@ spec:
         resources:
           requests:
             cpu: 50m
-            memory: 64Mi
+            memory: 128Mi
           limits:
             cpu: 500m
-            memory: 256Mi
+            memory: 512Mi
         securityContext:
           capabilities:
             add:
