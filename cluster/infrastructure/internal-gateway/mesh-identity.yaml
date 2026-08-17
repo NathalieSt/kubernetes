@@ -1,5 +1,13 @@
 ---
 apiVersion: netbird.io/v1alpha1
+kind: Group
+metadata:
+  name: internal-gateway
+  namespace: internal-gateway
+spec:
+  name: internal-gateway
+---
+apiVersion: netbird.io/v1alpha1
 kind: SetupKey
 metadata:
   name: internal-gateway-setup-key
@@ -10,6 +18,8 @@ spec:
   allowExtraDnsLabels: true
   autoGroups:
   - name: kubernetes
+  - localRef:
+      name: internal-gateway
 ---
 apiVersion: netbird.io/v1alpha1
 kind: SidecarProfile
