@@ -10,4 +10,4 @@ spec:
   sourceRef:
     kind: HelmRepository
     name: vault-secrets-operator-repo
-  version: 0.10.0
+  version: 1.5.1
