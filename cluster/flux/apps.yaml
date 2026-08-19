@@ -143,6 +143,25 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: gluetun-media
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/mediaserver/gluetun-media
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: jellyfin
+  - name: vault-secrets-operator-config
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: jellyfin
   namespace: flux-system
 spec:
@@ -198,6 +217,26 @@ spec:
   timeout: 10m
   dependsOn:
   - name: vault-secrets-operator-config
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: music-library-builder
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/mediaserver/music-library-builder
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: jellyfin
+  - name: gluetun-media
+  - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

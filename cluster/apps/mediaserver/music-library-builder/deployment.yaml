@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: music-library-builder
+    app.kubernetes.io/version: latest
+  name: music-library-builder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: music-library-builder
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: music-library-builder
+        app.kubernetes.io/version: latest
+    spec:
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:latest
+        name: music-library-builder
+        ports:
+        - containerPort: 8140
+          name: http
+        volumeMounts:
+        - mountPath: /media
+          name: media-volume
+        - mountPath: /state
+          name: state-volume
+        env:
+        - name: MLB_LIBRARY_ROOT
+          value: /media/music
+        - name: MLB_STATE_DIR
+          value: /state
+        - name: MLB_PROXY
+          value: http://gluetun-media.jellyfin.svc.cluster.local:8888
+        - name: MLB_VPN_CONTROL_URL
+          value: http://gluetun-media.jellyfin.svc.cluster.local:8000
+        - name: MLB_NO_PROXY
+          value: svc.cluster.local,cluster.local,localhost
+        - name: MLB_CONCURRENCY
+          value: "2"
+        - name: MLB_HOST
+          value: 0.0.0.0
+        - name: MLB_PORT
+          value: "8140"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+      volumes:
+      - name: media-volume
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc
+      - name: state-volume
+        persistentVolumeClaim:
+          claimName: music-library-builder-state-pvc
