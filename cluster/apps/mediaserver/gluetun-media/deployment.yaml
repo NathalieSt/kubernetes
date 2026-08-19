@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: gluetun-media
+    app.kubernetes.io/version: v3.40
+  name: gluetun-media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gluetun-media
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gluetun-media
+        app.kubernetes.io/version: v3.40
+    spec:
+      containers:
+      - image: qmcgaw/gluetun:v3.40
+        name: gluetun-media
+        ports:
+        - containerPort: 8888
+          name: http-proxy
+        - containerPort: 8000
+          name: control
+        env:
+        - name: VPN_SERVICE_PROVIDER
+          value: protonvpn
+        - name: VPN_TYPE
+          value: openvpn
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: gluetun-media-vpn
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: gluetun-media-vpn
+        - name: SERVER_COUNTRIES
+          value: Austria,Finland,Malta,Netherlands
+        - name: FIREWALL_INPUT_PORTS
+          value: 8888,8000
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.42.0.0/15
+        - name: HTTPPROXY
+          value: "on"
+        - name: HTTPPROXY_STEALTH
+          value: "on"
+        - name: HTTP_CONTROL_SERVER_ADDRESS
+          value: :8000
+        - name: HTTP_CONTROL_SERVER_LOG
+          value: "off"
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: music-library-builder
+    app.kubernetes.io/version: latest
+  name: music-library-builder
+spec:
+  selector:
+    app.kubernetes.io/name: music-library-builder
+  ports:
+  - name: http-music-library-builder
+    port: 8140
+    targetPort: 8140
