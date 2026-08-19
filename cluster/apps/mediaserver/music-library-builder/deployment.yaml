@@ -17,6 +17,8 @@ spec:
         app.kubernetes.io/name: music-library-builder
         app.kubernetes.io/version: latest
     spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
       containers:
       - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:latest
         name: music-library-builder

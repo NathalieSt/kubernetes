@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: backup-dashboard
     spec:
       imagePullSecrets:
-      - name: backup-dashboard-registry-secret
+      - name: forgejo-registry-secret
       serviceAccountName: backup-dashboard
       containers:
       - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:latest

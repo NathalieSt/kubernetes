@@ -237,6 +237,7 @@ spec:
   - name: jellyfin
   - name: gluetun-media
   - name: csi-driver-nfs
+  - name: reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
