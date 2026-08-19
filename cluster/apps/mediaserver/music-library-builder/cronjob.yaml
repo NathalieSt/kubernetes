@@ -22,6 +22,8 @@ spec:
             app.kubernetes.io/name: music-library-builder
             app.kubernetes.io/version: latest
         spec:
+          imagePullSecrets:
+          - name: forgejo-registry-secret
           containers:
           - args:
             - ./bin/mlb.mjs
