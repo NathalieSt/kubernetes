@@ -44,7 +44,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: vault-secrets-operator-vault-rolebinding
+  name: vault-secrets-operator-vault-token-reviewer-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
