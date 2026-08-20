@@ -57,6 +57,11 @@ data:
           entryPoints:
           - websecure
           service: kavita
+        music-library-builder:
+          rule: Host(`music.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: music-library-builder
         perses:
           rule: Host(`perses.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -117,6 +122,10 @@ data:
           loadBalancer:
             servers:
             - url: http://kavita.kavita.svc.cluster.local:5000
+        music-library-builder:
+          loadBalancer:
+            servers:
+            - url: http://music-library-builder.jellyfin.svc.cluster.local:8140
         perses:
           loadBalancer:
             servers:

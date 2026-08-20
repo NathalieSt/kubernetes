@@ -41,6 +41,7 @@ spec:
   - headlamp
   - jellyfin
   - kavita
+  - music
   - perses
   - redlib
   - searxng

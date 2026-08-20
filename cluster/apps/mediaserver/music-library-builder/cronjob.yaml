@@ -48,6 +48,8 @@ spec:
               value: svc.cluster.local,cluster.local,localhost
             - name: MLB_CONCURRENCY
               value: "2"
+            - name: MLB_BROWSE_ROOTS
+              value: /media
             resources:
               requests:
                 cpu: 50m
