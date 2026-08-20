@@ -41,7 +41,7 @@ spec:
               key: password
               name: gluetun-media-vpn
         - name: SERVER_COUNTRIES
-          value: Austria,Finland,Malta,Netherlands
+          value: Austria,Bulgaria,Croatia,Czech Republic,Estonia,Finland,Greece,Hungary,Latvia,Lithuania,Luxembourg,Malta,Netherlands,Portugal,Serbia,Slovakia,Slovenia
         - name: FIREWALL_INPUT_PORTS
           value: 8888,8000
         - name: FIREWALL_OUTBOUND_SUBNETS
