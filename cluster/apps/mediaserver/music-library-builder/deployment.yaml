@@ -43,6 +43,8 @@ spec:
           value: svc.cluster.local,cluster.local,localhost
         - name: MLB_CONCURRENCY
           value: "2"
+        - name: MLB_BROWSE_ROOTS
+          value: /media
         - name: MLB_HOST
           value: 0.0.0.0
         - name: MLB_PORT
