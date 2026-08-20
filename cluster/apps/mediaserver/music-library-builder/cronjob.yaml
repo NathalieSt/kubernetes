@@ -24,6 +24,16 @@ spec:
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
+          initContainers:
+          - command:
+            - sh
+            - -c
+            - chown 1000:1000 /state
+            image: busybox
+            name: permission-fix
+            volumeMounts:
+            - mountPath: /state
+              name: state-volume
           containers:
           - args:
             - ./bin/mlb.mjs
