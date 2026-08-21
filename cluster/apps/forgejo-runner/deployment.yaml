@@ -39,7 +39,17 @@ spec:
             level: info
             job_level: info
           runner:
-            capacity: 1
+            # How many jobs this daemon runs at once, and the only correct way to make CI
+            # parallel here. Scaling the Deployment instead does not work: every replica
+            # derives the same connection uuid from the same secret above, so they all
+            # register as one runner; they all write this same config.yml onto one RWX
+            # volume; and the cache server's bolt.db takes an exclusive lock with a
+            # five-second timeout, so the second pod's cache would fail intermittently -
+            # over NFS, where flock is already unreliable.
+            #
+            # Concurrent jobs run as containers of the dind sidecar, so they draw on its
+            # limits rather than this container's. Raise both together.
+            capacity: 3
             timeout: 3h
             shutdown_timeout: 3h
           cache:
@@ -102,8 +112,8 @@ spec:
             cpu: 500m
             memory: 1Gi
           limits:
-            cpu: 2000m
-            memory: 4Gi
+            cpu: 4000m
+            memory: 8Gi
         securityContext:
           privileged: true
       volumes:
