@@ -12,6 +12,11 @@ data:
             usersFile: /auth/headlamp
             realm: headlamp.netbird.nathalie-stiefsohn.eu
             removeHeader: true
+        vim-dojo-basic-auth:
+          basicAuth:
+            usersFile: /auth/vim-dojo
+            realm: dojo.netbird.nathalie-stiefsohn.eu
+            removeHeader: true
   routers.yaml: |
     http:
       routers:
@@ -87,6 +92,13 @@ data:
           entryPoints:
           - websecure
           service: vault
+        vim-dojo:
+          rule: Host(`dojo.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: vim-dojo
+          middlewares:
+          - vim-dojo-basic-auth
   services.yaml: |
     http:
       services:
@@ -146,6 +158,10 @@ data:
           loadBalancer:
             servers:
             - url: http://vault-ui.vault.svc.cluster.local:8200
+        vim-dojo:
+          loadBalancer:
+            servers:
+            - url: http://vim-dojo.vim-dojo.svc.cluster.local:3000
   tcp.yaml: |
     tcp:
       routers:

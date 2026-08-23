@@ -18,24 +18,24 @@ spec:
       admin:
         passwordMode: initialOnlyRequireReset
         username: Nathi
-      cache:
-        ADAPTER: redis
-        HOST: valkey://valkey.valkey.svc.cluster.local:6379/1
       config:
+        cache:
+          ADAPTER: redis
+          HOST: valkey://valkey.valkey.svc.cluster.local:6379/1
         database:
           DB_TYPE: postgres
           HOST: remote-fs.netbird.nathalie-stiefsohn.eu:5432
           NAME: forgejo
+        queue:
+          CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
+          TYPE: redis
         server:
           ROOT_URL: https://code.netbird.nathalie-stiefsohn.eu
           SSH_DOMAIN: code.netbird.nathalie-stiefsohn.eu
           SSH_PORT: "2222"
-      queue:
-        CONN_STR: valkey://valkey.valkey.svc.cluster.local:6379/0?
-        TYPE: redis
-      session:
-        PROVIDER: redis
-        PROVIDER_CONFIG: valkey://valkey.valkey.svc.cluster.local:6379/2
+        session:
+          PROVIDER: redis
+          PROVIDER_CONFIG: valkey://valkey.valkey.svc.cluster.local:6379/2
     persistence:
       annotations:
         k8up.io/backup: "true"

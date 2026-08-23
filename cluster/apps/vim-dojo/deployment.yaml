@@ -1,0 +1,92 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: vim-dojo
+    app.kubernetes.io/version: latest
+  name: vim-dojo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vim-dojo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vim-dojo
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown 1000:1000 /state /workspace && mkdir -p /state/home && chown 1000:1000 /state/home
+        image: busybox
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /state
+          name: state-volume
+        - mountPath: /workspace
+          name: workspace-volume
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo:latest
+        name: vim-dojo
+        ports:
+        - containerPort: 3000
+          name: http
+        volumeMounts:
+        - mountPath: /state
+          name: state-volume
+        - mountPath: /workspace
+          name: workspace-volume
+        - mountPath: /tmp
+          name: socket-volume
+        env:
+        - name: VIM_DOJO_WORKSPACE
+          value: /workspace
+        - name: HOME
+          value: /state/home
+        - name: XDG_CONFIG_HOME
+          value: /state/config
+        - name: XDG_DATA_HOME
+          value: /state/share
+        - name: XDG_STATE_HOME
+          value: /state/state
+        - name: XDG_CACHE_HOME
+          value: /state/cache
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+      volumes:
+      - name: state-volume
+        persistentVolumeClaim:
+          claimName: vim-dojo-state-pvc
+      - name: workspace-volume
+        persistentVolumeClaim:
+          claimName: vim-dojo-workspace-pvc
+      - name: socket-volume
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

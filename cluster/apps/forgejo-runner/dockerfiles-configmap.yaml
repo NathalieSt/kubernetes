@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forgejo-runner-dockerfiles
+data:
+  go.Dockerfile: |
+    FROM golang:1.26.1-trixie
+    RUN apt-get update -qq \
+     && apt-get install -y -qq --no-install-recommends git nodejs \
+     && rm -rf /var/lib/apt/lists/*
+  nvim.Dockerfile: |
+    FROM node:22
+    ARG NVIM_VERSION=v0.12.4
+    RUN set -eux; \
+        case "$(dpkg --print-architecture)" in \
+          amd64) nvim_arch=x86_64 ;; \
+          arm64) nvim_arch=arm64 ;; \
+          *) echo "unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+        esac; \
+        curl -fsSL -o /tmp/nvim.tar.gz \
+          "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-${nvim_arch}.tar.gz"; \
+        mkdir -p /opt/nvim; \
+        tar -C /opt/nvim --strip-components=1 -xzf /tmp/nvim.tar.gz; \
+        rm /tmp/nvim.tar.gz; \
+        /opt/nvim/bin/nvim --version | head -1
+    ENV PATH=/opt/nvim/bin:$PATH

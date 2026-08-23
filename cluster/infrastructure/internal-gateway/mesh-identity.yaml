@@ -47,6 +47,7 @@ spec:
   - searxng
   - tandoor
   - vault
+  - dojo
   containerOverride:
     env:
     - name: NB_DISABLE_UPDATE_SETTINGS
