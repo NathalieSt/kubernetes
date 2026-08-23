@@ -44,8 +44,8 @@ spec:
             # derives the same connection uuid from the same secret above, so they all
             # register as one runner; they all write this same config.yml onto one RWX
             # volume; and the cache server's bolt.db takes an exclusive lock with a
-            # five-second timeout, so the second pod's cache would fail intermittently -
-            # over NFS, where flock is already unreliable.
+            # five-second timeout, which two pods on one node-local volume would contend
+            # for. (That store is no longer on NFS at all - see cache.dir below.)
             #
             # Concurrent jobs run as containers of the dind sidecar, so they draw on its
             # limits rather than this container's. Raise both together.
@@ -53,8 +53,31 @@ spec:
             timeout: 3h
             shutdown_timeout: 3h
           cache:
-            enabled: true
-            dir: /data/cache
+            # Off, deliberately, and this costs real build time: every yarn install
+            # refetches its whole tree and every Go build recompiles from scratch.
+            #
+            # It was never actually on. The cache server keeps its index in a bolt.db
+            # and bolt needs an exclusive flock() to open it for writing; flock() fails
+            # on the nfs-remote mount that /data uses (nfs4, local_lock=none), so the
+            # store was created back in March and never written to again. Every
+            # actions/cache step in every repo carries continue-on-error, so the only
+            # symptom was silence.
+            #
+            #   $ flock -n /data/.locktest -c true ; echo $?
+            #   1
+            #   $ flock -n /tmp/.locktest  -c true ; echo $?
+            #   0
+            #
+            # Fixing it means putting the store on a filesystem where flock works, and
+            # the only node-local disk on any arm64 node in this cluster is the SD card
+            # it boots from. A cache is a write-heavy, constantly-rewritten working set,
+            # which is the workload most likely to wear one out, so no cache is the
+            # deliberate choice over a cache that eats SD cards.
+            #
+            # If this is ever worth revisiting: raspberry-pi-5-0 has a 3.6 TB SanDisk
+            # Extreme Pro at /mnt/external_ssd. Pin the runner there, point this at a
+            # local PV on that disk, and the tradeoff goes away.
+            enabled: false
           container:
             # Bind-mounted into every job container at /var/run/docker.sock so that steps
             # can run docker themselves. The path is resolved by the dind daemon, which
@@ -69,6 +92,12 @@ spec:
                 labels:
                   - ubuntu-latest:docker://node:20-bookworm
                   - docker:docker://docker:27-cli
+                  # Built locally by the image-warmer sidecar, never pulled: they live
+                  # only in this node's image store. force_pull defaults to false, so a
+                  # locally present image is used as-is and no registry is consulted -
+                  # which is what makes an unauthenticated private image workable at all.
+                  - go:docker://homelab-ci-go:1
+                  - nvim:docker://homelab-ci-nvim:1
           EOF
 
           exec forgejo-runner daemon --config /data/config.yml
@@ -116,6 +145,53 @@ spec:
             memory: 8Gi
         securityContext:
           privileged: true
+      - command:
+        - /bin/sh
+        - -c
+        - |
+
+          set -eu
+
+          while [ ! -S /var/run/docker-shared/docker.sock ]; do sleep 1; done
+          export DOCKER_HOST=unix:///var/run/docker-shared/docker.sock
+
+          # "<dockerfile> <tag>" per line, generated from ciImages so the tag always
+          # matches the file it is built from and the label that names it.
+          builds='go.Dockerfile homelab-ci-go:1
+          nvim.Dockerfile homelab-ci-nvim:1'
+
+          # No "is it already there?" shortcut on purpose. docker build against a warm
+          # layer cache costs about a second and, unlike an image-exists check, it
+          # actually notices when a Dockerfile has changed - which would otherwise
+          # silently serve a stale image until someone remembered to bump its tag.
+          echo "$builds" | while read -r file tag; do
+            [ -n "$file" ] || continue
+            echo "warming ${tag} from ${file}"
+            # /dockerfiles as the context: it holds only these files, so the build
+            # context stays a few kilobytes.
+            if docker build -t "$tag" -f "/dockerfiles/${file}" /dockerfiles; then
+              echo "  ok: ${tag}"
+            else
+              echo "  WARNING: could not build ${tag}; jobs using it will fail until this container restarts" >&2
+            fi
+          done
+
+          echo "image warmer done; idling"
+          while true; do sleep 3600; done
+        image: docker:27-cli
+        name: image-warmer
+        volumeMounts:
+        - mountPath: /var/run/docker-shared
+          name: docker-sock
+        - mountPath: /dockerfiles
+          name: ci-dockerfiles
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
       volumes:
       - name: runner-data
         persistentVolumeClaim:
@@ -124,6 +200,11 @@ spec:
         emptyDir: {}
       - name: docker-sock
         emptyDir: {}
+      - name: ci-dockerfiles
+        configMap:
+          name: forgejo-runner-dockerfiles
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
+      nodeSelector:
+        kubernetes.io/arch: arm64
