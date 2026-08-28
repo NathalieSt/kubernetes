@@ -60,3 +60,5 @@ spec:
       - name: garage-key
         secret:
           secretName: garage-backup-access-key-secret
+      nodeSelector:
+        kubernetes.io/arch: arm64
