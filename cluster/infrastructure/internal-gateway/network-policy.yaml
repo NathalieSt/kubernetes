@@ -14,3 +14,10 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: networkrouter
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 8082
+      protocol: TCP

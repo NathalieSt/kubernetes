@@ -74,6 +74,8 @@ spec:
               insecureSkipVerify: true
     nameOverride: vmks
     prometheus-node-exporter:
+      extraArgs:
+      - --collector.mountstats
       vmScrape:
         spec:
           endpoints:
@@ -137,6 +139,264 @@ spec:
                 target_label: namespace
               - target_label: job
                 replacement: cilium-operator
+          
+          # All six Flux controllers in one job. They are bootstrapped by flux itself
+          # rather than generated here, so there is no GeneratorMeta to declare Metrics
+          # on - but they share app.kubernetes.io/part-of and all serve Prometheus on
+          # 8080, so one job with the controller name lifted off the "app" label covers
+          # every one, including any controller added by a later flux bump.
+          - job_name: flux
+            kubernetes_sd_configs:
+              - role: pod
+                namespaces:
+                  names: [flux-system]
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_part_of]
+                regex: flux
+                action: keep
+              - source_labels: [__meta_kubernetes_pod_container_port_number]
+                regex: "8080"
+                action: keep
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                target_label: node
+              - source_labels: [__meta_kubernetes_pod_name]
+                target_label: pod
+              - source_labels: [__meta_kubernetes_namespace]
+                target_label: namespace
+              # Keeps the six controllers apart on a dashboard - without it every series
+              # says job="flux" and the reconciliation failures cannot be attributed.
+              - source_labels: [__meta_kubernetes_pod_label_app]
+                target_label: controller
+              - target_label: job
+                replacement: flux
+          
+          - job_name: cert-manager
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - cert-manager
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: cert-manager
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9402"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: cert-manager
+          - job_name: cnpg
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - cnpg-system
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: cloudnative-pg
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: cnpg
+          - job_name: forgejo
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - forgejo
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: forgejo
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "3000"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: forgejo
+          - job_name: garage
+            metrics_path: /metrics
+            scheme: http
+            bearer_token_file: /etc/vm/secrets/garage-metrics-token-secret/metrics_token
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - garage
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: garage
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "3903"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: garage
+          - job_name: internal-gateway
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - internal-gateway
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: internal-gateway
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8082"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: internal-gateway
+          - job_name: k8up
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - k8up
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: k8up
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: k8up
+          - job_name: keda
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - keda
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: keda-operator
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: keda
+          - job_name: vector
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - vector
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: vector
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9090"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: vector
+        secrets:
+        - garage-metrics-token-secret
     vmsingle:
       spec:
         extraArgs:

@@ -9,3 +9,4 @@ resources:
 - chart.yaml
 - release.yaml
 - netbird-network-resource.yaml
+- dashboards.yaml

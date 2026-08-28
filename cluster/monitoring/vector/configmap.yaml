@@ -12,6 +12,13 @@ data:
     # SOURCE - Kubernetes pod/container logs
     # -------------------------------------------------
     sources:
+      # Vector's own health: events in and out per component, errors, and the
+      # buffer/backpressure figures. Without this the log pipeline is the one part
+      # of the monitoring stack that nothing watches, and a sink failing quietly
+      # looks exactly like a cluster that stopped logging.
+      vector_metrics:
+        type: internal_metrics
+    
       k8s_in:
         auto_partial_merge: true
         delay_deletion_ms: 60000
@@ -130,6 +137,15 @@ data:
     # SINK - VictoriaLogs (via Elasticsearch-compatible insert API)
     # -------------------------------------------------
     sinks:
+      # Serves the internal metrics above on the prom-exporter container port the
+      # DaemonSet already declares. vmagent scrapes it via the generator's
+      # Metrics declaration.
+      prom_exporter:
+        type: prometheus_exporter
+        inputs:
+          - vector_metrics
+        address: 0.0.0.0:9090
+    
       vlogs:
         type: elasticsearch
         inputs:
