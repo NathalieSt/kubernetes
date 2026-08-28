@@ -13,3 +13,8 @@ spec:
   install:
     remediation:
       retries: 3
+  values:
+    k8up:
+      envVars:
+      - name: BACKUP_GLOBAL_SUCCESSFUL_JOBS_HISTORY_LIMIT
+        value: "1"
