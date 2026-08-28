@@ -155,6 +155,29 @@ spec:
           while [ ! -S /var/run/docker-shared/docker.sock ]; do sleep 1; done
           export DOCKER_HOST=unix:///var/run/docker-shared/docker.sock
 
+          # QEMU for the architectures this node is not. Every image the homelab publishes
+          # is built for linux/amd64 and linux/arm64 (ci/docker-publish), and this pod is
+          # pinned to arm64 - so without this, any Dockerfile stage that has to *execute*
+          # amd64 code fails with "exec format error" inside the build.
+          #
+          # This writes to the host kernel's binfmt_misc, not to a container: the
+          # registration outlives the container that made it and covers the whole node,
+          # which is why it belongs here and not in every workflow. --install is
+          # idempotent, so re-running it on each pod start is free. The native
+          # architecture in the list is a no-op and is named anyway, so that this keeps
+          # working if the runner is ever unpinned from arm64.
+          #
+          # Not fatal, for the same reason a failed image build is not: a runner that is
+          # up and cannot cross-build beats a runner that is not up. Builds whose stages
+          # all run on the build platform - backup-dashboard cross-compiles rather than
+          # emulating - are unaffected either way.
+          echo "registering binfmt handlers"
+          if docker run --privileged --rm tonistiigi/binfmt:qemu-v9.2.2 --install arm64,amd64; then
+            echo "  ok: qemu registered"
+          else
+            echo "  WARNING: could not register binfmt; multi-arch builds that need emulation will fail" >&2
+          fi
+
           # "<dockerfile> <tag>" per line, generated from ciImages so the tag always
           # matches the file it is built from and the label that names it.
           builds='go.Dockerfile homelab-ci-go:1

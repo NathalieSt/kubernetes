@@ -36,6 +36,8 @@ spec:
         session:
           PROVIDER: redis
           PROVIDER_CONFIG: redis://valkey.valkey.svc.cluster.local:6379/2
+      metrics:
+        enabled: true
     persistence:
       annotations:
         k8up.io/backup: "true"

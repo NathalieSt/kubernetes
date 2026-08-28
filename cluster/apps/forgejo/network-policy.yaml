@@ -24,3 +24,10 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: internal-gateway
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 3000
+      protocol: TCP
