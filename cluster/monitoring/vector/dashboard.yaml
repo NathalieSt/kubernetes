@@ -35,6 +35,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (component_id) (rate(vector_component_received_events_total[5m]))
         discarded:
           kind: Panel
@@ -60,6 +63,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (component_id) (rate(vector_component_discarded_events_total[5m]))
         errorStat:
           kind: Panel
@@ -90,6 +96,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(rate(vector_component_errors_total[5m]))
         errors:
           kind: Panel
@@ -113,6 +122,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (component_id, error_type) (rate(vector_component_errors_total[5m]))
         eventsInStat:
           kind: Panel
@@ -132,6 +144,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(rate(vector_component_received_events_total[5m]))
         eventsOutStat:
           kind: Panel
@@ -151,6 +166,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(rate(vector_component_sent_events_total{component_id="vlogs"}[5m]))
         logVolumeByNamespace:
           kind: Panel
@@ -176,6 +194,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (component_id) (rate(vector_component_sent_events_total[5m]))
         throughput:
           kind: Panel
@@ -199,12 +220,18 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(rate(vector_component_received_events_total[5m]))
             - kind: TimeSeriesQuery
               spec:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(rate(vector_component_sent_events_total[5m]))
       layouts:
       - kind: Grid
