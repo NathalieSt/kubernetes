@@ -35,6 +35,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(vm_cache_entries{type="storage/hour_metric_ids"})
         diskUsage:
           kind: Panel
@@ -58,6 +61,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(vm_data_size_bytes)
         ingestionRate:
           kind: Panel
@@ -77,6 +83,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(rate(vm_rows_inserted_total[5m]))
         samplesByJob:
           kind: Panel
@@ -96,6 +105,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (job) (scrape_samples_scraped)
         scrapeDuration:
           kind: Panel
@@ -116,6 +128,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: max by (job) (scrape_duration_seconds)
         targetHistory:
           kind: Panel
@@ -148,6 +163,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: min by (job) (up)
         targetsDown:
           kind: Panel
@@ -178,6 +196,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: count(up == 0) or vector(0)
         targetsUp:
           kind: Panel
@@ -198,6 +219,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: count(up == 1)
       layouts:
       - kind: Grid

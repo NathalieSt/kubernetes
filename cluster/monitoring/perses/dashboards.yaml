@@ -47,6 +47,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (namespace, container) (rate(container_cpu_cfs_throttled_periods_total[5m])) / clamp_min(sum by (namespace, container) (rate(container_cpu_cfs_periods_total[5m])), 0.001)
         fullestVolume:
           kind: Panel
@@ -75,6 +78,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: max(kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes)
         memoryRanking:
           kind: Panel
@@ -95,6 +101,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (namespace, container) (container_memory_working_set_bytes) / clamp_min(sum by (namespace, container) (container_spec_memory_limit_bytes), 1)
         nfsLatency:
           kind: Panel
@@ -118,6 +127,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: rate(node_mountstats_nfs_total_response_time_seconds_total[5m]) / clamp_min(rate(node_mountstats_nfs_operations_requests_total[5m]), 1)
         nfsStat:
           kind: Panel
@@ -148,6 +160,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: max(rate(node_mountstats_nfs_total_response_time_seconds_total[5m]) / clamp_min(rate(node_mountstats_nfs_operations_requests_total[5m]), 1))
         oomKills:
           kind: Panel
@@ -171,6 +186,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (namespace, container) (increase(container_oom_events_total[1h]))
         oomStat:
           kind: Panel
@@ -201,6 +219,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(increase(container_oom_events_total[24h]))
         throttleRanking:
           kind: Panel
@@ -221,6 +242,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (namespace, container) (rate(container_cpu_cfs_throttled_periods_total[5m])) / clamp_min(sum by (namespace, container) (rate(container_cpu_cfs_periods_total[5m])), 0.001)
         throttledStat:
           kind: Panel
@@ -251,6 +275,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: max(sum by (namespace, container) (rate(container_cpu_cfs_throttled_periods_total[5m])) / clamp_min(sum by (namespace, container) (rate(container_cpu_cfs_periods_total[5m])), 0.001))
         volumeRanking:
           kind: Panel
@@ -271,6 +298,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes
         volumeUsage:
           kind: Panel
@@ -294,6 +324,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes
       layouts:
       - kind: Grid
@@ -407,6 +440,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(rate(controller_runtime_reconcile_errors_total[5m]))
         notReady:
           kind: Panel
@@ -433,6 +469,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (kind) (gotk_reconcile_condition{type="Ready",status="False"})
         notReadyByKind:
           kind: Panel
@@ -453,6 +492,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (kind) (gotk_reconcile_condition{type="Ready",status="False"})
         notReadyStat:
           kind: Panel
@@ -483,6 +525,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(gotk_reconcile_condition{type="Ready",status="False"})
         readinessHistory:
           kind: Panel
@@ -515,6 +560,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: min by (kind) (gotk_reconcile_condition{type="Ready",status="True"})
         readyMix:
           kind: Panel
@@ -541,6 +589,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (status) (gotk_reconcile_condition{type="Ready"})
         reconcileByController:
           kind: Panel
@@ -561,6 +612,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (controller) (rate(controller_runtime_reconcile_total[5m]))
         reconcileDuration:
           kind: Panel
@@ -584,6 +638,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: histogram_quantile(0.95, sum by (controller, le) (rate(controller_runtime_reconcile_time_seconds_bucket[5m])))
         reconcileErrors:
           kind: Panel
@@ -607,6 +664,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum by (controller) (rate(controller_runtime_reconcile_errors_total[5m]))
         suspendedStat:
           kind: Panel
@@ -637,6 +697,9 @@ data:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
                     query: sum(gotk_suspend_status)
       layouts:
       - kind: Grid
