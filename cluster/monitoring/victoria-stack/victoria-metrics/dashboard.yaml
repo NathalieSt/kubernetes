@@ -1,0 +1,255 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    perses.dev/resource: "true"
+  name: victoria-metrics-dashboard
+data:
+  10-dashboard-scrape-targets.yaml: |
+    kind: Dashboard
+    metadata:
+      name: scrape-targets
+      project: homelab
+    spec:
+      display:
+        name: Scrape Targets
+      duration: 12h
+      refreshInterval: 1m
+      panels:
+        activeSeries:
+          kind: Panel
+          spec:
+            display:
+              name: Active series
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(vm_cache_entries{type="storage/hour_metric_ids"})
+        diskUsage:
+          kind: Panel
+          spec:
+            display:
+              name: Storage used by VictoriaMetrics
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes
+                  min: 0.0
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(vm_data_size_bytes)
+        ingestionRate:
+          kind: Panel
+          spec:
+            display:
+              name: Rows ingested per second
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(vm_rows_inserted_total[5m]))
+        samplesByJob:
+          kind: Panel
+          spec:
+            display:
+              name: Samples scraped per second, by job
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (job) (scrape_samples_scraped)
+        scrapeDuration:
+          kind: Panel
+          spec:
+            display:
+              name: Scrape duration, by job
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: seconds
+                  decimalPlaces: 3
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: max by (job) (scrape_duration_seconds)
+        targetHistory:
+          kind: Panel
+          spec:
+            display:
+              name: Scrape target state over time, by job
+            plugin:
+              kind: StatusHistoryChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
+                mappings:
+                - kind: Value
+                  spec:
+                    value: "1"
+                    result:
+                      value: Up
+                      color: "#2A9D6E"
+                - kind: Value
+                  spec:
+                    value: "0"
+                    result:
+                      value: Down
+                      color: "#D1495B"
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: min by (job) (up)
+        targetsDown:
+          kind: Panel
+          spec:
+            display:
+              name: Targets down
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 3.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: count(up == 0) or vector(0)
+        targetsUp:
+          kind: Panel
+          spec:
+            display:
+              name: Targets up
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: count(up == 1)
+      layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: What the monitoring can and cannot see
+          items:
+          - x: 0
+            "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/targetsUp"
+          - x: 8
+            "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/targetsDown"
+          - x: 16
+            "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/activeSeries"
+          - x: 0
+            "y": 4
+            width: 24
+            height: 9
+            content:
+              $ref: "#/spec/panels/targetHistory"
+          - x: 0
+            "y": 13
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/samplesByJob"
+          - x: 12
+            "y": 13
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/scrapeDuration"
+          - x: 0
+            "y": 21
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/ingestionRate"
+          - x: 12
+            "y": 21
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/diskUsage"

@@ -33,16 +33,69 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
                 yAxis:
                   format:
                     unit: percent-decimal
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
-                    query: sum by (namespace, container) (rate(container_cpu_cfs_throttled_periods_total[5m])) / clamp_min(sum by (namespace, container) (rate(container_cpu_cfs_periods_total[5m])), 1)
+                    query: sum by (namespace, container) (rate(container_cpu_cfs_throttled_periods_total[5m])) / clamp_min(sum by (namespace, container) (rate(container_cpu_cfs_periods_total[5m])), 0.001)
+        fullestVolume:
+          kind: Panel
+          spec:
+            display:
+              name: Fullest volume
+            plugin:
+              kind: GaugeChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent-decimal
+                  decimalPlaces: 1
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 0.8
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 0.9
+                    color: "#D1495B"
+                    name: critical
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: max(kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes)
+        memoryRanking:
+          kind: Panel
+          spec:
+            display:
+              name: Closest to their memory limit
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent-decimal
+                  decimalPlaces: 1
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (namespace, container) (container_memory_working_set_bytes) / clamp_min(sum by (namespace, container) (container_spec_memory_limit_bytes), 1)
         nfsLatency:
           kind: Panel
           spec:
@@ -51,9 +104,14 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
                 yAxis:
                   format:
                     unit: seconds
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -61,6 +119,36 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: rate(node_mountstats_nfs_total_response_time_seconds_total[5m]) / clamp_min(rate(node_mountstats_nfs_operations_requests_total[5m]), 1)
+        nfsStat:
+          kind: Panel
+          spec:
+            display:
+              name: Slowest NFS mount
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: seconds
+                  decimalPlaces: 3
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 0.05
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 0.2
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: max(rate(node_mountstats_nfs_total_response_time_seconds_total[5m]) / clamp_min(rate(node_mountstats_nfs_operations_requests_total[5m]), 1))
         oomKills:
           kind: Panel
           spec:
@@ -69,9 +157,14 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
                 yAxis:
                   format:
                     unit: decimal
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -79,6 +172,106 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: sum by (namespace, container) (increase(container_oom_events_total[1h]))
+        oomStat:
+          kind: Panel
+          spec:
+            display:
+              name: OOM kills in 24h
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 5.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(increase(container_oom_events_total[24h]))
+        throttleRanking:
+          kind: Panel
+          spec:
+            display:
+              name: Most throttled containers
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent-decimal
+                  decimalPlaces: 1
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (namespace, container) (rate(container_cpu_cfs_throttled_periods_total[5m])) / clamp_min(sum by (namespace, container) (rate(container_cpu_cfs_periods_total[5m])), 0.001)
+        throttledStat:
+          kind: Panel
+          spec:
+            display:
+              name: Worst CPU throttling
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent-decimal
+                  decimalPlaces: 1
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 0.25
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 0.5
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: max(sum by (namespace, container) (rate(container_cpu_cfs_throttled_periods_total[5m])) / clamp_min(sum by (namespace, container) (rate(container_cpu_cfs_periods_total[5m])), 0.001))
+        volumeRanking:
+          kind: Panel
+          spec:
+            display:
+              name: Fullest volumes, by claim
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent-decimal
+                  decimalPlaces: 1
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes
         volumeUsage:
           kind: Panel
           spec:
@@ -87,9 +280,14 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
                 yAxis:
                   format:
                     unit: percent-decimal
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -105,24 +303,66 @@ data:
           items:
           - x: 0
             "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/fullestVolume"
+          - x: 6
+            "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/oomStat"
+          - x: 12
+            "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/throttledStat"
+          - x: 18
+            "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/nfsStat"
+          - x: 0
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/volumeRanking"
+          - x: 8
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/throttleRanking"
+          - x: 16
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/memoryRanking"
+          - x: 0
+            "y": 12
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/volumeUsage"
           - x: 12
-            "y": 0
+            "y": 12
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/nfsLatency"
           - x: 0
-            "y": 8
+            "y": 20
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/oomKills"
           - x: 12
-            "y": 8
+            "y": 20
             width: 12
             height: 8
             content:
@@ -138,6 +378,36 @@ data:
       duration: 24h
       refreshInterval: 1m
       panels:
+        errorStat:
+          kind: Panel
+          spec:
+            display:
+              name: Reconcile errors/sec
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 3
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 0.01
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 0.1
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(controller_runtime_reconcile_errors_total[5m]))
         notReady:
           kind: Panel
           spec:
@@ -146,9 +416,17 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
                 yAxis:
                   format:
                     unit: decimal
+                  min: 0.0
+                visual:
+                  areaOpacity: 0.35
+                  stack: all
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -156,6 +434,157 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: sum by (kind) (gotk_reconcile_condition{type="Ready",status="False"})
+        notReadyByKind:
+          kind: Panel
+          spec:
+            display:
+              name: Not Ready, by kind
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (kind) (gotk_reconcile_condition{type="Ready",status="False"})
+        notReadyStat:
+          kind: Panel
+          spec:
+            display:
+              name: Resources not Ready
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 3.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(gotk_reconcile_condition{type="Ready",status="False"})
+        readinessHistory:
+          kind: Panel
+          spec:
+            display:
+              name: Readiness over time, by kind
+            plugin:
+              kind: StatusHistoryChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
+                mappings:
+                - kind: Value
+                  spec:
+                    value: "1"
+                    result:
+                      value: Ready
+                      color: "#2A9D6E"
+                - kind: Value
+                  spec:
+                    value: "0"
+                    result:
+                      value: Not Ready
+                      color: "#D1495B"
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: min by (kind) (gotk_reconcile_condition{type="Ready",status="True"})
+        readyMix:
+          kind: Panel
+          spec:
+            display:
+              name: Ready versus not, across all resources
+            plugin:
+              kind: PieChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                radius: 50.0
+                sort: desc
+                showLabels: true
+                legend:
+                  position: right
+                  mode: list
+                  size: small
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (status) (gotk_reconcile_condition{type="Ready"})
+        reconcileByController:
+          kind: Panel
+          spec:
+            display:
+              name: Reconciles/sec, by controller
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 2
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (controller) (rate(controller_runtime_reconcile_total[5m]))
+        reconcileDuration:
+          kind: Panel
+          spec:
+            display:
+              name: p95 reconcile duration, by controller
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
+                yAxis:
+                  format:
+                    unit: seconds
+                  min: 0.0
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: histogram_quantile(0.95, sum by (controller, le) (rate(controller_runtime_reconcile_time_seconds_bucket[5m])))
         reconcileErrors:
           kind: Panel
           spec:
@@ -164,9 +593,14 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
                 yAxis:
                   format:
                     unit: decimal
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -174,42 +608,36 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: sum by (controller) (rate(controller_runtime_reconcile_errors_total[5m]))
-        reconcileRate:
+        suspendedStat:
           kind: Panel
           spec:
             display:
-              name: Reconciles per second, by controller
+              name: Suspended resources
             plugin:
-              kind: TimeSeriesChart
+              kind: StatChart
               spec:
-                yAxis:
-                  format:
-                    unit: decimal
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 3.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
             queries:
             - kind: TimeSeriesQuery
               spec:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
-                    query: sum by (controller) (rate(controller_runtime_reconcile_total[5m]))
-        suspended:
-          kind: Panel
-          spec:
-            display:
-              name: Suspended resources, by kind
-            plugin:
-              kind: TimeSeriesChart
-              spec:
-                yAxis:
-                  format:
-                    unit: decimal
-            queries:
-            - kind: TimeSeriesQuery
-              spec:
-                plugin:
-                  kind: PrometheusTimeSeriesQuery
-                  spec:
-                    query: sum by (kind) (gotk_suspend_status)
+                    query: sum(gotk_suspend_status)
       layouts:
       - kind: Grid
         spec:
@@ -218,25 +646,61 @@ data:
           items:
           - x: 0
             "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/notReadyStat"
+          - x: 8
+            "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/suspendedStat"
+          - x: 16
+            "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/errorStat"
+          - x: 0
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/notReadyByKind"
+          - x: 8
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/reconcileByController"
+          - x: 16
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/readyMix"
+          - x: 0
+            "y": 12
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/notReady"
           - x: 12
-            "y": 0
-            width: 12
-            height: 8
-            content:
-              $ref: "#/spec/panels/suspended"
-          - x: 0
-            "y": 8
+            "y": 12
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/reconcileErrors"
-          - x: 12
-            "y": 8
-            width: 12
+          - x: 0
+            "y": 20
+            width: 24
             height: 8
             content:
-              $ref: "#/spec/panels/reconcileRate"
+              $ref: "#/spec/panels/readinessHistory"
+          - x: 0
+            "y": 28
+            width: 24
+            height: 7
+            content:
+              $ref: "#/spec/panels/reconcileDuration"

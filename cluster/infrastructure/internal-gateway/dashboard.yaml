@@ -17,17 +17,48 @@ data:
       duration: 6h
       refreshInterval: 1m
       panels:
-        certExpiry:
+        busiestApps:
           kind: Panel
           spec:
             display:
-              name: Days until the wildcard certificate expires
+              name: Busiest apps, requests/sec
             plugin:
-              kind: TimeSeriesChart
+              kind: BarChart
               spec:
-                yAxis:
-                  format:
-                    unit: decimal
+                calculation: last
+                format:
+                  unit: requests/sec
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (service) (rate(traefik_service_requests_total[5m]))
+        certDays:
+          kind: Panel
+          spec:
+            display:
+              name: Days of certificate left
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 0
+                thresholds:
+                  defaultColor: "#D1495B"
+                  steps:
+                  - value: 7.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 21.0
+                    color: "#2A9D6E"
+                    name: ok
+                sparkline: {}
+                colorMode: background_solid
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -43,9 +74,14 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
                 yAxis:
                   format:
                     unit: decimal
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -53,17 +89,50 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: sum by (service) (rate(traefik_service_requests_total{code=~"5.."}[5m]))
-        latencyP50:
+        errorRatio:
           kind: Panel
           spec:
             display:
-              name: Median latency, by app
+              name: Share of requests failing
+            plugin:
+              kind: GaugeChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent-decimal
+                  decimalPlaces: 2
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 0.01
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 0.05
+                    color: "#D1495B"
+                    name: critical
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(traefik_service_requests_total{code=~"5.."}[5m])) / clamp_min(sum(rate(traefik_service_requests_total[5m])), 0.001)
+        latency:
+          kind: Panel
+          spec:
+            display:
+              name: "Latency by app: median and p95"
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
                 yAxis:
                   format:
                     unit: seconds
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -71,18 +140,6 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: histogram_quantile(0.5, sum by (service, le) (rate(traefik_service_request_duration_seconds_bucket[5m])))
-        latencyP95:
-          kind: Panel
-          spec:
-            display:
-              name: p95 latency, by app
-            plugin:
-              kind: TimeSeriesChart
-              spec:
-                yAxis:
-                  format:
-                    unit: seconds
-            queries:
             - kind: TimeSeriesQuery
               spec:
                 plugin:
@@ -93,20 +150,21 @@ data:
           kind: Panel
           spec:
             display:
-              name: Open connections, by entrypoint
+              name: Open connections
             plugin:
-              kind: TimeSeriesChart
+              kind: StatChart
               spec:
-                yAxis:
-                  format:
-                    unit: decimal
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
             queries:
             - kind: TimeSeriesQuery
               spec:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
-                    query: sum by (entrypoint) (traefik_entrypoint_open_connections)
+                    query: sum(traefik_entrypoint_open_connections)
         requestRate:
           kind: Panel
           spec:
@@ -115,9 +173,105 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: requests/sec
+                visual:
+                  areaOpacity: 0.35
+                  stack: all
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (service) (rate(traefik_service_requests_total[5m]))
+        slowestApps:
+          kind: Panel
+          spec:
+            display:
+              name: Slowest apps, p95
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: seconds
+                  decimalPlaces: 3
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: histogram_quantile(0.95, sum by (service, le) (rate(traefik_service_request_duration_seconds_bucket[5m])))
+        statusCodes:
+          kind: Panel
+          spec:
+            display:
+              name: Responses per second, by status class
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
                 yAxis:
                   format:
                     unit: decimal
+                visual:
+                  areaOpacity: 0.35
+                  stack: all
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (code) (rate(traefik_service_requests_total[5m]))
+        totalRate:
+          kind: Panel
+          spec:
+            display:
+              name: Requests/sec
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: requests/sec
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(traefik_service_requests_total[5m]))
+        trafficShare:
+          kind: Panel
+          spec:
+            display:
+              name: Share of traffic, by app
+            plugin:
+              kind: PieChart
+              spec:
+                calculation: sum
+                format:
+                  unit: decimal
+                radius: 50.0
+                sort: desc
+                showLabels: true
+                legend:
+                  position: right
+                  mode: list
+                  size: small
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -133,37 +287,67 @@ data:
           items:
           - x: 0
             "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/totalRate"
+          - x: 6
+            "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/errorRatio"
+          - x: 12
+            "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/certDays"
+          - x: 18
+            "y": 0
+            width: 6
+            height: 4
+            content:
+              $ref: "#/spec/panels/openConnections"
+          - x: 0
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/busiestApps"
+          - x: 8
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/slowestApps"
+          - x: 16
+            "y": 4
+            width: 8
+            height: 8
+            content:
+              $ref: "#/spec/panels/trafficShare"
+          - x: 0
+            "y": 12
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/requestRate"
           - x: 12
-            "y": 0
+            "y": 12
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/errorRate"
           - x: 0
-            "y": 8
+            "y": 20
             width: 12
             height: 8
             content:
-              $ref: "#/spec/panels/latencyP50"
+              $ref: "#/spec/panels/latency"
           - x: 12
-            "y": 8
+            "y": 20
             width: 12
             height: 8
             content:
-              $ref: "#/spec/panels/latencyP95"
-          - x: 0
-            "y": 16
-            width: 12
-            height: 6
-            content:
-              $ref: "#/spec/panels/certExpiry"
-          - x: 12
-            "y": 16
-            width: 12
-            height: 6
-            content:
-              $ref: "#/spec/panels/openConnections"
+              $ref: "#/spec/panels/statusCodes"

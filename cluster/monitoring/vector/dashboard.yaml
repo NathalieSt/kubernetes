@@ -17,6 +17,25 @@ data:
       duration: 6h
       refreshInterval: 1m
       panels:
+        componentThroughput:
+          kind: Panel
+          spec:
+            display:
+              name: Throughput by component, events/sec
+            plugin:
+              kind: BarChart
+              spec:
+                calculation: last
+                format:
+                  unit: events/sec
+                sort: desc
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum by (component_id) (rate(vector_component_received_events_total[5m]))
         discarded:
           kind: Panel
           spec:
@@ -25,9 +44,16 @@ data:
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
                 yAxis:
                   format:
-                    unit: decimal
+                    unit: events/sec
+                visual:
+                  areaOpacity: 0.35
+                  stack: all
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -35,17 +61,52 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: sum by (component_id) (rate(vector_component_discarded_events_total[5m]))
+        errorStat:
+          kind: Panel
+          spec:
+            display:
+              name: Component errors/sec
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                  decimalPlaces: 2
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 0.1
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 1.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(vector_component_errors_total[5m]))
         errors:
           kind: Panel
           spec:
             display:
-              name: Component errors per second
+              name: Errors per second, by component and type
             plugin:
               kind: TimeSeriesChart
               spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
                 yAxis:
                   format:
                     unit: decimal
+                  min: 0.0
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -53,35 +114,62 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: sum by (component_id, error_type) (rate(vector_component_errors_total[5m]))
-        eventsIn:
+        eventsInStat:
           kind: Panel
           spec:
             display:
-              name: Events received per second, by component
+              name: Events/sec into the pipeline
             plugin:
-              kind: TimeSeriesChart
+              kind: StatChart
               spec:
-                yAxis:
-                  format:
-                    unit: decimal
+                calculation: last
+                format:
+                  unit: events/sec
+                sparkline: {}
             queries:
             - kind: TimeSeriesQuery
               spec:
                 plugin:
                   kind: PrometheusTimeSeriesQuery
                   spec:
-                    query: sum by (component_id) (rate(vector_component_received_events_total[5m]))
-        eventsOut:
+                    query: sum(rate(vector_component_received_events_total[5m]))
+        eventsOutStat:
           kind: Panel
           spec:
             display:
-              name: Events sent per second, by component
+              name: Events/sec reaching VictoriaLogs
             plugin:
-              kind: TimeSeriesChart
+              kind: StatChart
               spec:
-                yAxis:
-                  format:
-                    unit: decimal
+                calculation: last
+                format:
+                  unit: events/sec
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(vector_component_sent_events_total{component_id="vlogs"}[5m]))
+        logVolumeByNamespace:
+          kind: Panel
+          spec:
+            display:
+              name: Share of log volume, by component
+            plugin:
+              kind: PieChart
+              spec:
+                calculation: sum
+                format:
+                  unit: decimal
+                radius: 50.0
+                sort: desc
+                showLabels: true
+                legend:
+                  position: right
+                  mode: list
+                  size: small
             queries:
             - kind: TimeSeriesQuery
               spec:
@@ -89,6 +177,35 @@ data:
                   kind: PrometheusTimeSeriesQuery
                   spec:
                     query: sum by (component_id) (rate(vector_component_sent_events_total[5m]))
+        throughput:
+          kind: Panel
+          spec:
+            display:
+              name: Events per second, in and out
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: list
+                  size: small
+                yAxis:
+                  format:
+                    unit: events/sec
+                  min: 0.0
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(vector_component_received_events_total[5m]))
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: sum(rate(vector_component_sent_events_total[5m]))
       layouts:
       - kind: Grid
         spec:
@@ -97,25 +214,49 @@ data:
           items:
           - x: 0
             "y": 0
-            width: 12
-            height: 8
+            width: 8
+            height: 4
             content:
-              $ref: "#/spec/panels/eventsIn"
-          - x: 12
+              $ref: "#/spec/panels/eventsInStat"
+          - x: 8
             "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/eventsOutStat"
+          - x: 16
+            "y": 0
+            width: 8
+            height: 4
+            content:
+              $ref: "#/spec/panels/errorStat"
+          - x: 0
+            "y": 4
             width: 12
             height: 8
             content:
-              $ref: "#/spec/panels/eventsOut"
+              $ref: "#/spec/panels/componentThroughput"
+          - x: 12
+            "y": 4
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/logVolumeByNamespace"
           - x: 0
-            "y": 8
+            "y": 12
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/throughput"
+          - x: 12
+            "y": 12
             width: 12
             height: 8
             content:
               $ref: "#/spec/panels/errors"
-          - x: 12
-            "y": 8
-            width: 12
-            height: 8
+          - x: 0
+            "y": 20
+            width: 24
+            height: 7
             content:
               $ref: "#/spec/panels/discarded"
