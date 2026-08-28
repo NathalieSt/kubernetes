@@ -118,7 +118,7 @@ spec:
                 target_label: namespace
               - target_label: job
                 replacement: cilium-agent
-          
+
           - job_name: cilium-operator
             kubernetes_sd_configs:
               - role: pod
@@ -139,7 +139,7 @@ spec:
                 target_label: namespace
               - target_label: job
                 replacement: cilium-operator
-          
+
           # All six Flux controllers in one job. They are bootstrapped by flux itself
           # rather than generated here, so there is no GeneratorMeta to declare Metrics
           # on - but they share app.kubernetes.io/part-of and all serve Prometheus on
@@ -169,7 +169,7 @@ spec:
                 target_label: controller
               - target_label: job
                 replacement: flux
-          
+
           - job_name: cert-manager
             metrics_path: /metrics
             scheme: http
@@ -401,5 +401,15 @@ spec:
       spec:
         extraArgs:
           maxLabelsPerTimeseries: "120"
+          search.maxConcurrentRequests: "8"
+          search.maxQueryDuration: 60s
+          search.maxQueueDuration: 30s
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: 300m
+            memory: 768Mi
         storage:
           storageClassName: nfs-remote

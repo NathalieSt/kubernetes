@@ -21,41 +21,41 @@ data:
     # Do not set IPLEAK_INTERVAL below 60: each cycle makes up to 3 API calls and
     # the free tiers of these services rate-limit aggressively. A rate-limited
     # response is reported as UNKNOWN, not as a leak - see check_ip below.
-    
+
     INTERVAL="${IPLEAK_INTERVAL:-300}"
     EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"
     TIMEOUT="${IPLEAK_TIMEOUT:-15}"
     GRACE="${IPLEAK_STARTUP_GRACE:-30}"
-    
+
     # Extract a top-level JSON string value without jq (not in curlimages/curl).
     json_str() {
       printf '%s' "$1" | tr -d '\n' |
         sed -n 's/.*"'"$2"'"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'
     }
-    
+
     emit() {
       # emit <level> <check> <status> <extra-json-fields>
       printf '{"ts":"%s","level":"%s","check":"%s","status":"%s","expected":"%s"%s,"message":"%s/%s %s"}\n' \
         "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" "$2" "$3" "$EXPECTED" "$4" "$2" "$3" "$5"
     }
-    
+
     fetch() {
       curl -sfL --max-time "$TIMEOUT" "$1" 2>/dev/null
     }
-    
+
     # --- external IP -----------------------------------------------------------
     # Tries several providers in turn. Only if EVERY provider fails do we report
     # UNKNOWN. The old script treated "no country parsed" as a leak, so any API
     # hiccup or rate-limit produced a false alarm.
     check_ip() {
       ip=""; country=""
-    
+
       body="$(fetch https://api.country.is/)"
       if [ -n "$body" ]; then
         ip="$(json_str "$body" ip)"
         country="$(json_str "$body" country)"
       fi
-    
+
       if [ -z "$country" ]; then
         body="$(fetch https://ipwho.is/)"
         if [ -n "$body" ]; then
@@ -63,7 +63,7 @@ data:
           country="$(json_str "$body" country_code)"
         fi
       fi
-    
+
       if [ -z "$country" ]; then
         body="$(fetch https://ipapi.co/json/)"
         if [ -n "$body" ]; then
@@ -71,19 +71,19 @@ data:
           country="$(json_str "$body" country)"
         fi
       fi
-    
+
       if [ -z "$country" ]; then
         emit error ip UNKNOWN "" "all providers failed or rate-limited - could not verify exit IP"
         return
       fi
-    
+
       if [ "$country" = "$EXPECTED" ]; then
         emit info ip OK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country"
       else
         emit error ip LEAK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country, expected $EXPECTED"
       fi
     }
-    
+
     # --- DNS ------------------------------------------------------------------
     # The old check geolocated the nameserver from /etc/resolv.conf. In-cluster
     # that is always CoreDNS's ClusterIP (private RFC1918), which geo APIs reject,
@@ -99,30 +99,30 @@ data:
         emit error dns UNKNOWN "" "could not determine resolver egress ip"
         return
       fi
-    
+
       resolver="$(json_str "$body" ip)"
       if [ -z "$resolver" ]; then
         emit error dns UNKNOWN "" "resolver egress ip missing from response"
         return
       fi
-    
+
       geo="$(fetch "https://api.country.is/$resolver")"
       country="$(json_str "$geo" country)"
       if [ -z "$country" ]; then
         emit error dns UNKNOWN ",\"resolver\":\"$resolver\"" "resolver $resolver could not be geolocated"
         return
       fi
-    
+
       if [ "$country" = "$EXPECTED" ]; then
         emit info dns OK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country"
       else
         emit error dns LEAK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country, expected $EXPECTED - dns is bypassing the tunnel"
       fi
     }
-    
+
     emit info startup OK ",\"interval\":$INTERVAL" "leak detector starting, waiting ${GRACE}s for tunnel"
     sleep "$GRACE"
-    
+
     while true; do
       check_ip
       check_dns

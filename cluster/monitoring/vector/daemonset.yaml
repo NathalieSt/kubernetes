@@ -12,6 +12,8 @@ spec:
       app.kubernetes.io/name: vector
   template:
     metadata:
+      annotations:
+        homelab/vector-config-hash: 15a05f17630daec8
       labels:
         app.kubernetes.io/name: vector
         app.kubernetes.io/version: 0.52.0-alpine

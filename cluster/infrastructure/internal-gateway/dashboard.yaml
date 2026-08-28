@@ -71,7 +71,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: "(min(traefik_tls_certs_not_after) - time()) / 86400"
+                    query: (min(traefik_tls_certs_not_after) - time()) / 86400
         errorRate:
           kind: Panel
           spec:
