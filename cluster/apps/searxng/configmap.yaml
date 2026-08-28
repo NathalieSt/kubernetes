@@ -6,29 +6,28 @@ metadata:
     app.kubernetes.io/name: searxng
   name: searxng-configmap
 data:
-  settings.yml: |-
-    
+  settings.yml: |
     # SearXNG settings
     use_default_settings: true
-    
+
     general:
       debug: false
       instance_name: "Nathalies SearXNG"
-    
+
     search:
       safe_search: 2
       autocomplete: 'duckduckgo'
       formats:
         - html
-    
+
     server:
       secret_key: "mBrieVOfZQzc7"
       limiter: true
       image_proxy: true
-    
+
     valkey:
       url: valkey://valkey.valkey.svc.cluster.local:6379/0
-    
+
     outgoing:
       request_timeout: 4.0       # default timeout in seconds, can be override by engine
       max_request_timeout: 10.0  # the maximum timeout in seconds
@@ -41,4 +40,3 @@ data:
       proxies:
         all://:
           - http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
-      

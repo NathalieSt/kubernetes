@@ -18,7 +18,7 @@ data:
       # looks exactly like a cluster that stopped logging.
       vector_metrics:
         type: internal_metrics
-    
+
       k8s_in:
         auto_partial_merge: true
         delay_deletion_ms: 60000
@@ -40,34 +40,34 @@ data:
         source: |
           # Try parsing message as JSON
           parsed, err = parse_json(.message)
-    
+
           if err == null && is_object(parsed) {
             # Merge parsed fields into root
             . = merge!(., parsed)
-    
+
             # Optional: keep original message
             .original_message = .message
-    
+
             # Replace message with a readable string if present
             if exists(parsed.message) {
               .message = parsed.message
             }
           }
-    
+
           if err != null && is_string(.message) {
             parsed = parse_syslog(.message) ?? parse_key_value(.message) ?? null
             if parsed != null {
               . = merge!(., parsed)
             }
           }
-    
+
       drop_noisy_logs:
         type: filter
         inputs:
           - parse_message
         condition: |
           !(.kubernetes.container_name == "kube-proxy" || .kubernetes.container_name == "kube-apiserver" || .kubernetes.container_name == "coredns" && contains!(.message, "health"))
-    
+
       normalize_level:
         type: remap
         inputs:
@@ -83,18 +83,18 @@ data:
             del(.level)
           }
           if !exists(.lvl) { .lvl = "" }
-    
+
           # Optional: map common variants
           if .lvl == "warn" { .lvl = "warning" }
           if .lvl == "err"  { .lvl = "error" }
-    
+
       drop_debug_logs:
         type: filter
         inputs:
           - normalize_level
         condition: |
           !includes(["debug", "trace"], .lvl)
-    
+
       remove_k8s_noise:
         type: remap
         inputs:
@@ -102,7 +102,7 @@ data:
         source: |
           del(.kubernetes.node_labels)
           del(.kubernetes.annotations)
-    
+
       normalize_logs:
         type: remap
         inputs:
@@ -113,26 +113,26 @@ data:
           .pod       = string(.kubernetes.pod_name) ?? ""
           .container = string(.kubernetes.container_name) ?? ""
           .node      = string(.kubernetes.pod_node_name) ?? ""
-    
+
           # Rename message to short key
           .msg = .message
           del(.message)
-    
+
           # Remove empty fields
           if is_null(.msg) { del(.msg) }
-    
+
       truncate_messages:
         type: remap
         inputs:
           - normalize_logs
         source: |
           max_len = 2048
-    
+
           msg = to_string(.msg) ?? null
           if msg != null && length!(msg) > max_len {
             .msg = truncate!(msg, max_len, "...Truncated")
           }
-    
+
     # -------------------------------------------------
     # SINK - VictoriaLogs (via Elasticsearch-compatible insert API)
     # -------------------------------------------------
@@ -145,7 +145,7 @@ data:
         inputs:
           - vector_metrics
         address: 0.0.0.0:9090
-    
+
       vlogs:
         type: elasticsearch
         inputs:
