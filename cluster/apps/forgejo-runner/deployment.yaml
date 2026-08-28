@@ -23,7 +23,6 @@ spec:
         - /bin/sh
         - -c
         - |
-
           set -eu
 
           # The daemon refuses to start without a reachable Docker Engine, and the dind
@@ -149,7 +148,6 @@ spec:
         - /bin/sh
         - -c
         - |
-
           set -eu
 
           while [ ! -S /var/run/docker-shared/docker.sock ]; do sleep 1; done
