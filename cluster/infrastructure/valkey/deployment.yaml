@@ -34,6 +34,20 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+      - args:
+        - --redis.addr=redis://localhost:6379
+        image: oliver006/redis_exporter:v1.90.0
+        name: redis-exporter
+        ports:
+        - containerPort: 9121
+          name: redis-exporter
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
       volumes:
       - name: valkey-volume
         persistentVolumeClaim:

@@ -9,6 +9,13 @@ spec:
   ingress:
   - from:
     - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 9121
+      protocol: TCP
+  - from:
+    - namespaceSelector:
         matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: In

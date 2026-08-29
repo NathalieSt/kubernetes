@@ -10,7 +10,7 @@ data:
     kind: Dashboard
     metadata:
       name: internal-gateway
-      project: homelab
+      project: platform
     spec:
       display:
         name: Internal Gateway

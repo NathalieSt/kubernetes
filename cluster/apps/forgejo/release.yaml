@@ -14,6 +14,14 @@ spec:
     remediation:
       retries: 3
   values:
+    extraVolumeMounts:
+    - mountPath: /data/gitea/public/assets/css
+      name: pennant-theme
+      readOnly: true
+    extraVolumes:
+    - configMap:
+        name: forgejo-theme
+      name: pennant-theme
     gitea:
       admin:
         passwordMode: initialOnlyRequireReset
@@ -36,6 +44,8 @@ spec:
         session:
           PROVIDER: redis
           PROVIDER_CONFIG: redis://valkey.valkey.svc.cluster.local:6379/2
+        ui:
+          DEFAULT_THEME: pennant
       metrics:
         enabled: true
     persistence:

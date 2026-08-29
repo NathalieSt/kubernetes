@@ -311,6 +311,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: internal-gateway
+          - job_name: jellyfin
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - jellyfin
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: jellyfin
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8096"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: jellyfin
           - job_name: k8up
             metrics_path: /metrics
             scheme: http
@@ -367,6 +395,177 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: keda
+          - job_name: mariadb
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - mariadb
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: mariadb
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9104"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: mariadb
+          - job_name: netbird-operator
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - netbird
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: netbird-operator
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: netbird-operator
+          - job_name: redis
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - redis
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: redis
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9121"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: redis
+          - job_name: transmission
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - jellyfin
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: transmission
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "19091"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: transmission
+          - job_name: valkey
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - valkey
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: valkey
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9121"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: valkey
+          - job_name: vault
+            metrics_path: /v1/sys/metrics
+            params:
+              format:
+              - prometheus
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - vault
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: vault
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8200"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: vault
           - job_name: vector
             metrics_path: /metrics
             scheme: http
