@@ -10,7 +10,7 @@ data:
     kind: Dashboard
     metadata:
       name: vector
-      project: homelab
+      project: platform
     spec:
       display:
         name: Log Pipeline

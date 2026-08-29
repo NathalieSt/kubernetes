@@ -58,6 +58,27 @@ spec:
           limits:
             cpu: 1000m
             memory: 2Gi
+      - args:
+        - --mysqld.address=localhost:3306
+        - --mysqld.username=root
+        image: prom/mysqld-exporter:v0.20.0
+        name: mysqld-exporter
+        ports:
+        - containerPort: 9104
+          name: mysqld-exporter
+        env:
+        - name: MYSQLD_EXPORTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: mariadb-creds-secret
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
       volumes:
       - name: pvc-volume
         persistentVolumeClaim:

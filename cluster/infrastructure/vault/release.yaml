@@ -17,5 +17,26 @@ spec:
     server:
       dataStorage:
         storageClass: nfs-local
+      standalone:
+        config: |
+          ui = true
+
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+            telemetry {
+              unauthenticated_metrics_access = "true"
+            }
+          }
+
+          storage "file" {
+            path = "/vault/data"
+          }
+
+          telemetry {
+            prometheus_retention_time = "24h"
+            disable_hostname = true
+          }
     ui:
       enabled: true
