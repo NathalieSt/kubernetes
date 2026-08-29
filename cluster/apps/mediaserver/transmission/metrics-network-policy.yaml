@@ -2,8 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: mariadb-networkpolicy
+  name: transmission-metrics-networkpolicy
 spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: transmission
   policyTypes:
   - Ingress
   ingress:
@@ -12,12 +15,5 @@ spec:
         matchLabels:
           kubernetes.io/metadata.name: victoria-metrics
     ports:
-    - port: 9104
+    - port: 19091
       protocol: TCP
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: booklore
-      podSelector:
-        matchLabels:
-          app.kubernetes.io/name: booklore
