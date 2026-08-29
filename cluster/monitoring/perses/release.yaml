@@ -28,7 +28,10 @@ spec:
         plugin:
           kind: PrometheusDatasource
           spec:
-            directUrl: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+            proxy:
+              kind: HTTPProxy
+              spec:
+                url: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
     image:
       digest: sha256:69526cb91a48477a4b2a1f3cc9a475ba9c59c8cee13a50ce2ab9741b969f3c39
       version: main-latest
