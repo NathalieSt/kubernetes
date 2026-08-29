@@ -72,6 +72,23 @@ spec:
           limits:
             cpu: 100m
             memory: 64Mi
+      - image: metalmatze/transmission-exporter:0.3.0
+        name: transmission-exporter
+        ports:
+        - containerPort: 19091
+          name: trans-metrics
+        env:
+        - name: TRANSMISSION_ADDR
+          value: http://localhost:9091
+        - name: WEB_ADDR
+          value: :19091
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
       volumes:
       - name: trans-config-volume
         persistentVolumeClaim:

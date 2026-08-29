@@ -6,19 +6,1539 @@ metadata:
     perses.dev/resource: "true"
   name: perses-dashboards
 data:
-  00-project-homelab.yaml: |
+  00-project-cluster.yaml: |
     kind: Project
     metadata:
-      name: homelab
+      name: cluster
     spec:
       display:
-        name: Homelab
-        description: Dashboards generated from the kubernetes-generator repo.
+        name: Cluster
+        description: "Kubernetes itself: nodes, workloads, networking, and what is running short."
+  00-project-logs.yaml: |
+    kind: Project
+    metadata:
+      name: logs
+    spec:
+      display:
+        name: Logs
+        description: What the cluster is logging, by namespace and by pod.
+  00-project-platform.yaml: |
+    kind: Project
+    metadata:
+      name: platform
+    spec:
+      display:
+        name: Platform
+        description: "The services running the cluster: delivery, ingress, and monitoring's own health."
+  10-dashboard-cluster-cilium.yaml: |
+    kind: Dashboard
+    metadata:
+      name: cluster-cilium
+      project: cluster
+    spec:
+      display:
+        name: Cilium Networking
+      duration: 1h
+      refreshInterval: 30s
+      panels:
+        bpfMapPressure:
+          kind: Panel
+          spec:
+            display:
+              name: BPF Map Pressure
+              description: How full BPF maps are (0–1). Values approaching 1.0 mean the map is nearly full and entries will be dropped.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: percent-decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.2
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: max by (map_name) (cilium_bpf_map_pressure)
+                    seriesNameFormat: "{{map_name}}"
+        conntrackGcRuns:
+          kind: Panel
+          spec:
+            display:
+              name: Conntrack GC Runs
+              description: Rate of conntrack garbage collection runs by outcome. Failures indicate BPF map pressure.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (status) (rate(cilium_datapath_conntrack_gc_runs_total[$__rate_interval]))
+                    seriesNameFormat: "{{status}}"
+        dropBytes:
+          kind: Panel
+          spec:
+            display:
+              name: Dropped Bytes Rate
+              description: Bytes dropped by the datapath. Sustained drops may indicate a network policy issue.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes/sec
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.2
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (reason) (rate(cilium_drop_bytes_total[$__rate_interval]))
+                    seriesNameFormat: "{{reason}}"
+        dropRate:
+          kind: Panel
+          spec:
+            display:
+              name: Packet Drop Rate by Reason
+              description: Packets dropped by Cilium's BPF datapath. Policy denied drops are expected; others may indicate misconfigurations.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: packets/sec
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.25
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (reason) (rate(cilium_drop_count_total[$__rate_interval]))
+                    seriesNameFormat: "{{reason}}"
+        endpointRegenFailures:
+          kind: Panel
+          spec:
+            display:
+              name: Endpoint Regeneration Failures
+              description: Failed regenerations mean endpoints did not receive policy updates.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.3
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (pod) (rate(cilium_endpoint_regenerations_total{outcome="fail"}[$__rate_interval]))
+                    seriesNameFormat: "{{pod}}"
+        endpointStates:
+          kind: Panel
+          spec:
+            display:
+              name: Endpoint States Over Time
+              description: Breakdown of all endpoints by lifecycle state. Spikes in 'regenerating' mean policy updates are rolling out.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.15
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (endpoint_state) (cilium_endpoint_state)
+                    seriesNameFormat: "{{endpoint_state}}"
+        endpointsNotReady:
+          kind: Panel
+          spec:
+            display:
+              name: Non-Ready Endpoints
+              description: Endpoints not in ready state — regenerating or waiting for policy.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 5.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(cilium_endpoint_state{endpoint_state!="ready"})
+        endpointsTotal:
+          kind: Panel
+          spec:
+            display:
+              name: Managed Endpoints
+              description: Total number of endpoints (pods) managed by Cilium across all agents.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(cilium_endpoint_state{endpoint_state="ready"})
+        forwardBytes:
+          kind: Panel
+          spec:
+            display:
+              name: Forwarded Bytes Rate
+              description: Bytes forwarded by direction — the actual cluster network throughput via eBPF.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes/sec
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (direction) (rate(cilium_forward_bytes_total[$__rate_interval]))
+                    seriesNameFormat: "{{direction}}"
+        forwardRate:
+          kind: Panel
+          spec:
+            display:
+              name: Packet Forward Rate
+              description: Packets successfully forwarded by direction.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: packets/sec
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (direction) (rate(cilium_forward_count_total[$__rate_interval]))
+                    seriesNameFormat: "{{direction}}"
+        ipamAllocated:
+          kind: Panel
+          spec:
+            display:
+              name: IPAM Allocated IPs per Node
+              description: IP addresses currently allocated to pods per node.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (pod) (cilium_ipam_ips{type="in-use"})
+                    seriesNameFormat: "{{pod}}"
+        ipamAvailable:
+          kind: Panel
+          spec:
+            display:
+              name: IPAM Available IPs per Node
+              description: IP addresses still available for allocation. Low values mean pods may fail to schedule.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (pod) (cilium_ipam_ips{type="available"})
+                    seriesNameFormat: "{{pod}}"
+        policyCount:
+          kind: Panel
+          spec:
+            display:
+              name: Network Policies
+              description: Number of network policies loaded into Cilium.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(cilium_policy_count)
+        policyImportErrors:
+          kind: Panel
+          spec:
+            display:
+              name: Policy Import Errors
+              description: Policies that failed to import — should always be 0.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(cilium_policy_import_errors_total)
+      layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Agent Health
+          items:
+          - x: 0
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/endpointsTotal"
+          - x: 6
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/endpointsNotReady"
+          - x: 12
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/policyCount"
+          - x: 18
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/policyImportErrors"
+      - kind: Grid
+        spec:
+          display:
+            title: Endpoints
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/endpointStates"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/endpointRegenFailures"
+      - kind: Grid
+        spec:
+          display:
+            title: Datapath – Packet Rates
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/dropRate"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/forwardRate"
+      - kind: Grid
+        spec:
+          display:
+            title: Datapath – Byte Rates
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/dropBytes"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/forwardBytes"
+      - kind: Grid
+        spec:
+          display:
+            title: IPAM
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/ipamAllocated"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/ipamAvailable"
+      - kind: Grid
+        spec:
+          display:
+            title: BPF Maps & Conntrack
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/conntrackGcRuns"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/bpfMapPressure"
+  10-dashboard-cluster-nodes.yaml: |
+    kind: Dashboard
+    metadata:
+      name: cluster-nodes
+      project: cluster
+    spec:
+      display:
+        name: Nodes
+      duration: 1h
+      refreshInterval: 30s
+      variables:
+      - kind: ListVariable
+        spec:
+          name: node
+          display:
+            name: Node
+          allowAllValue: true
+          allowMultiple: true
+          plugin:
+            kind: PrometheusLabelValuesVariable
+            spec:
+              labelName: node
+              matchers:
+              - kube_node_info
+      panels:
+        cpuRequests:
+          kind: Panel
+          spec:
+            display:
+              name: CPU Requests & Limits vs Allocatable
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (node) (kube_pod_container_resource_requests{resource="cpu",node=~"$node"})
+                    seriesNameFormat: requests · {{node}}
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (node) (kube_pod_container_resource_limits{resource="cpu",node=~"$node"})
+                    seriesNameFormat: limits · {{node}}
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: kube_node_status_allocatable{resource="cpu",node=~"$node"}
+                    seriesNameFormat: allocatable · {{node}}
+        cpuUsage:
+          kind: Panel
+          spec:
+            display:
+              name: CPU Usage per Node
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: percent
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.2
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 - (avg by (node) (rate(node_cpu_seconds_total{mode="idle",node=~"$node"}[$__rate_interval])) * 100)
+                    seriesNameFormat: "{{node}}"
+        diskIops:
+          kind: Panel
+          spec:
+            display:
+              name: Disk IOPS
+              description: Read and write operations per second per node.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (node) (rate(node_disk_reads_completed_total{node=~"$node"}[$__rate_interval]))
+                    seriesNameFormat: reads · {{node}}
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (node) (rate(node_disk_writes_completed_total{node=~"$node"}[$__rate_interval]))
+                    seriesNameFormat: writes · {{node}}
+        diskRead:
+          kind: Panel
+          spec:
+            display:
+              name: Disk Read Throughput
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes/sec
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (node) (rate(node_disk_read_bytes_total{node=~"$node"}[$__rate_interval]))
+                    seriesNameFormat: "{{node}}"
+        diskWrite:
+          kind: Panel
+          spec:
+            display:
+              name: Disk Write Throughput
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes/sec
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (node) (rate(node_disk_written_bytes_total{node=~"$node"}[$__rate_interval]))
+                    seriesNameFormat: "{{node}}"
+        memBytes:
+          kind: Panel
+          spec:
+            display:
+              name: Memory Available vs Total
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.15
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: node_memory_MemAvailable_bytes{node=~"$node"}
+                    seriesNameFormat: available · {{node}}
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: node_memory_MemTotal_bytes{node=~"$node"}
+                    seriesNameFormat: total · {{node}}
+        memUsage:
+          kind: Panel
+          spec:
+            display:
+              name: Memory Usage per Node
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: percent
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.2
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 * (1 - (node_memory_MemAvailable_bytes{node=~"$node"} / node_memory_MemTotal_bytes{node=~"$node"}))
+                    seriesNameFormat: "{{node}}"
+        nodeConditions:
+          kind: Panel
+          spec:
+            display:
+              name: Nodes with Pressure
+              description: Nodes reporting DiskPressure, MemoryPressure, or PIDPressure.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_node_status_condition{condition=~"DiskPressure|MemoryPressure|PIDPressure",status="true"})
+        nodesReady:
+          kind: Panel
+          spec:
+            display:
+              name: Nodes Ready
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_node_status_condition{condition="Ready",status="true"})
+        podCapacity:
+          kind: Panel
+          spec:
+            display:
+              name: Pod Capacity Used
+              description: Running pods as % of total pod capacity.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 80.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 90.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 * sum(kubelet_running_pods) / sum(kube_node_status_capacity{resource="pods"})
+      layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Node Status
+          items:
+          - x: 0
+            "y": 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/nodesReady"
+          - x: 8
+            "y": 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/podCapacity"
+          - x: 16
+            "y": 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/nodeConditions"
+      - kind: Grid
+        spec:
+          display:
+            title: CPU
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/cpuUsage"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/cpuRequests"
+      - kind: Grid
+        spec:
+          display:
+            title: Memory
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/memUsage"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/memBytes"
+      - kind: Grid
+        spec:
+          display:
+            title: Disk
+          items:
+          - x: 0
+            "y": 0
+            width: 8
+            height: 9
+            content:
+              $ref: "#/spec/panels/diskRead"
+          - x: 8
+            "y": 0
+            width: 8
+            height: 9
+            content:
+              $ref: "#/spec/panels/diskWrite"
+          - x: 16
+            "y": 0
+            width: 8
+            height: 9
+            content:
+              $ref: "#/spec/panels/diskIops"
+  10-dashboard-cluster-overview.yaml: |
+    kind: Dashboard
+    metadata:
+      name: cluster-overview
+      project: cluster
+    spec:
+      display:
+        name: Cluster Overview
+      duration: 1h
+      refreshInterval: 30s
+      panels:
+        cpuRequests:
+          kind: Panel
+          spec:
+            display:
+              name: CPU Requests vs Allocatable (per Node)
+              description: ">100% means the node is overcommitted."
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: percent
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 * sum by (node) (kube_pod_container_resource_requests{resource="cpu"}) / sum by (node) (kube_node_status_allocatable{resource="cpu"})
+                    seriesNameFormat: "{{node}}"
+        cpuUsage:
+          kind: Panel
+          spec:
+            display:
+              name: Cluster CPU Usage vs Allocatable
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.25
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(rate(node_cpu_seconds_total{mode!="idle"}[$__rate_interval]))
+                    seriesNameFormat: used (cores)
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_node_status_allocatable{resource="cpu"})
+                    seriesNameFormat: allocatable
+        cpuUtil:
+          kind: Panel
+          spec:
+            display:
+              name: Cluster CPU Utilisation
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 70.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 85.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 * (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[$__rate_interval])))
+        memRequests:
+          kind: Panel
+          spec:
+            display:
+              name: Memory Requests vs Allocatable (per Node)
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: percent
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 * sum by (node) (kube_pod_container_resource_requests{resource="memory"}) / sum by (node) (kube_node_status_allocatable{resource="memory"})
+                    seriesNameFormat: "{{node}}"
+        memUsage:
+          kind: Panel
+          spec:
+            display:
+              name: Cluster Memory Usage vs Total
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.25
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(node_memory_MemTotal_bytes) - sum(node_memory_MemAvailable_bytes)
+                    seriesNameFormat: used
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(node_memory_MemTotal_bytes)
+                    seriesNameFormat: total
+        memUtil:
+          kind: Panel
+          spec:
+            display:
+              name: Cluster Memory Utilisation
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: percent
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 75.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 90.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))
+        nodesReady:
+          kind: Panel
+          spec:
+            display:
+              name: Nodes Ready
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_node_status_condition{condition="Ready",status="true"})
+        podsCrashloop:
+          kind: Panel
+          spec:
+            display:
+              name: CrashLoopBackOff Pods
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"})
+        podsNotRunning:
+          kind: Panel
+          spec:
+            display:
+              name: Non-Running Pods
+              description: Pods in Pending, Failed, or Unknown state.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 5.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_pod_status_phase{phase=~"Pending|Failed|Unknown"})
+        podsRunning:
+          kind: Panel
+          spec:
+            display:
+              name: Running Pods
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_pod_status_phase{phase="Running"})
+        pvStatus:
+          kind: Panel
+          spec:
+            display:
+              name: PV Status by Phase
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (phase) (kube_persistentvolume_status_phase)
+                    seriesNameFormat: "{{phase}}"
+        pvcCapacity:
+          kind: Panel
+          spec:
+            display:
+              name: PVC Capacity by Storage Class
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (storageclass) (kube_persistentvolumeclaim_resource_requests_storage_bytes)
+                    seriesNameFormat: "{{storageclass}}"
+        warningEvents:
+          kind: Panel
+          spec:
+            display:
+              name: Warning Event Rate by Reason
+              description: Spikes indicate cluster trouble worth investigating.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.2
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (reason) (rate(kube_event_count{type="Warning"}[$__rate_interval]))
+                    seriesNameFormat: "{{reason}}"
+      layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Cluster Health
+          items:
+          - x: 0
+            "y": 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/nodesReady"
+          - x: 4
+            "y": 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/podsRunning"
+          - x: 8
+            "y": 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/podsNotRunning"
+          - x: 12
+            "y": 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/podsCrashloop"
+          - x: 16
+            "y": 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/cpuUtil"
+          - x: 20
+            "y": 0
+            width: 4
+            height: 5
+            content:
+              $ref: "#/spec/panels/memUtil"
+      - kind: Grid
+        spec:
+          display:
+            title: Resource Consumption
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/cpuUsage"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/memUsage"
+      - kind: Grid
+        spec:
+          display:
+            title: Requests vs Allocatable
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/cpuRequests"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/memRequests"
+      - kind: Grid
+        spec:
+          display:
+            title: Persistent Volumes
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/pvStatus"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 8
+            content:
+              $ref: "#/spec/panels/pvcCapacity"
+      - kind: Grid
+        spec:
+          display:
+            title: Kubernetes Events
+          items:
+          - x: 0
+            "y": 0
+            width: 24
+            height: 8
+            content:
+              $ref: "#/spec/panels/warningEvents"
   10-dashboard-cluster-pressure.yaml: |
     kind: Dashboard
     metadata:
       name: cluster-pressure
-      project: homelab
+      project: cluster
     spec:
       display:
         name: Cluster Pressure
@@ -400,11 +1920,504 @@ data:
             height: 8
             content:
               $ref: "#/spec/panels/cpuThrottling"
+  10-dashboard-cluster-workloads.yaml: |
+    kind: Dashboard
+    metadata:
+      name: cluster-workloads
+      project: cluster
+    spec:
+      display:
+        name: Workloads
+      duration: 1h
+      refreshInterval: 30s
+      variables:
+      - kind: ListVariable
+        spec:
+          name: namespace
+          display:
+            name: Namespace
+          allowAllValue: true
+          allowMultiple: true
+          plugin:
+            kind: PrometheusLabelValuesVariable
+            spec:
+              labelName: namespace
+              matchers:
+              - kube_pod_info
+      - kind: ListVariable
+        spec:
+          name: deployment
+          display:
+            name: Deployment
+          allowAllValue: true
+          allowMultiple: true
+          plugin:
+            kind: PrometheusLabelValuesVariable
+            spec:
+              labelName: deployment
+              matchers:
+              - kube_deployment_status_replicas{namespace=~"$namespace"}
+      panels:
+        containerOom:
+          kind: Panel
+          spec:
+            display:
+              name: OOM Kills
+              description: Each event means memory limits are too low.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.4
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (namespace, pod, container) (increase(container_oom_events_total{namespace=~"$namespace"}[$__rate_interval]))
+                    seriesNameFormat: "{{namespace}}/{{pod}}/{{container}}"
+        containerRestarts:
+          kind: Panel
+          spec:
+            display:
+              name: Container Restarts (per hour)
+              description: Sustained restarts indicate a crash loop.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.3
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (namespace, pod, container) (increase(kube_pod_container_status_restarts_total{namespace=~"$namespace"}[1h]))
+                    seriesNameFormat: "{{namespace}}/{{pod}}/{{container}}"
+        deployAvailable:
+          kind: Panel
+          spec:
+            display:
+              name: Available Replicas per Deployment
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: kube_deployment_status_replicas_available{namespace=~"$namespace",deployment=~"$deployment"}
+                    seriesNameFormat: "{{namespace}}/{{deployment}}"
+        deployUnavailable:
+          kind: Panel
+          spec:
+            display:
+              name: Unavailable Replicas per Deployment
+              description: Should be 0 in steady state.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.3
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: kube_deployment_status_replicas_unavailable{namespace=~"$namespace",deployment=~"$deployment"}
+                    seriesNameFormat: "{{namespace}}/{{deployment}}"
+        podCpuThrottle:
+          kind: Panel
+          spec:
+            display:
+              name: CPU Throttling Ratio
+              description: Fraction of CPU periods throttled. >25% is worth investigating.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: percent
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.2
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: 100 * sum by (namespace, pod, container) (rate(container_cpu_cfs_throttled_periods_total{container!="",namespace=~"$namespace"}[$__rate_interval])) / sum by (namespace, pod, container) (rate(container_cpu_cfs_periods_total{container!="",namespace=~"$namespace"}[$__rate_interval]))
+                    seriesNameFormat: "{{namespace}}/{{pod}}/{{container}}"
+        podCpuUsage:
+          kind: Panel
+          spec:
+            display:
+              name: Pod CPU Usage
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (namespace, pod) (rate(container_cpu_usage_seconds_total{container!="",namespace=~"$namespace"}[$__rate_interval]))
+                    seriesNameFormat: "{{namespace}}/{{pod}}"
+        podMemRss:
+          kind: Panel
+          spec:
+            display:
+              name: Pod Memory RSS
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (namespace, pod) (container_memory_rss{container!="",namespace=~"$namespace"})
+                    seriesNameFormat: "{{namespace}}/{{pod}}"
+        podMemWss:
+          kind: Panel
+          spec:
+            display:
+              name: Pod Memory Working Set
+              description: Used by Kubernetes for eviction decisions.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: bytes
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum by (namespace, pod) (container_memory_working_set_bytes{container!="",namespace=~"$namespace"})
+                    seriesNameFormat: "{{namespace}}/{{pod}}"
+        podsCrashloop:
+          kind: Panel
+          spec:
+            display:
+              name: CrashLoopBackOff
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff",namespace=~"$namespace"})
+        podsFailed:
+          kind: Panel
+          spec:
+            display:
+              name: Failed Pods
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_pod_status_phase{phase="Failed",namespace=~"$namespace"})
+        podsPending:
+          kind: Panel
+          spec:
+            display:
+              name: Pending Pods
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 5.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_pod_status_phase{phase="Pending",namespace=~"$namespace"})
+        podsRunning:
+          kind: Panel
+          spec:
+            display:
+              name: Running Pods
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: PrometheusDatasource
+                      name: victoria-metrics
+                    query: sum(kube_pod_status_phase{phase="Running",namespace=~"$namespace"})
+      layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Pod Overview
+          items:
+          - x: 0
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/podsRunning"
+          - x: 6
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/podsPending"
+          - x: 12
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/podsFailed"
+          - x: 18
+            "y": 0
+            width: 6
+            height: 5
+            content:
+              $ref: "#/spec/panels/podsCrashloop"
+      - kind: Grid
+        spec:
+          display:
+            title: Deployment Health
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/deployAvailable"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/deployUnavailable"
+      - kind: Grid
+        spec:
+          display:
+            title: Pod CPU
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/podCpuUsage"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/podCpuThrottle"
+      - kind: Grid
+        spec:
+          display:
+            title: Pod Memory
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/podMemRss"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/podMemWss"
+      - kind: Grid
+        spec:
+          display:
+            title: Restarts & OOM Kills
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/containerRestarts"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/containerOom"
   10-dashboard-flux.yaml: |
     kind: Dashboard
     metadata:
       name: flux
-      project: homelab
+      project: platform
     spec:
       display:
         name: GitOps Delivery
@@ -767,3 +2780,418 @@ data:
             height: 7
             content:
               $ref: "#/spec/panels/reconcileDuration"
+  10-dashboard-logs-overview.yaml: |
+    kind: Dashboard
+    metadata:
+      name: logs-overview
+      project: logs
+    spec:
+      display:
+        name: Log Overview
+      duration: 1h
+      refreshInterval: 30s
+      variables:
+      - kind: ListVariable
+        spec:
+          name: namespace
+          display:
+            name: Namespace
+          allowAllValue: true
+          allowMultiple: true
+          plugin:
+            kind: VictoriaLogsFieldValuesVariable
+            spec:
+              query: "*"
+              field: namespace
+      panels:
+        errorRate:
+          kind: Panel
+          spec:
+            display:
+              name: Error / Warn Rate by Namespace
+              description: Log entries containing 'error' or 'warn' per step interval.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.3
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=~\"$namespace\"} (error OR warn) | stats by (namespace) count() as cnt"
+        errorTotal:
+          kind: Panel
+          spec:
+            display:
+              name: Error / Warn Entries (total)
+              description: Log entries containing 'error' or 'warn' across the selected time range.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: sum
+                format:
+                  unit: decimal
+                thresholds:
+                  defaultColor: "#2A9D6E"
+                  steps:
+                  - value: 1.0
+                    color: "#E8A33D"
+                    name: warning
+                  - value: 100.0
+                    color: "#D1495B"
+                    name: critical
+                sparkline: {}
+                colorMode: background_solid
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=~\"$namespace\"} (error OR warn) | stats count() as cnt"
+        namespacesActive:
+          kind: Panel
+          spec:
+            display:
+              name: Active Namespaces
+              description: Number of namespaces producing logs.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: last
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=~\"$namespace\"} | stats count_uniq(namespace) as cnt"
+        rateByNamespace:
+          kind: Panel
+          spec:
+            display:
+              name: Log Rate by Namespace
+              description: Number of log entries per step interval, broken down by namespace.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=~\"$namespace\"} | stats by (namespace) count() as cnt"
+        recentLogs:
+          kind: Panel
+          spec:
+            display:
+              name: Recent Log Entries
+            plugin:
+              kind: LogsTable
+              spec:
+                showTime: true
+                enableDetails: true
+                allowWrap: false
+            queries:
+            - kind: LogQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsLogQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=~\"$namespace\"}"
+        volumeTotal:
+          kind: Panel
+          spec:
+            display:
+              name: Log Volume (total)
+              description: Sum of all log entries across the selected time range.
+            plugin:
+              kind: StatChart
+              spec:
+                calculation: sum
+                format:
+                  unit: decimal
+                sparkline: {}
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=~\"$namespace\"} | stats count() as cnt"
+      layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Summary
+          items:
+          - x: 0
+            "y": 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/volumeTotal"
+          - x: 8
+            "y": 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/errorTotal"
+          - x: 16
+            "y": 0
+            width: 8
+            height: 5
+            content:
+              $ref: "#/spec/panels/namespacesActive"
+      - kind: Grid
+        spec:
+          display:
+            title: Log Rate
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/rateByNamespace"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/errorRate"
+      - kind: Grid
+        spec:
+          display:
+            title: Recent Logs
+          items:
+          - x: 0
+            "y": 0
+            width: 24
+            height: 14
+            content:
+              $ref: "#/spec/panels/recentLogs"
+  10-dashboard-logs-workloads.yaml: |
+    kind: Dashboard
+    metadata:
+      name: logs-workloads
+      project: logs
+    spec:
+      display:
+        name: Workload Logs
+      duration: 1h
+      refreshInterval: 30s
+      variables:
+      - kind: ListVariable
+        spec:
+          name: namespace
+          display:
+            name: Namespace
+          allowAllValue: false
+          allowMultiple: false
+          plugin:
+            kind: VictoriaLogsFieldValuesVariable
+            spec:
+              query: "*"
+              field: namespace
+      - kind: ListVariable
+        spec:
+          name: pod
+          display:
+            name: Pod
+          allowAllValue: true
+          allowMultiple: true
+          plugin:
+            kind: VictoriaLogsFieldValuesVariable
+            spec:
+              query: "{namespace=\"$namespace\"}"
+              field: pod
+      panels:
+        errorRateByPod:
+          kind: Panel
+          spec:
+            display:
+              name: Error / Warn Rate by Pod
+              description: Entries containing 'error' or 'warn' per step interval.
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.3
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=\"$namespace\", pod=~\"$pod\"} (error OR warn) | stats by (pod) count() as cnt"
+        podErrorLogs:
+          kind: Panel
+          spec:
+            display:
+              name: Errors & Warnings
+              description: Log entries containing 'error' or 'warn'.
+            plugin:
+              kind: LogsTable
+              spec:
+                showTime: true
+                enableDetails: true
+                allowWrap: true
+            queries:
+            - kind: LogQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsLogQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=\"$namespace\", pod=~\"$pod\"} (error OR warn)"
+        podLogs:
+          kind: Panel
+          spec:
+            display:
+              name: Logs
+            plugin:
+              kind: LogsTable
+              spec:
+                showTime: true
+                enableDetails: true
+                allowWrap: false
+            queries:
+            - kind: LogQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsLogQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=\"$namespace\", pod=~\"$pod\"}"
+        rateByPod:
+          kind: Panel
+          spec:
+            display:
+              name: Log Rate by Pod
+              description: Log entries per step interval for the selected namespace and pod(s).
+            plugin:
+              kind: TimeSeriesChart
+              spec:
+                legend:
+                  position: bottom
+                  mode: table
+                  size: small
+                yAxis:
+                  format:
+                    unit: decimal
+                  min: 0.0
+                visual:
+                  display: line
+                  areaOpacity: 0.1
+            queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: VictoriaLogsTimeSeriesQuery
+                  spec:
+                    datasource:
+                      kind: VictoriaLogsDatasource
+                      name: victoria-logs
+                    query: "{namespace=\"$namespace\", pod=~\"$pod\"} | stats by (pod) count() as cnt"
+      layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Log Rate
+          items:
+          - x: 0
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/rateByPod"
+          - x: 12
+            "y": 0
+            width: 12
+            height: 9
+            content:
+              $ref: "#/spec/panels/errorRateByPod"
+      - kind: Grid
+        spec:
+          display:
+            title: All Logs
+          items:
+          - x: 0
+            "y": 0
+            width: 24
+            height: 14
+            content:
+              $ref: "#/spec/panels/podLogs"
+      - kind: Grid
+        spec:
+          display:
+            title: Errors & Warnings
+          items:
+          - x: 0
+            "y": 0
+            width: 24
+            height: 14
+            content:
+              $ref: "#/spec/panels/podErrorLogs"
