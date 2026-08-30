@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: network-topology-ui
+    app.kubernetes.io/version: latest
+  name: network-topology-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: network-topology-ui
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: network-topology-ui
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/network-topology-ui:latest
+        name: network-topology-ui
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: NETWORK_TOPOLOGY_VM_URL
+          value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+        - name: WEB_ADDR
+          value: :8080
+        - name: NETWORK_TOPOLOGY_STATIC_ROOT
+          value: /app/ui/dist
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

@@ -14,7 +14,7 @@ spec:
     remediation:
       retries: 3
   values:
-    extraVolumeMounts:
+    extraContainerVolumeMounts:
     - mountPath: /data/gitea/public/assets/css
       name: pennant-theme
       readOnly: true

@@ -119,6 +119,41 @@ spec:
               - target_label: job
                 replacement: cilium-agent
 
+          # Hubble's metrics server, on the cilium agent pods but a different port from
+          # the agent's own metrics above. This is the job that makes a *flow* graph
+          # possible: cilium_* is aggregate per node and says how much was forwarded and
+          # dropped, while hubble_flows_processed_total carries source and destination
+          # labels and so says who talked to whom.
+          #
+          # Enabled by hubble.metrics on the cilium release, which also declares
+          # containerPort 9965 on the DaemonSet - and that declaration is what makes the
+          # target discoverable at all, since this job keeps only pods whose spec names
+          # the port.
+          #
+          # Cardinality is bounded by the source/destination contexts being
+          # workload-name rather than pod: a pod context would mint a new series on every
+          # restart, and the topology is drawn per workload anyway.
+          - job_name: hubble
+            kubernetes_sd_configs:
+              - role: pod
+                namespaces:
+                  names: [kube-system]
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_pod_label_k8s_app]
+                regex: cilium
+                action: keep
+              - source_labels: [__meta_kubernetes_pod_container_port_number]
+                regex: "9965"
+                action: keep
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                target_label: node
+              - source_labels: [__meta_kubernetes_pod_name]
+                target_label: pod
+              - source_labels: [__meta_kubernetes_namespace]
+                target_label: namespace
+              - target_label: job
+                replacement: hubble
+
           - job_name: cilium-operator
             kubernetes_sd_configs:
               - role: pod

@@ -67,6 +67,11 @@ data:
           entryPoints:
           - websecure
           service: music-library-builder
+        network-topology-ui:
+          rule: Host(`topology.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: network-topology-ui
         perses:
           rule: Host(`perses.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -138,6 +143,10 @@ data:
           loadBalancer:
             servers:
             - url: http://music-library-builder.jellyfin.svc.cluster.local:8140
+        network-topology-ui:
+          loadBalancer:
+            servers:
+            - url: http://network-topology-ui.network-topology-ui.svc.cluster.local:8080
         perses:
           loadBalancer:
             servers:
