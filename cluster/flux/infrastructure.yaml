@@ -173,6 +173,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  healthCheckExprs:
+  - apiVersion: netbird.io/v1alpha1
+    kind: SetupKey
+    current: has(status.conditions) && status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')
   dependsOn:
   - name: netbird-operator
   - name: vault-secrets-operator-config
