@@ -42,6 +42,7 @@ spec:
   - jellyfin
   - kavita
   - music
+  - topology
   - perses
   - redlib
   - searxng

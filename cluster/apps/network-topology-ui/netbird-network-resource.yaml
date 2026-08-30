@@ -1,0 +1,14 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: network-topology-ui
+  namespace: network-topology-ui
+spec:
+  networkRouterRef:
+    name: k8s-network
+    namespace: netbird
+  serviceRef:
+    name: network-topology-ui
+  groups:
+  - name: kubernetes
