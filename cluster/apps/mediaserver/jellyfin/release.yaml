@@ -19,6 +19,19 @@ spec:
   values:
     deploymentStrategy:
       type: Recreate
+    extraInitContainers:
+    - command:
+      - sh
+      - -c
+      - mkdir -p /config/config && cp /pennant/branding.xml /config/config/branding.xml
+      image: busybox
+      name: pennant-branding
+      volumeMounts:
+      - mountPath: /config
+        name: config
+      - mountPath: /pennant
+        name: pennant-theme
+        readOnly: true
     extraVolumeMounts:
       mountPath: /dev/dri
       name: hwa-volume
@@ -44,3 +57,7 @@ spec:
       capabilities:
         add:
         - SYS_ADMIN
+    volumes:
+    - name: pennant-theme
+      configMap:
+        name: jellyfin-theme

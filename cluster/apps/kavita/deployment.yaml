@@ -40,6 +40,9 @@ spec:
         volumeMounts:
         - mountPath: /kavita/config
           name: config-volume
+        - mountPath: /kavita/config/themes
+          name: theme-volume
+          readOnly: true
         - mountPath: /books
           name: library-volume
           readOnly: true
@@ -67,3 +70,6 @@ spec:
       - name: library-volume
         persistentVolumeClaim:
           claimName: kavita-library-pvc
+      - name: theme-volume
+        configMap:
+          name: kavita-theme
