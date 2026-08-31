@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: audiomuse-ai-flask
-    app.kubernetes.io/version: sha256_bffb01b86a4de
+    app.kubernetes.io/version: sha256_9881304597ce7
   name: audiomuse-ai
 spec:
   selector:
