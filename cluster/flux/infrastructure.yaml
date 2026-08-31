@@ -171,12 +171,12 @@ spec:
     name: flux-system
   path: ./cluster/infrastructure/internal-gateway
   prune: true
-  wait: true
   timeout: 10m
-  healthCheckExprs:
-  - apiVersion: netbird.io/v1alpha1
-    kind: SetupKey
-    current: has(status.conditions) && status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')
+  healthChecks:
+  - apiVersion: apps/v1
+    kind: Deployment
+    name: internal-gateway
+    namespace: internal-gateway
   dependsOn:
   - name: netbird-operator
   - name: vault-secrets-operator-config
