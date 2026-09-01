@@ -3,18 +3,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: forgejo-runner
+    app.kubernetes.io/name: forgejo-runner-1
     app.kubernetes.io/version: "12.13"
-  name: forgejo-runner
+  name: forgejo-runner-1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: forgejo-runner
+      app.kubernetes.io/name: forgejo-runner-1
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: forgejo-runner
+        app.kubernetes.io/name: forgejo-runner-1
         app.kubernetes.io/version: "12.13"
     spec:
       initContainers:
@@ -142,7 +142,7 @@ spec:
         - name: FORGEJO_RUNNER_SECRET
           valueFrom:
             secretKeyRef:
-              key: RUNNER_SECRET
+              key: RUNNER_SECRET_1
               name: forgejo-runner-secret
         resources:
           requests:
@@ -247,14 +247,14 @@ spec:
       volumes:
       - name: runner-data
         persistentVolumeClaim:
-          claimName: forgejo-runner-data-pvc
+          claimName: forgejo-runner-data-pvc-1
       - name: runner-cache
         hostPath:
-          path: /var/lib/forgejo-runner/0/cache
+          path: /var/lib/forgejo-runner/1/cache
           type: DirectoryOrCreate
       - name: docker-storage
         hostPath:
-          path: /var/lib/forgejo-runner/0/docker
+          path: /var/lib/forgejo-runner/1/docker
           type: DirectoryOrCreate
       - name: docker-certs
         emptyDir: {}
@@ -268,4 +268,4 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       nodeSelector:
         kubernetes.io/arch: amd64
-        kubernetes.io/hostname: debian-mgt-0
+        kubernetes.io/hostname: debian-mgt-1

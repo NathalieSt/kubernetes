@@ -6,6 +6,8 @@ metadata:
 resources:
 - namespace.yaml
 - vault-secret.yaml
-- data-pvc.yaml
 - dockerfiles-configmap.yaml
+- data-pvc.yaml
 - deployment.yaml
+- data-pvc-1.yaml
+- deployment-1.yaml
