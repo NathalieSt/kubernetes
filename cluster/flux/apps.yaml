@@ -63,6 +63,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: daybook
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: daybook
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/daybook
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+  - name: reflector
+  - name: garage
+  - name: k8up
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: dcts
   namespace: flux-system
 spec:

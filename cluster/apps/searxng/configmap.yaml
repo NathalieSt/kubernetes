@@ -14,15 +14,8 @@ data:
       debug: false
       instance_name: "Nathalies SearXNG"
 
-    # The only part of SearXNG that Pennant can reach. Its simple theme is compiled
-    # LESS with no hook for an extra stylesheet, and nothing here mounts a custom
-    # one -- so the page itself stays SearXNG's. These six values feed
-    # /manifest.json, which is what colours the splash screen and the browser chrome
-    # of an installed PWA, and nothing else. Narrow, but it is a real supported
-    # setting rather than a stylesheet smuggled past the theme.
-    #
-    # black is SearXNG's own third style, a true-black variant of dark; it takes the
-    # dark accent on a black ground rather than a third palette.
+    # The only part of SearXNG that Pennant can reach: these six values feed /manifest.json and nothing
+    # else, since the simple theme is compiled LESS with no hook for an extra stylesheet.
     brand:
       pwa_colors:
         theme_color_light: "#984a72"

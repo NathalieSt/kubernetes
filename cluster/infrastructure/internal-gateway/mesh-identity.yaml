@@ -36,6 +36,7 @@ spec:
   - affine
   - audiomuse
   - backups
+  - daybook
   - transmission
   - code
   - headlamp

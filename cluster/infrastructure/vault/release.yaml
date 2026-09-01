@@ -16,6 +16,8 @@ spec:
   values:
     server:
       dataStorage:
+        annotations:
+          k8up.io/backup: "true"
         storageClass: nfs-local
       standalone:
         config: |

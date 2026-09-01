@@ -48,10 +48,8 @@ spec:
             fi
           done
 
-          # garage requires rpc_secret to be exactly 32 bytes hex-encoded (64 hex chars).
-          # base64 - the obvious thing to reach for, and what "openssl rand -base64 32"
-          # gives you - is rejected at startup with "Invalid RPC secret key". Generate it
-          # with "openssl rand -hex 32".
+          # garage requires rpc_secret to be exactly 32 bytes hex-encoded (64 hex chars). base64 — what
+          # "openssl rand -base64 32" gives you — is rejected at startup. Generate it with "openssl rand -hex 32".
           case "$RPC_SECRET" in
           *[!0-9a-fA-F]*)
             echo "ERROR: rpc_secret must be hex-encoded (64 chars, 0-9a-f) - generate it with 'openssl rand -hex 32'" >&2

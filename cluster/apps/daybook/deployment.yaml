@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: daybook
+    app.kubernetes.io/version: latest
+  name: daybook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: daybook
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: daybook
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown 1000:1000 /var/lib/daybook
+        image: busybox
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /var/lib/daybook
+          name: data-volume
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook:latest
+        name: daybook
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /var/lib/daybook
+          name: data-volume
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: DAYBOOK_DATA_DIR
+          value: /var/lib/daybook
+        - name: DAYBOOK_STATIC_ROOT
+          value: /app/ui/dist
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: daybook-data-pvc
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

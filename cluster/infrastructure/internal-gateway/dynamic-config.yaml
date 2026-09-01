@@ -35,6 +35,11 @@ data:
           entryPoints:
           - websecure
           service: backup-dashboard
+        daybook:
+          rule: Host(`daybook.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: daybook
         flood:
           rule: Host(`transmission.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -119,6 +124,10 @@ data:
           loadBalancer:
             servers:
             - url: http://backup-dashboard.backup-dashboard.svc.cluster.local:8080
+        daybook:
+          loadBalancer:
+            servers:
+            - url: http://daybook.daybook.svc.cluster.local:8080
         flood:
           loadBalancer:
             servers:
