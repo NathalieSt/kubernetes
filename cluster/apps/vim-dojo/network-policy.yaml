@@ -4,6 +4,9 @@ kind: NetworkPolicy
 metadata:
   name: vim-dojo-networkpolicy
 spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: vim-dojo
   policyTypes:
   - Ingress
   - Egress
