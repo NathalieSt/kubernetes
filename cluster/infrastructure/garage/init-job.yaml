@@ -71,10 +71,8 @@ spec:
           CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
           K8S_API="https://kubernetes.default.svc"
 
-          # api <method> <endpoint> [body] - wraps curl so a non-2xx response prints the
-          # status and the response body before exiting. Plain "curl -sf" swallows both
-          # (-s hides the body, -f collapses every HTTP error into exit code 22), which
-          # makes a failed bootstrap show up as an empty log and a bare "Error" pod.
+          # api <method> <endpoint> [body] — wraps curl so a non-2xx prints the status and body before exiting.
+          # Plain "curl -sf" hides both, making a failed bootstrap show up as an empty log and a bare "Error" pod.
           api() {
             api_method="$1"
             api_endpoint="$2"
@@ -108,9 +106,8 @@ spec:
             sleep 5
           done
 
-          # GetClusterStatus has no top-level "node" field - the local node's ID is in
-          # the "nodes" array. Reading .node instead yielded the literal string "null",
-          # which UpdateClusterLayout rejected with a 400.
+          # GetClusterStatus has no top-level "node" field — the local node's ID is in the "nodes" array.
+          # Reading .node yielded the literal string "null", which UpdateClusterLayout rejected with a 400.
           NODE_ID=$(jq -r '.nodes[] | select(.isUp) | .id' /tmp/status.json | head -n 1)
           if [ -z "$NODE_ID" ] || [ "$NODE_ID" = "null" ]; then
             echo "ERROR: could not determine node ID from GetClusterStatus:" >&2
@@ -143,10 +140,8 @@ spec:
             api GET "v2/GetBucketInfo?globalAlias=${eb_name}" | jq -r '.id // .bucket.id'
           }
 
-          # ensure_key <name> - prints "<accessKeyId> <secretAccessKey>", reusing an
-          # existing key of that name. Minting a fresh key on every run would invalidate
-          # the credentials already deployed in the namespaces, which is exactly what the
-          # previous single-key version did whenever this Job was retried.
+          # ensure_key <name> — prints "<accessKeyId> <secretAccessKey>", reusing an existing key of that name.
+          # Minting a fresh key every run would invalidate the credentials already deployed in the namespaces.
           ensure_key() {
             ek_name="$1"
             ek_id=$(api GET "v2/ListKeys" | jq -r --arg n "$ek_name" '.[] | select(.name == $n) | .id' | head -n 1)
@@ -187,15 +182,8 @@ spec:
             ws_name="$2"
             ws_data="$3"
 
-            # A namespace listed for backups but not yet deployed is skipped, not fatal.
-            # Every app Kustomization depends on garage's, and an app's namespace is
-            # created by its own Kustomization -- so failing here deadlocks the cluster:
-            # this job cannot succeed until the namespace exists, and the namespace
-            # cannot be created until this job succeeds. Onboarding a namespace by adding
-            # it to backupNamespaces must never be able to wedge the bootstrap for every
-            # other namespace. The bucket and key were already provisioned above, and
-            # ensure_key reuses them by name, so the next run delivers the same
-            # credentials once the namespace is there.
+            # A namespace listed for backups but not yet deployed is skipped, not fatal: its Kustomization
+            # depends on garage's, so failing here would deadlock the bootstrap for every other namespace.
             if ! namespace_exists "$ws_ns"; then
               echo "  skipping Secret ${ws_name}: namespace ${ws_ns} does not exist yet" >&2
               return 0

@@ -44,9 +44,8 @@ spec:
         - |
           set -eu
 
-          # The daemon refuses to start without a reachable Docker Engine, and the dind
-          # sidecar writes its client certificates before the TLS listener is up, so wait
-          # for the listener and the shared socket rather than for the certificates alone.
+          # The daemon refuses to start without a reachable Docker Engine, and the dind sidecar writes its
+          # certificates before the TLS listener is up — so wait for the listener and the shared socket.
           while [ ! -S /var/run/docker-shared/docker.sock ] || ! nc -z 127.0.0.1 2376; do sleep 1; done
 
           uuid=$(printf '%s' "$FORGEJO_RUNNER_SECRET" | cut -c1-16 | od -An -tx1 | tr -d ' \n' \
@@ -57,57 +56,19 @@ spec:
             level: info
             job_level: info
           runner:
-            # How many jobs this daemon runs at once, and the only correct way to make CI
-            # parallel here. Scaling the Deployment instead does not work: every replica
-            # derives the same connection uuid from the same secret above, so they all
-            # register as one runner; they all write this same config.yml onto one RWX
-            # volume; and the cache server's bolt.db takes an exclusive lock with a
-            # five-second timeout, which two pods on one node-local volume would contend
-            # for. (That store is no longer on NFS at all - see cache.dir below.)
-            #
-            # Concurrent jobs run as containers of the dind sidecar, so they draw on its
-            # limits rather than this container's. Raise both together.
+            # The only correct way to make CI parallel here. Scaling the Deployment does not: replicas share a
+            # connection uuid, one config.yml and one bolt lock. Jobs run in the dind sidecar — raise both.
             capacity: 3
             timeout: 3h
             shutdown_timeout: 3h
           cache:
-            # On, and stored on a node-local disk rather than on /data.
-            #
-            # It was off for months, and never actually worked before that. The cache
-            # server keeps its index in a bolt.db, bolt needs an exclusive flock() to open
-            # it for writing, and flock() fails on the nfs-remote mount that /data uses
-            # (nfs4, local_lock=none) - so the store was created back in March and never
-            # written to again. Every actions/cache step in every repo carries
-            # continue-on-error, so the only symptom was silence: every yarn install
-            # refetched its whole tree and every Go build recompiled from scratch, on
-            # every single run.
-            #
-            #   $ flock -n /data/.locktest  -c true ; echo $?
-            #   1
-            #   $ flock -n /cache/.locktest -c true ; echo $?
-            #   0
-            #
-            # dir is therefore a hostPath on the node's own disk, where flock works. Every
-            # StorageClass in this cluster is NFS-backed, so there was no PVC that would
-            # have done - which is also why this is pinned to one named node. See the
-            # nodeSelector and the `instances` comment in ForgejoRunnerMeta.res.
-            #
-            # The objection this used to carry was SD card wear, back when the runner ran
-            # on a Raspberry Pi. It does not any more: the runners sit on the SSD-backed
-            # amd64 management nodes now, which is most of why they were moved there. The
-            # note that pointed at a 3.6 TB SSD on raspberry-pi-5-0 as the way out was
-            # wrong on its facts anyway - /mnt/external_ssd there is a plain directory on
-            # that node's 121.7 GB root filesystem, not a separate disk.
-            #
-            # Worth knowing even on an SSD: a cache *reduces* what the node writes. A miss
-            # writes a whole node_modules tree, tens of thousands of small files, into a
-            # workdir on this same disk. A hit writes one tarball and reads it back.
+            # On, and on a node-local disk: the cache index is a bolt.db needing flock(), which fails on the
+            # nfs-remote mount /data uses — so it silently never worked. Every StorageClass here is NFS-backed.
             enabled: true
             dir: /cache
           container:
-            # Bind-mounted into every job container at /var/run/docker.sock so that steps
-            # can run docker themselves. The path is resolved by the dind daemon, which
-            # mounts the same volume, so it has to be identical on both sides.
+            # Bind-mounted into every job container at /var/run/docker.sock. The path is resolved by the dind
+            # daemon, which mounts the same volume, so it has to be identical on both sides.
             docker_host: unix:///var/run/docker-shared/docker.sock
           server:
             connections:
@@ -118,10 +79,8 @@ spec:
                 labels:
                   - ubuntu-latest:docker://node:20-bookworm
                   - docker:docker://docker:27-cli
-                  # Built locally by the image-warmer sidecar, never pulled: they live
-                  # only in this node's image store. force_pull defaults to false, so a
-                  # locally present image is used as-is and no registry is consulted -
-                  # which is what makes an unauthenticated private image workable at all.
+                  # Built locally by the image-warmer sidecar, never pulled. force_pull defaults to false, so a
+                  # locally present image is used as-is — which is what makes a private image workable at all.
                   - go:docker://homelab-ci-go:1
                   - nvim:docker://homelab-ci-nvim:1
           EOF
@@ -184,22 +143,8 @@ spec:
           while [ ! -S /var/run/docker-shared/docker.sock ]; do sleep 1; done
           export DOCKER_HOST=unix:///var/run/docker-shared/docker.sock
 
-          # QEMU for the architectures this node is not. Every image the homelab publishes
-          # is built for linux/amd64 and linux/arm64 (ci/docker-publish), and this pod is
-          # pinned to arm64 - so without this, any Dockerfile stage that has to *execute*
-          # amd64 code fails with "exec format error" inside the build.
-          #
-          # This writes to the host kernel's binfmt_misc, not to a container: the
-          # registration outlives the container that made it and covers the whole node,
-          # which is why it belongs here and not in every workflow. --install is
-          # idempotent, so re-running it on each pod start is free. The native
-          # architecture in the list is a no-op and is named anyway, so that this keeps
-          # working if the runner is ever unpinned from arm64.
-          #
-          # Not fatal, for the same reason a failed image build is not: a runner that is
-          # up and cannot cross-build beats a runner that is not up. Builds whose stages
-          # all run on the build platform - backup-dashboard cross-compiles rather than
-          # emulating - are unaffected either way.
+          # QEMU for the architectures this node is not: images are built for amd64 and arm64 while this pod is
+          # pinned to arm64. Writes the host kernel's binfmt_misc, is idempotent, and is not fatal on failure.
           echo "registering binfmt handlers"
           if docker run --privileged --rm tonistiigi/binfmt:qemu-v9.2.2 --install arm64,amd64; then
             echo "  ok: qemu registered"
@@ -212,10 +157,8 @@ spec:
           builds='go.Dockerfile homelab-ci-go:1
           nvim.Dockerfile homelab-ci-nvim:1'
 
-          # No "is it already there?" shortcut on purpose. docker build against a warm
-          # layer cache costs about a second and, unlike an image-exists check, it
-          # actually notices when a Dockerfile has changed - which would otherwise
-          # silently serve a stale image until someone remembered to bump its tag.
+          # No "is it already there?" shortcut on purpose: a build against a warm cache costs about a second
+          # and, unlike an image-exists check, notices a changed Dockerfile instead of serving a stale image.
           echo "$builds" | while read -r file tag; do
             [ -n "$file" ] || continue
             echo "warming ${tag} from ${file}"

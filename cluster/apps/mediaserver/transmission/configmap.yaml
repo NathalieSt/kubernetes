@@ -6,21 +6,13 @@ metadata:
 data:
   ipleak.sh: |
     #!/bin/sh
-    # VPN leak detector for the transmission/gluetun pod.
+    # VPN leak detector for the transmission/gluetun pod. Emits one JSON object per check so Vector merges
+    # the fields into the log root, making them queryable as `check:ip status:LEAK`.
     #
-    # Emits one JSON object per check so Vector's parse_message transform merges
-    # the fields into the log root - that makes them queryable in VictoriaLogs as
-    # `check:ip status:LEAK` rather than needing a substring match on the message.
-    #
-    # Tuning (all optional, set via container env):
-    #   IPLEAK_INTERVAL          seconds between cycles (default 300)
+    #   IPLEAK_INTERVAL          seconds between cycles (default 300); do not set below 60
     #   IPLEAK_EXPECTED_COUNTRY  ISO-3166-2 code the exit node should be in (default NL)
     #   IPLEAK_TIMEOUT           per-request curl timeout in seconds (default 15)
     #   IPLEAK_STARTUP_GRACE     seconds to wait before the first check (default 30)
-    #
-    # Do not set IPLEAK_INTERVAL below 60: each cycle makes up to 3 API calls and
-    # the free tiers of these services rate-limit aggressively. A rate-limited
-    # response is reported as UNKNOWN, not as a leak - see check_ip below.
 
     INTERVAL="${IPLEAK_INTERVAL:-300}"
     EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"
@@ -43,10 +35,9 @@ data:
       curl -sfL --max-time "$TIMEOUT" "$1" 2>/dev/null
     }
 
-    # --- external IP -----------------------------------------------------------
-    # Tries several providers in turn. Only if EVERY provider fails do we report
-    # UNKNOWN. The old script treated "no country parsed" as a leak, so any API
-    # hiccup or rate-limit produced a false alarm.
+    # --- external IP
+    # Tries several providers in turn; only if every one fails is UNKNOWN reported. The old script
+    # treated "no country parsed" as a leak, so any hiccup or rate-limit produced a false alarm.
     check_ip() {
       ip=""; country=""
 
@@ -84,15 +75,9 @@ data:
       fi
     }
 
-    # --- DNS ------------------------------------------------------------------
-    # The old check geolocated the nameserver from /etc/resolv.conf. In-cluster
-    # that is always CoreDNS's ClusterIP (private RFC1918), which geo APIs reject,
-    # so it could never return a country and never detect anything.
-    #
-    # What actually matters is which *public* resolver ends up performing the
-    # lookup. edns.ip-api.com redirects to a randomized subdomain and reports the
-    # egress IP of whichever resolver queried it - that is the real leak signal.
-    # Requires -L to follow the redirect (fetch already passes it).
+    # --- DNS
+    # Geolocating /etc/resolv.conf is useless in-cluster — it is always CoreDNS's private ClusterIP.
+    # edns.ip-api.com reports the egress IP of whichever public resolver queried it: the real signal.
     check_dns() {
       body="$(fetch https://edns.ip-api.com/json)"
       if [ -z "$body" ]; then
