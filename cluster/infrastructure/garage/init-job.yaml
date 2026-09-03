@@ -385,6 +385,31 @@ spec:
           write_secret "daybook" "restic-repo-password-secret" \
             "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
+          echo "Provisioning backup repository for namespace mail"
+          BUCKET_ID=$(ensure_bucket "kubernetes-backups-mail")
+          if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
+            echo "ERROR: could not determine bucket ID for kubernetes-backups-mail" >&2
+            exit 1
+          fi
+
+          set -- $(ensure_key "backup-mail")
+          ACCESS_KEY_ID="$1"
+          SECRET_ACCESS_KEY="$2"
+
+          # Scoped to this one bucket: the namespace holding these credentials must not
+          # be able to read or delete any other namespace's backups.
+          GRANT="{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\""
+          GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$GRANT"
+
+          write_secret "mail" "garage-backup-access-key-secret" \
+            "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
+
+
+          REPO_PASSWORD=$(derive_password "mail")
+          write_secret "mail" "restic-repo-password-secret" \
+            "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
+
           echo "Provisioning read-only dashboard key"
           set -- $(ensure_key "backup-dashboard-reader")
           READER_ACCESS_KEY_ID="$1"
@@ -427,6 +452,12 @@ spec:
           api POST v2/AllowBucketKey "$READER_GRANT"
 
           READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-daybook")
+          READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
+          READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
+          READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$READER_GRANT"
+
+          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-mail")
           READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
           READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"

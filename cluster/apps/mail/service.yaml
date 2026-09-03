@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: roundcube
+    app.kubernetes.io/version: 1.7.3-apache-nonroot
+  name: roundcube
+spec:
+  selector:
+    app.kubernetes.io/name: roundcube
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000

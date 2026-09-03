@@ -1,0 +1,135 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-apply-config
+  namespace: vault-apply
+data:
+  provider.tf.json: |
+    {
+      "terraform": {
+        "required_providers": {
+          "vault": {
+            "source": "hashicorp/vault",
+            "version": "~> 5.0"
+          }
+        },
+        "backend": {
+          "s3": {
+            "bucket": "opentofu-state",
+            "key": "vault/terraform.tfstate",
+            "region": "garage",
+            "endpoints": {
+              "s3": "http://garage.garage.svc.cluster.local:3900"
+            },
+            "use_path_style": true,
+            "skip_credentials_validation": true,
+            "skip_region_validation": true,
+            "skip_requesting_account_id": true,
+            "skip_metadata_api_check": true,
+            "skip_s3_checksum": true
+          }
+        }
+      },
+      "provider": {
+        "vault": {
+          "address": "http://vault-ui.vault.svc.cluster.local:8200",
+          "auth_login": {
+            "path": "auth/kubernetes/login",
+            "parameters": {
+              "role": "opentofu",
+              "jwt": "${file(\"/var/run/secrets/kubernetes.io/serviceaccount/token\")}"
+            }
+          }
+        }
+      }
+    }
+  workloads.tf.json: |
+    {
+      "resource": {
+        "vault_policy": {
+          "mail": {
+            "name": "mail",
+            "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "psono-server": {
+            "name": "psono-server",
+            "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n"
+          }
+        },
+        "vault_kubernetes_auth_backend_role": {
+          "mail": {
+            "backend": "kubernetes",
+            "role_name": "mail",
+            "bound_service_account_names": [
+              "mail-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "mail"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.mail.name}"
+            ],
+            "token_ttl": 600
+          },
+          "psono-server": {
+            "backend": "kubernetes",
+            "role_name": "psono-server",
+            "bound_service_account_names": [
+              "psono-server-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "psono"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.psono-server.name}"
+            ],
+            "token_ttl": 600
+          }
+        },
+        "vault_kv_secret_v2": {
+          "mail_mail": {
+            "mount": "kvv2",
+            "name": "mail",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"postfix-accounts.cf\":\"REPLACE ME — vault kv patch kvv2/mail postfix-accounts.cf=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "mail"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "psono-server_psono": {
+            "mount": "kvv2",
+            "name": "psono",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"secret-key\":\"REPLACE ME — vault kv patch kvv2/psono secret-key=<value>\",\"activation-link-secret\":\"REPLACE ME — vault kv patch kvv2/psono activation-link-secret=<value>\",\"db-secret\":\"REPLACE ME — vault kv patch kvv2/psono db-secret=<value>\",\"email-secret-salt\":\"REPLACE ME — vault kv patch kvv2/psono email-secret-salt=<value>\",\"private-key\":\"REPLACE ME — vault kv patch kvv2/psono private-key=<value>\",\"public-key\":\"REPLACE ME — vault kv patch kvv2/psono public-key=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "psono-server"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          }
+        }
+      }
+    }

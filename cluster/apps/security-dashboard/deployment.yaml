@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: security-dashboard
+    app.kubernetes.io/version: latest
+  name: security-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: security-dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: security-dashboard
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      serviceAccountName: security-dashboard
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/security-dashboard:latest
+        name: security-dashboard
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: SECURITY_DASHBOARD_SCAN_NAMESPACE
+          value: security-dashboard
+        - name: SECURITY_DASHBOARD_INVENTORY_NAMESPACES
+          value: ""
+        - name: SECURITY_DASHBOARD_GRYPE_IMAGE
+          value: anchore/grype@sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b
+        - name: SECURITY_DASHBOARD_GRYPE_CACHE_CLAIM
+          value: security-dashboard-grype-cache-pvc
+        - name: SECURITY_DASHBOARD_CLAMAV_NAMESPACE
+          value: clamav
+        - name: SECURITY_DASHBOARD_CLAMAV_CRONJOBS
+          value: clamav-scan-local,clamav-scan-nas
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
