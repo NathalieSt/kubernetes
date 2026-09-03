@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mail-config
+  namespace: mail
+data:
+  postfix-main.cf: |
+    mynetworks = 127.0.0.0/8 10.42.0.0/16

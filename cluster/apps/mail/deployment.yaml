@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: mail
+    app.kubernetes.io/version: v16.0.0
+  name: mail
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mail
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mail
+        app.kubernetes.io/version: v16.0.0
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - image: ghcr.io/docker-mailserver/docker-mailserver:v16.0.0
+        name: mail
+        ports:
+        - containerPort: 25
+          name: smtp
+        - containerPort: 587
+          name: submission
+        - containerPort: 143
+          name: imap
+        volumeMounts:
+        - mountPath: /var/mail
+          subPath: mail
+          name: data-volume
+        - mountPath: /var/mail-state
+          subPath: state
+          name: data-volume
+        - mountPath: /var/log/mail
+          subPath: log
+          name: data-volume
+        - mountPath: /tmp/docker-mailserver/postfix-accounts.cf
+          subPath: postfix-accounts.cf
+          name: accounts-volume
+          readOnly: true
+        - mountPath: /tmp/docker-mailserver/postfix-main.cf
+          subPath: postfix-main.cf
+          name: config-volume
+          readOnly: true
+        env:
+        - name: OVERRIDE_HOSTNAME
+          value: mail.homelab.internal
+        - name: POSTMASTER_ADDRESS
+          value: postmaster@homelab.internal
+        - name: ACCOUNT_PROVISIONER
+          value: FILE
+        - name: PERMIT_DOCKER
+          value: none
+        - name: POSTFIX_INET_PROTOCOLS
+          value: ipv4
+        - name: DOVECOT_INET_PROTOCOLS
+          value: ipv4
+        - name: ENABLE_AMAVIS
+          value: "0"
+        - name: ENABLE_CLAMAV
+          value: "0"
+        - name: ENABLE_RSPAMD
+          value: "0"
+        - name: ENABLE_DNSBL
+          value: "0"
+        - name: ENABLE_OPENDKIM
+          value: "0"
+        - name: ENABLE_OPENDMARC
+          value: "0"
+        - name: ENABLE_POLICYD_SPF
+          value: "0"
+        - name: ENABLE_FAIL2BAN
+          value: "0"
+        - name: ENABLE_UPDATE_CHECK
+          value: "0"
+        - name: SPOOF_PROTECTION
+          value: "0"
+        - name: LOG_LEVEL
+          value: info
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: mail-pvc
+      - name: config-volume
+        configMap:
+          name: mail-config
+      - name: accounts-volume
+        secret:
+          secretName: mail-accounts-secret

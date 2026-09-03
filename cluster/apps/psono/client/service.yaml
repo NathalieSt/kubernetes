@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: psono-client
+    app.kubernetes.io/version: 4.8.1
+  name: psono-client
+spec:
+  selector:
+    app.kubernetes.io/name: psono-client
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80

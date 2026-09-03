@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: roundcube
+    app.kubernetes.io/version: 1.7.3-apache-nonroot
+  name: roundcube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: roundcube
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: roundcube
+        app.kubernetes.io/version: 1.7.3-apache-nonroot
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 33:33 /var/roundcube/db
+        image: busybox
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /var/roundcube/db
+          name: roundcube-db-volume
+      automountServiceAccountToken: false
+      containers:
+      - image: roundcube/roundcubemail:1.7.3-apache-nonroot
+        name: roundcube
+        ports:
+        - containerPort: 8000
+          name: http
+        volumeMounts:
+        - mountPath: /var/roundcube/db
+          name: roundcube-db-volume
+        env:
+        - name: ROUNDCUBEMAIL_DEFAULT_HOST
+          value: mail
+        - name: ROUNDCUBEMAIL_DEFAULT_PORT
+          value: "143"
+        - name: ROUNDCUBEMAIL_SMTP_SERVER
+          value: mail
+        - name: ROUNDCUBEMAIL_SMTP_PORT
+          value: "25"
+        - name: ROUNDCUBEMAIL_DB_TYPE
+          value: sqlite
+        - name: ROUNDCUBEMAIL_SKIN
+          value: elastic
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 33
+          runAsGroup: 33
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: roundcube-db-volume
+        persistentVolumeClaim:
+          claimName: roundcube-pvc

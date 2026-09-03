@@ -2,11 +2,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: main-pg
+  name: psono-server
 resources:
 - namespace.yaml
-- cnpg-cluster.yaml
-- audiomuseai-db.yaml
-- tandoor-db.yaml
-- psono-db.yaml
+- vault-secrets.yaml
+- deployment.yaml
+- service.yaml
 - network-policy.yaml

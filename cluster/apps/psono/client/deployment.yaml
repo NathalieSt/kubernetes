@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: psono-client
+    app.kubernetes.io/version: 4.8.1
+  name: psono-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: psono-client
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: psono-client
+        app.kubernetes.io/version: 4.8.1
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - image: psono/psono-client:4.8.1
+        name: psono-client
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: PSONO_WEBCLIENT_CONFIG_JSON
+          value: "{\"backend_servers\":[{\"title\":\"Homelab\",\"url\":\"https://vault-api.netbird.nathalie-stiefsohn.eu\",\"domain\":\"homelab.internal\"}],\"base_url\":\"https://vault.netbird.nathalie-stiefsohn.eu/\",\"allow_custom_server\":false,\"allow_registration\":false,\"allow_lost_password\":false,\"allow_delete_account\":false,\"authentication_methods\":[\"AUTHKEY\"],\"more_links\":[]}"
+        - name: PSONO_SERVICE_WORKER_DISABLE
+          value: "true"
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi

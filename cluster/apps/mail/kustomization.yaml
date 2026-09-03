@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: mail
+resources:
+- namespace.yaml
+- vault-secrets.yaml
+- config.yaml
+- deployment.yaml
+- pvc.yaml
+- service.yaml
+- roundcube-deployment.yaml
+- roundcube-pvc.yaml
+- service.yaml
+- network-policy.yaml
+- netbird-network-resource.yaml
+- k8up-schedule.yaml

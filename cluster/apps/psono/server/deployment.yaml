@@ -1,0 +1,94 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: psono-server
+    app.kubernetes.io/version: 7.4.0
+  name: psono-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: psono-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: psono-server
+        app.kubernetes.io/version: 7.4.0
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - image: psono/psono-server:7.4.0
+        name: psono-server
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - mountPath: /psono-secrets
+          name: secret-volume
+          readOnly: true
+        env:
+        - name: PSONO_SECRET_KEY_FILE
+          value: /psono-secrets/secret-key
+        - name: PSONO_ACTIVATION_LINK_SECRET_FILE
+          value: /psono-secrets/activation-link-secret
+        - name: PSONO_DB_SECRET_FILE
+          value: /psono-secrets/db-secret
+        - name: PSONO_EMAIL_SECRET_SALT_FILE
+          value: /psono-secrets/email-secret-salt
+        - name: PSONO_PRIVATE_KEY_FILE
+          value: /psono-secrets/private-key
+        - name: PSONO_PUBLIC_KEY_FILE
+          value: /psono-secrets/public-key
+        - name: PSONO_HOST_URL
+          value: https://vault-api.netbird.nathalie-stiefsohn.eu
+        - name: PSONO_ALLOWED_DOMAINS
+          value: vault.netbird.nathalie-stiefsohn.eu
+        - name: PSONO_DEBUG
+          value: "False"
+        - name: PSONO_ALLOW_REGISTRATION
+          value: "False"
+        - name: PSONO_ALLOW_LOST_PASSWORD
+          value: "False"
+        - name: PSONO_ENFORCE_MATCHING_USERNAME_AND_EMAIL
+          value: "False"
+        - name: PSONO_DATABASES_DEFAULT_HOST
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: PSONO_DATABASES_DEFAULT_PORT
+          value: "5432"
+        - name: PSONO_DATABASES_DEFAULT_NAME
+          value: psono
+        - name: PSONO_DATABASES_DEFAULT_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: PSONO_DATABASES_DEFAULT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: PSONO_EMAIL_HOST
+          value: mail.mail.svc.cluster.local
+        - name: PSONO_EMAIL_PORT
+          value: "25"
+        - name: PSONO_EMAIL_FROM
+          value: psono@homelab.internal
+        - name: PSONO_EMAIL_USE_TLS
+          value: "False"
+        - name: PSONO_EMAIL_USE_SSL
+          value: "False"
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: psono-server-secret

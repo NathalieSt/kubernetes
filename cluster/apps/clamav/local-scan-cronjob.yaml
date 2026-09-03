@@ -1,0 +1,70 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: clamav-scan-local
+    app.kubernetes.io/version: 1.5.4
+  name: clamav-scan-local
+spec:
+  schedule: 0 2 * * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: clamav-scan-local
+            app.kubernetes.io/version: 1.5.4
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - args:
+            - --config-file=/etc/clamav-client/clamd.conf
+            - --multiscan
+            - --infected
+            - --stdout
+            - /scan/local
+            command:
+            - clamdscan
+            image: clamav/clamav:1.5.4
+            name: clamav-scan-local
+            volumeMounts:
+            - mountPath: /etc/clamav-client
+              name: client-config-volume
+              readOnly: true
+            - mountPath: /scan/local
+              name: local-share-volume
+              readOnly: true
+            env:
+            - name: TZ
+              value: Europe/Vienna
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              runAsUser: 100
+              runAsGroup: 101
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: client-config-volume
+            configMap:
+              name: clamav-client-config
+          - name: local-share-volume
+            persistentVolumeClaim:
+              claimName: clamav-local-pvc
+          restartPolicy: Never

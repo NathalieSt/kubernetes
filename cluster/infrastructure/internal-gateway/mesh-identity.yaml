@@ -42,11 +42,15 @@ spec:
   - headlamp
   - jellyfin
   - kavita
+  - mail
   - music
   - topology
   - perses
+  - vault
+  - vault-api
   - redlib
   - searxng
+  - scans
   - tandoor
   - vault
   - dojo
