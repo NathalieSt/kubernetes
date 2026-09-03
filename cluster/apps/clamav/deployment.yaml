@@ -1,0 +1,85 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: clamav
+    app.kubernetes.io/version: 1.5.4
+  name: clamav
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: clamav
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: clamav
+        app.kubernetes.io/version: 1.5.4
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 100:101 /var/lib/clamav /var/log/clamav
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /var/lib/clamav
+          name: database-volume
+        - mountPath: /var/log/clamav
+          name: log-volume
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - command:
+        - /init-unprivileged
+        image: clamav/clamav:1.5.4
+        name: clamav
+        ports:
+        - containerPort: 3310
+          name: clamd
+        volumeMounts:
+        - mountPath: /var/lib/clamav
+          name: database-volume
+        - mountPath: /var/log/clamav
+          name: log-volume
+        - mountPath: /scan/local
+          name: local-share-volume
+          readOnly: true
+        - mountPath: /scan/nas
+          name: nas-share-volume
+          readOnly: true
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        - name: FRESHCLAM_CHECKS
+          value: "2"
+        resources:
+          requests:
+            cpu: 200m
+            memory: 1536Mi
+          limits:
+            cpu: 2000m
+            memory: 3Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 100
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: database-volume
+        persistentVolumeClaim:
+          claimName: clamav-db-pvc
+      - name: log-volume
+        emptyDir: {}
+      - name: local-share-volume
+        persistentVolumeClaim:
+          claimName: clamav-local-pvc
+      - name: nas-share-volume
+        persistentVolumeClaim:
+          claimName: clamav-nas-pvc

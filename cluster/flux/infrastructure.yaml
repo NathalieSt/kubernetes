@@ -379,6 +379,25 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: vault-apply
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: vault-apply
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/vault-apply
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: vault
+  - name: vault-secrets-operator-config
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: vault-backup
   namespace: flux-system
 spec:
