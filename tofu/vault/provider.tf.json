@@ -25,7 +25,8 @@
   },
   "provider": {
     "vault": {
-      "address": "http://vault-ui.vault.svc.cluster.local:8200"
+      "address": "http://vault-ui.vault.svc.cluster.local:8200",
+      "skip_child_token": true
     }
   }
 }

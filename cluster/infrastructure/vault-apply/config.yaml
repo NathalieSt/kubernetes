@@ -34,6 +34,7 @@ data:
       "provider": {
         "vault": {
           "address": "http://vault-ui.vault.svc.cluster.local:8200",
+          "skip_child_token": true,
           "auth_login": {
             "path": "auth/kubernetes/login",
             "parameters": {
