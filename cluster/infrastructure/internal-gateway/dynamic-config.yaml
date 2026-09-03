@@ -178,7 +178,7 @@ data:
         mail:
           loadBalancer:
             servers:
-            - url: http://mail.mail.svc.cluster.local:25
+            - url: http://roundcube.mail.svc.cluster.local:8000
         music-library-builder:
           loadBalancer:
             servers:
