@@ -12,6 +12,11 @@ data:
             usersFile: /auth/headlamp
             realm: headlamp.netbird.nathalie-stiefsohn.eu
             removeHeader: true
+        security-dashboard-basic-auth:
+          basicAuth:
+            usersFile: /auth/security-dashboard
+            realm: scans.netbird.nathalie-stiefsohn.eu
+            removeHeader: true
         vim-dojo-basic-auth:
           basicAuth:
             usersFile: /auth/vim-dojo
@@ -67,6 +72,11 @@ data:
           entryPoints:
           - websecure
           service: kavita
+        mail:
+          rule: Host(`mail.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: mail
         music-library-builder:
           rule: Host(`music.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -82,6 +92,16 @@ data:
           entryPoints:
           - websecure
           service: perses
+        psono-client:
+          rule: Host(`psono.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: psono-client
+        psono-server:
+          rule: Host(`psono-api.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: psono-server
         redlib:
           rule: Host(`redlib.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -92,6 +112,13 @@ data:
           entryPoints:
           - websecure
           service: searxng
+        security-dashboard:
+          rule: Host(`scans.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: security-dashboard
+          middlewares:
+          - security-dashboard-basic-auth
         tandoor:
           rule: Host(`tandoor.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -148,6 +175,10 @@ data:
           loadBalancer:
             servers:
             - url: http://kavita.kavita.svc.cluster.local:5000
+        mail:
+          loadBalancer:
+            servers:
+            - url: http://mail.mail.svc.cluster.local:25
         music-library-builder:
           loadBalancer:
             servers:
@@ -160,6 +191,14 @@ data:
           loadBalancer:
             servers:
             - url: http://perses.perses.svc.cluster.local:8080
+        psono-client:
+          loadBalancer:
+            servers:
+            - url: http://psono-client.psono.svc.cluster.local:80
+        psono-server:
+          loadBalancer:
+            servers:
+            - url: http://psono-server.psono.svc.cluster.local:80
         redlib:
           loadBalancer:
             servers:
@@ -168,6 +207,10 @@ data:
           loadBalancer:
             servers:
             - url: http://searxng.searxng.svc.cluster.local:8080
+        security-dashboard:
+          loadBalancer:
+            servers:
+            - url: http://security-dashboard.security-dashboard.svc.cluster.local:8080
         tandoor:
           loadBalancer:
             servers:

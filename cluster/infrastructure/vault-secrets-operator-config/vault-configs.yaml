@@ -9,6 +9,9 @@ spec:
   - gluetun-proxy
   - garage
   - backup-dashboard
+  - mail
+  - psono
+  - vault-apply
   defaultAuthMethod: kubernetes
   kubernetes:
     audiences:

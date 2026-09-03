@@ -8,4 +8,5 @@ resources:
 - cnpg-cluster.yaml
 - audiomuseai-db.yaml
 - tandoor-db.yaml
+- psono-db.yaml
 - network-policy.yaml

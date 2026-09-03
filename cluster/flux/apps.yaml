@@ -63,6 +63,24 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: clamav
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: clamav
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/clamav
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: daybook
   namespace: flux-system
 spec:
@@ -242,6 +260,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: mail
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: mail
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/mail
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
+  - name: garage
+  - name: k8up
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: music-library-builder
   namespace: flux-system
 spec:
@@ -277,6 +316,44 @@ spec:
   timeout: 10m
   dependsOn:
   - name: victoria-metrics
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: psono-client
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: psono
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/psono/client
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: psono-server
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: psono-server
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: psono
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/psono/server
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: main-pg
+  - name: vault-secrets-operator-config
+  - name: mail
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -331,6 +408,25 @@ spec:
   - name: gluetun-proxy
   - name: valkey
   - name: keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: security-dashboard
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: security-dashboard
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/security-dashboard
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+  - name: clamav
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

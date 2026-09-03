@@ -1,0 +1,31 @@
+{
+  "terraform": {
+    "required_providers": {
+      "vault": {
+        "source": "hashicorp/vault",
+        "version": "~> 5.0"
+      }
+    },
+    "backend": {
+      "s3": {
+        "bucket": "opentofu-state",
+        "key": "vault/terraform.tfstate",
+        "region": "garage",
+        "endpoints": {
+          "s3": "http://garage.garage.svc.cluster.local:3900"
+        },
+        "use_path_style": true,
+        "skip_credentials_validation": true,
+        "skip_region_validation": true,
+        "skip_requesting_account_id": true,
+        "skip_metadata_api_check": true,
+        "skip_s3_checksum": true
+      }
+    }
+  },
+  "provider": {
+    "vault": {
+      "address": "http://vault-ui.vault.svc.cluster.local:8200"
+    }
+  }
+}

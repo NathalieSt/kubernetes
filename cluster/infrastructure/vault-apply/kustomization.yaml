@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: vault-apply
+resources:
+- namespace.yaml
+- rbac.yaml
+- vault-secrets.yaml
+- config.yaml
+- plan-cronjob.yaml
+- apply-cronjob.yaml
+- network-policy.yaml
