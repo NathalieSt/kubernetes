@@ -3,3 +3,19 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
+# Flux's own controllers are bootstrap output, not generator output, so this is
+# the only place to change them. `flux bootstrap` preserves patches here.
+#
+# --concurrent=10 (default 4): every per-app Kustomization sets wait: true with a
+# 10m timeout, so one unhealthy app holds a worker for the full ten minutes. With
+# four workers, eight stalled apps starve every other reconcile — which looked
+# exactly like a wedged controller: no logs, observedGeneration frozen, and new
+# revisions never applied.
+patches:
+- target:
+    kind: Deployment
+    name: kustomize-controller
+  patch: |
+    - op: add
+      path: /spec/template/spec/containers/0/args/-
+      value: --concurrent=10
