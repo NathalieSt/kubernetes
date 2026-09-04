@@ -37,6 +37,10 @@ spec:
         queue:
           CONN_STR: redis://valkey.valkey.svc.cluster.local:6379/0?
           TYPE: redis
+        repository:
+          ALLOW_ADOPTION_OF_UNADOPTED_REPOSITORIES: true
+          ENABLE_PUSH_CREATE_ORG: true
+          ENABLE_PUSH_CREATE_USER: true
         server:
           ROOT_URL: https://code.netbird.nathalie-stiefsohn.eu
           SSH_DOMAIN: code.netbird.nathalie-stiefsohn.eu
