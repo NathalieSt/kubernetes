@@ -1,0 +1,19 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: forgejo-pg
+spec:
+  instances: 1
+  storage:
+    storageClass: nfs-local
+    size: 15Gi
+  superuserSecret:
+    name: forgejo-pg-creds-secret
+  enableSuperuserAccess: true
+  probes:
+    readiness:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      timeoutSeconds: 30
+      failureThreshold: 10

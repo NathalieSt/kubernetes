@@ -32,7 +32,7 @@ spec:
           HOST: redis://valkey.valkey.svc.cluster.local:6379/1
         database:
           DB_TYPE: postgres
-          HOST: remote-fs.netbird.nathalie-stiefsohn.eu:5432
+          HOST: forgejo-pg-rw.forgejo-pg-cluster.svc.cluster.local:5432
           NAME: forgejo
         queue:
           CONN_STR: redis://valkey.valkey.svc.cluster.local:6379/0?

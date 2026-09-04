@@ -2,31 +2,23 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: redis-networkpolicy
+  name: forgejo-pg-networkpolicy
 spec:
   policyTypes:
   - Ingress
   ingress:
   - from:
     - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: victoria-metrics
-    ports:
-    - port: 9121
-      protocol: TCP
-  - from:
-    - namespaceSelector:
         matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - affine
-          - jellyfin
+          - forgejo
+          - cnpg-system
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - affine
-          - audiomuse-ai-flask
-          - audiomuse-ai-worker
+          - forgejo
+          - cloudnative-pg
