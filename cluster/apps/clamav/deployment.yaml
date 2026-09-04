@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: clamav
-    app.kubernetes.io/version: 1.5.4
+    app.kubernetes.io/version: 1.5.4-debian13-slim
   name: clamav
 spec:
   replicas: 1
@@ -17,13 +17,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: clamav
-        app.kubernetes.io/version: 1.5.4
+        app.kubernetes.io/version: 1.5.4-debian13-slim
     spec:
       initContainers:
       - command:
         - sh
         - -c
-        - chown -R 100:101 /var/lib/clamav /var/log/clamav
+        - chown -R 1000:1000 /var/lib/clamav /var/log/clamav
         image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
         name: permission-fix
         volumeMounts:
@@ -36,7 +36,7 @@ spec:
       containers:
       - command:
         - /init-unprivileged
-        image: clamav/clamav:1.5.4
+        image: clamav/clamav:1.5.4-debian13-slim
         name: clamav
         ports:
         - containerPort: 3310
@@ -68,8 +68,8 @@ spec:
           capabilities:
             drop:
             - ALL
-          runAsUser: 100
-          runAsGroup: 101
+          runAsUser: 1000
+          runAsGroup: 1000
           allowPrivilegeEscalation: false
       volumes:
       - name: database-volume

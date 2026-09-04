@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: clamav-scan-nas
-    app.kubernetes.io/version: 1.5.4
+    app.kubernetes.io/version: 1.5.4-debian13-slim
   name: clamav-scan-nas
 spec:
   schedule: 0 3 * * 0
@@ -21,7 +21,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: clamav-scan-nas
-            app.kubernetes.io/version: 1.5.4
+            app.kubernetes.io/version: 1.5.4-debian13-slim
         spec:
           automountServiceAccountToken: false
           enableServiceLinks: false
@@ -34,7 +34,7 @@ spec:
             - /scan/nas
             command:
             - clamdscan
-            image: clamav/clamav:1.5.4
+            image: clamav/clamav:1.5.4-debian13-slim
             name: clamav-scan-nas
             volumeMounts:
             - mountPath: /etc/clamav-client
@@ -57,8 +57,8 @@ spec:
               capabilities:
                 drop:
                 - ALL
-              runAsUser: 100
-              runAsGroup: 101
+              runAsUser: 1000
+              runAsGroup: 1000
               allowPrivilegeEscalation: false
           volumes:
           - name: client-config-volume
