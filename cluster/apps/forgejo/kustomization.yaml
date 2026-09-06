@@ -6,6 +6,7 @@ metadata:
 resources:
 - namespace.yaml
 - theme-configmap.yaml
+- logo-configmap.yaml
 - repo.yaml
 - release.yaml
 - network-policy.yaml
