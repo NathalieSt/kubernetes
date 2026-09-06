@@ -18,10 +18,16 @@ spec:
     - mountPath: /data/gitea/public/assets/css
       name: pennant-theme
       readOnly: true
+    - mountPath: /data/gitea/public/assets/img
+      name: pennant-logo
+      readOnly: true
     extraVolumes:
     - configMap:
         name: forgejo-theme
       name: pennant-theme
+    - configMap:
+        name: forgejo-logo
+      name: pennant-logo
     gitea:
       admin:
         passwordMode: initialOnlyRequireReset

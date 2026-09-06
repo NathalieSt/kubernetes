@@ -66,6 +66,16 @@ spec:
             # nfs-remote mount /data uses — so it silently never worked. Every StorageClass here is NFS-backed.
             enabled: true
             dir: /cache
+          host:
+            # act's action cache: every remote `uses:` is cloned into a git repo under here, and every job
+            # re-fetches it. It defaults to $HOME/.cache/act, and HOME is /data — the nfs-remote PVC, reached
+            # over the mesh. The pack transfer is fine; writing the ~1200 loose refs of actions/checkout is
+            # not, and a fetch that takes 7s on this disk takes minutes there and intermittently fails. It
+            # reads as "could not fetch remote 'origin'" printed after a fetch that plainly succeeded and
+            # listed every ref, because what failed is the ref update, not the fetch. Same volume as the
+            # artifact cache above and for the same reason. XDG_CACHE_HOME does not do this: act reads it only
+            # when ActionCacheDir is empty, and the runner always sets that from this value.
+            workdir_parent: /cache/act
           container:
             # Bind-mounted into every job container at /var/run/docker.sock. The path is resolved by the dind
             # daemon, which mounts the same volume, so it has to be identical on both sides.
@@ -98,8 +108,6 @@ spec:
         env:
         - name: FORGEJO_INSTANCE_URL
           value: http://forgejo-http.forgejo.svc.cluster.local:3000
-        - name: XDG_CACHE_HOME
-          value: /cache
         - name: FORGEJO_RUNNER_SECRET
           valueFrom:
             secretKeyRef:
