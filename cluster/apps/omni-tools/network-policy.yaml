@@ -2,18 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: forgejo-networkpolicy
+  name: omni-tools-networkpolicy
 spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: forgejo
   policyTypes:
   - Ingress
   ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: forgejo
   - from:
     - namespaceSelector:
         matchLabels:
@@ -27,10 +20,3 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: internal-gateway
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: victoria-metrics
-    ports:
-    - port: 3000
-      protocol: TCP

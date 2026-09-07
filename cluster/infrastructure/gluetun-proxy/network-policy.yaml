@@ -14,3 +14,9 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: searxng
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: neko
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: neko

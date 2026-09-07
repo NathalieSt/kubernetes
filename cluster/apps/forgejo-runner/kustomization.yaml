@@ -7,6 +7,7 @@ resources:
 - namespace.yaml
 - vault-secret.yaml
 - dockerfiles-configmap.yaml
+- network-policy.yaml
 - data-pvc.yaml
 - deployment.yaml
 - data-pvc-1.yaml
