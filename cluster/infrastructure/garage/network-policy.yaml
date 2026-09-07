@@ -35,6 +35,9 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: backup-dashboard
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: vault-apply
     ports:
     - port: 3900
       protocol: TCP
