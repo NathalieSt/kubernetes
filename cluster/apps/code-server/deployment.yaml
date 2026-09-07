@@ -1,0 +1,187 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: code-server
+    app.kubernetes.io/version: 4.135.0
+  name: code-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: code-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: code-server
+        app.kubernetes.io/version: 4.135.0
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          #!/bin/sh
+          #
+          # Refuses to let a workload start while any secret it depends on is missing,
+          # empty, or still holding the placeholder that vault-config writes when it
+          # creates a KV path.
+          #
+          # Kept next to the generator rather than inlined so it can be linted and run by
+          # hand:
+          #
+          #     GUARDED_SECRET=neko-secret VAULT_PATH=neko \
+          #     EXPECTED_KEYS="password admin-password" \
+          #     GUARD_DIR=./fixture ./check.sh
+          #
+          # See SecretGuard.res for why this exists at all.
+
+          set -eu
+
+          : "${GUARDED_SECRET:?GUARDED_SECRET is required}"
+          : "${VAULT_PATH:?VAULT_PATH is required}"
+          : "${EXPECTED_KEYS:?EXPECTED_KEYS is required}"
+
+          dir="${GUARD_DIR:-/guarded}"
+          status=0
+
+          for key in $EXPECTED_KEYS; do
+              file="$dir/$key"
+
+              if [ ! -f "$file" ]; then
+                  echo "refusing to start: ${GUARDED_SECRET} has no key '${key}'." >&2
+                  echo "  The VaultStaticSecret syncs whatever is at kvv2/${VAULT_PATH}," >&2
+                  echo "  and that key is not there yet." >&2
+                  status=1
+                  continue
+              fi
+
+              value=$(cat "$file")
+
+              case "$value" in
+                  # The prefix, not the whole sentence: the placeholder embeds the path
+                  # and key, so matching it exactly would mean rebuilding the string here
+                  # and keeping two copies of it in step.
+                  "REPLACE ME"*)
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is still the vault-config placeholder." >&2
+                      echo "  This value is written into the manifests repository, so it is" >&2
+                      echo "  public knowledge and must never reach a running workload." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+                  "")
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is empty." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+              esac
+          done
+
+          if [ "$status" -ne 0 ]; then
+              echo "" >&2
+              echo "Once Vault holds real values the VaultStaticSecret picks them up within" >&2
+              echo "its refresh interval, and the next restart of this pod succeeds on its" >&2
+              echo "own — there is nothing else to do here." >&2
+          fi
+
+          exit "$status"
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: code-server-secret-guard
+        volumeMounts:
+        - mountPath: /guarded
+          name: code-server-secret-guard-volume
+          readOnly: true
+        env:
+        - name: GUARDED_SECRET
+          value: code-server-secret
+        - name: VAULT_PATH
+          value: code-server
+        - name: EXPECTED_KEYS
+          value: password
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
+        - sh
+        - -c
+        - chown 1000:1000 /home/coder
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /home/coder
+          name: home-volume
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - command:
+        - /usr/bin/dumb-init
+        - /usr/bin/code-server
+        - --bind-addr
+        - 0.0.0.0:8080
+        - /home/coder
+        image: codercom/code-server:4.135.0
+        name: code-server
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /home/coder
+          name: home-volume
+        - mountPath: /tmp
+          name: tmp-volume
+        env:
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: code-server-secret
+        - name: HOME
+          value: /home/coder
+        - name: USER
+          value: coder
+        - name: LANG
+          value: en_US.UTF-8
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: code-server-secret-guard-volume
+        secret:
+          secretName: code-server-secret
+      - name: home-volume
+        persistentVolumeClaim:
+          claimName: code-server-home-pvc
+      - name: tmp-volume
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

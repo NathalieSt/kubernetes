@@ -1,0 +1,14 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: omni-tools
+  namespace: omni-tools
+spec:
+  networkRouterRef:
+    name: k8s-network
+    namespace: netbird
+  serviceRef:
+    name: omni-tools
+  groups:
+  - name: kubernetes

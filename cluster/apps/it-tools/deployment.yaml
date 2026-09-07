@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: it-tools
+    app.kubernetes.io/version: 2024.10.22-7ca5933
+  name: it-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: it-tools
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: it-tools
+        app.kubernetes.io/version: 2024.10.22-7ca5933
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - command:
+        - nginx
+        - -c
+        - /etc/nginx/nginx.conf
+        - -g
+        - daemon off;
+        image: corentinth/it-tools:2024.10.22-7ca5933
+        name: it-tools
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          name: nginx-config-volume
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp-volume
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 101
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: nginx-config-volume
+        configMap:
+          name: it-tools-nginx-config
+      - name: tmp-volume
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

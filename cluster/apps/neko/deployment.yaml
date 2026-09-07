@@ -1,0 +1,177 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: neko
+    app.kubernetes.io/version: 3.1.5
+  name: neko
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: neko
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: neko
+        app.kubernetes.io/version: 3.1.5
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          #!/bin/sh
+          #
+          # Refuses to let a workload start while any secret it depends on is missing,
+          # empty, or still holding the placeholder that vault-config writes when it
+          # creates a KV path.
+          #
+          # Kept next to the generator rather than inlined so it can be linted and run by
+          # hand:
+          #
+          #     GUARDED_SECRET=neko-secret VAULT_PATH=neko \
+          #     EXPECTED_KEYS="password admin-password" \
+          #     GUARD_DIR=./fixture ./check.sh
+          #
+          # See SecretGuard.res for why this exists at all.
+
+          set -eu
+
+          : "${GUARDED_SECRET:?GUARDED_SECRET is required}"
+          : "${VAULT_PATH:?VAULT_PATH is required}"
+          : "${EXPECTED_KEYS:?EXPECTED_KEYS is required}"
+
+          dir="${GUARD_DIR:-/guarded}"
+          status=0
+
+          for key in $EXPECTED_KEYS; do
+              file="$dir/$key"
+
+              if [ ! -f "$file" ]; then
+                  echo "refusing to start: ${GUARDED_SECRET} has no key '${key}'." >&2
+                  echo "  The VaultStaticSecret syncs whatever is at kvv2/${VAULT_PATH}," >&2
+                  echo "  and that key is not there yet." >&2
+                  status=1
+                  continue
+              fi
+
+              value=$(cat "$file")
+
+              case "$value" in
+                  # The prefix, not the whole sentence: the placeholder embeds the path
+                  # and key, so matching it exactly would mean rebuilding the string here
+                  # and keeping two copies of it in step.
+                  "REPLACE ME"*)
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is still the vault-config placeholder." >&2
+                      echo "  This value is written into the manifests repository, so it is" >&2
+                      echo "  public knowledge and must never reach a running workload." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+                  "")
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is empty." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+              esac
+          done
+
+          if [ "$status" -ne 0 ]; then
+              echo "" >&2
+              echo "Once Vault holds real values the VaultStaticSecret picks them up within" >&2
+              echo "its refresh interval, and the next restart of this pod succeeds on its" >&2
+              echo "own — there is nothing else to do here." >&2
+          fi
+
+          exit "$status"
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: neko-secret-guard
+        volumeMounts:
+        - mountPath: /guarded
+          name: neko-secret-guard-volume
+          readOnly: true
+        env:
+        - name: GUARDED_SECRET
+          value: neko-secret
+        - name: VAULT_PATH
+          value: neko
+        - name: EXPECTED_KEYS
+          value: password admin-password
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: ghcr.io/m1k1o/neko/firefox:3.1.5
+        name: neko
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 52000
+          name: webrtc
+          protocol: UDP
+        volumeMounts:
+        - mountPath: /usr/lib/firefox/distribution/policies.json
+          subPath: policies.json
+          name: firefox-policies-volume
+          readOnly: true
+        - mountPath: /dev/shm
+          name: shm-volume
+        env:
+        - name: NEKO_WEBRTC_NAT1TO1
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NEKO_WEBRTC_UDPMUX
+          value: "52000"
+        - name: NEKO_DESKTOP_SCREEN
+          value: 1920x1080@30
+        - name: NEKO_MEMBER_PROVIDER
+          value: multiuser
+        - name: NEKO_MEMBER_MULTIUSER_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: neko-secret
+        - name: NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: admin-password
+              name: neko-secret
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 4000m
+            memory: 4Gi
+      volumes:
+      - name: neko-secret-guard-volume
+        secret:
+          secretName: neko-secret
+      - name: firefox-policies-volume
+        configMap:
+          name: neko-firefox-policies
+      - name: shm-volume
+        emptyDir:
+          medium: Memory
