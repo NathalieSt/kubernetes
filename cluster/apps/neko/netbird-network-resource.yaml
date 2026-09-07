@@ -1,0 +1,14 @@
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: neko
+  namespace: neko
+spec:
+  networkRouterRef:
+    name: k8s-network
+    namespace: netbird
+  serviceRef:
+    name: neko
+  groups:
+  - name: kubernetes

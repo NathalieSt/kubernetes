@@ -81,6 +81,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: code-server
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: code-server
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/code-server
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
+  - name: garage
+  - name: k8up
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: daybook
   namespace: flux-system
 spec:
@@ -178,6 +199,24 @@ spec:
   dependsOn:
   - name: jellyfin
   - name: vault-secrets-operator-config
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: it-tools
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: it-tools
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/it-tools
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -283,6 +322,26 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: neko
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: neko
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/neko
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: gluetun-proxy
+  - name: vault-secrets-operator-config
+  - name: keda
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: network-topology-ui
   namespace: flux-system
 spec:
@@ -297,6 +356,24 @@ spec:
   timeout: 10m
   dependsOn:
   - name: victoria-metrics
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: omni-tools
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: omni-tools
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/omni-tools
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

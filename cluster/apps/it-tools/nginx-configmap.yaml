@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    app.kubernetes.io/name: it-tools
+  name: it-tools-nginx-config
+data:
+  nginx.conf: |
+    # Serves a pre-built single-page application from the stock nginx image as an
+    # unprivileged user. Generated into a ConfigMap by StaticSite.res, which is
+    # where the reasoning lives; the notes here are the ones you want in front of
+    # you while reading nginx directives.
+    #
+    # This replaces the whole of /etc/nginx/nginx.conf rather than dropping a file
+    # into conf.d, and deliberately does NOT include conf.d/*.conf: the images this
+    # is mounted into ship a default.conf that listens on 80, which a non-root
+    # master process cannot bind. Including it would be a startup failure, not an
+    # override.
+
+    worker_processes auto;
+
+    # Not /var/run/nginx.pid. That directory is root-owned in the image and the
+    # master process here is not root.
+    pid /tmp/nginx.pid;
+
+    # The image symlinks /var/log/nginx/*.log onto the container's stdout and
+    # stderr, but opening them still goes through the root-owned log directory.
+    # Writing to the devices directly skips that and lands in the same place.
+    error_log /dev/stderr warn;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        # Taken from the image, and for omni-tools that file is not stock: its
+        # build patches `mjs` into the application/javascript entry, without which
+        # the browser refuses the ES modules the bundle is made of. Including the
+        # image's own copy is what preserves that patch — do not "simplify" this
+        # into an inline types block.
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        access_log /dev/stdout;
+
+        sendfile          on;
+        tcp_nopush        on;
+        keepalive_timeout 65;
+
+        # Every path nginx writes to, moved onto the one emptyDir the pod mounts.
+        # Left at their defaults these sit under /var/cache/nginx, which a
+        # read-only root filesystem makes unwritable — and nginx does not fail at
+        # startup for it, it fails on the first request large enough to buffer.
+        client_body_temp_path /tmp/nginx-client-body;
+        proxy_temp_path       /tmp/nginx-proxy;
+        fastcgi_temp_path     /tmp/nginx-fastcgi;
+        uwsgi_temp_path       /tmp/nginx-uwsgi;
+        scgi_temp_path        /tmp/nginx-scgi;
+
+        # These bundles are megabytes of JavaScript and WebAssembly served over a
+        # mesh link. The stock nginx.conf ships this commented out.
+        gzip              on;
+        gzip_vary         on;
+        gzip_min_length   1024;
+        gzip_types        text/plain text/css application/javascript application/json image/svg+xml;
+
+        server {
+            listen 8080;
+            server_name _;
+            root /usr/share/nginx/html;
+            index index.html;
+
+            # Client-side routing: both apps put every tool on its own path and
+            # resolve it in the browser, so a reload of a deep link has to be
+            # answered with the app shell rather than a 404.
+            location / {
+                try_files $uri $uri/ /index.html;
+            }
+        }
+    }
