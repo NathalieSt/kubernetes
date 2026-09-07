@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: code-server
+    app.kubernetes.io/version: sha256_ccd326184d71e
+  name: code-server
+spec:
+  selector:
+    app.kubernetes.io/name: code-server
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

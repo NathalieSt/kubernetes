@@ -1,9 +1,17 @@
 {
   "resource": {
     "vault_policy": {
+      "code-server": {
+        "name": "code-server",
+        "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "mail": {
         "name": "mail",
         "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "neko": {
+        "name": "neko",
+        "policy": "path \"kvv2/data/neko\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/neko\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "psono-server": {
         "name": "psono-server",
@@ -11,6 +19,21 @@
       }
     },
     "vault_kubernetes_auth_backend_role": {
+      "code-server": {
+        "backend": "kubernetes",
+        "role_name": "code-server",
+        "bound_service_account_names": [
+          "code-server-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "code-server"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.code-server.name}"
+        ],
+        "token_ttl": 600
+      },
       "mail": {
         "backend": "kubernetes",
         "role_name": "mail",
@@ -23,6 +46,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.mail.name}"
+        ],
+        "token_ttl": 600
+      },
+      "neko": {
+        "backend": "kubernetes",
+        "role_name": "neko",
+        "bound_service_account_names": [
+          "neko-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "neko"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.neko.name}"
         ],
         "token_ttl": 600
       },
@@ -43,6 +81,26 @@
       }
     },
     "vault_kv_secret_v2": {
+      "code-server_code-server": {
+        "mount": "kvv2",
+        "name": "code-server",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"password\":\"REPLACE ME — vault kv patch kvv2/code-server password=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "code-server"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
       "mail_mail": {
         "mount": "kvv2",
         "name": "mail",
@@ -54,6 +112,26 @@
             "managed-by": "opentofu",
             "created-as": "placeholder",
             "owner": "mail"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
+      "neko_neko": {
+        "mount": "kvv2",
+        "name": "neko",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"password\":\"REPLACE ME — vault kv patch kvv2/neko password=<value>\",\"admin-password\":\"REPLACE ME — vault kv patch kvv2/neko admin-password=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "neko"
           }
         },
         "lifecycle": {

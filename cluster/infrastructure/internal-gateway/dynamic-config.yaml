@@ -40,6 +40,11 @@ data:
           entryPoints:
           - websecure
           service: backup-dashboard
+        code-server:
+          rule: Host(`vscode.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: code-server
         daybook:
           rule: Host(`daybook.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -62,6 +67,11 @@ data:
           service: headlamp
           middlewares:
           - headlamp-basic-auth
+        it-tools:
+          rule: Host(`it-tools.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: it-tools
         jellyfin:
           rule: Host(`jellyfin.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -82,11 +92,21 @@ data:
           entryPoints:
           - websecure
           service: music-library-builder
+        neko:
+          rule: Host(`neko.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: neko
         network-topology-ui:
           rule: Host(`topology.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: network-topology-ui
+        omni-tools:
+          rule: Host(`omni-tools.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: omni-tools
         perses:
           rule: Host(`perses.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -151,6 +171,10 @@ data:
           loadBalancer:
             servers:
             - url: http://backup-dashboard.backup-dashboard.svc.cluster.local:8080
+        code-server:
+          loadBalancer:
+            servers:
+            - url: http://code-server.code-server.svc.cluster.local:8080
         daybook:
           loadBalancer:
             servers:
@@ -167,6 +191,10 @@ data:
           loadBalancer:
             servers:
             - url: http://headlamp.headlamp.svc.cluster.local:80
+        it-tools:
+          loadBalancer:
+            servers:
+            - url: http://it-tools.it-tools.svc.cluster.local:8080
         jellyfin:
           loadBalancer:
             servers:
@@ -183,10 +211,18 @@ data:
           loadBalancer:
             servers:
             - url: http://music-library-builder.jellyfin.svc.cluster.local:8140
+        neko:
+          loadBalancer:
+            servers:
+            - url: http://neko.neko.svc.cluster.local:8080
         network-topology-ui:
           loadBalancer:
             servers:
             - url: http://network-topology-ui.network-topology-ui.svc.cluster.local:8080
+        omni-tools:
+          loadBalancer:
+            servers:
+            - url: http://omni-tools.omni-tools.svc.cluster.local:8080
         perses:
           loadBalancer:
             servers:

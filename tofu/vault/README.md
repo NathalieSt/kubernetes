@@ -16,6 +16,8 @@ The frame around the secrets, never the secrets themselves:
 
 | Role | Namespace | Paths |
 | --- | --- | --- |
+| `code-server` | `code-server` | `kvv2/code-server` |
+| `neko` | `neko` | `kvv2/neko` |
 | `mail` | `mail` | `kvv2/mail` |
 | `psono-server` | `psono` | `kvv2/psono` |
 
