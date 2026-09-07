@@ -18,6 +18,24 @@ spec:
       enabled: false
     grafana:
       enabled: false
+    kubeApiServer:
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+          - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+            metricRelabelConfigs:
+            - action: drop
+              regex: apiserver_request_duration_seconds_bucket|etcd_request_duration_seconds_bucket|apiserver_request_body_size_bytes_bucket|apiserver_response_sizes_bucket|apiserver_watch_cache_read_wait_seconds_bucket|apiserver_watch_events_sizes_bucket|workqueue_queue_duration_seconds_bucket|workqueue_work_duration_seconds_bucket
+              sourceLabels:
+              - __name__
+            - action: labeldrop
+              regex: ^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*
+            port: https
+            scheme: https
+            tlsConfig:
+              caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              serverName: kubernetes
     kubelet:
       enabled: true
       vmScrapes:
@@ -60,7 +78,7 @@ spec:
             scheme: https
             tlsConfig:
               insecureSkipVerify: true
-        resource:
+        resources:
           enabled: true
           spec:
             bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

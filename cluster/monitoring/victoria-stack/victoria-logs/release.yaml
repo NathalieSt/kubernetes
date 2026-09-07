@@ -23,4 +23,10 @@ spec:
       podSecurityContext:
         fsGroup: 2000
         fsGroupChangePolicy: OnRootMismatch
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 100m
+          memory: 512Mi
       retentionPeriod: 4w
