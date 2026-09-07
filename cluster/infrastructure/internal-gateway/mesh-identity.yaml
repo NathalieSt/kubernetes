@@ -36,15 +36,19 @@ spec:
   - affine
   - audiomuse
   - backups
+  - vscode
   - daybook
   - transmission
   - code
   - headlamp
+  - it-tools
   - jellyfin
   - kavita
   - mail
   - music
+  - neko
   - topology
+  - omni-tools
   - perses
   - psono
   - psono-api
