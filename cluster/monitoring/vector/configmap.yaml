@@ -26,7 +26,12 @@ data:
         glob_minimum_cooldown_ms: 60000
         ignore_older_secs: 600
         insert_namespace_fields: true
-        self_node_name: ${VECTOR_SELF_NODE_NAME}
+        # self_node_name is deliberately absent: its built-in default reads the
+        # VECTOR_SELF_NODE_NAME environment variable, which the DaemonSet sets from
+        # spec.nodeName. Writing it as ${VECTOR_SELF_NODE_NAME} works too — the
+        # source resolves that field itself, so it survived 0.57.0 disabling
+        # general config interpolation — but relying on the default keeps the one
+        # ${...} out of this file entirely. Verified against 0.58.0 both ways.
         timezone: local
         type: kubernetes_logs
     # -------------------------------------------------

@@ -42,12 +42,16 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: garage-init
+  labels:
+    app.kubernetes.io/name: garage-init
+  name: garage-init-57b3a56b
 spec:
   backoffLimit: 5
   ttlSecondsAfterFinished: 3600
   template:
-    metadata: {}
+    metadata:
+      labels:
+        app.kubernetes.io/name: garage-init
     spec:
       serviceAccountName: garage-init
       containers:
