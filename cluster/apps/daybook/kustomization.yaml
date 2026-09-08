@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: daybook
 resources:
-- namespace.yaml
 - data-pvc.yaml
 - deployment.yaml
 - service.yaml

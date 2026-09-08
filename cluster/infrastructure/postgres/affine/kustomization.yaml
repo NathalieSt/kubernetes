@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: affine-pg
 resources:
-- namespace.yaml
 - affine-pg-cluster.yaml
 - affine-db.yaml
 - network-policy.yaml

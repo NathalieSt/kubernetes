@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: code-server
 resources:
-- namespace.yaml
 - home-pvc.yaml
 - deployment.yaml
 - vault-secrets.yaml

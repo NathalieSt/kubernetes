@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: garage
 resources:
-- namespace.yaml
 - configmap.yaml
 - vault-secrets.yaml
 - pvc.yaml

@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: psono-server
 resources:
-- namespace.yaml
 - vault-secrets.yaml
 - deployment.yaml
 - service.yaml

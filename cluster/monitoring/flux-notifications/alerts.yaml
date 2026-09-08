@@ -10,16 +10,64 @@ spec:
   eventSources:
   - kind: Kustomization
     name: "*"
-  - kind: HelmRelease
-    name: "*"
+    namespace: flux-system
   - kind: GitRepository
     name: "*"
-  - kind: OCIRepository
+    namespace: flux-system
+  - kind: HelmRelease
     name: "*"
-  - kind: HelmRepository
+    namespace: cert-manager
+  - kind: HelmRelease
     name: "*"
-  - kind: HelmChart
+    namespace: cnpg-system
+  - kind: HelmRelease
     name: "*"
+    namespace: csi-driver-nfs
+  - kind: HelmRelease
+    name: "*"
+    namespace: forgejo
+  - kind: HelmRelease
+    name: "*"
+    namespace: headlamp
+  - kind: HelmRelease
+    name: "*"
+    namespace: inteldeviceplugins-system
+  - kind: HelmRelease
+    name: "*"
+    namespace: jellyfin
+  - kind: HelmRelease
+    name: "*"
+    namespace: k8up
+  - kind: HelmRelease
+    name: "*"
+    namespace: keda
+  - kind: HelmRelease
+    name: "*"
+    namespace: netbird
+  - kind: HelmRelease
+    name: "*"
+    namespace: nfd
+  - kind: HelmRelease
+    name: "*"
+    namespace: nvidia-k8s-device-plugin
+  - kind: HelmRelease
+    name: "*"
+    namespace: perses
+  - kind: HelmRelease
+    name: "*"
+    namespace: reflector
+  - kind: HelmRelease
+    name: "*"
+    namespace: vault
+  - kind: HelmRelease
+    name: "*"
+    namespace: vault-secrets-operator
+  - kind: HelmRelease
+    name: "*"
+    namespace: victoria-logs
+  - kind: HelmRelease
+    name: "*"
+    namespace: victoria-metrics
   summary: flux reconciliation failed
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
@@ -33,3 +81,4 @@ spec:
   eventSources:
   - kind: Kustomization
     name: "*"
+    namespace: flux-system

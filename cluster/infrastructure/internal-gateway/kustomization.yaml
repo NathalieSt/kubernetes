@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: internal-gateway
 resources:
-- namespace.yaml
 - dashboard.yaml
 - dynamic-config.yaml
 - vault-secrets.yaml
