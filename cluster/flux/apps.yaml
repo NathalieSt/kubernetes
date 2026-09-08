@@ -16,9 +16,11 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
   - name: affine-pg
+  serviceAccountName: flux-affine
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -37,10 +39,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: jellyfin
   - name: redis
   - name: main-pg
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-audiomuse-ai
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -59,6 +63,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: garage
   - name: k8up
   - name: vault-secrets-operator-config
@@ -80,6 +85,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -99,10 +105,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: vault-secrets-operator-config
   - name: garage
   - name: k8up
+  serviceAccountName: flux-code-server
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -121,10 +129,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
   - name: garage
   - name: k8up
+  serviceAccountName: flux-daybook
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -143,9 +153,11 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: jellyfin
   - name: transmission
   - name: csi-driver-nfs
+  serviceAccountName: flux-flood
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -164,11 +176,13 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: forgejo-pg
   - name: valkey
   - name: keda
   - name: garage
   - name: k8up
+  serviceAccountName: flux-forgejo
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -187,8 +201,10 @@ spec:
   timeout: 5m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: forgejo
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-forgejo-runner
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -207,8 +223,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: jellyfin
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-gluetun-media
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -227,7 +245,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: keda
+  serviceAccountName: flux-it-tools
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -246,9 +266,11 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: keda
   - name: intel-device-gpu-plugin
+  serviceAccountName: flux-jellyfin
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -267,10 +289,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: keda
   - name: garage
   - name: k8up
+  serviceAccountName: flux-kavita
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -289,7 +313,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-livekit
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -308,10 +334,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: vault-secrets-operator-config
   - name: garage
   - name: k8up
+  serviceAccountName: flux-mail
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -330,10 +358,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: jellyfin
   - name: gluetun-media
   - name: csi-driver-nfs
   - name: reflector
+  serviceAccountName: flux-music-library-builder
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -352,9 +382,11 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: gluetun-proxy
   - name: vault-secrets-operator-config
   - name: keda
+  serviceAccountName: flux-neko
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -373,7 +405,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: victoria-metrics
+  serviceAccountName: flux-network-topology-ui
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -392,7 +426,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: keda
+  serviceAccountName: flux-omni-tools
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -411,7 +447,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: psono-server
+  serviceAccountName: flux-psono-client
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -430,9 +468,11 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: main-pg
   - name: vault-secrets-operator-config
   - name: mail
+  serviceAccountName: flux-psono-server
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -451,7 +491,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: keda
+  serviceAccountName: flux-redlib
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -468,8 +510,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  serviceAccountName: flux-rimworld-together
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -488,9 +532,11 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: gluetun-proxy
   - name: valkey
   - name: keda
+  serviceAccountName: flux-searxng
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -509,6 +555,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: clamav
 ---
@@ -529,10 +576,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: main-pg
   - name: csi-driver-nfs
   - name: keda
   - name: reflector
+  serviceAccountName: flux-tandoor
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -551,8 +600,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: jellyfin
   - name: csi-driver-nfs
+  serviceAccountName: flux-transmission
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -571,7 +622,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
   - name: garage
   - name: k8up
+  serviceAccountName: flux-vim-dojo

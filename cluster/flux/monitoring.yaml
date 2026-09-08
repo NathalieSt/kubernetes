@@ -25,8 +25,10 @@ spec:
     namespace: flux-system
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: victoria-metrics
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-flux-notifications
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -45,8 +47,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: victoria-metrics
   - name: csi-driver-nfs
+  serviceAccountName: flux-perses
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -65,6 +69,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
 ---
@@ -85,7 +90,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
+  serviceAccountName: flux-victoria-logs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -104,5 +111,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
+  serviceAccountName: flux-victoria-metrics

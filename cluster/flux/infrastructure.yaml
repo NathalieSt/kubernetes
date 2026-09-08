@@ -16,8 +16,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
+  serviceAccountName: flux-affine-pg
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -34,8 +36,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  serviceAccountName: flux-cert-manager
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -54,7 +58,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
+  serviceAccountName: flux-cnpg
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -68,6 +74,24 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./cluster/infrastructure/csi-driver-nfs
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-rbac
+  namespace: flux-system
+spec:
+  interval: 24h
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/infrastructure/flux-rbac
   prune: true
   wait: true
   timeout: 10m
@@ -91,8 +115,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
+  serviceAccountName: flux-forgejo-pg
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -111,6 +137,7 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: vault-secrets-operator-config
   - name: reflector
@@ -132,7 +159,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-gluetun-proxy
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -149,8 +178,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  serviceAccountName: flux-headlamp
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -169,7 +200,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: intel-device-plugins-operator
+  serviceAccountName: flux-intel-device-gpu-plugin
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -188,7 +221,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: cert-manager
+  serviceAccountName: flux-intel-device-plugins-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -211,8 +246,10 @@ spec:
     namespace: internal-gateway
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: netbird-operator
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-internal-gateway
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -231,7 +268,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: garage
+  serviceAccountName: flux-k8up
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -248,8 +287,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  serviceAccountName: flux-keda
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -268,10 +309,12 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
   - name: garage
   - name: k8up
+  serviceAccountName: flux-main-pg
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -290,8 +333,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: reflector
   - name: csi-driver-nfs
+  serviceAccountName: flux-mariadb
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -323,8 +368,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  serviceAccountName: flux-netbird-operator
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -341,8 +388,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  serviceAccountName: flux-nfd
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -359,8 +408,10 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  serviceAccountName: flux-nvidia-k8s-device-plugin
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -379,8 +430,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: keda
   - name: csi-driver-nfs
+  serviceAccountName: flux-redis
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -399,8 +452,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: keda
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-reflector
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -419,8 +474,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: keda
   - name: csi-driver-nfs
+  serviceAccountName: flux-valkey
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -439,7 +496,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: csi-driver-nfs
+  serviceAccountName: flux-vault
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -458,8 +517,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: vault
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-vault-apply
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -478,8 +539,10 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: garage
   - name: k8up
+  serviceAccountName: flux-vault-backup
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -498,7 +561,9 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: vault
+  serviceAccountName: flux-vault-secrets-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -517,4 +582,6 @@ spec:
   timeout: 10m
   dependsOn:
   - name: namespaces
+  - name: flux-rbac
   - name: vault-secrets-operator
+  serviceAccountName: flux-vault-secrets-operator-config
