@@ -25,6 +25,9 @@ spec:
           kubernetes.io/metadata.name: mail
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: postgres
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: tandoor
     - namespaceSelector:
         matchLabels:
