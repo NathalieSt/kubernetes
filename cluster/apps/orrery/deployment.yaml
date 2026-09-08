@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: orrery
+    app.kubernetes.io/version: latest
+  name: orrery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orrery
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: orrery
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery:latest
+        name: orrery
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: ORRERY_VM_URL
+          value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+        - name: ORRERY_VL_URL
+          value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
+        - name: WEB_ADDR
+          value: :8080
+        - name: ORRERY_STATIC_ROOT
+          value: /app/ui/dist
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

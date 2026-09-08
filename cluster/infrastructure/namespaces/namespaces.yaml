@@ -267,16 +267,6 @@ metadata:
   labels:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
-  name: network-topology-ui
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/warn: restricted
   name: nfd
 ---
 apiVersion: v1
@@ -307,7 +297,7 @@ metadata:
   labels:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
-  name: perses
+  name: orrery
 ---
 apiVersion: v1
 kind: Namespace

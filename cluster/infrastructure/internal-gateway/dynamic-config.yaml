@@ -97,21 +97,16 @@ data:
           entryPoints:
           - websecure
           service: neko
-        network-topology-ui:
-          rule: Host(`topology.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: network-topology-ui
         omni-tools:
           rule: Host(`omni-tools.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: omni-tools
-        perses:
-          rule: Host(`perses.netbird.nathalie-stiefsohn.eu`)
+        orrery:
+          rule: Host(`orrery.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
-          service: perses
+          service: orrery
         psono-client:
           rule: Host(`psono.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -215,18 +210,14 @@ data:
           loadBalancer:
             servers:
             - url: http://neko.neko.svc.cluster.local:8080
-        network-topology-ui:
-          loadBalancer:
-            servers:
-            - url: http://network-topology-ui.network-topology-ui.svc.cluster.local:8080
         omni-tools:
           loadBalancer:
             servers:
             - url: http://omni-tools.omni-tools.svc.cluster.local:8080
-        perses:
+        orrery:
           loadBalancer:
             servers:
-            - url: http://perses.perses.svc.cluster.local:8080
+            - url: http://orrery.orrery.svc.cluster.local:8080
         psono-client:
           loadBalancer:
             servers:
