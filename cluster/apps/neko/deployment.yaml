@@ -137,9 +137,7 @@ spec:
           name: shm-volume
         env:
         - name: NEKO_WEBRTC_NAT1TO1
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
+          value: 10.43.44.17
         - name: NEKO_WEBRTC_UDPMUX
           value: "52000"
         - name: NEKO_DESKTOP_SCREEN
