@@ -20,6 +20,7 @@ The frame around the secrets, never the secrets themselves:
 | `neko` | `neko` | `kvv2/neko` |
 | `mail` | `mail` | `kvv2/mail` |
 | `psono-server` | `psono` | `kvv2/psono` |
+| `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 
 ## What is not managed, and why
 

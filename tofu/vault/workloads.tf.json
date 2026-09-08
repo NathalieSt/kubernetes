@@ -5,6 +5,10 @@
         "name": "code-server",
         "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "flux-notifications": {
+        "name": "flux-notifications",
+        "policy": "path \"kvv2/data/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "mail": {
         "name": "mail",
         "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n"
@@ -31,6 +35,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.code-server.name}"
+        ],
+        "token_ttl": 600
+      },
+      "flux-notifications": {
+        "backend": "kubernetes",
+        "role_name": "flux-notifications",
+        "bound_service_account_names": [
+          "flux-notifications-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "flux-system"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.flux-notifications.name}"
         ],
         "token_ttl": 600
       },
@@ -92,6 +111,26 @@
             "managed-by": "opentofu",
             "created-as": "placeholder",
             "owner": "code-server"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
+      "flux-notifications_flux-notifications": {
+        "mount": "kvv2",
+        "name": "flux-notifications",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"token\":\"REPLACE ME — vault kv patch kvv2/flux-notifications token=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "flux-notifications"
           }
         },
         "lifecycle": {

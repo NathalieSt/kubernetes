@@ -50,3 +50,5 @@ spec:
     serviceAccount:
       create: true
       name: headlamp
+  driftDetection:
+    mode: warn

@@ -2485,7 +2485,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: sum by (kind) (gotk_reconcile_condition{type="Ready",status="False"})
+                    query: sum by (customresource_kind) (gotk_resource_info{ready="False"})
         notReadyByKind:
           kind: Panel
           spec:
@@ -2508,7 +2508,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: sum by (kind) (gotk_reconcile_condition{type="Ready",status="False"})
+                    query: sum by (customresource_kind) (gotk_resource_info{ready="False"})
         notReadyStat:
           kind: Panel
           spec:
@@ -2541,7 +2541,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: sum(gotk_reconcile_condition{type="Ready",status="False"})
+                    query: sum(gotk_resource_info{ready="False"})
         readinessHistory:
           kind: Panel
           spec:
@@ -2576,7 +2576,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: min by (kind) (gotk_reconcile_condition{type="Ready",status="True"})
+                    query: min by (customresource_kind) (gotk_resource_info{ready="True"} or (gotk_resource_info{ready!="True"} * 0))
         readyMix:
           kind: Panel
           spec:
@@ -2605,7 +2605,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: sum by (status) (gotk_reconcile_condition{type="Ready"})
+                    query: sum by (ready) (gotk_resource_info)
         reconcileByController:
           kind: Panel
           spec:
@@ -2713,7 +2713,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: sum(gotk_suspend_status)
+                    query: sum(gotk_resource_info{suspended="true"})
       layouts:
       - kind: Grid
         spec:

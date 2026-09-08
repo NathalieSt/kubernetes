@@ -2,6 +2,34 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: flux-notifications
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: flux-system
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/monitoring/flux-notifications
+  prune: true
+  wait: false
+  timeout: 10m
+  healthChecks:
+  - apiVersion: notification.toolkit.fluxcd.io/v1beta3
+    kind: Provider
+    name: alertmanager
+    namespace: flux-system
+  - apiVersion: notification.toolkit.fluxcd.io/v1beta3
+    kind: Alert
+    name: flux-errors
+    namespace: flux-system
+  dependsOn:
+  - name: victoria-metrics
+  - name: vault-secrets-operator-config
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: perses
   namespace: flux-system
 spec:
