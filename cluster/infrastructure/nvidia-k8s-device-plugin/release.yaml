@@ -16,3 +16,5 @@ spec:
   values:
     gfd:
       enabled: true
+  driftDetection:
+    mode: warn

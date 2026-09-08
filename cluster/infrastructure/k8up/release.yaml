@@ -18,3 +18,5 @@ spec:
       envVars:
       - name: BACKUP_GLOBAL_SUCCESSFUL_JOBS_HISTORY_LIMIT
         value: "1"
+  driftDetection:
+    mode: warn

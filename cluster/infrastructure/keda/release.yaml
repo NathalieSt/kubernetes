@@ -17,3 +17,5 @@ spec:
     prometheus:
       operator:
         enabled: true
+  driftDetection:
+    mode: warn

@@ -25,3 +25,5 @@ spec:
     operator:
       nodeSelector:
         kubernetes.io/hostname: debian
+  driftDetection:
+    mode: warn
