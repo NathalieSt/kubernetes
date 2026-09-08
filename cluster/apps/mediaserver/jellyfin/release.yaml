@@ -63,3 +63,4 @@ spec:
         name: jellyfin-theme
   driftDetection:
     mode: warn
+  serviceAccountName: flux-helm-jellyfin
