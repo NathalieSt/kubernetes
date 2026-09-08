@@ -44,7 +44,7 @@ kind: Job
 metadata:
   labels:
     app.kubernetes.io/name: garage-init
-  name: garage-init-57b3a56b
+  name: garage-init-4392b831
 spec:
   backoffLimit: 5
   ttlSecondsAfterFinished: 3600
@@ -171,27 +171,12 @@ spec:
             printf '%s' "$1" | openssl dgst -sha256 -hmac "$RESTIC_SEED" -binary | base64 | tr -d '\n'
           }
 
-          # namespace_exists <namespace>
-          namespace_exists() {
-            ne_status=$(curl -s -o /dev/null -w '%{http_code}' --cacert "$CACERT" \
-              -H "Authorization: Bearer ${K8S_TOKEN}" \
-              "${K8S_API}/api/v1/namespaces/$1")
-            [ "$ne_status" = "200" ]
-          }
-
           # write_secret <namespace> <name> <json data map> - creates or replaces, so a
           # re-run refreshes the contents instead of leaving stale credentials behind.
           write_secret() {
             ws_ns="$1"
             ws_name="$2"
             ws_data="$3"
-
-            # A namespace listed for backups but not yet deployed is skipped, not fatal: its Kustomization
-            # depends on garage's, so failing here would deadlock the bootstrap for every other namespace.
-            if ! namespace_exists "$ws_ns"; then
-              echo "  skipping Secret ${ws_name}: namespace ${ws_ns} does not exist yet" >&2
-              return 0
-            fi
 
             ws_body="{\"apiVersion\":\"v1\",\"kind\":\"Secret\""
             ws_body="${ws_body},\"metadata\":{\"name\":\"${ws_name}\",\"namespace\":\"${ws_ns}\"}"
@@ -210,6 +195,15 @@ spec:
 
             case "$ws_status" in
             2??) echo "  wrote Secret ${ws_name} in ${ws_ns}" ;;
+            # A namespace listed for backups but not yet deployed is skipped, not fatal: its Kustomization
+            # depends on garage's, so failing here would deadlock the bootstrap for every other namespace.
+            # This reads the write's own 404 rather than asking first. A pre-flight GET on the namespace
+            # needs a `get namespaces` grant this job deliberately does not have, so it answered 403 —
+            # which the check could not tell from "missing" — and silently skipped every namespace for a
+            # week while the Job still exited 0 and Flux still reported it healthy.
+            404)
+              echo "  skipping Secret ${ws_name}: namespace ${ws_ns} does not exist yet" >&2
+              ;;
             *)
               echo "ERROR: writing Secret ${ws_name} in ${ws_ns} returned HTTP $ws_status" >&2
               cat /tmp/secret_response >&2
