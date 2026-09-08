@@ -67,6 +67,7 @@ spec:
   - name: garage
   - name: k8up
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -87,6 +88,7 @@ spec:
   - name: namespaces
   - name: flux-rbac
   - name: csi-driver-nfs
+  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -558,6 +560,7 @@ spec:
   - name: flux-rbac
   - name: csi-driver-nfs
   - name: clamav
+  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
