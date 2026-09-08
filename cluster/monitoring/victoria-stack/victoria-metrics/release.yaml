@@ -934,10 +934,113 @@ spec:
     vmsingle:
       spec:
         extraArgs:
+          deleteAuthKey: file:///etc/vm-authkeys/adminAuthKey
+          forceFlushAuthKey: file:///etc/vm-authkeys/adminAuthKey
+          forceMergeAuthKey: file:///etc/vm-authkeys/adminAuthKey
           maxLabelsPerTimeseries: "120"
+          metricNamesStatsResetAuthKey: file:///etc/vm-authkeys/adminAuthKey
           search.maxConcurrentRequests: "8"
           search.maxQueryDuration: 60s
           search.maxQueueDuration: 30s
+          search.resetCacheAuthKey: file:///etc/vm-authkeys/adminAuthKey
+          snapshotAuthKey: file:///etc/vm-authkeys/adminAuthKey
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            #!/bin/sh
+            # Guarantees that the file VictoriaMetrics' authKey flags read from exists and
+            # holds something unguessable, whatever state Vault is in.
+            #
+            # This runs as an init container in front of vmsingle. The flags are set with
+            # `-deleteAuthKey=file://...`, and VictoriaMetrics refuses to start if that path
+            # is missing — so whatever produces the file has to be something that cannot
+            # fail, and a VaultStaticSecret is not that. Vault's KV path is created by
+            # OpenTofu that is applied by a *suspended* CronJob, on purpose, so on the
+            # reconcile that first ships this change the Secret does not exist yet. Gating
+            # the metrics store on it would take monitoring down until somebody ran a job by
+            # hand, which is exactly the class of failure the admin endpoints are being
+            # closed against in the first place.
+            #
+            # So: Vault's value when there is a real one, a fresh random one otherwise.
+            # Either way the endpoints are closed. The difference is only whether an
+            # operator can look the key up when they genuinely need to delete a series.
+            #
+            # The placeholder counts as "no value". vault-config seeds a new KV path with
+            # "REPLACE ME — vault kv patch ...", which is a real string that would be
+            # accepted as a key — and it is published in the manifests repository, so using
+            # it would leave the endpoints open to anyone who has read that repo while
+            # looking closed. SecretGuard makes the same check and refuses to start; here
+            # refusing to start is the wrong answer, so it falls back instead.
+
+            set -eu
+
+            source_file="$AUTHKEY_SOURCE_DIR/$AUTHKEY_NAME"
+            target_file="$AUTHKEY_TARGET_DIR/$AUTHKEY_NAME"
+
+            use_random() {
+            	# 32 bytes as hex. busybox has no openssl; od and tr are enough, and the
+            	# result is the same 64 hex characters `openssl rand -hex 32` would give.
+            	od -An -tx1 -N32 /dev/urandom | tr -d ' \n' >"$target_file"
+            	echo "authkey: $1 — generated a random key for this pod." >&2
+            	echo "authkey: the admin endpoints are closed, but nothing can open them." >&2
+            	echo "authkey: to make the key knowable, put one in Vault:" >&2
+            	echo "authkey:   vault kv patch kvv2/${VAULT_PATH} ${AUTHKEY_NAME}=\$(openssl rand -hex 32)" >&2
+            }
+
+            if [ ! -s "$source_file" ]; then
+            	use_random "no value in Vault yet"
+            else
+            	value=$(cat "$source_file")
+            	case "$value" in
+            	"REPLACE ME"*)
+            		use_random "Vault still holds the vault-config placeholder"
+            		;;
+            	*)
+            		printf '%s' "$value" >"$target_file"
+            		echo "authkey: using the key from Vault." >&2
+            		;;
+            	esac
+            fi
+
+            # World-readable, because the vmsingle container beside this one runs as a
+            # different uid and has to read it. The file is on an emptyDir that only this
+            # pod can see, so the audience is the pod itself.
+            chmod 0444 "$target_file"
+          env:
+          - name: AUTHKEY_SOURCE_DIR
+            value: /etc/vm-authkeys-vault
+          - name: AUTHKEY_TARGET_DIR
+            value: /etc/vm-authkeys
+          - name: AUTHKEY_NAME
+            value: adminAuthKey
+          - name: VAULT_PATH
+            value: victoria-metrics
+          image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+          name: authkey
+          resources:
+            limits:
+              cpu: 100m
+              memory: 32Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 65534
+          volumeMounts:
+          - mountPath: /etc/vm-authkeys-vault
+            name: authkeys-vault
+            readOnly: true
+          - mountPath: /etc/vm-authkeys
+            name: authkeys
         resources:
           limits:
             cpu: "2"
@@ -947,5 +1050,16 @@ spec:
             memory: 768Mi
         storage:
           storageClassName: nfs-remote
+        volumeMounts:
+        - mountPath: /etc/vm-authkeys
+          name: authkeys
+          readOnly: true
+        volumes:
+        - name: authkeys-vault
+          secret:
+            optional: true
+            secretName: victoria-metrics-authkeys
+        - emptyDir: {}
+          name: authkeys
   driftDetection:
     mode: warn

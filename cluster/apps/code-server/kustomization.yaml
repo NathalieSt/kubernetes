@@ -5,9 +5,14 @@ metadata:
   name: code-server
 resources:
 - home-pvc.yaml
+- cluster-access.yaml
+- kubeconfig-configmap.yaml
+- theme-configmap.yaml
+- bootstrap-configmap.yaml
 - deployment.yaml
 - vault-secrets.yaml
 - service.yaml
 - network-policy.yaml
+- cilium-network-policy.yaml
 - netbird-network-resource.yaml
 - k8up-schedule.yaml

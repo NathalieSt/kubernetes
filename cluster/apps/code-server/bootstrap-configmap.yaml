@@ -1,0 +1,192 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: code-server-bootstrap
+  namespace: code-server
+data:
+  bootstrap.sh: |
+    #!/bin/sh
+    # Prepares the editor's home directory before code-server starts.
+    #
+    # Runs as an init container from the code-server image itself, as the same uid
+    # the editor runs as, against the same persistent volume. That is what makes
+    # `code-server --install-extension` the right tool here rather than an
+    # unpacked download: it is the same code path the UI uses, so the extension
+    # tree and its index stay in the shape the editor expects.
+    #
+    # Three jobs, in order of how much they are allowed to touch:
+    #
+    #   1. The Pennant theme, rewritten on every start. It is generated output and
+    #      nobody edits it in place, so there is nothing to preserve.
+    #   2. The default settings, written exactly once against a marker file. After
+    #      that the file belongs to whoever is using the editor.
+    #   3. The declared extensions, installed if missing. Never removed.
+    #
+    # Nothing here is allowed to fail the pod except a genuinely broken volume.
+    # Extension installation reaches Open VSX over the internet, and an editor that
+    # will not start because a marketplace is having an afternoon is a worse outcome
+    # than an editor with one missing extension.
+
+    set -eu
+
+    log() { echo "bootstrap: $*" >&2; }
+
+    data_dir="$HOME/.local/share/code-server"
+    ext_dir="$data_dir/extensions"
+    user_dir="$data_dir/User"
+    theme_dir="$ext_dir/$PENNANT_THEME_DIR"
+    seed_marker="$data_dir/.pennant-seeded"
+
+    mkdir -p "$ext_dir" "$user_dir"
+
+    # ------------------------------------------------------------------- theme
+    #
+    # Written in place rather than removed and recreated. VS Code's scanner adds a
+    # hand-placed directory to extensions.json by itself, but it does not prune that
+    # index when a directory disappears — so a delete-then-write leaves a window in
+    # which the index points at nothing, and a *rename* would strand the old entry
+    # permanently. The directory name is fixed for that reason; see CodeServerTheme.
+    log "writing the Pennant theme into $theme_dir"
+    mkdir -p "$theme_dir/themes"
+    cp "$THEME_ASSET_DIR/package.json" "$theme_dir/package.json"
+    for theme in "$THEME_ASSET_DIR"/*-color-theme.json; do
+    	cp "$theme" "$theme_dir/themes/$(basename "$theme")"
+    done
+
+    # ---------------------------------------------------------------- settings
+    #
+    # The marker rather than the file's own absence, so that a user who deletes
+    # every setting they disagreed with does not get them all back on the next pod
+    # restart. The one-time backup exists because this seeding was added to an
+    # editor that had already been in use, and overwriting a settings file someone
+    # had edited with no copy of it would be the kind of small data loss that is
+    # only noticed much later.
+    if [ -e "$seed_marker" ]; then
+    	log "settings already seeded; leaving $user_dir/settings.json alone"
+    else
+    	if [ -e "$user_dir/settings.json" ]; then
+    		log "keeping the previous settings.json as settings.json.pre-pennant"
+    		cp "$user_dir/settings.json" "$user_dir/settings.json.pre-pennant"
+    	fi
+    	cp "$SETTINGS_ASSET" "$user_dir/settings.json"
+    	: >"$seed_marker"
+    	log "seeded $user_dir/settings.json"
+    fi
+
+    # -------------------------------------------------------------- extensions
+    #
+    # One listing up front rather than one probe per extension: --list-extensions
+    # starts a Node process and scans the whole tree, and doing that eight times
+    # turns a fast start into a slow one for no additional information.
+    #
+    # The listing is taken after the theme is written, so the theme is in it and
+    # is not reinstalled from a marketplace that has never heard of it.
+    installed=$(code-server --list-extensions 2>/dev/null || true)
+
+    for id in $CODE_SERVER_EXTENSIONS; do
+    	if echo "$installed" | grep -qixF -- "$id"; then
+    		log "$id is already installed"
+    		continue
+    	fi
+
+    	log "installing $id"
+    	# Bounded, because an unbounded one is the difference between a missing
+    	# extension and a pod that never starts. A stalled TCP connection to the
+    	# marketplace does not fail on its own, and this runs in an init container:
+    	# the editor is not serving anything while it waits, and the Kustomization
+    	# holds a kustomize-controller worker for its full 10m timeout behind it.
+    	#
+    	# Per install, not for the loop: a marketplace that is simply down fails
+    	# every one of these in seconds, so the case this bounds is one or two
+    	# hanging connections and not all eight. A cold install of the whole list
+    	# takes two to four minutes when the marketplace is healthy.
+    	if timeout 300 code-server --install-extension "$id" >&2; then
+    		log "installed $id"
+    	else
+    		# Not fatal, and worth being loud about: this is the one step here that
+    		# depends on something outside the cluster. A missing extension shows up
+    		# as an editor that has lost a language server, which is easy to
+    		# misread as a broken language server.
+    		log "WARNING: could not install $id — the editor will start without it"
+    	fi
+    done
+
+    log "done"
+  settings.json: |-
+    {
+      "workbench.colorTheme": "Pennant Dark",
+      "workbench.preferredDarkColorTheme": "Pennant Dark",
+      "workbench.preferredLightColorTheme": "Pennant Light",
+      "window.autoDetectColorScheme": true,
+      "files.autoSave": "onFocusChange",
+      "files.trimTrailingWhitespace": true,
+      "files.insertFinalNewline": true,
+      "files.exclude": {
+        "**/node_modules": true,
+        "**/lib/bs": true,
+        "**/lib/ocaml": true,
+        "**/.bsb.lock": true
+      },
+      "search.exclude": {
+        "**/node_modules": true,
+        "**/lib": true,
+        "**/dist": true,
+        "**/yarn.lock": true,
+        "**/go.sum": true
+      },
+      "files.watcherExclude": {
+        "**/node_modules/**": true,
+        "**/lib/bs/**": true,
+        "**/lib/ocaml/**": true,
+        "**/.git/objects/**": true
+      },
+      "explorer.fileNesting.enabled": true,
+      "explorer.fileNesting.patterns": {
+        "go.mod": "go.sum",
+        "package.json": "yarn.lock, .npmrc, .npmrc.example",
+        "rescript.json": "*.res.mjs",
+        "docker-compose.yaml": ".env.example, *.env.example",
+        "*.res": "${capture}.resi, ${capture}.res.mjs"
+      },
+      "git.autoRepositoryDetection": true,
+      "git.openRepositoryInParentFolders": "never",
+      "git.branchProtection": [
+        "main",
+        "master"
+      ],
+      "gopls": {
+        "ui.semanticTokens": true
+      },
+      "[go]": {
+        "editor.defaultFormatter": "golang.go",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        }
+      },
+      "[rescript]": {
+        "editor.defaultFormatter": "chenglou92.rescript-vscode",
+        "editor.formatOnSave": true
+      },
+      "[markdown]": {
+        "editor.wordWrap": "on",
+        "editor.quickSuggestions": {
+          "comments": "off",
+          "strings": "off",
+          "other": "off"
+        }
+      },
+      "yaml.format.enable": true,
+      "redhat.telemetry.enabled": false,
+      "telemetry.telemetryLevel": "off",
+      "vs-kubernetes": {
+        "vs-kubernetes.kubeconfig": "/etc/kube/config",
+        "vs-kubernetes.knownKubeconfigs": [
+          "/etc/kube/config"
+        ],
+        "vs-kubernetes.autoCleanupOnDebugTerminate": false
+      },
+      "terminal.integrated.defaultProfile.linux": "bash",
+      "terminal.integrated.scrollback": 20000
+    }

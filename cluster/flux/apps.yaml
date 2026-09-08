@@ -112,7 +112,7 @@ spec:
   - name: vault-secrets-operator-config
   - name: garage
   - name: k8up
-  serviceAccountName: flux-code-server
+  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
