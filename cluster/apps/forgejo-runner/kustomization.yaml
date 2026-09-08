@@ -10,5 +10,7 @@ resources:
 - network-policy.yaml
 - data-pvc.yaml
 - deployment.yaml
+- scaled-object.yaml
 - data-pvc-1.yaml
 - deployment-1.yaml
+- scaled-object-1.yaml
