@@ -57,6 +57,10 @@ data:
             "name": "flux-notifications",
             "policy": "path \"kvv2/data/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n"
           },
+          "livekit": {
+            "name": "livekit",
+            "policy": "path \"kvv2/data/livekit\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/livekit\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/livekit-tls\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/livekit-tls\" {\n  capabilities = [\"read\"]\n}\n"
+          },
           "mail": {
             "name": "mail",
             "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n"
@@ -98,6 +102,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.flux-notifications.name}"
+            ],
+            "token_ttl": 600
+          },
+          "livekit": {
+            "backend": "kubernetes",
+            "role_name": "livekit",
+            "bound_service_account_names": [
+              "livekit-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "dcts"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.livekit.name}"
             ],
             "token_ttl": 600
           },
@@ -179,6 +198,46 @@ data:
                 "managed-by": "opentofu",
                 "created-as": "placeholder",
                 "owner": "flux-notifications"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "livekit_livekit": {
+            "mount": "kvv2",
+            "name": "livekit",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"api-key\":\"REPLACE ME — vault kv patch kvv2/livekit api-key=<value>\",\"api-secret\":\"REPLACE ME — vault kv patch kvv2/livekit api-secret=<value>\",\"livekit.yaml\":\"REPLACE ME — vault kv patch kvv2/livekit livekit.yaml=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "livekit"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "livekit_livekit-tls": {
+            "mount": "kvv2",
+            "name": "livekit-tls",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"tls.crt\":\"REPLACE ME — vault kv patch kvv2/livekit-tls tls.crt=<value>\",\"tls.key\":\"REPLACE ME — vault kv patch kvv2/livekit-tls tls.key=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "livekit"
               }
             },
             "lifecycle": {
