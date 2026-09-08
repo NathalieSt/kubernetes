@@ -11,6 +11,19 @@ resources:
 # four workers, eight stalled apps starve every other reconcile — which looked
 # exactly like a wedged controller: no logs, observedGeneration frozen, and new
 # revisions never applied.
+#
+# --no-cross-namespace-refs=true: a Kustomization or HelmRelease may only
+# reference a source in its own namespace. Verified safe before enabling —
+# nothing in this cluster crosses a namespace for a source: every Kustomization
+# lives in flux-system and references the flux-system GitRepository, and every
+# HelmRelease sits in the same namespace as its HelmChart/OCIRepository. So this
+# takes nothing away today and closes off a class of future mistake.
+#
+# Deliberately NOT applied to notification-controller, which the Flux docs
+# otherwise list alongside these two. An Alert's eventSources have no namespace
+# wildcard, so covering HelmReleases at all means naming each namespace they
+# live in — which is exactly the cross-namespace reference this flag forbids.
+# Setting it there would silently reduce flux-errors to Kustomizations only.
 patches:
 - target:
     kind: Deployment
@@ -19,3 +32,13 @@ patches:
     - op: add
       path: /spec/template/spec/containers/0/args/-
       value: --concurrent=10
+    - op: add
+      path: /spec/template/spec/containers/0/args/-
+      value: --no-cross-namespace-refs=true
+- target:
+    kind: Deployment
+    name: helm-controller
+  patch: |
+    - op: add
+      path: /spec/template/spec/containers/0/args/-
+      value: --no-cross-namespace-refs=true
