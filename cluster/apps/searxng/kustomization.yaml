@@ -9,6 +9,4 @@ resources:
 - service.yaml
 - scaled-object.yaml
 - network-policy.yaml
-- static-pvc.yaml
-- templates-pvc.yaml
 - netbird-network-resource.yaml

@@ -28,10 +28,6 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: configmap-volume
-        - mountPath: /usr/local/searxng/searx/templates
-          name: templates-pvc-volume
-        - mountPath: /usr/local/searxng/searx/static
-          name: static-pvc-volume
         resources:
           requests:
             cpu: 100m
@@ -48,12 +44,6 @@ spec:
       - name: configmap-volume
         configMap:
           name: searxng-configmap
-      - name: static-pvc-volume
-        persistentVolumeClaim:
-          claimName: searxng-static-pvc
-      - name: templates-pvc-volume
-        persistentVolumeClaim:
-          claimName: searxng-templates-pvc
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
