@@ -39,7 +39,25 @@ caddy-server.p12
 root.crt
 root.key
 
-vault-backup
+# Anchored with a leading slash, and it must stay that way.
+#
+# This blocks a Vault backup file pulled out of the cluster during recovery.
+# Unanchored, a git pattern with no slash in it matches at EVERY depth — so a
+# bare `vault-backup` also matched `cluster/infrastructure/vault-backup/`, the
+# directory the vault-backup generator writes its K8up Schedule into. CI runs
+# `git add -A`, which silently skips ignored paths, so the directory never
+# reached this repo and Flux reported the Kustomization as "path not found".
+#
+# The cost of that was not cosmetic: Vault holds every other secret in the
+# homelab, its namespace had its Garage bucket, its scoped key and its
+# out-of-band restic password all provisioned — and the one object that
+# actually runs the backup was never applied. It had no backup at all.
+#
+# Before adding a pattern here, check it against the generated tree:
+#   for f in $(cd ../kubernetes-generator && find cluster tofu -type f); do
+#     git check-ignore -q "$f" && echo "IGNORED: $f"
+#   done
+/vault-backup
 
 test.yaml
 test-2.yaml

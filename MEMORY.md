@@ -170,10 +170,35 @@ Two things to check, because both have been wrong:
    generators upstream. `git fetch && git log --oneline HEAD..origin/main`
    before assuming the tree is current.
 
+## Check any new `.gitignore` pattern against the generated tree
+
+A git pattern with no slash in it matches at **every depth**, and CI's
+`git add -A` skips ignored paths in silence. A bare `vault-backup`, meant to
+block a Vault dump pulled out of the cluster during recovery, therefore also
+swallowed `cluster/infrastructure/vault-backup/` — the directory the
+vault-backup generator writes its K8up Schedule into. The generator produced it
+on every run, CI never committed it, and Flux reported the Kustomization as
+`ArtifactFailed: kustomization path not found`.
+
+What that cost: **Vault had no backup.** Its namespace had the Garage bucket,
+the scoped access key and the out-of-band restic password all provisioned and
+27 days old — every part of the design except the one object that runs it. The
+Schedule was simply absent from the cluster, and nothing said so until Flux
+alerting was switched on. Vault holds every other secret in this homelab.
+
+The pattern is now `/vault-backup`, anchored to the repo root. Before adding
+another, check it:
+
+```sh
+for f in $(cd ../kubernetes-generator && find cluster tofu -type f); do
+  git check-ignore -q "$f" && echo "IGNORED: $f"
+done
+```
+
 ## Secrets
 
 No secret material belongs here. `.gitignore` blocks `caddy-server.p12`,
-`root.crt`, `root.key` and `vault-backup` specifically because those get pulled
+`root.crt`, `root.key` and `/vault-backup` specifically because those get pulled
 out of the cluster during recovery work and are easy to commit by accident.
 
 Secrets reach workloads through Vault + the Vault Secrets Operator, and

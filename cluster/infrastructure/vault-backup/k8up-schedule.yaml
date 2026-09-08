@@ -1,0 +1,28 @@
+---
+apiVersion: k8up.io/v1
+kind: Schedule
+metadata:
+  name: vault-backup
+  namespace: vault
+spec:
+  backend:
+    repoPasswordSecretRef:
+      name: restic-repo-password-secret
+      key: password
+    s3:
+      endpoint: http://garage.garage.svc.cluster.local:3900
+      bucket: kubernetes-backups-vault
+      accessKeyIDSecretRef:
+        name: garage-backup-access-key-secret
+        key: access-key-id
+      secretAccessKeySecretRef:
+        name: garage-backup-access-key-secret
+        key: secret-access-key
+  backup:
+    schedule: 0 1 * * *
+  prune:
+    schedule: 0 5 * * 0
+    retention:
+      keepLast: 14
+      keepWeekly: 8
+      keepMonthly: 12
