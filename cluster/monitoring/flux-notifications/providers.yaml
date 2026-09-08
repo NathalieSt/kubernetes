@@ -1,0 +1,18 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: alertmanager
+spec:
+  type: alertmanager
+  address: http://vmalertmanager-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:9093/api/v2/alerts
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: forgejo
+spec:
+  type: gitea
+  address: http://forgejo-http.forgejo.svc.cluster.local:3000/my-homelab/kubernetes
+  secretRef:
+    name: flux-notifications-forgejo-token

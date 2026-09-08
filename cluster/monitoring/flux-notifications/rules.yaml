@@ -1,0 +1,50 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: flux-rules
+spec:
+  groups:
+  - name: flux
+    interval: 1m
+    rules:
+    - alert: FluxResourceNotReady
+      expr: gotk_resource_info{ready="False"} == 1
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: "{{ $labels.customresource_kind }} {{ $labels.exported_namespace }}/{{ $labels.name }} has been Ready=False for 15m. `flux get kustomizations` for the reason."
+        summary: Flux {{ $labels.customresource_kind }} {{ $labels.name }} is not Ready
+    - alert: FluxResourceStuckReconciling
+      expr: gotk_resource_info{ready="Unknown"} == 1
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        description: "{{ $labels.customresource_kind }} {{ $labels.exported_namespace }}/{{ $labels.name }} is Ready=Unknown. With wait: true this usually means a health check that never passes, which also blocks everything downstream of it."
+        summary: Flux {{ $labels.customresource_kind }} {{ $labels.name }} has been reconciling for 30m
+    - alert: FluxResourceSuspended
+      expr: gotk_resource_info{suspended="true"} == 1
+      for: 1h
+      labels:
+        severity: info
+      annotations:
+        description: A suspended resource no longer tracks git and reports no error. `flux resume {{ $labels.customresource_kind | toLower }} {{ $labels.name }}` when the reason for suspending it has passed.
+        summary: Flux {{ $labels.customresource_kind }} {{ $labels.name }} has been suspended for an hour
+    - alert: FluxControllerDown
+      expr: up{job="flux"} == 0
+      for: 15m
+      labels:
+        severity: critical
+      annotations:
+        description: No metrics from {{ $labels.pod }} for 15m. While a controller is down nothing it owns reconciles, and the event-based alerts from it stop too.
+        summary: Flux controller {{ $labels.pod }} is down
+    - alert: FluxReconcileErrors
+      expr: sum by (pod) (rate(controller_runtime_reconcile_errors_total{job="flux"}[15m])) > 0.05
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        description: Sustained reconcile errors in {{ $labels.pod }}. Unlike the resource alerts this counts controller-level failures, which includes the ones that never reach a resource status — a bad kubeconfig, a webhook refusing the apply.
+        summary: "{{ $labels.pod }} is erroring on reconcile"

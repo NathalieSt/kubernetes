@@ -79,3 +79,5 @@ spec:
     name: forgejo-pg-creds-secret
     valuesKey: password
     targetPath: gitea.config.database.PASSWD
+  driftDetection:
+    mode: warn

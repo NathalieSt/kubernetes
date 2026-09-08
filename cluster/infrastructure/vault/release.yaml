@@ -42,3 +42,5 @@ spec:
           }
     ui:
       enabled: true
+  driftDetection:
+    mode: warn

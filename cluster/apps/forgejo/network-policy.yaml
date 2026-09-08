@@ -34,3 +34,10 @@ spec:
     ports:
     - port: 3000
       protocol: TCP
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: flux-system
+    ports:
+    - port: 3000
+      protocol: TCP
