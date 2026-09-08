@@ -732,26 +732,6 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-network-topology-ui
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-network-topology-ui-namespace-admin
-  namespace: network-topology-ui
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-network-topology-ui
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
   name: flux-nfd
   namespace: flux-system
 ---
@@ -812,21 +792,21 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-perses
+  name: flux-orrery
   namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: flux-perses-namespace-admin
-  namespace: perses
+  name: flux-orrery-namespace-admin
+  namespace: orrery
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
 subjects:
 - kind: ServiceAccount
-  name: flux-perses
+  name: flux-orrery
   namespace: flux-system
 ---
 apiVersion: v1

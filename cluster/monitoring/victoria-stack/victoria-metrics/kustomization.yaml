@@ -6,4 +6,3 @@ metadata:
 resources:
 - repo.yaml
 - release.yaml
-- dashboard.yaml

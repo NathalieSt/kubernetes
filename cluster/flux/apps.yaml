@@ -393,27 +393,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: network-topology-ui
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: network-topology-ui
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/apps/network-topology-ui
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: victoria-metrics
-  serviceAccountName: flux-network-topology-ui
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: omni-tools
   namespace: flux-system
 spec:
@@ -431,6 +410,27 @@ spec:
   - name: flux-rbac
   - name: keda
   serviceAccountName: flux-omni-tools
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: orrery
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: orrery
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/apps/orrery
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: victoria-metrics
+  serviceAccountName: flux-orrery
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
