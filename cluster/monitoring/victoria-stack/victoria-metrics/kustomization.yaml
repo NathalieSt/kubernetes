@@ -5,4 +5,5 @@ metadata:
   name: victoria-metrics
 resources:
 - repo.yaml
+- vault-secrets.yaml
 - release.yaml

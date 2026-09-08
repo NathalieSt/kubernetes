@@ -22,6 +22,7 @@ The frame around the secrets, never the secrets themselves:
 | `mail` | `mail` | `kvv2/mail` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
+| `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics` |
 
 ## What is not managed, and why
 

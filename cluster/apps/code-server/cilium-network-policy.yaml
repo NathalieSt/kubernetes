@@ -1,0 +1,41 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: code-server-cilium-networkpolicy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: code-server
+  description: Read-only access to the API server and to the metrics and log stores.
+  egress:
+  - toEntities:
+    - kube-apiserver
+    toPorts:
+    - ports:
+      - port: "6443"
+        protocol: TCP
+      - port: "443"
+        protocol: TCP
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: victoria-metrics
+    toPorts:
+    - ports:
+      - port: "8428"
+        protocol: TCP
+      rules:
+        http:
+        - method: ^(GET|POST)$
+          path: ^/api/v1/(query|query_range|series|labels|label/[^/?]+/values|status/[^?]*|metadata|targets|rules|alerts|export[^?]*)([?].*)?$
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: victoria-logs
+    toPorts:
+    - ports:
+      - port: "9428"
+        protocol: TCP
+      rules:
+        http:
+        - method: ^(GET|POST)$
+          path: ^/select/.*$

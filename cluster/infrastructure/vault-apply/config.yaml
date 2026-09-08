@@ -72,6 +72,10 @@ data:
           "psono-server": {
             "name": "psono-server",
             "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "victoria-metrics": {
+            "name": "victoria-metrics",
+            "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n"
           }
         },
         "vault_kubernetes_auth_backend_role": {
@@ -162,6 +166,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.psono-server.name}"
+            ],
+            "token_ttl": 600
+          },
+          "victoria-metrics": {
+            "backend": "kubernetes",
+            "role_name": "victoria-metrics",
+            "bound_service_account_names": [
+              "victoria-metrics-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "victoria-metrics"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.victoria-metrics.name}"
             ],
             "token_ttl": 600
           }
@@ -298,6 +317,26 @@ data:
                 "managed-by": "opentofu",
                 "created-as": "placeholder",
                 "owner": "psono-server"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "victoria-metrics_victoria-metrics": {
+            "mount": "kvv2",
+            "name": "victoria-metrics",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"adminAuthKey\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics adminAuthKey=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "victoria-metrics"
               }
             },
             "lifecycle": {

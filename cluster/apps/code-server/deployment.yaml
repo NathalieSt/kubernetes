@@ -126,7 +126,73 @@ spec:
         volumeMounts:
         - mountPath: /home/coder
           name: home-volume
-      automountServiceAccountToken: false
+      - command:
+        - sh
+        - -c
+        - cp /usr/bin/kubectl /opt/cluster-tools/kubectl
+        image: alpine/k8s:1.34.4@sha256:22284d679fe7a0414199396fe33fec521a92a4fc9efbda35aaadd074c4576394
+        name: cluster-tools
+        volumeMounts:
+        - mountPath: /opt/cluster-tools
+          name: cluster-tools-volume
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
+        - sh
+        - /etc/code-server/bootstrap/bootstrap.sh
+        image: codercom/code-server@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
+        name: editor-bootstrap
+        volumeMounts:
+        - mountPath: /home/coder
+          name: home-volume
+        - mountPath: /etc/code-server/theme
+          name: theme-volume
+          readOnly: true
+        - mountPath: /etc/code-server/bootstrap
+          name: bootstrap-volume
+          readOnly: true
+        env:
+        - name: HOME
+          value: /home/coder
+        - name: THEME_ASSET_DIR
+          value: /etc/code-server/theme
+        - name: SETTINGS_ASSET
+          value: /etc/code-server/bootstrap/settings.json
+        - name: PENNANT_THEME_DIR
+          value: pennant-theme
+        - name: CODE_SERVER_EXTENSIONS
+          value: golang.go chenglou92.rescript-vscode redhat.vscode-yaml ms-azuretools.vscode-docker ms-kubernetes-tools.vscode-kubernetes-tools dbaeumer.vscode-eslint eamodio.gitlens anthropic.claude-code
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+      serviceAccountName: code-server-cluster-reader
+      automountServiceAccountToken: true
       enableServiceLinks: false
       containers:
       - command:
@@ -145,6 +211,12 @@ spec:
           name: home-volume
         - mountPath: /tmp
           name: tmp-volume
+        - mountPath: /etc/kube
+          name: kubeconfig-volume
+          readOnly: true
+        - mountPath: /opt/cluster-tools
+          name: cluster-tools-volume
+          readOnly: true
         env:
         - name: PASSWORD
           valueFrom:
@@ -159,6 +231,14 @@ spec:
           value: en_US.UTF-8
         - name: TZ
           value: Europe/Vienna
+        - name: PATH
+          value: /opt/cluster-tools:/home/coder/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        - name: KUBECONFIG
+          value: /etc/kube/config
+        - name: HOMELAB_METRICS_URL
+          value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+        - name: HOMELAB_LOGS_URL
+          value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
         resources:
           requests:
             cpu: 200m
@@ -181,6 +261,17 @@ spec:
         persistentVolumeClaim:
           claimName: code-server-home-pvc
       - name: tmp-volume
+        emptyDir: {}
+      - name: theme-volume
+        configMap:
+          name: code-server-theme
+      - name: bootstrap-volume
+        configMap:
+          name: code-server-bootstrap
+      - name: kubeconfig-volume
+        configMap:
+          name: code-server-kubeconfig
+      - name: cluster-tools-volume
         emptyDir: {}
       securityContext:
         seccompProfile:

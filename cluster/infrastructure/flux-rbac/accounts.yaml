@@ -115,39 +115,6 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-code-server
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-code-server-namespace-admin
-  namespace: code-server
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-code-server
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-code-server-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-code-server
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
   name: flux-daybook
   namespace: flux-system
 ---
@@ -1209,6 +1176,19 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-victoria-metrics
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-victoria-metrics-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
 subjects:
 - kind: ServiceAccount
   name: flux-victoria-metrics

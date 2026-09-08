@@ -93,4 +93,5 @@ spec:
   - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
+  - name: vault-secrets-operator-config
   serviceAccountName: flux-victoria-metrics
