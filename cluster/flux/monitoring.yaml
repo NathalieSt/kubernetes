@@ -24,6 +24,7 @@ spec:
     name: flux-errors
     namespace: flux-system
   dependsOn:
+  - name: namespaces
   - name: victoria-metrics
   - name: vault-secrets-operator-config
 ---
@@ -43,6 +44,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: victoria-metrics
   - name: csi-driver-nfs
 ---
@@ -62,6 +64,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: reflector
 ---
@@ -81,6 +84,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -99,5 +103,6 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: reflector

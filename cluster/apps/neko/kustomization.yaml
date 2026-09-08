@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: neko
 resources:
-- namespace.yaml
 - deployment.yaml
 - firefox-policies-configmap.yaml
 - vault-secrets.yaml

@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: valkey
 resources:
-- namespace.yaml
 - deployment.yaml
 - pvc.yaml
 - service.yaml

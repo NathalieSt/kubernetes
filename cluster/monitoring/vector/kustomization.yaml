@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: vector
 resources:
-- namespace.yaml
 - daemonset.yaml
 - serviceaccount.yaml
 - configmap.yaml

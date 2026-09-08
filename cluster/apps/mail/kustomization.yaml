@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: mail
 resources:
-- namespace.yaml
 - vault-secrets.yaml
 - config.yaml
 - deployment.yaml

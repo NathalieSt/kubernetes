@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: livekit
 resources:
-- namespace.yaml
 - deployment.yaml
 - service.yaml
 - network-policy.yaml

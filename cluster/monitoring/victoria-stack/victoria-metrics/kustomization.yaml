@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: victoria-metrics
 resources:
-- namespace.yaml
 - repo.yaml
 - release.yaml
 - dashboard.yaml

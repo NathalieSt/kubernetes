@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: forgejo
 resources:
-- namespace.yaml
 - theme-configmap.yaml
 - logo-configmap.yaml
 - repo.yaml

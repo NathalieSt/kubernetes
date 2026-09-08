@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: affine
 resources:
-- namespace.yaml
 - conf-pvc.yaml
 - data-pvc.yaml
 - service.yaml

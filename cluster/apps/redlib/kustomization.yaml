@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: redlib
 resources:
-- namespace.yaml
 - deployment.yaml
 - service.yaml
 - scaled-object.yaml

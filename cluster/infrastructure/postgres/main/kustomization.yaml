@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: main-pg
 resources:
-- namespace.yaml
 - cnpg-cluster.yaml
 - audiomuseai-db.yaml
 - tandoor-db.yaml

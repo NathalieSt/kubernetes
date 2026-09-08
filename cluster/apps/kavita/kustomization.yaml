@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: kavita
 resources:
-- namespace.yaml
 - theme-configmap.yaml
 - deployment.yaml
 - config-pvc.yaml
