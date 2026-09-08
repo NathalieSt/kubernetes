@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: omni-tools
 resources:
-- namespace.yaml
 - nginx-configmap.yaml
 - deployment.yaml
 - service.yaml

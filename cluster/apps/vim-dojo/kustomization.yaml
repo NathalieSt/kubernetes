@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: vim-dojo
 resources:
-- namespace.yaml
 - state-pvc.yaml
 - workspace-pvc.yaml
 - deployment.yaml

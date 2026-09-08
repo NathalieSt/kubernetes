@@ -2541,7 +2541,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: sum(gotk_resource_info{ready="False"})
+                    query: sum(gotk_resource_info{ready="False"}) or vector(0)
         readinessHistory:
           kind: Panel
           spec:
@@ -2713,7 +2713,7 @@ data:
                     datasource:
                       kind: PrometheusDatasource
                       name: victoria-metrics
-                    query: sum(gotk_resource_info{suspended="true"})
+                    query: sum(gotk_resource_info{suspended="true"}) or vector(0)
       layouts:
       - kind: Grid
         spec:

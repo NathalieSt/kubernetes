@@ -15,6 +15,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: reflector
   - name: affine-pg
@@ -35,6 +36,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: jellyfin
   - name: redis
   - name: main-pg
@@ -56,6 +58,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: garage
   - name: k8up
   - name: vault-secrets-operator-config
@@ -76,6 +79,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -94,6 +98,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: vault-secrets-operator-config
   - name: garage
@@ -115,6 +120,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: reflector
   - name: garage
@@ -136,6 +142,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: jellyfin
   - name: transmission
   - name: csi-driver-nfs
@@ -156,6 +163,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: forgejo-pg
   - name: valkey
   - name: keda
@@ -178,6 +186,7 @@ spec:
   wait: true
   timeout: 5m
   dependsOn:
+  - name: namespaces
   - name: forgejo
   - name: vault-secrets-operator-config
 ---
@@ -197,6 +206,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: jellyfin
   - name: vault-secrets-operator-config
 ---
@@ -216,6 +226,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -234,6 +245,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: keda
   - name: intel-device-gpu-plugin
@@ -254,6 +266,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: keda
   - name: garage
@@ -275,6 +288,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: vault-secrets-operator-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -293,6 +307,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: vault-secrets-operator-config
   - name: garage
@@ -314,6 +329,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: jellyfin
   - name: gluetun-media
   - name: csi-driver-nfs
@@ -335,6 +351,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: gluetun-proxy
   - name: vault-secrets-operator-config
   - name: keda
@@ -355,6 +372,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: victoria-metrics
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -373,6 +391,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -391,6 +410,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: psono-server
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -409,6 +429,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: main-pg
   - name: vault-secrets-operator-config
   - name: mail
@@ -429,6 +450,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -446,6 +468,8 @@ spec:
   prune: true
   wait: true
   timeout: 10m
+  dependsOn:
+  - name: namespaces
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -463,6 +487,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: gluetun-proxy
   - name: valkey
   - name: keda
@@ -483,6 +508,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: clamav
 ---
@@ -502,6 +528,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: main-pg
   - name: csi-driver-nfs
   - name: keda
@@ -523,6 +550,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: jellyfin
   - name: csi-driver-nfs
 ---
@@ -542,6 +570,7 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
+  - name: namespaces
   - name: csi-driver-nfs
   - name: reflector
   - name: garage

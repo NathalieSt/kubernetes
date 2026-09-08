@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: vault-apply
 resources:
-- namespace.yaml
 - rbac.yaml
 - vault-secrets.yaml
 - config.yaml

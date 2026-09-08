@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: jellyfin
 resources:
-- namespace.yaml
 - theme-configmap.yaml
 - repo.yaml
 - chart.yaml

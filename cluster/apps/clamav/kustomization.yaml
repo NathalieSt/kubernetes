@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: clamav
 resources:
-- namespace.yaml
 - client-config.yaml
 - deployment.yaml
 - db-pvc.yaml

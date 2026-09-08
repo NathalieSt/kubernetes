@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: gluetun-proxy
 resources:
-- namespace.yaml
 - deployment.yaml
 - service.yaml
 - vault-secret.yaml

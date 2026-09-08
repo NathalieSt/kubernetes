@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: tandoor
 resources:
-- namespace.yaml
 - deployment.yaml
 - media-pvc.yaml
 - service.yaml
