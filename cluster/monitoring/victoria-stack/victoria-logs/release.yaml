@@ -32,3 +32,4 @@ spec:
       retentionPeriod: 4w
   driftDetection:
     mode: warn
+  serviceAccountName: flux-helm-victoria-logs

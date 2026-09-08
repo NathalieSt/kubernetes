@@ -81,3 +81,4 @@ spec:
     targetPath: gitea.config.database.PASSWD
   driftDetection:
     mode: warn
+  serviceAccountName: flux-helm-forgejo
