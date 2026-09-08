@@ -10,3 +10,4 @@ resources:
 - tandoor-db.yaml
 - psono-db.yaml
 - network-policy.yaml
+- k8up-schedule.yaml

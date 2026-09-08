@@ -252,6 +252,8 @@ spec:
   dependsOn:
   - name: csi-driver-nfs
   - name: reflector
+  - name: garage
+  - name: k8up
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
