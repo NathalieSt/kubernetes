@@ -9,6 +9,7 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/name: neko
+  clusterIP: 10.43.44.17
   ports:
   - name: http-neko
     port: 8080
