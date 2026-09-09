@@ -2,29 +2,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: affine
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: affine
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/apps/affine
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: csi-driver-nfs
-  - name: reflector
-  - name: affine-pg
-  serviceAccountName: flux-affine
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: audiomuse-ai
   namespace: flux-system
 spec:
@@ -301,23 +278,24 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: livekit
+  name: limes
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: dcts
+  targetNamespace: limes
   sourceRef:
     kind: GitRepository
     name: manifests
-  path: ./cluster/apps/dcts/livekit
+  path: ./cluster/apps/limes
   prune: true
   wait: true
   timeout: 10m
   dependsOn:
   - name: namespaces
   - name: flux-rbac
-  - name: vault-secrets-operator-config
-  serviceAccountName: flux-livekit
+  - name: csi-driver-nfs
+  - name: clamav
+  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -539,28 +517,6 @@ spec:
   - name: valkey
   - name: keda
   serviceAccountName: flux-searxng
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: security-dashboard
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: security-dashboard
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/apps/security-dashboard
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: csi-driver-nfs
-  - name: clamav
-  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

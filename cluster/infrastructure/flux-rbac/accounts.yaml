@@ -2,46 +2,6 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-affine
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-affine-namespace-admin
-  namespace: affine
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-affine
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-affine-pg
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-affine-pg-namespace-admin
-  namespace: affine-pg-cluster
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-affine-pg
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
   name: flux-audiomuse-ai
   namespace: flux-system
 ---
@@ -515,39 +475,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-keda
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-livekit
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-livekit-namespace-admin
-  namespace: dcts
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-livekit
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-livekit-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-livekit
   namespace: flux-system
 ---
 apiVersion: v1

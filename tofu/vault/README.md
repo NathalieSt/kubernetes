@@ -18,7 +18,6 @@ The frame around the secrets, never the secrets themselves:
 | --- | --- | --- |
 | `code-server` | `code-server` | `kvv2/code-server` |
 | `neko` | `neko` | `kvv2/neko` |
-| `livekit` | `dcts` | `kvv2/livekit`, `kvv2/livekit-tls` |
 | `mail` | `mail` | `kvv2/mail` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |

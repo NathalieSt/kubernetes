@@ -7,26 +7,6 @@ metadata:
   labels:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
-  name: affine
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/warn: restricted
-  name: affine-pg-cluster
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/warn: restricted
   name: backup-dashboard
 ---
 apiVersion: v1
@@ -88,16 +68,6 @@ metadata:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
   name: daybook
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/warn: restricted
-  name: dcts
 ---
 apiVersion: v1
 kind: Namespace
@@ -218,6 +188,16 @@ metadata:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
   name: keda
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  name: limes
 ---
 apiVersion: v1
 kind: Namespace
@@ -368,16 +348,6 @@ metadata:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
   name: searxng
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/warn: restricted
-  name: security-dashboard
 ---
 apiVersion: v1
 kind: Namespace

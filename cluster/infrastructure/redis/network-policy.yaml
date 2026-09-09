@@ -20,13 +20,11 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - affine
           - jellyfin
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - affine
           - audiomuse-ai-flask
           - audiomuse-ai-worker
