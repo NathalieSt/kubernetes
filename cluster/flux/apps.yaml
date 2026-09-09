@@ -9,7 +9,7 @@ spec:
   targetNamespace: affine
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/affine
   prune: true
   wait: true
@@ -32,7 +32,7 @@ spec:
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/mediaserver/audiomuse-ai
   prune: true
   wait: true
@@ -56,7 +56,7 @@ spec:
   targetNamespace: backup-dashboard
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/backup-dashboard
   prune: true
   wait: true
@@ -79,7 +79,7 @@ spec:
   targetNamespace: clamav
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/clamav
   prune: true
   wait: true
@@ -100,7 +100,7 @@ spec:
   targetNamespace: code-server
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/code-server
   prune: true
   wait: true
@@ -124,7 +124,7 @@ spec:
   targetNamespace: daybook
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/daybook
   prune: true
   wait: true
@@ -148,7 +148,7 @@ spec:
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/mediaserver/flood
   prune: true
   wait: true
@@ -171,7 +171,7 @@ spec:
   targetNamespace: forgejo
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/forgejo
   prune: true
   wait: true
@@ -196,7 +196,7 @@ spec:
   targetNamespace: forgejo
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/forgejo-runner
   prune: true
   wait: true
@@ -218,7 +218,7 @@ spec:
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/mediaserver/gluetun-media
   prune: true
   wait: true
@@ -240,7 +240,7 @@ spec:
   targetNamespace: it-tools
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/it-tools
   prune: true
   wait: true
@@ -261,7 +261,7 @@ spec:
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/mediaserver/jellyfin
   prune: true
   wait: true
@@ -284,7 +284,7 @@ spec:
   targetNamespace: kavita
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/kavita
   prune: true
   wait: true
@@ -308,7 +308,7 @@ spec:
   targetNamespace: dcts
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/dcts/livekit
   prune: true
   wait: true
@@ -329,7 +329,7 @@ spec:
   targetNamespace: mail
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/mail
   prune: true
   wait: true
@@ -353,7 +353,7 @@ spec:
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/mediaserver/music-library-builder
   prune: true
   wait: true
@@ -377,7 +377,7 @@ spec:
   targetNamespace: neko
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/neko
   prune: true
   wait: true
@@ -400,7 +400,7 @@ spec:
   targetNamespace: omni-tools
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/omni-tools
   prune: true
   wait: true
@@ -421,7 +421,7 @@ spec:
   targetNamespace: orrery
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/orrery
   prune: true
   wait: true
@@ -442,7 +442,7 @@ spec:
   targetNamespace: psono
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/psono/client
   prune: true
   wait: true
@@ -463,7 +463,7 @@ spec:
   targetNamespace: psono
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/psono/server
   prune: true
   wait: true
@@ -486,7 +486,7 @@ spec:
   targetNamespace: redlib
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/redlib
   prune: true
   wait: true
@@ -507,15 +507,15 @@ spec:
   targetNamespace: rimworld-together
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/rimworld-together
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-rimworld-together
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-rimworld-together
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -527,7 +527,7 @@ spec:
   targetNamespace: searxng
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/searxng
   prune: true
   wait: true
@@ -550,7 +550,7 @@ spec:
   targetNamespace: security-dashboard
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/security-dashboard
   prune: true
   wait: true
@@ -572,7 +572,7 @@ spec:
   targetNamespace: tandoor
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/tandoor
   prune: true
   wait: true
@@ -596,7 +596,7 @@ spec:
   targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/mediaserver/transmission
   prune: true
   wait: true
@@ -618,7 +618,7 @@ spec:
   targetNamespace: vim-dojo
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/apps/vim-dojo
   prune: true
   wait: true
