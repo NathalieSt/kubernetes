@@ -81,7 +81,7 @@ spec:
   path: ./cluster/apps/code-server
   prune: true
   wait: true
-  timeout: 10m
+  timeout: 15m
   dependsOn:
   - name: namespaces
   - name: flux-rbac

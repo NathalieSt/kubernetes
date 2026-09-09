@@ -401,12 +401,139 @@ data:
       end,
     }
     /* assetDir Not a pure module */
+  repos.sh: |
+    #!/bin/sh
+    # Builds the same tree of homelab repos in the editor's home directory that a
+    # laptop has, and leaves git able to push from it.
+    #
+    # Runs as an init container from the code-server image, as the uid the editor
+    # runs as, against the same persistent volume — so what it writes is the user's
+    # from the moment it exists. It runs after editor-bootstrap for no deeper
+    # reason than that the extensions are what make the checkout useful.
+    #
+    # The repo list is deliberately not here. The workspace repo's own bootstrap.sh
+    # is what a human runs on a new machine, and running that exact script is the
+    # only way this pod and a laptop cannot disagree about which repos exist. This
+    # clones that one repo and hands over, overriding FORGEJO_BASE because the
+    # default is SSH on the gateway's 2222 entrypoint and nothing opens that port
+    # for egress from here. HTTPS to the same host is already allowed — see the
+    # CiliumNetworkPolicy in CodeServerMeta.res.
+    #
+    # Nothing here may fail the pod. An unreachable Forgejo, a token nobody has
+    # written into Vault yet and a repo that has been renamed are all "the editor
+    # starts without a checkout", never "the editor does not start". That is the
+    # same rule the extension install follows, and it matters more here: the login
+    # password is in Vault, so an editor that will not come up cannot be used to
+    # fix whatever broke.
+
+    set -u
+
+    log() { echo "repos: $*" >&2; }
+
+    # Exit 0 on every path. `exit` is used rather than a chain of else-branches
+    # because there is nothing to do after any of these, and an init container's
+    # status is the only thing Kubernetes reads.
+    give_up() {
+    	log "WARNING: $*"
+    	log "the editor will start without the repo tree; fix and restart the pod"
+    	exit 0
+    }
+
+    if ! command -v git >/dev/null 2>&1; then
+    	give_up "no git in the image"
+    fi
+
+    # ------------------------------------------------------------- credentials
+    #
+    # The token is mounted from a Secret the Vault Secrets Operator syncs, and the
+    # volume is `optional: true`, so "not there at all" is a real and expected
+    # state on a namespace that has just been rebuilt.
+    token_file="$GIT_SECRET_DIR/token"
+    user_file="$GIT_SECRET_DIR/username"
+
+    if [ ! -r "$token_file" ] || [ ! -r "$user_file" ]; then
+    	give_up "no Forgejo credential mounted at $GIT_SECRET_DIR"
+    fi
+
+    # vault-config creates every declared KV path filled with a placeholder
+    # sentence so the path exists before a human has written to it. Recognising it
+    # here turns "401 against Forgejo, eighteen times" into one sentence naming the
+    # command to run. The prefix is VaultTofu's; keep the two in step.
+    case "$(cat "$token_file")" in
+    "REPLACE ME"*)
+    	give_up "the Forgejo token is still vault-config's placeholder — vault kv patch kvv2/code-server-git token=<value>"
+    	;;
+    esac
+
+    # Seeded once each, not written on every start: a global git config is the
+    # user's, and the identity on a commit is not something a manifest should keep
+    # reasserting. `git config --get` is the check rather than the file's absence,
+    # so a value set by hand survives — including one set before this ran at all.
+    if ! git config --global --get user.name >/dev/null 2>&1; then
+    	git config --global user.name "$(cat "$user_file")" && log "seeded git user.name"
+    fi
+    if [ -r "$GIT_SECRET_DIR/email" ] && ! git config --global --get user.email >/dev/null 2>&1; then
+    	git config --global user.email "$(cat "$GIT_SECRET_DIR/email")" && log "seeded git user.email"
+    fi
+
+    # The credential helper itself is not configured here — it comes in as
+    # GIT_CONFIG_* on both containers, so a `git push` typed into a terminal an
+    # hour from now authenticates the same way this clone does. See CodeServerMeta.
+
+    # -------------------------------------------------------------------- tree
+    parent=$(dirname "$WORKSPACE_DIR")
+    mkdir -p "$parent" || give_up "cannot create $parent"
+
+    if [ ! -d "$WORKSPACE_DIR/.git" ]; then
+    	log "cloning the workspace repo into $WORKSPACE_DIR"
+    	# Bounded for the reason every network call in these init containers is:
+    	# an unbounded one is the difference between a missing checkout and a pod
+    	# that never starts, and a stalled TCP connection does not fail on its own.
+    	if ! timeout 120 git clone "$FORGEJO_BASE/workspace.git" "$WORKSPACE_DIR"; then
+    		# Leaves nothing behind to be mistaken for a good checkout: a failed
+    		# clone can leave a partial directory, and the `.git` test above would
+    		# then skip the retry forever.
+    		rm -rf "$WORKSPACE_DIR"
+    		give_up "could not clone the workspace repo"
+    	fi
+    fi
+
+    # Readable rather than executable: it is invoked as `bash <path>` below, the
+    # same way bootstrap.sh invokes this pod's other scripts, so the mode bit git
+    # checked out is not what decides whether this works.
+    if [ ! -r "$WORKSPACE_DIR/bootstrap.sh" ]; then
+    	give_up "$WORKSPACE_DIR/bootstrap.sh is missing — has the workspace repo changed shape?"
+    fi
+
+    log "running the workspace repo's own bootstrap.sh"
+
+    # One bound for the whole sweep rather than one per repo, and it is a cap on
+    # how long this delays the editor rather than an estimate of how long the work
+    # takes. The step is resumable: bootstrap.sh clones repo by repo and skips what
+    # is already there, so a run cut short here finishes on the next pod start.
+    #
+    # The cost of getting this wrong is not just a slow start. This container sits
+    # in front of a Deployment the Kustomization waits on, so time spent here is
+    # time a kustomize-controller worker is held; see the flux timeout in
+    # CodeServerMeta.res, which is set with this number in mind.
+    if timeout 300 env FORGEJO_BASE="$FORGEJO_BASE" bash "$WORKSPACE_DIR/bootstrap.sh" >&2; then
+    	log "the repo tree is up to date"
+    else
+    	# bootstrap.sh already names the repos it could not reach. Not fatal, and
+    	# worth being loud about: a partial tree looks exactly like a complete one
+    	# in the explorer, and the missing folder reads as a deleted repo.
+    	log "WARNING: the workspace bootstrap reported failures — see the lines above"
+    	log "the repos it did fetch are in place; restart the pod to retry the rest"
+    fi
+
+    log "done"
   settings.json: |-
     {
       "workbench.colorTheme": "Pennant Dark",
       "workbench.preferredDarkColorTheme": "Pennant Dark",
       "workbench.preferredLightColorTheme": "Pennant Light",
       "window.autoDetectColorScheme": true,
+      "workbench.iconTheme": "vscode-icons",
       "files.autoSave": "onFocusChange",
       "files.trimTrailingWhitespace": true,
       "files.insertFinalNewline": true,

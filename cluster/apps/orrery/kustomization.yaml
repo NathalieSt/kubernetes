@@ -4,6 +4,7 @@ kind: Kustomization
 metadata:
   name: orrery
 resources:
+- layout-pvc.yaml
 - deployment.yaml
 - service.yaml
 - network-policy.yaml
