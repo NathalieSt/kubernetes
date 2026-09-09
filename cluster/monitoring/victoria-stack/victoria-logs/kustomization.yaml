@@ -6,3 +6,4 @@ metadata:
 resources:
 - repo.yaml
 - release.yaml
+- network-policy.yaml

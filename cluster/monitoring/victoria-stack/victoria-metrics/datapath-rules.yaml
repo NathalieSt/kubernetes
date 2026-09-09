@@ -1,0 +1,26 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: cilium-datapath-rules
+spec:
+  groups:
+  - name: cilium-datapath
+    interval: 1m
+    rules:
+    - alert: CiliumEnvoyPolicyRejected
+      expr: sum by(node,type_url) (increase(cilium_xds_events_count{status="nack"}[10m])) > 0
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        description: "cilium-agent on {{ $labels.node }} has been NACKed on {{ $labels.type_url }} for 10m. Envoy rejects the whole resource, so no L7 policy on that node can converge and new pods there may fail CNI ADD. The reason appears only in that agent log: kubectl -n kube-system logs $(kubectl -n kube-system get pod -l k8s-app=cilium --field-selector spec.nodeName={{ $labels.node }} -o name) | grep xdsDetail"
+        summary: Envoy is rejecting Cilium policy on {{ $labels.node }}
+    - alert: CiliumEndpointRegenerationFailing
+      expr: sum by(node) (increase(cilium_endpoint_regenerations_total{outcome="fail"}[15m])) > 0
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: Endpoints on {{ $labels.node }} have failed to regenerate for 15m. Pods scheduled there may sit in Init with FailedCreatePodSandBox. Check cilium-dbg endpoint list on that node for endpoints not in state ready.
+        summary: Cilium endpoint regeneration is failing on {{ $labels.node }}
