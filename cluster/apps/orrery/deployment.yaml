@@ -27,6 +27,9 @@ spec:
         ports:
         - containerPort: 8080
           name: http
+        volumeMounts:
+        - mountPath: /data
+          name: layout-volume
         env:
         - name: ORRERY_VM_URL
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
@@ -36,6 +39,8 @@ spec:
           value: :8080
         - name: ORRERY_STATIC_ROOT
           value: /app/ui/dist
+        - name: ORRERY_STATE_DIR
+          value: /data
         resources:
           requests:
             cpu: 50m
@@ -49,6 +54,10 @@ spec:
             - ALL
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
+      volumes:
+      - name: layout-volume
+        persistentVolumeClaim:
+          claimName: orrery-layout-pvc
       securityContext:
         fsGroup: 1000
         runAsUser: 1000

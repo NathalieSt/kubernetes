@@ -3,7 +3,7 @@
     "vault_policy": {
       "code-server": {
         "name": "code-server",
-        "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/code-server-git\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server-git\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "flux-notifications": {
         "name": "flux-notifications",
@@ -125,6 +125,26 @@
         "cas": 0,
         "disable_read": true,
         "data_json": "{\"password\":\"REPLACE ME — vault kv patch kvv2/code-server password=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "code-server"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
+      "code-server_code-server-git": {
+        "mount": "kvv2",
+        "name": "code-server-git",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"username\":\"REPLACE ME — vault kv patch kvv2/code-server-git username=<value>\",\"email\":\"REPLACE ME — vault kv patch kvv2/code-server-git email=<value>\",\"token\":\"REPLACE ME — vault kv patch kvv2/code-server-git token=<value>\"}",
         "custom_metadata": {
           "data": {
             "managed-by": "opentofu",

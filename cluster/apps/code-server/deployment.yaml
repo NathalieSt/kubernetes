@@ -175,7 +175,7 @@ spec:
         - name: BOOTSTRAP_ASSET_DIR
           value: /etc/code-server/bootstrap
         - name: CODE_SERVER_EXTENSIONS
-          value: golang.go chenglou92.rescript-vscode redhat.vscode-yaml ms-azuretools.vscode-docker ms-kubernetes-tools.vscode-kubernetes-tools dbaeumer.vscode-eslint eamodio.gitlens anthropic.claude-code
+          value: golang.go chenglou92.rescript-vscode redhat.vscode-yaml ms-azuretools.vscode-docker ms-kubernetes-tools.vscode-kubernetes-tools dbaeumer.vscode-eslint eamodio.gitlens anthropic.claude-code vscode-icons-team.vscode-icons
         resources:
           requests:
             cpu: 100m
@@ -183,6 +183,50 @@ spec:
           limits:
             cpu: 2000m
             memory: 1Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+      - command:
+        - sh
+        - /etc/code-server/bootstrap/repos.sh
+        image: codercom/code-server@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
+        name: repo-bootstrap
+        volumeMounts:
+        - mountPath: /home/coder
+          name: home-volume
+        - mountPath: /etc/code-server/bootstrap
+          name: bootstrap-volume
+          readOnly: true
+        - mountPath: /etc/code-server/git-credentials
+          name: git-secret-volume
+          readOnly: true
+        env:
+        - name: HOME
+          value: /home/coder
+        - name: GIT_SECRET_DIR
+          value: /etc/code-server/git-credentials
+        - name: WORKSPACE_DIR
+          value: /home/coder/dev/my-homelab
+        - name: FORGEJO_BASE
+          value: https://code.netbird.nathalie-stiefsohn.eu/my-homelab
+        - name: GIT_CONFIG_COUNT
+          value: "1"
+        - name: GIT_CONFIG_KEY_0
+          value: credential.https://code.netbird.nathalie-stiefsohn.eu.helper
+        - name: GIT_CONFIG_VALUE_0
+          value: "!f() { test \"$1\" = get && { echo \"username=$(cat /etc/code-server/git-credentials/username)\"; echo \"password=$(cat /etc/code-server/git-credentials/token)\"; }; }; f"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 512Mi
         securityContext:
           capabilities:
             drop:
@@ -200,7 +244,7 @@ spec:
         - /usr/bin/code-server
         - --bind-addr
         - 0.0.0.0:8080
-        - /home/coder
+        - /home/coder/dev/my-homelab/my-homelab.code-workspace
         image: codercom/code-server@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
         name: code-server
         ports:
@@ -216,6 +260,9 @@ spec:
           readOnly: true
         - mountPath: /opt/cluster-tools
           name: cluster-tools-volume
+          readOnly: true
+        - mountPath: /etc/code-server/git-credentials
+          name: git-secret-volume
           readOnly: true
         env:
         - name: PASSWORD
@@ -239,6 +286,12 @@ spec:
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
         - name: HOMELAB_LOGS_URL
           value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
+        - name: GIT_CONFIG_COUNT
+          value: "1"
+        - name: GIT_CONFIG_KEY_0
+          value: credential.https://code.netbird.nathalie-stiefsohn.eu.helper
+        - name: GIT_CONFIG_VALUE_0
+          value: "!f() { test \"$1\" = get && { echo \"username=$(cat /etc/code-server/git-credentials/username)\"; echo \"password=$(cat /etc/code-server/git-credentials/token)\"; }; }; f"
         resources:
           requests:
             cpu: 200m
@@ -273,6 +326,10 @@ spec:
           name: code-server-kubeconfig
       - name: cluster-tools-volume
         emptyDir: {}
+      - name: git-secret-volume
+        secret:
+          secretName: code-server-git-secret
+          optional: true
       securityContext:
         seccompProfile:
           type: RuntimeDefault
