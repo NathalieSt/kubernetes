@@ -27,7 +27,15 @@ spec:
       rules:
         http:
         - method: ^(GET|POST)$
-          path: ^/api/v1/(query|query_range|series|labels|label/[^/?]+/values|status/[^?]*|metadata|targets|rules|alerts|export[^?]*)([?].*)?$
+          path: ^/api/v1/query(_range)?([?].*)?$
+        - method: ^(GET|POST)$
+          path: ^/api/v1/(series|labels|metadata|targets|rules|alerts)([?].*)?$
+        - method: ^(GET|POST)$
+          path: ^/api/v1/label/[^/?]+/values([?].*)?$
+        - method: ^(GET|POST)$
+          path: ^/api/v1/status/[^?]*([?].*)?$
+        - method: ^(GET|POST)$
+          path: ^/api/v1/export[^?]*([?].*)?$
   - toEndpoints:
     - matchLabels:
         k8s:io.kubernetes.pod.namespace: victoria-logs
