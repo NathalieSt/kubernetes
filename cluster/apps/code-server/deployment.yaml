@@ -172,8 +172,8 @@ spec:
           value: /etc/code-server/theme
         - name: SETTINGS_ASSET
           value: /etc/code-server/bootstrap/settings.json
-        - name: PENNANT_THEME_DIR
-          value: pennant-theme
+        - name: BOOTSTRAP_ASSET_DIR
+          value: /etc/code-server/bootstrap
         - name: CODE_SERVER_EXTENSIONS
           value: golang.go chenglou92.rescript-vscode redhat.vscode-yaml ms-azuretools.vscode-docker ms-kubernetes-tools.vscode-kubernetes-tools dbaeumer.vscode-eslint eamodio.gitlens anthropic.claude-code
         resources:
