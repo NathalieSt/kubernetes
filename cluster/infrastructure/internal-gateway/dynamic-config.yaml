@@ -12,10 +12,10 @@ data:
             usersFile: /auth/headlamp
             realm: headlamp.netbird.nathalie-stiefsohn.eu
             removeHeader: true
-        security-dashboard-basic-auth:
+        limes-basic-auth:
           basicAuth:
-            usersFile: /auth/security-dashboard
-            realm: scans.netbird.nathalie-stiefsohn.eu
+            usersFile: /auth/limes
+            realm: limes.netbird.nathalie-stiefsohn.eu
             removeHeader: true
         vim-dojo-basic-auth:
           basicAuth:
@@ -25,11 +25,6 @@ data:
   routers.yaml: |
     http:
       routers:
-        affine:
-          rule: Host(`affine.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: affine
         audiomuse-ai:
           rule: Host(`audiomuse.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -82,6 +77,13 @@ data:
           entryPoints:
           - websecure
           service: kavita
+        limes:
+          rule: Host(`limes.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: limes
+          middlewares:
+          - limes-basic-auth
         mail:
           rule: Host(`mail.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -127,13 +129,6 @@ data:
           entryPoints:
           - websecure
           service: searxng
-        security-dashboard:
-          rule: Host(`scans.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: security-dashboard
-          middlewares:
-          - security-dashboard-basic-auth
         tandoor:
           rule: Host(`tandoor.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -154,10 +149,6 @@ data:
   services.yaml: |
     http:
       services:
-        affine:
-          loadBalancer:
-            servers:
-            - url: http://affine.affine.svc.cluster.local:3010
         audiomuse-ai:
           loadBalancer:
             servers:
@@ -198,6 +189,10 @@ data:
           loadBalancer:
             servers:
             - url: http://kavita.kavita.svc.cluster.local:5000
+        limes:
+          loadBalancer:
+            servers:
+            - url: http://limes.limes.svc.cluster.local:8080
         mail:
           loadBalancer:
             servers:
@@ -234,10 +229,6 @@ data:
           loadBalancer:
             servers:
             - url: http://searxng.searxng.svc.cluster.local:8080
-        security-dashboard:
-          loadBalancer:
-            servers:
-            - url: http://security-dashboard.security-dashboard.svc.cluster.local:8080
         tandoor:
           loadBalancer:
             servers:

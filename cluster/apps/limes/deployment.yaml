@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: limes
+    app.kubernetes.io/version: latest
+  name: limes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: limes
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: limes
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      serviceAccountName: limes
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:latest
+        name: limes
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: LIMES_SCAN_NAMESPACE
+          value: limes
+        - name: LIMES_INVENTORY_NAMESPACES
+          value: ""
+        - name: LIMES_GRYPE_IMAGE
+          value: anchore/grype@sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b
+        - name: LIMES_GRYPE_CACHE_CLAIM
+          value: limes-grype-cache-pvc
+        - name: LIMES_CLAMAV_NAMESPACE
+          value: clamav
+        - name: LIMES_CLAMAV_CRONJOBS
+          value: clamav-scan-local,clamav-scan-nas
+        - name: LIMES_PATROL_ENABLED
+          value: "true"
+        - name: LIMES_PATROL_CONCURRENCY
+          value: "2"
+        - name: LIMES_PATROL_INTERVAL_MS
+          value: "900000"
+        - name: LIMES_PATROL_MAX_AGE_MS
+          value: "86400000"
+        - name: LIMES_VM_URL
+          value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true

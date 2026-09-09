@@ -33,7 +33,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: internal-gateway
   extraDNSLabels:
-  - affine
   - audiomuse
   - backups
   - vscode
@@ -44,6 +43,7 @@ spec:
   - it-tools
   - jellyfin
   - kavita
+  - limes
   - mail
   - music
   - neko
@@ -53,7 +53,6 @@ spec:
   - psono-api
   - redlib
   - searxng
-  - scans
   - tandoor
   - vault
   - dojo
