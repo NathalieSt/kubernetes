@@ -1,0 +1,50 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: vim-dojo-cilium-networkpolicy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vim-dojo
+  description: "Plugin installation: DNS through the proxy, then the forges and registries by name."
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: UDP
+      - port: "53"
+        protocol: TCP
+      rules:
+        dns:
+        - matchPattern: "*"
+  - toFQDNs:
+    - matchName: open-vsx.org
+    - matchPattern: "*.open-vsx.org"
+    - matchPattern: "*.blob.core.windows.net"
+    - matchName: code.netbird.nathalie-stiefsohn.eu
+    - matchName: github.com
+    - matchPattern: "*.github.com"
+    - matchPattern: "*.githubusercontent.com"
+    - matchName: codeberg.org
+    - matchPattern: "*.codeberg.org"
+    - matchPattern: "*.npmjs.org"
+    - matchName: pypi.org
+    - matchPattern: "*.pythonhosted.org"
+    - matchName: crates.io
+    - matchPattern: "*.crates.io"
+    - matchPattern: "*.golang.org"
+    - matchPattern: "*.rubygems.org"
+    - matchPattern: "*.debian.org"
+    - matchPattern: "*.ubuntu.com"
+    - matchPattern: "*.alpinelinux.org"
+    toPorts:
+    - ports:
+      - port: "443"
+        protocol: TCP
+      - port: "80"
+        protocol: TCP

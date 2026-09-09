@@ -9,4 +9,5 @@ resources:
 - deployment.yaml
 - service.yaml
 - network-policy.yaml
+- cilium-network-policy.yaml
 - k8up-schedule.yaml

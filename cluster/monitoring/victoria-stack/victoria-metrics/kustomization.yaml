@@ -7,3 +7,5 @@ resources:
 - repo.yaml
 - vault-secrets.yaml
 - release.yaml
+- datapath-rules.yaml
+- network-policy.yaml

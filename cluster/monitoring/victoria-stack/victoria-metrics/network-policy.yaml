@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: victoria-metrics-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: vmsingle
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: code-server
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: orrery
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 8428
+      protocol: TCP
