@@ -11,4 +11,4 @@ spec:
   resources:
     requests:
       storage: 4Gi
-  storageClassName: nfs-local
+  storageClassName: nfs-remote
