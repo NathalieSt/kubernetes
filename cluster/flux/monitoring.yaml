@@ -9,7 +9,7 @@ spec:
   targetNamespace: flux-system
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/monitoring/flux-notifications
   prune: true
   wait: false
@@ -40,7 +40,7 @@ spec:
   targetNamespace: vector
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/monitoring/vector
   prune: true
   wait: true
@@ -62,7 +62,7 @@ spec:
   targetNamespace: victoria-logs
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/monitoring/victoria-stack/victoria-logs
   prune: true
   wait: true
@@ -83,7 +83,7 @@ spec:
   targetNamespace: victoria-metrics
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/monitoring/victoria-stack/victoria-metrics
   prune: true
   wait: true

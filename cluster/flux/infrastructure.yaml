@@ -9,7 +9,7 @@ spec:
   targetNamespace: affine-pg-cluster
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/postgres/affine
   prune: true
   wait: true
@@ -31,15 +31,15 @@ spec:
   targetNamespace: cert-manager
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/cert-manager
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-cert-manager
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-cert-manager
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -51,7 +51,7 @@ spec:
   targetNamespace: cnpg-system
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/cnpg
   prune: true
   wait: true
@@ -72,15 +72,15 @@ spec:
   targetNamespace: csi-driver-nfs
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/csi-driver-nfs
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-privileged
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -91,7 +91,7 @@ spec:
   interval: 24h
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/flux-rbac
   prune: true
   wait: true
@@ -110,7 +110,7 @@ spec:
   targetNamespace: forgejo-pg-cluster
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/postgres/forgejo
   prune: true
   wait: true
@@ -132,7 +132,7 @@ spec:
   targetNamespace: garage
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/garage
   prune: true
   wait: true
@@ -155,7 +155,7 @@ spec:
   targetNamespace: gluetun-proxy
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/gluetun-proxy
   prune: true
   wait: true
@@ -176,15 +176,15 @@ spec:
   targetNamespace: headlamp
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/headlamp
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-headlamp
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-headlamp
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -196,7 +196,7 @@ spec:
   targetNamespace: inteldeviceplugins-system
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/intel-device-plugins/gpu-plugin
   prune: true
   wait: true
@@ -217,7 +217,7 @@ spec:
   targetNamespace: inteldeviceplugins-system
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/intel-device-plugins/operator
   prune: true
   wait: true
@@ -238,7 +238,7 @@ spec:
   targetNamespace: internal-gateway
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/internal-gateway
   prune: true
   timeout: 10m
@@ -264,7 +264,7 @@ spec:
   targetNamespace: k8up
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/k8up
   prune: true
   wait: true
@@ -285,15 +285,15 @@ spec:
   targetNamespace: keda
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/keda
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-keda
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-keda
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -305,7 +305,7 @@ spec:
   targetNamespace: postgres
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/postgres/main
   prune: true
   wait: true
@@ -329,7 +329,7 @@ spec:
   targetNamespace: mariadb
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/mariadb
   prune: true
   wait: true
@@ -350,7 +350,7 @@ spec:
   interval: 24h
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/namespaces
   prune: true
   wait: true
@@ -367,15 +367,15 @@ spec:
   targetNamespace: netbird
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/netbird/
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-netbird-operator
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-netbird-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -387,15 +387,15 @@ spec:
   targetNamespace: nfd
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/nfd
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-nfd
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-nfd
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -407,15 +407,15 @@ spec:
   targetNamespace: nvidia-k8s-device-plugin
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/nvidia-k8s-device-plugin
   prune: true
   wait: true
   timeout: 10m
-  serviceAccountName: flux-nvidia-k8s-device-plugin
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  serviceAccountName: flux-nvidia-k8s-device-plugin
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -427,7 +427,7 @@ spec:
   targetNamespace: redis
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/redis
   prune: true
   wait: true
@@ -449,7 +449,7 @@ spec:
   targetNamespace: reflector
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/reflector
   prune: true
   wait: true
@@ -471,7 +471,7 @@ spec:
   targetNamespace: valkey
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/valkey
   prune: true
   wait: true
@@ -493,7 +493,7 @@ spec:
   targetNamespace: vault
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/vault
   prune: true
   wait: true
@@ -514,7 +514,7 @@ spec:
   targetNamespace: vault-apply
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/vault-apply
   prune: true
   wait: true
@@ -536,7 +536,7 @@ spec:
   targetNamespace: vault
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/vault-backup
   prune: true
   wait: true
@@ -558,7 +558,7 @@ spec:
   targetNamespace: vault-secrets-operator
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/vault-secrets-operator
   prune: true
   wait: true
@@ -579,7 +579,7 @@ spec:
   targetNamespace: vault-secrets-operator
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: manifests
   path: ./cluster/infrastructure/vault-secrets-operator-config
   prune: true
   wait: true
