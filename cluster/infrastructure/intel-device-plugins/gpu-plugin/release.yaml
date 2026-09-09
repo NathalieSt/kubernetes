@@ -15,4 +15,3 @@ spec:
       retries: 3
   driftDetection:
     mode: warn
-  serviceAccountName: flux-helm-intel-device-gpu-plugin
