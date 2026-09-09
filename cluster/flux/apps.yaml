@@ -2,29 +2,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: affine
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: affine
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/apps/affine
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: csi-driver-nfs
-  - name: reflector
-  - name: affine-pg
-  serviceAccountName: flux-affine
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: audiomuse-ai
   namespace: flux-system
 spec:
@@ -297,27 +274,6 @@ spec:
   - name: garage
   - name: k8up
   serviceAccountName: flux-kavita
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: livekit
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: dcts
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/apps/dcts/livekit
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: vault-secrets-operator-config
-  serviceAccountName: flux-livekit
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

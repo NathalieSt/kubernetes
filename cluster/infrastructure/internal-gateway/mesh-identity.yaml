@@ -33,7 +33,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: internal-gateway
   extraDNSLabels:
-  - affine
   - audiomuse
   - backups
   - vscode

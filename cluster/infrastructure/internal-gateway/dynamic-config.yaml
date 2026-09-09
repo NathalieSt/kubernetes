@@ -25,11 +25,6 @@ data:
   routers.yaml: |
     http:
       routers:
-        affine:
-          rule: Host(`affine.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: affine
         audiomuse-ai:
           rule: Host(`audiomuse.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -154,10 +149,6 @@ data:
   services.yaml: |
     http:
       services:
-        affine:
-          loadBalancer:
-            servers:
-            - url: http://affine.affine.svc.cluster.local:3010
         audiomuse-ai:
           loadBalancer:
             servers:
