@@ -20,6 +20,7 @@ The frame around the secrets, never the secrets themselves:
 | `neko` | `neko` | `kvv2/neko` |
 | `mail` | `mail` | `kvv2/mail` |
 | `psono-server` | `psono` | `kvv2/psono` |
+| `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics` |
 

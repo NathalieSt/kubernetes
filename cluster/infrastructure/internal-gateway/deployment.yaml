@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        internal-gateway.nathalie-stiefsohn.eu/dns-labels: d33856e2eb6b80554be9abcd4127254f154c56ca6357804675dd4e2e15870e47
+        internal-gateway.nathalie-stiefsohn.eu/dns-labels: 6c0dbdafae7a686ef936b83de4aac164faa064e3e96ee15a877135ef53a71b04
       labels:
         app.kubernetes.io/name: internal-gateway
         app.kubernetes.io/version: v3.6
@@ -92,9 +92,6 @@ spec:
         - mountPath: /acme-dns
           name: acme-dns
           readOnly: true
-        - mountPath: /auth
-          name: basic-auth
-          readOnly: true
         env:
         - name: GOMEMLIMIT
           value: 440MiB
@@ -134,10 +131,6 @@ spec:
       - name: acme-dns
         secret:
           secretName: acme-dns-secret
-      - name: basic-auth
-        secret:
-          secretName: internal-gateway-basic-auth-secret
-          optional: true
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
