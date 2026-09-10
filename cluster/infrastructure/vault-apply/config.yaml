@@ -49,6 +49,14 @@ data:
     {
       "resource": {
         "vault_policy": {
+          "authelia": {
+            "name": "authelia",
+            "policy": "path \"kvv2/data/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "backup-dashboard": {
+            "name": "backup-dashboard",
+            "policy": "path \"kvv2/data/backup-dashboard/basic-auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/backup-dashboard/basic-auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/backup-dashboard/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/backup-dashboard/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+          },
           "code-server": {
             "name": "code-server",
             "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/code-server-git\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server-git\" {\n  capabilities = [\"read\"]\n}\n"
@@ -75,6 +83,36 @@ data:
           }
         },
         "vault_kubernetes_auth_backend_role": {
+          "authelia": {
+            "backend": "kubernetes",
+            "role_name": "authelia",
+            "bound_service_account_names": [
+              "authelia-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "authelia"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.authelia.name}"
+            ],
+            "token_ttl": 600
+          },
+          "backup-dashboard": {
+            "backend": "kubernetes",
+            "role_name": "backup-dashboard",
+            "bound_service_account_names": [
+              "backup-dashboard-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "backup-dashboard"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.backup-dashboard.name}"
+            ],
+            "token_ttl": 600
+          },
           "code-server": {
             "backend": "kubernetes",
             "role_name": "code-server",
@@ -167,6 +205,106 @@ data:
           }
         },
         "vault_kv_secret_v2": {
+          "authelia_authelia_secrets": {
+            "mount": "kvv2",
+            "name": "authelia/secrets",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"session-secret\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets session-secret=<value>\",\"storage-encryption-key\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets storage-encryption-key=<value>\",\"reset-password-jwt-secret\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets reset-password-jwt-secret=<value>\",\"oidc-hmac-secret\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets oidc-hmac-secret=<value>\",\"oidc-issuer-private-key\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets oidc-issuer-private-key=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "authelia"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "authelia_authelia_users": {
+            "mount": "kvv2",
+            "name": "authelia/users",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"users.yml\":\"REPLACE ME — vault kv patch kvv2/authelia/users users.yml=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "authelia"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "authelia_authelia_oidc-clients": {
+            "mount": "kvv2",
+            "name": "authelia/oidc-clients",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "authelia"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "backup-dashboard_backup-dashboard_basic-auth": {
+            "mount": "kvv2",
+            "name": "backup-dashboard/basic-auth",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"username\":\"REPLACE ME — vault kv patch kvv2/backup-dashboard/basic-auth username=<value>\",\"password\":\"REPLACE ME — vault kv patch kvv2/backup-dashboard/basic-auth password=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "adopted",
+                "owner": "backup-dashboard"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "backup-dashboard_backup-dashboard_oidc": {
+            "mount": "kvv2",
+            "name": "backup-dashboard/oidc",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/backup-dashboard/oidc client-secret=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "backup-dashboard"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
           "code-server_code-server": {
             "mount": "kvv2",
             "name": "code-server",
@@ -310,6 +448,10 @@ data:
         }
       },
       "import": [
+        {
+          "to": "vault_kv_secret_v2.backup-dashboard_backup-dashboard_basic-auth",
+          "id": "kvv2/data/backup-dashboard/basic-auth"
+        },
         {
           "to": "vault_kv_secret_v2.flux-notifications_flux-notifications",
           "id": "kvv2/data/flux-notifications"

@@ -1,0 +1,36 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: authelia-networkpolicy
+spec:
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: netbird
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: networkrouter
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-gateway
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-gateway
+  - from:
+    - namespaceSelector:
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          - backup-dashboard
+          - forgejo
+          - limes
+          - orrery
+          - vault
+    ports:
+    - port: 9091
+      protocol: TCP

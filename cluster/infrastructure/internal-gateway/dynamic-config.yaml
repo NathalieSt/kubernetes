@@ -7,21 +7,15 @@ data:
   middlewares.yaml: |
     http:
       middlewares:
-        headlamp-basic-auth:
-          basicAuth:
-            usersFile: /auth/headlamp
-            realm: headlamp.netbird.nathalie-stiefsohn.eu
-            removeHeader: true
-        limes-basic-auth:
-          basicAuth:
-            usersFile: /auth/limes
-            realm: limes.netbird.nathalie-stiefsohn.eu
-            removeHeader: true
-        vim-dojo-basic-auth:
-          basicAuth:
-            usersFile: /auth/vim-dojo
-            realm: dojo.netbird.nathalie-stiefsohn.eu
-            removeHeader: true
+        authelia:
+          forwardAuth:
+            address: http://authelia.authelia.svc.cluster.local:9091/api/authz/forward-auth
+            trustForwardHeader: true
+            authResponseHeaders:
+            - Remote-User
+            - Remote-Groups
+            - Remote-Email
+            - Remote-Name
   routers.yaml: |
     http:
       routers:
@@ -30,26 +24,41 @@ data:
           entryPoints:
           - websecure
           service: audiomuse-ai
+          middlewares:
+          - authelia
+        authelia:
+          rule: Host(`auth.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: authelia
         backup-dashboard:
           rule: Host(`backups.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: backup-dashboard
+          middlewares:
+          - authelia
         code-server:
           rule: Host(`vscode.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: code-server
+          middlewares:
+          - authelia
         daybook:
           rule: Host(`daybook.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: daybook
+          middlewares:
+          - authelia
         flood:
           rule: Host(`transmission.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: flood
+          middlewares:
+          - authelia
         forgejo:
           rule: Host(`code.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -61,12 +70,14 @@ data:
           - websecure
           service: headlamp
           middlewares:
-          - headlamp-basic-auth
+          - authelia
         it-tools:
           rule: Host(`it-tools.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: it-tools
+          middlewares:
+          - authelia
         jellyfin:
           rule: Host(`jellyfin.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -77,38 +88,50 @@ data:
           entryPoints:
           - websecure
           service: kavita
+          middlewares:
+          - authelia
         limes:
           rule: Host(`limes.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: limes
           middlewares:
-          - limes-basic-auth
+          - authelia
         mail:
           rule: Host(`mail.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: mail
+          middlewares:
+          - authelia
         music-library-builder:
           rule: Host(`music.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: music-library-builder
+          middlewares:
+          - authelia
         neko:
           rule: Host(`neko.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: neko
+          middlewares:
+          - authelia
         omni-tools:
           rule: Host(`omni-tools.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: omni-tools
+          middlewares:
+          - authelia
         orrery:
           rule: Host(`orrery.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: orrery
+          middlewares:
+          - authelia
         psono-client:
           rule: Host(`psono.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -124,16 +147,22 @@ data:
           entryPoints:
           - websecure
           service: redlib
+          middlewares:
+          - authelia
         searxng:
           rule: Host(`searxng.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: searxng
+          middlewares:
+          - authelia
         tandoor:
           rule: Host(`tandoor.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: tandoor
+          middlewares:
+          - authelia
         vault:
           rule: Host(`vault.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -145,7 +174,7 @@ data:
           - websecure
           service: vim-dojo
           middlewares:
-          - vim-dojo-basic-auth
+          - authelia
   services.yaml: |
     http:
       services:
@@ -153,6 +182,10 @@ data:
           loadBalancer:
             servers:
             - url: http://audiomuse-ai.jellyfin.svc.cluster.local:8000
+        authelia:
+          loadBalancer:
+            servers:
+            - url: http://authelia.authelia.svc.cluster.local:9091
         backup-dashboard:
           loadBalancer:
             servers:
