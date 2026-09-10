@@ -50,4 +50,11 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: garage
+    ports:
+    - port: 3900
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: mail

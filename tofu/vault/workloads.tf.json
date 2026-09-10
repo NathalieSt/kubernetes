@@ -168,7 +168,7 @@
         "custom_metadata": {
           "data": {
             "managed-by": "opentofu",
-            "created-as": "placeholder",
+            "created-as": "adopted",
             "owner": "flux-notifications"
           }
         },
@@ -260,5 +260,11 @@
         }
       }
     }
-  }
+  },
+  "import": [
+    {
+      "to": "vault_kv_secret_v2.flux-notifications_flux-notifications",
+      "id": "kvv2/data/flux-notifications"
+    }
+  ]
 }

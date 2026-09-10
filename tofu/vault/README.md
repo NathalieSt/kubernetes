@@ -45,11 +45,34 @@ than running on a secret that is sitting in a git repository.
 Every entry is created with `cas = 0`, meaning "write only if nothing is
 there". Running this against a path that already holds a real secret **fails
 the apply** rather than clobbering it — which is what makes it safe to point at
-a live Vault. Adopt such a path instead:
+a live Vault.
 
-```sh
-tofu import 'vault_kv_secret_v2.<name>' kvv2/data/<path>
+## Adopting a path that already exists
+
+What that failure actually looks like is worth knowing, because it does not
+mention check-and-set at all:
+
+    Error: error writing to path "kvv2/data/<path>", ... Code: 403 ... permission denied
+
+The `opentofu` policy below grants `create` and no `update` on the KV data
+path, so a write to an existing path is refused by the ACL *before* the
+check-and-set is evaluated. It fails the same way on every run from then on,
+which matters more than the one resource: the nightly plan is the drift check,
+and a drift check that always fails can no longer report drift.
+
+Adopt the path rather than importing it by hand — set `adopted: true` on that
+`vaultSecret` next to the workload. This emits an OpenTofu `import` block, so
+one apply brings the path into state and the declaration keeps working against
+a state rebuilt from nothing. The block is inert once the resource is in state,
+so it stays in the configuration:
+
+```json
+{ "import": [ { "to": "vault_kv_secret_v2.<name>", "id": "kvv2/data/<path>" } ] }
 ```
+
+An adopted entry carries `created-as: adopted` in its custom metadata instead
+of `created-as: placeholder`, because it was not created here and the metadata
+should not say it was.
 
 To find what still needs filling in:
 
