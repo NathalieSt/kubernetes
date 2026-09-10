@@ -139,7 +139,7 @@ data:
       oidc:
         hmac_secret: "{{ secret `/secrets/authelia/oidc-hmac-secret` }}"
         jwks:
-        - key: "{{ secret `/secrets/authelia/oidc-issuer-private-key` }}"
+        - key: {{ secret `/secrets/authelia/oidc-issuer-private-key` | mindent 8 "|" | msquote }}
         clients:
         - client_id: backup-dashboard
           client_name: backup-dashboard
@@ -150,8 +150,6 @@ data:
           pkce_challenge_method: S256
           redirect_uris:
           - https://backups.netbird.nathalie-stiefsohn.eu/auth/callback
-          post_logout_redirect_uris:
-          - https://backups.netbird.nathalie-stiefsohn.eu/
           scopes:
           - openid
           - profile
@@ -191,8 +189,6 @@ data:
           pkce_challenge_method: S256
           redirect_uris:
           - https://limes.netbird.nathalie-stiefsohn.eu/auth/callback
-          post_logout_redirect_uris:
-          - https://limes.netbird.nathalie-stiefsohn.eu/
           scopes:
           - openid
           - profile
@@ -214,8 +210,6 @@ data:
           pkce_challenge_method: S256
           redirect_uris:
           - https://orrery.netbird.nathalie-stiefsohn.eu/auth/callback
-          post_logout_redirect_uris:
-          - https://orrery.netbird.nathalie-stiefsohn.eu/
           scopes:
           - openid
           - profile
