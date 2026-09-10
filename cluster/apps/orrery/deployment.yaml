@@ -41,6 +41,10 @@ spec:
           value: /app/ui/dist
         - name: ORRERY_STATE_DIR
           value: /data
+        - name: ORRERY_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: ORRERY_OIDC_CLIENT_ID
+          value: orrery
         resources:
           requests:
             cpu: 50m

@@ -51,6 +51,10 @@ spec:
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
         - name: TZ
           value: Europe/Vienna
+        - name: LIMES_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: LIMES_OIDC_CLIENT_ID
+          value: limes
         resources:
           requests:
             cpu: 50m

@@ -77,5 +77,179 @@ spec:
   eventSeverity: info
   eventSources:
   - kind: Kustomization
-    name: "*"
+    name: manifests
+    namespace: flux-system
+  - kind: Kustomization
+    name: audiomuse-ai
+    namespace: flux-system
+  - kind: Kustomization
+    name: authelia
+    namespace: flux-system
+  - kind: Kustomization
+    name: backup-dashboard
+    namespace: flux-system
+  - kind: Kustomization
+    name: cert-manager
+    namespace: flux-system
+  - kind: Kustomization
+    name: clamav
+    namespace: flux-system
+  - kind: Kustomization
+    name: cnpg
+    namespace: flux-system
+  - kind: Kustomization
+    name: code-server
+    namespace: flux-system
+  - kind: Kustomization
+    name: csi-driver-nfs
+    namespace: flux-system
+  - kind: Kustomization
+    name: daybook
+    namespace: flux-system
+  - kind: Kustomization
+    name: flood
+    namespace: flux-system
+  - kind: Kustomization
+    name: flux-notifications
+    namespace: flux-system
+  - kind: Kustomization
+    name: flux-rbac
+    namespace: flux-system
+  - kind: Kustomization
+    name: forgejo
+    namespace: flux-system
+  - kind: Kustomization
+    name: forgejo-pg
+    namespace: flux-system
+  - kind: Kustomization
+    name: forgejo-runner
+    namespace: flux-system
+  - kind: Kustomization
+    name: garage
+    namespace: flux-system
+  - kind: Kustomization
+    name: gluetun-media
+    namespace: flux-system
+  - kind: Kustomization
+    name: gluetun-proxy
+    namespace: flux-system
+  - kind: Kustomization
+    name: headlamp
+    namespace: flux-system
+  - kind: Kustomization
+    name: intel-device-gpu-plugin
+    namespace: flux-system
+  - kind: Kustomization
+    name: intel-device-plugins-operator
+    namespace: flux-system
+  - kind: Kustomization
+    name: internal-gateway
+    namespace: flux-system
+  - kind: Kustomization
+    name: it-tools
+    namespace: flux-system
+  - kind: Kustomization
+    name: jellyfin
+    namespace: flux-system
+  - kind: Kustomization
+    name: k8up
+    namespace: flux-system
+  - kind: Kustomization
+    name: kavita
+    namespace: flux-system
+  - kind: Kustomization
+    name: keda
+    namespace: flux-system
+  - kind: Kustomization
+    name: limes
+    namespace: flux-system
+  - kind: Kustomization
+    name: mail
+    namespace: flux-system
+  - kind: Kustomization
+    name: main-pg
+    namespace: flux-system
+  - kind: Kustomization
+    name: mariadb
+    namespace: flux-system
+  - kind: Kustomization
+    name: music-library-builder
+    namespace: flux-system
+  - kind: Kustomization
+    name: namespaces
+    namespace: flux-system
+  - kind: Kustomization
+    name: neko
+    namespace: flux-system
+  - kind: Kustomization
+    name: netbird-operator
+    namespace: flux-system
+  - kind: Kustomization
+    name: nfd
+    namespace: flux-system
+  - kind: Kustomization
+    name: nvidia-k8s-device-plugin
+    namespace: flux-system
+  - kind: Kustomization
+    name: omni-tools
+    namespace: flux-system
+  - kind: Kustomization
+    name: orrery
+    namespace: flux-system
+  - kind: Kustomization
+    name: psono-client
+    namespace: flux-system
+  - kind: Kustomization
+    name: psono-server
+    namespace: flux-system
+  - kind: Kustomization
+    name: redis
+    namespace: flux-system
+  - kind: Kustomization
+    name: redlib
+    namespace: flux-system
+  - kind: Kustomization
+    name: reflector
+    namespace: flux-system
+  - kind: Kustomization
+    name: rimworld-together
+    namespace: flux-system
+  - kind: Kustomization
+    name: searxng
+    namespace: flux-system
+  - kind: Kustomization
+    name: tandoor
+    namespace: flux-system
+  - kind: Kustomization
+    name: transmission
+    namespace: flux-system
+  - kind: Kustomization
+    name: valkey
+    namespace: flux-system
+  - kind: Kustomization
+    name: vault
+    namespace: flux-system
+  - kind: Kustomization
+    name: vault-apply
+    namespace: flux-system
+  - kind: Kustomization
+    name: vault-backup
+    namespace: flux-system
+  - kind: Kustomization
+    name: vault-secrets-operator
+    namespace: flux-system
+  - kind: Kustomization
+    name: vault-secrets-operator-config
+    namespace: flux-system
+  - kind: Kustomization
+    name: vector
+    namespace: flux-system
+  - kind: Kustomization
+    name: victoria-logs
+    namespace: flux-system
+  - kind: Kustomization
+    name: victoria-metrics
+    namespace: flux-system
+  - kind: Kustomization
+    name: vim-dojo
     namespace: flux-system

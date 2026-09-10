@@ -18,6 +18,7 @@ spec:
           - jellyfin
           - cnpg-system
           - openclarity
+          - authelia
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
@@ -30,3 +31,4 @@ spec:
           - audiomuse-ai-flask
           - cloudnative-pg
           - openclarity
+          - authelia

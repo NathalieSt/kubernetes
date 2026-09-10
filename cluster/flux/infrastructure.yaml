@@ -2,6 +2,29 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: authelia
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: authelia
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/infrastructure/authelia
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: reflector
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-authelia
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: cert-manager
   namespace: flux-system
 spec:

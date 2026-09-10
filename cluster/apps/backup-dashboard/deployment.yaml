@@ -42,6 +42,17 @@ spec:
             secretKeyRef:
               key: password
               name: backup-dashboard-basic-auth-secret
+        - name: OIDC_ISSUER
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: OIDC_CLIENT_ID
+          value: backup-dashboard
+        - name: OIDC_REDIRECT_URI
+          value: https://backups.netbird.nathalie-stiefsohn.eu/auth/callback
+        - name: OIDC_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client-secret
+              name: backup-dashboard-oidc-secret
         resources:
           requests:
             cpu: 50m

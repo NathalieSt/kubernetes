@@ -16,10 +16,12 @@ The frame around the secrets, never the secrets themselves:
 
 | Role | Namespace | Paths |
 | --- | --- | --- |
+| `backup-dashboard` | `backup-dashboard` | `kvv2/backup-dashboard/basic-auth`, `kvv2/backup-dashboard/oidc` |
 | `code-server` | `code-server` | `kvv2/code-server`, `kvv2/code-server-git` |
 | `neko` | `neko` | `kvv2/neko` |
 | `mail` | `mail` | `kvv2/mail` |
 | `psono-server` | `psono` | `kvv2/psono` |
+| `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics` |
 
