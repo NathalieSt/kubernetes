@@ -8,6 +8,7 @@ data:
     theme: dark
     server:
       address: tcp://0.0.0.0:9091
+      disable_healthcheck: true
       buffers:
         read: 8192
         write: 8192
