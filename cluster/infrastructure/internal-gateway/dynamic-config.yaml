@@ -137,8 +137,6 @@ data:
           entryPoints:
           - websecure
           service: orrery
-          middlewares:
-          - authelia
         psono-client:
           rule: Host(`psono.netbird.nathalie-stiefsohn.eu`)
           entryPoints:

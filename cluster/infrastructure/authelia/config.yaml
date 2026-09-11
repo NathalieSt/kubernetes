@@ -91,7 +91,7 @@ data:
         policy: one_factor
       - domain:
         - orrery.netbird.nathalie-stiefsohn.eu
-        policy: one_factor
+        policy: bypass
       - domain:
         - psono-api.netbird.nathalie-stiefsohn.eu
         policy: bypass
