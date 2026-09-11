@@ -150,6 +150,12 @@ data:
         hmac_secret: "{{ secret `/secrets/authelia/oidc-hmac-secret` }}"
         jwks:
         - key: {{ secret `/secrets/authelia/oidc-issuer-private-key` | mindent 8 "|" | msquote }}
+        cors:
+          endpoints:
+          - token
+          - userinfo
+          - revocation
+          allowed_origins_from_client_redirect_uris: true
         clients:
         - client_id: backup-dashboard
           client_name: backup-dashboard
