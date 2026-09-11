@@ -51,3 +51,9 @@ spec:
     ports:
     - port: 9428
       protocol: TCP
+  - to:
+    - ipBlock:
+        cidr: 100.64.0.0/10
+    ports:
+    - port: 443
+      protocol: TCP
