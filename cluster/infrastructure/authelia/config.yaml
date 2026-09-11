@@ -12,7 +12,7 @@ data:
         read: 8192
         write: 8192
     log:
-      level: info
+      level: trace
       format: json
     totp:
       issuer: netbird.nathalie-stiefsohn.eu
@@ -144,7 +144,7 @@ data:
         - client_id: backup-dashboard
           client_name: backup-dashboard
           public: false
-          client_secret: "{{ secret `/secrets/oidc-clients/backup-dashboard` }}"
+          client_secret: "{{ if glob `/secrets/oidc-clients/backup-dashboard` }}{{ secret `/secrets/oidc-clients/backup-dashboard` }}{{ else }}unwritten-secret-for-backup-dashboard{{ end }}"
           authorization_policy: one_factor
           require_pkce: true
           pkce_challenge_method: S256
@@ -164,7 +164,7 @@ data:
         - client_id: forgejo
           client_name: forgejo
           public: false
-          client_secret: "{{ secret `/secrets/oidc-clients/forgejo` }}"
+          client_secret: "{{ if glob `/secrets/oidc-clients/forgejo` }}{{ secret `/secrets/oidc-clients/forgejo` }}{{ else }}unwritten-secret-for-forgejo{{ end }}"
           authorization_policy: one_factor
           require_pkce: true
           pkce_challenge_method: S256
@@ -226,7 +226,7 @@ data:
         - client_id: vault
           client_name: vault
           public: false
-          client_secret: "{{ secret `/secrets/oidc-clients/vault` }}"
+          client_secret: "{{ if glob `/secrets/oidc-clients/vault` }}{{ secret `/secrets/oidc-clients/vault` }}{{ else }}unwritten-secret-for-vault{{ end }}"
           authorization_policy: one_factor
           require_pkce: true
           pkce_challenge_method: S256

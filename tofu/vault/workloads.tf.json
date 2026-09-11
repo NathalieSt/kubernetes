@@ -202,7 +202,7 @@
         "name": "authelia/oidc-clients",
         "cas": 0,
         "disable_read": true,
-        "data_json": "{}",
+        "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
         "custom_metadata": {
           "data": {
             "managed-by": "opentofu",

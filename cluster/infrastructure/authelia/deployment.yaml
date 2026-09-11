@@ -95,7 +95,6 @@ spec:
       - name: oidc-clients
         secret:
           secretName: authelia-oidc-clients-secret
-          optional: true
       - name: postgres
         secret:
           secretName: postgres-creds-secret
