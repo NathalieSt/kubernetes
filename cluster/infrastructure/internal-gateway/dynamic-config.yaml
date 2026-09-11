@@ -16,6 +16,13 @@ data:
             - Remote-Groups
             - Remote-Email
             - Remote-Name
+            authRequestHeaders:
+            - Cookie
+            - X-Forwarded-For
+            - X-Forwarded-Host
+            - X-Forwarded-Proto
+            - X-Forwarded-Uri
+            - X-Forwarded-Method
   routers.yaml: |
     http:
       routers:
