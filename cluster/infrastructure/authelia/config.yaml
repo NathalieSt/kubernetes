@@ -12,6 +12,15 @@ data:
       buffers:
         read: 8192
         write: 8192
+      endpoints:
+        authz:
+          forward-auth:
+            implementation: ForwardAuth
+            authn_strategies:
+            - name: HeaderAuthorization
+              schemes:
+              - Basic
+            - name: CookieSession
     log:
       level: trace
       format: json
