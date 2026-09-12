@@ -28,8 +28,10 @@ spec:
           values:
           - backup-dashboard
           - forgejo
+          - kavita
           - limes
           - orrery
+          - tandoor
           - vault
     ports:
     - port: 9091

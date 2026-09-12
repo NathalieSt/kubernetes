@@ -197,6 +197,26 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
+        - client_id: kavita
+          client_name: kavita
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/kavita` }}{{ secret `/secrets/oidc-clients/kavita` }}{{ else }}unwritten-secret-for-kavita{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://kavita.netbird.nathalie-stiefsohn.eu/signin-oidc
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_post
+          consent_mode: implicit
         - client_id: limes
           client_name: limes
           public: true
@@ -238,6 +258,26 @@ data:
           response_types:
           - code
           token_endpoint_auth_method: none
+          consent_mode: implicit
+        - client_id: tandoor
+          client_name: tandoor
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/tandoor` }}{{ secret `/secrets/oidc-clients/tandoor` }}{{ else }}unwritten-secret-for-tandoor{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://tandoor.netbird.nathalie-stiefsohn.eu/accounts/oidc/authelia/login/callback/
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
         - client_id: vault
           client_name: vault

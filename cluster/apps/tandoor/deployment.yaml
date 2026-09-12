@@ -66,6 +66,17 @@ spec:
           value: "0"
         - name: ALLAUTH_TRUSTED_PROXY_COUNT
           value: "1"
+        - name: SOCIAL_PROVIDERS
+          value: allauth.socialaccount.providers.openid_connect
+        - name: OIDC_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client-secret
+              name: tandoor-oidc-secret
+        - name: SOCIALACCOUNT_PROVIDERS
+          value: "{\"openid_connect\":{\"OAUTH_PKCE_ENABLED\":true,\"APPS\":[{\"provider_id\":\"authelia\",\"name\":\"Authelia\",\"client_id\":\"tandoor\",\"secret\":\"$(OIDC_CLIENT_SECRET)\",\"settings\":{\"server_url\":\"https://auth.netbird.nathalie-stiefsohn.eu\"}}]}}"
+        - name: SOCIALACCOUNT_EMAIL_AUTHENTICATION
+          value: "1"
         resources:
           requests:
             cpu: 100m

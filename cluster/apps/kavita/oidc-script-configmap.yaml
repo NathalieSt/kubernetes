@@ -1,0 +1,80 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kavita-oidc-script
+  namespace: kavita
+data:
+  oidc-appsettings.sh: |
+    #!/bin/sh
+    # Merge this cluster's OIDC registration into Kavita's appsettings.json.
+    #
+    # Kavita reads Authority, ClientId and Secret from that file and from nowhere
+    # else — Kavita.Common/Configuration.cs deserialises it directly, with no
+    # IConfiguration binding and so no environment override. The file lives on the
+    # config PVC, which Kavita also owns: it holds the TokenKey Kavita generated
+    # for itself, and rewriting the file wholesale would throw that away and log
+    # every session out. Kavita is scaled to zero overnight, so "every pod start"
+    # means every morning.
+    #
+    # Hence a merge, with a parser rather than a substitution. The client secret is
+    # an opaque random string; sed and awk on one is the mistake documented at
+    # length in the garage generator. yq reads each value from the environment
+    # (strenv, never its command line), edits in place, and exits non-zero rather
+    # than writing something half-substituted — which matters because the pod then
+    # stays in Init and says so, instead of Kavita starting with a configuration
+    # that parses and is wrong.
+    set -eu
+
+    settings="$1"
+
+    # Kavita's own entrypoint copies a default appsettings.json here when it is
+    # missing, but that runs after this container, in the pod's first *real*
+    # start. Creating an empty object is enough to get out of its way: every key
+    # in Kavita's AppSettings class has a C# default, and a null TokenKey is
+    # treated as unset and regenerated on startup.
+    if [ ! -f "$settings" ]; then
+      echo "no $settings yet — creating one for Kavita to fill in"
+      printf '{}\n' > "$settings"
+    fi
+
+    # From the mounted Secret rather than from an environment variable, so the
+    # value is not visible in `kubectl describe pod`.
+    OIDC_SECRET="$(cat "$OIDC_SECRET_FILE")"
+    export OIDC_SECRET
+
+    # -p=json as well as -o=json: JSON is a subset of YAML and yq would parse the
+    # file either way, but the JSON decoder is the one that cannot reinterpret an
+    # unquoted scalar on the way through.
+    # ForwardedHeaders_Enabled is not a Kavita setting — it is ASP.NET's, read out
+    # of this same file because Kavita clears every other configuration source
+    # (Program.cs does `config.Sources.Clear()`, so environment variables are not
+    # one). Setting it is what makes the redirect URI come out as https.
+    #
+    # Kavita already calls UseForwardedHeaders, but ASP.NET ignores X-Forwarded-*
+    # unless the immediate peer is a known proxy, and the default known set is
+    # loopback only. Kavita's own KnownProxies config takes single IP addresses,
+    # which a Traefik pod does not have a stable one of. This flag is the
+    # documented alternative: it clears the known-proxy restriction outright.
+    #
+    # The restriction is then the NetworkPolicy's to enforce, and it does — only
+    # the NetBird router and the internal gateway may reach this Service at all.
+    #
+    # Why it matters is worth writing down, because the failure is late and the
+    # error names the wrong thing. Without it Request.Scheme is http, so the
+    # handler stores `http://kavita…/signin-oidc` as the redirect URI for the code
+    # exchange. Kavita's OnRedirectToIdentityProvider rewrites the *authorization*
+    # request to https, but that rewrite happens after the properties are sealed
+    # into `state`, so the token request still sends the http one — and an
+    # authorization code redeemed with a redirect URI that differs from the one it
+    # was issued for is refused. The login gets all the way to a successful
+    # Authelia sign-in and then dies at the callback.
+    yq -i -p=json -o=json '
+      .ForwardedHeaders_Enabled = "true" |
+      .OpenIdConnectSettings.Authority = strenv(OIDC_AUTHORITY) |
+      .OpenIdConnectSettings.ClientId = strenv(OIDC_CLIENT_ID) |
+      .OpenIdConnectSettings.Secret = strenv(OIDC_SECRET) |
+      .OpenIdConnectSettings.CustomScopes = (strenv(OIDC_CUSTOM_SCOPES) | split(","))
+    ' "$settings"
+
+    echo "wrote OpenIdConnectSettings for $OIDC_CLIENT_ID at $OIDC_AUTHORITY"

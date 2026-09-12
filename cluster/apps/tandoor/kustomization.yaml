@@ -6,6 +6,7 @@ metadata:
 resources:
 - deployment.yaml
 - media-pvc.yaml
+- vault-secrets.yaml
 - service.yaml
 - scaled-object.yaml
 - network-policy.yaml

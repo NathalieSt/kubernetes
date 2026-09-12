@@ -5,6 +5,8 @@ metadata:
   name: kavita
 resources:
 - theme-configmap.yaml
+- oidc-script-configmap.yaml
+- vault-secrets.yaml
 - deployment.yaml
 - config-pvc.yaml
 - library-pvc.yaml

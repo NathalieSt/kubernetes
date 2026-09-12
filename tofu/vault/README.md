@@ -19,8 +19,10 @@ The frame around the secrets, never the secrets themselves:
 | `backup-dashboard` | `backup-dashboard` | `kvv2/backup-dashboard/basic-auth`, `kvv2/backup-dashboard/oidc` |
 | `code-server` | `code-server` | `kvv2/code-server`, `kvv2/code-server-git` |
 | `neko` | `neko` | `kvv2/neko` |
+| `kavita` | `kavita` | `kvv2/kavita/oidc` |
 | `mail` | `mail` | `kvv2/mail` |
 | `psono-server` | `psono` | `kvv2/psono` |
+| `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics` |

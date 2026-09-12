@@ -29,6 +29,39 @@ spec:
         volumeMounts:
         - mountPath: /kavita/config
           name: config-volume
+      - command:
+        - sh
+        - /scripts/oidc-appsettings.sh
+        - /kavita/config/appsettings.json
+        image: mikefarah/yq@sha256:b9285dd3b0bea3c34d0c54415dd48d767dabd9644d489bd6e253660847b58419
+        name: oidc-config
+        volumeMounts:
+        - mountPath: /kavita/config
+          name: config-volume
+        - mountPath: /scripts
+          name: oidc-script-volume
+          readOnly: true
+        - mountPath: /secrets/oidc
+          name: oidc-secret-volume
+          readOnly: true
+        env:
+        - name: OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: OIDC_CLIENT_ID
+          value: kavita
+        - name: OIDC_CUSTOM_SCOPES
+          value: groups
+        - name: OIDC_SECRET_FILE
+          value: /secrets/oidc/client-secret
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -73,3 +106,10 @@ spec:
       - name: theme-volume
         configMap:
           name: kavita-theme
+      - name: oidc-script-volume
+        configMap:
+          name: kavita-oidc-script
+          defaultMode: 365
+      - name: oidc-secret-volume
+        secret:
+          secretName: kavita-oidc-secret

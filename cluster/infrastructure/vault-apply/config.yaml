@@ -65,6 +65,10 @@ data:
             "name": "flux-notifications",
             "policy": "path \"kvv2/data/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n"
           },
+          "kavita": {
+            "name": "kavita",
+            "policy": "path \"kvv2/data/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+          },
           "mail": {
             "name": "mail",
             "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n"
@@ -76,6 +80,10 @@ data:
           "psono-server": {
             "name": "psono-server",
             "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "tandoor": {
+            "name": "tandoor",
+            "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "victoria-metrics": {
             "name": "victoria-metrics",
@@ -143,6 +151,21 @@ data:
             ],
             "token_ttl": 600
           },
+          "kavita": {
+            "backend": "kubernetes",
+            "role_name": "kavita",
+            "bound_service_account_names": [
+              "kavita-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "kavita"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.kavita.name}"
+            ],
+            "token_ttl": 600
+          },
           "mail": {
             "backend": "kubernetes",
             "role_name": "mail",
@@ -185,6 +208,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.psono-server.name}"
+            ],
+            "token_ttl": 600
+          },
+          "tandoor": {
+            "backend": "kubernetes",
+            "role_name": "tandoor",
+            "bound_service_account_names": [
+              "tandoor-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "tandoor"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.tandoor.name}"
             ],
             "token_ttl": 600
           },
@@ -250,7 +288,7 @@ data:
             "name": "authelia/oidc-clients",
             "cas": 0,
             "disable_read": true,
-            "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
+            "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
             "custom_metadata": {
               "data": {
                 "managed-by": "opentofu",
@@ -365,6 +403,26 @@ data:
               "prevent_destroy": true
             }
           },
+          "kavita_kavita_oidc": {
+            "mount": "kvv2",
+            "name": "kavita/oidc",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/kavita/oidc client-secret=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "adopted",
+                "owner": "kavita"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
           "mail_mail": {
             "mount": "kvv2",
             "name": "mail",
@@ -425,6 +483,26 @@ data:
               "prevent_destroy": true
             }
           },
+          "tandoor_tandoor_oidc": {
+            "mount": "kvv2",
+            "name": "tandoor/oidc",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/tandoor/oidc client-secret=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "adopted",
+                "owner": "tandoor"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
           "victoria-metrics_victoria-metrics": {
             "mount": "kvv2",
             "name": "victoria-metrics",
@@ -455,6 +533,14 @@ data:
         {
           "to": "vault_kv_secret_v2.flux-notifications_flux-notifications",
           "id": "kvv2/data/flux-notifications"
+        },
+        {
+          "to": "vault_kv_secret_v2.kavita_kavita_oidc",
+          "id": "kvv2/data/kavita/oidc"
+        },
+        {
+          "to": "vault_kv_secret_v2.tandoor_tandoor_oidc",
+          "id": "kvv2/data/tandoor/oidc"
         }
       ]
     }
