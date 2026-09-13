@@ -16,6 +16,16 @@ spec:
         app.kubernetes.io/name: audiomuse-ai-worker
         app.kubernetes.io/version: sha256_9881304597ce7
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - debian-mgt-0
+                - debian-mgt-1
       containers:
       - image: ghcr.io/neptunehub/audiomuse-ai@sha256:9881304597ce7ea4938b670509e227a97aab42dcf8ca349139cebab321f2dd33
         name: audiomuse-ai-worker
@@ -53,6 +63,12 @@ spec:
         envFrom:
         - configMapRef:
             name: audiomuse-configmap
+        resources:
+          requests:
+            cpu: 50m
+            memory: 320Mi
+          limits:
+            memory: 5Gi
       volumes:
       - name: temp-volume
         persistentVolumeClaim:

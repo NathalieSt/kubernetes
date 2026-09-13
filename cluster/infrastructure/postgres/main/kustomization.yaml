@@ -9,5 +9,8 @@ resources:
 - tandoor-db.yaml
 - psono-db.yaml
 - authelia-db.yaml
+- healthchecks-db.yaml
+- ntfy-db.yaml
+- glitchtip-db.yaml
 - network-policy.yaml
 - k8up-schedule.yaml

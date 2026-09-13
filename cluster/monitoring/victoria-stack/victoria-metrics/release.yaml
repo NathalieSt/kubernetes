@@ -13,6 +13,8 @@ spec:
   install:
     remediation:
       retries: 3
+  upgrade:
+    crds: CreateReplace
   values:
     defaultDashboards:
       enabled: false
@@ -287,6 +289,10 @@ spec:
             bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
             honorLabels: true
             metricRelabelConfigs:
+            - action: drop
+              regex: (apiserver|etcd)_.+
+              sourceLabels:
+              - __name__
             - action: labeldrop
               regex: ^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*
             scheme: https
@@ -786,6 +792,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: netbird-operator
+          - job_name: ntfy
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - ntfy
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: ntfy
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9090"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: ntfy
           - job_name: redis
             metrics_path: /metrics
             scheme: http
@@ -929,6 +963,13 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: vector
+        resources:
+          limits:
+            cpu: "1"
+            memory: 500Mi
+          requests:
+            cpu: 150m
+            memory: 200Mi
         secrets:
         - garage-metrics-token-secret
     vmsingle:

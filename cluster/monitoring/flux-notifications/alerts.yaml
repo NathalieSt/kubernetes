@@ -92,6 +92,9 @@ spec:
     name: cert-manager
     namespace: flux-system
   - kind: Kustomization
+    name: changedetection
+    namespace: flux-system
+  - kind: Kustomization
     name: clamav
     namespace: flux-system
   - kind: Kustomization
@@ -128,6 +131,9 @@ spec:
     name: garage
     namespace: flux-system
   - kind: Kustomization
+    name: glitchtip
+    namespace: flux-system
+  - kind: Kustomization
     name: gluetun-media
     namespace: flux-system
   - kind: Kustomization
@@ -135,6 +141,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: headlamp
+    namespace: flux-system
+  - kind: Kustomization
+    name: healthchecks
     namespace: flux-system
   - kind: Kustomization
     name: intel-device-gpu-plugin
@@ -186,6 +195,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: nfd
+    namespace: flux-system
+  - kind: Kustomization
+    name: ntfy
     namespace: flux-system
   - kind: Kustomization
     name: nvidia-k8s-device-plugin

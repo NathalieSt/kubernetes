@@ -1,0 +1,204 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: healthchecks
+    app.kubernetes.io/version: v4.4
+  name: healthchecks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: healthchecks
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: healthchecks
+        app.kubernetes.io/version: v4.4
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          #!/bin/sh
+          #
+          # Refuses to let a workload start while any secret it depends on is missing,
+          # empty, or still holding the placeholder that vault-config writes when it
+          # creates a KV path.
+          #
+          # Kept next to the generator rather than inlined so it can be linted and run by
+          # hand:
+          #
+          #     GUARDED_SECRET=neko-secret VAULT_PATH=neko \
+          #     EXPECTED_KEYS="password admin-password" \
+          #     GUARD_DIR=./fixture ./check.sh
+          #
+          # See SecretGuard.res for why this exists at all.
+
+          set -eu
+
+          : "${GUARDED_SECRET:?GUARDED_SECRET is required}"
+          : "${VAULT_PATH:?VAULT_PATH is required}"
+          : "${EXPECTED_KEYS:?EXPECTED_KEYS is required}"
+
+          dir="${GUARD_DIR:-/guarded}"
+          status=0
+
+          for key in $EXPECTED_KEYS; do
+              file="$dir/$key"
+
+              if [ ! -f "$file" ]; then
+                  echo "refusing to start: ${GUARDED_SECRET} has no key '${key}'." >&2
+                  echo "  The VaultStaticSecret syncs whatever is at kvv2/${VAULT_PATH}," >&2
+                  echo "  and that key is not there yet." >&2
+                  status=1
+                  continue
+              fi
+
+              value=$(cat "$file")
+
+              case "$value" in
+                  # The prefix, not the whole sentence: the placeholder embeds the path
+                  # and key, so matching it exactly would mean rebuilding the string here
+                  # and keeping two copies of it in step.
+                  "REPLACE ME"*)
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is still the vault-config placeholder." >&2
+                      echo "  This value is written into the manifests repository, so it is" >&2
+                      echo "  public knowledge and must never reach a running workload." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+                  "")
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is empty." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+              esac
+          done
+
+          if [ "$status" -ne 0 ]; then
+              echo "" >&2
+              echo "Once Vault holds real values the VaultStaticSecret picks them up within" >&2
+              echo "its refresh interval, and the next restart of this pod succeeds on its" >&2
+              echo "own — there is nothing else to do here." >&2
+          fi
+
+          exit "$status"
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: healthchecks-secret-guard
+        volumeMounts:
+        - mountPath: /guarded
+          name: healthchecks-secret-guard-volume
+          readOnly: true
+        env:
+        - name: GUARDED_SECRET
+          value: healthchecks-secret
+        - name: VAULT_PATH
+          value: healthchecks/secret
+        - name: EXPECTED_KEYS
+          value: secret-key
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: healthchecks/healthchecks:v4.4
+        name: healthchecks
+        ports:
+        - containerPort: 8000
+          name: http
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp-volume
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: secret-key
+              name: healthchecks-secret
+        - name: DEBUG
+          value: "False"
+        - name: SITE_ROOT
+          value: https://healthchecks.netbird.nathalie-stiefsohn.eu
+        - name: SITE_NAME
+          value: Healthchecks
+        - name: ALLOWED_HOSTS
+          value: healthchecks.netbird.nathalie-stiefsohn.eu,healthchecks.healthchecks.svc.cluster.local,$(POD_IP)
+        - name: PING_ENDPOINT
+          value: http://healthchecks.healthchecks.svc.cluster.local:8000/ping/
+        - name: SECURE_PROXY_SSL_HEADER
+          value: HTTP_X_FORWARDED_PROTO,https
+        - name: DB
+          value: postgres
+        - name: DB_HOST
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: healthchecks
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: REGISTRATION_OPEN
+          value: "False"
+        - name: INTEGRATIONS_ALLOW_PRIVATE_IPS
+          value: "True"
+        - name: UWSGI_PROCESSES
+          value: "2"
+        resources:
+          requests:
+            cpu: 25m
+            memory: 192Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 999
+          runAsGroup: 999
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /api/v3/status/
+            port: 8000
+          periodSeconds: 15
+      volumes:
+      - name: healthchecks-secret-guard-volume
+        secret:
+          secretName: healthchecks-secret
+      - name: tmp-volume
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

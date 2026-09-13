@@ -47,11 +47,10 @@ data:
           parsed, err = parse_json(.message)
 
           if err == null && is_object(parsed) {
-            # Merge parsed fields into root
+            # Merge parsed fields into root. Every field of the document survives
+            # the merge, so the raw JSON is not kept beside it as well — an
+            # `original_message` copy stored every JSON line twice.
             . = merge!(., parsed)
-
-            # Optional: keep original message
-            .original_message = .message
 
             # Replace message with a readable string if present
             if exists(parsed.message) {
@@ -59,10 +58,29 @@ data:
             }
           }
 
-          if err != null && is_string(.message) {
-            parsed = parse_syslog(.message) ?? parse_key_value(.message) ?? null
-            if parsed != null {
-              . = merge!(., parsed)
+          # Plain-text lines are NOT split into fields. This used to fall back to
+          # parse_syslog ?? parse_key_value, and parse_key_value accepts any text at
+          # all: every space-separated word became a field name. VictoriaLogs saw
+          # 7,212 distinct field names in one hour, 6,557 of them words out of log
+          # messages ("feature discovery completed", "nfd-worker.go:550]", "200"),
+          # and each is a column it has to keep in memory. It sat at 1.9 of its
+          # 2 GiB limit and had been OOM-killed.
+          #
+          # Only a line that is actually logfmt (starts with key=) is parsed, and
+          # only its level is lifted out — that is what normalize_level and the
+          # debug filter below need. The rest stays in the message, where
+          # VictoriaLogs' `| unpack_logfmt` recovers it at query time.
+          if err != null {
+            line = string(.message) ?? ""
+            if match(line, r'^[A-Za-z_][\w.]*=') {
+              kv, kv_err = parse_logfmt(line)
+              if kv_err == null {
+                if exists(kv.level) {
+                  .level = kv.level
+                } else if exists(kv.lvl) {
+                  .level = kv.lvl
+                }
+              }
             }
           }
 
@@ -104,9 +122,18 @@ data:
         type: remap
         inputs:
           - drop_debug_logs
+        # Metadata carried on every line that nothing queries. `annotations` was
+        # listed here for a long time and matched nothing: the source calls the
+        # field pod_annotations. pod_labels stay — selecting logs by app label is a
+        # real query.
         source: |
           del(.kubernetes.node_labels)
-          del(.kubernetes.annotations)
+          del(.kubernetes.pod_annotations)
+          del(.kubernetes.namespace_labels)
+          del(.kubernetes.pod_ips)
+          del(.kubernetes.pod_uid)
+          del(.kubernetes.container_id)
+          del(.file)
 
       normalize_logs:
         type: remap

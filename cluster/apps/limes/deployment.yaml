@@ -47,6 +47,8 @@ spec:
           value: "900000"
         - name: LIMES_PATROL_MAX_AGE_MS
           value: "86400000"
+        - name: LIMES_SCAN_AVOID_NODES
+          value: raspberry-pi-5-0,raspberry-pi-5-1,raspberry-pi-5-2
         - name: LIMES_VM_URL
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
         - name: TZ

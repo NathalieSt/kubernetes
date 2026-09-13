@@ -17,6 +17,14 @@
         "name": "flux-notifications",
         "policy": "path \"kvv2/data/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "glitchtip": {
+        "name": "glitchtip",
+        "policy": "path \"kvv2/data/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "healthchecks": {
+        "name": "healthchecks",
+        "policy": "path \"kvv2/data/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "kavita": {
         "name": "kavita",
         "policy": "path \"kvv2/data/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -28,6 +36,10 @@
       "neko": {
         "name": "neko",
         "policy": "path \"kvv2/data/neko\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/neko\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "ntfy": {
+        "name": "ntfy",
+        "policy": "path \"kvv2/data/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "psono-server": {
         "name": "psono-server",
@@ -103,6 +115,36 @@
         ],
         "token_ttl": 600
       },
+      "glitchtip": {
+        "backend": "kubernetes",
+        "role_name": "glitchtip",
+        "bound_service_account_names": [
+          "glitchtip-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "glitchtip"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.glitchtip.name}"
+        ],
+        "token_ttl": 600
+      },
+      "healthchecks": {
+        "backend": "kubernetes",
+        "role_name": "healthchecks",
+        "bound_service_account_names": [
+          "healthchecks-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "healthchecks"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.healthchecks.name}"
+        ],
+        "token_ttl": 600
+      },
       "kavita": {
         "backend": "kubernetes",
         "role_name": "kavita",
@@ -145,6 +187,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.neko.name}"
+        ],
+        "token_ttl": 600
+      },
+      "ntfy": {
+        "backend": "kubernetes",
+        "role_name": "ntfy",
+        "bound_service_account_names": [
+          "ntfy-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "ntfy"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.ntfy.name}"
         ],
         "token_ttl": 600
       },
@@ -355,6 +412,46 @@
           "prevent_destroy": true
         }
       },
+      "glitchtip_glitchtip_secret": {
+        "mount": "kvv2",
+        "name": "glitchtip/secret",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"secret-key\":\"REPLACE ME — vault kv patch kvv2/glitchtip/secret secret-key=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "glitchtip"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
+      "healthchecks_healthchecks_secret": {
+        "mount": "kvv2",
+        "name": "healthchecks/secret",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"secret-key\":\"REPLACE ME — vault kv patch kvv2/healthchecks/secret secret-key=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "healthchecks"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
       "kavita_kavita_oidc": {
         "mount": "kvv2",
         "name": "kavita/oidc",
@@ -406,6 +503,26 @@
             "managed-by": "opentofu",
             "created-as": "placeholder",
             "owner": "neko"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
+      "ntfy_ntfy_auth": {
+        "mount": "kvv2",
+        "name": "ntfy/auth",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"auth-users\":\"REPLACE ME — vault kv patch kvv2/ntfy/auth auth-users=<value>\",\"auth-tokens\":\"REPLACE ME — vault kv patch kvv2/ntfy/auth auth-tokens=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "ntfy"
           }
         },
         "lifecycle": {

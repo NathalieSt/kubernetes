@@ -54,6 +54,9 @@ data:
         - backups.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - changedetection.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - code.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
@@ -63,8 +66,14 @@ data:
         - dojo.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - glitchtip.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - headlamp.netbird.nathalie-stiefsohn.eu
         policy: two_factor
+      - domain:
+        - healthchecks.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
       - domain:
         - it-tools.netbird.nathalie-stiefsohn.eu
         policy: one_factor
@@ -86,6 +95,9 @@ data:
       - domain:
         - neko.netbird.nathalie-stiefsohn.eu
         policy: one_factor
+      - domain:
+        - ntfy.netbird.nathalie-stiefsohn.eu
+        policy: bypass
       - domain:
         - omni-tools.netbird.nathalie-stiefsohn.eu
         policy: one_factor
