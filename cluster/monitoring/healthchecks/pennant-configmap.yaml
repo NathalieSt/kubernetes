@@ -1,0 +1,247 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: healthchecks-pennant
+  namespace: healthchecks
+data:
+  append-stylesheet.sh: |
+    #!/bin/sh
+    # Appends Pennant to an application's own stylesheet, in a copy of the
+    # directory that holds it. Run as an init container from the application's own
+    # image, so the file it copies is the one that version actually serves. See
+    # StylesheetAppend.res for why this exists at all.
+    #
+    #   $1   the directory in the image
+    #   $2   the emptyDir mounted over that directory in the application container
+    #   $3   the stylesheet to append
+    #   $4…  globs, relative to the directory, naming the files to append to
+    #
+    # A theme must never be the reason an application does not start. So a layout
+    # this does not recognise -- the application moved its assets in an upgrade --
+    # is reported on stderr and the pod starts unthemed, from a faithful copy.
+    # Everything else (a failed copy, a full disk) still fails, because then the
+    # copy the application would be served from is incomplete.
+    set -eu
+
+    source_dir=$1
+    target_dir=$2
+    css=$3
+    shift 3
+
+    warn() {
+      echo "WARNING: Pennant not applied: $*" >&2
+    }
+
+    if [ ! -d "$source_dir" ]; then
+      # Nothing to copy, and nothing is hidden by mounting over a path that does
+      # not exist in this image.
+      warn "$source_dir does not exist in this image -- the asset layout has changed"
+      exit 0
+    fi
+
+    cp -R "$source_dir/." "$target_dir/"
+    # An image may ship its assets read-only, and cp keeps the mode. The contents
+    # only: the emptyDir's own root belongs to root, and a chmod of it fails.
+    find "$target_dir" -mindepth 1 -exec chmod u+w {} +
+
+    for pattern in "$@"; do
+      matched=0
+      # Unquoted on purpose: this is the glob.
+      for file in "$target_dir"/$pattern; do
+        [ -f "$file" ] || continue
+        matched=$((matched + 1))
+        printf '\n' >>"$file"
+        cat "$css" >>"$file"
+        # A pre-compressed sibling is served in preference to the file itself, so
+        # one left as it was would quietly serve the unthemed stylesheet to every
+        # browser that accepts the encoding -- which is all of them. gzip is in
+        # every image this runs from; brotli is in none, so that copy is dropped
+        # and the server falls back to the gzip one.
+        rm -f "$file.br"
+        if [ -e "$file.gz" ]; then
+          gzip -9 -c "$file" >"$file.gz"
+        fi
+        echo "appended Pennant to ${file#"$target_dir"/}"
+      done
+      if [ "$matched" -eq 0 ]; then
+        warn "no file under $source_dir matches '$pattern' -- the asset layout has changed"
+      fi
+    done
+  pennant.css: |
+    /* Pennant for Healthchecks, appended by kubernetes-generator (src/generators/theme). */
+
+    :root {
+      --alert-no-data-bg: #f1f4f5;
+      --alert-no-data-border: #e3e7e9;
+      --alert-no-data-color: #666d71;
+      --alert-success-bg: #d9f6df;
+      --alert-success-border: #e3e7e9;
+      --alert-success-color: #135f32;
+      --body-bg: #f9fafb;
+      --border-color: #e3e7e9;
+      --border-muted: #e3e7e9;
+      --breadcrumb-active-color: #666d71;
+      --breadcrumb-bg: #f1f4f5;
+      --btn-active-bg: #e3e7e9;
+      --btn-active-border: #838b8e;
+      --btn-active-color: #2e3436;
+      --btn-default-bg: #ffffff;
+      --btn-default-color: #2e3436;
+      --btn-remove-color: #af3d34;
+      --btn-remove-hover: #ffe6e3;
+      --cheatsheet-example-bg: #f1f4f5;
+      --close-color: #2e3436;
+      --dropdown-bg: #ffffff;
+      --dropdown-link-hover-bg: #f1f4f5;
+      --get-started-bg: #f1f4f5;
+      --input-bg-disabled: #f1f4f5;
+      --input-color: #2e3436;
+      --input-group-addon-bg: #f1f4f5;
+      --jumbotron-bg: #f1f4f5;
+      --label-ign-bg: #e3e7e9;
+      --label-ign-color: #2e3436;
+      --label-start-color: #1e7c44;
+      --link-color: #984a72;
+      --link-hover-color: #763757;
+      --log-flip-bg: #f1f4f5;
+      --modal-content-bg: #ffffff;
+      --nav-link-hover-bg: #f1f4f5;
+      --panel-bg: #ffffff;
+      --panel-default-heading-bg: #f1f4f5;
+      --panel-success-bg: #d9f6df;
+      --pre-bg: #f1f4f5;
+      --ts-tag-bg: #e3e7e9;
+      --small-text-color: #2e3436;
+      --state-info-bg: #eaebff;
+      --state-info-border: #e3e7e9;
+      --state-info-color: #4b4489;
+      --status-new-color: #838b8e;
+      --table-bg-hover: #f1f4f5;
+      --tag-bg: #f1f4f5;
+      --tag-checked-bg: #2e3436;
+      --tag-checked-border: #2e3436;
+      --tag-checked-color: #ffffff;
+      --tag-color: #666d71;
+      --tag-up-bg: #ffffff;
+      --tag-up-border: #e3e7e9;
+      --tag-up-color: #2e3436;
+      --text-color: #2e3436;
+      --text-muted: #666d71;
+      --text-success: #1e7c44;
+      --text-warning: #8e5e00;
+      --text-danger: #af3d34;
+      --log-new-row-bg: #eaebff;
+      --log-new-row-border: #e3e7e9;
+      --btn-default-border: #d0d5d8;
+      --btn-remove-bg: #ffffff;
+      --input-border: #d0d5d8;
+    }
+
+    body.dark {
+      --alert-no-data-bg: #1d2123;
+      --alert-no-data-border: #2e3436;
+      --alert-no-data-color: #b8bfc2;
+      --alert-success-bg: #042b13;
+      --alert-success-border: #2e3436;
+      --alert-success-color: #bbeac6;
+      --body-bg: #090c0d;
+      --border-color: #2e3436;
+      --border-muted: #2e3436;
+      --breadcrumb-active-color: #b8bfc2;
+      --breadcrumb-bg: #1d2123;
+      --btn-active-bg: #2e3436;
+      --btn-active-border: #666d71;
+      --btn-active-color: #f1f4f5;
+      --btn-default-bg: #121617;
+      --btn-default-color: #f1f4f5;
+      --btn-remove-color: #ffaea2;
+      --btn-remove-hover: #40100d;
+      --cheatsheet-example-bg: #1d2123;
+      --close-color: #f1f4f5;
+      --dropdown-bg: #121617;
+      --dropdown-link-hover-bg: #1d2123;
+      --get-started-bg: #1d2123;
+      --input-bg-disabled: #1d2123;
+      --input-color: #f1f4f5;
+      --input-group-addon-bg: #1d2123;
+      --jumbotron-bg: #1d2123;
+      --label-ign-bg: #2e3436;
+      --label-ign-color: #f1f4f5;
+      --label-start-color: #93d9a6;
+      --link-color: #f5adce;
+      --link-hover-color: #ffcbe2;
+      --log-flip-bg: #1d2123;
+      --modal-content-bg: #121617;
+      --nav-link-hover-bg: #1d2123;
+      --panel-bg: #121617;
+      --panel-default-heading-bg: #1d2123;
+      --panel-success-bg: #042b13;
+      --pre-bg: #1d2123;
+      --ts-tag-bg: #2e3436;
+      --small-text-color: #f1f4f5;
+      --state-info-bg: #201d41;
+      --state-info-border: #2e3436;
+      --state-info-color: #d8d8ff;
+      --status-new-color: #666d71;
+      --table-bg-hover: #1d2123;
+      --tag-bg: #1d2123;
+      --tag-checked-bg: #f1f4f5;
+      --tag-checked-border: #f1f4f5;
+      --tag-checked-color: #121617;
+      --tag-color: #b8bfc2;
+      --tag-up-bg: #121617;
+      --tag-up-border: #2e3436;
+      --tag-up-color: #f1f4f5;
+      --text-color: #f1f4f5;
+      --text-muted: #b8bfc2;
+      --text-success: #93d9a6;
+      --text-warning: #eebc77;
+      --text-danger: #ffaea2;
+      --log-new-row-bg: #201d41;
+      --log-new-row-border: #2e3436;
+    }
+
+    .btn-primary,
+    .btn-primary.disabled,
+    .btn-primary[disabled],
+    fieldset[disabled] .btn-primary,
+    .btn-primary.disabled:hover,
+    .btn-primary[disabled]:hover,
+    fieldset[disabled] .btn-primary:hover,
+    .btn-primary.disabled:focus,
+    .btn-primary[disabled]:focus,
+    fieldset[disabled] .btn-primary:focus {
+      color: #f9fafb;
+      background-color: #984a72;
+      border-color: #984a72;
+    }
+
+    .btn-primary:focus,
+    .btn-primary.focus,
+    .btn-primary:hover,
+    .btn-primary:active,
+    .btn-primary.active,
+    .open>.dropdown-toggle.btn-primary,
+    .btn-primary:active:hover,
+    .btn-primary.active:hover,
+    .open>.dropdown-toggle.btn-primary:hover,
+    .btn-primary:active:focus,
+    .btn-primary.active:focus,
+    .open>.dropdown-toggle.btn-primary:focus,
+    .btn-primary:active.focus,
+    .btn-primary.active.focus,
+    .open>.dropdown-toggle.btn-primary.focus {
+      color: #f9fafb;
+      background-color: #763757;
+      border-color: #763757;
+    }
+
+    .btn-primary .badge {
+      color: #984a72;
+      background-color: #f9fafb;
+    }
+
+    .btn-primary {
+      box-shadow: 0 5px 0 -3px #984a724d;
+    }

@@ -45,6 +45,9 @@ spec:
         - mountPath: /secrets/postgres
           name: postgres
           readOnly: true
+        - mountPath: /assets
+          name: assets
+          readOnly: true
         - mountPath: /notifications
           name: notifications
         - mountPath: /tmp
@@ -98,6 +101,9 @@ spec:
       - name: postgres
         secret:
           secretName: postgres-creds-secret
+      - name: assets
+        configMap:
+          name: authelia-assets
       - name: notifications
         emptyDir: {}
       - name: tmp

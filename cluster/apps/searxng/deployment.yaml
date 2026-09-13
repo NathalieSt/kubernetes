@@ -17,6 +17,32 @@ spec:
         app.kubernetes.io/name: searxng
         app.kubernetes.io/version: sha256_b2211b2ad11fc
     spec:
+      initContainers:
+      - command:
+        - sh
+        - /pennant/append-stylesheet.sh
+        - /usr/local/searxng/searx/static/themes/simple
+        - /pennant-out
+        - /pennant/pennant.css
+        - sxng-ltr.min.css
+        - sxng-rtl.min.css
+        image: searxng/searxng@sha256:b2211b2ad11fc9822ed8d94502a609a862d6587e13f052e18847559586c76b71
+        name: pennant
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-script-volume
+          readOnly: true
+        - mountPath: /pennant-out
+          name: pennant-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -28,6 +54,9 @@ spec:
         volumeMounts:
         - mountPath: /etc/searxng
           name: configmap-volume
+        - mountPath: /usr/local/searxng/searx/static/themes/simple
+          name: pennant-volume
+          readOnly: true
         resources:
           requests:
             cpu: 100m
@@ -44,6 +73,11 @@ spec:
       - name: configmap-volume
         configMap:
           name: searxng-configmap
+      - name: pennant-script-volume
+        configMap:
+          name: searxng-pennant
+      - name: pennant-volume
+        emptyDir: {}
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
