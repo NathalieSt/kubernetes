@@ -19,7 +19,7 @@
       },
       "glitchtip": {
         "name": "glitchtip",
-        "policy": "path \"kvv2/data/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "healthchecks": {
         "name": "healthchecks",
@@ -51,7 +51,7 @@
       },
       "victoria-metrics": {
         "name": "victoria-metrics",
-        "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n"
       }
     },
     "vault_kubernetes_auth_backend_role": {
@@ -297,7 +297,7 @@
         "name": "authelia/oidc-clients",
         "cas": 0,
         "disable_read": true,
-        "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
+        "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"glitchtip\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients glitchtip=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
         "custom_metadata": {
           "data": {
             "managed-by": "opentofu",
@@ -422,6 +422,26 @@
           "data": {
             "managed-by": "opentofu",
             "created-as": "placeholder",
+            "owner": "glitchtip"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
+      "glitchtip_glitchtip_oidc": {
+        "mount": "kvv2",
+        "name": "glitchtip/oidc",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/glitchtip/oidc client-secret=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "adopted",
             "owner": "glitchtip"
           }
         },
@@ -591,6 +611,26 @@
           ],
           "prevent_destroy": true
         }
+      },
+      "victoria-metrics_victoria-metrics_ntfy": {
+        "mount": "kvv2",
+        "name": "victoria-metrics/ntfy",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"token\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics/ntfy token=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "victoria-metrics"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
       }
     }
   },
@@ -602,6 +642,10 @@
     {
       "to": "vault_kv_secret_v2.flux-notifications_flux-notifications",
       "id": "kvv2/data/flux-notifications"
+    },
+    {
+      "to": "vault_kv_secret_v2.glitchtip_glitchtip_oidc",
+      "id": "kvv2/data/glitchtip/oidc"
     },
     {
       "to": "vault_kv_secret_v2.kavita_kavita_oidc",

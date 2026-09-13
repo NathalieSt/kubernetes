@@ -36,6 +36,7 @@ spec:
           - healthchecks
           - glitchtip
           - changedetection
+          - victoria-metrics
     ports:
     - port: 8080
       protocol: TCP

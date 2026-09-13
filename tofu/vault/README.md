@@ -25,10 +25,10 @@ The frame around the secrets, never the secrets themselves:
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
-| `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret` |
+| `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc` |
 | `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret` |
 | `ntfy` | `ntfy` | `kvv2/ntfy/auth` |
-| `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics` |
+| `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics`, `kvv2/victoria-metrics/ntfy` |
 
 ## What is not managed, and why
 

@@ -213,6 +213,25 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
+        - client_id: glitchtip
+          client_name: glitchtip
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/glitchtip` }}{{ secret `/secrets/oidc-clients/glitchtip` }}{{ else }}unwritten-secret-for-glitchtip{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://glitchtip.netbird.nathalie-stiefsohn.eu/accounts/oidc/authelia/login/callback/
+          scopes:
+          - openid
+          - profile
+          - email
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_post
+          consent_mode: implicit
         - client_id: kavita
           client_name: kavita
           public: false
