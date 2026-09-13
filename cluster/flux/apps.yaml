@@ -363,6 +363,7 @@ spec:
   - name: vault-secrets-operator-config
   - name: garage
   - name: k8up
+  - name: reflector
   serviceAccountName: flux-mail
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -517,6 +518,7 @@ spec:
   - name: namespaces
   - name: flux-rbac
   - name: keda
+  - name: reflector
   serviceAccountName: flux-redlib
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1

@@ -1,0 +1,216 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tandoor-pennant
+  namespace: tandoor
+data:
+  append-stylesheet.sh: |
+    #!/bin/sh
+    # Appends Pennant to an application's own stylesheet, in a copy of the
+    # directory that holds it. Run as an init container from the application's own
+    # image, so the file it copies is the one that version actually serves. See
+    # StylesheetAppend.res for why this exists at all.
+    #
+    #   $1   the directory in the image
+    #   $2   the emptyDir mounted over that directory in the application container
+    #   $3   the stylesheet to append
+    #   $4…  globs, relative to the directory, naming the files to append to
+    #
+    # A theme must never be the reason an application does not start. So a layout
+    # this does not recognise -- the application moved its assets in an upgrade --
+    # is reported on stderr and the pod starts unthemed, from a faithful copy.
+    # Everything else (a failed copy, a full disk) still fails, because then the
+    # copy the application would be served from is incomplete.
+    set -eu
+
+    source_dir=$1
+    target_dir=$2
+    css=$3
+    shift 3
+
+    warn() {
+      echo "WARNING: Pennant not applied: $*" >&2
+    }
+
+    if [ ! -d "$source_dir" ]; then
+      # Nothing to copy, and nothing is hidden by mounting over a path that does
+      # not exist in this image.
+      warn "$source_dir does not exist in this image -- the asset layout has changed"
+      exit 0
+    fi
+
+    cp -R "$source_dir/." "$target_dir/"
+    # An image may ship its assets read-only, and cp keeps the mode. The contents
+    # only: the emptyDir's own root belongs to root, and a chmod of it fails.
+    find "$target_dir" -mindepth 1 -exec chmod u+w {} +
+
+    for pattern in "$@"; do
+      matched=0
+      # Unquoted on purpose: this is the glob.
+      for file in "$target_dir"/$pattern; do
+        [ -f "$file" ] || continue
+        matched=$((matched + 1))
+        printf '\n' >>"$file"
+        cat "$css" >>"$file"
+        # A pre-compressed sibling is served in preference to the file itself, so
+        # one left as it was would quietly serve the unthemed stylesheet to every
+        # browser that accepts the encoding -- which is all of them. gzip is in
+        # every image this runs from; brotli is in none, so that copy is dropped
+        # and the server falls back to the gzip one.
+        rm -f "$file.br"
+        if [ -e "$file.gz" ]; then
+          gzip -9 -c "$file" >"$file.gz"
+        fi
+        echo "appended Pennant to ${file#"$target_dir"/}"
+      done
+      if [ "$matched" -eq 0 ]; then
+        warn "no file under $source_dir matches '$pattern' -- the asset layout has changed"
+      fi
+    done
+  pennant.css: |
+    /* Pennant for Tandoor, appended by kubernetes-generator (src/generators/theme). */
+
+    html:root {
+      --v-theme-background: 249,250,251;
+      --v-theme-on-background: 46,52,54;
+      --v-theme-surface: 255,255,255;
+      --v-theme-on-surface: 46,52,54;
+      --v-theme-surface-bright: 255,255,255;
+      --v-theme-surface-light: 241,244,245;
+      --v-theme-surface-variant: 72,78,81;
+      --v-theme-on-surface-variant: 249,250,251;
+      --v-theme-primary: 152,74,114;
+      --v-theme-on-primary: 249,250,251;
+      --v-theme-secondary: 0,116,149;
+      --v-theme-on-secondary: 249,250,251;
+      --v-theme-success: 30,124,68;
+      --v-theme-on-success: 249,250,251;
+      --v-theme-info: 99,91,177;
+      --v-theme-on-info: 249,250,251;
+      --v-theme-warning: 142,94,0;
+      --v-theme-on-warning: 249,250,251;
+      --v-theme-error: 175,61,52;
+      --v-theme-on-error: 249,250,251;
+      --v-theme-tandoor: 152,74,114;
+      --v-theme-on-tandoor: 249,250,251;
+      --v-theme-save: 30,124,68;
+      --v-theme-on-save: 249,250,251;
+      --v-theme-create: 30,124,68;
+      --v-theme-on-create: 249,250,251;
+      --v-theme-edit: 99,91,177;
+      --v-theme-on-edit: 249,250,251;
+      --v-theme-delete: 175,61,52;
+      --v-theme-on-delete: 249,250,251;
+      --v-theme-cancel: 142,94,0;
+      --v-theme-on-cancel: 249,250,251;
+      --v-theme-recipeImagePlaceholderBg: 241,244,245;
+    }
+
+    html:root:has(.v-application.v-theme--dark) {
+      --v-theme-background: 9,12,13;
+      --v-theme-on-background: 241,244,245;
+      --v-theme-surface: 18,22,23;
+      --v-theme-on-surface: 241,244,245;
+      --v-theme-surface-bright: 18,22,23;
+      --v-theme-surface-light: 29,33,35;
+      --v-theme-surface-variant: 208,213,216;
+      --v-theme-on-surface-variant: 9,12,13;
+      --v-theme-primary: 230,142,184;
+      --v-theme-on-primary: 9,12,13;
+      --v-theme-secondary: 7,191,244;
+      --v-theme-on-secondary: 9,12,13;
+      --v-theme-success: 107,197,134;
+      --v-theme-on-success: 9,12,13;
+      --v-theme-info: 166,161,255;
+      --v-theme-on-info: 9,12,13;
+      --v-theme-warning: 223,160,67;
+      --v-theme-on-warning: 9,12,13;
+      --v-theme-error: 255,133,119;
+      --v-theme-on-error: 9,12,13;
+      --v-theme-tandoor: 230,142,184;
+      --v-theme-on-tandoor: 9,12,13;
+      --v-theme-save: 107,197,134;
+      --v-theme-on-save: 9,12,13;
+      --v-theme-create: 107,197,134;
+      --v-theme-on-create: 9,12,13;
+      --v-theme-edit: 166,161,255;
+      --v-theme-on-edit: 9,12,13;
+      --v-theme-delete: 255,133,119;
+      --v-theme-on-delete: 9,12,13;
+      --v-theme-cancel: 223,160,67;
+      --v-theme-on-cancel: 9,12,13;
+      --v-theme-recipeImagePlaceholderBg: 29,33,35;
+    }
+
+    html .v-theme--light {
+      --v-theme-background: 249,250,251;
+      --v-theme-on-background: 46,52,54;
+      --v-theme-surface: 255,255,255;
+      --v-theme-on-surface: 46,52,54;
+      --v-theme-surface-bright: 255,255,255;
+      --v-theme-surface-light: 241,244,245;
+      --v-theme-surface-variant: 72,78,81;
+      --v-theme-on-surface-variant: 249,250,251;
+      --v-theme-primary: 152,74,114;
+      --v-theme-on-primary: 249,250,251;
+      --v-theme-secondary: 0,116,149;
+      --v-theme-on-secondary: 249,250,251;
+      --v-theme-success: 30,124,68;
+      --v-theme-on-success: 249,250,251;
+      --v-theme-info: 99,91,177;
+      --v-theme-on-info: 249,250,251;
+      --v-theme-warning: 142,94,0;
+      --v-theme-on-warning: 249,250,251;
+      --v-theme-error: 175,61,52;
+      --v-theme-on-error: 249,250,251;
+      --v-theme-tandoor: 152,74,114;
+      --v-theme-on-tandoor: 249,250,251;
+      --v-theme-save: 30,124,68;
+      --v-theme-on-save: 249,250,251;
+      --v-theme-create: 30,124,68;
+      --v-theme-on-create: 249,250,251;
+      --v-theme-edit: 99,91,177;
+      --v-theme-on-edit: 249,250,251;
+      --v-theme-delete: 175,61,52;
+      --v-theme-on-delete: 249,250,251;
+      --v-theme-cancel: 142,94,0;
+      --v-theme-on-cancel: 249,250,251;
+      --v-theme-recipeImagePlaceholderBg: 241,244,245;
+    }
+
+    html .v-theme--dark {
+      --v-theme-background: 9,12,13;
+      --v-theme-on-background: 241,244,245;
+      --v-theme-surface: 18,22,23;
+      --v-theme-on-surface: 241,244,245;
+      --v-theme-surface-bright: 18,22,23;
+      --v-theme-surface-light: 29,33,35;
+      --v-theme-surface-variant: 208,213,216;
+      --v-theme-on-surface-variant: 9,12,13;
+      --v-theme-primary: 230,142,184;
+      --v-theme-on-primary: 9,12,13;
+      --v-theme-secondary: 7,191,244;
+      --v-theme-on-secondary: 9,12,13;
+      --v-theme-success: 107,197,134;
+      --v-theme-on-success: 9,12,13;
+      --v-theme-info: 166,161,255;
+      --v-theme-on-info: 9,12,13;
+      --v-theme-warning: 223,160,67;
+      --v-theme-on-warning: 9,12,13;
+      --v-theme-error: 255,133,119;
+      --v-theme-on-error: 9,12,13;
+      --v-theme-tandoor: 230,142,184;
+      --v-theme-on-tandoor: 9,12,13;
+      --v-theme-save: 107,197,134;
+      --v-theme-on-save: 9,12,13;
+      --v-theme-create: 107,197,134;
+      --v-theme-on-create: 9,12,13;
+      --v-theme-edit: 166,161,255;
+      --v-theme-on-edit: 9,12,13;
+      --v-theme-delete: 255,133,119;
+      --v-theme-on-delete: 9,12,13;
+      --v-theme-cancel: 223,160,67;
+      --v-theme-on-cancel: 9,12,13;
+      --v-theme-recipeImagePlaceholderBg: 29,33,35;
+    }
