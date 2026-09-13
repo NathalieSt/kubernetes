@@ -28,6 +28,7 @@ spec:
           values:
           - backup-dashboard
           - forgejo
+          - glitchtip
           - kavita
           - limes
           - orrery

@@ -150,6 +150,175 @@ spec:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+      - command:
+        - python
+        - -c
+        - |
+          """Write GlitchTip's Authelia sign-in provider into its database.
+
+          GlitchTip lists sign-in providers from allauth's SocialApp table and from
+          nowhere else: settings.py builds SOCIALACCOUNT_PROVIDERS from four fixed
+          environment variables, none of them a generic OpenID Connect provider, and the
+          login page's /api/settings/ only reads the table. So the provider is a row, and
+          this makes that row match the manifest on every pod start.
+
+          Two things the row carries that GlitchTip's own organization SSO screen cannot
+          set, and which are the reason this exists rather than a click in that screen:
+
+          - `oauth_pkce_enabled`. Authelia requires PKCE of every client it registers;
+            without it the authorization request is refused before a login is shown.
+          - A fixed `provider_id`. It is the redirect URI's only variable part, and the
+            screen generates `<org-slug>-<random hex>`, which Authelia's client list
+            cannot know in advance.
+
+          The token endpoint method is not set: allauth picks client_secret_post by
+          itself whenever the discovery document advertises it, which Authelia's does and
+          which is what Authelia registers confidential clients with.
+
+          Fails soft, all of it, to stderr. This is an init container in front of the
+          error tracker, and the error tracker starting matters more than its login
+          button — a sign-in that is missing is visible on the login page, while a
+          GlitchTip that will not start drops every event the apps send in the meantime.
+          """
+
+          import os
+          import sys
+          import traceback
+
+
+          def log(message):
+              print(f"authelia-social-app: {message}", file=sys.stderr)
+
+
+          def main():
+              secret = os.environ.get("OIDC_CLIENT_SECRET", "")
+              # vault-config's placeholder is a sentence; the Secret may also not exist
+              # yet, in which case the optional secretKeyRef leaves the variable unset.
+              if not secret or secret.startswith("REPLACE ME"):
+                  log(
+                      "no client secret in glitchtip-oidc-secret, leaving the provider as "
+                      "it is. Write it with `vault kv patch kvv2/glitchtip/oidc "
+                      "client-secret=<value>` and restart the pod."
+                  )
+                  return
+
+              os.environ.setdefault("DJANGO_SETTINGS_MODULE", "glitchtip.settings")
+              import django
+
+              django.setup()
+
+              from allauth.socialaccount.models import SocialApp
+              from django.db import connection
+
+              # Migrations run when the server starts, which is after this. On an empty
+              # database the table does not exist yet; the next pod start writes the row.
+              if SocialApp._meta.db_table not in connection.introspection.table_names():
+                  log("SocialApp table does not exist yet (fresh database); skipping")
+                  return
+
+              provider_id = os.environ["OIDC_PROVIDER_ID"]
+              _, created = SocialApp.objects.update_or_create(
+                  provider="openid_connect",
+                  provider_id=provider_id,
+                  defaults={
+                      "name": os.environ["OIDC_PROVIDER_NAME"],
+                      "client_id": os.environ["OIDC_CLIENT_ID"],
+                      "secret": secret,
+                      "key": "",
+                      "settings": {
+                          "server_url": os.environ["OIDC_SERVER_URL"],
+                          "oauth_pkce_enabled": True,
+                      },
+                  },
+              )
+              log(f"{'created' if created else 'updated'} provider {provider_id}")
+
+
+          try:
+              main()
+          except Exception:
+              traceback.print_exc()
+              log("failed; GlitchTip starts without the Authelia provider being updated")
+        image: glitchtip/glitchtip:6.2.6
+        name: authelia-social-app
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp-volume
+        env:
+        - name: SERVER_ROLE
+          value: all_in_one
+        - name: VALKEY_URL
+          value: ""
+        - name: PORT
+          value: "8000"
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: secret-key
+              name: glitchtip-secret
+        - name: GLITCHTIP_DOMAIN
+          value: https://glitchtip.netbird.nathalie-stiefsohn.eu
+        - name: DATABASE_HOST
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: DATABASE_PORT
+          value: "5432"
+        - name: DATABASE_NAME
+          value: glitchtip
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: ENABLE_USER_REGISTRATION
+          value: "False"
+        - name: ENABLE_SOCIAL_APPS_USER_REGISTRATION
+          value: "True"
+        - name: ENABLE_ORGANIZATION_CREATION
+          value: "False"
+        - name: SOCIAL_AUTH_BLOCK_PRIVATE_IPS
+          value: "False"
+        - name: MEDIA_ROOT
+          value: /var/lib/glitchtip
+        - name: GLITCHTIP_RETENTION_DAYS
+          value: "30"
+        - name: GLITCHTIP_ALLOW_PRIVATE_IPS
+          value: "True"
+        - name: GLITCHTIP_UPTIME_ALLOW_PRIVATE_IPS
+          value: "False"
+        - name: EMAIL_BACKEND
+          value: django.core.mail.backends.console.EmailBackend
+        - name: OIDC_PROVIDER_ID
+          value: authelia
+        - name: OIDC_PROVIDER_NAME
+          value: Authelia
+        - name: OIDC_CLIENT_ID
+          value: glitchtip
+        - name: OIDC_SERVER_URL
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: OIDC_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client-secret
+              name: glitchtip-oidc-secret
+              optional: true
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 5000
+          runAsGroup: 5000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -202,7 +371,11 @@ spec:
               name: postgres-creds-secret
         - name: ENABLE_USER_REGISTRATION
           value: "False"
+        - name: ENABLE_SOCIAL_APPS_USER_REGISTRATION
+          value: "True"
         - name: ENABLE_ORGANIZATION_CREATION
+          value: "False"
+        - name: SOCIAL_AUTH_BLOCK_PRIVATE_IPS
           value: "False"
         - name: MEDIA_ROOT
           value: /var/lib/glitchtip

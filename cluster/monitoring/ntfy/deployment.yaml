@@ -165,7 +165,7 @@ spec:
               key: auth-tokens
               name: ntfy-auth-secret
         - name: NTFY_AUTH_ACCESS
-          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo
+          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo,victoria-metrics:victoria-metrics:wo
         resources:
           requests:
             cpu: 10m

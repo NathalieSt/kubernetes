@@ -16,8 +16,51 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    alertmanager:
+      config:
+        receivers:
+        - name: blackhole
+        - name: ntfy
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/victoria-metrics?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D
+        route:
+          group_by:
+          - alertname
+          - namespace
+          group_interval: 5m
+          group_wait: 30s
+          receiver: blackhole
+          repeat_interval: 12h
+          routes:
+          - matchers:
+            - severity="critical"
+            receiver: ntfy
+      spec:
+        volumeMounts:
+        - mountPath: /etc/alertmanager-ntfy
+          name: ntfy-token
+          readOnly: true
+        volumes:
+        - name: ntfy-token
+          secret:
+            optional: true
+            secretName: victoria-metrics-ntfy-token
     defaultDashboards:
       enabled: false
+    defaultRules:
+      groups:
+        etcd:
+          create: false
+        kubeScheduler:
+          create: false
+        kubernetesSystemControllerManager:
+          create: false
+        kubernetesSystemScheduler:
+          create: false
     grafana:
       enabled: false
     kube-state-metrics:
@@ -264,6 +307,12 @@ spec:
             tlsConfig:
               caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
               serverName: kubernetes
+    kubeControllerManager:
+      enabled: false
+    kubeEtcd:
+      enabled: false
+    kubeScheduler:
+      enabled: false
     kubelet:
       enabled: true
       vmScrapes:
