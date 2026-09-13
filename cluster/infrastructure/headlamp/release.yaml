@@ -18,6 +18,9 @@ spec:
       clusterRoleName: cluster-admin
       create: true
     config:
+      extraArgs:
+      - -default-light-theme=Pennant
+      - -default-dark-theme=Pennant Dark
       inCluster: true
       oidc:
         secret:
@@ -50,5 +53,13 @@ spec:
     serviceAccount:
       create: true
       name: headlamp
+    volumeMounts:
+    - mountPath: /headlamp/plugins/pennant
+      name: pennant-plugin
+      readOnly: true
+    volumes:
+    - configMap:
+        name: headlamp-pennant-plugin
+      name: pennant-plugin
   driftDetection:
     mode: warn

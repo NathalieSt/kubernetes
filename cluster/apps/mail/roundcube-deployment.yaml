@@ -19,6 +19,8 @@ spec:
         app.kubernetes.io/name: roundcube
         app.kubernetes.io/version: sha256_c018c84f59872
     spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
       initContainers:
       - command:
         - sh
@@ -29,6 +31,49 @@ spec:
         volumeMounts:
         - mountPath: /var/roundcube/db
           name: roundcube-db-volume
+      - command:
+        - sh
+        - /pennant/roundcube-skin-sources.sh
+        - /pennant-skin
+        - /pennant/_variables.less
+        image: roundcube/roundcubemail@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a
+        name: pennant-skin-sources
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-scripts-volume
+          readOnly: true
+        - mountPath: /pennant-skin
+          name: pennant-skin-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 33
+          runAsGroup: 33
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
+        - sh
+        - /pennant/roundcube-skin-compile.sh
+        - /pennant-skin
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/lessc@sha256:58bf86bb2cfe2975cd02f6ff76d5629f9b5950905929abd0209b0652295b1acc
+        name: pennant-skin-compile
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-scripts-volume
+          readOnly: true
+        - mountPath: /pennant-skin
+          name: pennant-skin-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 33
+          runAsGroup: 33
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       containers:
       - image: roundcube/roundcubemail@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a
@@ -39,6 +84,12 @@ spec:
         volumeMounts:
         - mountPath: /var/roundcube/db
           name: roundcube-db-volume
+        - mountPath: /pennant-skin
+          name: pennant-skin-volume
+          readOnly: true
+        - mountPath: /entrypoint-tasks/post-setup
+          name: pennant-task-volume
+          readOnly: true
         env:
         - name: ROUNDCUBEMAIL_DEFAULT_HOST
           value: mail
@@ -72,3 +123,15 @@ spec:
       - name: roundcube-db-volume
         persistentVolumeClaim:
           claimName: roundcube-pvc
+      - name: pennant-scripts-volume
+        configMap:
+          name: roundcube-pennant-skin
+      - name: pennant-skin-volume
+        emptyDir: {}
+      - name: pennant-task-volume
+        configMap:
+          name: roundcube-pennant-skin
+          items:
+          - key: roundcube-skin-install.sh
+            path: pennant-skin.sh
+          defaultMode: 365
