@@ -14,8 +14,8 @@ data:
       debug: false
       instance_name: "Nathalies SearXNG"
 
-    # The only part of SearXNG that Pennant can reach: these six values feed /manifest.json and nothing
-    # else, since the simple theme is compiled LESS with no hook for an extra stylesheet.
+    # The installed-app colours: these six values feed /manifest.json and nothing else. The page itself
+    # is recoloured separately, by appending Pennant to the compiled stylesheet at pod start.
     brand:
       pwa_colors:
         theme_color_light: "#984a72"

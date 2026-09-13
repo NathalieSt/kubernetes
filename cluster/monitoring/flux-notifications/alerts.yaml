@@ -146,6 +146,9 @@ spec:
     name: healthchecks
     namespace: flux-system
   - kind: Kustomization
+    name: homepage
+    namespace: flux-system
+  - kind: Kustomization
     name: intel-device-gpu-plugin
     namespace: flux-system
   - kind: Kustomization

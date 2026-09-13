@@ -233,6 +233,26 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: homepage
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: homepage
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/homepage
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: it-tools
   namespace: flux-system
 spec:

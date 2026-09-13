@@ -5,7 +5,7 @@ metadata:
   name: authelia-config
 data:
   configuration.yml: |
-    theme: dark
+    theme: auto
     server:
       address: tcp://0.0.0.0:9091
       disable_healthcheck: true
@@ -21,6 +21,7 @@ data:
               schemes:
               - Basic
             - name: CookieSession
+      asset_path: /assets/
     log:
       level: trace
       format: json
@@ -73,6 +74,9 @@ data:
         policy: two_factor
       - domain:
         - healthchecks.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
+        - home.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
         - it-tools.netbird.nathalie-stiefsohn.eu

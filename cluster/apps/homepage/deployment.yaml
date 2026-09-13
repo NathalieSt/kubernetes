@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: homepage
+    app.kubernetes.io/version: v2.3.0
+  name: homepage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homepage
+  template:
+    metadata:
+      annotations:
+        homelab/homepage-config-hash: 81647cea306b3e6a
+      labels:
+        app.kubernetes.io/name: homepage
+        app.kubernetes.io/version: v2.3.0
+    spec:
+      serviceAccountName: homepage
+      enableServiceLinks: false
+      containers:
+      - image: ghcr.io/gethomepage/homepage:v2.3.0
+        name: homepage
+        ports:
+        - containerPort: 3000
+          name: http
+        volumeMounts:
+        - mountPath: /app/config
+          name: config
+          readOnly: true
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: HOMEPAGE_ALLOWED_HOSTS
+          value: home.netbird.nathalie-stiefsohn.eu,$(POD_IP):3000
+        - name: LOG_TARGETS
+          value: stdout
+        - name: HOSTNAME
+          value: 0.0.0.0
+        resources:
+          requests:
+            cpu: 20m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 384Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+        readinessProbe:
+          httpGet:
+            path: /api/healthcheck
+            port: 3000
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: homepage-config
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

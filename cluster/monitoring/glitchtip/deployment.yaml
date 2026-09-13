@@ -126,6 +126,30 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/glitchtip
           name: uploads-volume
+      - command:
+        - sh
+        - /pennant/append-stylesheet.sh
+        - /code/static
+        - /pennant-out
+        - /pennant/pennant.css
+        - styles-*.css
+        image: glitchtip/glitchtip:6.2.6
+        name: pennant
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-script-volume
+          readOnly: true
+        - mountPath: /pennant-out
+          name: pennant-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 5000
+          runAsGroup: 5000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -139,6 +163,9 @@ spec:
           name: uploads-volume
         - mountPath: /tmp
           name: tmp-volume
+        - mountPath: /code/static
+          name: pennant-volume
+          readOnly: true
         env:
         - name: SERVER_ROLE
           value: all_in_one
@@ -216,6 +243,11 @@ spec:
         persistentVolumeClaim:
           claimName: glitchtip-uploads-pvc
       - name: tmp-volume
+        emptyDir: {}
+      - name: pennant-script-volume
+        configMap:
+          name: glitchtip-pennant
+      - name: pennant-volume
         emptyDir: {}
       securityContext:
         seccompProfile:
