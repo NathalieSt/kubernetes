@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/vector-config-hash: c1f9c27cacbbed0a
+        homelab/vector-config-hash: e85c8997e65de1d4
       labels:
         app.kubernetes.io/name: vector
         app.kubernetes.io/version: sha256_5dcf67db0ee37

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: glitchtip
+    app.kubernetes.io/version: 6.2.6
+  name: glitchtip
+spec:
+  selector:
+    app.kubernetes.io/name: glitchtip
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000

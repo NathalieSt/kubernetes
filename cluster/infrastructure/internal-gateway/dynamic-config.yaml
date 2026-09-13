@@ -45,6 +45,13 @@ data:
           service: backup-dashboard
           middlewares:
           - authelia
+        changedetection:
+          rule: Host(`changedetection.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: changedetection
+          middlewares:
+          - authelia
         code-server:
           rule: Host(`vscode.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -71,11 +78,23 @@ data:
           entryPoints:
           - websecure
           service: forgejo
+        glitchtip:
+          rule: Host(`glitchtip.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: glitchtip
         headlamp:
           rule: Host(`headlamp.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: headlamp
+          middlewares:
+          - authelia
+        healthchecks:
+          rule: Host(`healthchecks.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: healthchecks
           middlewares:
           - authelia
         it-tools:
@@ -125,6 +144,11 @@ data:
           service: neko
           middlewares:
           - authelia
+        ntfy:
+          rule: Host(`ntfy.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: ntfy
         omni-tools:
           rule: Host(`omni-tools.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -195,6 +219,10 @@ data:
           loadBalancer:
             servers:
             - url: http://backup-dashboard.backup-dashboard.svc.cluster.local:8080
+        changedetection:
+          loadBalancer:
+            servers:
+            - url: http://changedetection.changedetection.svc.cluster.local:5000
         code-server:
           loadBalancer:
             servers:
@@ -211,10 +239,18 @@ data:
           loadBalancer:
             servers:
             - url: http://forgejo-http.forgejo.svc.cluster.local:3000
+        glitchtip:
+          loadBalancer:
+            servers:
+            - url: http://glitchtip.glitchtip.svc.cluster.local:8000
         headlamp:
           loadBalancer:
             servers:
             - url: http://headlamp.headlamp.svc.cluster.local:80
+        healthchecks:
+          loadBalancer:
+            servers:
+            - url: http://healthchecks.healthchecks.svc.cluster.local:8000
         it-tools:
           loadBalancer:
             servers:
@@ -243,6 +279,10 @@ data:
           loadBalancer:
             servers:
             - url: http://neko.neko.svc.cluster.local:8080
+        ntfy:
+          loadBalancer:
+            servers:
+            - url: http://ntfy.ntfy.svc.cluster.local:8080
         omni-tools:
           loadBalancer:
             servers:

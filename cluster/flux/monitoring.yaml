@@ -33,6 +33,76 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: glitchtip
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: glitchtip
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/glitchtip
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: csi-driver-nfs
+  - name: reflector
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-glitchtip
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: healthchecks
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: healthchecks
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/healthchecks
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: reflector
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-healthchecks
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ntfy
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: ntfy
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/ntfy
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: reflector
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-ntfy
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: vector
   namespace: flux-system
 spec:

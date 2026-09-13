@@ -1,0 +1,42 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: healthchecks-networkpolicy
+spec:
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: netbird
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: networkrouter
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-gateway
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-gateway
+  - from:
+    - namespaceSelector:
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          - changedetection
+          - code-server
+          - daybook
+          - forgejo
+          - kavita
+          - mail
+          - postgres
+          - tandoor
+          - vault
+          - vim-dojo
+          - vault-apply
+    ports:
+    - port: 8000
+      protocol: TCP
