@@ -14,11 +14,35 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/homepage-config-hash: 81647cea306b3e6a
+        homelab/homepage-config-hash: 3052a60fcc81d971
       labels:
         app.kubernetes.io/name: homepage
         app.kubernetes.io/version: v2.3.0
     spec:
+      initContainers:
+      - command:
+        - cp
+        - -a
+        - /app/.next/.
+        - /next/
+        image: ghcr.io/gethomepage/homepage:v2.3.0
+        name: copy-next
+        volumeMounts:
+        - mountPath: /next
+          name: next
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
       serviceAccountName: homepage
       enableServiceLinks: false
       containers:
@@ -31,6 +55,8 @@ spec:
         - mountPath: /app/config
           name: config
           readOnly: true
+        - mountPath: /app/.next
+          name: next
         env:
         - name: POD_IP
           valueFrom:
@@ -60,10 +86,18 @@ spec:
             path: /api/healthcheck
             port: 3000
           periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /api/revalidate
+            port: 3000
+          periodSeconds: 2
+          failureThreshold: 30
       volumes:
       - name: config
         configMap:
           name: homepage-config
+      - name: next
+        emptyDir: {}
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
