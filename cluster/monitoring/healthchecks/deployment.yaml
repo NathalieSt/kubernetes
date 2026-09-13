@@ -115,6 +115,30 @@ spec:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+      - command:
+        - sh
+        - /pennant/append-stylesheet.sh
+        - /opt/healthchecks/static-collected/CACHE
+        - /pennant-out
+        - /pennant/pennant.css
+        - css/output.*.css
+        image: healthchecks/healthchecks:v4.4
+        name: pennant
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-script-volume
+          readOnly: true
+        - mountPath: /pennant-out
+          name: pennant-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 999
+          runAsGroup: 999
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -126,6 +150,9 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-volume
+        - mountPath: /opt/healthchecks/static-collected/CACHE
+          name: pennant-volume
+          readOnly: true
         env:
         - name: POD_IP
           valueFrom:
@@ -198,6 +225,11 @@ spec:
         secret:
           secretName: healthchecks-secret
       - name: tmp-volume
+        emptyDir: {}
+      - name: pennant-script-volume
+        configMap:
+          name: healthchecks-pennant
+      - name: pennant-volume
         emptyDir: {}
       securityContext:
         seccompProfile:

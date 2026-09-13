@@ -10,3 +10,4 @@ resources:
 - scaled-object.yaml
 - network-policy.yaml
 - netbird-network-resource.yaml
+- pennant-configmap.yaml

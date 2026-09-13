@@ -29,6 +29,30 @@ spec:
         volumeMounts:
         - mountPath: /datastore
           name: data-volume
+      - command:
+        - sh
+        - /pennant/append-stylesheet.sh
+        - /app/changedetectionio/static/styles
+        - /pennant-out
+        - /pennant/pennant.css
+        - styles.css
+        image: ghcr.io/dgtlmoon/changedetection.io:0.60.4
+        name: pennant
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-script-volume
+          readOnly: true
+        - mountPath: /pennant-out
+          name: pennant-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -42,6 +66,9 @@ spec:
           name: data-volume
         - mountPath: /tmp
           name: tmp-volume
+        - mountPath: /app/changedetectionio/static/styles
+          name: pennant-volume
+          readOnly: true
         env:
         - name: BASE_URL
           value: https://changedetection.netbird.nathalie-stiefsohn.eu
@@ -74,6 +101,11 @@ spec:
         persistentVolumeClaim:
           claimName: changedetection-data-pvc
       - name: tmp-volume
+        emptyDir: {}
+      - name: pennant-script-volume
+        configMap:
+          name: changedetection-pennant
+      - name: pennant-volume
         emptyDir: {}
       securityContext:
         seccompProfile:
