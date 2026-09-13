@@ -97,6 +97,13 @@ data:
           service: healthchecks
           middlewares:
           - authelia
+        homepage:
+          rule: Host(`home.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: homepage
+          middlewares:
+          - authelia
         it-tools:
           rule: Host(`it-tools.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -251,6 +258,10 @@ data:
           loadBalancer:
             servers:
             - url: http://healthchecks.healthchecks.svc.cluster.local:8000
+        homepage:
+          loadBalancer:
+            servers:
+            - url: http://homepage.homepage.svc.cluster.local:3000
         it-tools:
           loadBalancer:
             servers:

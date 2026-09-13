@@ -17,6 +17,31 @@ spec:
         app.kubernetes.io/name: tandoor
         app.kubernetes.io/version: sha256_f6c58afdea7a7
     spec:
+      initContainers:
+      - command:
+        - sh
+        - /pennant/append-stylesheet.sh
+        - /opt/recipes/cookbook/static/vue3/assets
+        - /pennant-out
+        - /pennant/pennant.css
+        - main-*.css
+        image: vabene1111/recipes@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
+        name: pennant
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-script-volume
+          readOnly: true
+        - mountPath: /pennant-out
+          name: pennant-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -30,6 +55,9 @@ spec:
           name: media-volume
         - mountPath: /opt/recipes/staticfiles
           name: static-volume
+        - mountPath: /opt/recipes/cookbook/static/vue3/assets
+          name: pennant-volume
+          readOnly: true
         env:
         - name: SECRET_KEY
           valueFrom:
@@ -89,4 +117,9 @@ spec:
         persistentVolumeClaim:
           claimName: tandoor-media-pvc
       - name: static-volume
+        emptyDir: {}
+      - name: pennant-script-volume
+        configMap:
+          name: tandoor-pennant
+      - name: pennant-volume
         emptyDir: {}
