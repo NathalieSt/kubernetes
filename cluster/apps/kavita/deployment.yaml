@@ -44,6 +44,8 @@ spec:
         - mountPath: /secrets/oidc
           name: oidc-secret-volume
           readOnly: true
+        - mountPath: /tmp
+          name: tmp
         env:
         - name: OIDC_AUTHORITY
           value: https://auth.netbird.nathalie-stiefsohn.eu
@@ -113,3 +115,5 @@ spec:
       - name: oidc-secret-volume
         secret:
           secretName: kavita-oidc-secret
+      - name: tmp
+        emptyDir: {}
