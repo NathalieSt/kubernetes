@@ -36,11 +36,14 @@ spec:
   - audiomuse
   - auth
   - backups
+  - changedetection
   - vscode
   - daybook
   - transmission
   - code
+  - glitchtip
   - headlamp
+  - healthchecks
   - it-tools
   - jellyfin
   - kavita
@@ -48,6 +51,7 @@ spec:
   - mail
   - music
   - neko
+  - ntfy
   - omni-tools
   - orrery
   - psono

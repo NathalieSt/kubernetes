@@ -1,0 +1,80 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: changedetection
+    app.kubernetes.io/version: 0.60.4
+  name: changedetection
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: changedetection
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: changedetection
+        app.kubernetes.io/version: 0.60.4
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown 1000:1000 /datastore
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /datastore
+          name: data-volume
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: ghcr.io/dgtlmoon/changedetection.io:0.60.4
+        name: changedetection
+        ports:
+        - containerPort: 5000
+          name: http
+        volumeMounts:
+        - mountPath: /datastore
+          name: data-volume
+        - mountPath: /tmp
+          name: tmp-volume
+        env:
+        - name: BASE_URL
+          value: https://changedetection.netbird.nathalie-stiefsohn.eu
+        - name: PORT
+          value: "5000"
+        - name: LOGGER_LEVEL
+          value: INFO
+        - name: HIDE_REFERER
+          value: "true"
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: changedetection-data-pvc
+      - name: tmp-volume
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

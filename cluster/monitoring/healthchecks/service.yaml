@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: healthchecks
+    app.kubernetes.io/version: v4.4
+  name: healthchecks
+spec:
+  selector:
+    app.kubernetes.io/name: healthchecks
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000

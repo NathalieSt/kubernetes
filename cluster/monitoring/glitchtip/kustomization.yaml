@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: glitchtip
+resources:
+- deployment.yaml
+- uploads-pvc.yaml
+- vault-secrets.yaml
+- service.yaml
+- network-policy.yaml
+- netbird-network-resource.yaml

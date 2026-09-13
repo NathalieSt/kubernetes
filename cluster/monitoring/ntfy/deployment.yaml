@@ -1,0 +1,196 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: ntfy
+    app.kubernetes.io/version: v2.28.0
+  name: ntfy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ntfy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ntfy
+        app.kubernetes.io/version: v2.28.0
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          #!/bin/sh
+          #
+          # Refuses to let a workload start while any secret it depends on is missing,
+          # empty, or still holding the placeholder that vault-config writes when it
+          # creates a KV path.
+          #
+          # Kept next to the generator rather than inlined so it can be linted and run by
+          # hand:
+          #
+          #     GUARDED_SECRET=neko-secret VAULT_PATH=neko \
+          #     EXPECTED_KEYS="password admin-password" \
+          #     GUARD_DIR=./fixture ./check.sh
+          #
+          # See SecretGuard.res for why this exists at all.
+
+          set -eu
+
+          : "${GUARDED_SECRET:?GUARDED_SECRET is required}"
+          : "${VAULT_PATH:?VAULT_PATH is required}"
+          : "${EXPECTED_KEYS:?EXPECTED_KEYS is required}"
+
+          dir="${GUARD_DIR:-/guarded}"
+          status=0
+
+          for key in $EXPECTED_KEYS; do
+              file="$dir/$key"
+
+              if [ ! -f "$file" ]; then
+                  echo "refusing to start: ${GUARDED_SECRET} has no key '${key}'." >&2
+                  echo "  The VaultStaticSecret syncs whatever is at kvv2/${VAULT_PATH}," >&2
+                  echo "  and that key is not there yet." >&2
+                  status=1
+                  continue
+              fi
+
+              value=$(cat "$file")
+
+              case "$value" in
+                  # The prefix, not the whole sentence: the placeholder embeds the path
+                  # and key, so matching it exactly would mean rebuilding the string here
+                  # and keeping two copies of it in step.
+                  "REPLACE ME"*)
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is still the vault-config placeholder." >&2
+                      echo "  This value is written into the manifests repository, so it is" >&2
+                      echo "  public knowledge and must never reach a running workload." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+                  "")
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is empty." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+              esac
+          done
+
+          if [ "$status" -ne 0 ]; then
+              echo "" >&2
+              echo "Once Vault holds real values the VaultStaticSecret picks them up within" >&2
+              echo "its refresh interval, and the next restart of this pod succeeds on its" >&2
+              echo "own — there is nothing else to do here." >&2
+          fi
+
+          exit "$status"
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: ntfy-auth-secret-guard
+        volumeMounts:
+        - mountPath: /guarded
+          name: ntfy-auth-secret-guard-volume
+          readOnly: true
+        env:
+        - name: GUARDED_SECRET
+          value: ntfy-auth-secret
+        - name: VAULT_PATH
+          value: ntfy/auth
+        - name: EXPECTED_KEYS
+          value: auth-users auth-tokens
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - args:
+        - serve
+        image: binwiederhier/ntfy:v2.28.0
+        name: ntfy
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: NTFY_BASE_URL
+          value: https://ntfy.netbird.nathalie-stiefsohn.eu
+        - name: NTFY_LISTEN_HTTP
+          value: :8080
+        - name: NTFY_METRICS_LISTEN_HTTP
+          value: :9090
+        - name: NTFY_BEHIND_PROXY
+          value: "true"
+        - name: NTFY_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/ntfy
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: NTFY_AUTH_DEFAULT_ACCESS
+          value: deny-all
+        - name: NTFY_ENABLE_LOGIN
+          value: "true"
+        - name: NTFY_REQUIRE_LOGIN
+          value: "true"
+        - name: NTFY_AUTH_USERS
+          valueFrom:
+            secretKeyRef:
+              key: auth-users
+              name: ntfy-auth-secret
+        - name: NTFY_AUTH_TOKENS
+          valueFrom:
+            secretKeyRef:
+              key: auth-tokens
+              name: ntfy-auth-secret
+        - name: NTFY_AUTH_ACCESS
+          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /v1/health
+            port: 8080
+          periodSeconds: 10
+      volumes:
+      - name: ntfy-auth-secret-guard-volume
+        secret:
+          secretName: ntfy-auth-secret
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
