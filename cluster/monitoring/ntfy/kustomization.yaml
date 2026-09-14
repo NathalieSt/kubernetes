@@ -4,6 +4,7 @@ kind: Kustomization
 metadata:
   name: ntfy
 resources:
+- scripts.yaml
 - deployment.yaml
 - vault-secrets.yaml
 - service.yaml

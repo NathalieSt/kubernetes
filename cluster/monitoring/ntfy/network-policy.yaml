@@ -37,6 +37,8 @@ spec:
           - glitchtip
           - changedetection
           - victoria-metrics
+          - forgejo
+          - jellyfin
     ports:
     - port: 8080
       protocol: TCP

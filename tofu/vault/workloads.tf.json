@@ -37,6 +37,10 @@
         "name": "mail",
         "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "music-library-builder": {
+        "name": "music-library-builder",
+        "policy": "path \"kvv2/data/music-library-builder\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/music-library-builder\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "neko": {
         "name": "neko",
         "policy": "path \"kvv2/data/neko\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/neko\" {\n  capabilities = [\"read\"]\n}\n"
@@ -191,6 +195,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.mail.name}"
+        ],
+        "token_ttl": 600
+      },
+      "music-library-builder": {
+        "backend": "kubernetes",
+        "role_name": "music-library-builder",
+        "bound_service_account_names": [
+          "music-library-builder-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.music-library-builder.name}"
         ],
         "token_ttl": 600
       },
@@ -376,6 +395,12 @@
     },
     {
       "from": "vault_kv_secret_v2.mail_mail_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.music-library-builder_music-library-builder",
       "lifecycle": {
         "destroy": false
       }

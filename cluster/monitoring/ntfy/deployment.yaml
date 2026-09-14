@@ -13,6 +13,8 @@ spec:
       app.kubernetes.io/name: ntfy
   template:
     metadata:
+      annotations:
+        homelab/ntfy-start-hash: e544d60542d0e2c3
       labels:
         app.kubernetes.io/name: ntfy
         app.kubernetes.io/version: v2.28.0
@@ -118,8 +120,9 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - args:
-        - serve
+      - command:
+        - /bin/sh
+        - /scripts/ntfy-start.sh
         image: binwiederhier/ntfy:v2.28.0
         name: ntfy
         ports:
@@ -127,6 +130,10 @@ spec:
           name: http
         - containerPort: 9090
           name: metrics
+        volumeMounts:
+        - mountPath: /scripts
+          name: scripts-volume
+          readOnly: true
         env:
         - name: NTFY_BASE_URL
           value: https://ntfy.netbird.nathalie-stiefsohn.eu
@@ -164,8 +171,8 @@ spec:
             secretKeyRef:
               key: auth-tokens
               name: ntfy-auth-secret
-        - name: NTFY_AUTH_ACCESS
-          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo,victoria-metrics:victoria-metrics:wo
+        - name: NTFY_AUTH_ACCESS_DECLARED
+          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo,victoria-metrics:victoria-metrics:wo,victoria-metrics:warnings:wo,forgejo-ci:ci:wo,jellyfin:jellyfin:wo,music-library-builder:music-library-builder:wo,hosts:hosts:wo
         resources:
           requests:
             cpu: 10m
@@ -191,6 +198,9 @@ spec:
       - name: ntfy-auth-secret-guard-volume
         secret:
           secretName: ntfy-auth-secret
+      - name: scripts-volume
+        configMap:
+          name: ntfy-scripts
       securityContext:
         seccompProfile:
           type: RuntimeDefault
