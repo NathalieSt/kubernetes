@@ -26,18 +26,14 @@ The frame around the secrets, never the secrets themselves:
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc` |
-| `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret` |
+| `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret`, `kvv2/healthchecks/oidc` |
 | `ntfy` | `ntfy` | `kvv2/ntfy/auth` |
 | `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics`, `kvv2/victoria-metrics/ntfy`, `kvv2/victoria-metrics/healthchecks` |
 
-And once, for people rather than workloads:
-
-- the **`oidc` auth method**, signing in to the web UI through Authelia;
-- an **`admin` role** on it, admitting only members of the Authelia
-  `admins` group, with a 1h token renewable to 8h;
-- the **`admin` policy** that role grants — every capability on every
-  path, sudo included. Root in all but name, and not the root token: it expires
-  and the audit log names the person.
+The web UI's sign-in — the `oidc` auth method, its role and the
+`admin` policy — is a separate run with its own state, in
+`../vault-oidc`. It reads a hand-written secret at plan time, and keeping it
+out of here means a missing one fails only that run.
 
 ## What is not managed, and why
 
@@ -146,15 +142,16 @@ path "auth/oidc/role/*"            { capabilities = ["create", "read", "update",
 EOF
 ```
 
-The last six lines are the web UI's sign-in. Measured, not guessed: that is
-what an apply and a clean re-plan needed against a dev server, run with a token
-holding only this policy. An existing Vault needs the policy rewritten with
-them before the first apply that includes the `oidc` method — without,
-the nightly plan fails on a 403 reading `sys/mounts/auth/oidc`.
+One policy for both runs — this one and `../vault-oidc` — because both log in
+as the same `opentofu` role. The last six lines are the web UI's
+sign-in, and only that run uses them. Measured, not guessed: that is what an
+apply and a clean re-plan needed against a dev server, run with a token holding
+only this policy.
 
 Note what `sys/policy/*` already meant before those lines: this policy can
-write any policy, `admin` included. The OIDC lines add a way to hand
-that policy to a person; they do not add a privilege the apply did not have.
+write any policy, `admin` included. The OIDC lines add a way to
+hand that policy to a person; they do not add a privilege the apply did not
+have.
 
 Note what that policy allows on KV: `create` and `read`, no `update` and
 no `delete`. Even a compromised apply cannot rewrite a filled-in secret.
@@ -220,47 +217,6 @@ Reaching Vault from CI also needs the runner added to Vault's NetworkPolicy —
 which widens Vault's ingress to everything that can run a CI job. That is the
 trade the in-pod path avoids.
 
-## Signing in to the web UI
-
-Once, before the first apply that includes it. Every step is by hand because
-each is either a secret or a thing OpenTofu cannot do to itself.
-
-```sh
-# 1. The opentofu policy above, rewritten with the six OIDC lines.
-
-# 2. The client secret: plaintext for Vault, digest for Authelia. Different
-#    values — writing the same string to both fails every login with
-#    invalid_client. This prints both halves together.
-podman run --rm docker.io/authelia/authelia:4.39.25 authelia crypto hash generate pbkdf2 --variant sha512 --random --random.charset numeric-hex --random.length 64
-vault kv put kvv2/vault/oidc client-secret=<the random password>
-vault kv patch kvv2/authelia/oidc-clients vault='<the digest>'
-kubectl -n authelia rollout restart deploy/authelia
-
-# 3. An oidc mount enabled by hand and never configured, if there is one.
-#    The provider cannot import a mount with no config, and creating over it
-#    fails. Unconfigured means nobody can have signed in through it.
-vault write auth/oidc/oidc/auth_url role=x redirect_uri=http://x 2>&1 | grep -q 'could not load configuration' && vault auth disable oidc
-
-# 4. Apply, then open the UI: it lands on the OIDC tab with the admin role.
-kubectl create job -n vault-apply --from=cronjob/vault-apply-apply now
-```
-
-Your Authelia user must be in the `admins` group (`authelia/users`), and
-must have a TOTP device: the client requires two factors.
-
-`kvv2/vault/oidc` must exist before the nightly plan runs, too. The
-secret is read by an ephemeral resource — never into state — and a missing path
-fails the plan.
-
-**Rotating the secret** is steps 2 and 4 plus one thing: bump
-`oidcClientSecretVersion` in the generator. The field is write-only, so a plan
-cannot see that the value in KV changed, and it is sent again only when that
-number does.
-
-The `vault` CLI does not sign in this way. `vault login -method=oidc` wants a
-`http://localhost:8250/oidc/callback` redirect, which neither the Authelia
-client nor the role allows.
-
 ## How it runs
 
 Two CronJobs in the `vault-apply` namespace, from a ConfigMap holding exactly
@@ -270,6 +226,10 @@ these files:
 | --- | --- | --- |
 | `vault-apply-plan` | nightly, 05:00 | `tofu plan -detailed-exitcode`. Exit code 2 means Vault no longer matches the declarations, so **drift is a failed Job** |
 | `vault-apply-apply` | never — suspended | `tofu apply`, on demand only |
+
+`vault-apply-oidc-plan` and `vault-apply-oidc-apply` are the same pair for
+`../vault-oidc`, from their own ConfigMap. Separate Jobs so that each failure
+names its own run.
 
 Applying is deliberate rather than automatic. Nothing rewrites Vault's policies
 because a commit landed:

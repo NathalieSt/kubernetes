@@ -29,6 +29,7 @@ spec:
           - backup-dashboard
           - forgejo
           - glitchtip
+          - healthchecks
           - kavita
           - limes
           - orrery

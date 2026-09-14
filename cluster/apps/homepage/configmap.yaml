@@ -394,6 +394,12 @@ data:
           description: Watches pages for changes
           namespace: changedetection
           app: changedetection
+      - fourget:
+          href: https://4get.netbird.nathalie-stiefsohn.eu
+          icon: mdi-magnify
+          description: Private metasearch
+          namespace: fourget
+          app: fourget
       - neko:
           href: https://neko.netbird.nathalie-stiefsohn.eu
           icon: neko.png
@@ -406,12 +412,6 @@ data:
           description: Private Reddit front end
           namespace: redlib
           app: redlib
-      - searxng:
-          href: https://searxng.netbird.nathalie-stiefsohn.eu
-          icon: searxng.png
-          description: Private metasearch
-          namespace: searxng
-          app: searxng
     - Platform:
       - authelia:
           href: https://auth.netbird.nathalie-stiefsohn.eu
@@ -489,7 +489,7 @@ data:
       searchDescriptions: true
       hideVisitURL: true
       provider: custom
-      url: https://searxng.netbird.nathalie-stiefsohn.eu/search?q=
+      url: https://4get.netbird.nathalie-stiefsohn.eu/web?s=
       target: _blank
     layout:
       Cluster:
@@ -541,6 +541,6 @@ data:
           hourCycle: h23
     - search:
         provider: custom
-        url: https://searxng.netbird.nathalie-stiefsohn.eu/search?q=
+        url: https://4get.netbird.nathalie-stiefsohn.eu/web?s=
         target: _blank
         focus: false

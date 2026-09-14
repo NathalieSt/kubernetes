@@ -9,4 +9,7 @@ resources:
 - config.yaml
 - plan-cronjob.yaml
 - apply-cronjob.yaml
+- oidc-config.yaml
+- oidc-plan-cronjob.yaml
+- oidc-apply-cronjob.yaml
 - network-policy.yaml

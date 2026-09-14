@@ -21,11 +21,9 @@ spec:
           operator: In
           values:
           - forgejo
-          - searxng
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
           operator: In
           values:
           - forgejo
-          - searxng

@@ -1,0 +1,116 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-apply-oidc-config
+  namespace: vault-apply
+data:
+  oidc.tf.json: |
+    {
+      "resource": {
+        "vault_policy": {
+          "admin": {
+            "name": "admin",
+            "policy": "path \"*\" {\n  capabilities = [\"create\", \"read\", \"update\", \"patch\", \"delete\", \"list\", \"sudo\"]\n}\n"
+          }
+        },
+        "vault_jwt_auth_backend": {
+          "oidc": {
+            "path": "oidc",
+            "type": "oidc",
+            "description": "Sign in to the web UI with Authelia",
+            "oidc_discovery_url": "https://auth.netbird.nathalie-stiefsohn.eu",
+            "bound_issuer": "https://auth.netbird.nathalie-stiefsohn.eu",
+            "oidc_client_id": "vault",
+            "oidc_client_secret_wo": "${ephemeral.vault_kv_secret_v2.vault_oidc_client.data[\"client-secret\"]}",
+            "oidc_client_secret_wo_version": 1,
+            "default_role": "admin",
+            "tune": [
+              {
+                "listing_visibility": "unauth",
+                "default_lease_ttl": "3600s",
+                "max_lease_ttl": "28800s",
+                "token_type": "default-service",
+                "allowed_response_headers": [],
+                "audit_non_hmac_request_keys": [],
+                "audit_non_hmac_response_keys": [],
+                "passthrough_request_headers": []
+              }
+            ]
+          }
+        },
+        "vault_jwt_auth_backend_role": {
+          "admin": {
+            "backend": "${vault_jwt_auth_backend.oidc.path}",
+            "role_name": "admin",
+            "role_type": "oidc",
+            "user_claim": "preferred_username",
+            "groups_claim": "groups",
+            "bound_claims": {
+              "groups": "admins"
+            },
+            "oidc_scopes": [
+              "profile",
+              "email",
+              "groups"
+            ],
+            "allowed_redirect_uris": [
+              "https://vault.netbird.nathalie-stiefsohn.eu/ui/vault/auth/oidc/oidc/callback"
+            ],
+            "token_policies": [
+              "${vault_policy.admin.name}"
+            ],
+            "token_ttl": 3600,
+            "token_max_ttl": 28800
+          }
+        }
+      },
+      "ephemeral": {
+        "vault_kv_secret_v2": {
+          "vault_oidc_client": {
+            "mount": "kvv2",
+            "name": "vault/oidc"
+          }
+        }
+      }
+    }
+  provider.tf.json: |
+    {
+      "terraform": {
+        "required_providers": {
+          "vault": {
+            "source": "hashicorp/vault",
+            "version": "~> 5.0"
+          }
+        },
+        "backend": {
+          "s3": {
+            "bucket": "opentofu-state",
+            "key": "vault-oidc/terraform.tfstate",
+            "region": "garage",
+            "endpoints": {
+              "s3": "http://garage.garage.svc.cluster.local:3900"
+            },
+            "use_path_style": true,
+            "skip_credentials_validation": true,
+            "skip_region_validation": true,
+            "skip_requesting_account_id": true,
+            "skip_metadata_api_check": true,
+            "skip_s3_checksum": true
+          }
+        }
+      },
+      "provider": {
+        "vault": {
+          "address": "http://vault-ui.vault.svc.cluster.local:8200",
+          "skip_child_token": true,
+          "auth_login": {
+            "path": "auth/kubernetes/login",
+            "parameters": {
+              "role": "opentofu",
+              "jwt": "${file(\"/var/run/secrets/kubernetes.io/serviceaccount/token\")}"
+            }
+          }
+        }
+      }
+    }

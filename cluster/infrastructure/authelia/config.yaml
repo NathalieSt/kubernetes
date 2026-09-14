@@ -46,6 +46,9 @@ data:
       default_policy: deny
       rules:
       - domain:
+        - 4get.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - audiomuse.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -116,9 +119,6 @@ data:
         policy: bypass
       - domain:
         - redlib.netbird.nathalie-stiefsohn.eu
-        policy: one_factor
-      - domain:
-        - searxng.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
         - tandoor.netbird.nathalie-stiefsohn.eu
@@ -225,6 +225,24 @@ data:
           scopes:
           - openid
           - profile
+          - email
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_post
+          consent_mode: implicit
+        - client_id: healthchecks
+          client_name: healthchecks
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/healthchecks` }}{{ secret `/secrets/oidc-clients/healthchecks` }}{{ else }}unwritten-secret-for-healthchecks{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://healthchecks.netbird.nathalie-stiefsohn.eu/oidc/callback/
+          scopes:
+          - openid
           - email
           grant_types:
           - authorization_code

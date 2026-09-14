@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: fourget
+    app.kubernetes.io/version: 1.0.58
+  name: fourget
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fourget
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fourget
+        app.kubernetes.io/version: 1.0.58
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          set -eu
+          cp -R /var/www/html/4get/data/. /work/data/
+          cd /work
+          php /var/www/html/4get/docker/gen_config.php
+          echo "4get: config.php generated"
+        image: luuul/4get:1.0.58
+        name: generate-config
+        volumeMounts:
+        - mountPath: /work/data
+          name: data
+        env:
+        - name: FOURGET_SERVER_NAME
+          value: 4get
+        - name: FOURGET_DEFAULT_THEME
+          value: Pennant
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - command:
+        - httpd
+        - -DFOREGROUND
+        - -f
+        - /etc/4get/httpd.conf
+        image: luuul/4get:1.0.58
+        name: fourget
+        ports:
+        - containerPort: 8080
+          name: fourget
+        volumeMounts:
+        - mountPath: /etc/4get/httpd.conf
+          subPath: httpd.conf
+          name: config
+          readOnly: true
+        - mountPath: /var/www/html/4get/static/themes/Pennant.css
+          subPath: Pennant.css
+          name: config
+          readOnly: true
+        - mountPath: /var/www/html/4get/data
+          name: data
+        - mountPath: /var/www/html/4get/icons
+          name: icons
+        env:
+        - name: http_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: config
+        configMap:
+          name: fourget-config
+      - name: data
+        emptyDir: {}
+      - name: icons
+        emptyDir: {}
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      nodeSelector:
+        kubernetes.io/arch: amd64

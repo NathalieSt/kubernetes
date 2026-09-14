@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/homepage-config-hash: 3052a60fcc81d971
+        homelab/homepage-config-hash: 5969f8d5b8a7e4ba
       labels:
         app.kubernetes.io/name: homepage
         app.kubernetes.io/version: v2.3.0

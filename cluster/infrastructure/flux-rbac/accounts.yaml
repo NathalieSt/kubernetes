@@ -294,6 +294,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-fourget
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-fourget-namespace-admin
+  namespace: fourget
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-fourget
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-glitchtip
   namespace: flux-system
 ---
@@ -1032,26 +1052,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-rimworld-together
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-searxng
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-searxng-namespace-admin
-  namespace: searxng
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-searxng
   namespace: flux-system
 ---
 apiVersion: v1

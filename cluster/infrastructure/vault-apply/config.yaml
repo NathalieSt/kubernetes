@@ -49,10 +49,6 @@ data:
     {
       "resource": {
         "vault_policy": {
-          "admin": {
-            "name": "admin",
-            "policy": "path \"*\" {\n  capabilities = [\"create\", \"read\", \"update\", \"patch\", \"delete\", \"list\", \"sudo\"]\n}\n"
-          },
           "authelia": {
             "name": "authelia",
             "policy": "path \"kvv2/data/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n"
@@ -75,7 +71,7 @@ data:
           },
           "healthchecks": {
             "name": "healthchecks",
-            "policy": "path \"kvv2/data/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n"
+            "policy": "path \"kvv2/data/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "kavita": {
             "name": "kavita",
@@ -303,56 +299,6 @@ data:
             "token_ttl": 600
           }
         },
-        "vault_jwt_auth_backend": {
-          "oidc": {
-            "path": "oidc",
-            "type": "oidc",
-            "description": "Sign in to the web UI with Authelia",
-            "oidc_discovery_url": "https://auth.netbird.nathalie-stiefsohn.eu",
-            "bound_issuer": "https://auth.netbird.nathalie-stiefsohn.eu",
-            "oidc_client_id": "vault",
-            "oidc_client_secret_wo": "${ephemeral.vault_kv_secret_v2.vault_oidc_client.data[\"client-secret\"]}",
-            "oidc_client_secret_wo_version": 1,
-            "default_role": "admin",
-            "tune": [
-              {
-                "listing_visibility": "unauth",
-                "default_lease_ttl": "3600s",
-                "max_lease_ttl": "28800s",
-                "token_type": "default-service",
-                "allowed_response_headers": [],
-                "audit_non_hmac_request_keys": [],
-                "audit_non_hmac_response_keys": [],
-                "passthrough_request_headers": []
-              }
-            ]
-          }
-        },
-        "vault_jwt_auth_backend_role": {
-          "admin": {
-            "backend": "${vault_jwt_auth_backend.oidc.path}",
-            "role_name": "admin",
-            "role_type": "oidc",
-            "user_claim": "preferred_username",
-            "groups_claim": "groups",
-            "bound_claims": {
-              "groups": "admins"
-            },
-            "oidc_scopes": [
-              "profile",
-              "email",
-              "groups"
-            ],
-            "allowed_redirect_uris": [
-              "https://vault.netbird.nathalie-stiefsohn.eu/ui/vault/auth/oidc/oidc/callback"
-            ],
-            "token_policies": [
-              "${vault_policy.admin.name}"
-            ],
-            "token_ttl": 3600,
-            "token_max_ttl": 28800
-          }
-        },
         "vault_kv_secret_v2": {
           "authelia_authelia_secrets": {
             "mount": "kvv2",
@@ -399,7 +345,7 @@ data:
             "name": "authelia/oidc-clients",
             "cas": 0,
             "disable_read": true,
-            "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"glitchtip\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients glitchtip=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
+            "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"glitchtip\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients glitchtip=<value>\",\"healthchecks\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients healthchecks=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
             "custom_metadata": {
               "data": {
                 "managed-by": "opentofu",
@@ -564,6 +510,26 @@ data:
               "data": {
                 "managed-by": "opentofu",
                 "created-as": "placeholder",
+                "owner": "healthchecks"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          },
+          "healthchecks_healthchecks_oidc": {
+            "mount": "kvv2",
+            "name": "healthchecks/oidc",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/healthchecks/oidc client-secret=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "adopted",
                 "owner": "healthchecks"
               }
             },
@@ -756,14 +722,6 @@ data:
           }
         }
       },
-      "ephemeral": {
-        "vault_kv_secret_v2": {
-          "vault_oidc_client": {
-            "mount": "kvv2",
-            "name": "vault/oidc"
-          }
-        }
-      },
       "import": [
         {
           "to": "vault_kv_secret_v2.backup-dashboard_backup-dashboard_basic-auth",
@@ -776,6 +734,10 @@ data:
         {
           "to": "vault_kv_secret_v2.glitchtip_glitchtip_oidc",
           "id": "kvv2/data/glitchtip/oidc"
+        },
+        {
+          "to": "vault_kv_secret_v2.healthchecks_healthchecks_oidc",
+          "id": "kvv2/data/healthchecks/oidc"
         },
         {
           "to": "vault_kv_secret_v2.kavita_kavita_oidc",
