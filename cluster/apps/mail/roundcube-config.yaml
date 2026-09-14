@@ -39,9 +39,20 @@ data:
      * builds its OAuth redirect_uri as http://…, which does not match the https://
      * URI registered with Authelia, and every sign-in is refused at the provider.
      * It sets no redirect of its own; it only tells Roundcube the connection is
-     * secure.
+     * secure (and marks its cookies Secure).
      */
     $config['use_https'] = true;
+
+    /*
+     * And the port. Roundcube trusts X-Forwarded-Port only from proxy_whitelist, so
+     * behind the gateway it falls back to Apache's own port and builds
+     * https://mail…:8000/index.php/login/oauth, which Authelia refuses for not
+     * being the registered URI. The pod IPs of the gateway are not a thing to
+     * whitelist, so the public URL is stated instead, derived from gateway.dnsName.
+     */
+    if (getenv('ROUNDCUBE_URL')) {
+        $config['request_url'] = getenv('ROUNDCUBE_URL');
+    }
 
     /*
      * The secret is optional in the pod, and a vault-config placeholder is treated

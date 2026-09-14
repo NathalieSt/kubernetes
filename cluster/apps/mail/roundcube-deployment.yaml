@@ -115,6 +115,8 @@ spec:
           value: openid profile email offline_access
         - name: ROUNDCUBE_OIDC_CLIENT_SECRET_FILE
           value: /var/roundcube/oidc/client-secret
+        - name: ROUNDCUBE_URL
+          value: https://mail.netbird.nathalie-stiefsohn.eu
         - name: ROUNDCUBE_OIDC_AUTHORITY
           value: https://auth.netbird.nathalie-stiefsohn.eu
         - name: ROUNDCUBE_OIDC_CLIENT_ID
