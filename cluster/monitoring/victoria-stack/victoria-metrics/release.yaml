@@ -26,14 +26,14 @@ spec:
               authorization:
                 credentials_file: /etc/alertmanager-ntfy/token
             send_resolved: true
-            url: http://ntfy.ntfy.svc.cluster.local:8080/victoria-metrics?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu&actions=view%2C%20Open%20orrery%2C%20https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+            url: http://ntfy.ntfy.svc.cluster.local:8080/victoria-metrics?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
         - name: ntfy-warnings
           webhook_configs:
           - http_config:
               authorization:
                 credentials_file: /etc/alertmanager-ntfy/token
             send_resolved: true
-            url: http://ntfy.ntfy.svc.cluster.local:8080/warnings?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu&actions=view%2C%20Open%20orrery%2C%20https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+            url: http://ntfy.ntfy.svc.cluster.local:8080/warnings?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
         - name: healthchecks
           webhook_configs:
           - send_resolved: false
@@ -82,6 +82,14 @@ spec:
     defaultRules:
       groups:
         etcd:
+          create: false
+        kubeApiserverAvailability:
+          create: false
+        kubeApiserverBurnrate:
+          create: false
+        kubeApiserverHistogram:
+          create: false
+        kubeApiserverSlos:
           create: false
         kubeScheduler:
           create: false
