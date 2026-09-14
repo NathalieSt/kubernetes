@@ -12,6 +12,7 @@ resources:
 - roundcube-deployment.yaml
 - roundcube-pvc.yaml
 - roundcube-service.yaml
+- roundcube-config.yaml
 - network-policy.yaml
 - netbird-network-resource.yaml
 - k8up-schedule.yaml

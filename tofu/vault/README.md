@@ -11,8 +11,9 @@ The frame around the secrets, never the secrets themselves:
 
 - a **policy** per workload, granting read on exactly the paths it declared;
 - a **Kubernetes auth role** per workload, bound to that workload's
-  ServiceAccount and namespace;
-- a **KV-v2 entry** per path, created with placeholder values.
+  ServiceAccount and namespace.
+
+The KV paths themselves are not OpenTofu resources — see Placeholders below.
 
 | Role | Namespace | Paths |
 | --- | --- | --- |
@@ -20,7 +21,7 @@ The frame around the secrets, never the secrets themselves:
 | `code-server` | `code-server` | `kvv2/code-server`, `kvv2/code-server-git` |
 | `neko` | `neko` | `kvv2/neko` |
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
-| `mail` | `mail` | `kvv2/mail` |
+| `mail` | `mail` | `kvv2/mail`, `kvv2/mail/oidc` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
@@ -39,57 +40,36 @@ out of here means a missing one fails only that run.
 
 - **The `kvv2` mount and the `kubernetes` auth backend.** Both
   already exist. Adopt them with `tofu import` if you want them here.
-- **Secret values.** The placeholders are written once, with
-  `ignore_changes = [data_json]` and `disable_read = true`, so a real value
-  written afterwards is never read into state and never overwritten.
+- **The KV paths and their values.** See below.
 - **OpenTofu's own Vault credentials.** A policy cannot create the policy that
   authorises creating it; see the bootstrap below.
 
 ## Placeholders
 
-A new path is created holding one line per key:
+`placeholders.txt` lists every declared path. Before each apply, the
+vault-apply Job's `placeholders` step (`placeholders.sh` in the vault-apply
+generator) goes through it with one rule: **a path that exists is never
+written.** A path that does not exist is created holding one line per key,
 
     REPLACE ME — vault kv patch kvv2/<path> <key>=<value>
 
-That value is deliberately unusable. A workload started against it fails rather
-than running on a secret that is sitting in a git repository.
+with check-and-set 0, so even a human writing the same path at the same moment
+cannot be overwritten. The value is deliberately unusable: a workload started
+against it fails rather than running on a secret sitting in a git repository.
 
-Every entry is created with `cas = 0`, meaning "write only if nothing is
-there". Running this against a path that already holds a real secret **fails
-the apply** rather than clobbering it — which is what makes it safe to point at
-a live Vault.
+So the order of things no longer matters. Write a secret by hand before its
+declaration merges, or after the placeholder appears — both end with the value
+you wrote, and neither fails an apply. (Until September 2026 these were
+`vault_kv_secret_v2` resources, and a path written first was a 403 on every
+run; the `removed` blocks in `workloads.tf.json` are what took them out of
+state without touching Vault.)
 
-## Adopting a path that already exists
-
-What that failure actually looks like is worth knowing, because it does not
-mention check-and-set at all:
-
-    Error: error writing to path "kvv2/data/<path>", ... Code: 403 ... permission denied
-
-The `opentofu` policy below grants `create` and no `update` on the KV data
-path, so a write to an existing path is refused by the ACL *before* the
-check-and-set is evaluated. It fails the same way on every run from then on,
-which matters more than the one resource: the nightly plan is the drift check,
-and a drift check that always fails can no longer report drift.
-
-Adopt the path rather than importing it by hand — set `adopted: true` on that
-`vaultSecret` next to the workload. This emits an OpenTofu `import` block, so
-one apply brings the path into state and the declaration keeps working against
-a state rebuilt from nothing. The block is inert once the resource is in state,
-so it stays in the configuration:
-
-```json
-{ "import": [ { "to": "vault_kv_secret_v2.<name>", "id": "kvv2/data/<path>" } ] }
-```
-
-An adopted entry carries `created-as: adopted` in its custom metadata instead
-of `created-as: placeholder`, because it was not created here and the metadata
-should not say it was.
-
-To find what still needs filling in:
+The step lists what is still waiting for a human — a key holding a placeholder,
+or a declared key that is absent — at the end of its log. That is a to-do, not
+a failure: the Job stays green.
 
 ```sh
-vault kv get kvv2/<path>   # a REPLACE ME value is unfilled
+kubectl logs -n vault-apply job/<the apply job> -c placeholders
 ```
 
 ## Bootstrap, once, by hand
@@ -219,30 +199,37 @@ trade the in-pod path avoids.
 
 ## How it runs
 
-Two CronJobs in the `vault-apply` namespace, from a ConfigMap holding exactly
-these files:
+In the `vault-apply` namespace, from a ConfigMap holding exactly these files:
 
 | | When | Does |
 | --- | --- | --- |
-| `vault-apply-plan` | nightly, 05:00 | `tofu plan -detailed-exitcode`. Exit code 2 means Vault no longer matches the declarations, so **drift is a failed Job** |
-| `vault-apply-apply` | never — suspended | `tofu apply`, on demand only |
+| `vault-apply-apply-<hash>` | once, when the merged configuration changes | placeholders, then `tofu apply` |
+| `vault-apply-plan` | nightly, 05:00 | placeholders in check mode, then `tofu plan -detailed-exitcode` |
+| `vault-apply-apply` | never — suspended | the same apply, on demand |
 
-`vault-apply-oidc-plan` and `vault-apply-oidc-apply` are the same pair for
-`../vault-oidc`, from their own ConfigMap. Separate Jobs so that each failure
+`vault-apply-oidc-*` are the same for `../vault-oidc`, from their own
+ConfigMap, without the placeholders step. Separate Jobs so that each failure
 names its own run.
 
-Applying is deliberate rather than automatic. Nothing rewrites Vault's policies
-because a commit landed:
+**Merging is the deliberate act.** The apply Job's name carries a hash of
+everything it runs, so a merged manifests PR that changes a Vault declaration
+creates a new Job, Flux runs it once, and prunes the previous one. A PR that does
+not touch Vault leaves the Job — and its log — as it was.
+
+That is what makes a red Job mean something:
+
+- **A failed apply** makes the `vault-apply` Kustomization unhealthy, which Flux
+  alerting reports. The declarations did not reach Vault.
+- **A failed nightly plan** is drift: nothing is waiting to be applied any more,
+  so a difference means someone changed Vault by hand, or a declared path was
+  deleted.
+- **A secret nobody has filled in** fails neither.
+
+Re-running an apply — after fixing a transient failure, say:
 
 ```sh
-kubectl create job -n vault-apply --from=cronjob/vault-apply-apply now
-kubectl logs -n vault-apply -l app.kubernetes.io/name=vault-apply-apply -f
-```
-
-Check what the nightly plan thought:
-
-```sh
-kubectl logs -n vault-apply -l app.kubernetes.io/name=vault-apply-plan --tail=100
+kubectl create job -n vault-apply --from=cronjob/vault-apply-apply rerun
+kubectl logs -n vault-apply job/rerun --all-containers -f
 ```
 
 ## Running it by hand

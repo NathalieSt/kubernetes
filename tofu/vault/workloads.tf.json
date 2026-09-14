@@ -31,7 +31,7 @@
       },
       "mail": {
         "name": "mail",
-        "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "neko": {
         "name": "neko",
@@ -250,454 +250,152 @@
         ],
         "token_ttl": 600
       }
-    },
-    "vault_kv_secret_v2": {
-      "authelia_authelia_secrets": {
-        "mount": "kvv2",
-        "name": "authelia/secrets",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"session-secret\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets session-secret=<value>\",\"storage-encryption-key\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets storage-encryption-key=<value>\",\"reset-password-jwt-secret\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets reset-password-jwt-secret=<value>\",\"oidc-hmac-secret\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets oidc-hmac-secret=<value>\",\"oidc-issuer-private-key\":\"REPLACE ME — vault kv patch kvv2/authelia/secrets oidc-issuer-private-key=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "authelia"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "authelia_authelia_users": {
-        "mount": "kvv2",
-        "name": "authelia/users",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"users.yml\":\"REPLACE ME — vault kv patch kvv2/authelia/users users.yml=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "authelia"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "authelia_authelia_oidc-clients": {
-        "mount": "kvv2",
-        "name": "authelia/oidc-clients",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"glitchtip\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients glitchtip=<value>\",\"healthchecks\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients healthchecks=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "authelia"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "backup-dashboard_backup-dashboard_basic-auth": {
-        "mount": "kvv2",
-        "name": "backup-dashboard/basic-auth",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"username\":\"REPLACE ME — vault kv patch kvv2/backup-dashboard/basic-auth username=<value>\",\"password\":\"REPLACE ME — vault kv patch kvv2/backup-dashboard/basic-auth password=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "adopted",
-            "owner": "backup-dashboard"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "backup-dashboard_backup-dashboard_oidc": {
-        "mount": "kvv2",
-        "name": "backup-dashboard/oidc",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/backup-dashboard/oidc client-secret=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "backup-dashboard"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "code-server_code-server": {
-        "mount": "kvv2",
-        "name": "code-server",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"password\":\"REPLACE ME — vault kv patch kvv2/code-server password=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "code-server"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "code-server_code-server-git": {
-        "mount": "kvv2",
-        "name": "code-server-git",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"username\":\"REPLACE ME — vault kv patch kvv2/code-server-git username=<value>\",\"email\":\"REPLACE ME — vault kv patch kvv2/code-server-git email=<value>\",\"token\":\"REPLACE ME — vault kv patch kvv2/code-server-git token=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "code-server"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "flux-notifications_flux-notifications": {
-        "mount": "kvv2",
-        "name": "flux-notifications",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"token\":\"REPLACE ME — vault kv patch kvv2/flux-notifications token=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "adopted",
-            "owner": "flux-notifications"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "glitchtip_glitchtip_secret": {
-        "mount": "kvv2",
-        "name": "glitchtip/secret",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"secret-key\":\"REPLACE ME — vault kv patch kvv2/glitchtip/secret secret-key=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "glitchtip"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "glitchtip_glitchtip_oidc": {
-        "mount": "kvv2",
-        "name": "glitchtip/oidc",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/glitchtip/oidc client-secret=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "adopted",
-            "owner": "glitchtip"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "healthchecks_healthchecks_secret": {
-        "mount": "kvv2",
-        "name": "healthchecks/secret",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"secret-key\":\"REPLACE ME — vault kv patch kvv2/healthchecks/secret secret-key=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "healthchecks"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "healthchecks_healthchecks_oidc": {
-        "mount": "kvv2",
-        "name": "healthchecks/oidc",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/healthchecks/oidc client-secret=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "adopted",
-            "owner": "healthchecks"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "kavita_kavita_oidc": {
-        "mount": "kvv2",
-        "name": "kavita/oidc",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/kavita/oidc client-secret=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "adopted",
-            "owner": "kavita"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "mail_mail": {
-        "mount": "kvv2",
-        "name": "mail",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"postfix-accounts.cf\":\"REPLACE ME — vault kv patch kvv2/mail postfix-accounts.cf=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "mail"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "neko_neko": {
-        "mount": "kvv2",
-        "name": "neko",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"password\":\"REPLACE ME — vault kv patch kvv2/neko password=<value>\",\"admin-password\":\"REPLACE ME — vault kv patch kvv2/neko admin-password=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "neko"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "ntfy_ntfy_auth": {
-        "mount": "kvv2",
-        "name": "ntfy/auth",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"auth-users\":\"REPLACE ME — vault kv patch kvv2/ntfy/auth auth-users=<value>\",\"auth-tokens\":\"REPLACE ME — vault kv patch kvv2/ntfy/auth auth-tokens=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "ntfy"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "psono-server_psono": {
-        "mount": "kvv2",
-        "name": "psono",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"secret-key\":\"REPLACE ME — vault kv patch kvv2/psono secret-key=<value>\",\"activation-link-secret\":\"REPLACE ME — vault kv patch kvv2/psono activation-link-secret=<value>\",\"db-secret\":\"REPLACE ME — vault kv patch kvv2/psono db-secret=<value>\",\"email-secret-salt\":\"REPLACE ME — vault kv patch kvv2/psono email-secret-salt=<value>\",\"private-key\":\"REPLACE ME — vault kv patch kvv2/psono private-key=<value>\",\"public-key\":\"REPLACE ME — vault kv patch kvv2/psono public-key=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "psono-server"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "tandoor_tandoor_oidc": {
-        "mount": "kvv2",
-        "name": "tandoor/oidc",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/tandoor/oidc client-secret=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "adopted",
-            "owner": "tandoor"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "victoria-metrics_victoria-metrics": {
-        "mount": "kvv2",
-        "name": "victoria-metrics",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"adminAuthKey\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics adminAuthKey=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "victoria-metrics"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "victoria-metrics_victoria-metrics_ntfy": {
-        "mount": "kvv2",
-        "name": "victoria-metrics/ntfy",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"token\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics/ntfy token=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "victoria-metrics"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      },
-      "victoria-metrics_victoria-metrics_healthchecks": {
-        "mount": "kvv2",
-        "name": "victoria-metrics/healthchecks",
-        "cas": 0,
-        "disable_read": true,
-        "data_json": "{\"watchdog-ping-url\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics/healthchecks watchdog-ping-url=<value>\"}",
-        "custom_metadata": {
-          "data": {
-            "managed-by": "opentofu",
-            "created-as": "placeholder",
-            "owner": "victoria-metrics"
-          }
-        },
-        "lifecycle": {
-          "ignore_changes": [
-            "data_json"
-          ],
-          "prevent_destroy": true
-        }
-      }
     }
   },
-  "import": [
+  "removed": [
     {
-      "to": "vault_kv_secret_v2.backup-dashboard_backup-dashboard_basic-auth",
-      "id": "kvv2/data/backup-dashboard/basic-auth"
+      "from": "vault_kv_secret_v2.authelia_authelia_oidc-clients",
+      "lifecycle": {
+        "destroy": false
+      }
     },
     {
-      "to": "vault_kv_secret_v2.flux-notifications_flux-notifications",
-      "id": "kvv2/data/flux-notifications"
+      "from": "vault_kv_secret_v2.authelia_authelia_secrets",
+      "lifecycle": {
+        "destroy": false
+      }
     },
     {
-      "to": "vault_kv_secret_v2.glitchtip_glitchtip_oidc",
-      "id": "kvv2/data/glitchtip/oidc"
+      "from": "vault_kv_secret_v2.authelia_authelia_users",
+      "lifecycle": {
+        "destroy": false
+      }
     },
     {
-      "to": "vault_kv_secret_v2.healthchecks_healthchecks_oidc",
-      "id": "kvv2/data/healthchecks/oidc"
+      "from": "vault_kv_secret_v2.backup-dashboard_backup-dashboard_basic-auth",
+      "lifecycle": {
+        "destroy": false
+      }
     },
     {
-      "to": "vault_kv_secret_v2.kavita_kavita_oidc",
-      "id": "kvv2/data/kavita/oidc"
+      "from": "vault_kv_secret_v2.backup-dashboard_backup-dashboard_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
     },
     {
-      "to": "vault_kv_secret_v2.tandoor_tandoor_oidc",
-      "id": "kvv2/data/tandoor/oidc"
+      "from": "vault_kv_secret_v2.code-server_code-server",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.code-server_code-server-git",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.flux-notifications_flux-notifications",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.glitchtip_glitchtip_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.glitchtip_glitchtip_secret",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.healthchecks_healthchecks_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.healthchecks_healthchecks_secret",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.kavita_kavita_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.livekit_livekit",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.livekit_livekit-tls",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.mail_mail",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.mail_mail_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.neko_neko",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.ntfy_ntfy_auth",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.psono-server_psono",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.tandoor_tandoor_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.victoria-metrics_victoria-metrics",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.victoria-metrics_victoria-metrics_healthchecks",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.victoria-metrics_victoria-metrics_ntfy",
+      "lifecycle": {
+        "destroy": false
+      }
     }
   ]
 }
