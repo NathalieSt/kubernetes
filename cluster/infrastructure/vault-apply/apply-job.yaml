@@ -1,0 +1,119 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app.kubernetes.io/name: vault-apply-apply
+    app.kubernetes.io/version: 1.12.6
+  name: vault-apply-apply-93d8cdd115
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vault-apply-apply
+        app.kubernetes.io/version: 1.12.6
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - cp /config/*.tf.json /work/
+        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: copy-config
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+          readOnly: true
+        - mountPath: /work
+          name: work-volume
+      - command:
+        - /bin/sh
+        - /config/placeholders.sh
+        - apply
+        image: hashicorp/vault:2.0.4@sha256:5be49781ecf78bfe775c5309c6a4d9f4e9e040b6c885c99eb2b12fb69855e1a2
+        name: placeholders
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+          readOnly: true
+        env:
+        - name: VAULT_ADDR
+          value: http://vault-ui.vault.svc.cluster.local:8200
+        - name: VAULT_ROLE
+          value: opentofu
+        - name: KV_MOUNT
+          value: kvv2
+        - name: PLACEHOLDERS
+          value: /config/placeholders.txt
+      - args:
+        - -chdir=/work
+        - init
+        - -input=false
+        image: ghcr.io/opentofu/opentofu:1.12.6
+        name: tofu-init
+        volumeMounts:
+        - mountPath: /work
+          name: work-volume
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: access-key-id
+              name: vault-apply-bootstrap-secret
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: secret-access-key
+              name: vault-apply-bootstrap-secret
+        - name: TF_ENCRYPTION
+          valueFrom:
+            secretKeyRef:
+              key: encryption
+              name: vault-apply-bootstrap-secret
+        - name: TZ
+          value: Europe/Vienna
+      serviceAccountName: opentofu
+      containers:
+      - args:
+        - -chdir=/work
+        - apply
+        - -input=false
+        - -auto-approve
+        image: ghcr.io/opentofu/opentofu:1.12.6
+        name: vault-apply-apply
+        volumeMounts:
+        - mountPath: /work
+          name: work-volume
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: access-key-id
+              name: vault-apply-bootstrap-secret
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: secret-access-key
+              name: vault-apply-bootstrap-secret
+        - name: TF_ENCRYPTION
+          valueFrom:
+            secretKeyRef:
+              key: encryption
+              name: vault-apply-bootstrap-secret
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+      volumes:
+      - name: config-volume
+        configMap:
+          name: vault-apply-config
+      - name: work-volume
+        emptyDir: {}
+      restartPolicy: Never

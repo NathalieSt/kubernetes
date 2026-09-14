@@ -7,9 +7,11 @@ resources:
 - rbac.yaml
 - vault-secrets.yaml
 - config.yaml
+- apply-job.yaml
 - plan-cronjob.yaml
 - apply-cronjob.yaml
 - oidc-config.yaml
+- oidc-apply-job.yaml
 - oidc-plan-cronjob.yaml
 - oidc-apply-cronjob.yaml
 - network-policy.yaml
