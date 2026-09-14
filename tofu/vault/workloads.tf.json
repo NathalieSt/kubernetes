@@ -51,7 +51,7 @@
       },
       "victoria-metrics": {
         "name": "victoria-metrics",
-        "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n"
       }
     },
     "vault_kubernetes_auth_backend_role": {
@@ -618,6 +618,26 @@
         "cas": 0,
         "disable_read": true,
         "data_json": "{\"token\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics/ntfy token=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "placeholder",
+            "owner": "victoria-metrics"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
+      "victoria-metrics_victoria-metrics_healthchecks": {
+        "mount": "kvv2",
+        "name": "victoria-metrics/healthchecks",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"watchdog-ping-url\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics/healthchecks watchdog-ping-url=<value>\"}",
         "custom_metadata": {
           "data": {
             "managed-by": "opentofu",

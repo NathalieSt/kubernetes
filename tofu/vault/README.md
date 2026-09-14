@@ -28,7 +28,7 @@ The frame around the secrets, never the secrets themselves:
 | `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc` |
 | `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret` |
 | `ntfy` | `ntfy` | `kvv2/ntfy/auth` |
-| `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics`, `kvv2/victoria-metrics/ntfy` |
+| `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics`, `kvv2/victoria-metrics/ntfy`, `kvv2/victoria-metrics/healthchecks` |
 
 ## What is not managed, and why
 
