@@ -1,0 +1,169 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    app.kubernetes.io/name: fourget
+  name: fourget-config
+data:
+  Pennant.css: |
+    /* Pennant for 4get, written by kubernetes-generator (src/generators/theme). */
+
+    :root {
+      color-scheme: light dark;
+      --1d2021: #f9fafb;
+      --282828: #ffffff;
+      --3c3836: #f1f4f5;
+      --504945: #e3e7e9;
+      --928374: #838b8e;
+      --a89984: #666d71;
+      --bdae93: #2e3436;
+      --8ec07c: #1e7c44;
+      --ebdbb2: #2e3436;
+      --comment: #838b8e;
+      --default: #2e3436;
+      --keyword: #984a72;
+      --string: #1e7c44;
+    }
+
+    .web .text-result .title {
+      color: #984a72;
+    }
+
+    .tabs .tab.selected {
+      border-bottom-color: #984a72;
+    }
+
+    .searchbox:focus-within {
+      border-color: #b95f8c;
+    }
+
+    .quote {
+      border-left-color: #e3e7e9;
+    }
+
+    #images .duration {
+      border-color: #e3e7e9;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --1d2021: #090c0d;
+        --282828: #121617;
+        --3c3836: #1d2123;
+        --504945: #2e3436;
+        --928374: #9ea6a9;
+        --a89984: #b8bfc2;
+        --bdae93: #f1f4f5;
+        --8ec07c: #93d9a6;
+        --ebdbb2: #f1f4f5;
+        --comment: #9ea6a9;
+        --default: #f1f4f5;
+        --keyword: #f5adce;
+        --string: #93d9a6;
+      }
+
+      .web .text-result .title {
+        color: #f5adce;
+      }
+
+      .tabs .tab.selected {
+        border-bottom-color: #f5adce;
+      }
+
+      .searchbox:focus-within {
+        border-color: #f5adce;
+      }
+
+      .quote {
+        border-left-color: #2e3436;
+      }
+
+      #images .duration {
+        border-color: #2e3436;
+      }
+    }
+  httpd.conf: |
+    # Apache for 4get, replacing the image's own docker/apache/http/httpd.conf.
+    #
+    # The image's entrypoint copies that file into /etc/apache2 and starts httpd as
+    # root, which then drops to `apache`. This pod runs as uid 1000 from the start,
+    # so the copy is refused and port 80 cannot be bound; httpd is started directly
+    # against this file instead. What differs from upstream, and why:
+    #
+    # - Listen 8080, and the pid file and runtime directory in /tmp, which uid 1000
+    #   can write. No User/Group: httpd not started as root runs as whoever it is.
+    # - ServerName carries the https gateway URL and UseCanonicalName is on. TLS
+    #   ends at the gateway, so Apache sees plain http and would otherwise build
+    #   every redirect it issues (the `.php` rewrite below, a trailing slash) as
+    #   http://, which the browser then has to be bounced back from.
+    # - HTTPS=on from X-Forwarded-Proto, for the same reason, because opensearch.php
+    #   builds the search-engine URL a browser installs from $_SERVER['HTTPS'].
+    # - Upstream's .php redirect hardcodes `http://%{HTTP_HOST}`; here it is
+    #   relative, and Apache completes it from ServerName.
+    # - Errors go to stderr instead of /dev/null. The access log stays off, as
+    #   upstream has it: every request line of a search engine is a search query.
+    # - Only the modules this configuration uses, plus PHP.
+    # - A bounded worker pool. mod_php under prefork is one PHP process per worker,
+    #   and the prefork default of 150 would outgrow the pod's memory limit long
+    #   before it served a household.
+
+    ServerRoot /var/www
+    Listen 8080
+    DefaultRuntimeDir /tmp
+    PidFile /tmp/httpd.pid
+    ServerName https://4get.netbird.nathalie-stiefsohn.eu
+    UseCanonicalName On
+    ServerTokens Prod
+    ServerSignature Off
+    LogLevel warn
+    ErrorLog /dev/stderr
+
+    LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+    LoadModule unixd_module modules/mod_unixd.so
+    LoadModule authz_core_module modules/mod_authz_core.so
+    LoadModule mime_module modules/mod_mime.so
+    LoadModule dir_module modules/mod_dir.so
+    LoadModule rewrite_module modules/mod_rewrite.so
+    LoadModule setenvif_module modules/mod_setenvif.so
+    LoadModule headers_module modules/mod_headers.so
+    LoadModule php_module modules/mod_php84.so
+
+    StartServers 2
+    MinSpareServers 2
+    MaxSpareServers 4
+    MaxRequestWorkers 12
+
+    TypesConfig /etc/apache2/mime.types
+    DocumentRoot "/var/www/html/4get"
+    DirectoryIndex index.php index.html
+    RequestHeader unset Proxy early
+    SetEnvIf X-Forwarded-Proto ^https$ HTTPS=on
+
+    <Directory />
+        AllowOverride None
+        Require all denied
+    </Directory>
+
+    <Directory "/var/www/html/4get">
+        RewriteEngine On
+        RewriteCond %{THE_REQUEST} ^\w+\ /(.*)\.php(\?.*)?\ HTTP/
+        RewriteRule ^ /%1 [R=301]
+        RewriteCond %{REQUEST_FILENAME}.php -f
+        RewriteRule .* $0.php
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    # The generated config.php, and the proxy and API key lists.
+    <Directory "/var/www/html/4get/data">
+        Require all denied
+    </Directory>
+
+    <Files ".ht*">
+        Require all denied
+    </Files>
+
+    <FilesMatch \.php$>
+        SetHandler application/x-httpd-php
+    </FilesMatch>

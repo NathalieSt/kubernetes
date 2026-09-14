@@ -78,6 +78,13 @@ data:
           entryPoints:
           - websecure
           service: forgejo
+        fourget:
+          rule: Host(`4get.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: fourget
+          middlewares:
+          - authelia
         glitchtip:
           rule: Host(`glitchtip.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -185,13 +192,6 @@ data:
           service: redlib
           middlewares:
           - authelia
-        searxng:
-          rule: Host(`searxng.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: searxng
-          middlewares:
-          - authelia
         tandoor:
           rule: Host(`tandoor.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -246,6 +246,10 @@ data:
           loadBalancer:
             servers:
             - url: http://forgejo-http.forgejo.svc.cluster.local:3000
+        fourget:
+          loadBalancer:
+            servers:
+            - url: http://fourget.fourget.svc.cluster.local:8080
         glitchtip:
           loadBalancer:
             servers:
@@ -314,10 +318,6 @@ data:
           loadBalancer:
             servers:
             - url: http://redlib.redlib.svc.cluster.local:8080
-        searxng:
-          loadBalancer:
-            servers:
-            - url: http://searxng.searxng.svc.cluster.local:8080
         tandoor:
           loadBalancer:
             servers:
