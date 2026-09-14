@@ -20,7 +20,7 @@ The frame around the secrets, never the secrets themselves:
 | `code-server` | `code-server` | `kvv2/code-server`, `kvv2/code-server-git` |
 | `neko` | `neko` | `kvv2/neko` |
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
-| `mail` | `mail` | `kvv2/mail` |
+| `mail` | `mail` | `kvv2/mail`, `kvv2/mail/oidc` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |

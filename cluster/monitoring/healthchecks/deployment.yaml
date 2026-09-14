@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: healthchecks
-    app.kubernetes.io/version: 68af362
+    app.kubernetes.io/version: d4954af
   name: healthchecks
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: healthchecks
-        app.kubernetes.io/version: 68af362
+        app.kubernetes.io/version: d4954af
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -124,7 +124,7 @@ spec:
         - /pennant-out
         - /pennant/pennant.css
         - css/output.*.css
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:68af362
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af
         name: pennant
         volumeMounts:
         - mountPath: /pennant
@@ -144,7 +144,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:68af362
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af
         name: healthchecks
         ports:
         - containerPort: 8000

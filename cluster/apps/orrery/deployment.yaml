@@ -41,6 +41,8 @@ spec:
           value: /app/ui/dist
         - name: ORRERY_STATE_DIR
           value: /data
+        - name: ORRERY_SENTRY_DSN
+          value: https://cd8bc55442a644769d472ebfa3fb7ade@glitchtip.netbird.nathalie-stiefsohn.eu/1
         - name: ORRERY_OIDC_AUTHORITY
           value: https://auth.netbird.nathalie-stiefsohn.eu
         - name: ORRERY_OIDC_CLIENT_ID

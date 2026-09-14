@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: roundcube-config
+  namespace: mail
+data:
+  oidc.inc.php: |
+    <?php
+    /*
+     * Roundcube's sign-in through Authelia, and the two settings that go with it.
+     *
+     * Static on purpose: every value that has to agree with a registration — the
+     * issuer, the client id, the scopes — arrives as an environment variable that
+     * MailManifests derives from the same declarations Authelia's client list is
+     * built from. The docker image's entrypoint includes every *.php file in
+     * /var/roundcube/config, which is where this is mounted.
+     *
+     * Roundcube does not authenticate anyone itself. It exchanges the code for an
+     * access token and logs in to Dovecot with that token as an XOAUTH2/OAUTHBEARER
+     * credential; Dovecot then asks Authelia's userinfo endpoint whose token it is
+     * and requires the `email` it gets back to be the mailbox being opened. That
+     * half is docker-mailserver's ENABLE_OAUTH2 — see MailManifests.
+     */
+
+    /*
+     * Sending goes to port 25, which Postfix trusts by mynetworks and on which it
+     * offers no AUTH at all. Roundcube's defaults are '%u'/'%p', which make it
+     * attempt a login anyway and fail every send with "SMTP server does not
+     * support authentication". Empty is Roundcube's documented way to say "do not
+     * authenticate", and it is also what keeps the OAuth hook from swapping in an
+     * XOAUTH2 login there.
+     */
+    $config['smtp_user'] = '';
+    $config['smtp_pass'] = '';
+
+    /*
+     * TLS ends at the gateway, so Apache sees plain HTTP. Without this Roundcube
+     * builds its OAuth redirect_uri as http://…, which does not match the https://
+     * URI registered with Authelia, and every sign-in is refused at the provider.
+     * It sets no redirect of its own; it only tells Roundcube the connection is
+     * secure.
+     */
+    $config['use_https'] = true;
+
+    /*
+     * The secret is optional in the pod, and a vault-config placeholder is treated
+     * as no secret — the same rule GlitchTip's init container and the victoria
+     * authkey script use. Either way Roundcube falls back to its own password form
+     * rather than redirecting every visitor into a code exchange that cannot
+     * succeed. Read on every request, from a Secret volume rather than an env var,
+     * so a value written into Vault later takes effect without a restart.
+     */
+    $rcOidcSecretFile = (string) getenv('ROUNDCUBE_OIDC_CLIENT_SECRET_FILE');
+    $rcOidcSecret = is_readable($rcOidcSecretFile) ? trim((string) file_get_contents($rcOidcSecretFile)) : '';
+
+    if ($rcOidcSecret !== '' && strpos($rcOidcSecret, 'REPLACE ME') !== 0) {
+        $config['oauth_provider'] = 'generic';
+        $config['oauth_provider_name'] = 'Authelia';
+        /* Discovery, cached in Roundcube's own database (the default oauth_cache).
+         It supplies the issuer, which Roundcube then checks on the ID token. */
+        $config['oauth_config_uri'] = getenv('ROUNDCUBE_OIDC_AUTHORITY') . '/.well-known/openid-configuration';
+        $config['oauth_client_id'] = getenv('ROUNDCUBE_OIDC_CLIENT_ID');
+        $config['oauth_client_secret'] = $rcOidcSecret;
+        $config['oauth_scope'] = getenv('ROUNDCUBE_OIDC_SCOPE');
+        /* The mailbox name is the `email` claim, which is Roundcube's default.
+         Authelia 4.39 leaves it out of the ID token, so Roundcube reads it from
+         the userinfo endpoint instead — the same answer Dovecot will get. */
+        $config['oauth_identity_fields'] = ['email'];
+        /* Straight to Authelia, and no password form. The gateway already asked
+         for an Authelia session in front of this host; asking for a mailbox
+         password after it was a second, unrelated credential. */
+        $config['oauth_login_redirect'] = true;
+    }
+
+    unset($rcOidcSecretFile, $rcOidcSecret);

@@ -31,7 +31,7 @@
       },
       "mail": {
         "name": "mail",
-        "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "neko": {
         "name": "neko",
@@ -297,7 +297,7 @@
         "name": "authelia/oidc-clients",
         "cas": 0,
         "disable_read": true,
-        "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"glitchtip\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients glitchtip=<value>\",\"healthchecks\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients healthchecks=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
+        "data_json": "{\"backup-dashboard\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients backup-dashboard=<value>\",\"forgejo\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients forgejo=<value>\",\"glitchtip\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients glitchtip=<value>\",\"healthchecks\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients healthchecks=<value>\",\"kavita\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients kavita=<value>\",\"mail\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients mail=<value>\",\"tandoor\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients tandoor=<value>\",\"vault\":\"REPLACE ME — vault kv patch kvv2/authelia/oidc-clients vault=<value>\"}",
         "custom_metadata": {
           "data": {
             "managed-by": "opentofu",
@@ -532,6 +532,26 @@
           "prevent_destroy": true
         }
       },
+      "mail_mail_oidc": {
+        "mount": "kvv2",
+        "name": "mail/oidc",
+        "cas": 0,
+        "disable_read": true,
+        "data_json": "{\"client-secret\":\"REPLACE ME — vault kv patch kvv2/mail/oidc client-secret=<value>\"}",
+        "custom_metadata": {
+          "data": {
+            "managed-by": "opentofu",
+            "created-as": "adopted",
+            "owner": "mail"
+          }
+        },
+        "lifecycle": {
+          "ignore_changes": [
+            "data_json"
+          ],
+          "prevent_destroy": true
+        }
+      },
       "neko_neko": {
         "mount": "kvv2",
         "name": "neko",
@@ -694,6 +714,10 @@
     {
       "to": "vault_kv_secret_v2.kavita_kavita_oidc",
       "id": "kvv2/data/kavita/oidc"
+    },
+    {
+      "to": "vault_kv_secret_v2.mail_mail_oidc",
+      "id": "kvv2/data/mail/oidc"
     },
     {
       "to": "vault_kv_secret_v2.tandoor_tandoor_oidc",
