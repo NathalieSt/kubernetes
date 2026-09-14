@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: healthchecks
-    app.kubernetes.io/version: v4.4
+    app.kubernetes.io/version: 68af362
   name: healthchecks
 spec:
   selector:

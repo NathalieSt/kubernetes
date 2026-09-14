@@ -131,6 +131,9 @@ spec:
     name: forgejo-runner
     namespace: flux-system
   - kind: Kustomization
+    name: fourget
+    namespace: flux-system
+  - kind: Kustomization
     name: garage
     namespace: flux-system
   - kind: Kustomization
@@ -231,9 +234,6 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: rimworld-together
-    namespace: flux-system
-  - kind: Kustomization
-    name: searxng
     namespace: flux-system
   - kind: Kustomization
     name: tandoor
