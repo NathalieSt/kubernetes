@@ -214,3 +214,8 @@ data:
       --v-theme-on-cancel: 9,12,13;
       --v-theme-recipeImagePlaceholderBg: 29,33,35;
     }
+
+    html .v-toolbar.v-app-bar {
+      background-color: rgb(var(--v-theme-tandoor)) !important;
+      color: rgb(var(--v-theme-on-tandoor)) !important;
+    }

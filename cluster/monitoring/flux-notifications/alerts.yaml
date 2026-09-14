@@ -110,6 +110,9 @@ spec:
     name: daybook
     namespace: flux-system
   - kind: Kustomization
+    name: egress-proxy
+    namespace: flux-system
+  - kind: Kustomization
     name: flood
     namespace: flux-system
   - kind: Kustomization

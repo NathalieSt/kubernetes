@@ -148,6 +148,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-egress-proxy
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-egress-proxy-namespace-admin
+  namespace: egress-proxy
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-egress-proxy
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-flood
   namespace: flux-system
 ---

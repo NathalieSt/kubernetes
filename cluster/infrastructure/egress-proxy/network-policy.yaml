@@ -1,0 +1,63 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-proxy-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: egress-proxy
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: code-server
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: code-server
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: vim-dojo
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: vim-dojo
+    ports:
+    - port: 8888
+      protocol: TCP
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+        - 100.64.0.0/10
+        - 169.254.0.0/16
+        - 127.0.0.0/8
+    ports:
+    - port: 443
+      protocol: TCP
+    - port: 80
+      protocol: TCP
+  - to:
+    - ipBlock:
+        cidr: 100.64.0.0/10
+    ports:
+    - port: 443
+      protocol: TCP
