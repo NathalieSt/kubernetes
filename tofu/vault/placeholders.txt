@@ -11,6 +11,7 @@ glitchtip/secret glitchtip secret-key
 glitchtip/oidc glitchtip client-secret
 healthchecks/secret healthchecks secret-key
 healthchecks/oidc healthchecks client-secret
+heartbeats heartbeats healthchecks-api-key forgejo-token external-ping-url
 kavita/oidc kavita client-secret
 mail mail postfix-accounts.cf
 mail/oidc mail client-secret

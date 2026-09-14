@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: heartbeats
+    app.kubernetes.io/version: python-3.13
+  name: heartbeats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: heartbeats
+  template:
+    metadata:
+      annotations:
+        homelab/heartbeats-config-hash: 47d53d8add30ddd7
+      labels:
+        app.kubernetes.io/name: heartbeats
+        app.kubernetes.io/version: python-3.13
+    spec:
+      serviceAccountName: heartbeats
+      enableServiceLinks: false
+      containers:
+      - command:
+        - python
+        - /config/heartbeats.py
+        image: python:3.13-alpine@sha256:7415fbc3c9e4979cc717d92377ab2bc7b2b4a2af1ac03cc52b5f3f88efedaf3a
+        name: heartbeats
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+          readOnly: true
+        - mountPath: /secrets
+          name: secrets-volume
+          readOnly: true
+        env:
+        - name: HEARTBEATS_CONFIG
+          value: /config/checks.json
+        - name: HEARTBEATS_SECRETS
+          value: /secrets
+        - name: HEARTBEATS_INTERVAL
+          value: "300"
+        - name: PYTHONDONTWRITEBYTECODE
+          value: "1"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: heartbeats-config
+      - name: secrets-volume
+        secret:
+          secretName: heartbeats-secret
+          optional: true
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

@@ -166,6 +166,7 @@ data:
     glitchtip/oidc glitchtip client-secret
     healthchecks/secret healthchecks secret-key
     healthchecks/oidc healthchecks client-secret
+    heartbeats heartbeats healthchecks-api-key forgejo-token external-ping-url
     kavita/oidc kavita client-secret
     mail mail postfix-accounts.cf
     mail/oidc mail client-secret
@@ -243,6 +244,10 @@ data:
           "healthchecks": {
             "name": "healthchecks",
             "policy": "path \"kvv2/data/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "heartbeats": {
+            "name": "heartbeats",
+            "policy": "path \"kvv2/data/heartbeats\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/heartbeats\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "kavita": {
             "name": "kavita",
@@ -361,6 +366,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.healthchecks.name}"
+            ],
+            "token_ttl": 600
+          },
+          "heartbeats": {
+            "backend": "kubernetes",
+            "role_name": "heartbeats",
+            "bound_service_account_names": [
+              "heartbeats-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "healthchecks"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.heartbeats.name}"
             ],
             "token_ttl": 600
           },
@@ -540,6 +560,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.healthchecks_healthchecks_secret",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.heartbeats_heartbeats",
           "lifecycle": {
             "destroy": false
           }

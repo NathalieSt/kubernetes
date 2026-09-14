@@ -28,6 +28,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc` |
 | `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret`, `kvv2/healthchecks/oidc` |
+| `heartbeats` | `healthchecks` | `kvv2/heartbeats` |
 | `ntfy` | `ntfy` | `kvv2/ntfy/auth` |
 | `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics`, `kvv2/victoria-metrics/ntfy`, `kvv2/victoria-metrics/healthchecks` |
 
