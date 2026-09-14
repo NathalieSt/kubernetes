@@ -629,13 +629,18 @@ data:
 
     def ping_external(ok, message):
         """The one ping that leaves the cluster, for whatever is watching it from
-        outside. Optional: absent, it is skipped."""
+        outside. Optional: unset, or anything that is not an http(s) URL — someone
+        writing "no" to say there is none — is skipped. It never raises: a problem
+        with the watcher of last resort must not stop the reporting it watches."""
         url = secret("external-ping-url")
         if url is None:
             return
+        if not url.startswith(("https://", "http://")):
+            log("external-ping-url is not an http(s) URL, so it is skipped")
+            return
         try:
             request("POST", url if ok else url + "/fail", body=message)
-        except HttpError as error:
+        except Exception as error:
             log(f"external ping failed: {error}")
 
 
@@ -648,10 +653,11 @@ data:
             started = time.monotonic()
             try:
                 problems = run_once(config)
-                ping_external(not problems, f"{len(problems)} checks could not be reported.")
+                outcome = (not problems, f"{len(problems)} checks could not be reported.")
             except Exception as error:
                 log(f"pass failed: {error}")
-                ping_external(False, str(error))
+                outcome = (False, str(error))
+            ping_external(*outcome)
             time.sleep(max(0, INTERVAL - (time.monotonic() - started)))
 
 
