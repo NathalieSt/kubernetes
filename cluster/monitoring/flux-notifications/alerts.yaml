@@ -152,6 +152,9 @@ spec:
     name: healthchecks
     namespace: flux-system
   - kind: Kustomization
+    name: heartbeats
+    namespace: flux-system
+  - kind: Kustomization
     name: homepage
     namespace: flux-system
   - kind: Kustomization

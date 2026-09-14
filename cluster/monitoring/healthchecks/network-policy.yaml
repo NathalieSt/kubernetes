@@ -26,17 +26,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - changedetection
-          - code-server
-          - daybook
-          - forgejo
-          - kavita
-          - mail
-          - postgres
-          - tandoor
-          - vault
-          - vim-dojo
-          - vault-apply
+          - healthchecks
           - victoria-metrics
     ports:
     - port: 8000
