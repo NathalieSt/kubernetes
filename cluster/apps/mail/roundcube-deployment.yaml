@@ -84,6 +84,12 @@ spec:
         volumeMounts:
         - mountPath: /var/roundcube/db
           name: roundcube-db-volume
+        - mountPath: /var/roundcube/config
+          name: roundcube-config-volume
+          readOnly: true
+        - mountPath: /var/roundcube/oidc
+          name: roundcube-oidc-volume
+          readOnly: true
         - mountPath: /pennant-skin
           name: pennant-skin-volume
           readOnly: true
@@ -105,6 +111,14 @@ spec:
           value: elastic
         - name: TZ
           value: Europe/Vienna
+        - name: ROUNDCUBE_OIDC_SCOPE
+          value: openid profile email offline_access
+        - name: ROUNDCUBE_OIDC_CLIENT_SECRET_FILE
+          value: /var/roundcube/oidc/client-secret
+        - name: ROUNDCUBE_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: ROUNDCUBE_OIDC_CLIENT_ID
+          value: mail
         resources:
           requests:
             cpu: 50m
@@ -123,6 +137,13 @@ spec:
       - name: roundcube-db-volume
         persistentVolumeClaim:
           claimName: roundcube-pvc
+      - name: roundcube-config-volume
+        configMap:
+          name: roundcube-config
+      - name: roundcube-oidc-volume
+        secret:
+          secretName: mail-oidc-secret
+          optional: true
       - name: pennant-scripts-volume
         configMap:
           name: roundcube-pennant-skin

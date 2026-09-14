@@ -32,6 +32,7 @@ spec:
           - healthchecks
           - kavita
           - limes
+          - mail
           - orrery
           - tandoor
           - vault
