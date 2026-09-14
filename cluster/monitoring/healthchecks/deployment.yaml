@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: healthchecks
-    app.kubernetes.io/version: v4.4
+    app.kubernetes.io/version: 68af362
   name: healthchecks
 spec:
   replicas: 1
@@ -15,8 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: healthchecks
-        app.kubernetes.io/version: v4.4
+        app.kubernetes.io/version: 68af362
     spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
       initContainers:
       - command:
         - sh
@@ -122,7 +124,7 @@ spec:
         - /pennant-out
         - /pennant/pennant.css
         - css/output.*.css
-        image: healthchecks/healthchecks:v4.4
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:68af362
         name: pennant
         volumeMounts:
         - mountPath: /pennant
@@ -142,7 +144,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: healthchecks/healthchecks:v4.4
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:68af362
         name: healthchecks
         ports:
         - containerPort: 8000
@@ -195,6 +197,22 @@ spec:
               name: postgres-creds-secret
         - name: REGISTRATION_OPEN
           value: "False"
+        - name: OIDC_OP_AUTHORIZATION_ENDPOINT
+          value: https://auth.netbird.nathalie-stiefsohn.eu/api/oidc/authorization
+        - name: OIDC_OP_TOKEN_ENDPOINT
+          value: https://auth.netbird.nathalie-stiefsohn.eu/api/oidc/token
+        - name: OIDC_OP_USER_ENDPOINT
+          value: https://auth.netbird.nathalie-stiefsohn.eu/api/oidc/userinfo
+        - name: OIDC_OP_JWKS_ENDPOINT
+          value: https://auth.netbird.nathalie-stiefsohn.eu/jwks.json
+        - name: OIDC_RP_CLIENT_ID
+          value: healthchecks
+        - name: OIDC_RP_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client-secret
+              name: healthchecks-oidc-secret
+              optional: true
         - name: INTEGRATIONS_ALLOW_PRIVATE_IPS
           value: "True"
         - name: UWSGI_PROCESSES

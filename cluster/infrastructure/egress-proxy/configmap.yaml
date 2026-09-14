@@ -7,6 +7,7 @@ data:
   filter: |
     ^open-vsx\.org$
     ^[a-z0-9_-]+\.open-vsx\.org$
+    ^openvsx\.eclipsecontent\.org$
     ^[a-z0-9_-]+\.blob\.core\.windows\.net$
     ^code\.netbird\.nathalie-stiefsohn\.eu$
     ^github\.com$
