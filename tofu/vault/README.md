@@ -22,6 +22,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `neko` | `neko` | `kvv2/neko` |
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
 | `mail` | `mail` | `kvv2/mail`, `kvv2/mail/oidc` |
+| `music-library-builder` | `jellyfin` | `kvv2/music-library-builder` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |

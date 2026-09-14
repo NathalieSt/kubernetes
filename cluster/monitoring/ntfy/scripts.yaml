@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ntfy-scripts
+  namespace: ntfy
+data:
+  ntfy-start.sh: |
+    #!/bin/sh
+    # Start ntfy with only the access grants whose user is actually provisioned.
+    #
+    # ntfy refuses to start when auth-access names a user that auth-users does not
+    # define ("user … is not provisioned"), and refuses an empty auth-access too.
+    # The grants are generated from NtfyMeta.publishers, but the users live in
+    # Vault and are written by hand — so declaring a publisher one merge ahead of
+    # its Vault entry used to take the whole server down, every phone included.
+    #
+    # Here that costs the new publisher alone: its grant is left out, said so on
+    # stderr, and picked up by the next start after the user exists. Nothing is
+    # widened by leaving a grant out — the default is deny-all.
+    #
+    # Measured on v2.28.0, both refusals included. Busybox sh: no arrays, and the
+    # password hashes contain `$` and `/` but never `,` or `:`, which is what makes
+    # splitting on those two safe.
+    set -eu
+
+    provisioned=$(printf '%s' "${NTFY_AUTH_USERS:-}" | tr ',' '\n' | cut -d: -f1)
+
+    kept=""
+    for grant in $(printf '%s' "${NTFY_AUTH_ACCESS_DECLARED:-}" | tr ',' ' '); do
+      user=${grant%%:*}
+      if printf '%s\n' "$provisioned" | grep -qx -- "$user"; then
+        kept="${kept:+$kept,}$grant"
+      else
+        echo "ntfy-start: user '$user' is not in auth-users yet, so '$grant' is left out until it is" >&2
+      fi
+    done
+
+    if [ -n "$kept" ]; then
+      export NTFY_AUTH_ACCESS="$kept"
+    else
+      unset NTFY_AUTH_ACCESS
+    fi
+
+    exec ntfy serve

@@ -15,6 +15,7 @@ heartbeats heartbeats healthchecks-api-key forgejo-token external-ping-url
 kavita/oidc kavita client-secret
 mail mail postfix-accounts.cf
 mail/oidc mail client-secret
+music-library-builder music-library-builder ntfy-token
 neko neko password admin-password
 ntfy/auth ntfy auth-users auth-tokens
 psono psono-server secret-key activation-link-secret db-secret email-secret-salt private-key public-key

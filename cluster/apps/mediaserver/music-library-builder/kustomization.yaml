@@ -9,3 +9,4 @@ resources:
 - service.yaml
 - cronjob.yaml
 - netbird-network-resource.yaml
+- vault-secrets.yaml

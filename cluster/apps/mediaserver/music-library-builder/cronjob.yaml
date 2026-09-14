@@ -60,6 +60,18 @@ spec:
               value: "2"
             - name: MLB_BROWSE_ROOTS
               value: /media
+            - name: MLB_NTFY_URL
+              value: http://ntfy.ntfy.svc.cluster.local:8080
+            - name: MLB_NTFY_TOPIC
+              value: music-library-builder
+            - name: MLB_NTFY_CLICK
+              value: https://music.netbird.nathalie-stiefsohn.eu
+            - name: MLB_NTFY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: ntfy-token
+                  name: music-library-builder-secret
+                  optional: true
             resources:
               requests:
                 cpu: 50m
