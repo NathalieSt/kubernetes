@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: egress-proxy
+    app.kubernetes.io/version: sha256_8f9269b0b5b7b
+  name: egress-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: egress-proxy
+  template:
+    metadata:
+      annotations:
+        homelab/egress-proxy-config-hash: 0ebda5eccb0e58ebd3f9143ad02876b24349140ab78f236a13e23b726c6f7b57
+      labels:
+        app.kubernetes.io/name: egress-proxy
+        app.kubernetes.io/version: sha256_8f9269b0b5b7b
+    spec:
+      containers:
+      - command:
+        - /usr/bin/tinyproxy
+        - -d
+        - -c
+        - /etc/tinyproxy/tinyproxy.conf
+        image: kalaksi/tinyproxy@sha256:8f9269b0b5b7b872b2fe8471299330c9fcf2ffb12eebdbb152feb7b9084f866a
+        name: egress-proxy
+        ports:
+        - containerPort: 8888
+          name: proxy
+        volumeMounts:
+        - mountPath: /etc/tinyproxy
+          name: config
+          readOnly: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 57981
+          runAsGroup: 57981
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: config
+        configMap:
+          name: egress-proxy-config
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

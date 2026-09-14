@@ -49,6 +49,10 @@ data:
     {
       "resource": {
         "vault_policy": {
+          "admin": {
+            "name": "admin",
+            "policy": "path \"*\" {\n  capabilities = [\"create\", \"read\", \"update\", \"patch\", \"delete\", \"list\", \"sudo\"]\n}\n"
+          },
           "authelia": {
             "name": "authelia",
             "policy": "path \"kvv2/data/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n"
@@ -99,7 +103,7 @@ data:
           },
           "victoria-metrics": {
             "name": "victoria-metrics",
-            "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n"
+            "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n"
           }
         },
         "vault_kubernetes_auth_backend_role": {
@@ -297,6 +301,56 @@ data:
               "${vault_policy.victoria-metrics.name}"
             ],
             "token_ttl": 600
+          }
+        },
+        "vault_jwt_auth_backend": {
+          "oidc": {
+            "path": "oidc",
+            "type": "oidc",
+            "description": "Sign in to the web UI with Authelia",
+            "oidc_discovery_url": "https://auth.netbird.nathalie-stiefsohn.eu",
+            "bound_issuer": "https://auth.netbird.nathalie-stiefsohn.eu",
+            "oidc_client_id": "vault",
+            "oidc_client_secret_wo": "${ephemeral.vault_kv_secret_v2.vault_oidc_client.data[\"client-secret\"]}",
+            "oidc_client_secret_wo_version": 1,
+            "default_role": "admin",
+            "tune": [
+              {
+                "listing_visibility": "unauth",
+                "default_lease_ttl": "3600s",
+                "max_lease_ttl": "28800s",
+                "token_type": "default-service",
+                "allowed_response_headers": [],
+                "audit_non_hmac_request_keys": [],
+                "audit_non_hmac_response_keys": [],
+                "passthrough_request_headers": []
+              }
+            ]
+          }
+        },
+        "vault_jwt_auth_backend_role": {
+          "admin": {
+            "backend": "${vault_jwt_auth_backend.oidc.path}",
+            "role_name": "admin",
+            "role_type": "oidc",
+            "user_claim": "preferred_username",
+            "groups_claim": "groups",
+            "bound_claims": {
+              "groups": "admins"
+            },
+            "oidc_scopes": [
+              "profile",
+              "email",
+              "groups"
+            ],
+            "allowed_redirect_uris": [
+              "https://vault.netbird.nathalie-stiefsohn.eu/ui/vault/auth/oidc/oidc/callback"
+            ],
+            "token_policies": [
+              "${vault_policy.admin.name}"
+            ],
+            "token_ttl": 3600,
+            "token_max_ttl": 28800
           }
         },
         "vault_kv_secret_v2": {
@@ -679,6 +733,34 @@ data:
               ],
               "prevent_destroy": true
             }
+          },
+          "victoria-metrics_victoria-metrics_healthchecks": {
+            "mount": "kvv2",
+            "name": "victoria-metrics/healthchecks",
+            "cas": 0,
+            "disable_read": true,
+            "data_json": "{\"watchdog-ping-url\":\"REPLACE ME — vault kv patch kvv2/victoria-metrics/healthchecks watchdog-ping-url=<value>\"}",
+            "custom_metadata": {
+              "data": {
+                "managed-by": "opentofu",
+                "created-as": "placeholder",
+                "owner": "victoria-metrics"
+              }
+            },
+            "lifecycle": {
+              "ignore_changes": [
+                "data_json"
+              ],
+              "prevent_destroy": true
+            }
+          }
+        }
+      },
+      "ephemeral": {
+        "vault_kv_secret_v2": {
+          "vault_oidc_client": {
+            "mount": "kvv2",
+            "name": "vault/oidc"
           }
         }
       },

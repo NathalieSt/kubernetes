@@ -176,6 +176,18 @@ spec:
           value: /etc/code-server/bootstrap
         - name: CODE_SERVER_EXTENSIONS
           value: golang.go chenglou92.rescript-vscode redhat.vscode-yaml ms-azuretools.vscode-docker ms-kubernetes-tools.vscode-kubernetes-tools dbaeumer.vscode-eslint eamodio.gitlens anthropic.claude-code vscode-icons-team.vscode-icons
+        - name: HTTPS_PROXY
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: HTTP_PROXY
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: http_proxy
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.svc.cluster.local,.cluster.local,10.42.0.0/16,10.43.0.0/16
+        - name: no_proxy
+          value: localhost,127.0.0.1,.svc,.svc.cluster.local,.cluster.local,10.42.0.0/16,10.43.0.0/16
         resources:
           requests:
             cpu: 100m
@@ -220,6 +232,18 @@ spec:
           value: credential.https://code.netbird.nathalie-stiefsohn.eu.helper
         - name: GIT_CONFIG_VALUE_0
           value: "!f() { test \"$1\" = get && { echo \"username=$(cat /etc/code-server/git-credentials/username)\"; echo \"password=$(cat /etc/code-server/git-credentials/token)\"; }; }; f"
+        - name: HTTPS_PROXY
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: HTTP_PROXY
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: http_proxy
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.svc.cluster.local,.cluster.local,10.42.0.0/16,10.43.0.0/16
+        - name: no_proxy
+          value: localhost,127.0.0.1,.svc,.svc.cluster.local,.cluster.local,10.42.0.0/16,10.43.0.0/16
         resources:
           requests:
             cpu: 100m
@@ -292,6 +316,18 @@ spec:
           value: credential.https://code.netbird.nathalie-stiefsohn.eu.helper
         - name: GIT_CONFIG_VALUE_0
           value: "!f() { test \"$1\" = get && { echo \"username=$(cat /etc/code-server/git-credentials/username)\"; echo \"password=$(cat /etc/code-server/git-credentials/token)\"; }; }; f"
+        - name: HTTPS_PROXY
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: HTTP_PROXY
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: http_proxy
+          value: http://egress-proxy.egress-proxy.svc.cluster.local:8888
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.svc.cluster.local,.cluster.local,10.42.0.0/16,10.43.0.0/16
+        - name: no_proxy
+          value: localhost,127.0.0.1,.svc,.svc.cluster.local,.cluster.local,10.42.0.0/16,10.43.0.0/16
         resources:
           requests:
             cpu: 200m

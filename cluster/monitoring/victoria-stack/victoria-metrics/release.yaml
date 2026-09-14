@@ -27,6 +27,10 @@ spec:
                 credentials_file: /etc/alertmanager-ntfy/token
             send_resolved: true
             url: http://ntfy.ntfy.svc.cluster.local:8080/victoria-metrics?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D
+        - name: healthchecks
+          webhook_configs:
+          - send_resolved: false
+            url_file: /etc/alertmanager-healthchecks/watchdog-ping-url
         route:
           group_by:
           - alertname
@@ -36,6 +40,12 @@ spec:
           receiver: blackhole
           repeat_interval: 12h
           routes:
+          - group_interval: 1m
+            group_wait: 0s
+            matchers:
+            - alertname="Watchdog"
+            receiver: healthchecks
+            repeat_interval: 1m
           - matchers:
             - severity="critical"
             receiver: ntfy
@@ -44,11 +54,18 @@ spec:
         - mountPath: /etc/alertmanager-ntfy
           name: ntfy-token
           readOnly: true
+        - mountPath: /etc/alertmanager-healthchecks
+          name: healthchecks-ping
+          readOnly: true
         volumes:
         - name: ntfy-token
           secret:
             optional: true
             secretName: victoria-metrics-ntfy-token
+        - name: healthchecks-ping
+          secret:
+            optional: true
+            secretName: victoria-metrics-healthchecks-ping
     defaultDashboards:
       enabled: false
     defaultRules:
