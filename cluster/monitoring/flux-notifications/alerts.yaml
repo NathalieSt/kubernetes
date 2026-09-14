@@ -271,3 +271,5 @@ spec:
   - kind: Kustomization
     name: vim-dojo
     namespace: flux-system
+  exclusionList:
+  - ^Dependencies do not meet ready condition
