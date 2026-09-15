@@ -356,6 +356,12 @@ data:
           description: Recipes and meal plans
           namespace: tandoor
           app: tandoor
+      - zyme:
+          href: https://zyme.netbird.nathalie-stiefsohn.eu
+          icon: mdi-bottle-tonic-outline
+          description: "Fermentation: batches, sensors and reminders"
+          namespace: zyme
+          app: zyme
     - Development:
       - code-server:
           href: https://vscode.netbird.nathalie-stiefsohn.eu

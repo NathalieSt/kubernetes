@@ -27,6 +27,49 @@ spec:
           create: false
       unsafeUseServiceAccountToken: true
     fullnameOverride: headlamp
+    image:
+      tag: v0.44.0
+    initContainers:
+    - command:
+      - sh
+      - /plugin-installer/install-plugins.sh
+      - /headlamp/plugins
+      - flux
+      - 0.7.0
+      - 837dc962a4ca485b86b010e5a3463d3ffc71c51778125394f006a210921b7c65
+      - keda
+      - 0.1.2
+      - 979996aa0d0efdbc852baf6977e178c955264e346fea2c82df94b2d58ef57501
+      - cert-manager
+      - 0.1.1
+      - 2b06caae0a207e2c30ce0d21bc4d672ae0a71a2cffc23a4585199110533032ab
+      image: ghcr.io/headlamp-k8s/headlamp:v0.44.0
+      name: install-plugins
+      resources:
+        limits:
+          cpu: 200m
+          memory: 64Mi
+        requests:
+          cpu: 10m
+          memory: 32Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsGroup: 101
+        runAsNonRoot: true
+        runAsUser: 100
+        seccompProfile:
+          type: RuntimeDefault
+      volumeMounts:
+      - mountPath: /plugin-installer
+        name: plugin-installer
+        readOnly: true
+      - mountPath: /headlamp/plugins
+        name: plugins
     replicaCount: 1
     resources:
       limits:
@@ -54,6 +97,8 @@ spec:
       create: true
       name: headlamp
     volumeMounts:
+    - mountPath: /headlamp/plugins
+      name: plugins
     - mountPath: /headlamp/plugins/pennant
       name: pennant-plugin
       readOnly: true
@@ -61,5 +106,10 @@ spec:
     - configMap:
         name: headlamp-pennant-plugin
       name: pennant-plugin
+    - emptyDir: {}
+      name: plugins
+    - configMap:
+        name: headlamp-plugin-installer
+      name: plugin-installer
   driftDetection:
     mode: warn

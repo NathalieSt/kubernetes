@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/ntfy-start-hash: e544d60542d0e2c3
+        homelab/ntfy-start-hash: d228d327000d6e89
       labels:
         app.kubernetes.io/name: ntfy
         app.kubernetes.io/version: v2.28.0
@@ -172,7 +172,7 @@ spec:
               key: auth-tokens
               name: ntfy-auth-secret
         - name: NTFY_AUTH_ACCESS_DECLARED
-          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo,victoria-metrics:victoria-metrics:wo,victoria-metrics:warnings:wo,forgejo-ci:ci:wo,jellyfin:jellyfin:wo,music-library-builder:music-library-builder:wo,hosts:hosts:wo
+          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo,victoria-metrics:victoria-metrics:wo,victoria-metrics:warnings:wo,forgejo-ci:ci:wo,jellyfin:jellyfin:wo,music-library-builder:music-library-builder:wo,zyme:zyme:wo,hosts:hosts:wo
         resources:
           requests:
             cpu: 10m

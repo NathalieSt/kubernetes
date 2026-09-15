@@ -63,6 +63,7 @@ spec:
   - tandoor
   - vault
   - dojo
+  - zyme
   containerOverride:
     env:
     - name: NB_DISABLE_UPDATE_SETTINGS

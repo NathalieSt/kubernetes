@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: zyme
+    app.kubernetes.io/version: latest
+  name: zyme
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zyme
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: zyme
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme:latest
+        name: zyme
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: TZ
+          value: Europe/Vienna
+        - name: ZYME_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/zyme
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+              optional: false
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+              optional: false
+        - name: ZYME_PUBLIC_URL
+          value: https://zyme.netbird.nathalie-stiefsohn.eu
+        - name: ZYME_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080/
+        - name: ZYME_NTFY_TOPIC
+          value: zyme
+        - name: ZYME_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: zyme-secret
+              optional: true
+        - name: ZYME_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: ZYME_OIDC_CLIENT_ID
+          value: zyme
+        resources:
+          requests:
+            cpu: 25m
+            memory: 96Mi
+          limits:
+            cpu: 500m
+            memory: 384Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

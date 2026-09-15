@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: headlamp-plugin-installer
+  namespace: headlamp
+data:
+  install-plugins.sh: |
+    #!/bin/sh
+    # Installs Headlamp plugins from their release tarballs into the plugins
+    # directory, verifying each against a pinned checksum. Run as an init container
+    # from Headlamp's own image, which has wget, tar and sha256sum. See
+    # HeadlampPlugins.res for why this and not the chart's plugin manager.
+    #
+    #   $1   the plugins directory (an emptyDir the Headlamp container mounts)
+    #   $2…  one "name version sha256" triple per plugin, as separate arguments
+    #
+    # A plugin must never be the reason Headlamp does not start -- it is the
+    # browser tool for recovering the cluster. So a failed download, a checksum
+    # that does not match or an archive of an unexpected shape is reported on
+    # stderr and that plugin is skipped; Headlamp starts without it. A mismatch is
+    # never installed anyway: the plugin's code runs in a cluster-admin session.
+    set -eu
+
+    plugins_dir=$1
+    shift
+
+    # The arguments come from the generator, so a miscount is a bug there, not a
+    # plugin to skip.
+    if [ $(($# % 3)) -ne 0 ]; then
+      echo "ERROR: plugin arguments must come in name/version/sha256 triples" >&2
+      exit 1
+    fi
+
+    warn() {
+      echo "WARNING: Headlamp plugin $1 not installed: $2" >&2
+    }
+
+    work="$plugins_dir/.download"
+    trap 'rm -rf "$work"' EXIT
+
+    while [ $# -ge 3 ]; do
+      name=$1 version=$2 sha256=$3
+      shift 3
+
+      archive="headlamp-k8s-$name-$version.tar.gz"
+      url="https://github.com/headlamp-k8s/plugins/releases/download/$name-$version/$archive"
+
+      rm -rf "$work"
+      mkdir -p "$work"
+
+      if ! wget -q -T 30 -O "$work/$archive" "$url"; then
+        warn "$name" "download of $url failed"
+        continue
+      fi
+
+      if ! echo "$sha256  $work/$archive" | sha256sum -c -s; then
+        warn "$name" "$archive does not match the pinned sha256 $sha256"
+        continue
+      fi
+
+      mkdir "$work/extract"
+      if ! tar -xzf "$work/$archive" -C "$work/extract" \
+        || [ ! -f "$work/extract/$name/main.js" ]; then
+        warn "$name" "$archive does not unpack to $name/main.js"
+        continue
+      fi
+
+      rm -rf "${plugins_dir:?}/$name"
+      mv "$work/extract/$name" "$plugins_dir/$name"
+      echo "installed Headlamp plugin $name $version"
+    done
