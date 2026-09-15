@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/authelia-config-hash: 61a4ca1ac9031bf9
+        homelab/authelia-config-hash: 59c61c1788f1223e
       labels:
         app.kubernetes.io/name: authelia
         app.kubernetes.io/version: 4.39.25

@@ -104,6 +104,13 @@ data:
           service: healthchecks
           middlewares:
           - authelia
+        homelab-docs:
+          rule: Host(`docs.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: homelab-docs
+          middlewares:
+          - authelia
         homepage:
           rule: Host(`home.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -262,6 +269,10 @@ data:
           loadBalancer:
             servers:
             - url: http://healthchecks.healthchecks.svc.cluster.local:8000
+        homelab-docs:
+          loadBalancer:
+            servers:
+            - url: http://homelab-docs.homelab-docs.svc.cluster.local:8080
         homepage:
           loadBalancer:
             servers:

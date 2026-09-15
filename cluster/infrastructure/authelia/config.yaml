@@ -67,6 +67,9 @@ data:
         - daybook.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - docs.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - dojo.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:

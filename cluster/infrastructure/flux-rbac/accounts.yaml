@@ -466,6 +466,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-homelab-docs
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-homelab-docs-namespace-admin
+  namespace: homelab-docs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-homelab-docs
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-intel-device-gpu-plugin
   namespace: flux-system
 ---
