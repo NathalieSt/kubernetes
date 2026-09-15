@@ -12,5 +12,6 @@ resources:
 - healthchecks-db.yaml
 - ntfy-db.yaml
 - glitchtip-db.yaml
+- zyme-db.yaml
 - network-policy.yaml
 - k8up-schedule.yaml

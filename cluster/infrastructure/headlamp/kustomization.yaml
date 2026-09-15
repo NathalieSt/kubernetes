@@ -9,3 +9,4 @@ resources:
 - release.yaml
 - network-policy.yaml
 - pennant-plugin-configmap.yaml
+- plugin-installer-configmap.yaml

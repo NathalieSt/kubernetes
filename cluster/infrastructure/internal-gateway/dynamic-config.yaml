@@ -218,6 +218,13 @@ data:
           service: vim-dojo
           middlewares:
           - authelia
+        zyme:
+          rule: Host(`zyme.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: zyme
+          middlewares:
+          - authelia
   services.yaml: |
     http:
       services:
@@ -341,6 +348,10 @@ data:
           loadBalancer:
             servers:
             - url: http://vim-dojo.vim-dojo.svc.cluster.local:3000
+        zyme:
+          loadBalancer:
+            servers:
+            - url: http://zyme.zyme.svc.cluster.local:8080
   tcp.yaml: |
     tcp:
       routers:

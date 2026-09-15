@@ -23,3 +23,4 @@ tandoor/oidc tandoor client-secret
 victoria-metrics victoria-metrics adminAuthKey
 victoria-metrics/ntfy victoria-metrics token
 victoria-metrics/healthchecks victoria-metrics watchdog-ping-url
+zyme zyme ntfy-token mqtt-username mqtt-password

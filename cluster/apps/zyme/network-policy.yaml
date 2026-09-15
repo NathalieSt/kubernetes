@@ -2,10 +2,14 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: ntfy-networkpolicy
+  name: zyme-networkpolicy
 spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: zyme
   policyTypes:
   - Ingress
+  - Egress
   ingress:
   - from:
     - namespaceSelector:
@@ -25,21 +29,38 @@ spec:
         matchLabels:
           kubernetes.io/metadata.name: victoria-metrics
     ports:
-    - port: 9090
+    - port: 8080
       protocol: TCP
-  - from:
+  egress:
+  - to:
     - namespaceSelector:
-        matchExpressions:
-        - key: kubernetes.io/metadata.name
-          operator: In
-          values:
-          - healthchecks
-          - glitchtip
-          - changedetection
-          - victoria-metrics
-          - forgejo
-          - jellyfin
-          - zyme
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: postgres
+    ports:
+    - port: 5432
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ntfy
     ports:
     - port: 8080
+      protocol: TCP
+  - to:
+    - ipBlock:
+        cidr: 100.64.0.0/10
+    ports:
+    - port: 443
       protocol: TCP

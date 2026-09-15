@@ -36,6 +36,7 @@ spec:
           - orrery
           - tandoor
           - vault
+          - zyme
     ports:
     - port: 9091
       protocol: TCP

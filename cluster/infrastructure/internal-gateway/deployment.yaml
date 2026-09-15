@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        internal-gateway.nathalie-stiefsohn.eu/dns-labels: 7f57a6366f5521c02cb93d7378c9fd09b3effc33391057337f803f84ec6b37db
+        internal-gateway.nathalie-stiefsohn.eu/dns-labels: 386046bb27560446924be3fd3f395b0847f95e9f8b097705d7a25987a29e064a
       labels:
         app.kubernetes.io/name: internal-gateway
         app.kubernetes.io/version: v3.6

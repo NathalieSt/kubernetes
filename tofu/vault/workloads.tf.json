@@ -60,6 +60,10 @@
       "victoria-metrics": {
         "name": "victoria-metrics",
         "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "zyme": {
+        "name": "zyme",
+        "policy": "path \"kvv2/data/zyme\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme\" {\n  capabilities = [\"read\"]\n}\n"
       }
     },
     "vault_kubernetes_auth_backend_role": {
@@ -287,6 +291,21 @@
           "${vault_policy.victoria-metrics.name}"
         ],
         "token_ttl": 600
+      },
+      "zyme": {
+        "backend": "kubernetes",
+        "role_name": "zyme",
+        "bound_service_account_names": [
+          "zyme-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "zyme"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.zyme.name}"
+        ],
+        "token_ttl": 600
       }
     }
   },
@@ -443,6 +462,12 @@
     },
     {
       "from": "vault_kv_secret_v2.victoria-metrics_victoria-metrics_ntfy",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.zyme_zyme",
       "lifecycle": {
         "destroy": false
       }

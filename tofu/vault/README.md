@@ -25,6 +25,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `music-library-builder` | `jellyfin` | `kvv2/music-library-builder` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
+| `zyme` | `zyme` | `kvv2/zyme` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc` |

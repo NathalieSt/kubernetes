@@ -22,6 +22,7 @@ spec:
           - healthchecks
           - ntfy
           - glitchtip
+          - zyme
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
@@ -38,3 +39,4 @@ spec:
           - healthchecks
           - ntfy
           - glitchtip
+          - zyme
