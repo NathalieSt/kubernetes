@@ -2,8 +2,8 @@
 
 Read this before making changes.
 
-Full documentation: the `homelab-docs` repo
-(`docs/03-kubernetes-manifests.md` in particular).
+Full documentation: the `homelab-docs` site
+(https://docs.netbird.nathalie-stiefsohn.eu/platform/gitops/ in particular).
 
 ## What this repo is
 
