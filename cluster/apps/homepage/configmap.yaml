@@ -431,6 +431,12 @@ data:
           description: Kubernetes UI
           namespace: headlamp
           app: headlamp
+      - homelab-docs:
+          href: https://docs.netbird.nathalie-stiefsohn.eu
+          icon: homelab-docs.png
+          description: How the homelab works, and runbooks
+          namespace: homelab-docs
+          app: homelab-docs
       - psono-server:
           href: https://psono-api.netbird.nathalie-stiefsohn.eu
           icon: mdi-api

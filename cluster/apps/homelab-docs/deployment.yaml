@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: homelab-docs
+    app.kubernetes.io/version: latest
+  name: homelab-docs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homelab-docs
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: homelab-docs
+        app.kubernetes.io/version: latest
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - command:
+        - nginx
+        - -c
+        - /etc/nginx/nginx.conf
+        - -g
+        - daemon off;
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs:latest
+        name: homelab-docs
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          name: nginx-config-volume
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp-volume
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 101
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: nginx-config-volume
+        configMap:
+          name: homelab-docs-nginx-config
+      - name: tmp-volume
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

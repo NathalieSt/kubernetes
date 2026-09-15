@@ -45,6 +45,7 @@ spec:
   - glitchtip
   - headlamp
   - healthchecks
+  - docs
   - home
   - it-tools
   - jellyfin

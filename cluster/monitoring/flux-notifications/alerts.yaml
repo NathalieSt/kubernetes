@@ -155,6 +155,9 @@ spec:
     name: heartbeats
     namespace: flux-system
   - kind: Kustomization
+    name: homelab-docs
+    namespace: flux-system
+  - kind: Kustomization
     name: homepage
     namespace: flux-system
   - kind: Kustomization

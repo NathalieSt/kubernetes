@@ -256,6 +256,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: homelab-docs
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: homelab-docs
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/homelab-docs
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: reflector
+  serviceAccountName: flux-homelab-docs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: homepage
   namespace: flux-system
 spec:
