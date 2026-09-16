@@ -24,7 +24,7 @@ spec:
         - sh
         - -c
         - chown -R 1000:1000 /kavita/config
-        image: busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
         name: permission-fix
         volumeMounts:
         - mountPath: /kavita/config
@@ -33,7 +33,7 @@ spec:
         - sh
         - /scripts/oidc-appsettings.sh
         - /kavita/config/appsettings.json
-        image: mikefarah/yq@sha256:b9285dd3b0bea3c34d0c54415dd48d767dabd9644d489bd6e253660847b58419
+        image: mikefarah/yq:4.47.1@sha256:b9285dd3b0bea3c34d0c54415dd48d767dabd9644d489bd6e253660847b58419
         name: oidc-config
         volumeMounts:
         - mountPath: /kavita/config
