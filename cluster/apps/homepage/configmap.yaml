@@ -10,10 +10,6 @@ data:
         - icon: forgejo.png
           href: https://code.netbird.nathalie-stiefsohn.eu/my-homelab
           description: Every repo
-      - homelab-docs:
-        - icon: mdi-book-open-page-variant-outline
-          href: https://code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs
-          description: Architecture, runbooks
       - Codeberg:
         - icon: codeberg.png
           href: https://codeberg.org/NathalieStiefsohn
@@ -406,6 +402,12 @@ data:
           description: Private metasearch
           namespace: fourget
           app: fourget
+      - helium-services:
+          href: https://helium.netbird.nathalie-stiefsohn.eu
+          icon: si-heliumbrowser
+          description: Extensions, filter lists and bangs for Helium
+          namespace: helium-services
+          app: helium-services
       - neko:
           href: https://neko.netbird.nathalie-stiefsohn.eu
           icon: neko.png
@@ -439,7 +441,7 @@ data:
           app: headlamp
       - homelab-docs:
           href: https://docs.netbird.nathalie-stiefsohn.eu
-          icon: homelab-docs.png
+          icon: mdi-book-open-page-variant-outline
           description: How the homelab works, and runbooks
           namespace: homelab-docs
           app: homelab-docs
@@ -486,12 +488,6 @@ data:
           description: Topology, metrics and logs
           namespace: orrery
           app: orrery
-    - Other:
-      - helium-services:
-          href: https://helium.netbird.nathalie-stiefsohn.eu
-          icon: helium-services.png
-          namespace: helium-services
-          app: helium-services
   settings.yaml: |
     title: Homelab
     favicon: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADRUlEQVR4nO2aT27TQBTGe4QeoUfgCDkCR+jemyy6RCg7diRbVlmwJUpFhbqgUtQuAAGKCcUBBVW2qKpIhSpVKyckdfuhZ2xk0ji25814bMmf9BbdTGd+4+/96XRjo1KlSpUEBKAOYAKgB2BL935yE4AaABv31QSwqXt/ykS3HNz2OtEXUde9V6miWw1uN4tM+lJ0752tloOa6/m3KqpuqfODYaGx8w14x0HwV41S5gcCYFgARcsBRi4LAmHc1n2mTIoCCOP5GXCxYIHolSY/rAJAQbZ4dQ5MPRaIduHzQxyAMB6PgMEVCwLZoqH7nLFKAhDND6czFghqrB7qPu89pQUQzQ9MW1B+eKD73P+UFUA0PzDVLkTZFAEQzQ8SyqbetpoDIJofmGXT1lY2ZQAI48VYSn7It2zKBBDmBwltdX5jt2wAYTw5KUlbnQRg59jzQxTEsx/s/KB27E4C8PTDNX7tDtB+c8H6IiS01WrG7jQA3E7fj+P9kf+zKAQqm4Ubu7MACOPwwMGjT3NhEBLGbltafhABQEG22D0cs2xRiLFbFEAYzt7QNCx0ORA4ur2cYvZ6KP41cAG4nX4vWKdmWDDTHpxbJu8WHuYfnXAP4uO2LACR9bYNC5O49WQ0SovhGNOXg+geigMgWHPTsNBcXovbKt/+vMZ0/8uqPRQLQGTtLcNCjzss3blz/D4ardtDMQGkfGmKPzj5fHCa9PuLB0Dwpek/3TgXyz4vBwBqUIJBRkjk89nB17QHLw6A4EXZFD247/O3J1kPrh/AdO+zGQwqYgdfeH5ZEzx4GPoaIcrOovJ9vrqspY2e2+nrbYVFAJDPE8paUtisW9cFgHweaV+F/e52+nrHYREAK9rXrNF1O329fxARAeCdXXJ9brJ9rgMAjalMn0+k+TxPAEtjqmg0pfo8LwA338+5Pu8p8blqAGvG1LRhK/W5SgDMIJ8X+3FUIYB2bj4vGADyeXn+QUIiAPJ5+f5FRgKACWtcVS3FANq5l7WsUgSAP6bmJckA8mlfZUoiALljal4KnrRiX3JSAFAzpuapuJecBABqx1QdCl9yEgDob19VK7CFvQJAfmNqEWRYqLfeX020jKmVKlWqJEl/AMzO3SdiFe8yAAAAAElFTkSuQmCC
@@ -526,11 +522,9 @@ data:
         icon: mdi-server-security
       Observability:
         icon: mdi-chart-timeline-variant
-      Other:
-        icon: mdi-help-circle-outline
       Links:
         style: row
-        columns: 4
+        columns: 3
         icon: mdi-link-variant
   widgets.yaml: |
     - logo: {}
