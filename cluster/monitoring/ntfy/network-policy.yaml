@@ -40,6 +40,7 @@ spec:
           - forgejo
           - jellyfin
           - zyme
+          - limes
     ports:
     - port: 8080
       protocol: TCP

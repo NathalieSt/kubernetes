@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: limes
+spec:
+  name: limes
+  cluster:
+    name: postgres
+  owner: postgres
