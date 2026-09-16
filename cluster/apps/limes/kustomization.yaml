@@ -5,7 +5,9 @@ metadata:
   name: limes
 resources:
 - rbac.yaml
+- vault-secrets.yaml
 - cache-pvc.yaml
+- version-pins.yaml
 - deployment.yaml
 - service.yaml
 - network-policy.yaml

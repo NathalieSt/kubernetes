@@ -168,6 +168,7 @@ data:
     healthchecks/oidc healthchecks client-secret
     heartbeats heartbeats healthchecks-api-key forgejo-token external-ping-url
     kavita/oidc kavita client-secret
+    limes limes ntfy-token forgejo-token
     mail mail postfix-accounts.cf
     mail/oidc mail client-secret
     music-library-builder music-library-builder ntfy-token
@@ -254,6 +255,10 @@ data:
           "kavita": {
             "name": "kavita",
             "policy": "path \"kvv2/data/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "limes": {
+            "name": "limes",
+            "policy": "path \"kvv2/data/limes\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "mail": {
             "name": "mail",
@@ -406,6 +411,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.kavita.name}"
+            ],
+            "token_ttl": 600
+          },
+          "limes": {
+            "backend": "kubernetes",
+            "role_name": "limes",
+            "bound_service_account_names": [
+              "limes-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "limes"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.limes.name}"
             ],
             "token_ttl": 600
           },
@@ -612,6 +632,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.kavita_kavita_oidc",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.limes_limes",
           "lifecycle": {
             "destroy": false
           }

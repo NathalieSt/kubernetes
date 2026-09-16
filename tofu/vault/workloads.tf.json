@@ -33,6 +33,10 @@
         "name": "kavita",
         "policy": "path \"kvv2/data/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "limes": {
+        "name": "limes",
+        "policy": "path \"kvv2/data/limes\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "mail": {
         "name": "mail",
         "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -184,6 +188,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.kavita.name}"
+        ],
+        "token_ttl": 600
+      },
+      "limes": {
+        "backend": "kubernetes",
+        "role_name": "limes",
+        "bound_service_account_names": [
+          "limes-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "limes"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.limes.name}"
         ],
         "token_ttl": 600
       },
@@ -390,6 +409,12 @@
     },
     {
       "from": "vault_kv_secret_v2.kavita_kavita_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.limes_limes",
       "lifecycle": {
         "destroy": false
       }

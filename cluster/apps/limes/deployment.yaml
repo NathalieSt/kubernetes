@@ -26,6 +26,10 @@ spec:
         ports:
         - containerPort: 8080
           name: http
+        volumeMounts:
+        - mountPath: /etc/limes/pins
+          name: version-pins
+          readOnly: true
         env:
         - name: LIMES_SCAN_NAMESPACE
           value: limes
@@ -51,6 +55,46 @@ spec:
           value: raspberry-pi-5-0,raspberry-pi-5-1,raspberry-pi-5-2
         - name: LIMES_VM_URL
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+        - name: LIMES_PINS_FILE
+          value: /etc/limes/pins/pins.json
+        - name: LIMES_OWN_REGISTRY
+          value: code.netbird.nathalie-stiefsohn.eu/my-homelab
+        - name: LIMES_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080
+        - name: LIMES_NTFY_TOPIC
+          value: limes
+        - name: LIMES_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: limes-secret
+              optional: true
+        - name: LIMES_PUBLIC_URL
+          value: https://limes.netbird.nathalie-stiefsohn.eu
+        - name: LIMES_FORGEJO_URL
+          value: http://forgejo-http.forgejo.svc.cluster.local:3000
+        - name: LIMES_FORGEJO_REPO
+          value: my-homelab/kubernetes-generator
+        - name: LIMES_FORGEJO_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: forgejo-token
+              name: limes-secret
+              optional: true
+        - name: LIMES_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/limes
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: LIMES_REGISTRY_SECRET
+          value: forgejo-registry-secret
         - name: TZ
           value: Europe/Vienna
         - name: LIMES_OIDC_AUTHORITY
@@ -72,3 +116,7 @@ spec:
           runAsGroup: 1000
           allowPrivilegeEscalation: false
           runAsNonRoot: true
+      volumes:
+      - name: version-pins
+        configMap:
+          name: limes-version-pins

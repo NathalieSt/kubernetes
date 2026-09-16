@@ -13,5 +13,6 @@ resources:
 - ntfy-db.yaml
 - glitchtip-db.yaml
 - zyme-db.yaml
+- limes-db.yaml
 - network-policy.yaml
 - k8up-schedule.yaml

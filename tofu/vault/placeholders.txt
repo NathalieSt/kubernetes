@@ -13,6 +13,7 @@ healthchecks/secret healthchecks secret-key
 healthchecks/oidc healthchecks client-secret
 heartbeats heartbeats healthchecks-api-key forgejo-token external-ping-url
 kavita/oidc kavita client-secret
+limes limes ntfy-token forgejo-token
 mail mail postfix-accounts.cf
 mail/oidc mail client-secret
 music-library-builder music-library-builder ntfy-token

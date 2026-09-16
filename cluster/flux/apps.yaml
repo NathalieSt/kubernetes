@@ -405,6 +405,8 @@ spec:
   - name: flux-rbac
   - name: csi-driver-nfs
   - name: clamav
+  - name: reflector
+  - name: main-pg
   serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
