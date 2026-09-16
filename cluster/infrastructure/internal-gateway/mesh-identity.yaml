@@ -45,6 +45,7 @@ spec:
   - glitchtip
   - headlamp
   - healthchecks
+  - helium
   - docs
   - home
   - it-tools
