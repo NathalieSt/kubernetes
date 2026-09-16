@@ -245,6 +245,12 @@ spec:
     name: rimworld-together
     namespace: flux-system
   - kind: Kustomization
+    name: system-upgrade-controller
+    namespace: flux-system
+  - kind: Kustomization
+    name: system-upgrade-plans
+    namespace: flux-system
+  - kind: Kustomization
     name: tandoor
     namespace: flux-system
   - kind: Kustomization

@@ -69,3 +69,18 @@ spec:
     env:
     - name: NB_DISABLE_UPDATE_SETTINGS
       value: "false"
+    livenessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - |-
+          s=$(netbird status --json 2>/dev/null | tr -d ' \n\t') || exit 1
+          total=$(printf '%s' "$s" | grep -o '"peers":{"total":[0-9]*' | grep -o '[0-9]*$')
+          connected=$(printf '%s' "$s" | grep -o '"peers":{"total":[0-9]*,"connected":[0-9]*' | grep -o '[0-9]*$')
+          [ -n "$total" ] || { echo "no peer count in netbird status"; exit 1; }
+          [ "$total" -eq 0 ] || [ "${connected:-0}" -gt 0 ] || { echo "0/$total peers connected"; exit 1; }
+      initialDelaySeconds: 120
+      periodSeconds: 60
+      timeoutSeconds: 15
+      failureThreshold: 5
