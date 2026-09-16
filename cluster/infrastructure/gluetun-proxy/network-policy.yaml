@@ -20,3 +20,9 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: neko
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: helium-services
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: helium-services

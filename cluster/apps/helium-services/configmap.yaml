@@ -1,0 +1,107 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    app.kubernetes.io/name: helium-services
+  name: helium-services-router
+data:
+  nginx.conf: |
+    # The router in front of Helium's services: upstream's svc/nginx/nginx.conf.j2
+    # with the TLS taken out, because the internal gateway terminates it. Generated
+    # into a ConfigMap by HeliumServicesManifests.res, which is where the reasoning
+    # lives. Keep the locations in step with upstream's template at the commit the
+    # image is built from: they are the paths the browser asks for, and a missing
+    # one is a feature that silently stops working rather than an error.
+    #
+    # Hardened the same way as src/pkg/utils/static-site/nginx.conf, and for the
+    # same reasons -- see the notes there: no conf.d include, pid and temp paths
+    # under /tmp, logs straight to the container's stdio.
+
+    worker_processes auto;
+    pid /tmp/nginx.pid;
+    error_log /dev/stderr warn;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        # Off, as upstream has it. Every request here is one browser's update
+        # check, extension install or dictionary download -- a log of them is a
+        # log of what that browser has installed, and it tells an operator
+        # nothing a failing status code would not.
+        access_log off;
+        server_tokens off;
+        client_max_body_size 64k;
+
+        sendfile   on;
+        tcp_nopush on;
+        keepalive_timeout 20s;
+
+        client_body_temp_path /tmp/nginx-client-body;
+        proxy_temp_path       /tmp/nginx-proxy;
+        fastcgi_temp_path     /tmp/nginx-fastcgi;
+        uwsgi_temp_path       /tmp/nginx-uwsgi;
+        scgi_temp_path        /tmp/nginx-scgi;
+
+        gzip on;
+        gzip_vary on;
+        gzip_static on;
+        gzip_types text/plain application/json "application/xml; charset=utf-8" "application/json; charset=utf-8";
+
+        server {
+            listen 8080;
+            server_name _;
+
+            location = / {
+                return 302 https://helium.computer;
+            }
+
+            location = /robots.txt {
+                add_header Content-Type text/plain;
+                return 200 "User-agent: *\nDisallow: /\n";
+            }
+
+            location = /connectivitycheck {
+                return 204;
+            }
+
+            # Copied out of the image by the init container: bangs.json with our
+            # own bangs merged in, and the spellcheck dictionaries.
+            location = /bangs.json {
+                add_header Cache-Control "public, max-age=86400, stale-if-error=604800";
+                add_header Access-Control-Allow-Origin *;
+                root /static;
+            }
+
+            # Only the .gz of each dictionary exists. `gzip_static always` serves
+            # it with Content-Encoding: gzip whatever the client asked for, which
+            # is how upstream serves them to the same browser; the sub_filter keeps
+            # the directory listing naming the files as they are requested.
+            location /dict {
+                gzip_static always;
+                root /static;
+
+                autoindex on;
+                sub_filter ".gz" "";
+                sub_filter_once off;
+            }
+
+            location /ext/ {
+                proxy_pass http://127.0.0.1:8001/;
+            }
+
+            location /com {
+                proxy_pass http://127.0.0.1:8001/com;
+            }
+
+            location /ubo/ {
+                proxy_pass http://127.0.0.1:8002/;
+                proxy_pass_request_body off;
+            }
+        }
+    }

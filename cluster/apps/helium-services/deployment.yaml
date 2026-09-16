@@ -1,0 +1,162 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: helium-services
+    app.kubernetes.io/version: 271ce7a
+  name: helium-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: helium-services
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: helium-services
+        app.kubernetes.io/version: 271ce7a
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - cp -R /srv/helium/. /static/
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:271ce7a
+        name: static
+        volumeMounts:
+        - mountPath: /static
+          name: static
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - command:
+        - nginx
+        - -c
+        - /etc/nginx/nginx.conf
+        - -g
+        - daemon off;
+        image: nginx@sha256:a5688ea5d06cccc298505dddac20e8e28bfe7de67b015a374006593bc23700b1
+        name: router
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          name: router-config
+          readOnly: true
+        - mountPath: /tmp
+          name: router-tmp
+        - mountPath: /static
+          name: static
+          readOnly: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 500m
+            memory: 64Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 101
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /connectivitycheck
+            port: 8080
+          periodSeconds: 10
+      - args:
+        - extension-proxy
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:271ce7a
+        name: extension-proxy
+        env:
+        - name: DENO_SERVE_ADDRESS
+          value: tcp:127.0.0.1:8001
+        - name: PROXY_BASE_URL
+          value: https://helium.netbird.nathalie-stiefsohn.eu/ext/
+        - name: HTTPS_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: HTTP_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: http_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        resources:
+          requests:
+            cpu: 10m
+            memory: 48Mi
+          limits:
+            cpu: "1"
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - args:
+        - ubo
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:271ce7a
+        name: ubo
+        env:
+        - name: DENO_SERVE_ADDRESS
+          value: tcp:127.0.0.1:8002
+        - name: UBO_PROXY_BASE_URL
+          value: https://helium.netbird.nathalie-stiefsohn.eu/ubo/
+        - name: HTTPS_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: HTTP_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: http_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 384Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: router-config
+        configMap:
+          name: helium-services-router
+      - name: router-tmp
+        emptyDir: {}
+      - name: static
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

@@ -82,6 +82,9 @@ data:
         - healthchecks.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - helium.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - home.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:

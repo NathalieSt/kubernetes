@@ -256,6 +256,28 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: helium-services
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: helium-services
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/helium-services
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: gluetun-proxy
+  - name: reflector
+  serviceAccountName: flux-helium-services
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: homelab-docs
   namespace: flux-system
 spec:
