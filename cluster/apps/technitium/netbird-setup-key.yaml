@@ -1,9 +1,0 @@
----
-apiVersion: netbird.io/v1alpha1
-kind: SetupKey
-metadata:
-  name: technitium-sidecar
-  namespace: technitium
-spec:
-  name: technitium-sidecar
-  ephemeral: true

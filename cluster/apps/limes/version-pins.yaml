@@ -446,6 +446,15 @@ data:
           "generators": []
         },
         {
+          "key": "kubectl",
+          "kind": "image",
+          "repository": "rancher/kubectl",
+          "version": "v1.34.4@sha256:0a0e7a52f82b0fb12c28de2aedcc57e33acf08b5bfb75b099a4d3b958182a1ec",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
           "key": "lessc",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/lessc",
@@ -628,6 +637,17 @@ data:
           ]
         },
         {
+          "key": "k3s",
+          "kind": "image",
+          "repository": "rancher/k3s-upgrade",
+          "version": "v1.34.4+k3s1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "system-upgrade-plans"
+          ]
+        },
+        {
           "key": "k8up",
           "kind": "chart",
           "repository": "https://k8up-io.github.io/k8up",
@@ -752,6 +772,17 @@ data:
           "inVersionsFile": true,
           "generators": [
             "reflector"
+          ]
+        },
+        {
+          "key": "system-upgrade-controller",
+          "kind": "image",
+          "repository": "rancher/system-upgrade-controller",
+          "version": "v0.20.1@sha256:aaf4dbf640579a6abfa6390aab927ee664f06814e33c371e69df9dd451ca153a",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "system-upgrade-controller"
           ]
         },
         {
