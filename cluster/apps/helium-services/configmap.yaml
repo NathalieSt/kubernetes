@@ -57,6 +57,14 @@ data:
             listen 8080;
             server_name _;
 
+            # Relative Location headers. The browser asks for `/ext?...` with no
+            # slash, and nginx answers that with its own 301 to `/ext/` -- which,
+            # absolute, it builds from this listener: http, port 8080, a URL
+            # nothing outside the pod can reach. Upstream gets away with it by
+            # terminating TLS on 443 itself. With the gateway in front, every web
+            # store install failed as "Download interrupted".
+            absolute_redirect off;
+
             location = / {
                 return 302 https://helium.computer;
             }
