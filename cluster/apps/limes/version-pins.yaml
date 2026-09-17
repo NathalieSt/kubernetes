@@ -210,7 +210,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "latest",
+          "version": "62e7acd@sha256:8707ff4f62719598cf880d47f8e269f90dc7aa55ca0809d9fffab1ec3cad8f91",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
