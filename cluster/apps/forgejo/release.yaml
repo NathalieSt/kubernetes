@@ -15,13 +15,21 @@ spec:
       retries: 3
   values:
     extraContainerVolumeMounts:
+    - mountPath: /data/git
+      name: git
     - mountPath: /data/gitea/public/assets/css
       name: pennant-theme
       readOnly: true
     - mountPath: /data/gitea/public/assets/img
       name: pennant-logo
       readOnly: true
+    extraInitVolumeMounts:
+    - mountPath: /data/git
+      name: git
     extraVolumes:
+    - name: git
+      persistentVolumeClaim:
+        claimName: forgejo-git
     - configMap:
         name: forgejo-theme
       name: pennant-theme
