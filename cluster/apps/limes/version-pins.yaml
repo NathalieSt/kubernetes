@@ -154,7 +154,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "b12c76f@sha256:f96c4c63cd2ca2a23fc521eb16510e57279439d1b5e930e15d748ac441126695",
+          "version": "ffc500f@sha256:b4bce1cecefc779d26d9ecc90eb597d4763c8637248166b33cc864f7c93fcec4",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -210,7 +210,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "7ce71db@sha256:ea31408bba3e8cd007548854147adfb897d8c40af571e8318cf9cc9c2a97f9ad",
+          "version": "64e9071@sha256:704ddac1a5ca2bfb9f7ae1230a2e26e4f958ae58141f44248f0695491b62e398",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
