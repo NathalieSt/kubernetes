@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: forgejo-runner-1
-    app.kubernetes.io/version: "12.13"
+    app.kubernetes.io/version: "13.1"
   name: forgejo-runner-1
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: forgejo-runner-1
-        app.kubernetes.io/version: "12.13"
+        app.kubernetes.io/version: "13.1"
     spec:
       initContainers:
       - command:
@@ -96,7 +96,7 @@ spec:
           EOF
 
           exec forgejo-runner daemon --config /data/config.yml
-        image: code.forgejo.org/forgejo/runner:12.13
+        image: code.forgejo.org/forgejo/runner:13.1
         name: forgejo-runner
         volumeMounts:
         - mountPath: /data
@@ -183,7 +183,7 @@ spec:
 
           echo "image warmer done; idling"
           while true; do sleep 3600; done
-        image: docker:27-cli
+        image: docker:29-cli
         name: image-warmer
         volumeMounts:
         - mountPath: /var/run/docker-shared

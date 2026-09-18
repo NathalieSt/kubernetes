@@ -99,7 +99,7 @@ data:
           "key": "forgejo-runner",
           "kind": "image",
           "repository": "code.forgejo.org/forgejo/runner",
-          "version": "12.13",
+          "version": "13.1",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -431,7 +431,7 @@ data:
           "key": "docker-cli",
           "kind": "image",
           "repository": "docker",
-          "version": "27-cli",
+          "version": "29-cli",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -594,7 +594,7 @@ data:
           "kind": "chart",
           "repository": "https://kubernetes-sigs.github.io/headlamp/",
           "chart": "headlamp",
-          "version": "0.44.0",
+          "version": "0.45.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
