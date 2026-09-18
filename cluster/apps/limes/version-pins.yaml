@@ -375,7 +375,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "latest",
+          "version": "94ccddc@sha256:5c0082f60589af6668a970a170c90c475b53d0d7229b9f5a4d6d60f6fe3936cd",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
