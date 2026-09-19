@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: homelab-docs
-    app.kubernetes.io/version: 5c294a2
+    app.kubernetes.io/version: 4accad4
   name: homelab-docs
 spec:
   selector:
