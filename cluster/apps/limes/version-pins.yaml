@@ -77,7 +77,7 @@ data:
           "key": "flood",
           "kind": "image",
           "repository": "jesec/flood",
-          "version": "4.13.0",
+          "version": "4.16.1",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -99,7 +99,7 @@ data:
           "key": "forgejo-runner",
           "kind": "image",
           "repository": "code.forgejo.org/forgejo/runner",
-          "version": "13.1",
+          "version": "13.2",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -121,7 +121,7 @@ data:
           "key": "gluetun-media",
           "kind": "image",
           "repository": "qmcgaw/gluetun",
-          "version": "v3.40",
+          "version": "v3.41",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -386,7 +386,7 @@ data:
           "key": "alpine",
           "kind": "image",
           "repository": "alpine",
-          "version": "3.20",
+          "version": "3.24",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -395,7 +395,7 @@ data:
           "key": "alpine-k8s",
           "kind": "image",
           "repository": "alpine/k8s",
-          "version": "1.34.4@sha256:22284d679fe7a0414199396fe33fec521a92a4fc9efbda35aaadd074c4576394",
+          "version": "1.37.0@sha256:b421c2e9419edb98db39b6ab641669f4db7bb2acf354f22450c6b7e7176d1ff4",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -404,7 +404,7 @@ data:
           "key": "binfmt",
           "kind": "image",
           "repository": "tonistiigi/binfmt",
-          "version": "qemu-v9.2.2",
+          "version": "qemu-v10.2.3",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -422,7 +422,7 @@ data:
           "key": "curl",
           "kind": "image",
           "repository": "curlimages/curl",
-          "version": "8.17.0",
+          "version": "8.22.0",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -440,7 +440,7 @@ data:
           "key": "docker-dind",
           "kind": "image",
           "repository": "docker",
-          "version": "27-dind",
+          "version": "29-dind",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -560,7 +560,7 @@ data:
           "key": "forgejo-pg",
           "kind": "image",
           "repository": "ghcr.io/cloudnative-pg/postgresql",
-          "version": "17.5",
+          "version": "18.6",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -675,7 +675,7 @@ data:
           "key": "main-pg",
           "kind": "image",
           "repository": "ghcr.io/cloudnative-pg/postgresql",
-          "version": "17.5",
+          "version": "18.6",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -767,7 +767,7 @@ data:
           "kind": "chart",
           "repository": "https://emberstack.github.io/helm-charts",
           "chart": "reflector",
-          "version": "9.1.27",
+          "version": "10.0.65",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -789,7 +789,7 @@ data:
           "key": "valkey",
           "kind": "image",
           "repository": "valkey/valkey",
-          "version": "8-alpine3.22",
+          "version": "9-alpine3.22",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [

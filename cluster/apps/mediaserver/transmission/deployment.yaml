@@ -57,7 +57,7 @@ spec:
         - /bin/sh
         - -c
         - sh /scripts/ipleak.sh
-        image: curlimages/curl:8.17.0
+        image: curlimages/curl:8.22.0
         name: ipleak
         volumeMounts:
         - mountPath: /scripts/

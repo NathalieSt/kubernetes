@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: flood
-    app.kubernetes.io/version: 4.13.0
+    app.kubernetes.io/version: 4.16.1
   name: flood
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: flood
-        app.kubernetes.io/version: 4.13.0
+        app.kubernetes.io/version: 4.16.1
     spec:
       initContainers:
       - command:
@@ -28,7 +28,7 @@ spec:
         - mountPath: /config
           name: flood-config-volume
       containers:
-      - image: jesec/flood:4.13.0
+      - image: jesec/flood:4.16.1
         name: flood-ui
         ports:
         - containerPort: 3000

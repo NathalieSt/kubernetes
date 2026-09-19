@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: flood
-    app.kubernetes.io/version: 4.13.0
+    app.kubernetes.io/version: 4.16.1
   name: flood
 spec:
   selector:
