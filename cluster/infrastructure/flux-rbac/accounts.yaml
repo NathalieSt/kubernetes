@@ -68,6 +68,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-bazarr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-bazarr-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-bazarr
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-cert-manager
   namespace: flux-system
 ---
@@ -163,26 +183,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-egress-proxy
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-flood
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-flood-namespace-admin
-  namespace: jellyfin
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-flood
   namespace: flux-system
 ---
 apiVersion: v1
@@ -692,6 +692,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-lidarr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-lidarr-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-lidarr
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-mail
   namespace: flux-system
 ---
@@ -964,6 +984,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-prowlarr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-prowlarr-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-prowlarr
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-psono-client
   namespace: flux-system
 ---
@@ -1012,6 +1052,59 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-psono-server
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-qbittorrent
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-qbittorrent-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-qbittorrent
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-qbittorrent-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-qbittorrent
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-radarr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-radarr-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-radarr
   namespace: flux-system
 ---
 apiVersion: v1
@@ -1110,6 +1203,66 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-sabnzbd
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-sabnzbd-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-sabnzbd
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-seerr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-seerr-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-seerr
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-sonarr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-sonarr-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-sonarr
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-system-upgrade-plans
   namespace: flux-system
 ---
@@ -1158,39 +1311,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-tandoor
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-transmission
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-transmission-namespace-admin
-  namespace: jellyfin
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-transmission
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-transmission-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-transmission
   namespace: flux-system
 ---
 apiVersion: v1

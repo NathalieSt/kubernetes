@@ -14,5 +14,4 @@ resources:
 - service.yaml
 - network-policy.yaml
 - cilium-network-policy.yaml
-- netbird-network-resource.yaml
 - k8up-schedule.yaml

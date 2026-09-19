@@ -98,7 +98,7 @@ spec:
         - name: LIMES_REGISTRY_PULL_ADDRESS
           value: forgejo-http.forgejo.svc.cluster.local:3000
         - name: LIMES_REGISTRY_TOKEN_IMAGE
-          value: curlimages/curl:8.17.0
+          value: curlimages/curl:8.22.0
         - name: TZ
           value: Europe/Vienna
         - name: LIMES_OIDC_AUTHORITY

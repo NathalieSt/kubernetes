@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/version: 2.6.5.5623-ls161
+  name: prowlarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prowlarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: prowlarr
+        app.kubernetes.io/version: 2.6.5.5623-ls161
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: linuxserver/prowlarr:2.6.5.5623-ls161@sha256:c96b56d94d116a9f4de94bc23d3381689492e6c3cfb7435320e8d982e406f99a
+        name: prowlarr
+        ports:
+        - containerPort: 9696
+          name: http
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "10"
+        - name: TZ
+          value: Europe/Vienna
+        - name: PROWLARR__POSTGRES__HOST
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: PROWLARR__POSTGRES__PORT
+          value: "5432"
+        - name: PROWLARR__POSTGRES__USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: PROWLARR__POSTGRES__PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: PROWLARR__POSTGRES__MAINDB
+          value: prowlarr-main
+        - name: PROWLARR__POSTGRES__LOGDB
+          value: prowlarr-log
+        - name: PROWLARR__AUTH__METHOD
+          value: External
+        - name: PROWLARR__LOG__ANALYTICSENABLED
+          value: "False"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 192Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 9696
+          periodSeconds: 30
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: prowlarr-config

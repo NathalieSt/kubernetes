@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: lidarr-log
+spec:
+  name: lidarr-log
+  cluster:
+    name: postgres
+  owner: postgres

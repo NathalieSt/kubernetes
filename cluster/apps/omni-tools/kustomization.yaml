@@ -9,4 +9,3 @@ resources:
 - service.yaml
 - scaled-object.yaml
 - network-policy.yaml
-- netbird-network-resource.yaml

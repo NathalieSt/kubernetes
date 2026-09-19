@@ -45,6 +45,13 @@ data:
           service: backup-dashboard
           middlewares:
           - authelia
+        bazarr:
+          rule: Host(`bazarr.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: bazarr
+          middlewares:
+          - authelia
         changedetection:
           rule: Host(`changedetection.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -64,13 +71,6 @@ data:
           entryPoints:
           - websecure
           service: daybook
-          middlewares:
-          - authelia
-        flood:
-          rule: Host(`transmission.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: flood
           middlewares:
           - authelia
         forgejo:
@@ -142,6 +142,13 @@ data:
           service: kavita
           middlewares:
           - authelia
+        lidarr:
+          rule: Host(`lidarr.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: lidarr
+          middlewares:
+          - authelia
         limes:
           rule: Host(`limes.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -187,6 +194,13 @@ data:
           entryPoints:
           - websecure
           service: orrery
+        prowlarr:
+          rule: Host(`prowlarr.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: prowlarr
+          middlewares:
+          - authelia
         psono-client:
           rule: Host(`psono.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -197,11 +211,46 @@ data:
           entryPoints:
           - websecure
           service: psono-server
+        qbittorrent:
+          rule: Host(`qbittorrent.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: qbittorrent
+          middlewares:
+          - authelia
+        radarr:
+          rule: Host(`radarr.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: radarr
+          middlewares:
+          - authelia
         redlib:
           rule: Host(`redlib.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: redlib
+          middlewares:
+          - authelia
+        sabnzbd:
+          rule: Host(`sabnzbd.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: sabnzbd
+          middlewares:
+          - authelia
+        seerr:
+          rule: Host(`requests.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: seerr
+          middlewares:
+          - authelia
+        sonarr:
+          rule: Host(`sonarr.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: sonarr
           middlewares:
           - authelia
         tandoor:
@@ -245,6 +294,10 @@ data:
           loadBalancer:
             servers:
             - url: http://backup-dashboard.backup-dashboard.svc.cluster.local:8080
+        bazarr:
+          loadBalancer:
+            servers:
+            - url: http://bazarr.jellyfin.svc.cluster.local:6767
         changedetection:
           loadBalancer:
             servers:
@@ -257,10 +310,6 @@ data:
           loadBalancer:
             servers:
             - url: http://daybook.daybook.svc.cluster.local:8080
-        flood:
-          loadBalancer:
-            servers:
-            - url: http://flood.jellyfin.svc.cluster.local:3000
         forgejo:
           loadBalancer:
             servers:
@@ -305,6 +354,10 @@ data:
           loadBalancer:
             servers:
             - url: http://kavita.kavita.svc.cluster.local:5000
+        lidarr:
+          loadBalancer:
+            servers:
+            - url: http://lidarr.jellyfin.svc.cluster.local:8686
         limes:
           loadBalancer:
             servers:
@@ -333,6 +386,10 @@ data:
           loadBalancer:
             servers:
             - url: http://orrery.orrery.svc.cluster.local:8080
+        prowlarr:
+          loadBalancer:
+            servers:
+            - url: http://prowlarr.jellyfin.svc.cluster.local:9696
         psono-client:
           loadBalancer:
             servers:
@@ -341,10 +398,30 @@ data:
           loadBalancer:
             servers:
             - url: http://psono-server.psono.svc.cluster.local:80
+        qbittorrent:
+          loadBalancer:
+            servers:
+            - url: http://qbittorrent.jellyfin.svc.cluster.local:8080
+        radarr:
+          loadBalancer:
+            servers:
+            - url: http://radarr.jellyfin.svc.cluster.local:7878
         redlib:
           loadBalancer:
             servers:
             - url: http://redlib.redlib.svc.cluster.local:8080
+        sabnzbd:
+          loadBalancer:
+            servers:
+            - url: http://sabnzbd.jellyfin.svc.cluster.local:8080
+        seerr:
+          loadBalancer:
+            servers:
+            - url: http://seerr.jellyfin.svc.cluster.local:5055
+        sonarr:
+          loadBalancer:
+            servers:
+            - url: http://sonarr.jellyfin.svc.cluster.local:8989
         tandoor:
           loadBalancer:
             servers:

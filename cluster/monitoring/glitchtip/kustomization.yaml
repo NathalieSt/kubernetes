@@ -9,5 +9,4 @@ resources:
 - vault-secrets.yaml
 - service.yaml
 - network-policy.yaml
-- netbird-network-resource.yaml
 - pennant-configmap.yaml
