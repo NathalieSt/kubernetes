@@ -74,7 +74,7 @@ spec:
           limits:
             cpu: 100m
             memory: 64Mi
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/transmission-exporter:4800993@sha256:52e487860fb331eccee1e206546f4d68caa68a9eb68e35a3396f2ca53ee3abd0
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/transmission-exporter:a1d8e40@sha256:1480b0e900f241fc4d2c95fcda9e2dc0a49e97ca6de4fefdebe3daf3aa8a6e05
         name: transmission-exporter
         ports:
         - containerPort: 19091
