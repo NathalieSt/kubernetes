@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: healthchecks
-    app.kubernetes.io/version: d4954af
+    app.kubernetes.io/version: ceb2862
   name: healthchecks
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: healthchecks
-        app.kubernetes.io/version: d4954af
+        app.kubernetes.io/version: ceb2862
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -124,7 +124,7 @@ spec:
         - /pennant-out
         - /pennant/pennant.css
         - css/output.*.css
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af@sha256:ae7ed67eae7914aa8fc2eefe37622c9ab47bfd41c4e34433059fbfcb4d68001a
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:ceb2862@sha256:c4c4ebbb6b47d28335d3bfebdd0c4aaf518470c2f554a262fcac3c490522cf8c
         name: pennant
         volumeMounts:
         - mountPath: /pennant
@@ -144,7 +144,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af@sha256:ae7ed67eae7914aa8fc2eefe37622c9ab47bfd41c4e34433059fbfcb4d68001a
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:ceb2862@sha256:c4c4ebbb6b47d28335d3bfebdd0c4aaf518470c2f554a262fcac3c490522cf8c
         name: healthchecks
         ports:
         - containerPort: 8000
