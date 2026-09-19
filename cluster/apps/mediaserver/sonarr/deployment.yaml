@@ -73,6 +73,12 @@ spec:
             path: /ping
             port: 8989
           periodSeconds: 30
+        startupProbe:
+          httpGet:
+            path: /ping
+            port: 8989
+          periodSeconds: 10
+          failureThreshold: 60
       volumes:
       - name: config
         persistentVolumeClaim:

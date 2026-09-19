@@ -23,6 +23,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
 | `mail` | `mail` | `kvv2/mail`, `kvv2/mail/oidc` |
 | `music-library-builder` | `jellyfin` | `kvv2/music-library-builder` |
+| `qbittorrent` | `jellyfin` | `kvv2/vpn` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `limes` | `limes` | `kvv2/limes` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |

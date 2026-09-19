@@ -20,6 +20,7 @@ music-library-builder music-library-builder ntfy-token
 neko neko password admin-password
 ntfy/auth ntfy auth-users auth-tokens
 psono psono-server secret-key activation-link-secret db-secret email-secret-salt private-key public-key
+vpn qbittorrent user password
 tandoor/oidc tandoor client-secret
 victoria-metrics victoria-metrics adminAuthKey
 victoria-metrics/ntfy victoria-metrics token

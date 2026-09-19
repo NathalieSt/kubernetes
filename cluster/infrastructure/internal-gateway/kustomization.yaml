@@ -11,3 +11,6 @@ resources:
 - deployment.yaml
 - service.yaml
 - network-policy.yaml
+- acme-storage-secondary.yaml
+- mesh-identity-secondary.yaml
+- deployment-secondary.yaml

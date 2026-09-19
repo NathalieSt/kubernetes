@@ -71,6 +71,12 @@ spec:
             path: /ping
             port: 9696
           periodSeconds: 30
+        startupProbe:
+          httpGet:
+            path: /ping
+            port: 9696
+          periodSeconds: 10
+          failureThreshold: 60
       volumes:
       - name: config
         persistentVolumeClaim:
