@@ -864,8 +864,12 @@ spec:
               action: keep
             - source_labels:
               - __meta_kubernetes_pod_container_port_number
-              regex: "8080"
+              regex: "443"
               action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_ip
+              target_label: __address__
+              replacement: $1:8080
             - source_labels:
               - __meta_kubernetes_pod_node_name
               target_label: node
