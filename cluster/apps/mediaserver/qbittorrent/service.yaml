@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: qbittorrent
+    app.kubernetes.io/version: 5.2.3_v2.0.14-ls476
+  name: qbittorrent
+spec:
+  selector:
+    app.kubernetes.io/name: qbittorrent
+  ports:
+  - name: http-qbittorrent
+    port: 8080
+    targetPort: 8080

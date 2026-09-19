@@ -42,3 +42,9 @@ spec:
           - glitchtip
           - zyme
           - limes
+          - sonarr
+          - radarr
+          - lidarr
+          - prowlarr
+          - bazarr
+          - seerr

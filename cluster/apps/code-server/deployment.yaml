@@ -130,7 +130,7 @@ spec:
         - sh
         - -c
         - cp /usr/bin/kubectl /opt/cluster-tools/kubectl
-        image: alpine/k8s:1.34.4@sha256:22284d679fe7a0414199396fe33fec521a92a4fc9efbda35aaadd074c4576394
+        image: alpine/k8s:1.37.0@sha256:b421c2e9419edb98db39b6ab641669f4db7bb2acf354f22450c6b7e7176d1ff4
         name: cluster-tools
         volumeMounts:
         - mountPath: /opt/cluster-tools

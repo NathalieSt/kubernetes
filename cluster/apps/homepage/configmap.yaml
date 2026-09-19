@@ -302,12 +302,12 @@ data:
           namespace: jellyfin
           app: audiomuse-ai
           podSelector: app.kubernetes.io/name=audiomuse-ai-flask
-      - flood:
-          href: https://transmission.netbird.nathalie-stiefsohn.eu
-          icon: flood.png
-          description: Torrents, through the VPN
+      - bazarr:
+          href: https://bazarr.netbird.nathalie-stiefsohn.eu
+          icon: bazarr.png
+          description: Subtitles for the library
           namespace: jellyfin
-          app: flood
+          app: bazarr
       - jellyfin:
           href: https://jellyfin.netbird.nathalie-stiefsohn.eu
           icon: jellyfin.png
@@ -320,12 +320,54 @@ data:
           description: Books and comics
           namespace: kavita
           app: kavita
+      - lidarr:
+          href: https://lidarr.netbird.nathalie-stiefsohn.eu
+          icon: lidarr.png
+          description: Albums, fetched and sorted
+          namespace: jellyfin
+          app: lidarr
       - music-library-builder:
           href: https://music.netbird.nathalie-stiefsohn.eu
           icon: mdi-music-box-multiple
           description: yt-dlp into the Jellyfin music library
           namespace: jellyfin
           app: music-library-builder
+      - prowlarr:
+          href: https://prowlarr.netbird.nathalie-stiefsohn.eu
+          icon: prowlarr.png
+          description: Indexers for the arr stack
+          namespace: jellyfin
+          app: prowlarr
+      - qbittorrent:
+          href: https://qbittorrent.netbird.nathalie-stiefsohn.eu
+          icon: qbittorrent.png
+          description: Torrents, through the VPN
+          namespace: jellyfin
+          app: qbittorrent
+      - radarr:
+          href: https://radarr.netbird.nathalie-stiefsohn.eu
+          icon: radarr.png
+          description: Films, fetched and sorted
+          namespace: jellyfin
+          app: radarr
+      - sabnzbd:
+          href: https://sabnzbd.netbird.nathalie-stiefsohn.eu
+          icon: sabnzbd.png
+          description: Usenet downloads
+          namespace: jellyfin
+          app: sabnzbd
+      - seerr:
+          href: https://requests.netbird.nathalie-stiefsohn.eu
+          icon: jellyseerr.png
+          description: Ask for a film or series
+          namespace: jellyfin
+          app: seerr
+      - sonarr:
+          href: https://sonarr.netbird.nathalie-stiefsohn.eu
+          icon: sonarr.png
+          description: Series, fetched and sorted
+          namespace: jellyfin
+          app: sonarr
     - Personal:
       - daybook:
           href: https://daybook.netbird.nathalie-stiefsohn.eu

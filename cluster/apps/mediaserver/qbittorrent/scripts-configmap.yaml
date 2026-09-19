@@ -1,0 +1,198 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbittorrent-scripts
+data:
+  ini-set.sh: |
+    #!/bin/sh
+    # Pins the keys that must agree with the cluster and leaves everything the app or its UI
+    # wrote. Runs as root in an init container, before the app reads its config; values come
+    # from the environment, never from the command line.
+    #
+    #   INI_FILE       the file; created, with its directory, when missing
+    #   INI_KEYS       one `[Section]key=value` per line; the first `=` ends the key
+    #   INI_COMPACT    `true` writes `key=value` (qBittorrent) rather than `key = value`
+    #   INI_OWNER      uid:gid to hand the file and INI_DIRS to
+    #   INI_DIRS       space-separated directories to create
+    set -eu
+
+    mkdir -p "$(dirname "$INI_FILE")"
+    [ -f "$INI_FILE" ] || : > "$INI_FILE"
+
+    for dir in ${INI_DIRS:-}; do
+      mkdir -p "$dir"
+      chown "$INI_OWNER" "$dir"
+    done
+
+    awk '
+    function flush(section,  k) {
+      for (k in want) {
+        if (sectionOf[k] == section && !(k in done)) print keyOf[k] sep want[k]
+      }
+      flushed[section] = 1
+    }
+    BEGIN {
+      sep = ENVIRON["INI_COMPACT"] == "true" ? "=" : " = "
+      n = split(ENVIRON["INI_KEYS"], lines, "\n")
+      for (i = 1; i <= n; i++) {
+        line = lines[i]
+        if (line == "") continue
+        close_at = index(line, "]")
+        section = substr(line, 2, close_at - 2)
+        rest = substr(line, close_at + 1)
+        eq = index(rest, "=")
+        id = section SUBSEP substr(rest, 1, eq - 1)
+        want[id] = substr(rest, eq + 1)
+        sectionOf[id] = section
+        keyOf[id] = substr(rest, 1, eq - 1)
+        sections[section] = 1
+      }
+      current = ""
+    }
+    /^\[/ {
+      if (current in sections) flush(current)
+      current = $0
+      sub(/^\[/, "", current)
+      sub(/\].*$/, "", current)
+      print
+      next
+    }
+    {
+      eq = index($0, "=")
+      if (eq > 0 && (current in sections)) {
+        key = substr($0, 1, eq - 1)
+        gsub(/^[ \t]+|[ \t]+$/, "", key)
+        id = current SUBSEP key
+        if (id in want) {
+          print key sep want[id]
+          done[id] = 1
+          next
+        }
+      }
+      print
+    }
+    END {
+      if (current in sections) flush(current)
+      for (s in sections) {
+        if (!(s in flushed)) {
+          print "[" s "]"
+          flush(s)
+        }
+      }
+    }
+    ' "$INI_FILE" > "$INI_FILE.new"
+    mv "$INI_FILE.new" "$INI_FILE"
+
+    if [ -n "${INI_OWNER:-}" ]; then
+      chown "$INI_OWNER" "$INI_FILE"
+    fi
+  ipleak.sh: |
+    #!/bin/sh
+    # VPN leak detector for the qBittorrent/gluetun pod. Emits one JSON object per check so Vector merges
+    # the fields into the log root, making them queryable as `check:ip status:LEAK`.
+    #
+    #   IPLEAK_INTERVAL          seconds between cycles (default 300); do not set below 60
+    #   IPLEAK_EXPECTED_COUNTRY  ISO-3166-2 code the exit node should be in (default NL)
+    #   IPLEAK_TIMEOUT           per-request curl timeout in seconds (default 15)
+    #   IPLEAK_STARTUP_GRACE     seconds to wait before the first check (default 30)
+
+    INTERVAL="${IPLEAK_INTERVAL:-300}"
+    EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"
+    TIMEOUT="${IPLEAK_TIMEOUT:-15}"
+    GRACE="${IPLEAK_STARTUP_GRACE:-30}"
+
+    # Extract a top-level JSON string value without jq (not in curlimages/curl).
+    json_str() {
+      printf '%s' "$1" | tr -d '\n' |
+        sed -n 's/.*"'"$2"'"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'
+    }
+
+    emit() {
+      # emit <level> <check> <status> <extra-json-fields>
+      printf '{"ts":"%s","level":"%s","check":"%s","status":"%s","expected":"%s"%s,"message":"%s/%s %s"}\n' \
+        "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" "$2" "$3" "$EXPECTED" "$4" "$2" "$3" "$5"
+    }
+
+    fetch() {
+      curl -sfL --max-time "$TIMEOUT" "$1" 2>/dev/null
+    }
+
+    # --- external IP
+    # Tries several providers in turn; only if every one fails is UNKNOWN reported. The old script
+    # treated "no country parsed" as a leak, so any hiccup or rate-limit produced a false alarm.
+    check_ip() {
+      ip=""; country=""
+
+      body="$(fetch https://api.country.is/)"
+      if [ -n "$body" ]; then
+        ip="$(json_str "$body" ip)"
+        country="$(json_str "$body" country)"
+      fi
+
+      if [ -z "$country" ]; then
+        body="$(fetch https://ipwho.is/)"
+        if [ -n "$body" ]; then
+          ip="$(json_str "$body" ip)"
+          country="$(json_str "$body" country_code)"
+        fi
+      fi
+
+      if [ -z "$country" ]; then
+        body="$(fetch https://ipapi.co/json/)"
+        if [ -n "$body" ]; then
+          ip="$(json_str "$body" ip)"
+          country="$(json_str "$body" country)"
+        fi
+      fi
+
+      if [ -z "$country" ]; then
+        emit error ip UNKNOWN "" "all providers failed or rate-limited - could not verify exit IP"
+        return
+      fi
+
+      if [ "$country" = "$EXPECTED" ]; then
+        emit info ip OK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country"
+      else
+        emit error ip LEAK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country, expected $EXPECTED"
+      fi
+    }
+
+    # --- DNS
+    # Geolocating /etc/resolv.conf is useless in-cluster — it is always CoreDNS's private ClusterIP.
+    # edns.ip-api.com reports the egress IP of whichever public resolver queried it: the real signal.
+    check_dns() {
+      body="$(fetch https://edns.ip-api.com/json)"
+      if [ -z "$body" ]; then
+        emit error dns UNKNOWN "" "could not determine resolver egress ip"
+        return
+      fi
+
+      resolver="$(json_str "$body" ip)"
+      if [ -z "$resolver" ]; then
+        emit error dns UNKNOWN "" "resolver egress ip missing from response"
+        return
+      fi
+
+      geo="$(fetch "https://api.country.is/$resolver")"
+      country="$(json_str "$geo" country)"
+      if [ -z "$country" ]; then
+        emit error dns UNKNOWN ",\"resolver\":\"$resolver\"" "resolver $resolver could not be geolocated"
+        return
+      fi
+
+      if [ "$country" = "$EXPECTED" ]; then
+        emit info dns OK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country"
+      else
+        emit error dns LEAK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country, expected $EXPECTED - dns is bypassing the tunnel"
+      fi
+    }
+
+    emit info startup OK ",\"interval\":$INTERVAL" "leak detector starting, waiting ${GRACE}s for tunnel"
+    sleep "$GRACE"
+
+    while true; do
+      check_ip
+      check_dns
+      sleep "$INTERVAL"
+    done

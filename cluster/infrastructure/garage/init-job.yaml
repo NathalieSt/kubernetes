@@ -558,7 +558,7 @@ spec:
             "{\"access-key-id\":\"$(b64 "$READER_ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$READER_SECRET_ACCESS_KEY")\"}"
 
           echo "Per-namespace backup repositories provisioned."
-        image: alpine:3.20
+        image: alpine:3.24
         name: init
         volumeMounts:
         - mountPath: /secrets

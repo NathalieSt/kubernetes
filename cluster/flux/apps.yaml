@@ -49,6 +49,29 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: bazarr
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/bazarr
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: main-pg
+  - name: csi-driver-nfs
+  serviceAccountName: flux-bazarr
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: changedetection
   namespace: flux-system
 spec:
@@ -138,29 +161,6 @@ spec:
   - name: garage
   - name: k8up
   serviceAccountName: flux-daybook
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: flood
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: jellyfin
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/apps/mediaserver/flood
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: jellyfin
-  - name: transmission
-  - name: csi-driver-nfs
-  serviceAccountName: flux-flood
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -388,6 +388,29 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: lidarr
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/lidarr
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: main-pg
+  - name: csi-driver-nfs
+  serviceAccountName: flux-lidarr
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: limes
   namespace: flux-system
 spec:
@@ -526,6 +549,29 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: prowlarr
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/prowlarr
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: main-pg
+  - name: csi-driver-nfs
+  serviceAccountName: flux-prowlarr
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: psono-client
   namespace: flux-system
 spec:
@@ -566,6 +612,52 @@ spec:
   - name: vault-secrets-operator-config
   - name: mail
   serviceAccountName: flux-psono-server
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: qbittorrent
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/qbittorrent
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-qbittorrent
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: radarr
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/radarr
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: main-pg
+  - name: csi-driver-nfs
+  serviceAccountName: flux-radarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -612,6 +704,74 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: sabnzbd
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/sabnzbd
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: csi-driver-nfs
+  serviceAccountName: flux-sabnzbd
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: seerr
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/seerr
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: main-pg
+  - name: csi-driver-nfs
+  serviceAccountName: flux-seerr
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sonarr
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/apps/mediaserver/sonarr
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: jellyfin
+  - name: main-pg
+  - name: csi-driver-nfs
+  serviceAccountName: flux-sonarr
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: tandoor
   namespace: flux-system
 spec:
@@ -633,28 +793,6 @@ spec:
   - name: reflector
   - name: vault-secrets-operator-config
   serviceAccountName: flux-tandoor
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: transmission
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: jellyfin
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/apps/mediaserver/transmission
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: jellyfin
-  - name: csi-driver-nfs
-  serviceAccountName: flux-transmission
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

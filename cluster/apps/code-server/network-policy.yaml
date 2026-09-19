@@ -13,12 +13,6 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: netbird
-      podSelector:
-        matchLabels:
-          app.kubernetes.io/name: networkrouter
-    - namespaceSelector:
-        matchLabels:
           kubernetes.io/metadata.name: internal-gateway
       podSelector:
         matchLabels:

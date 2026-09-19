@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: valkey
-    app.kubernetes.io/version: 8-alpine3.22
+    app.kubernetes.io/version: 9-alpine3.22
   name: valkey
 spec:
   replicas: 1
@@ -15,11 +15,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: valkey
-        app.kubernetes.io/version: 8-alpine3.22
+        app.kubernetes.io/version: 9-alpine3.22
     spec:
       automountServiceAccountToken: false
       containers:
-      - image: valkey/valkey:8-alpine3.22
+      - image: valkey/valkey:9-alpine3.22
         name: valkey
         ports:
         - containerPort: 6379

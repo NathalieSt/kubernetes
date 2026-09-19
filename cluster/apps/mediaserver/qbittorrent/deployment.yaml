@@ -1,0 +1,185 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: qbittorrent
+    app.kubernetes.io/version: 5.2.3_v2.0.14-ls476
+  name: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qbittorrent
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qbittorrent
+        app.kubernetes.io/version: 5.2.3_v2.0.14-ls476
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - /scripts/ini-set.sh
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: config
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /data
+          name: media
+        - mountPath: /scripts
+          name: scripts
+          readOnly: true
+        env:
+        - name: INI_FILE
+          value: /config/qBittorrent/qBittorrent.conf
+        - name: INI_KEYS
+          value: |-
+            [BitTorrent]Session\DefaultSavePath=/data/completed
+            [BitTorrent]Session\TempPath=/data/incomplete
+            [BitTorrent]Session\TempPathEnabled=true
+            [BitTorrent]Session\Interface=tun0
+            [BitTorrent]Session\InterfaceName=tun0
+            [Preferences]WebUI\LocalHostAuth=false
+            [Preferences]WebUI\AuthSubnetWhitelistEnabled=true
+            [Preferences]WebUI\AuthSubnetWhitelist=10.42.0.0/16
+        - name: INI_OWNER
+          value: "1000:10"
+        - name: INI_DIRS
+          value: ""
+        - name: INI_COMPACT
+          value: "true"
+      - image: qmcgaw/gluetun:v3.41.3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027
+        name: gluetun
+        env:
+        - name: VPN_SERVICE_PROVIDER
+          value: protonvpn
+        - name: VPN_TYPE
+          value: openvpn
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: qbittorrent-vpn
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: qbittorrent-vpn
+        - name: SERVER_COUNTRIES
+          value: Netherlands
+        - name: PORT_FORWARD_ONLY
+          value: "on"
+        - name: VPN_PORT_FORWARDING
+          value: "on"
+        - name: VPN_PORT_FORWARDING_UP_COMMAND
+          value: /bin/sh -c 'wget -O- -nv --retry-connrefused --post-data "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"{{VPN_INTERFACE}}\",\"random_port\":false,\"upnp\":false}" http://127.0.0.1:8080/api/v2/app/setPreferences'
+        - name: VPN_PORT_FORWARDING_DOWN_COMMAND
+          value: /bin/sh -c 'wget -O- -nv --retry-connrefused --post-data "json={\"listen_port\":0,\"current_network_interface\":\"lo\"}" http://127.0.0.1:8080/api/v2/app/setPreferences'
+        - name: FIREWALL_INPUT_PORTS
+          value: 8080,8090
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: 10.42.0.0/16
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 20m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+        startupProbe:
+          exec:
+            command:
+            - /gluetun-entrypoint
+            - healthcheck
+          periodSeconds: 5
+          failureThreshold: 120
+        restartPolicy: Always
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 127.0.0.1
+      containers:
+      - image: linuxserver/qbittorrent:5.2.3_v2.0.14-ls476@sha256:2be038f3421f60f62e8e4bf201f66f385b68e4fbc9ed3ab79051069ea22e2650
+        name: qbittorrent
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /data
+          name: media
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "10"
+        - name: TZ
+          value: Europe/Vienna
+        - name: WEBUI_PORT
+          value: "8080"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "2"
+            memory: 2Gi
+      - image: ghcr.io/martabal/qbittorrent-exporter:v2.0.3@sha256:bc4fa09481634ee894ebfb4d47c8aa239a32a12567b043afa01fa42a3075d1a5
+        name: exporter
+        ports:
+        - containerPort: 8090
+          name: metrics
+        env:
+        - name: QBITTORRENT_BASE_URL
+          value: http://127.0.0.1:8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+      - command:
+        - /bin/sh
+        - /scripts/ipleak.sh
+        image: curlimages/curl:8.22.0
+        name: ipleak
+        volumeMounts:
+        - mountPath: /scripts
+          name: scripts
+          readOnly: true
+        env:
+        - name: IPLEAK_EXPECTED_COUNTRY
+          value: NL
+        - name: IPLEAK_INTERVAL
+          value: "300"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: qbittorrent-config
+      - name: media
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc
+      - name: scripts
+        configMap:
+          name: qbittorrent-scripts
