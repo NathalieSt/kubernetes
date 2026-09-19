@@ -18,3 +18,9 @@ spec:
   - name: forgejo-ssh
     port: 2222
     targetPort: 2222
+  - name: neko-turn
+    port: 3478
+    targetPort: 3478
+  - name: rimworld-together-game
+    port: 25555
+    targetPort: 25555
