@@ -446,8 +446,26 @@ data:
           entryPoints:
           - forgejo-ssh
           service: forgejo-ssh
+        neko-turn:
+          rule: HostSNI(`*`)
+          entryPoints:
+          - neko-turn
+          service: neko-turn
+        rimworld-together-game:
+          rule: HostSNI(`*`)
+          entryPoints:
+          - rimworld-together-game
+          service: rimworld-together-game
       services:
         forgejo-ssh:
           loadBalancer:
             servers:
             - address: forgejo-ssh.forgejo.svc.cluster.local:2222
+        neko-turn:
+          loadBalancer:
+            servers:
+            - address: neko.neko.svc.cluster.local:3478
+        rimworld-together-game:
+          loadBalancer:
+            servers:
+            - address: rimworld-together.rimworld-together.svc.cluster.local:25555

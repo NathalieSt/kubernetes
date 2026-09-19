@@ -60,6 +60,7 @@ spec:
   - psono
   - psono-api
   - redlib
+  - rimworld
   - tandoor
   - vault
   - dojo

@@ -72,6 +72,8 @@ spec:
         - --metrics.prometheus.addRoutersLabels=true
         - --metrics.prometheus.addServicesLabels=true
         - --entrypoints.forgejo-ssh.address=:2222
+        - --entrypoints.neko-turn.address=:3478
+        - --entrypoints.rimworld-together-game.address=:25555
         image: traefik:v3.6
         name: internal-gateway
         ports:
@@ -82,7 +84,11 @@ spec:
         - containerPort: 8082
           name: metrics
         - containerPort: 2222
-          name: forgejo-ssh
+          name: tcp-2222
+        - containerPort: 3478
+          name: tcp-3478
+        - containerPort: 25555
+          name: tcp-25555
         volumeMounts:
         - mountPath: /dynamic
           name: dynamic-config

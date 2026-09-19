@@ -9,13 +9,12 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/name: neko
-  clusterIP: 10.43.44.17
   ports:
   - name: http-neko
     port: 8080
     targetPort: 8080
     protocol: TCP
-  - name: webrtc-neko
-    port: 52000
-    targetPort: 52000
-    protocol: UDP
+  - name: turn-neko
+    port: 3478
+    targetPort: 3478
+    protocol: TCP
