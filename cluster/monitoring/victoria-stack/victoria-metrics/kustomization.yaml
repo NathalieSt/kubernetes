@@ -8,4 +8,5 @@ resources:
 - vault-secrets.yaml
 - release.yaml
 - datapath-rules.yaml
+- node-rules.yaml
 - network-policy.yaml
