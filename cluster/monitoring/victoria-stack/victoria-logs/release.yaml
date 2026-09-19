@@ -29,7 +29,7 @@ spec:
         requests:
           cpu: 100m
           memory: 512Mi
-      retentionPeriod: 4w
+      retentionPeriod: 26w
   driftDetection:
     mode: warn
   serviceAccountName: flux-helm-victoria-logs

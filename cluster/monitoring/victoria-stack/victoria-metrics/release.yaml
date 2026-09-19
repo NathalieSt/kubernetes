@@ -97,6 +97,10 @@ spec:
           create: false
         kubernetesSystemScheduler:
           create: false
+      rules:
+        NodeSystemSaturation:
+          spec:
+            expr: (node_load1{job="node-exporter"} / count(node_cpu_seconds_total{job="node-exporter",mode="idle"}) without(cpu,mode)) > 2 and (sum(rate(node_cpu_seconds_total{job="node-exporter",mode!~"idle|iowait"}[5m])) without(cpu,mode) / count(node_cpu_seconds_total{job="node-exporter",mode="idle"}) without(cpu,mode)) > 0.8
     grafana:
       enabled: false
     kube-state-metrics:

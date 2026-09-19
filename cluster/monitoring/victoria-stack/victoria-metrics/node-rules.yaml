@@ -1,0 +1,18 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: node-rules
+spec:
+  groups:
+  - name: node-io
+    interval: 1m
+    rules:
+    - alert: NodeTasksStuckInIO
+      expr: min_over_time(((node_load1{job="node-exporter"} - sum(rate(node_cpu_seconds_total{job="node-exporter",mode!~"idle|iowait"}[5m])) without(cpu,mode)) / count(node_cpu_seconds_total{job="node-exporter",mode="idle"}) without(cpu,mode))[2h:1m]) > 3
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: "For two hours, {{ $labels.instance }} has had at least {{ $value | printf \"%.1f\" }} blocked tasks per core beyond what its CPU is doing, usually a hung NFS mount. Find them with kubectl debug node/<node> --profile=sysadmin: threads in state D, their wchan and syscall. Hung kubelet calls clear only with a k3s restart."
+        summary: Tasks stuck in I/O on {{ $labels.instance }}
