@@ -8,5 +8,4 @@ resources:
 - deployment.yaml
 - service.yaml
 - network-policy.yaml
-- netbird-network-resource.yaml
 - k8up-schedule.yaml

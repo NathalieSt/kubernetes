@@ -30,6 +30,17 @@ data:
           ]
         },
         {
+          "key": "bazarr",
+          "kind": "image",
+          "repository": "linuxserver/bazarr",
+          "version": "v1.6.1-ls364@sha256:d24bd0048c759a468970989e9df11a6b96a7628d556d00f923e60a35ba59237b",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "bazarr"
+          ]
+        },
+        {
           "key": "changedetection",
           "kind": "image",
           "repository": "ghcr.io/dgtlmoon/changedetection.io",
@@ -74,17 +85,6 @@ data:
           ]
         },
         {
-          "key": "flood",
-          "kind": "image",
-          "repository": "jesec/flood",
-          "version": "4.13.0",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "flood"
-          ]
-        },
-        {
           "key": "forgejo",
           "kind": "chart",
           "repository": "oci://code.forgejo.org/forgejo-helm/forgejo",
@@ -99,7 +99,7 @@ data:
           "key": "forgejo-runner",
           "kind": "image",
           "repository": "code.forgejo.org/forgejo/runner",
-          "version": "13.1",
+          "version": "13.2",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -121,7 +121,7 @@ data:
           "key": "gluetun-media",
           "kind": "image",
           "repository": "qmcgaw/gluetun",
-          "version": "v3.40",
+          "version": "v3.41",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -207,6 +207,17 @@ data:
           ]
         },
         {
+          "key": "lidarr",
+          "kind": "image",
+          "repository": "linuxserver/lidarr",
+          "version": "3.1.0.4875-ls41@sha256:8ab0fd370b604ae034d9a9c261a9d8d873bece33d9736852e7ce4f3566e4a35d",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "lidarr"
+          ]
+        },
+        {
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
@@ -273,6 +284,17 @@ data:
           ]
         },
         {
+          "key": "prowlarr",
+          "kind": "image",
+          "repository": "linuxserver/prowlarr",
+          "version": "2.6.5.5623-ls161@sha256:c96b56d94d116a9f4de94bc23d3381689492e6c3cfb7435320e8d982e406f99a",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "prowlarr"
+          ]
+        },
+        {
           "key": "psono-client",
           "kind": "image",
           "repository": "psono/psono-client",
@@ -292,6 +314,28 @@ data:
           "inVersionsFile": true,
           "generators": [
             "psono-server"
+          ]
+        },
+        {
+          "key": "qbittorrent",
+          "kind": "image",
+          "repository": "linuxserver/qbittorrent",
+          "version": "5.2.3_v2.0.14-ls476@sha256:2be038f3421f60f62e8e4bf201f66f385b68e4fbc9ed3ab79051069ea22e2650",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "qbittorrent"
+          ]
+        },
+        {
+          "key": "radarr",
+          "kind": "image",
+          "repository": "linuxserver/radarr",
+          "version": "6.4.4.10685-ls317@sha256:c960f2b52ec6542dbe6707c5a21e696a7c74fd8b17997454f4d10a55dacee133",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "radarr"
           ]
         },
         {
@@ -328,6 +372,39 @@ data:
           ]
         },
         {
+          "key": "sabnzbd",
+          "kind": "image",
+          "repository": "linuxserver/sabnzbd",
+          "version": "5.1.3-ls273@sha256:948ea3dc45d68943ec14b33ba37ffa1488da3e9837bf3ca0f75621e971614d85",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "sabnzbd"
+          ]
+        },
+        {
+          "key": "seerr",
+          "kind": "image",
+          "repository": "ghcr.io/seerr-team/seerr",
+          "version": "v3.4.1@sha256:f4768de5f616248d723e05891f3345a1402123775d03bf0890dbfedc0831bda1",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "seerr"
+          ]
+        },
+        {
+          "key": "sonarr",
+          "kind": "image",
+          "repository": "linuxserver/sonarr",
+          "version": "4.0.20.3014-ls325@sha256:a5c1a5fecbef946927ab90ad68df319ac5fe644057e5fc18cd993f01ac07b2b2",
+          "file": "versions/apps.json",
+          "inVersionsFile": true,
+          "generators": [
+            "sonarr"
+          ]
+        },
+        {
           "key": "tandoor",
           "kind": "image",
           "repository": "vabene1111/recipes",
@@ -336,28 +413,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "tandoor"
-          ]
-        },
-        {
-          "key": "transmission",
-          "kind": "image",
-          "repository": "haugene/transmission-openvpn",
-          "version": "5.3.2",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "transmission"
-          ]
-        },
-        {
-          "key": "transmission-exporter",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/transmission-exporter",
-          "version": "a1d8e40@sha256:1480b0e900f241fc4d2c95fcda9e2dc0a49e97ca6de4fefdebe3daf3aa8a6e05",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "transmission"
           ]
         },
         {
@@ -386,7 +441,7 @@ data:
           "key": "alpine",
           "kind": "image",
           "repository": "alpine",
-          "version": "3.20",
+          "version": "3.24",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -395,7 +450,7 @@ data:
           "key": "alpine-k8s",
           "kind": "image",
           "repository": "alpine/k8s",
-          "version": "1.34.4@sha256:22284d679fe7a0414199396fe33fec521a92a4fc9efbda35aaadd074c4576394",
+          "version": "1.37.0@sha256:b421c2e9419edb98db39b6ab641669f4db7bb2acf354f22450c6b7e7176d1ff4",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -404,7 +459,7 @@ data:
           "key": "binfmt",
           "kind": "image",
           "repository": "tonistiigi/binfmt",
-          "version": "qemu-v9.2.2",
+          "version": "qemu-v10.2.3",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -422,7 +477,7 @@ data:
           "key": "curl",
           "kind": "image",
           "repository": "curlimages/curl",
-          "version": "8.17.0",
+          "version": "8.22.0",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -440,7 +495,16 @@ data:
           "key": "docker-dind",
           "kind": "image",
           "repository": "docker",
-          "version": "27-dind",
+          "version": "29-dind",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "gluetun",
+          "kind": "image",
+          "repository": "qmcgaw/gluetun",
+          "version": "v3.41.3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -477,6 +541,15 @@ data:
           "kind": "image",
           "repository": "python",
           "version": "3.13-alpine@sha256:7415fbc3c9e4979cc717d92377ab2bc7b2b4a2af1ac03cc52b5f3f88efedaf3a",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "qbittorrent-exporter",
+          "kind": "image",
+          "repository": "ghcr.io/martabal/qbittorrent-exporter",
+          "version": "v2.0.3@sha256:bc4fa09481634ee894ebfb4d47c8aa239a32a12567b043afa01fa42a3075d1a5",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -560,7 +633,7 @@ data:
           "key": "forgejo-pg",
           "kind": "image",
           "repository": "ghcr.io/cloudnative-pg/postgresql",
-          "version": "17.5",
+          "version": "18.6",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -675,7 +748,7 @@ data:
           "key": "main-pg",
           "kind": "image",
           "repository": "ghcr.io/cloudnative-pg/postgresql",
-          "version": "17.5",
+          "version": "18.6",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -767,7 +840,7 @@ data:
           "kind": "chart",
           "repository": "https://emberstack.github.io/helm-charts",
           "chart": "reflector",
-          "version": "9.1.27",
+          "version": "10.0.65",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -789,7 +862,7 @@ data:
           "key": "valkey",
           "kind": "image",
           "repository": "valkey/valkey",
-          "version": "8-alpine3.22",
+          "version": "9-alpine3.22",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [

@@ -12,5 +12,4 @@ resources:
 - scaled-object.yaml
 - network-policy.yaml
 - jellyfin-audiomuse-network-policy.yaml
-- flood-transmission-network-policy.yaml
-- netbird-network-resource.yaml
+- jellyfin-arr-network-policy.yaml

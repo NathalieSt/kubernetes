@@ -89,6 +89,9 @@ spec:
     name: backup-dashboard
     namespace: flux-system
   - kind: Kustomization
+    name: bazarr
+    namespace: flux-system
+  - kind: Kustomization
     name: cert-manager
     namespace: flux-system
   - kind: Kustomization
@@ -111,9 +114,6 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: egress-proxy
-    namespace: flux-system
-  - kind: Kustomization
-    name: flood
     namespace: flux-system
   - kind: Kustomization
     name: flux-notifications
@@ -188,6 +188,9 @@ spec:
     name: keda
     namespace: flux-system
   - kind: Kustomization
+    name: lidarr
+    namespace: flux-system
+  - kind: Kustomization
     name: limes
     namespace: flux-system
   - kind: Kustomization
@@ -227,10 +230,19 @@ spec:
     name: orrery
     namespace: flux-system
   - kind: Kustomization
+    name: prowlarr
+    namespace: flux-system
+  - kind: Kustomization
     name: psono-client
     namespace: flux-system
   - kind: Kustomization
     name: psono-server
+    namespace: flux-system
+  - kind: Kustomization
+    name: qbittorrent
+    namespace: flux-system
+  - kind: Kustomization
+    name: radarr
     namespace: flux-system
   - kind: Kustomization
     name: redis
@@ -245,6 +257,15 @@ spec:
     name: rimworld-together
     namespace: flux-system
   - kind: Kustomization
+    name: sabnzbd
+    namespace: flux-system
+  - kind: Kustomization
+    name: seerr
+    namespace: flux-system
+  - kind: Kustomization
+    name: sonarr
+    namespace: flux-system
+  - kind: Kustomization
     name: system-upgrade-controller
     namespace: flux-system
   - kind: Kustomization
@@ -252,9 +273,6 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: tandoor
-    namespace: flux-system
-  - kind: Kustomization
-    name: transmission
     namespace: flux-system
   - kind: Kustomization
     name: valkey
