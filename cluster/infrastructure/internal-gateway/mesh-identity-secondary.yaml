@@ -1,19 +1,11 @@
 ---
 apiVersion: netbird.io/v1alpha1
-kind: Group
-metadata:
-  name: internal-gateway
-  namespace: internal-gateway
-spec:
-  name: internal-gateway
----
-apiVersion: netbird.io/v1alpha1
 kind: SetupKey
 metadata:
-  name: internal-gateway-setup-key
+  name: internal-gateway-secondary-setup-key
   namespace: internal-gateway
 spec:
-  name: internal-gateway
+  name: internal-gateway-secondary
   ephemeral: true
   allowExtraDnsLabels: true
   autoGroups:
@@ -24,46 +16,23 @@ spec:
 apiVersion: netbird.io/v1alpha1
 kind: SidecarProfile
 metadata:
-  name: internal-gateway
+  name: internal-gateway-secondary
   namespace: internal-gateway
 spec:
   setupKeyRef:
-    name: internal-gateway-setup-key
+    name: internal-gateway-secondary-setup-key
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: internal-gateway
+      app.kubernetes.io/name: internal-gateway-secondary
   extraDNSLabels:
-  - audiomuse
-  - auth
-  - backups
-  - changedetection
-  - vscode
-  - daybook
-  - code
-  - 4get
-  - glitchtip
-  - headlamp
-  - healthchecks
-  - helium
-  - docs
-  - home
-  - it-tools
-  - jellyfin
-  - kavita
-  - limes
-  - mail
-  - music
-  - neko
-  - ntfy
-  - omni-tools
-  - orrery
-  - psono
-  - psono-api
-  - redlib
-  - tandoor
-  - vault
-  - dojo
-  - zyme
+  - bazarr
+  - lidarr
+  - prowlarr
+  - qbittorrent
+  - radarr
+  - sabnzbd
+  - requests
+  - sonarr
   containerOverride:
     env:
     - name: NB_DISABLE_UPDATE_SETTINGS

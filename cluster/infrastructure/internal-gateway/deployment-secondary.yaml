@@ -3,22 +3,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: internal-gateway
+    app.kubernetes.io/name: internal-gateway-secondary
     app.kubernetes.io/version: v3.6
-  name: internal-gateway
+  name: internal-gateway-secondary
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: internal-gateway
+      app.kubernetes.io/name: internal-gateway-secondary
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        internal-gateway.nathalie-stiefsohn.eu/dns-labels: 9feca7e7e11c778a65db68718e25523feaa68a4b2824dccef1d381d97bf53fb2
+        internal-gateway.nathalie-stiefsohn.eu/dns-labels: b942c8084c0b49f8d59f139db0ca176475f39e88024c03b5385a3d292d8bd8c7
       labels:
-        app.kubernetes.io/name: internal-gateway
+        app.kubernetes.io/name: internal-gateway-secondary
         app.kubernetes.io/version: v3.6
     spec:
       initContainers:
@@ -127,7 +127,7 @@ spec:
           name: internal-gateway-dynamic
       - name: acme-storage
         persistentVolumeClaim:
-          claimName: internal-gateway-acme
+          claimName: internal-gateway-secondary-acme
       - name: acme-dns
         secret:
           secretName: acme-dns-secret
