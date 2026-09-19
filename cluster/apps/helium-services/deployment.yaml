@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: helium-services
-    app.kubernetes.io/version: 271ce7a
+    app.kubernetes.io/version: ceb2862
   name: helium-services
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: helium-services
-        app.kubernetes.io/version: 271ce7a
+        app.kubernetes.io/version: ceb2862
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -24,7 +24,7 @@ spec:
         - sh
         - -c
         - cp -R /srv/helium/. /static/
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:271ce7a@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:ceb2862@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544
         name: static
         volumeMounts:
         - mountPath: /static
@@ -85,7 +85,7 @@ spec:
           periodSeconds: 10
       - args:
         - extension-proxy
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:271ce7a@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:ceb2862@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544
         name: extension-proxy
         env:
         - name: DENO_SERVE_ADDRESS
@@ -118,7 +118,7 @@ spec:
           runAsNonRoot: true
       - args:
         - ubo
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:271ce7a@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services:ceb2862@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544
         name: ubo
         env:
         - name: DENO_SERVE_ADDRESS
