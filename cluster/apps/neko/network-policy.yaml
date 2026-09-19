@@ -16,8 +16,12 @@ spec:
         matchLabels:
           kubernetes.io/metadata.name: internal-gateway
       podSelector:
-        matchLabels:
-          app.kubernetes.io/name: internal-gateway
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - internal-gateway
+          - internal-gateway-secondary
   - from: []
     ports:
     - port: 52000
