@@ -8,6 +8,7 @@ metadata:
   name: music-library-builder-sync
 spec:
   schedule: 30 4 * * *
+  timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
