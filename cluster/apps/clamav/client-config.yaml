@@ -8,3 +8,51 @@ data:
   clamd.conf: |
     TCPAddr clamav.clamav.svc.cluster.local
     TCPSocket 3310
+  scan.sh: |
+    #!/bin/sh
+    # Usage: scan.sh <client config> <share root> [top-level directory to skip]...
+    #
+    # clamdscan exits 2 on any error, and a file clamd's user may not open is one: other
+    # apps' 0600 files. Those are counted and pass. Anything else that is an error — clamd
+    # unreachable, a scan cut short before its summary — still fails, as does a find (1).
+    config=$1
+    root=$2
+    shift 2
+
+    paths=""
+    for dir in "$root"/*; do
+      skip=""
+      for excluded in "$@"; do
+        [ "$dir" = "$root/$excluded" ] && skip=1
+      done
+      if [ -n "$skip" ]; then
+        echo "Skipping $dir"
+      else
+        paths="$paths $dir"
+      fi
+    done
+
+    # With no paths clamdscan scans its working directory and passes.
+    if [ -z "$paths" ]; then
+      echo "Nothing to scan under $root: is the share mounted?"
+      exit 2
+    fi
+
+    # The exit status travels down the pipe as a last line: sh has no pipefail.
+    # shellcheck disable=SC2086 # top-level entries are namespace names, no spaces
+    {
+      clamdscan --config-file="$config" --multiscan --infected --stdout $paths
+      echo "clamdscan-exit $?"
+    } | awk '
+      /^clamdscan-exit / { rc = $2; next }
+      { print }
+      /: Failed to open file\. ERROR$/ { unreadable++; next }
+      /ERROR/ { other++ }
+      /^Infected files: / { summary = 1 }
+      END {
+        if (rc == 2 && summary && !other) {
+          print unreadable + 0 " files were not readable by clamd and were not scanned."
+          exit 0
+        }
+        exit rc
+      }'
