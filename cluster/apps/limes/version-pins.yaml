@@ -22,7 +22,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "8702648@sha256:1f5198e27115dc174c40690ddb892338e29661239bd77ad81b0f238f74326451",
+          "version": "2e8d4f4@sha256:7c3f75f62fb5a78fbcc1cbe7dcd766436ca9696390340c285781fbeb241043e7",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -143,7 +143,7 @@ data:
           "key": "helium-services",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services",
-          "version": "271ce7a@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544",
+          "version": "ceb2862@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -846,7 +846,7 @@ data:
           "key": "healthchecks",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks",
-          "version": "d4954af@sha256:ae7ed67eae7914aa8fc2eefe37622c9ab47bfd41c4e34433059fbfcb4d68001a",
+          "version": "ceb2862@sha256:c4c4ebbb6b47d28335d3bfebdd0c4aaf518470c2f554a262fcac3c490522cf8c",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
