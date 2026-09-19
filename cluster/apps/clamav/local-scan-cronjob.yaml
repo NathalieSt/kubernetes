@@ -27,13 +27,13 @@ spec:
           enableServiceLinks: false
           containers:
           - args:
-            - --config-file=/etc/clamav-client/clamd.conf
-            - --multiscan
-            - --infected
-            - --stdout
+            - /etc/clamav-client/scan.sh
+            - /etc/clamav-client/clamd.conf
             - /scan/local
+            - vault
+            - vault-backup
             command:
-            - clamdscan
+            - sh
             image: clamav/clamav:1.5.4-debian13-slim
             name: clamav-scan-local
             volumeMounts:
