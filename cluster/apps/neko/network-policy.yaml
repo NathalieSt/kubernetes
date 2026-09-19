@@ -22,10 +22,6 @@ spec:
           values:
           - internal-gateway
           - internal-gateway-secondary
-  - from: []
-    ports:
-    - port: 52000
-      protocol: UDP
   egress:
   - to:
     - namespaceSelector:
@@ -49,8 +45,3 @@ spec:
     ports:
     - port: 8888
       protocol: TCP
-  - to:
-    - ipBlock:
-        cidr: 100.64.0.0/10
-    ports:
-    - protocol: UDP
