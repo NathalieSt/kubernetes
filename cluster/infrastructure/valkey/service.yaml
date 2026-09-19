@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: valkey
-    app.kubernetes.io/version: 8-alpine3.22
+    app.kubernetes.io/version: 9-alpine3.22
   name: valkey
 spec:
   selector:

@@ -36,10 +36,10 @@ spec:
   - audiomuse
   - auth
   - backups
+  - bazarr
   - changedetection
   - vscode
   - daybook
-  - transmission
   - code
   - 4get
   - glitchtip
@@ -51,6 +51,7 @@ spec:
   - it-tools
   - jellyfin
   - kavita
+  - lidarr
   - limes
   - mail
   - music
@@ -58,9 +59,15 @@ spec:
   - ntfy
   - omni-tools
   - orrery
+  - prowlarr
   - psono
   - psono-api
+  - qbittorrent
+  - radarr
   - redlib
+  - sabnzbd
+  - requests
+  - sonarr
   - tandoor
   - vault
   - dojo

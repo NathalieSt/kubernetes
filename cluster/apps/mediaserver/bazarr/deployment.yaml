@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: bazarr
+    app.kubernetes.io/version: v1.6.1-ls364
+  name: bazarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bazarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bazarr
+        app.kubernetes.io/version: v1.6.1-ls364
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: linuxserver/bazarr:v1.6.1-ls364@sha256:d24bd0048c759a468970989e9df11a6b96a7628d556d00f923e60a35ba59237b
+        name: bazarr
+        ports:
+        - containerPort: 6767
+          name: http
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /data
+          name: media
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "10"
+        - name: TZ
+          value: Europe/Vienna
+        - name: POSTGRES_ENABLED
+          value: "true"
+        - name: POSTGRES_HOST
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DATABASE
+          value: bazarr
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        resources:
+          requests:
+            cpu: 50m
+            memory: 192Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        readinessProbe:
+          httpGet:
+            path: /api/system/ping
+            port: 6767
+          periodSeconds: 30
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: bazarr-config
+      - name: media
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc

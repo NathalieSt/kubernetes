@@ -58,6 +58,9 @@ data:
         - backups.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - bazarr.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - changedetection.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -97,6 +100,9 @@ data:
         - kavita.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - lidarr.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - limes.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -118,19 +124,34 @@ data:
         - orrery.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
+        - prowlarr.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - psono-api.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
         - psono.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
+        - qbittorrent.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
+        - radarr.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - redlib.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - tandoor.netbird.nathalie-stiefsohn.eu
+        - requests.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - transmission.netbird.nathalie-stiefsohn.eu
+        - sabnzbd.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
+        - sonarr.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
+        - tandoor.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
         - vault.netbird.nathalie-stiefsohn.eu

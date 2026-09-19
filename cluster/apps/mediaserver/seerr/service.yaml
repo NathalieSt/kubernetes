@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: seerr
+    app.kubernetes.io/version: v3.4.1
+  name: seerr
+spec:
+  selector:
+    app.kubernetes.io/name: seerr
+  ports:
+  - name: http-seerr
+    port: 5055
+    targetPort: 5055

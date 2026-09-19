@@ -14,5 +14,15 @@ resources:
 - glitchtip-db.yaml
 - zyme-db.yaml
 - limes-db.yaml
+- sonarr-main-db.yaml
+- sonarr-log-db.yaml
+- radarr-main-db.yaml
+- radarr-log-db.yaml
+- lidarr-main-db.yaml
+- lidarr-log-db.yaml
+- prowlarr-main-db.yaml
+- prowlarr-log-db.yaml
+- bazarr-db.yaml
+- seerr-db.yaml
 - network-policy.yaml
 - k8up-schedule.yaml

@@ -10,6 +10,5 @@ resources:
 - service.yaml
 - scaled-object.yaml
 - network-policy.yaml
-- netbird-network-resource.yaml
 - k8up-schedule.yaml
 - pennant-configmap.yaml
