@@ -124,7 +124,7 @@ spec:
         - /pennant-out
         - /pennant/pennant.css
         - css/output.*.css
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af@sha256:ae7ed67eae7914aa8fc2eefe37622c9ab47bfd41c4e34433059fbfcb4d68001a
         name: pennant
         volumeMounts:
         - mountPath: /pennant
@@ -144,7 +144,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:d4954af@sha256:ae7ed67eae7914aa8fc2eefe37622c9ab47bfd41c4e34433059fbfcb4d68001a
         name: healthchecks
         ports:
         - containerPort: 8000
