@@ -89,13 +89,17 @@ data:
     fi
   ipleak.sh: |
     #!/bin/sh
-    # VPN leak detector for the qBittorrent/gluetun pod. Emits one JSON object per check so Vector merges
+    # VPN leak detector for a pod behind a gluetun sidecar. Emits one JSON object per check so Vector merges
     # the fields into the log root, making them queryable as `check:ip status:LEAK`.
     #
     #   IPLEAK_INTERVAL          seconds between cycles (default 300); do not set below 60
     #   IPLEAK_EXPECTED_COUNTRY  ISO-3166-2 code the exit node should be in (default NL)
     #   IPLEAK_TIMEOUT           per-request curl timeout in seconds (default 15)
     #   IPLEAK_STARTUP_GRACE     seconds to wait before the first check (default 30)
+    #   IPLEAK_ON_LEAK_URL       POSTed `hashes=all` on every exit-IP LEAK (qBittorrent's
+    #                            torrents/stop); unset, a leak is only logged. Not on a DNS one:
+    #                            that geolocates Cloudflare's anycast resolver, which can answer
+    #                            from next door without anything being wrong
 
     INTERVAL="${IPLEAK_INTERVAL:-300}"
     EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"
@@ -116,6 +120,16 @@ data:
 
     fetch() {
       curl -sfL --max-time "$TIMEOUT" "$1" 2>/dev/null
+    }
+
+    # On every exit-IP LEAK, not once: whatever it stops may have been started again since.
+    on_leak() {
+      [ -n "${IPLEAK_ON_LEAK_URL:-}" ] || return 0
+      if curl -sf --max-time "$TIMEOUT" -o /dev/null --data 'hashes=all' "$IPLEAK_ON_LEAK_URL"; then
+        emit error action STOPPED "" "posted to $IPLEAK_ON_LEAK_URL"
+      else
+        emit error action FAILED "" "could not post to $IPLEAK_ON_LEAK_URL"
+      fi
     }
 
     # --- external IP
@@ -155,6 +169,7 @@ data:
         emit info ip OK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country"
       else
         emit error ip LEAK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country, expected $EXPECTED"
+        on_leak
       fi
     }
 

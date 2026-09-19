@@ -59,6 +59,10 @@ spec:
           value: protonvpn
         - name: VPN_TYPE
           value: openvpn
+        - name: OPENVPN_PROTOCOL
+          value: udp
+        - name: OPENVPN_ENDPOINT_PORT
+          value: "1194"
         - name: OPENVPN_USER
           valueFrom:
             secretKeyRef:
@@ -166,6 +170,8 @@ spec:
           value: NL
         - name: IPLEAK_INTERVAL
           value: "300"
+        - name: IPLEAK_ON_LEAK_URL
+          value: http://127.0.0.1:8080/api/v2/torrents/stop
         resources:
           requests:
             cpu: 10m

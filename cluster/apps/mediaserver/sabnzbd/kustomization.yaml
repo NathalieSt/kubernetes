@@ -5,7 +5,9 @@ metadata:
   name: sabnzbd
 resources:
 - deployment.yaml
+- vault-secrets.yaml
 - scripts-configmap.yaml
 - config-pvc.yaml
 - service.yaml
 - arr-network-policy.yaml
+- egress-network-policy.yaml

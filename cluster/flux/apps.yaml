@@ -67,6 +67,7 @@ spec:
   - name: jellyfin
   - name: main-pg
   - name: csi-driver-nfs
+  - name: gluetun-proxy
   serviceAccountName: flux-bazarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -406,6 +407,7 @@ spec:
   - name: jellyfin
   - name: main-pg
   - name: csi-driver-nfs
+  - name: gluetun-proxy
   serviceAccountName: flux-lidarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -567,6 +569,7 @@ spec:
   - name: jellyfin
   - name: main-pg
   - name: csi-driver-nfs
+  - name: gluetun-proxy
   serviceAccountName: flux-prowlarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -657,6 +660,7 @@ spec:
   - name: jellyfin
   - name: main-pg
   - name: csi-driver-nfs
+  - name: gluetun-proxy
   serviceAccountName: flux-radarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -721,6 +725,7 @@ spec:
   - name: flux-rbac
   - name: jellyfin
   - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
   serviceAccountName: flux-sabnzbd
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -744,6 +749,7 @@ spec:
   - name: jellyfin
   - name: main-pg
   - name: csi-driver-nfs
+  - name: gluetun-proxy
   serviceAccountName: flux-seerr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -767,6 +773,7 @@ spec:
   - name: jellyfin
   - name: main-pg
   - name: csi-driver-nfs
+  - name: gluetun-proxy
   serviceAccountName: flux-sonarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1

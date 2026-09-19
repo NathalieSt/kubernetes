@@ -61,6 +61,10 @@
         "name": "qbittorrent",
         "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "sabnzbd": {
+        "name": "sabnzbd",
+        "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "tandoor": {
         "name": "tandoor",
         "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -300,6 +304,21 @@
         ],
         "token_ttl": 600
       },
+      "sabnzbd": {
+        "backend": "kubernetes",
+        "role_name": "sabnzbd",
+        "bound_service_account_names": [
+          "sabnzbd-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.sabnzbd.name}"
+        ],
+        "token_ttl": 600
+      },
       "tandoor": {
         "backend": "kubernetes",
         "role_name": "tandoor",
@@ -488,6 +507,12 @@
     },
     {
       "from": "vault_kv_secret_v2.qbittorrent_vpn",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.sabnzbd_vpn",
       "lifecycle": {
         "destroy": false
       }
