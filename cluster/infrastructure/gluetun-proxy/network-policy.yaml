@@ -26,3 +26,39 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: helium-services
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: sonarr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: radarr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: lidarr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: prowlarr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: bazarr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: seerr

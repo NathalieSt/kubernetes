@@ -8,3 +8,4 @@ resources:
 - config-pvc.yaml
 - service.yaml
 - arr-network-policy.yaml
+- egress-network-policy.yaml

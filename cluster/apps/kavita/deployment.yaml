@@ -33,7 +33,7 @@ spec:
         - sh
         - /scripts/oidc-appsettings.sh
         - /kavita/config/appsettings.json
-        image: mikefarah/yq:4.47.1@sha256:b9285dd3b0bea3c34d0c54415dd48d767dabd9644d489bd6e253660847b58419
+        image: mikefarah/yq:4.53.6@sha256:cfc4eee658595834ef304eadb0c3ea721f3b7cb6404ad8b7cb909cc5b5145b23
         name: oidc-config
         volumeMounts:
         - mountPath: /kavita/config

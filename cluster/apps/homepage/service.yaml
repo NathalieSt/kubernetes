@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: homepage
-    app.kubernetes.io/version: v2.3.0
+    app.kubernetes.io/version: v2.4.0
   name: homepage
 spec:
   selector:

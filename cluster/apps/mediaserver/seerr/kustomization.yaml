@@ -5,6 +5,8 @@ metadata:
   name: seerr
 resources:
 - deployment.yaml
+- scripts-configmap.yaml
 - config-pvc.yaml
 - service.yaml
 - arr-network-policy.yaml
+- egress-network-policy.yaml
