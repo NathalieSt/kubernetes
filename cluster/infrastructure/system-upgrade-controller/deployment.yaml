@@ -55,7 +55,7 @@ spec:
         - name: SYSTEM_UPGRADE_JOB_IMAGE_PULL_POLICY
           value: IfNotPresent
         - name: SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE
-          value: rancher/kubectl:v1.34.4@sha256:0a0e7a52f82b0fb12c28de2aedcc57e33acf08b5bfb75b099a4d3b958182a1ec
+          value: rancher/kubectl:v1.36.2@sha256:06c7a7a9772737494ae1e0c3af90f1b5385630c147e47c1c7cea92f4bed55fbe
         - name: SYSTEM_UPGRADE_JOB_PRIVILEGED
           value: "true"
         - name: SYSTEM_UPGRADE_JOB_TTL_SECONDS_AFTER_FINISH

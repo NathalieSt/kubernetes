@@ -10,3 +10,4 @@ resources:
 - config-pvc.yaml
 - service.yaml
 - network-policy.yaml
+- egress-network-policy.yaml

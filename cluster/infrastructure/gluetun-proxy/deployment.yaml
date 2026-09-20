@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: gluetun-proxy
-    app.kubernetes.io/version: v3.40
+    app.kubernetes.io/version: v3.41
   name: gluetun-proxy
 spec:
   replicas: 1
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: gluetun-proxy
-        app.kubernetes.io/version: v3.40
+        app.kubernetes.io/version: v3.41
     spec:
       containers:
-      - image: qmcgaw/gluetun:v3.40
+      - image: qmcgaw/gluetun:v3.41
         name: gluetun-proxy
         ports:
         - containerPort: 8888

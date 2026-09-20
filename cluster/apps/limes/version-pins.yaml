@@ -165,7 +165,7 @@ data:
           "key": "homepage",
           "kind": "image",
           "repository": "ghcr.io/gethomepage/homepage",
-          "version": "v2.3.0",
+          "version": "v2.4.0",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -522,7 +522,7 @@ data:
           "key": "kubectl",
           "kind": "image",
           "repository": "rancher/kubectl",
-          "version": "v1.34.4@sha256:0a0e7a52f82b0fb12c28de2aedcc57e33acf08b5bfb75b099a4d3b958182a1ec",
+          "version": "v1.36.2@sha256:06c7a7a9772737494ae1e0c3af90f1b5385630c147e47c1c7cea92f4bed55fbe",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -549,7 +549,7 @@ data:
           "key": "python",
           "kind": "image",
           "repository": "python",
-          "version": "3.13-alpine@sha256:7415fbc3c9e4979cc717d92377ab2bc7b2b4a2af1ac03cc52b5f3f88efedaf3a",
+          "version": "3.14-alpine@sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -567,7 +567,7 @@ data:
           "key": "vault-cli",
           "kind": "image",
           "repository": "hashicorp/vault",
-          "version": "2.0.4@sha256:5be49781ecf78bfe775c5309c6a4d9f4e9e040b6c885c99eb2b12fb69855e1a2",
+          "version": "2.1.1@sha256:47f14a6acb98f48d798a07df7c83f23a6e636e1cf724c5f8ff165cb32667a1e2",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -576,7 +576,7 @@ data:
           "key": "yq",
           "kind": "image",
           "repository": "mikefarah/yq",
-          "version": "4.47.1@sha256:b9285dd3b0bea3c34d0c54415dd48d767dabd9644d489bd6e253660847b58419",
+          "version": "4.53.6@sha256:cfc4eee658595834ef304eadb0c3ea721f3b7cb6404ad8b7cb909cc5b5145b23",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -596,7 +596,7 @@ data:
           "key": "cert-manager",
           "kind": "chart",
           "repository": "oci://quay.io/jetstack/charts/cert-manager",
-          "version": "v1.19.2",
+          "version": "v1.21.2",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -608,7 +608,7 @@ data:
           "kind": "chart",
           "repository": "https://cloudnative-pg.github.io/charts",
           "chart": "cloudnative-pg",
-          "version": "0.26.0",
+          "version": "0.29.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -620,7 +620,7 @@ data:
           "kind": "chart",
           "repository": "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts",
           "chart": "csi-driver-nfs",
-          "version": "4.11.0",
+          "version": "4.13.4",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -664,7 +664,7 @@ data:
           "key": "gluetun-proxy",
           "kind": "image",
           "repository": "qmcgaw/gluetun",
-          "version": "v3.40",
+          "version": "v3.41",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -688,7 +688,7 @@ data:
           "kind": "chart",
           "repository": "https://intel.github.io/helm-charts/",
           "chart": "intel-device-plugins-gpu",
-          "version": "0.34.1",
+          "version": "0.36.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -700,7 +700,7 @@ data:
           "kind": "chart",
           "repository": "https://intel.github.io/helm-charts/",
           "chart": "intel-device-plugins-operator",
-          "version": "0.34.1",
+          "version": "0.36.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -711,7 +711,7 @@ data:
           "key": "internal-gateway",
           "kind": "image",
           "repository": "traefik",
-          "version": "v3.6",
+          "version": "v3.7",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -746,7 +746,7 @@ data:
           "kind": "chart",
           "repository": "https://kedacore.github.io/charts",
           "chart": "keda",
-          "version": "2.17.2",
+          "version": "2.20.2",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -802,7 +802,7 @@ data:
           "kind": "chart",
           "repository": "https://kubernetes-sigs.github.io/node-feature-discovery/charts",
           "chart": "node-feature-discovery",
-          "version": "0.18.3",
+          "version": "0.19.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -825,7 +825,7 @@ data:
           "key": "redis",
           "kind": "image",
           "repository": "redis",
-          "version": "8.2.1",
+          "version": "8.10.1",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -836,7 +836,7 @@ data:
           "key": "redis-exporter",
           "kind": "image",
           "repository": "oliver006/redis_exporter",
-          "version": "v1.90.0",
+          "version": "v1.91.1",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -961,7 +961,7 @@ data:
           "key": "victoria-logs",
           "kind": "chart",
           "repository": "oci://ghcr.io/victoriametrics/helm-charts/victoria-logs-single",
-          "version": "0.12.4",
+          "version": "0.13.9",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -972,7 +972,7 @@ data:
           "key": "victoria-metrics",
           "kind": "chart",
           "repository": "oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack",
-          "version": "0.78.0",
+          "version": "0.92.1",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [

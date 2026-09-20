@@ -61,6 +61,18 @@ spec:
           value: External
         - name: SONARR__LOG__ANALYTICSENABLED
           value: "False"
+        - name: HTTPS_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: HTTP_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: http_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,qbittorrent,qbittorrent.jellyfin,sabnzbd,sabnzbd.jellyfin,jellyfin,jellyfin.jellyfin
+        - name: no_proxy
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,qbittorrent,qbittorrent.jellyfin,sabnzbd,sabnzbd.jellyfin,jellyfin,jellyfin.jellyfin
         resources:
           requests:
             cpu: 50m
