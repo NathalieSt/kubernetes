@@ -77,7 +77,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "8186a73@sha256:62d62119f5be6f1ec6e0bb8da4a561b24be4e3d5fdc016a480a1e947816ec376",
+          "version": "4c0c9ef@sha256:4b52bcefbdfd9cb0a13dfa696274d1e2c1c1c8d12d816da274b64350b6bdb341",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -430,7 +430,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "f11b5e1@sha256:9e8532364c6fb1a785cdb9ec61cee95c097979a47c5836d1edb84b2f090c862c",
+          "version": "0a7c545@sha256:928f96ddd6b11fb2254bb0fc2b8a53408636a2b14165fbc20a5c13f9a907d0b7",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
