@@ -413,7 +413,7 @@ data:
         sabnzbd:
           loadBalancer:
             servers:
-            - url: http://sabnzbd.jellyfin.svc.cluster.local:8080
+            - url: http://sabnzbd.jellyfin.svc.cluster.local:8081
         seerr:
           loadBalancer:
             servers:

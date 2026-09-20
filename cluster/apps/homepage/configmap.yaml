@@ -424,7 +424,7 @@ data:
       - sabnzbd:
           href: https://sabnzbd.netbird.nathalie-stiefsohn.eu
           icon: sabnzbd.png
-          description: Usenet downloads
+          description: Usenet, through the VPN
           namespace: jellyfin
           app: sabnzbd
       - sonarr:

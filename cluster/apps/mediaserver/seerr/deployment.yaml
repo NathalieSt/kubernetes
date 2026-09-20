@@ -29,6 +29,37 @@ spec:
         volumeMounts:
         - mountPath: /app/config
           name: config
+      - command:
+        - sh
+        - /scripts/proxy-set.sh
+        image: mikefarah/yq:4.47.1@sha256:b9285dd3b0bea3c34d0c54415dd48d767dabd9644d489bd6e253660847b58419
+        name: proxy
+        volumeMounts:
+        - mountPath: /app/config
+          name: config
+        - mountPath: /scripts
+          name: scripts
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp
+        env:
+        - name: SETTINGS_FILE
+          value: /app/config/settings.json
+        - name: PROXY_HOST
+          value: gluetun-proxy.gluetun-proxy.svc.cluster.local
+        - name: PROXY_PORT
+          value: "8888"
+        - name: PROXY_BYPASS
+          value: "*.svc,*.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,qbittorrent,qbittorrent.jellyfin,sabnzbd,sabnzbd.jellyfin,jellyfin,jellyfin.jellyfin"
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -85,3 +116,8 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: seerr-config
+      - name: scripts
+        configMap:
+          name: seerr-scripts
+      - name: tmp
+        emptyDir: {}
