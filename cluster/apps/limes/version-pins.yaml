@@ -22,7 +22,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "b2efa82@sha256:e8ab7004ca8c5503ff52ce1a7cec83dce8a8f438e6432de476285114c4635193",
+          "version": "0e254a5@sha256:1014d28b4dc900bfeaa517f3b83ec83710fa9bb2b92e7a3d036e0dd4fca4da76",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -77,7 +77,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "4c0c9ef@sha256:4b52bcefbdfd9cb0a13dfa696274d1e2c1c1c8d12d816da274b64350b6bdb341",
+          "version": "0ca65ba@sha256:e2e6aac9341bc5148631461426e371a452d6ce66ae7d0c80818ea4374c9f6d0e",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -243,7 +243,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "b908ded@sha256:e78ee9eb2a8a06f0e561ca460ca7f737ef1d134bdb94e237e30b96fadba9de14",
+          "version": "a192f7b@sha256:27ace24cf21bbf861410ae57e11f637efbb78fb41f17a024cc8c0cf552906c71",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
