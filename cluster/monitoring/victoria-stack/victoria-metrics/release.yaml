@@ -83,6 +83,24 @@ spec:
       groups:
         etcd:
           create: false
+        k8s.rules.container_cpu_limits:
+          create: false
+        k8s.rules.container_cpu_usage_seconds_total:
+          create: false
+        k8s.rules.container_memory_cache:
+          create: false
+        k8s.rules.container_memory_limits:
+          create: false
+        k8s.rules.container_memory_rss:
+          create: false
+        k8s.rules.container_memory_swap:
+          create: false
+        k8s.rules.container_memory_working_set_bytes:
+          create: false
+        k8s.rules.pod_owner:
+          create: false
+        kube-prometheus-general.rules:
+          create: false
         kubeApiserverAvailability:
           create: false
         kubeApiserverBurnrate:
@@ -318,6 +336,10 @@ spec:
                   - spec
                   - version
         enabled: true
+      metricDenylist:
+      - kube_pod_tolerations
+      - kube_pod_status_qos_class
+      - kube_pod_status_scheduled
       rbac:
         extraRules:
         - apiGroups:
@@ -337,7 +359,7 @@ spec:
           - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
             metricRelabelConfigs:
             - action: drop
-              regex: apiserver_request_duration_seconds_bucket|etcd_request_duration_seconds_bucket|apiserver_request_body_size_bytes_bucket|apiserver_response_sizes_bucket|apiserver_watch_cache_read_wait_seconds_bucket|apiserver_watch_events_sizes_bucket|workqueue_queue_duration_seconds_bucket|workqueue_work_duration_seconds_bucket
+              regex: apiserver_request_duration_seconds_bucket|apiserver_request_body_size_bytes_bucket|apiserver_response_sizes_bucket|apiserver_watch_cache_read_wait_seconds_bucket|apiserver_watch_events_sizes_bucket|apiserver_watch_list_duration_seconds_bucket|apiserver_admission_controller_admission_duration_seconds_bucket|etcd_request_duration_seconds_bucket|etcd_requests_total|workqueue_queue_duration_seconds_bucket|workqueue_work_duration_seconds_bucket|storage_operation_duration_seconds_bucket|kubelet_runtime_operations_duration_seconds_bucket|scheduler_.+_duration_seconds_bucket|rest_client_(request_duration_seconds|request_size_bytes|response_size_bytes|rate_limiter_duration_seconds)_bucket|kubernetes_feature_enabled
               sourceLabels:
               - __name__
             - action: labeldrop
@@ -379,7 +401,7 @@ spec:
             honorLabels: true
             metricRelabelConfigs:
             - action: drop
-              regex: (apiserver|etcd)_.+
+              regex: (apiserver|etcd)_.+|apiserver_request_duration_seconds_bucket|apiserver_request_body_size_bytes_bucket|apiserver_response_sizes_bucket|apiserver_watch_cache_read_wait_seconds_bucket|apiserver_watch_events_sizes_bucket|apiserver_watch_list_duration_seconds_bucket|apiserver_admission_controller_admission_duration_seconds_bucket|etcd_request_duration_seconds_bucket|etcd_requests_total|workqueue_queue_duration_seconds_bucket|workqueue_work_duration_seconds_bucket|storage_operation_duration_seconds_bucket|kubelet_runtime_operations_duration_seconds_bucket|scheduler_.+_duration_seconds_bucket|rest_client_(request_duration_seconds|request_size_bytes|response_size_bytes|rate_limiter_duration_seconds)_bucket|kubernetes_feature_enabled
               sourceLabels:
               - __name__
             - action: labeldrop
@@ -393,6 +415,10 @@ spec:
             bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
             honorLabels: true
             metricRelabelConfigs:
+            - action: drop
+              regex: prober_probe_duration_seconds_bucket
+              sourceLabels:
+              - __name__
             - action: labeldrop
               regex: ^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*
             path: /metrics/probes
@@ -423,6 +449,10 @@ spec:
               regex: /var/lib/kubelet/pods.+
               source_labels:
               - mountpoint
+            - action: drop
+              regex: node_mountstats_nfs_(operations|event)_.+
+              sourceLabels:
+              - __name__
             - action: labeldrop
               regex: ^(feature_node_kubernetes_io|beta_kubernetes_io|gpu_intel_com|intel_feature_node_kubernetes_io|node_kubernetes_io_instance_type).*
             port: metrics
@@ -1093,6 +1123,9 @@ spec:
             memory: 200Mi
         secrets:
         - garage-metrics-token-secret
+    vmalert:
+      spec:
+        evaluationInterval: 2m
     vmsingle:
       spec:
         extraArgs:
@@ -1206,10 +1239,10 @@ spec:
         resources:
           limits:
             cpu: "2"
-            memory: 2Gi
+            memory: 3Gi
           requests:
             cpu: 300m
-            memory: 768Mi
+            memory: 1Gi
         storage:
           storageClassName: nfs-remote
         volumeMounts:
