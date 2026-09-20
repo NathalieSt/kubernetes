@@ -22,7 +22,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "3d274cd@sha256:f25bb2967410f0718f05433a6baf860da49087710b494011e9072f577fd42a2d",
+          "version": "b2efa82@sha256:e8ab7004ca8c5503ff52ce1a7cec83dce8a8f438e6432de476285114c4635193",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -221,7 +221,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "27500af@sha256:7890edf643c839679e1fa6efb348d1b27a07ea6c19f444958490128048c95487",
+          "version": "550cce9@sha256:06e430a26d6a434e318443353d1b2120ead5db9d5887423fba54f167d8ef8c20",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -243,7 +243,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "d14f01d@sha256:5a48b80cf22d29fd7fa1f9440b32fc6c2079ec1c05e5f939e2c92416b0bf23a0",
+          "version": "b908ded@sha256:e78ee9eb2a8a06f0e561ca460ca7f737ef1d134bdb94e237e30b96fadba9de14",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
