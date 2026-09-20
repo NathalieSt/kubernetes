@@ -8,17 +8,6 @@ data:
     {
       "pins": [
         {
-          "key": "audiomuse-ai",
-          "kind": "image",
-          "repository": "ghcr.io/neptunehub/audiomuse-ai",
-          "version": "sha256:9881304597ce7ea4938b670509e227a97aab42dcf8ca349139cebab321f2dd33",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "audiomuse-ai"
-          ]
-        },
-        {
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
@@ -27,17 +16,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "backup-dashboard"
-          ]
-        },
-        {
-          "key": "bazarr",
-          "kind": "image",
-          "repository": "linuxserver/bazarr",
-          "version": "v1.6.1-ls364@sha256:d24bd0048c759a468970989e9df11a6b96a7628d556d00f923e60a35ba59237b",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "bazarr"
           ]
         },
         {
@@ -118,17 +96,6 @@ data:
           ]
         },
         {
-          "key": "gluetun-media",
-          "kind": "image",
-          "repository": "qmcgaw/gluetun",
-          "version": "v3.41",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "gluetun-media"
-          ]
-        },
-        {
           "key": "grype",
           "kind": "image",
           "repository": "anchore/grype",
@@ -154,7 +121,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "b7df213@sha256:f07dd73969d3476f963ce877a255e1fa017d6c7e696326dbcd605d3737ced542",
+          "version": "d25be64@sha256:3fd9c462f0bce3c30231e9b28366bb3c9c453ef966c7eb78f34fc82757c30ced",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -184,18 +151,6 @@ data:
           ]
         },
         {
-          "key": "jellyfin",
-          "kind": "chart",
-          "repository": "https://jellyfin.github.io/jellyfin-helm",
-          "chart": "jellyfin",
-          "version": "3.2.0",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "jellyfin"
-          ]
-        },
-        {
           "key": "kavita",
           "kind": "image",
           "repository": "jvmilazz0/kavita",
@@ -204,17 +159,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "kavita"
-          ]
-        },
-        {
-          "key": "lidarr",
-          "kind": "image",
-          "repository": "linuxserver/lidarr",
-          "version": "3.1.0.4875-ls41@sha256:8ab0fd370b604ae034d9a9c261a9d8d873bece33d9736852e7ce4f3566e4a35d",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "lidarr"
           ]
         },
         {
@@ -237,17 +181,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "mail"
-          ]
-        },
-        {
-          "key": "music-library-builder",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "2184424@sha256:055beca73a4620c9fd444d78639a9d3999df80ef5a04a2d3036fd7341991efdf",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "music-library-builder"
           ]
         },
         {
@@ -284,17 +217,6 @@ data:
           ]
         },
         {
-          "key": "prowlarr",
-          "kind": "image",
-          "repository": "linuxserver/prowlarr",
-          "version": "2.6.5.5623-ls161@sha256:c96b56d94d116a9f4de94bc23d3381689492e6c3cfb7435320e8d982e406f99a",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "prowlarr"
-          ]
-        },
-        {
           "key": "psono-client",
           "kind": "image",
           "repository": "psono/psono-client",
@@ -314,28 +236,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "psono-server"
-          ]
-        },
-        {
-          "key": "qbittorrent",
-          "kind": "image",
-          "repository": "linuxserver/qbittorrent",
-          "version": "5.2.3_v2.0.14-ls476@sha256:2be038f3421f60f62e8e4bf201f66f385b68e4fbc9ed3ab79051069ea22e2650",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "qbittorrent"
-          ]
-        },
-        {
-          "key": "radarr",
-          "kind": "image",
-          "repository": "linuxserver/radarr",
-          "version": "6.4.4.10685-ls317@sha256:c960f2b52ec6542dbe6707c5a21e696a7c74fd8b17997454f4d10a55dacee133",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "radarr"
           ]
         },
         {
@@ -369,39 +269,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "mail"
-          ]
-        },
-        {
-          "key": "sabnzbd",
-          "kind": "image",
-          "repository": "linuxserver/sabnzbd",
-          "version": "5.1.3-ls273@sha256:948ea3dc45d68943ec14b33ba37ffa1488da3e9837bf3ca0f75621e971614d85",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "sabnzbd"
-          ]
-        },
-        {
-          "key": "seerr",
-          "kind": "image",
-          "repository": "ghcr.io/seerr-team/seerr",
-          "version": "v3.4.1@sha256:f4768de5f616248d723e05891f3345a1402123775d03bf0890dbfedc0831bda1",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "seerr"
-          ]
-        },
-        {
-          "key": "sonarr",
-          "kind": "image",
-          "repository": "linuxserver/sonarr",
-          "version": "4.0.20.3014-ls325@sha256:a5c1a5fecbef946927ab90ad68df319ac5fe644057e5fc18cd993f01ac07b2b2",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "sonarr"
           ]
         },
         {
@@ -911,6 +778,139 @@ data:
           "inVersionsFile": true,
           "generators": [
             "vault-secrets-operator"
+          ]
+        },
+        {
+          "key": "audiomuse-ai",
+          "kind": "image",
+          "repository": "ghcr.io/neptunehub/audiomuse-ai",
+          "version": "sha256:9881304597ce7ea4938b670509e227a97aab42dcf8ca349139cebab321f2dd33",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "audiomuse-ai"
+          ]
+        },
+        {
+          "key": "bazarr",
+          "kind": "image",
+          "repository": "linuxserver/bazarr",
+          "version": "v1.6.1-ls364@sha256:d24bd0048c759a468970989e9df11a6b96a7628d556d00f923e60a35ba59237b",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "bazarr"
+          ]
+        },
+        {
+          "key": "gluetun-media",
+          "kind": "image",
+          "repository": "qmcgaw/gluetun",
+          "version": "v3.41",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "gluetun-media"
+          ]
+        },
+        {
+          "key": "jellyfin",
+          "kind": "chart",
+          "repository": "https://jellyfin.github.io/jellyfin-helm",
+          "chart": "jellyfin",
+          "version": "3.2.0",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "jellyfin"
+          ]
+        },
+        {
+          "key": "lidarr",
+          "kind": "image",
+          "repository": "linuxserver/lidarr",
+          "version": "3.1.0.4875-ls41@sha256:8ab0fd370b604ae034d9a9c261a9d8d873bece33d9736852e7ce4f3566e4a35d",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "lidarr"
+          ]
+        },
+        {
+          "key": "music-library-builder",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
+          "version": "2184424@sha256:055beca73a4620c9fd444d78639a9d3999df80ef5a04a2d3036fd7341991efdf",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "music-library-builder"
+          ]
+        },
+        {
+          "key": "prowlarr",
+          "kind": "image",
+          "repository": "linuxserver/prowlarr",
+          "version": "2.6.5.5623-ls161@sha256:c96b56d94d116a9f4de94bc23d3381689492e6c3cfb7435320e8d982e406f99a",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "prowlarr"
+          ]
+        },
+        {
+          "key": "qbittorrent",
+          "kind": "image",
+          "repository": "linuxserver/qbittorrent",
+          "version": "5.2.3_v2.0.14-ls476@sha256:2be038f3421f60f62e8e4bf201f66f385b68e4fbc9ed3ab79051069ea22e2650",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "qbittorrent"
+          ]
+        },
+        {
+          "key": "radarr",
+          "kind": "image",
+          "repository": "linuxserver/radarr",
+          "version": "6.4.4.10685-ls317@sha256:c960f2b52ec6542dbe6707c5a21e696a7c74fd8b17997454f4d10a55dacee133",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "radarr"
+          ]
+        },
+        {
+          "key": "sabnzbd",
+          "kind": "image",
+          "repository": "linuxserver/sabnzbd",
+          "version": "5.1.3-ls273@sha256:948ea3dc45d68943ec14b33ba37ffa1488da3e9837bf3ca0f75621e971614d85",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "sabnzbd"
+          ]
+        },
+        {
+          "key": "seerr",
+          "kind": "image",
+          "repository": "ghcr.io/seerr-team/seerr",
+          "version": "v3.4.1@sha256:f4768de5f616248d723e05891f3345a1402123775d03bf0890dbfedc0831bda1",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "seerr"
+          ]
+        },
+        {
+          "key": "sonarr",
+          "kind": "image",
+          "repository": "linuxserver/sonarr",
+          "version": "4.0.20.3014-ls325@sha256:a5c1a5fecbef946927ab90ad68df319ac5fe644057e5fc18cd993f01ac07b2b2",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "sonarr"
           ]
         },
         {

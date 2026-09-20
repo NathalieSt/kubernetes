@@ -112,7 +112,7 @@ spec:
         - name: VPN_PORT_FORWARDING_DOWN_COMMAND
           value: /bin/sh -c 'wget -O- -nv --retry-connrefused --post-data "json={\"listen_port\":0,\"current_network_interface\":\"lo\"}" http://127.0.0.1:8080/api/v2/app/setPreferences'
         - name: FIREWALL_INPUT_PORTS
-          value: 8080,8090,8081
+          value: 8080,8090,9102,8081
         - name: FIREWALL_OUTBOUND_SUBNETS
           value: 10.42.0.0/16
         - name: TZ
@@ -218,20 +218,38 @@ spec:
             memory: 64Mi
       - command:
         - /bin/sh
-        - /scripts/ipleak.sh
+        - /vpn-probe/ipleak.sh
         image: curlimages/curl:8.22.0
         name: ipleak
         volumeMounts:
+        - mountPath: /vpn-probe
+          name: vpn-probe-scripts
+          readOnly: true
+        - mountPath: /run/vpn-probe
+          name: vpn-probe-state
         - mountPath: /scripts
           name: scripts
+          readOnly: true
+        - mountPath: /sabnzbd-config
+          name: sabnzbd-config
           readOnly: true
         env:
         - name: IPLEAK_EXPECTED_COUNTRY
           value: NL
         - name: IPLEAK_INTERVAL
           value: "300"
-        - name: IPLEAK_ON_LEAK_URL
+        - name: IPLEAK_METRICS_FILE
+          value: /run/vpn-probe/metrics.txt
+        - name: IPLEAK_LATCH_FILE
+          value: /run/vpn-probe/leak
+        - name: IPLEAK_ON_LEAK_SCRIPT
+          value: /scripts/stop-downloads.sh
+        - name: QBITTORRENT_URL
           value: http://127.0.0.1:8080/api/v2/torrents/stop
+        - name: SABNZBD_URL
+          value: http://127.0.0.1:8081/api
+        - name: SABNZBD_INI
+          value: /sabnzbd-config/sabnzbd.ini
         resources:
           requests:
             cpu: 10m
@@ -239,6 +257,29 @@ spec:
           limits:
             cpu: 100m
             memory: 64Mi
+      - command:
+        - httpd
+        - -f
+        - -p
+        - "9102"
+        - -h
+        - /run/vpn-probe
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: ipleak-metrics
+        ports:
+        - containerPort: 9102
+          name: vpn-metrics
+        volumeMounts:
+        - mountPath: /run/vpn-probe
+          name: vpn-probe-state
+          readOnly: true
+        resources:
+          requests:
+            cpu: 5m
+            memory: 8Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
       volumes:
       - name: config
         persistentVolumeClaim:
@@ -252,3 +293,8 @@ spec:
       - name: scripts
         configMap:
           name: qbittorrent-scripts
+      - name: vpn-probe-scripts
+        configMap:
+          name: qbittorrent-vpn-probe
+      - name: vpn-probe-state
+        emptyDir: {}

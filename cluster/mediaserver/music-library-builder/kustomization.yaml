@@ -9,3 +9,4 @@ resources:
 - service.yaml
 - cronjob.yaml
 - vault-secrets.yaml
+- egress-network-policy.yaml

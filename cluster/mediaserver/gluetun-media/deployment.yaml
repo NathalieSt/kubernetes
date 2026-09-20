@@ -3,20 +3,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: gluetun-proxy
+    app.kubernetes.io/name: gluetun-media
     app.kubernetes.io/version: v3.41
-  name: gluetun-proxy
+  name: gluetun-media
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: gluetun-proxy
+      app.kubernetes.io/name: gluetun-media
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: gluetun-proxy
+        app.kubernetes.io/name: gluetun-media
         app.kubernetes.io/version: v3.41
     spec:
       dnsPolicy: None
@@ -25,10 +25,12 @@ spec:
         - 127.0.0.1
       containers:
       - image: qmcgaw/gluetun:v3.41
-        name: gluetun-proxy
+        name: gluetun-media
         ports:
         - containerPort: 8888
-          name: gluetun-proxy
+          name: http-proxy
+        - containerPort: 8000
+          name: control
         env:
         - name: VPN_SERVICE_PROVIDER
           value: protonvpn
@@ -44,22 +46,26 @@ spec:
           valueFrom:
             secretKeyRef:
               key: user
-              name: gluetun-proxy-vpn
+              name: gluetun-media-vpn
         - name: OPENVPN_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: gluetun-proxy-vpn
+              name: gluetun-media-vpn
         - name: SERVER_COUNTRIES
-          value: Austria,Finland,Malta
+          value: Austria,Bulgaria,Croatia,Czech Republic,Estonia,Finland,Greece,Hungary,Latvia,Lithuania,Luxembourg,Malta,Netherlands,Portugal,Serbia,Slovakia,Slovenia
         - name: FIREWALL_INPUT_PORTS
-          value: 8888,9101
+          value: 8888,8000,9101
         - name: FIREWALL_OUTBOUND_SUBNETS
           value: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.42.0.0/15
         - name: HTTPPROXY
           value: "on"
         - name: HTTPPROXY_STEALTH
           value: "on"
+        - name: HTTP_CONTROL_SERVER_ADDRESS
+          value: :8000
+        - name: HTTP_CONTROL_SERVER_LOG
+          value: "off"
         securityContext:
           capabilities:
             add:
@@ -92,7 +98,7 @@ spec:
           name: vpn-probe-state
         env:
         - name: IPLEAK_EXPECTED_COUNTRY
-          value: AT,FI,MT
+          value: AT,BG,HR,CZ,EE,FI,GR,HU,LV,LT,LU,MT,NL,PT,RS,SK,SI
         - name: IPLEAK_INTERVAL
           value: "300"
         - name: IPLEAK_METRICS_FILE
@@ -130,6 +136,6 @@ spec:
       volumes:
       - name: vpn-probe-scripts
         configMap:
-          name: gluetun-proxy-vpn-probe
+          name: gluetun-media-vpn-probe
       - name: vpn-probe-state
         emptyDir: {}
