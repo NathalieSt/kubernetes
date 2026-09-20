@@ -276,7 +276,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "a83b177@sha256:250ff654489766a9c7b90f3f124a043e3bcde8cd899aaf62c66629aec055cc4f",
+          "version": "75de75a@sha256:11e55fee7ed52d3c8935cf636a74f59057af985974ed97ceeccf1a7ff44b673b",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
