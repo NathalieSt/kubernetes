@@ -121,7 +121,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "b7df213@sha256:f07dd73969d3476f963ce877a255e1fa017d6c7e696326dbcd605d3737ced542",
+          "version": "d25be64@sha256:3fd9c462f0bce3c30231e9b28366bb3c9c453ef966c7eb78f34fc82757c30ced",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -209,7 +209,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "df4afdc@sha256:e6493c4242d614bb99c46a3b770ff51b0d589c7f50928b9f81d2706eafc61fd0",
+          "version": "feabe72@sha256:cd3b7a07abd0e5eb9069aed4a38e32c76899c9617ac48f8a2a057c7da0ea3217",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
