@@ -31,3 +31,10 @@ spec:
     ports:
     - port: 8090
       protocol: TCP
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 9102
+      protocol: TCP

@@ -1,0 +1,138 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbittorrent-scripts
+data:
+  ini-set.sh: |
+    #!/bin/sh
+    # Pins the keys that must agree with the cluster and leaves everything the app or its UI
+    # wrote. Runs as root in an init container, before the app reads its config; values come
+    # from the environment, never from the command line.
+    #
+    #   INI_FILE       the file; created, with its directory, when missing
+    #   INI_KEYS       one `[Section]key=value` per line; the first `=` ends the key
+    #   INI_COMPACT    `true` writes `key=value` (qBittorrent) rather than `key = value`
+    #   INI_OWNER      uid:gid to hand the file and INI_DIRS to
+    #   INI_DIRS       space-separated directories to create
+    set -eu
+
+    mkdir -p "$(dirname "$INI_FILE")"
+    [ -f "$INI_FILE" ] || : > "$INI_FILE"
+
+    for dir in ${INI_DIRS:-}; do
+      mkdir -p "$dir"
+      chown "$INI_OWNER" "$dir"
+    done
+
+    awk '
+    function flush(section,  k) {
+      for (k in want) {
+        if (sectionOf[k] == section && !(k in done)) print keyOf[k] sep want[k]
+      }
+      flushed[section] = 1
+    }
+    BEGIN {
+      sep = ENVIRON["INI_COMPACT"] == "true" ? "=" : " = "
+      n = split(ENVIRON["INI_KEYS"], lines, "\n")
+      for (i = 1; i <= n; i++) {
+        line = lines[i]
+        if (line == "") continue
+        close_at = index(line, "]")
+        section = substr(line, 2, close_at - 2)
+        rest = substr(line, close_at + 1)
+        eq = index(rest, "=")
+        id = section SUBSEP substr(rest, 1, eq - 1)
+        want[id] = substr(rest, eq + 1)
+        sectionOf[id] = section
+        keyOf[id] = substr(rest, 1, eq - 1)
+        sections[section] = 1
+      }
+      current = ""
+    }
+    /^\[/ {
+      if (current in sections) flush(current)
+      current = $0
+      sub(/^\[/, "", current)
+      sub(/\].*$/, "", current)
+      print
+      next
+    }
+    {
+      eq = index($0, "=")
+      if (eq > 0 && (current in sections)) {
+        key = substr($0, 1, eq - 1)
+        gsub(/^[ \t]+|[ \t]+$/, "", key)
+        id = current SUBSEP key
+        if (id in want) {
+          print key sep want[id]
+          done[id] = 1
+          next
+        }
+      }
+      print
+    }
+    END {
+      if (current in sections) flush(current)
+      for (s in sections) {
+        if (!(s in flushed)) {
+          print "[" s "]"
+          flush(s)
+        }
+      }
+    }
+    ' "$INI_FILE" > "$INI_FILE.new"
+    mv "$INI_FILE.new" "$INI_FILE"
+
+    if [ -n "${INI_OWNER:-}" ]; then
+      chown "$INI_OWNER" "$INI_FILE"
+    fi
+  stop-downloads.sh: |
+    #!/bin/sh
+    # Run by ipleak.sh as IPLEAK_ON_LEAK_SCRIPT when the exit IP leaves the expected country.
+    # Stops both downloaders in the qBittorrent pod. Both are on loopback, which is why neither
+    # needs a credential from us: qBittorrent has WebUI\LocalHostAuth off, and SABnzbd's key is
+    # in the config file this mounts read-only.
+    #
+    #   QBITTORRENT_URL  torrents/stop endpoint, POSTed `hashes=all`
+    #   SABNZBD_URL      SABnzbd's api endpoint, called with `mode=pause`
+    #   SABNZBD_INI      sabnzbd.ini, read for `api_key`
+    #
+    # Every step fails soft and this always exits 0. The caller latches and exits non-zero
+    # whatever happens here, so the alert fires either way — and a partial stop that reported
+    # itself as a total failure would be the worse outcome of the two.
+
+    TIMEOUT="${IPLEAK_TIMEOUT:-15}"
+
+    log() {
+      printf '{"ts":"%s","level":"%s","check":"action","status":"%s","target":"%s","message":"action/%s %s"}\n' \
+        "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" "$2" "$3" "$2" "$4"
+    }
+
+    # qBittorrent: stop every torrent. This is what actually matters on a leak — a torrent swarm
+    # shows the exit address to every peer in it, where usenet shows it only to the provider.
+    if [ -n "${QBITTORRENT_URL:-}" ]; then
+      if curl -sf --max-time "$TIMEOUT" -o /dev/null --data 'hashes=all' "$QBITTORRENT_URL"; then
+        log error STOPPED qbittorrent "stopped every torrent"
+      else
+        log error FAILED qbittorrent "could not POST $QBITTORRENT_URL"
+      fi
+    fi
+
+    # SABnzbd: pause the queue. `mode=pause` is the global pause; `mode=queue&name=pause` answers
+    # {"status":false} without pausing anything, which is the sort of success-shaped failure worth
+    # only finding out about once.
+    if [ -n "${SABNZBD_URL:-}" ] && [ -n "${SABNZBD_INI:-}" ]; then
+      key="$(sed -n 's/^api_key *= *\([^ ]*\) *$/\1/p' "$SABNZBD_INI" 2>/dev/null | head -n 1)"
+      if [ -z "$key" ]; then
+        # Before SABnzbd's first start there is no ini and no queue to pause either.
+        log error SKIPPED sabnzbd "no api_key in $SABNZBD_INI"
+      elif curl -sf --max-time "$TIMEOUT" "$SABNZBD_URL?mode=pause&apikey=$key&output=json" |
+        grep -q '"status":[[:space:]]*true'; then
+        log error STOPPED sabnzbd "paused the queue"
+      else
+        log error FAILED sabnzbd "could not pause via $SABNZBD_URL"
+      fi
+    fi
+
+    exit 0
