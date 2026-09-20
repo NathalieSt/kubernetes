@@ -22,7 +22,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "b2efa82@sha256:e8ab7004ca8c5503ff52ce1a7cec83dce8a8f438e6432de476285114c4635193",
+          "version": "0e254a5@sha256:1014d28b4dc900bfeaa517f3b83ec83710fa9bb2b92e7a3d036e0dd4fca4da76",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -77,7 +77,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "4c0c9ef@sha256:4b52bcefbdfd9cb0a13dfa696274d1e2c1c1c8d12d816da274b64350b6bdb341",
+          "version": "0ca65ba@sha256:e2e6aac9341bc5148631461426e371a452d6ce66ae7d0c80818ea4374c9f6d0e",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -243,7 +243,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "b908ded@sha256:e78ee9eb2a8a06f0e561ca460ca7f737ef1d134bdb94e237e30b96fadba9de14",
+          "version": "2184424@sha256:055beca73a4620c9fd444d78639a9d3999df80ef5a04a2d3036fd7341991efdf",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -419,7 +419,7 @@ data:
           "key": "vim-dojo",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "fe7b819@sha256:9a7637210376ff0fd30cd28ec9f111981df3d5b52fe197d7113b1e74fdbecd6b",
+          "version": "4c9830d@sha256:f5cc2097f39fa93b3453becf9010cd2c8f4052ceb2506bc5edb1743b8febfef5",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -430,7 +430,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "0a7c545@sha256:928f96ddd6b11fb2254bb0fc2b8a53408636a2b14165fbc20a5c13f9a907d0b7",
+          "version": "cf6fce0@sha256:0c4a7a59300dd6616bad706dc94ee2fef3f5757b5bb04a767f4f450a749344e5",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
