@@ -45,3 +45,13 @@ spec:
     ports:
     - port: 8888
       protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-gateway
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-gateway
+    ports:
+    - port: 443
+      protocol: TCP

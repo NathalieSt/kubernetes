@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: neko
-    app.kubernetes.io/version: sha256_5596a0571437a
+    app.kubernetes.io/version: latest
   name: neko
 spec:
   replicas: 1
@@ -17,8 +17,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: neko
-        app.kubernetes.io/version: sha256_5596a0571437a
+        app.kubernetes.io/version: latest
     spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
       initContainers:
       - command:
         - sh
@@ -120,7 +122,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: ghcr.io/m1k1o/neko/firefox@sha256:5596a0571437a96937426a7060b144912414028293c854412382e8449842a60e
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium:latest
         name: neko
         ports:
         - containerPort: 8080
@@ -129,9 +131,12 @@ spec:
           name: webrtc
           protocol: UDP
         volumeMounts:
-        - mountPath: /usr/lib/firefox/distribution/policies.json
-          subPath: policies.json
-          name: firefox-policies-volume
+        - mountPath: /etc/chromium/policies/managed
+          name: browser-config-volume
+          readOnly: true
+        - mountPath: /opt/helium/initial_preferences
+          subPath: initial_preferences
+          name: browser-config-volume
           readOnly: true
         - mountPath: /dev/shm
           name: shm-volume
@@ -148,6 +153,14 @@ spec:
           value: "[{\"urls\":[\"turn:neko.netbird.nathalie-stiefsohn.eu:3478?transport=tcp\"],\"username\":\"neko\",\"credential\":\"neko-turn\"}]"
         - name: NEKO_DESKTOP_SCREEN
           value: 1920x1080@30
+        - name: NEKO_CAPTURE_VIDEO_CODEC
+          value: vp8
+        - name: NEKO_CAPTURE_VIDEO_IDS
+          value: main
+        - name: NEKO_CAPTURE_VIDEO_PIPELINES
+          value: "{\"main\":{\"fps\":\"20\",\"gst_encoder\":\"vp8enc\",\"show_pointer\":false,\"gst_params\":{\"target-bitrate\":\"1996800\",\"cpu-used\":\"16\",\"end-usage\":\"cbr\",\"threads\":\"4\",\"deadline\":\"1\",\"undershoot\":\"95\",\"buffer-size\":\"12288\",\"buffer-initial-size\":\"6144\",\"buffer-optimal-size\":\"9216\",\"keyframe-max-dist\":\"25\",\"min-quantizer\":\"4\",\"max-quantizer\":\"20\"}},\"legacy\":{\"fps\":\"20\",\"gst_encoder\":\"vp8enc\",\"show_pointer\":true,\"gst_params\":{\"target-bitrate\":\"1996800\",\"cpu-used\":\"16\",\"end-usage\":\"cbr\",\"threads\":\"4\",\"deadline\":\"1\",\"undershoot\":\"95\",\"buffer-size\":\"12288\",\"buffer-initial-size\":\"6144\",\"buffer-optimal-size\":\"9216\",\"keyframe-max-dist\":\"25\",\"min-quantizer\":\"4\",\"max-quantizer\":\"20\"}}}"
+        - name: HELIUM_EXTRA_FLAGS
+          value: --host-resolver-rules="MAP helium.netbird.nathalie-stiefsohn.eu internal-gateway.internal-gateway.svc.cluster.local"
         - name: NEKO_MEMBER_PROVIDER
           value: multiuser
         - name: NEKO_MEMBER_MULTIUSER_USER_PASSWORD
@@ -234,9 +247,12 @@ spec:
       - name: neko-secret-guard-volume
         secret:
           secretName: neko-secret
-      - name: firefox-policies-volume
+      - name: browser-config-volume
         configMap:
-          name: neko-firefox-policies
+          name: neko-browser-config
+          items:
+          - key: policies.json
+            path: policies.json
       - name: shm-volume
         emptyDir:
           medium: Memory
