@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: daybook
-    app.kubernetes.io/version: 8186a73
+    app.kubernetes.io/version: 4c0c9ef
   name: daybook
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: daybook
-        app.kubernetes.io/version: 8186a73
+        app.kubernetes.io/version: 4c0c9ef
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -34,7 +34,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook:8186a73@sha256:62d62119f5be6f1ec6e0bb8da4a561b24be4e3d5fdc016a480a1e947816ec376
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook:4c0c9ef@sha256:4b52bcefbdfd9cb0a13dfa696274d1e2c1c1c8d12d816da274b64350b6bdb341
         name: daybook
         ports:
         - containerPort: 8080
