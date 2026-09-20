@@ -187,7 +187,7 @@ data:
           "key": "neko",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium",
-          "version": "latest",
+          "version": "8342ddb@sha256:275f535704f5f23a2d5f23b03d71309afa47951c17f5d3b01c565cf55380a370",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
