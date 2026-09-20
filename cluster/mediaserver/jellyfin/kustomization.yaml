@@ -11,5 +11,8 @@ resources:
 - pvc.yaml
 - scaled-object.yaml
 - network-policy.yaml
+- gateway-ingress-network-policy.yaml
+- metrics-network-policy.yaml
+- egress-network-policy.yaml
 - jellyfin-audiomuse-network-policy.yaml
 - jellyfin-arr-network-policy.yaml

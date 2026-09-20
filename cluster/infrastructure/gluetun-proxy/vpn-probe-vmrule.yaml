@@ -1,0 +1,50 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vpn-probe-rules
+spec:
+  groups:
+  - name: vpn-probe
+    interval: 1m
+    rules:
+    - alert: VpnExitCountryUnexpected
+      expr: vpn_probe_country_ok{check="ip"} == 0
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        description: "The tunnel in {{ $labels.namespace }}/{{ $labels.pod }} is up and carrying traffic, but out of the wrong country — see `vpn_probe_exit_info` for which. Nothing left the house: the egress policy admits nothing but the VPN either way. For qBittorrent this will already have stopped the torrents and latched."
+        summary: "{{ $labels.job }} is exiting from a country it was not configured for"
+    - alert: VpnProbeStale
+      expr: time() - vpn_probe_last_check_timestamp_seconds{check="ip"} > 1800
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: No exit-IP verdict from {{ $labels.namespace }}/{{ $labels.pod }} for over 30 minutes, against a 5 minute interval. The tunnel may well be fine; what is certain is that nothing is watching it. `kubectl logs -c ipleak` is the first thing to read.
+        summary: "{{ $labels.job }}'s VPN leak detector has stopped checking"
+    - alert: VpnExitUnverified
+      expr: vpn_probe_check_completed{check="ip"} == 0
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        description: Every geolocation provider failed from {{ $labels.namespace }}/{{ $labels.pod }} for half an hour. Usually the tunnel is down, which is safe but not working; occasionally it is all three providers rate-limiting at once.
+        summary: "{{ $labels.job }}'s exit IP cannot be verified"
+    - alert: VpnLeakLatched
+      expr: vpn_probe_latched == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: The detector in {{ $labels.namespace }}/{{ $labels.pod }} found an exit outside the expected countries, stopped what the pod was doing and latched. It stays latched until the pod is deleted, which is meant to be a decision rather than a retry.
+        summary: "{{ $labels.job }} has latched a VPN leak and stopped"
+    - alert: VpnDnsExitUnexpected
+      expr: vpn_probe_country_ok{check="dns"} == 0
+      for: 45m
+      labels:
+        severity: warning
+      annotations:
+        description: The resolver answering for {{ $labels.namespace }}/{{ $labels.pod }} has been egressing outside the expected countries for 45 minutes, which is long enough not to be an anycast node answering from somewhere convenient. It suggests lookups are leaving outside the tunnel.
+        summary: "{{ $labels.job }}'s DNS is resolving from an unexpected country"

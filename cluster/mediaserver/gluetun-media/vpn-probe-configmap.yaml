@@ -1,0 +1,320 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gluetun-media-vpn-probe
+data:
+  ipleak.sh: |
+    #!/bin/sh
+    # VPN leak detector for a pod behind gluetun. Runs beside all three tunnels — the qBittorrent
+    # pod's sidecar, gluetun-media and gluetun-proxy — because a tunnel that is up and carrying
+    # traffic out of the wrong country looks exactly like a healthy one to every other check in
+    # this cluster.
+    #
+    # It reports twice over. One JSON object per check on stdout, so Vector merges the fields into
+    # the log root and `check:ip status:LEAK` is queryable; and a Prometheus text file rewritten
+    # every cycle, served by the httpd container beside this one. The file is the half that can be
+    # watched over time: a log line says a leak happened, `vpn_probe_country_ok` says how long it
+    # lasted, and `vpn_probe_last_check_timestamp_seconds` going stale says the detector itself
+    # stopped — which no amount of log querying can tell you, because a detector that is not
+    # running writes nothing and nothing is what a quiet week looks like too.
+    #
+    #   IPLEAK_INTERVAL          seconds between cycles (default 300); do not set below 60
+    #   IPLEAK_EXPECTED_COUNTRY  ISO-3166-2 codes the exit may be in, comma-separated (default NL).
+    #                            A list, because gluetun picks a random server from SERVER_COUNTRIES
+    #                            and the two standalone tunnels are given several
+    #   IPLEAK_TIMEOUT           per-request curl timeout in seconds (default 15)
+    #   IPLEAK_STARTUP_GRACE     seconds to wait before the first check (default 30)
+    #   IPLEAK_METRICS_FILE      where to write the Prometheus text; unset, only the log is emitted.
+    #                            Must end in .txt: busybox httpd sets Content-Type from the
+    #                            extension and sends none at all without one
+    #   IPLEAK_ON_LEAK_SCRIPT    run on every exit-IP LEAK, to stop whatever the pod is doing;
+    #                            unset, a leak is only reported. Not run on a DNS one: that
+    #                            geolocates Cloudflare's anycast resolver, which can answer from
+    #                            next door without anything being wrong. What to stop is
+    #                            pod-specific and lives in that script, so this one stays the
+    #                            same detector for any tunnelled pod
+    #   IPLEAK_LATCH_FILE        where an exit-IP LEAK is recorded before this script exits
+    #                            non-zero, and what makes every later start exit at once. Unset,
+    #                            a leak is reported and the loop carries on — see latch_or_continue
+    #
+    # Latching is for the qBittorrent pod alone. There, an exit-IP LEAK writes the latch and exits
+    # non-zero, and every restart re-stops and exits again while the latch is there — a deliberate
+    # CrashLoopBackOff, because nothing in that pod can reach ntfy or the metrics store to say so
+    # itself (the egress policy admits UDP 1194 and nothing else, and dnsPolicy None leaves no way
+    # to resolve a cluster name), so restarting was the only signal available from inside. It still
+    # is for the *stopping*; the metrics file now carries the reporting, over the pod's own scrape
+    # port, which is ingress and therefore allowed. The latch lives on an emptyDir, so recreating
+    # the pod clears it and a human deciding the leak is over is what starts the detector again.
+    #
+    # The two standalone tunnels deliberately pass no latch file and no leak script: a wrong
+    # country there is not a home-address exposure — the egress policy stands between those pods
+    # and the house either way — and crashlooping gluetun-proxy would take the whole arr stack,
+    # 4get, neko and helium-services down with it. They report; they do not act.
+
+    INTERVAL="${IPLEAK_INTERVAL:-300}"
+    EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"
+    TIMEOUT="${IPLEAK_TIMEOUT:-15}"
+    GRACE="${IPLEAK_STARTUP_GRACE:-30}"
+
+    # Extract a top-level JSON string value without jq (not in curlimages/curl).
+    json_str() {
+      printf '%s' "$1" | tr -d '\n' |
+        sed -n 's/.*"'"$2"'"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'
+    }
+
+    emit() {
+      # emit <level> <check> <status> <extra-json-fields>
+      printf '{"ts":"%s","level":"%s","check":"%s","status":"%s","expected":"%s"%s,"message":"%s/%s %s"}\n' \
+        "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" "$2" "$3" "$EXPECTED" "$4" "$2" "$3" "$5"
+    }
+
+    fetch() {
+      curl -sfL --max-time "$TIMEOUT" "$1" 2>/dev/null
+    }
+
+    # --- expectation
+    # A comma-separated list, matched exactly. Spaces are tolerated so the generator can join a
+    # list the obvious way without the match silently never succeeding.
+    country_expected() {
+      observed="$1"
+      rest="$EXPECTED"
+      while [ -n "$rest" ]; do
+        head="${rest%%,*}"
+        case "$rest" in
+          *,*) rest="${rest#*,}" ;;
+          *) rest="" ;;
+        esac
+        head="$(printf '%s' "$head" | tr -d ' ')"
+        [ "$head" = "$observed" ] && return 0
+      done
+      return 1
+    }
+
+    # --- metrics
+    # Per-cycle state, rendered in full every time: a gauge left out of one write would vanish from
+    # the store and read as "quiet" rather than as "not measured".
+    ip_completed=0 ip_ok=0 ip_country="" ip_ts=0
+    dns_completed=0 dns_ok=0 dns_country="" dns_ts=0
+    n_ip_OK=0 n_ip_LEAK=0 n_ip_UNKNOWN=0
+    n_dns_OK=0 n_dns_LEAK=0 n_dns_UNKNOWN=0
+    latched_value=0
+
+    count() {
+      # count <check> <status>
+      case "$1/$2" in
+        ip/OK) n_ip_OK=$((n_ip_OK + 1)) ;;
+        ip/LEAK) n_ip_LEAK=$((n_ip_LEAK + 1)) ;;
+        ip/UNKNOWN) n_ip_UNKNOWN=$((n_ip_UNKNOWN + 1)) ;;
+        dns/OK) n_dns_OK=$((n_dns_OK + 1)) ;;
+        dns/LEAK) n_dns_LEAK=$((n_dns_LEAK + 1)) ;;
+        dns/UNKNOWN) n_dns_UNKNOWN=$((n_dns_UNKNOWN + 1)) ;;
+      esac
+    }
+
+    # Written to a temporary file and moved into place: httpd serves whatever is there when the
+    # scrape lands, and half a file parses as a truncated exposition rather than as an error.
+    write_metrics() {
+      [ -n "${IPLEAK_METRICS_FILE:-}" ] || return 0
+      tmp="${IPLEAK_METRICS_FILE}.tmp"
+
+      {
+        echo '# HELP vpn_probe_last_check_timestamp_seconds Unix time the last check of this kind reached a verdict.'
+        echo '# TYPE vpn_probe_last_check_timestamp_seconds gauge'
+        echo "vpn_probe_last_check_timestamp_seconds{check=\"ip\"} ${ip_ts}"
+        echo "vpn_probe_last_check_timestamp_seconds{check=\"dns\"} ${dns_ts}"
+
+        echo '# HELP vpn_probe_check_completed Whether the last check reached a verdict at all. 0 means every provider failed, which is what a tunnel that is down looks like from in here.'
+        echo '# TYPE vpn_probe_check_completed gauge'
+        echo "vpn_probe_check_completed{check=\"ip\"} ${ip_completed}"
+        echo "vpn_probe_check_completed{check=\"dns\"} ${dns_completed}"
+
+        # Only for a check that reached a verdict. Emitting 0 for one that could not would make
+        # "not measured" and "leaked" the same number, and the alert is written against this.
+        echo '# HELP vpn_probe_country_ok Whether the observed country was one of the expected ones. 0 is a leak; absent means the check reached no verdict, which vpn_probe_check_completed says loudly.'
+        echo '# TYPE vpn_probe_country_ok gauge'
+        [ "$ip_completed" = 1 ] && echo "vpn_probe_country_ok{check=\"ip\"} ${ip_ok}"
+        [ "$dns_completed" = 1 ] && echo "vpn_probe_country_ok{check=\"dns\"} ${dns_ok}"
+
+        echo '# HELP vpn_probe_exit_info The country the last completed check observed. Always 1; read the label.'
+        echo '# TYPE vpn_probe_exit_info gauge'
+        [ -n "$ip_country" ] && echo "vpn_probe_exit_info{check=\"ip\",country=\"${ip_country}\"} 1"
+        [ -n "$dns_country" ] && echo "vpn_probe_exit_info{check=\"dns\",country=\"${dns_country}\"} 1"
+
+        echo '# HELP vpn_probe_checks_total Checks by kind and verdict since this detector started.'
+        echo '# TYPE vpn_probe_checks_total counter'
+        echo "vpn_probe_checks_total{check=\"ip\",status=\"OK\"} ${n_ip_OK}"
+        echo "vpn_probe_checks_total{check=\"ip\",status=\"LEAK\"} ${n_ip_LEAK}"
+        echo "vpn_probe_checks_total{check=\"ip\",status=\"UNKNOWN\"} ${n_ip_UNKNOWN}"
+        echo "vpn_probe_checks_total{check=\"dns\",status=\"OK\"} ${n_dns_OK}"
+        echo "vpn_probe_checks_total{check=\"dns\",status=\"LEAK\"} ${n_dns_LEAK}"
+        echo "vpn_probe_checks_total{check=\"dns\",status=\"UNKNOWN\"} ${n_dns_UNKNOWN}"
+
+        echo '# HELP vpn_probe_latched Whether a leak was latched and this pod is refusing to work until it is recreated.'
+        echo '# TYPE vpn_probe_latched gauge'
+        echo "vpn_probe_latched ${latched_value}"
+      } >"$tmp" 2>/dev/null && mv "$tmp" "$IPLEAK_METRICS_FILE" 2>/dev/null ||
+        emit error metrics FAILED "" "could not write $IPLEAK_METRICS_FILE"
+    }
+
+    latched() {
+      [ -n "${IPLEAK_LATCH_FILE:-}" ] && [ -f "$IPLEAK_LATCH_FILE" ]
+    }
+
+    # Latching and exiting are one decision, and it is IPLEAK_LATCH_FILE that makes it. With a
+    # latch file this exits non-zero and keeps doing so, which is the qBittorrent pod's alarm;
+    # without one it returns and the loop carries on.
+    #
+    # That distinction is load-bearing and was not in the first version of this script, which
+    # exited on every leak however it was configured. Beside a shared tunnel that is not an alarm
+    # but an outage: a crashlooping sidecar takes its pod out of the Service endpoints, so a
+    # gluetun-proxy reporting the wrong country would stop the arr stack, 4get, neko and
+    # helium-services rather than tell anyone about it.
+    latch_or_continue() {
+      if [ -z "${IPLEAK_LATCH_FILE:-}" ]; then
+        return 0
+      fi
+
+      printf '%s\n' "$1" >"$IPLEAK_LATCH_FILE" 2>/dev/null ||
+        emit error latch FAILED "" "could not write $IPLEAK_LATCH_FILE"
+      latched_value=1
+      # Before the exit: the httpd container keeps serving this file while this one crashloops,
+      # so it is what carries the alarm to the store for as long as the latch stands.
+      write_metrics
+      emit error latch TRIPPED "" "exiting non-zero so the restart count carries the alarm: $1"
+      exit 1
+    }
+
+    # On every exit-IP LEAK, not once: whatever it stops may have been started again since. The
+    # script logs its own result per downloader and always exits 0 — see stop-downloads.sh.
+    on_leak() {
+      [ -n "${IPLEAK_ON_LEAK_SCRIPT:-}" ] || return 0
+      IPLEAK_TIMEOUT="$TIMEOUT" sh "$IPLEAK_ON_LEAK_SCRIPT" ||
+        emit error action FAILED "" "$IPLEAK_ON_LEAK_SCRIPT exited non-zero"
+    }
+
+    # --- external IP
+    # Tries several providers in turn; only if every one fails is UNKNOWN reported. The old script
+    # treated "no country parsed" as a leak, so any hiccup or rate-limit produced a false alarm.
+    check_ip() {
+      ip=""; country=""
+
+      body="$(fetch https://api.country.is/)"
+      if [ -n "$body" ]; then
+        ip="$(json_str "$body" ip)"
+        country="$(json_str "$body" country)"
+      fi
+
+      if [ -z "$country" ]; then
+        body="$(fetch https://ipwho.is/)"
+        if [ -n "$body" ]; then
+          ip="$(json_str "$body" ip)"
+          country="$(json_str "$body" country_code)"
+        fi
+      fi
+
+      if [ -z "$country" ]; then
+        body="$(fetch https://ipapi.co/json/)"
+        if [ -n "$body" ]; then
+          ip="$(json_str "$body" ip)"
+          country="$(json_str "$body" country)"
+        fi
+      fi
+
+      if [ -z "$country" ]; then
+        ip_completed=0
+        ip_country=""
+        count ip UNKNOWN
+        emit error ip UNKNOWN "" "all providers failed or rate-limited - could not verify exit IP"
+        return
+      fi
+
+      ip_completed=1
+      ip_country="$country"
+      ip_ts="$(date -u +%s)"
+
+      if country_expected "$country"; then
+        ip_ok=1
+        count ip OK
+        emit info ip OK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country"
+      else
+        ip_ok=0
+        count ip LEAK
+        emit error ip LEAK ",\"ip\":\"$ip\",\"country\":\"$country\"" "exit ip $ip in $country, expected $EXPECTED"
+        on_leak
+        # Exits here where a latch file is configured; returns where one is not.
+        latch_or_continue "exit ip $ip in $country, expected $EXPECTED"
+      fi
+    }
+
+    # --- DNS
+    # Geolocating /etc/resolv.conf is useless in-cluster — it is always CoreDNS's private ClusterIP.
+    # edns.ip-api.com reports the egress IP of whichever public resolver queried it: the real signal.
+    check_dns() {
+      body="$(fetch https://edns.ip-api.com/json)"
+      if [ -z "$body" ]; then
+        dns_completed=0
+        dns_country=""
+        count dns UNKNOWN
+        emit error dns UNKNOWN "" "could not determine resolver egress ip"
+        return
+      fi
+
+      resolver="$(json_str "$body" ip)"
+      if [ -z "$resolver" ]; then
+        dns_completed=0
+        dns_country=""
+        count dns UNKNOWN
+        emit error dns UNKNOWN "" "resolver egress ip missing from response"
+        return
+      fi
+
+      geo="$(fetch "https://api.country.is/$resolver")"
+      country="$(json_str "$geo" country)"
+      if [ -z "$country" ]; then
+        dns_completed=0
+        dns_country=""
+        count dns UNKNOWN
+        emit error dns UNKNOWN ",\"resolver\":\"$resolver\"" "resolver $resolver could not be geolocated"
+        return
+      fi
+
+      dns_completed=1
+      dns_country="$country"
+      dns_ts="$(date -u +%s)"
+
+      if country_expected "$country"; then
+        dns_ok=1
+        count dns OK
+        emit info dns OK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country"
+      else
+        dns_ok=0
+        count dns LEAK
+        emit error dns LEAK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country, expected $EXPECTED - dns is bypassing the tunnel"
+      fi
+    }
+
+    # A leak already found: re-stop whatever has been started since, and keep crashing.
+    if latched; then
+      emit error startup LATCHED "" "a previous check found a leak: $(cat "$IPLEAK_LATCH_FILE" 2>/dev/null)"
+      on_leak
+      # The verdict that put the latch there, restated rather than left to go stale: a gauge that
+      # stops being written disappears, and a disappeared gauge is the thing nobody notices.
+      ip_ts="$(date -u +%s)"
+      ip_completed=1
+      ip_ok=0
+      latch_or_continue "still latched from an earlier check"
+    fi
+
+    # Before the grace period, so the endpoint exists for the first scrape rather than 404ing and
+    # reading as a target that has never worked.
+    write_metrics
+    emit info startup OK ",\"interval\":$INTERVAL" "leak detector starting, waiting ${GRACE}s for tunnel"
+    sleep "$GRACE"
+
+    while true; do
+      check_ip
+      check_dns
+      write_metrics
+      sleep "$INTERVAL"
+    done

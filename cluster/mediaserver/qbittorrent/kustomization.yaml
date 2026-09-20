@@ -5,8 +5,10 @@ metadata:
   name: qbittorrent
 resources:
 - deployment.yaml
+- vmrule.yaml
 - vault-secrets.yaml
 - scripts-configmap.yaml
+- vpn-probe-configmap.yaml
 - config-pvc.yaml
 - service.yaml
 - network-policy.yaml

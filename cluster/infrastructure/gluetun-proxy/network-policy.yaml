@@ -62,3 +62,10 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: seerr
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 9101
+      protocol: TCP
