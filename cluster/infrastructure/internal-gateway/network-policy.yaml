@@ -14,3 +14,13 @@ spec:
     ports:
     - port: 8082
       protocol: TCP
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: neko
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: neko
+    ports:
+    - port: 443
+      protocol: TCP

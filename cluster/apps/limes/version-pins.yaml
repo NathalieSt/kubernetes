@@ -186,8 +186,8 @@ data:
         {
           "key": "neko",
           "kind": "image",
-          "repository": "ghcr.io/m1k1o/neko/firefox",
-          "version": "sha256:5596a0571437a96937426a7060b144912414028293c854412382e8449842a60e",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium",
+          "version": "latest",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [

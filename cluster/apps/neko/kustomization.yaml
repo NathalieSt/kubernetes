@@ -5,7 +5,7 @@ metadata:
   name: neko
 resources:
 - deployment.yaml
-- firefox-policies-configmap.yaml
+- browser-config-configmap.yaml
 - vault-secrets.yaml
 - service.yaml
 - scaled-object.yaml
