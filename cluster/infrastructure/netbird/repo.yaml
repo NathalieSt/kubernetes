@@ -8,3 +8,5 @@ spec:
   interval: 24h
   ref:
     tag: 0.8.0
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip

@@ -243,7 +243,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "b908ded@sha256:e78ee9eb2a8a06f0e561ca460ca7f737ef1d134bdb94e237e30b96fadba9de14",
+          "version": "a192f7b@sha256:27ace24cf21bbf861410ae57e11f637efbb78fb41f17a024cc8c0cf552906c71",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
