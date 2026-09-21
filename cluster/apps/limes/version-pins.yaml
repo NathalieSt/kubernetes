@@ -11,7 +11,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "1fc47bd@sha256:1014d28b4dc900bfeaa517f3b83ec83710fa9bb2b92e7a3d036e0dd4fca4da76",
+          "version": "031ffa8@sha256:e8ab7004ca8c5503ff52ce1a7cec83dce8a8f438e6432de476285114c4635193",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -55,7 +55,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "0ca65ba@sha256:e2e6aac9341bc5148631461426e371a452d6ce66ae7d0c80818ea4374c9f6d0e",
+          "version": "8799321@sha256:68610393ffc01994943232fdd65ebf972a80e272c37a7ecb838f42d2a10d662c",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -165,7 +165,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "7d9b399@sha256:a06a558923bd4ae5d452888737d6302311534c6f144377d82a817a2513f5d32a",
+          "version": "c8a1681@sha256:ba124dc759ec5ce3c4601f7df33b9e1f599ec1e553620ba8ad06337c7f0a75b8",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -209,7 +209,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "feabe72@sha256:cd3b7a07abd0e5eb9069aed4a38e32c76899c9617ac48f8a2a057c7da0ea3217",
+          "version": "ed0e7db@sha256:9fefa1307de276fbf72d064a827a137bb18cfaa7a467164e3ce47190ed36dbd5",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -286,7 +286,7 @@ data:
           "key": "vim-dojo",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "4c9830d@sha256:f5cc2097f39fa93b3453becf9010cd2c8f4052ceb2506bc5edb1743b8febfef5",
+          "version": "6247270@sha256:f3692ef866fa30e4d7020383cca6511b0483a9eac4c2e74e30209ddfb025aaae",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -297,7 +297,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "cf6fce0@sha256:0c4a7a59300dd6616bad706dc94ee2fef3f5757b5bb04a767f4f450a749344e5",
+          "version": "3606317@sha256:1a4001798a9730b568cdf7c47020b16b9ddb42a43ccb043fde3e94da577ef026",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [

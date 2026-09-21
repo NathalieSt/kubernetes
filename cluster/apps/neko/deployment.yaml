@@ -136,7 +136,7 @@ spec:
           readOnly: true
         - mountPath: /opt/helium/initial_preferences
           subPath: initial_preferences
-          name: browser-config-volume
+          name: initial-preferences-volume
           readOnly: true
         - mountPath: /dev/shm
           name: shm-volume
@@ -253,6 +253,12 @@ spec:
           items:
           - key: policies.json
             path: policies.json
+      - name: initial-preferences-volume
+        configMap:
+          name: neko-browser-config
+          items:
+          - key: initial_preferences
+            path: initial_preferences
       - name: shm-volume
         emptyDir:
           medium: Memory
