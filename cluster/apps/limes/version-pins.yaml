@@ -55,7 +55,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "0ca65ba@sha256:e2e6aac9341bc5148631461426e371a452d6ce66ae7d0c80818ea4374c9f6d0e",
+          "version": "8799321@sha256:68610393ffc01994943232fdd65ebf972a80e272c37a7ecb838f42d2a10d662c",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -286,7 +286,7 @@ data:
           "key": "vim-dojo",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "4c9830d@sha256:f5cc2097f39fa93b3453becf9010cd2c8f4052ceb2506bc5edb1743b8febfef5",
+          "version": "6247270@sha256:f3692ef866fa30e4d7020383cca6511b0483a9eac4c2e74e30209ddfb025aaae",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
