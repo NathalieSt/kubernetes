@@ -15,6 +15,8 @@ spec:
     type: Recreate
   template:
     metadata:
+      annotations:
+        homelab/neko-initial-preferences-hash: 8cf7c6da3b494d16
       labels:
         app.kubernetes.io/name: neko
         app.kubernetes.io/version: 8342ddb

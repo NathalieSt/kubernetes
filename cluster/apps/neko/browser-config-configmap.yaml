@@ -23,6 +23,9 @@ data:
       "browser": {
         "custom_chrome_frame": false,
         "show_home_button": false,
+        "theme": {
+          "color_scheme2": 2
+        },
         "window_placement": {
           "maximized": true
         }
