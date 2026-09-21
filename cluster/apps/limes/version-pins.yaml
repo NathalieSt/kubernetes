@@ -286,7 +286,7 @@ data:
           "key": "vim-dojo",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "9135d04@sha256:b61227b301d544612805aef44ae7829506b537a3108d7addaaacb63023328f33",
+          "version": "eb432df@sha256:5cbbdd566f42076f68a89409226c3bffb9be2220aa6563b579379815560b3736",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
