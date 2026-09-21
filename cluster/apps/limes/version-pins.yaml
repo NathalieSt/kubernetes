@@ -242,7 +242,7 @@ data:
           "key": "redlib",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
-          "version": "0e75e10@sha256:f0c881e16acca060a6c95dd00f4ba14282abae34d196082caf8ce96f310d4726",
+          "version": "acf6616@sha256:f0c881e16acca060a6c95dd00f4ba14282abae34d196082caf8ce96f310d4726",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -297,7 +297,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "2019b36@sha256:dc57e589a98cfe13b68409ef6f0da9b3475a610bf73c5ba925cac303932a2afe",
+          "version": "72bcf83@sha256:11f36ff706e330c124a2edcea9ae34e181b2af7d753fe1717b0d421898d2c2fe",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
