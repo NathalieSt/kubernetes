@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: limes
-    app.kubernetes.io/version: c8a1681
+    app.kubernetes.io/version: c3fdc0c
   name: limes
 spec:
   selector:
