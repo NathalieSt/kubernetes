@@ -17,14 +17,14 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: kube-system
+          kubernetes.io/metadata.name: jellyfin
       podSelector:
         matchLabels:
-          k8s-app: kube-dns
+          app.kubernetes.io/name: media-dns
     ports:
-    - port: 53
+    - port: 5353
       protocol: UDP
-    - port: 53
+    - port: 5353
       protocol: TCP
   - to:
     - namespaceSelector:

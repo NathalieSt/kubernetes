@@ -21,6 +21,14 @@
         "name": "glitchtip",
         "policy": "path \"kvv2/data/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "gluetun-media": {
+        "name": "gluetun-media",
+        "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "gluetun-proxy": {
+        "name": "gluetun-proxy",
+        "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "healthchecks": {
         "name": "healthchecks",
         "policy": "path \"kvv2/data/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -147,6 +155,36 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.glitchtip.name}"
+        ],
+        "token_ttl": 600
+      },
+      "gluetun-media": {
+        "backend": "kubernetes",
+        "role_name": "gluetun-media",
+        "bound_service_account_names": [
+          "gluetun-media-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "gluetun-media"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.gluetun-media.name}"
+        ],
+        "token_ttl": 600
+      },
+      "gluetun-proxy": {
+        "backend": "kubernetes",
+        "role_name": "gluetun-proxy",
+        "bound_service_account_names": [
+          "gluetun-proxy-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "gluetun-proxy"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.gluetun-proxy.name}"
         ],
         "token_ttl": 600
       },
@@ -292,7 +330,7 @@
           "qbittorrent-vault-serviceaccount"
         ],
         "bound_service_account_namespaces": [
-          "jellyfin"
+          "qbittorrent"
         ],
         "audience": "vault",
         "token_policies": [
@@ -404,6 +442,18 @@
     },
     {
       "from": "vault_kv_secret_v2.glitchtip_glitchtip_secret",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.gluetun-media_vpn",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.gluetun-proxy_vpn",
       "lifecycle": {
         "destroy": false
       }

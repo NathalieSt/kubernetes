@@ -158,34 +158,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: qbittorrent-gateway-ingress
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: qbittorrent
-  policyTypes:
-  - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: internal-gateway
-      podSelector:
-        matchExpressions:
-        - key: app.kubernetes.io/name
-          operator: In
-          values:
-          - internal-gateway
-          - internal-gateway-secondary
-    ports:
-    - port: 8080
-      protocol: TCP
-    - port: 8081
-      protocol: TCP
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
   name: radarr-gateway-ingress
 spec:
   podSelector:

@@ -35,6 +35,14 @@ spec:
             volumeMounts:
             - mountPath: /state
               name: state-volume
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+            - 10.43.0.53
+            searches:
+            - jellyfin.svc.cluster.local
+            - svc.cluster.local
+            - cluster.local
           containers:
           - args:
             - ./bin/mlb.mjs
@@ -52,9 +60,9 @@ spec:
             - name: MLB_STATE_DIR
               value: /state
             - name: MLB_PROXY
-              value: http://gluetun-media.jellyfin.svc.cluster.local:8888
+              value: http://gluetun-media.gluetun-media.svc.cluster.local:8888
             - name: MLB_VPN_CONTROL_URL
-              value: http://gluetun-media.jellyfin.svc.cluster.local:8000
+              value: http://gluetun-media.gluetun-media.svc.cluster.local:8000
             - name: MLB_NO_PROXY
               value: svc.cluster.local,cluster.local,localhost
             - name: MLB_CONCURRENCY

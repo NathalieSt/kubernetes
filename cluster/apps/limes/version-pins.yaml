@@ -837,6 +837,17 @@ data:
           ]
         },
         {
+          "key": "media-dns",
+          "kind": "image",
+          "repository": "coredns/coredns",
+          "version": "1.14.2@sha256:e7e6440cfd1e919280958f5b5a6ab2b184d385bba774c12ad2a9e1e4183f90d9",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "media-dns"
+          ]
+        },
+        {
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",

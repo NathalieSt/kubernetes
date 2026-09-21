@@ -22,13 +22,15 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `neko` | `neko` | `kvv2/neko` |
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
 | `mail` | `mail` | `kvv2/mail`, `kvv2/mail/oidc` |
+| `gluetun-media` | `gluetun-media` | `kvv2/vpn` |
 | `music-library-builder` | `jellyfin` | `kvv2/music-library-builder` |
-| `qbittorrent` | `jellyfin` | `kvv2/vpn` |
+| `qbittorrent` | `qbittorrent` | `kvv2/vpn` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `limes` | `limes` | `kvv2/limes` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
 | `zyme` | `zyme` | `kvv2/zyme` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
+| `gluetun-proxy` | `gluetun-proxy` | `kvv2/vpn` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc` |
 | `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret`, `kvv2/healthchecks/oidc` |

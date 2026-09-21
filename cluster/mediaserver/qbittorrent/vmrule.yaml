@@ -9,7 +9,7 @@ spec:
     interval: 1m
     rules:
     - alert: VpnLeakDetectorTripped
-      expr: increase(kube_pod_container_status_restarts_total{namespace="jellyfin",container="ipleak"}[15m]) > 0
+      expr: increase(kube_pod_container_status_restarts_total{namespace="qbittorrent",container="ipleak"}[15m]) > 0
       for: 5m
       labels:
         severity: critical
