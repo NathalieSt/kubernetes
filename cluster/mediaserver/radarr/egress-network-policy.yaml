@@ -13,14 +13,14 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: kube-system
+          kubernetes.io/metadata.name: jellyfin
       podSelector:
         matchLabels:
-          k8s-app: kube-dns
+          app.kubernetes.io/name: media-dns
     ports:
-    - port: 53
+    - port: 5353
       protocol: UDP
-    - port: 53
+    - port: 5353
       protocol: TCP
   - to:
     - podSelector: {}
@@ -40,4 +40,16 @@ spec:
           app.kubernetes.io/name: gluetun-proxy
     ports:
     - port: 8888
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: qbittorrent
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: qbittorrent
+    ports:
+    - port: 8080
+      protocol: TCP
+    - port: 8081
       protocol: TCP

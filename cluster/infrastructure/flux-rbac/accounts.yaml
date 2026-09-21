@@ -354,7 +354,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: flux-gluetun-media-namespace-admin
-  namespace: jellyfin
+  namespace: gluetun-media
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -785,6 +785,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-media-dns
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-media-dns-namespace-admin
+  namespace: jellyfin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-media-dns
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-music-library-builder
   namespace: flux-system
 ---
@@ -1064,7 +1084,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: flux-qbittorrent-namespace-admin
-  namespace: jellyfin
+  namespace: qbittorrent
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -1210,7 +1230,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: flux-sabnzbd-namespace-admin
-  namespace: jellyfin
+  namespace: qbittorrent
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

@@ -1,0 +1,77 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qbittorrent-qbittorrent-config
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: qbittorrent-config
+    namespace: qbittorrent
+  mountOptions:
+  - nfsvers=4.1
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: debian/mnt/external_ssd/jellyfin/qbittorrent-config#qbittorrent-qbittorrent-config
+    volumeAttributes:
+      server: debian
+      share: /mnt/external_ssd
+      subDir: jellyfin/qbittorrent-config
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qbittorrent-media
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 20Ti
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: media
+    namespace: qbittorrent
+  mountOptions:
+  - nfsvers=3
+  - hard
+  - nolock
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: nathisvault.netbird.nathalie-stiefsohn.eu/volume1/nfs/jellyfin/jellyfin-pvc#qbittorrent-media
+    volumeAttributes:
+      server: nathisvault.netbird.nathalie-stiefsohn.eu
+      share: /volume1/nfs
+      subDir: jellyfin/jellyfin-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qbittorrent-sabnzbd-config
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: sabnzbd-config
+    namespace: qbittorrent
+  mountOptions:
+  - nfsvers=4.1
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: debian/mnt/external_ssd/jellyfin/sabnzbd-config#qbittorrent-sabnzbd-config
+    volumeAttributes:
+      server: debian
+      share: /mnt/external_ssd
+      subDir: jellyfin/sabnzbd-config

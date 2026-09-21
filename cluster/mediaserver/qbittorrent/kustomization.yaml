@@ -9,7 +9,10 @@ resources:
 - vault-secrets.yaml
 - scripts-configmap.yaml
 - vpn-probe-configmap.yaml
-- config-pvc.yaml
+- qbittorrent-config-pvc.yaml
+- media-pvc.yaml
 - service.yaml
 - network-policy.yaml
+- gateway-ingress-network-policy.yaml
 - egress-network-policy.yaml
+- default-deny-egress.yaml

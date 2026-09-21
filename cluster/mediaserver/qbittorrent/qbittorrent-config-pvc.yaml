@@ -9,4 +9,5 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: nfs-local
+  storageClassName: ""
+  volumeName: qbittorrent-qbittorrent-config

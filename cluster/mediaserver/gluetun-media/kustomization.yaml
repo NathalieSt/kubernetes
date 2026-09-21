@@ -6,7 +6,8 @@ metadata:
 resources:
 - deployment.yaml
 - service.yaml
-- vault-secret.yaml
+- vault-secrets.yaml
 - network-policy.yaml
 - egress-network-policy.yaml
 - vpn-probe-configmap.yaml
+- default-deny-egress.yaml

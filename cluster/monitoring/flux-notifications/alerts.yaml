@@ -203,6 +203,9 @@ spec:
     name: mariadb
     namespace: flux-system
   - kind: Kustomization
+    name: media-dns
+    namespace: flux-system
+  - kind: Kustomization
     name: music-library-builder
     namespace: flux-system
   - kind: Kustomization

@@ -11,3 +11,4 @@ resources:
 - remote-storage-class.yaml
 - debian-storage-class.yaml
 - nas-storage-class.yaml
+- existing-volumes.yaml

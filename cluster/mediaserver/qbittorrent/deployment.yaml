@@ -71,7 +71,7 @@ spec:
         - name: INI_KEYS
           value: |-
             [misc]port=8081
-            [misc]host_whitelist=sabnzbd, sabnzbd.jellyfin, sabnzbd.jellyfin.svc.cluster.local, sabnzbd.netbird.nathalie-stiefsohn.eu
+            [misc]host_whitelist=sabnzbd, sabnzbd.qbittorrent, sabnzbd.qbittorrent.svc.cluster.local, sabnzbd.netbird.nathalie-stiefsohn.eu
             [misc]download_dir=/data/usenet/incomplete
             [misc]complete_dir=/data/usenet/complete
         - name: INI_OWNER
@@ -289,7 +289,7 @@ spec:
           claimName: sabnzbd-config
       - name: media
         persistentVolumeClaim:
-          claimName: jellyfin-pvc
+          claimName: media
       - name: scripts
         configMap:
           name: qbittorrent-scripts

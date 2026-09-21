@@ -50,7 +50,7 @@ spec:
         - name: PROXY_PORT
           value: "8888"
         - name: PROXY_BYPASS
-          value: "*.svc,*.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,qbittorrent,qbittorrent.jellyfin,sabnzbd,sabnzbd.jellyfin,jellyfin,jellyfin.jellyfin"
+          value: "*.svc,*.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent"
         securityContext:
           capabilities:
             drop:
@@ -62,6 +62,14 @@ spec:
           runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - jellyfin.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
       containers:
       - image: ghcr.io/seerr-team/seerr:v3.4.1@sha256:f4768de5f616248d723e05891f3345a1402123775d03bf0890dbfedc0831bda1
         name: seerr
