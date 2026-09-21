@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: redlib
-    app.kubernetes.io/version: 0e75e10
+    app.kubernetes.io/version: acf6616
   name: redlib
 spec:
   selector:
