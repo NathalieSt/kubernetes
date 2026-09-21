@@ -9,6 +9,8 @@ code-server-git code-server username email token
 flux-notifications flux-notifications token
 glitchtip/secret glitchtip secret-key
 glitchtip/oidc glitchtip client-secret
+vpn gluetun-media user password
+vpn gluetun-proxy user password
 healthchecks/secret healthchecks secret-key
 healthchecks/oidc healthchecks client-secret
 heartbeats heartbeats healthchecks-api-key forgejo-token external-ping-url

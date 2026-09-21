@@ -21,6 +21,14 @@ spec:
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - jellyfin.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
       containers:
       - image: linuxserver/prowlarr:2.6.5.5623-ls161@sha256:c96b56d94d116a9f4de94bc23d3381689492e6c3cfb7435320e8d982e406f99a
         name: prowlarr
@@ -68,9 +76,9 @@ spec:
         - name: http_proxy
           value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
         - name: NO_PROXY
-          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,qbittorrent,qbittorrent.jellyfin,sabnzbd,sabnzbd.jellyfin,jellyfin,jellyfin.jellyfin
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
         - name: no_proxy
-          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,qbittorrent,qbittorrent.jellyfin,sabnzbd,sabnzbd.jellyfin,jellyfin,jellyfin.jellyfin
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
         resources:
           requests:
             cpu: 50m

@@ -413,7 +413,7 @@ data:
           href: https://qbittorrent.netbird.nathalie-stiefsohn.eu
           icon: qbittorrent.png
           description: Torrents, through the VPN
-          namespace: jellyfin
+          namespace: qbittorrent
           app: qbittorrent
       - radarr:
           href: https://radarr.netbird.nathalie-stiefsohn.eu
@@ -425,7 +425,7 @@ data:
           href: https://sabnzbd.netbird.nathalie-stiefsohn.eu
           icon: sabnzbd.png
           description: Usenet, through the VPN
-          namespace: jellyfin
+          namespace: qbittorrent
           app: sabnzbd
       - sonarr:
           href: https://sonarr.netbird.nathalie-stiefsohn.eu

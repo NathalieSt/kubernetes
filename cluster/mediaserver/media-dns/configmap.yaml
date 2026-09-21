@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: media-dns-config
+data:
+  Corefile: |
+    cluster.local:5353 {
+        errors
+        health :8080
+        ready :8181
+        forward . 10.43.0.10
+        cache 30
+    }
+
+    .:5353 {
+        errors
+        log
+        template ANY ANY {
+            rcode NXDOMAIN
+        }
+    }

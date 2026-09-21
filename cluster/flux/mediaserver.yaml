@@ -21,6 +21,7 @@ spec:
   - name: redis
   - name: main-pg
   - name: vault-secrets-operator-config
+  - name: media-dns
   serviceAccountName: flux-audiomuse-ai
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -45,6 +46,7 @@ spec:
   - name: main-pg
   - name: csi-driver-nfs
   - name: gluetun-proxy
+  - name: media-dns
   serviceAccountName: flux-bazarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -54,7 +56,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: jellyfin
+  targetNamespace: gluetun-media
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -65,7 +67,6 @@ spec:
   dependsOn:
   - name: namespaces
   - name: flux-rbac
-  - name: jellyfin
   - name: vault-secrets-operator-config
   serviceAccountName: flux-gluetun-media
 ---
@@ -114,7 +115,28 @@ spec:
   - name: main-pg
   - name: csi-driver-nfs
   - name: gluetun-proxy
+  - name: media-dns
   serviceAccountName: flux-lidarr
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: media-dns
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: jellyfin
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/mediaserver/media-dns
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  serviceAccountName: flux-media-dns
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -138,6 +160,7 @@ spec:
   - name: gluetun-media
   - name: csi-driver-nfs
   - name: reflector
+  - name: media-dns
   serviceAccountName: flux-music-library-builder
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -162,6 +185,7 @@ spec:
   - name: main-pg
   - name: csi-driver-nfs
   - name: gluetun-proxy
+  - name: media-dns
   serviceAccountName: flux-prowlarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -171,7 +195,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: jellyfin
+  targetNamespace: qbittorrent
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -182,7 +206,6 @@ spec:
   dependsOn:
   - name: namespaces
   - name: flux-rbac
-  - name: jellyfin
   - name: csi-driver-nfs
   - name: vault-secrets-operator-config
   - name: sabnzbd
@@ -210,6 +233,7 @@ spec:
   - name: main-pg
   - name: csi-driver-nfs
   - name: gluetun-proxy
+  - name: media-dns
   serviceAccountName: flux-radarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -219,7 +243,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: jellyfin
+  targetNamespace: qbittorrent
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -230,7 +254,6 @@ spec:
   dependsOn:
   - name: namespaces
   - name: flux-rbac
-  - name: jellyfin
   - name: csi-driver-nfs
   serviceAccountName: flux-sabnzbd
 ---
@@ -256,6 +279,7 @@ spec:
   - name: main-pg
   - name: csi-driver-nfs
   - name: gluetun-proxy
+  - name: media-dns
   serviceAccountName: flux-seerr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -280,4 +304,5 @@ spec:
   - name: main-pg
   - name: csi-driver-nfs
   - name: gluetun-proxy
+  - name: media-dns
   serviceAccountName: flux-sonarr

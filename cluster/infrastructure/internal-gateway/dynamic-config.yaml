@@ -401,7 +401,7 @@ data:
         qbittorrent:
           loadBalancer:
             servers:
-            - url: http://qbittorrent.jellyfin.svc.cluster.local:8080
+            - url: http://qbittorrent.qbittorrent.svc.cluster.local:8080
         radarr:
           loadBalancer:
             servers:
@@ -413,7 +413,7 @@ data:
         sabnzbd:
           loadBalancer:
             servers:
-            - url: http://sabnzbd.jellyfin.svc.cluster.local:8081
+            - url: http://sabnzbd.qbittorrent.svc.cluster.local:8081
         seerr:
           loadBalancer:
             servers:

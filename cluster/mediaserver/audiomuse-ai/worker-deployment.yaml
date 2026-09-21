@@ -26,6 +26,14 @@ spec:
                 values:
                 - debian-mgt-0
                 - debian-mgt-1
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - jellyfin.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
       containers:
       - image: ghcr.io/neptunehub/audiomuse-ai@sha256:9881304597ce7ea4938b670509e227a97aab42dcf8ca349139cebab321f2dd33
         name: audiomuse-ai-worker
