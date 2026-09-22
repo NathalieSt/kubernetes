@@ -55,7 +55,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "f097388@sha256:f229200f1791216fd9ce50453da2764b85dbe6ac09bee07c09746a3349bf017a",
+          "version": "32c3842@sha256:bf5e4101105e7158a481cb011fff220ebaa23b9f979592eee77dcc2bee172cf5",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -121,7 +121,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "6bd2f41@sha256:de9b32646fde24231d1e7e20353f5dbc1115cb222a21a47b7c0bcb585df6902d",
+          "version": "0f54acb@sha256:fcbf255f52f315f97364256ae7e672ad83d3e2b3dbbc8de57ee59a635e99860d",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -165,7 +165,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "16268cc@sha256:13fd75d94621ca042d4967b52d03c45d7b3b29e6f8c1ca4a0b5314d94ba6a8db",
+          "version": "bd83bbb@sha256:a1f79f7a657998e7fd1df1f9c535e32bea10cbff0e8c930fef4020394a713259",
           "file": "versions/apps.json",
           "inVersionsFile": true,
           "generators": [
@@ -851,7 +851,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "010c951@sha256:526edc903782f39c7d8744ab1441b7e76a95b1ce89bd79006d097e6a37dea95d",
+          "version": "9a5328f@sha256:be2eb65099796add21c263fb4930110bb326874eb87cb6e67d19021e8e74a616",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
