@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: daybook
-    app.kubernetes.io/version: f097388
+    app.kubernetes.io/version: a1e946d
   name: daybook
 spec:
   selector:
