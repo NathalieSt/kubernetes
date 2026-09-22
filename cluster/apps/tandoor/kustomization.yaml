@@ -8,7 +8,6 @@ resources:
 - media-pvc.yaml
 - vault-secrets.yaml
 - service.yaml
-- scaled-object.yaml
 - network-policy.yaml
 - k8up-schedule.yaml
 - pennant-configmap.yaml
