@@ -513,7 +513,6 @@ spec:
   - name: flux-rbac
   - name: main-pg
   - name: csi-driver-nfs
-  - name: keda
   - name: reflector
   - name: vault-secrets-operator-config
   serviceAccountName: flux-tandoor
