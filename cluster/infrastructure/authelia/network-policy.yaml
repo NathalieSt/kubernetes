@@ -32,6 +32,7 @@ spec:
           - limes
           - mail
           - orrery
+          - paperless
           - tandoor
           - vault
           - zyme

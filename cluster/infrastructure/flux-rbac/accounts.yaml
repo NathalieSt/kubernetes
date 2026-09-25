@@ -2,6 +2,39 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-anki-sync
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-anki-sync-namespace-admin
+  namespace: anki-sync
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-anki-sync
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-anki-sync-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-anki-sync
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-audiomuse-ai
   namespace: flux-system
 ---
@@ -1004,6 +1037,39 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-paperless
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-paperless-namespace-admin
+  namespace: paperless
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-paperless
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-paperless-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-paperless
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-prowlarr
   namespace: flux-system
 ---
@@ -1125,6 +1191,39 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-radarr
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-radicale
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-radicale-namespace-admin
+  namespace: radicale
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-radicale
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-radicale-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-radicale
   namespace: flux-system
 ---
 apiVersion: v1
@@ -1283,6 +1382,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-stirling-pdf
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-stirling-pdf-namespace-admin
+  namespace: stirling-pdf
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-stirling-pdf
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-system-upgrade-plans
   namespace: flux-system
 ---
@@ -1331,6 +1450,26 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-tandoor
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-trilium
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-trilium-namespace-admin
+  namespace: trilium
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-trilium
   namespace: flux-system
 ---
 apiVersion: v1

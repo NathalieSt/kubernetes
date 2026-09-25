@@ -24,6 +24,7 @@ spec:
           - glitchtip
           - zyme
           - limes
+          - paperless
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
@@ -42,6 +43,7 @@ spec:
           - glitchtip
           - zyme
           - limes
+          - paperless
           - sonarr
           - radarr
           - lidarr
