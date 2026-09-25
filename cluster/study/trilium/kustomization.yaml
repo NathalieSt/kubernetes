@@ -8,5 +8,6 @@ resources:
 - deployment.yaml
 - egress-network-policy.yaml
 - k8up-schedule.yaml
+- vault-secrets.yaml
 - service.yaml
 - network-policy.yaml

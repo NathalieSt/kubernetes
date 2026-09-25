@@ -117,4 +117,5 @@ spec:
   - name: csi-driver-nfs
   - name: garage
   - name: k8up
+  - name: vault-secrets-operator-config
   serviceAccountName: flux-trilium

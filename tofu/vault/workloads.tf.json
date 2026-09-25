@@ -85,6 +85,10 @@
         "name": "tandoor",
         "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "trilium": {
+        "name": "trilium",
+        "policy": "path \"kvv2/data/trilium/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/trilium/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "victoria-metrics": {
         "name": "victoria-metrics",
         "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n"
@@ -410,6 +414,21 @@
         ],
         "token_ttl": 600
       },
+      "trilium": {
+        "backend": "kubernetes",
+        "role_name": "trilium",
+        "bound_service_account_names": [
+          "trilium-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "trilium"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.trilium.name}"
+        ],
+        "token_ttl": 600
+      },
       "victoria-metrics": {
         "backend": "kubernetes",
         "role_name": "victoria-metrics",
@@ -625,6 +644,12 @@
     },
     {
       "from": "vault_kv_secret_v2.tandoor_tandoor_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.trilium_trilium_oidc",
       "lifecycle": {
         "destroy": false
       }
