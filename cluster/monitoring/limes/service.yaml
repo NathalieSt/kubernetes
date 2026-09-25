@@ -3,12 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: daybook
-    app.kubernetes.io/version: f097388
-  name: daybook
+    app.kubernetes.io/name: limes
+    app.kubernetes.io/version: 9a459c5
+  name: limes
 spec:
   selector:
-    app.kubernetes.io/name: daybook
+    app.kubernetes.io/name: limes
   ports:
   - name: http
     port: 8080

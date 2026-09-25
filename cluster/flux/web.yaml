@@ -1,0 +1,132 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: changedetection
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: changedetection
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/changedetection
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: k8up
+  - name: garage
+  serviceAccountName: flux-changedetection
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: fourget
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: fourget
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/fourget
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: gluetun-proxy
+  - name: keda
+  serviceAccountName: flux-fourget
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: helium-services
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: helium-services
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/helium-services
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: gluetun-proxy
+  - name: reflector
+  serviceAccountName: flux-helium-services
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: neko
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: neko
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/neko
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: gluetun-proxy
+  - name: vault-secrets-operator-config
+  - name: keda
+  serviceAccountName: flux-neko
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: redlib
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: redlib
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/redlib
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: keda
+  - name: reflector
+  serviceAccountName: flux-redlib
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: rimworld-together
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: rimworld-together
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/rimworld-together
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  serviceAccountName: flux-rimworld-together

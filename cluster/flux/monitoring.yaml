@@ -2,6 +2,27 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: clamav
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: clamav
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/clamav
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: flux-notifications
   namespace: flux-system
 spec:
@@ -102,6 +123,30 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: limes
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: limes
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/limes
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: clamav
+  - name: reflector
+  - name: main-pg
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: ntfy
   namespace: flux-system
 spec:
@@ -121,6 +166,27 @@ spec:
   - name: reflector
   - name: vault-secrets-operator-config
   serviceAccountName: flux-ntfy
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: orrery
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: orrery
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/orrery
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: victoria-metrics
+  serviceAccountName: flux-orrery
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

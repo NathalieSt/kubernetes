@@ -1,0 +1,139 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: code-server
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: code-server
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/development/code-server
+  prune: true
+  wait: true
+  timeout: 15m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
+  - name: garage
+  - name: k8up
+  - name: egress-proxy
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: forgejo
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: forgejo
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/development/forgejo
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: forgejo-pg
+  - name: valkey
+  - name: keda
+  - name: garage
+  - name: k8up
+  serviceAccountName: flux-forgejo
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: forgejo-runner
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: forgejo
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/development/forgejo-runner
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: forgejo
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-forgejo-runner
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: it-tools
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: it-tools
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/development/it-tools
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: keda
+  serviceAccountName: flux-it-tools
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: omni-tools
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: omni-tools
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/development/omni-tools
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: keda
+  serviceAccountName: flux-omni-tools
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vim-dojo
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: vim-dojo
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/development/vim-dojo
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: reflector
+  - name: garage
+  - name: k8up
+  - name: egress-proxy
+  serviceAccountName: flux-vim-dojo

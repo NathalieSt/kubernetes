@@ -1,0 +1,64 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: backup-dashboard
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: backup-dashboard
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/platform/backup-dashboard
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: garage
+  - name: k8up
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: homelab-docs
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: homelab-docs
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/platform/homelab-docs
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: reflector
+  serviceAccountName: flux-homelab-docs
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: homepage
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: homepage
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/platform/homepage
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  serviceAccountName: flux-privileged
