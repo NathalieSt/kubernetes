@@ -10,6 +10,9 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: anki-sync
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: changedetection
     - namespaceSelector:
         matchLabels:
@@ -31,7 +34,13 @@ spec:
           kubernetes.io/metadata.name: postgres
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: radicale
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: tandoor
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: trilium
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: vault

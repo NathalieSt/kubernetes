@@ -8,6 +8,17 @@ metadata:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
+  name: anki-sync
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
   name: authelia
 ---
 apiVersion: v1
@@ -470,6 +481,17 @@ metadata:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
+  name: radicale
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
   name: redis
 ---
 apiVersion: v1
@@ -512,6 +534,17 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
     pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: stirling-pdf
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: privileged
     pod-security.kubernetes.io/warn: restricted
   name: system-upgrade
@@ -526,6 +559,17 @@ metadata:
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
   name: tandoor
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: trilium
 ---
 apiVersion: v1
 kind: Namespace

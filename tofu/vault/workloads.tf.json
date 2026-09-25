@@ -1,6 +1,10 @@
 {
   "resource": {
     "vault_policy": {
+      "anki-sync": {
+        "name": "anki-sync",
+        "policy": "path \"kvv2/data/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "authelia": {
         "name": "authelia",
         "policy": "path \"kvv2/data/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n"
@@ -69,6 +73,10 @@
         "name": "qbittorrent",
         "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "radicale": {
+        "name": "radicale",
+        "policy": "path \"kvv2/data/radicale/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radicale/users\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "tandoor": {
         "name": "tandoor",
         "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -83,6 +91,21 @@
       }
     },
     "vault_kubernetes_auth_backend_role": {
+      "anki-sync": {
+        "backend": "kubernetes",
+        "role_name": "anki-sync",
+        "bound_service_account_names": [
+          "anki-sync-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "anki-sync"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.anki-sync.name}"
+        ],
+        "token_ttl": 600
+      },
       "authelia": {
         "backend": "kubernetes",
         "role_name": "authelia",
@@ -338,6 +361,21 @@
         ],
         "token_ttl": 600
       },
+      "radicale": {
+        "backend": "kubernetes",
+        "role_name": "radicale",
+        "bound_service_account_names": [
+          "radicale-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "radicale"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.radicale.name}"
+        ],
+        "token_ttl": 600
+      },
       "tandoor": {
         "backend": "kubernetes",
         "role_name": "tandoor",
@@ -386,6 +424,12 @@
     }
   },
   "removed": [
+    {
+      "from": "vault_kv_secret_v2.anki-sync_anki-sync_users",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
     {
       "from": "vault_kv_secret_v2.authelia_authelia_oidc-clients",
       "lifecycle": {
@@ -538,6 +582,12 @@
     },
     {
       "from": "vault_kv_secret_v2.qbittorrent_vpn",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.radicale_radicale_users",
       "lifecycle": {
         "destroy": false
       }

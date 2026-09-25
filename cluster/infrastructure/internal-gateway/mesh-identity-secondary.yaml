@@ -25,14 +25,18 @@ spec:
     matchLabels:
       app.kubernetes.io/name: internal-gateway-secondary
   extraDNSLabels:
+  - anki
   - bazarr
   - lidarr
   - prowlarr
   - qbittorrent
   - radarr
+  - calendar
   - sabnzbd
   - requests
   - sonarr
+  - pdf
+  - notes
   containerOverride:
     env:
     - name: NB_DISABLE_UPDATE_SETTINGS

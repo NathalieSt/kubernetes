@@ -925,6 +925,50 @@ data:
           ]
         },
         {
+          "key": "anki-sync",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/anki-sync",
+          "version": "233db3f@sha256:fc3d86c600ec4dc52bf0631c86b05d2e198e49a9b8d269067d250d92c7925641",
+          "file": "versions/study.json",
+          "inVersionsFile": true,
+          "generators": [
+            "anki-sync"
+          ]
+        },
+        {
+          "key": "radicale",
+          "kind": "image",
+          "repository": "ghcr.io/kozea/radicale",
+          "version": "3.8.1@sha256:54d9406cd30f9e206a9dd6d61dfac48da26b9afc37200e14f23beb8fafa7d11c",
+          "file": "versions/study.json",
+          "inVersionsFile": true,
+          "generators": [
+            "radicale"
+          ]
+        },
+        {
+          "key": "stirling-pdf",
+          "kind": "image",
+          "repository": "stirlingtools/stirling-pdf",
+          "version": "2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396",
+          "file": "versions/study.json",
+          "inVersionsFile": true,
+          "generators": [
+            "stirling-pdf"
+          ]
+        },
+        {
+          "key": "trilium",
+          "kind": "image",
+          "repository": "triliumnext/trilium",
+          "version": "v0.105.0@sha256:cc6a15edd7ac3df9bb98ad39dd40af8ffda6c1c0bfafe37c26137ddcbecdb7e5",
+          "file": "versions/study.json",
+          "inVersionsFile": true,
+          "generators": [
+            "trilium"
+          ]
+        },
+        {
           "key": "changedetection",
           "kind": "image",
           "repository": "ghcr.io/dgtlmoon/changedetection.io",

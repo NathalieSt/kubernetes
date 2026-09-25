@@ -49,6 +49,9 @@ data:
         - 4get.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - anki.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - audiomuse.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -60,6 +63,9 @@ data:
       - domain:
         - bazarr.netbird.nathalie-stiefsohn.eu
         policy: one_factor
+      - domain:
+        - calendar.netbird.nathalie-stiefsohn.eu
+        policy: bypass
       - domain:
         - changedetection.netbird.nathalie-stiefsohn.eu
         policy: one_factor
@@ -115,6 +121,9 @@ data:
         - neko.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - notes.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - ntfy.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
@@ -123,6 +132,9 @@ data:
       - domain:
         - orrery.netbird.nathalie-stiefsohn.eu
         policy: bypass
+      - domain:
+        - pdf.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
       - domain:
         - prowlarr.netbird.nathalie-stiefsohn.eu
         policy: one_factor

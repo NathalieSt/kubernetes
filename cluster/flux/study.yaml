@@ -1,0 +1,93 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: anki-sync
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: anki-sync
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/study/anki-sync
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: reflector
+  - name: garage
+  - name: k8up
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-anki-sync
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: radicale
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: radicale
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/study/radicale
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: garage
+  - name: k8up
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-radicale
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: stirling-pdf
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: stirling-pdf
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/study/stirling-pdf
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: keda
+  serviceAccountName: flux-stirling-pdf
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: trilium
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: trilium
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/study/trilium
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: garage
+  - name: k8up
+  serviceAccountName: flux-trilium
