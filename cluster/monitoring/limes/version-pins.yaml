@@ -8,303 +8,6 @@ data:
     {
       "pins": [
         {
-          "key": "backup-dashboard",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "086216c@sha256:e8ab7004ca8c5503ff52ce1a7cec83dce8a8f438e6432de476285114c4635193",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "backup-dashboard"
-          ]
-        },
-        {
-          "key": "changedetection",
-          "kind": "image",
-          "repository": "ghcr.io/dgtlmoon/changedetection.io",
-          "version": "0.60.4",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "changedetection"
-          ]
-        },
-        {
-          "key": "clamav",
-          "kind": "image",
-          "repository": "clamav/clamav",
-          "version": "1.5.4-debian13-slim",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "clamav"
-          ]
-        },
-        {
-          "key": "code-server",
-          "kind": "image",
-          "repository": "codercom/code-server",
-          "version": "sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "code-server"
-          ]
-        },
-        {
-          "key": "daybook",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "f097388@sha256:f229200f1791216fd9ce50453da2764b85dbe6ac09bee07c09746a3349bf017a",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "daybook"
-          ]
-        },
-        {
-          "key": "forgejo",
-          "kind": "chart",
-          "repository": "oci://code.forgejo.org/forgejo-helm/forgejo",
-          "version": "17.1.3",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "forgejo"
-          ]
-        },
-        {
-          "key": "forgejo-runner",
-          "kind": "image",
-          "repository": "code.forgejo.org/forgejo/runner",
-          "version": "13.2",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "forgejo-runner"
-          ]
-        },
-        {
-          "key": "fourget",
-          "kind": "image",
-          "repository": "luuul/4get",
-          "version": "1.0.58",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "fourget"
-          ]
-        },
-        {
-          "key": "grype",
-          "kind": "image",
-          "repository": "anchore/grype",
-          "version": "sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "limes"
-          ]
-        },
-        {
-          "key": "helium-services",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services",
-          "version": "ceb2862@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "helium-services"
-          ]
-        },
-        {
-          "key": "homelab-docs",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "6bd2f41@sha256:de9b32646fde24231d1e7e20353f5dbc1115cb222a21a47b7c0bcb585df6902d",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "homelab-docs"
-          ]
-        },
-        {
-          "key": "homepage",
-          "kind": "image",
-          "repository": "ghcr.io/gethomepage/homepage",
-          "version": "v2.4.0",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "homepage"
-          ]
-        },
-        {
-          "key": "it-tools",
-          "kind": "image",
-          "repository": "ghcr.io/sharevb/it-tools",
-          "version": "sha256:5d79e8c7fbf39d6473c282b9c4f86ff85c4900ec22ef766ae3c6f0f9ca8dbb37",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "it-tools"
-          ]
-        },
-        {
-          "key": "kavita",
-          "kind": "image",
-          "repository": "jvmilazz0/kavita",
-          "version": "sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "kavita"
-          ]
-        },
-        {
-          "key": "limes",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "16268cc@sha256:13fd75d94621ca042d4967b52d03c45d7b3b29e6f8c1ca4a0b5314d94ba6a8db",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "limes"
-          ]
-        },
-        {
-          "key": "mail",
-          "kind": "image",
-          "repository": "ghcr.io/docker-mailserver/docker-mailserver",
-          "version": "sha256:5961d79488def84b030a2e164168dd64fb262ac6a2393a4f77b3ceebe5261d4f",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "mail"
-          ]
-        },
-        {
-          "key": "neko",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium",
-          "version": "8342ddb@sha256:275f535704f5f23a2d5f23b03d71309afa47951c17f5d3b01c565cf55380a370",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "neko"
-          ]
-        },
-        {
-          "key": "omni-tools",
-          "kind": "image",
-          "repository": "iib0011/omni-tools",
-          "version": "sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "omni-tools"
-          ]
-        },
-        {
-          "key": "orrery",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "6694af6@sha256:140536a4f6d14a4658d89590758870a6a203f2e4ab42318613f0efb245b3ffb6",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "orrery"
-          ]
-        },
-        {
-          "key": "psono-client",
-          "kind": "image",
-          "repository": "psono/psono-client",
-          "version": "sha256:487eb176193565f5ebdc9a9d6d610b9c0a832ca6b56221bf2703a526c97727d7",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "psono-client"
-          ]
-        },
-        {
-          "key": "psono-server",
-          "kind": "image",
-          "repository": "psono/psono-server",
-          "version": "sha256:8b489f203c1bab3f46296bd4acd7ffa371df83b4fcdd20856f803c364e3c790b",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "psono-server"
-          ]
-        },
-        {
-          "key": "redlib",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
-          "version": "acf6616@sha256:f0c881e16acca060a6c95dd00f4ba14282abae34d196082caf8ce96f310d4726",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "redlib"
-          ]
-        },
-        {
-          "key": "rimworld-together",
-          "kind": "image",
-          "repository": "ghcr.io/rimworld-together/rimworld-together",
-          "version": "sha256:a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "rimworld-together"
-          ]
-        },
-        {
-          "key": "roundcube",
-          "kind": "image",
-          "repository": "roundcube/roundcubemail",
-          "version": "sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "mail"
-          ]
-        },
-        {
-          "key": "tandoor",
-          "kind": "image",
-          "repository": "vabene1111/recipes",
-          "version": "sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "tandoor"
-          ]
-        },
-        {
-          "key": "vim-dojo",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "eb432df@sha256:5cbbdd566f42076f68a89409226c3bffb9be2220aa6563b579379815560b3736",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "vim-dojo"
-          ]
-        },
-        {
-          "key": "zyme",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "72bcf83@sha256:11f36ff706e330c124a2edcea9ae34e181b2af7d753fe1717b0d421898d2c2fe",
-          "file": "versions/apps.json",
-          "inVersionsFile": true,
-          "generators": [
-            "zyme"
-          ]
-        },
-        {
           "key": "alpine",
           "kind": "image",
           "repository": "alpine",
@@ -447,6 +150,72 @@ data:
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
+        },
+        {
+          "key": "code-server",
+          "kind": "image",
+          "repository": "codercom/code-server",
+          "version": "sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "code-server"
+          ]
+        },
+        {
+          "key": "forgejo",
+          "kind": "chart",
+          "repository": "oci://code.forgejo.org/forgejo-helm/forgejo",
+          "version": "17.1.3",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "forgejo"
+          ]
+        },
+        {
+          "key": "forgejo-runner",
+          "kind": "image",
+          "repository": "code.forgejo.org/forgejo/runner",
+          "version": "13.2",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "forgejo-runner"
+          ]
+        },
+        {
+          "key": "it-tools",
+          "kind": "image",
+          "repository": "ghcr.io/sharevb/it-tools",
+          "version": "sha256:5d79e8c7fbf39d6473c282b9c4f86ff85c4900ec22ef766ae3c6f0f9ca8dbb37",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "it-tools"
+          ]
+        },
+        {
+          "key": "omni-tools",
+          "kind": "image",
+          "repository": "iib0011/omni-tools",
+          "version": "sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "omni-tools"
+          ]
+        },
+        {
+          "key": "vim-dojo",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
+          "version": "39841ca@sha256:a2536a5e43ba1d770f8788ac94178f97749e4fc0c23b40feefb976083dcc4174",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "vim-dojo"
+          ]
         },
         {
           "key": "authelia",
@@ -851,7 +620,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "010c951@sha256:526edc903782f39c7d8744ab1441b7e76a95b1ce89bd79006d097e6a37dea95d",
+          "version": "86acfee@sha256:5e36e34ab4536775d500805b79d0876e514f72c3459907c938b3860a815b2a5d",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -925,6 +694,17 @@ data:
           ]
         },
         {
+          "key": "clamav",
+          "kind": "image",
+          "repository": "clamav/clamav",
+          "version": "1.5.4-debian13-slim",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "clamav"
+          ]
+        },
+        {
           "key": "glitchtip",
           "kind": "image",
           "repository": "glitchtip/glitchtip",
@@ -933,6 +713,17 @@ data:
           "inVersionsFile": true,
           "generators": [
             "glitchtip"
+          ]
+        },
+        {
+          "key": "grype",
+          "kind": "image",
+          "repository": "anchore/grype",
+          "version": "sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "limes"
           ]
         },
         {
@@ -947,6 +738,17 @@ data:
           ]
         },
         {
+          "key": "limes",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
+          "version": "9a459c5@sha256:1f99301c7f199576e89a22b42380686ea3557cdfef04d372ce0663fbe8025da8",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "limes"
+          ]
+        },
+        {
           "key": "ntfy",
           "kind": "image",
           "repository": "binwiederhier/ntfy",
@@ -955,6 +757,17 @@ data:
           "inVersionsFile": true,
           "generators": [
             "ntfy"
+          ]
+        },
+        {
+          "key": "orrery",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
+          "version": "c35316d@sha256:6b4537e179988b33284f3f875d83c5158e1500c67f09c13d1cab4cc170aac915",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "orrery"
           ]
         },
         {
@@ -988,6 +801,193 @@ data:
           "inVersionsFile": true,
           "generators": [
             "victoria-metrics"
+          ]
+        },
+        {
+          "key": "daybook",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
+          "version": "7791445@sha256:0e3980e7e12eddbd9ef6fb94ef78e652e90c75eb2a31b718e2be6d2290f0568f",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "daybook"
+          ]
+        },
+        {
+          "key": "kavita",
+          "kind": "image",
+          "repository": "jvmilazz0/kavita",
+          "version": "sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "kavita"
+          ]
+        },
+        {
+          "key": "mail",
+          "kind": "image",
+          "repository": "ghcr.io/docker-mailserver/docker-mailserver",
+          "version": "sha256:5961d79488def84b030a2e164168dd64fb262ac6a2393a4f77b3ceebe5261d4f",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "mail"
+          ]
+        },
+        {
+          "key": "psono-client",
+          "kind": "image",
+          "repository": "psono/psono-client",
+          "version": "sha256:487eb176193565f5ebdc9a9d6d610b9c0a832ca6b56221bf2703a526c97727d7",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "psono-client"
+          ]
+        },
+        {
+          "key": "psono-server",
+          "kind": "image",
+          "repository": "psono/psono-server",
+          "version": "sha256:8b489f203c1bab3f46296bd4acd7ffa371df83b4fcdd20856f803c364e3c790b",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "psono-server"
+          ]
+        },
+        {
+          "key": "roundcube",
+          "kind": "image",
+          "repository": "roundcube/roundcubemail",
+          "version": "sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "mail"
+          ]
+        },
+        {
+          "key": "tandoor",
+          "kind": "image",
+          "repository": "vabene1111/recipes",
+          "version": "sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "tandoor"
+          ]
+        },
+        {
+          "key": "zyme",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
+          "version": "80340b8@sha256:2c8f24b00ffdf259845ed0e7f43415a878da900e43ee19a4c63976e0f1945b9f",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "zyme"
+          ]
+        },
+        {
+          "key": "backup-dashboard",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
+          "version": "41217d6@sha256:1014d28b4dc900bfeaa517f3b83ec83710fa9bb2b92e7a3d036e0dd4fca4da76",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "backup-dashboard"
+          ]
+        },
+        {
+          "key": "homelab-docs",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
+          "version": "0f54acb@sha256:fcbf255f52f315f97364256ae7e672ad83d3e2b3dbbc8de57ee59a635e99860d",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "homelab-docs"
+          ]
+        },
+        {
+          "key": "homepage",
+          "kind": "image",
+          "repository": "ghcr.io/gethomepage/homepage",
+          "version": "v2.4.0",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "homepage"
+          ]
+        },
+        {
+          "key": "changedetection",
+          "kind": "image",
+          "repository": "ghcr.io/dgtlmoon/changedetection.io",
+          "version": "0.60.4",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "changedetection"
+          ]
+        },
+        {
+          "key": "fourget",
+          "kind": "image",
+          "repository": "luuul/4get",
+          "version": "1.0.58",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "fourget"
+          ]
+        },
+        {
+          "key": "helium-services",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services",
+          "version": "ceb2862@sha256:cfb3d520d689b0a9f631cca04f04172f17dbebf0b1d61b57090d64c810af9544",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "helium-services"
+          ]
+        },
+        {
+          "key": "neko",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium",
+          "version": "8342ddb@sha256:275f535704f5f23a2d5f23b03d71309afa47951c17f5d3b01c565cf55380a370",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "neko"
+          ]
+        },
+        {
+          "key": "redlib",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
+          "version": "acf6616@sha256:f0c881e16acca060a6c95dd00f4ba14282abae34d196082caf8ce96f310d4726",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "redlib"
+          ]
+        },
+        {
+          "key": "rimworld-together",
+          "kind": "image",
+          "repository": "ghcr.io/rimworld-together/rimworld-together",
+          "version": "sha256:a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "rimworld-together"
           ]
         }
       ],
