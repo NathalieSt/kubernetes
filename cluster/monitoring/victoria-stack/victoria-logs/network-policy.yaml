@@ -14,6 +14,9 @@ spec:
           kubernetes.io/metadata.name: code-server
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: healthchecks
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: orrery
     - namespaceSelector:
         matchLabels:

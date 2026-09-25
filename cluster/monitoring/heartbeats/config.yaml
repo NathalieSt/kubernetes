@@ -345,6 +345,7 @@ data:
     CONFIG_PATH = os.environ["HEARTBEATS_CONFIG"]
     SECRETS_DIR = os.environ["HEARTBEATS_SECRETS"]
     INTERVAL = int(os.environ.get("HEARTBEATS_INTERVAL", "300"))
+    VICTORIA_LOGS = os.environ["HEARTBEATS_VICTORIA_LOGS"].rstrip("/")
 
     # vault-apply fills every declared key with a sentence starting with this, so
     # a key that has not been written yet is present and must still read as unset.
@@ -416,7 +417,8 @@ data:
         try:
             with urllib.request.urlopen(req, timeout=TIMEOUT, context=context) as response:
                 raw = response.read()
-                is_json = response.headers.get_content_type() == "application/json"
+                content_type = response.headers.get_content_type()
+                is_json = content_type == "application/json" or content_type.endswith("+json")
         except urllib.error.HTTPError as error:
             if error.code == 404 and not_found_ok:
                 return None
@@ -424,8 +426,12 @@ data:
             raise HttpError(f"{method} {urllib.parse.urlsplit(url).path}: HTTP {error.code} {detail}")
         except (urllib.error.URLError, TimeoutError) as error:
             raise HttpError(f"{method} {urllib.parse.urlsplit(url).netloc}: {error}")
-        # A ping answers with a bare "OK"; only the APIs answer in JSON.
-        return json.loads(raw) if raw and is_json else None
+        # A ping answers with a bare "OK"; only the APIs answer in JSON. VictoriaLogs
+        # streams one object per line, and a `stats` query has exactly one.
+        if not (raw and is_json):
+            return None
+        text = raw.decode()
+        return json.loads(text if content_type == "application/json" else text.splitlines()[0])
 
 
     class Kube:
@@ -458,6 +464,9 @@ data:
         # Observed now rather than a run that finished at a moment of its own, so
         # "newer than last_ping" is always true and pings need throttling instead.
         live: bool = False
+        # Backups only: which one, and when it was created, for the log check.
+        backup: str = ""
+        started: datetime | None = None
 
 
     @dataclass
@@ -518,6 +527,32 @@ data:
         return None
 
 
+    def skipped_files(namespace, backup, since):
+        """How many files restic could not read in this Backup, from its pod's log.
+
+        K8up marks a Backup Succeeded when restic exits with an incomplete snapshot,
+        so a file the backup pod may not read is skipped with only an ERROR line to
+        show for it. Vault lost ~600 files a night that way, every night, while its
+        check stayed green. The pod is gone by morning; VictoriaLogs still has it."""
+        query = (
+            f'kubernetes.pod_namespace:"{namespace}" AND kubernetes.pod_name:"backup-{backup}-"* '
+            'AND "during archival" | stats count() skipped'
+        )
+        start = (since or now() - timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        body = urllib.parse.urlencode({"query": query, "start": start})
+        answer = request(
+            "POST",
+            f"{VICTORIA_LOGS}/select/logsql/query",
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            body=body,
+        )
+        # An answer that is not the expected object is an error, never zero: a zero
+        # read out of a response nobody parsed is how this check would go blind.
+        if not isinstance(answer, dict) or "skipped" not in answer:
+            raise ValueError(f"unexpected answer from VictoriaLogs: {answer!r:.200}")
+        return int(answer["skipped"])
+
+
     def observe_backup(kube, namespace, schedule):
         if kube.get(f"/apis/k8up.io/v1/namespaces/{namespace}/schedules/{schedule}") is None:
             return Missing(f"K8up Schedule {namespace}/{schedule} does not exist, so nothing backs this namespace up.")
@@ -534,8 +569,34 @@ data:
                 ok = condition.get("reason") == "Succeeded"
                 verdict = "succeeded" if ok else "failed"
                 outcome = Outcome(finished, ok, f"Backup {name} {verdict}: {condition.get('message', '')}")
+                outcome.backup = name
+                outcome.started = parse_time(backup["metadata"].get("creationTimestamp"))
                 if latest is None or outcome.at > latest.at:
                     latest = outcome
+        if latest is None or not latest.ok:
+            return latest
+
+        # Only the newest, and only a success: a failure already says so.
+        try:
+            skipped = skipped_files(namespace, latest.backup, latest.started)
+        except (HttpError, ValueError) as error:
+            # Not knowing is reported as not knowing, never as fine: an unreachable
+            # VictoriaLogs must not quietly switch this check off again.
+            return Outcome(
+                latest.at,
+                False,
+                f"Backup {latest.backup} finished, but whether restic skipped files could not "
+                f"be checked: {error}",
+            )
+        if skipped:
+            return Outcome(
+                latest.at,
+                False,
+                f"Backup {latest.backup} is incomplete: restic could not read {skipped} file(s) and "
+                "K8up still called it Succeeded. The backup pod's user cannot read them. "
+                f'VictoriaLogs: kubernetes.pod_namespace:"{namespace}" AND '
+                f'kubernetes.pod_name:"backup-{latest.backup}-"* AND "during archival"',
+            )
         return latest
 
 

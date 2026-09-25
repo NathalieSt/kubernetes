@@ -26,3 +26,6 @@ spec:
       keepLast: 14
       keepWeekly: 8
       keepMonthly: 12
+  podSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
