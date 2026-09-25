@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: anki-sync
+    app.kubernetes.io/version: 233db3f
+  name: anki-sync
+spec:
+  selector:
+    app.kubernetes.io/name: anki-sync
+  ports:
+  - name: http-anki-sync
+    port: 8080
+    targetPort: 8080

@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: stirling-pdf
+    app.kubernetes.io/version: 2.14.3
+  name: stirling-pdf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: stirling-pdf
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: stirling-pdf
+        app.kubernetes.io/version: 2.14.3
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: stirlingtools/stirling-pdf:2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396
+        name: stirling-pdf
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /tmp
+          name: scratch-tmp
+        - mountPath: /configs
+          name: scratch-configs
+        - mountPath: /logs
+          name: scratch-logs
+        - mountPath: /customFiles
+          name: scratch-customfiles
+        - mountPath: /pipeline
+          name: scratch-pipeline
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        - name: SECURITY_ENABLELOGIN
+          value: "false"
+        - name: SYSTEM_ENABLEANALYTICS
+          value: "false"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+        securityContext:
+          capabilities:
+            add:
+            - CHOWN
+            - DAC_OVERRIDE
+            - FOWNER
+            - SETUID
+            - SETGID
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+        readinessProbe:
+          httpGet:
+            path: /api/v1/info/status
+            port: 8080
+          periodSeconds: 15
+        startupProbe:
+          httpGet:
+            path: /api/v1/info/status
+            port: 8080
+          periodSeconds: 5
+          failureThreshold: 36
+      volumes:
+      - name: scratch-tmp
+        emptyDir: {}
+      - name: scratch-configs
+        emptyDir: {}
+      - name: scratch-logs
+        emptyDir: {}
+      - name: scratch-customfiles
+        emptyDir: {}
+      - name: scratch-pipeline
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

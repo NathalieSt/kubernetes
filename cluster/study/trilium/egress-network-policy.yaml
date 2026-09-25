@@ -1,0 +1,12 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: trilium-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: trilium
+  policyTypes:
+  - Egress
+  egress: []

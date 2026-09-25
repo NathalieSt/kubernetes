@@ -80,6 +80,9 @@ spec:
     name: manifests
     namespace: flux-system
   - kind: Kustomization
+    name: anki-sync
+    namespace: flux-system
+  - kind: Kustomization
     name: audiomuse-ai
     namespace: flux-system
   - kind: Kustomization
@@ -233,6 +236,9 @@ spec:
     name: orrery
     namespace: flux-system
   - kind: Kustomization
+    name: paperless
+    namespace: flux-system
+  - kind: Kustomization
     name: prowlarr
     namespace: flux-system
   - kind: Kustomization
@@ -246,6 +252,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: radarr
+    namespace: flux-system
+  - kind: Kustomization
+    name: radicale
     namespace: flux-system
   - kind: Kustomization
     name: redis
@@ -269,6 +278,9 @@ spec:
     name: sonarr
     namespace: flux-system
   - kind: Kustomization
+    name: stirling-pdf
+    namespace: flux-system
+  - kind: Kustomization
     name: system-upgrade-controller
     namespace: flux-system
   - kind: Kustomization
@@ -276,6 +288,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: tandoor
+    namespace: flux-system
+  - kind: Kustomization
+    name: trilium
     namespace: flux-system
   - kind: Kustomization
     name: valkey

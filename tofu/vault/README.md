@@ -29,6 +29,9 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `limes` | `limes` | `kvv2/limes` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
 | `zyme` | `zyme` | `kvv2/zyme` |
+| `radicale` | `radicale` | `kvv2/radicale/users` |
+| `anki-sync` | `anki-sync` | `kvv2/anki-sync/users` |
+| `paperless` | `paperless` | `kvv2/paperless/oidc`, `kvv2/paperless/app` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
 | `gluetun-proxy` | `gluetun-proxy` | `kvv2/vpn` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
