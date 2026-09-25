@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/authelia-config-hash: 00951b1ba9a198ba
+        homelab/authelia-config-hash: 672397bcd19057cb
       labels:
         app.kubernetes.io/name: authelia
         app.kubernetes.io/version: 4.39.25
@@ -31,6 +31,8 @@ spec:
         ports:
         - containerPort: 9091
           name: http
+        - containerPort: 9959
+          name: metrics
         volumeMounts:
         - mountPath: /config
           name: config

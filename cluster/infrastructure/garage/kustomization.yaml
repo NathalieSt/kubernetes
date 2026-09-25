@@ -11,3 +11,4 @@ resources:
 - service.yaml
 - init-job.yaml
 - network-policy.yaml
+- alert-rules.yaml

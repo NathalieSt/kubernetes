@@ -1,0 +1,37 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: internal-gateway
+spec:
+  groups:
+  - name: internal-gateway
+    interval: 1m
+    rules:
+    - alert: GatewayCertificateExpiring
+      expr: min by (pod, cn) (traefik_tls_certs_not_after{job="internal-gateway"}) - time() < 21 * 86400
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: "{{ $labels.pod }} should have renewed it a week ago. Renewal is DNS-01 through acme-dns on the coordination VPS, so check that first; Traefik's log in {{ $labels.pod }} has the ACME error."
+        summary: The gateway's {{ $labels.cn }} certificate expires in {{ $value | humanizeDuration }}
+    - alert: GatewayCertificateExpiringSoon
+      expr: min by (pod, cn) (traefik_tls_certs_not_after{job="internal-gateway"}) - time() < 7 * 86400
+      for: 1h
+      labels:
+        severity: critical
+        topic: alerts-platform
+      annotations:
+        description: Every app on {{ $labels.pod }}'s NetBird peer becomes a certificate error when it lapses. Renewal is DNS-01 through acme-dns on the coordination VPS.
+        summary: The gateway's {{ $labels.cn }} certificate expires in {{ $value | humanizeDuration }}
+    - alert: GatewayServiceErrors
+      expr: sum by (service) (rate(traefik_service_requests_total{job="internal-gateway", code=~"5.."}[10m])) / sum by (service) (rate(traefik_service_requests_total{job="internal-gateway"}[10m])) > 0.5 and sum by (service) (rate(traefik_service_requests_total{job="internal-gateway"}[10m])) > 0.02
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-apps
+      annotations:
+        description: More than half of what the gateway sent to {{ $labels.service }} in the last 10 minutes came back 5xx, for 15 minutes. The app's own log is the place to look; a 502 or 504 means the gateway could not reach it at all.
+        summary: "{{ $labels.service }} is answering most requests with a 5xx"

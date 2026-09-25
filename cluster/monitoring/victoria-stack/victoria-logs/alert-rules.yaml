@@ -1,0 +1,37 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: victoria-logs
+spec:
+  groups:
+  - name: victoria-logs
+    interval: 1m
+    rules:
+    - alert: VictoriaLogsReadOnly
+      expr: vl_storage_is_read_only{job="victoria-logs"} == 1
+      for: 5m
+      labels:
+        severity: critical
+        topic: alerts-monitoring
+      annotations:
+        description: Its storage is out of space, and every log line since is dropped. Free space on nfs-remote or shorten retentionPeriod.
+        summary: VictoriaLogs has gone read-only
+    - alert: VictoriaLogsDiskLow
+      expr: vl_free_disk_space_bytes{job="victoria-logs"} < 10 * 1024 * 1024 * 1024
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: It goes read-only when this runs out. The volume's 20Gi is not enforced on NFS, so this is the free space of the whole nfs-remote export.
+        summary: VictoriaLogs has {{ $value | humanize1024 }}B of disk left
+    - alert: VictoriaLogsDroppingRows
+      expr: sum by (reason) (increase(vl_rows_dropped_total{job="victoria-logs"}[1h])) > 0
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: Lines are reaching it and being discarded rather than stored, so a search will come up short. The reason label says why; too_many_fields is usually one app logging a map as fields.
+        summary: VictoriaLogs is dropping log lines ({{ $labels.reason }})

@@ -478,3 +478,7 @@ data:
           - code
           token_endpoint_auth_method: none
           consent_mode: implicit
+    telemetry:
+      metrics:
+        enabled: true
+        address: tcp://0.0.0.0:9959/metrics

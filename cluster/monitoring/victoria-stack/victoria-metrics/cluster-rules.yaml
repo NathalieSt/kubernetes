@@ -1,0 +1,45 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: cluster
+spec:
+  groups:
+  - name: cluster
+    interval: 1m
+    rules:
+    - alert: CoreDNSServfail
+      expr: sum(rate(coredns_dns_responses_total{job="core-dns", rcode="SERVFAIL"}[10m])) / sum(rate(coredns_dns_responses_total{job="core-dns"}[10m])) > 0.05
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: Usually its upstream, the node's own resolver, failing — which fails every external name in the cluster, though in-cluster names still resolve. (coredns_forward_healthcheck_broken_total ticks all day and is not the signal.)
+        summary: CoreDNS is answering {{ $value | humanizePercentage }} of queries with SERVFAIL
+    - alert: CoreDNSPanics
+      expr: increase(coredns_panics_total{job="core-dns"}[15m]) > 0
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: A CoreDNS pod recovered from a panic. One is a bug to report; a stream of them is DNS going away. `kubectl -n kube-system logs -l k8s-app=kube-dns` has the trace.
+        summary: CoreDNS panicked
+    - alert: NfsRetransmitting
+      expr: rate(node_nfs_rpc_retransmissions_total[15m]) > 0.1
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: "The NFS client on {{ $labels.node }} has been resending RPCs for half an hour: a server that stopped answering, or a mesh link to remote-fs that is dropping. Every pod there with an NFS volume stalls in the meantime. `grep -e nfs /proc/mounts` on the node, via kubectl debug, shows which servers it holds mounts on."
+        summary: NFS calls on {{ $labels.node }} are being retransmitted
+    - alert: KubeletThreadsLeaking
+      expr: max by (node) (go_threads{job="kubelet", metrics_path="/metrics"}) > 1000 or max by (node) (deriv(go_threads{job="kubelet", metrics_path="/metrics"}[2h])) * 3600 > 50
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-nodes
+      annotations:
+        description: Threads are piling up in the k3s process, almost always kubelet calls hung on a dead NFS mount; at 10,000 the process dies. Find the mount (`cat /proc/loadavg`, then `grep <server> /proc/mounts` via kubectl debug --profile=sysadmin), unmount it lazily, and restart k3s to reclaim the threads — see the load-average note.
+        summary: k3s on {{ $labels.node }} is leaking threads

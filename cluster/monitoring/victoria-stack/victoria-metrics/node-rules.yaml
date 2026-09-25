@@ -13,6 +13,7 @@ spec:
       for: 15m
       labels:
         severity: warning
+        topic: alerts-nodes
       annotations:
         description: "For two hours, {{ $labels.instance }} has had at least {{ $value | printf \"%.1f\" }} blocked tasks per core beyond what its CPU is doing, usually a hung NFS mount. Find them with kubectl debug node/<node> --profile=sysadmin: threads in state D, their wchan and syscall. Hung kubelet calls clear only with a k3s restart."
         summary: Tasks stuck in I/O on {{ $labels.instance }}

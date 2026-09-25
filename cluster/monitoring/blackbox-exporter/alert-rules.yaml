@@ -1,0 +1,28 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: blackbox-exporter
+spec:
+  groups:
+  - name: blackbox-exporter
+    interval: 1m
+    rules:
+    - alert: AppUnreachable
+      expr: probe_success{job="probe-http"} == 0 unless on (probe_namespace, probe_name) (label_replace(label_replace(kube_deployment_spec_replicas == 0, "probe_name", "$1", "deployment", "(.*)"), "probe_namespace", "$1", "namespace", "(.*)") or label_replace(label_replace(kube_statefulset_replicas == 0, "probe_name", "$1", "statefulset", "(.*)"), "probe_namespace", "$1", "namespace", "(.*)"))
+      for: 10m
+      labels:
+        severity: warning
+        topic: alerts-apps
+      annotations:
+        description: Nothing has answered HTTP at {{ $labels.instance }} — the address the gateway routes {{ $labels.probe_name }} to — for ten minutes, so opening it gives a 502 or 504. `kubectl -n {{ $labels.probe_namespace }} get pods` first; `probe_http_status_code` says whether it is refusing, timing out or erroring.
+        summary: "{{ $labels.probe_name }} is not answering"
+    - alert: AppProberDown
+      expr: absent(up{job="probe-http"} == 1)
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: vmagent cannot reach the blackbox exporter in internal-gateway, so AppUnreachable can say nothing about any app. `kubectl -n internal-gateway get pods -l app.kubernetes.io/name=blackbox-exporter`.
+        summary: The app prober is not being scraped

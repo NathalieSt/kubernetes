@@ -1,0 +1,160 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: blackbox-exporter-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: blackbox-exporter
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: anki-sync
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: authelia
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: backup-dashboard
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: changedetection
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: code-server
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: daybook
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: forgejo
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: fourget
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: glitchtip
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: headlamp
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: healthchecks
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: helium-services
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: homelab-docs
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: homepage
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: it-tools
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kavita
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: limes
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: mail
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: neko
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ntfy
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: omni-tools
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: orrery
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: paperless
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: psono
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: qbittorrent
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: radicale
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: redlib
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: stirling-pdf
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tandoor
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: trilium
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: vault
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: vim-dojo
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: zyme

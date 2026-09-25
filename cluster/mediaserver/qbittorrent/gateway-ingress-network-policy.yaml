@@ -21,6 +21,7 @@ spec:
           values:
           - internal-gateway
           - internal-gateway-secondary
+          - blackbox-exporter
     ports:
     - port: 8080
       protocol: TCP

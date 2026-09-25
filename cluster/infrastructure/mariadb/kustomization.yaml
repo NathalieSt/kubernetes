@@ -9,3 +9,4 @@ resources:
 - pvc.yaml
 - scaled-object.yaml
 - network-policy.yaml
+- alert-rules.yaml

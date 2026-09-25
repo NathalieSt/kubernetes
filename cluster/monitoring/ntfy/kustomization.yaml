@@ -9,3 +9,4 @@ resources:
 - vault-secrets.yaml
 - service.yaml
 - network-policy.yaml
+- alert-rules.yaml

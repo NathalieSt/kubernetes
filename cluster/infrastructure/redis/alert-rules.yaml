@@ -1,0 +1,27 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: redis
+spec:
+  groups:
+  - name: redis
+    interval: 1m
+    rules:
+    - alert: RedisDown
+      expr: redis_up{job="redis"} == 0
+      for: 5m
+      labels:
+        severity: critical
+        topic: alerts-storage
+      annotations:
+        description: The exporter beside ${meta.name} cannot reach it, so every client using it for sessions, cache or queues is failing. `kubectl -n {{ $labels.namespace }} logs {{ $labels.pod }}` says why.
+        summary: ${meta.name} is not answering its exporter
+    - alert: RedisRejectingConnections
+      expr: increase(redis_rejected_connections_total{job="redis"}[15m]) > 0
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: It has hit maxclients, so its clients see connection errors. Something is leaking connections; `CLIENT LIST` in the pod shows who holds them.
+        summary: ${meta.name} is rejecting connections

@@ -1,0 +1,19 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: ntfy
+spec:
+  groups:
+  - name: ntfy
+    interval: 1m
+    rules:
+    - alert: NtfyPublishFailing
+      expr: increase(ntfy_messages_published_failure{job="ntfy"}[15m]) > 0
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: "Something is failing to publish to ntfy, and that something is a notification path: an alert, a heartbeat, a CI result. The usual cause is a publisher whose grant ntfy-start.sh left out because its user is not in Vault yet — `kubectl -n ntfy logs deploy/ntfy` says so at start."
+        summary: ntfy is refusing publishes

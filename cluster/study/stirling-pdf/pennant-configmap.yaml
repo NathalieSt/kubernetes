@@ -1,0 +1,182 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stirling-pdf-pennant
+  namespace: stirling-pdf
+data:
+  jar-stylesheet-override.py: |
+    """Pennant for an app that serves its frontend from inside a jar but lets files under
+    a custom static directory override it (Stirling-PDF's customFiles/static).
+
+      $1  the jar
+      $2  the index page inside the jar, which names the stylesheet (content-hashed)
+      $3  the static directory to write the override into
+      $4  the stylesheet to append
+
+    Copies each stylesheet the index links out of the jar, appends Pennant, and writes
+    it under the same path in the override directory, so the app serves it in place of
+    its own. Like append-stylesheet.sh it fails soft: a jar or index that is not where it
+    was, or an index that links no stylesheet, starts the app unthemed with a warning.
+    """
+
+    import os
+    import re
+    import sys
+    import zipfile
+
+    jar, index, out_dir, css = sys.argv[1:5]
+
+
+    def warn(message):
+        print(f"WARNING: Pennant not applied: {message}", file=sys.stderr)
+        sys.exit(0)
+
+
+    try:
+        archive = zipfile.ZipFile(jar)
+        page = archive.read(index).decode()
+    except (OSError, KeyError, zipfile.BadZipFile) as error:
+        warn(f"cannot read {index} from {jar}: {error}")
+
+    links = re.findall(r'<link[^>]+rel="stylesheet"[^>]+href="\.?/?([^"]+\.css)"', page)
+    links += re.findall(r'<link[^>]+href="\.?/?([^"]+\.css)"[^>]+rel="stylesheet"', page)
+    if not links:
+        warn(f"{index} links no stylesheet -- the frontend layout has changed")
+
+    prefix = os.path.dirname(index)
+    with open(css) as handle:
+        pennant = handle.read()
+
+    for link in sorted(set(links)):
+        member = f"{prefix}/{link}" if prefix else link
+        try:
+            original = archive.read(member)
+        except KeyError:
+            warn(f"{index} links {link}, which is not in {jar}")
+        target = os.path.join(out_dir, link)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        with open(target, "wb") as handle:
+            handle.write(original + b"\n" + pennant.encode())
+        print(f"appended Pennant to {link}")
+  pennant.css: |
+    /* Pennant for Stirling-PDF, appended by kubernetes-generator (src/generators/theme). */
+
+    :root:root {
+      --mantine-color-blue-0: #fff3f8;
+      --mantine-color-blue-1: #ffe4f0;
+      --mantine-color-blue-2: #ffcbe2;
+      --mantine-color-blue-3: #f5adce;
+      --mantine-color-blue-4: #e68eb8;
+      --mantine-color-blue-5: #d375a4;
+      --mantine-color-blue-6: #b95f8c;
+      --mantine-color-blue-7: #984a72;
+      --mantine-color-blue-8: #763757;
+      --mantine-color-blue-9: #54263d;
+      --color-primary-50: #fff3f8;
+      --color-primary-100: #ffe4f0;
+      --color-primary-200: #ffcbe2;
+      --color-primary-300: #f5adce;
+      --color-primary-400: #e68eb8;
+      --color-primary-500: #d375a4;
+      --color-primary-600: #b95f8c;
+      --color-primary-700: #984a72;
+      --color-primary-800: #763757;
+      --color-primary-900: #54263d;
+    }
+
+    :root:root, :root:root[data-mantine-color-scheme=light], :root:root[data-theme=light] {
+      --mantine-primary-color-filled: #984a72;
+      --mantine-primary-color-filled-hover: #763757;
+      --mantine-primary-color-light: #ffe4f0;
+      --mantine-primary-color-light-hover: #ffe4f0;
+      --mantine-primary-color-light-color: #763757;
+      --mantine-primary-color-contrast: #f9fafb;
+      --mantine-color-blue-filled: #984a72;
+      --mantine-color-blue-filled-hover: #763757;
+      --mantine-color-blue-light: #ffe4f0;
+      --mantine-color-blue-light-hover: #ffe4f0;
+      --mantine-color-blue-light-color: #763757;
+      --mantine-color-anchor: #984a72;
+      --btn-open-file: #984a72;
+      --mantine-color-body: #f9fafb;
+      --mantine-color-text: #2e3436;
+      --mantine-color-default-border: #e3e7e9;
+      --mantine-color-dimmed: #666d71;
+      --bg-surface: #ffffff;
+      --bg-raised: #f1f4f5;
+      --bg-muted: #f1f4f5;
+      --bg-background: #f9fafb;
+      --bg-toolbar: #ffffff;
+      --bg-file-manager: #f1f4f5;
+      --bg-file-list: #ffffff;
+      --text-primary: #2e3436;
+      --text-secondary: #666d71;
+      --text-muted: #838b8e;
+      --border-subtle: #e3e7e9;
+      --border-default: #e3e7e9;
+      --border-strong: #838b8e;
+      --hover-bg: #f1f4f5;
+      --active-bg: #e3e7e9;
+      --surface: 255 255 255;
+      --background: 249 250 251;
+      --border: 227 231 233;
+      --color-blue: #984a72;
+      --color-blue-light: #ffe4f0;
+      --color-blue-dark: #763757;
+      --color-blue-border: #ffcbe2;
+      --color-nav-active: #ffe4f0;
+      --color-nav-active-text: #763757;
+      --color-bg: #f9fafb;
+      --color-surface: #ffffff;
+      --color-border: #e3e7e9;
+      --color-text-1: #2e3436;
+    }
+
+    :root:root[data-mantine-color-scheme=dark], :root:root[data-theme=dark] {
+      --mantine-primary-color-filled: #e68eb8;
+      --mantine-primary-color-filled-hover: #ffcbe2;
+      --mantine-primary-color-light: #371627;
+      --mantine-primary-color-light-hover: #371627;
+      --mantine-primary-color-light-color: #ffcbe2;
+      --mantine-primary-color-contrast: #090c0d;
+      --mantine-color-blue-filled: #e68eb8;
+      --mantine-color-blue-filled-hover: #ffcbe2;
+      --mantine-color-blue-light: #371627;
+      --mantine-color-blue-light-hover: #371627;
+      --mantine-color-blue-light-color: #ffcbe2;
+      --mantine-color-anchor: #f5adce;
+      --btn-open-file: #e68eb8;
+      --mantine-color-body: #090c0d;
+      --mantine-color-text: #f1f4f5;
+      --mantine-color-default-border: #2e3436;
+      --mantine-color-dimmed: #b8bfc2;
+      --bg-surface: #121617;
+      --bg-raised: #1d2123;
+      --bg-muted: #1d2123;
+      --bg-background: #090c0d;
+      --bg-toolbar: #121617;
+      --bg-file-manager: #1d2123;
+      --bg-file-list: #121617;
+      --text-primary: #f1f4f5;
+      --text-secondary: #b8bfc2;
+      --text-muted: #9ea6a9;
+      --border-subtle: #2e3436;
+      --border-default: #2e3436;
+      --border-strong: #666d71;
+      --hover-bg: #1d2123;
+      --active-bg: #2e3436;
+      --surface: 18 22 23;
+      --background: 9 12 13;
+      --border: 46 52 54;
+      --color-blue: #f5adce;
+      --color-blue-light: #371627;
+      --color-blue-dark: #ffcbe2;
+      --color-blue-border: #763757;
+      --color-nav-active: #371627;
+      --color-nav-active-text: #ffcbe2;
+      --color-bg: #090c0d;
+      --color-surface: #121617;
+      --color-border: #2e3436;
+      --color-text-1: #f1f4f5;
+    }

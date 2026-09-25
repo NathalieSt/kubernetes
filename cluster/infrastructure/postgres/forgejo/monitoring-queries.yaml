@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forgejo-pg-monitoring
+data:
+  queries: |
+    # CNPG custom queries for Forgejo's cluster, exported as cnpg_forgejo_push_mirror_*.
+    #
+    # Forgejo's push mirrors are how the cluster's own source reaches Codeberg, which is what
+    # Flux reads, so a mirror that stopped is a cluster that stopped deploying — and every
+    # Kustomization stays Ready while it happens, just on an old revision. Forgejo records
+    # the mirror's last successful push and last error in its own tables, which makes this
+    # a query rather than an exporter with a token.
+    #
+    # repo_updated_seconds is the repository's last change, so the difference between the
+    # two is how far the mirror is behind. last_error is cleared by the next good push.
+    forgejo_push_mirror:
+      query: |
+        SELECT r.owner_name || '/' || r.name AS repo,
+               pm.remote_name AS remote,
+               pm.last_update::float AS last_update_seconds,
+               r.updated_unix::float AS repo_updated_seconds,
+               CASE WHEN coalesce(pm.last_error, '') = '' THEN 0 ELSE 1 END AS failing
+        FROM push_mirror pm
+        JOIN repository r ON r.id = pm.repo_id
+      target_databases: ["forgejo"]
+      metrics:
+        - repo:
+            usage: LABEL
+            description: Owner and name of the mirrored repository
+        - remote:
+            usage: LABEL
+            description: Forgejo's name for the push mirror remote
+        - last_update_seconds:
+            usage: GAUGE
+            description: Unix time of the mirror's last successful push
+        - repo_updated_seconds:
+            usage: GAUGE
+            description: Unix time the repository last changed
+        - failing:
+            usage: GAUGE
+            description: 1 while the mirror's last push attempt recorded an error

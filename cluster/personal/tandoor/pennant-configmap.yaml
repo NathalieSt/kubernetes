@@ -42,8 +42,9 @@ data:
 
     cp -R "$source_dir/." "$target_dir/"
     # An image may ship its assets read-only, and cp keeps the mode. The contents
-    # only: the emptyDir's own root belongs to root, and a chmod of it fails.
-    find "$target_dir" -mindepth 1 -exec chmod u+w {} +
+    # only: the emptyDir's own root belongs to root, and a chmod of it fails. Not
+    # through symlinks, whose targets are in the image's read-only root.
+    find "$target_dir" -mindepth 1 ! -type l -exec chmod u+w {} +
 
     for pattern in "$@"; do
       matched=0
@@ -51,6 +52,14 @@ data:
       for file in "$target_dir"/$pattern; do
         [ -f "$file" ] || continue
         matched=$((matched + 1))
+        # A symlink stays one in the copy (Paperless' collectstatic links every
+        # file back into its source tree), and appending through it would write
+        # into the image. So the file being themed becomes a real one; links
+        # elsewhere are left, since the image they point into is the same.
+        if [ -L "$file" ]; then
+          cp "$file" "$file.real" && rm "$file" && mv "$file.real" "$file"
+          chmod u+w "$file"
+        fi
         printf '\n' >>"$file"
         cat "$css" >>"$file"
         # A pre-compressed sibling is served in preference to the file itself, so
@@ -59,7 +68,10 @@ data:
         # every image this runs from; brotli is in none, so that copy is dropped
         # and the server falls back to the gzip one.
         rm -f "$file.br"
-        if [ -e "$file.gz" ]; then
+        # -L too: a compressed sibling may be a link, even one shared with other
+        # directories' identical files, and must not be written through.
+        if [ -e "$file.gz" ] || [ -L "$file.gz" ]; then
+          rm -f "$file.gz"
           gzip -9 -c "$file" >"$file.gz"
         fi
         echo "appended Pennant to ${file#"$target_dir"/}"

@@ -1,0 +1,27 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: authelia
+spec:
+  groups:
+  - name: authelia
+    interval: 1m
+    rules:
+    - alert: AutheliaDown
+      expr: up{job="authelia"} == 0 or absent(up{job="authelia"})
+      for: 5m
+      labels:
+        severity: critical
+        topic: alerts-platform
+      annotations:
+        description: The gateway's forward-auth fails closed, so every app behind `#sso` answers 500 until Authelia is back. kubectl does not need it; `kubectl -n authelia logs deploy/authelia` usually names the configuration key or the Vault path at fault.
+        summary: Authelia is down, and every SSO app with it
+    - alert: AutheliaLoginFailuresHigh
+      expr: sum(increase({__name__=~"authelia_authn(_total)?", job="authelia", success="false"}[15m])) > 20
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: Far more than a mistyped password. Authelia's log has the usernames and source addresses (`kubectl -n authelia logs deploy/authelia | grep -i 'unsuccessful'`); every source is a mesh peer, so NetBird's dashboard says which device.
+        summary: "{{ $value }} failed Authelia logins in 15 minutes"

@@ -18,6 +18,7 @@ spec:
           values:
           - internal-gateway
           - internal-gateway-secondary
+          - blackbox-exporter
   - from:
     - namespaceSelector:
         matchLabels:

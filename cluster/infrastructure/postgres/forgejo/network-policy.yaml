@@ -22,3 +22,10 @@ spec:
           values:
           - forgejo
           - cloudnative-pg
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 9187
+      protocol: TCP

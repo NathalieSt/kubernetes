@@ -131,8 +131,9 @@ spec:
         livenessProbe:
           exec:
             command:
-            - /gluetun-entrypoint
-            - healthcheck
+            - /bin/sh
+            - -c
+            - /gluetun-entrypoint healthcheck && test -e /sys/class/net/tun0
           periodSeconds: 60
           timeoutSeconds: 30
           failureThreshold: 5
@@ -255,7 +256,7 @@ spec:
             cpu: 10m
             memory: 16Mi
           limits:
-            cpu: 100m
+            cpu: 250m
             memory: 64Mi
       - command:
         - httpd

@@ -18,6 +18,14 @@ spec:
           values:
           - internal-gateway
           - internal-gateway-secondary
+          - blackbox-exporter
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 9959
+      protocol: TCP
   - from:
     - namespaceSelector:
         matchExpressions:

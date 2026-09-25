@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/heartbeats-config-hash: e46370f2536a9d30
+        homelab/heartbeats-config-hash: 12301469ff660a62
       labels:
         app.kubernetes.io/name: heartbeats
         app.kubernetes.io/version: python-3.13
@@ -41,6 +41,8 @@ spec:
           value: /secrets
         - name: HEARTBEATS_INTERVAL
           value: "300"
+        - name: HEARTBEATS_VICTORIA_LOGS
+          value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
         - name: PYTHONDONTWRITEBYTECODE
           value: "1"
         resources:

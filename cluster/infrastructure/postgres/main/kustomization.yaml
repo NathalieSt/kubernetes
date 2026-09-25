@@ -27,3 +27,4 @@ resources:
 - seerr-db.yaml
 - network-policy.yaml
 - k8up-schedule.yaml
+- alert-rules.yaml

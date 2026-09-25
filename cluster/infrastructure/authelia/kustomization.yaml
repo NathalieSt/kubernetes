@@ -10,3 +10,4 @@ resources:
 - service.yaml
 - network-policy.yaml
 - assets-configmap.yaml
+- alert-rules.yaml
