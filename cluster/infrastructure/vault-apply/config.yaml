@@ -157,7 +157,7 @@ data:
     anki-sync/users anki-sync sync-user1
     authelia/secrets authelia session-secret storage-encryption-key reset-password-jwt-secret oidc-hmac-secret oidc-issuer-private-key
     authelia/users authelia users.yml
-    authelia/oidc-clients authelia backup-dashboard forgejo glitchtip healthchecks kavita mail paperless tandoor vault
+    authelia/oidc-clients authelia backup-dashboard forgejo glitchtip healthchecks kavita mail paperless tandoor trilium vault
     backup-dashboard/basic-auth backup-dashboard username password
     backup-dashboard/oidc backup-dashboard client-secret
     code-server code-server password
@@ -183,6 +183,7 @@ data:
     vpn qbittorrent user password
     radicale/users radicale htpasswd
     tandoor/oidc tandoor client-secret
+    trilium/oidc trilium client-secret
     victoria-metrics victoria-metrics adminAuthKey
     victoria-metrics/ntfy victoria-metrics token
     victoria-metrics/healthchecks victoria-metrics watchdog-ping-url
@@ -314,6 +315,10 @@ data:
           "tandoor": {
             "name": "tandoor",
             "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "trilium": {
+            "name": "trilium",
+            "policy": "path \"kvv2/data/trilium/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/trilium/oidc\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "victoria-metrics": {
             "name": "victoria-metrics",
@@ -640,6 +645,21 @@ data:
             ],
             "token_ttl": 600
           },
+          "trilium": {
+            "backend": "kubernetes",
+            "role_name": "trilium",
+            "bound_service_account_names": [
+              "trilium-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "trilium"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.trilium.name}"
+            ],
+            "token_ttl": 600
+          },
           "victoria-metrics": {
             "backend": "kubernetes",
             "role_name": "victoria-metrics",
@@ -855,6 +875,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.tandoor_tandoor_oidc",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.trilium_trilium_oidc",
           "lifecycle": {
             "destroy": false
           }

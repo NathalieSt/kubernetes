@@ -418,6 +418,25 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
+        - client_id: trilium
+          client_name: trilium
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/trilium` }}{{ secret `/secrets/oidc-clients/trilium` }}{{ else }}unwritten-secret-for-trilium{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://notes.netbird.nathalie-stiefsohn.eu/callback
+          scopes:
+          - openid
+          - profile
+          - email
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_post
+          consent_mode: implicit
         - client_id: vault
           client_name: vault
           public: false
