@@ -359,37 +359,37 @@ data:
           description: "Fermentation: batches, sensors and reminders"
           namespace: zyme
           app: zyme
-    - Development:
-      - code-server:
-          href: https://vscode.netbird.nathalie-stiefsohn.eu
-          icon: code-server.png
-          description: VS Code in the browser
-          namespace: code-server
-          app: code-server
-      - forgejo:
-          href: https://code.netbird.nathalie-stiefsohn.eu
-          icon: forgejo.png
-          description: Git, CI and package registry
-          namespace: forgejo
-          app: forgejo
-      - it-tools:
-          href: https://it-tools.netbird.nathalie-stiefsohn.eu
-          icon: it-tools.png
-          description: Developer utilities
-          namespace: it-tools
-          app: it-tools
-      - omni-tools:
-          href: https://omni-tools.netbird.nathalie-stiefsohn.eu
-          icon: omni-tools.png
-          description: File, image and text tools
-          namespace: omni-tools
-          app: omni-tools
-      - vim-dojo:
-          href: https://dojo.netbird.nathalie-stiefsohn.eu
-          icon: si-neovim
-          description: Neovim in the browser
-          namespace: vim-dojo
-          app: vim-dojo
+    - Study:
+      - anki-sync:
+          href: https://anki.netbird.nathalie-stiefsohn.eu
+          icon: anki.png
+          description: "Flashcard sync: set it as the sync server in Anki"
+          namespace: anki-sync
+          app: anki-sync
+      - paperless:
+          href: https://paperless.netbird.nathalie-stiefsohn.eu
+          icon: paperless.png
+          description: Documents, OCRed and searchable
+          namespace: paperless
+          app: paperless
+      - radicale:
+          href: https://calendar.netbird.nathalie-stiefsohn.eu
+          icon: radicale.png
+          description: Calendars and contacts (CalDAV)
+          namespace: radicale
+          app: radicale
+      - stirling-pdf:
+          href: https://pdf.netbird.nathalie-stiefsohn.eu
+          icon: stirling-pdf.png
+          description: Merge, split, OCR and convert PDFs
+          namespace: stirling-pdf
+          app: stirling-pdf
+      - trilium:
+          href: https://notes.netbird.nathalie-stiefsohn.eu
+          icon: trilium.png
+          description: Lecture notes and placement reflections
+          namespace: trilium
+          app: trilium
     - Downloads:
       - bazarr:
           href: https://bazarr.netbird.nathalie-stiefsohn.eu
@@ -433,6 +433,37 @@ data:
           description: Series, fetched and sorted
           namespace: jellyfin
           app: sonarr
+    - Development:
+      - code-server:
+          href: https://vscode.netbird.nathalie-stiefsohn.eu
+          icon: code-server.png
+          description: VS Code in the browser
+          namespace: code-server
+          app: code-server
+      - forgejo:
+          href: https://code.netbird.nathalie-stiefsohn.eu
+          icon: forgejo.png
+          description: Git, CI and package registry
+          namespace: forgejo
+          app: forgejo
+      - it-tools:
+          href: https://it-tools.netbird.nathalie-stiefsohn.eu
+          icon: it-tools.png
+          description: Developer utilities
+          namespace: it-tools
+          app: it-tools
+      - omni-tools:
+          href: https://omni-tools.netbird.nathalie-stiefsohn.eu
+          icon: omni-tools.png
+          description: File, image and text tools
+          namespace: omni-tools
+          app: omni-tools
+      - vim-dojo:
+          href: https://dojo.netbird.nathalie-stiefsohn.eu
+          icon: si-neovim
+          description: Neovim in the browser
+          namespace: vim-dojo
+          app: vim-dojo
     - Web:
       - changedetection:
           href: https://changedetection.netbird.nathalie-stiefsohn.eu
@@ -558,12 +589,14 @@ data:
         icon: mdi-play-circle-outline
       Personal:
         icon: mdi-account-heart-outline
-      Development:
-        icon: mdi-code-braces
+      Study:
+        icon: mdi-school-outline
       Downloads:
         style: row
         columns: 4
         icon: mdi-download-circle-outline
+      Development:
+        icon: mdi-code-braces
       Web:
         icon: mdi-web
       Platform:

@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: radicale
+    app.kubernetes.io/version: 3.8.1
+  name: radicale
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: radicale
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: radicale
+        app.kubernetes.io/version: 3.8.1
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown 1000:1000 /var/lib/radicale
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: permission-fix
+        volumeMounts:
+        - mountPath: /var/lib/radicale
+          name: data
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - args:
+        - --config
+        - /etc/radicale/config
+        image: ghcr.io/kozea/radicale:3.8.1@sha256:54d9406cd30f9e206a9dd6d61dfac48da26b9afc37200e14f23beb8fafa7d11c
+        name: radicale
+        ports:
+        - containerPort: 5232
+          name: http
+        volumeMounts:
+        - mountPath: /var/lib/radicale
+          name: data
+        - mountPath: /etc/radicale
+          name: config
+          readOnly: true
+        - mountPath: /secrets
+          name: users
+          readOnly: true
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 10m
+            memory: 48Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /.web/
+            port: 5232
+          periodSeconds: 15
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: radicale-data-pvc
+      - name: config
+        configMap:
+          name: radicale-config
+      - name: users
+        secret:
+          secretName: radicale-users
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

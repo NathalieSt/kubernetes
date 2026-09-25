@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: trilium
+    app.kubernetes.io/version: v0.105.0
+  name: trilium
+spec:
+  selector:
+    app.kubernetes.io/name: trilium
+  ports:
+  - name: http-trilium
+    port: 8080
+    targetPort: 8080

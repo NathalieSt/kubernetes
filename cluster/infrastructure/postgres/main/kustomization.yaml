@@ -14,6 +14,7 @@ resources:
 - glitchtip-db.yaml
 - zyme-db.yaml
 - limes-db.yaml
+- paperless-db.yaml
 - sonarr-main-db.yaml
 - sonarr-log-db.yaml
 - radarr-main-db.yaml

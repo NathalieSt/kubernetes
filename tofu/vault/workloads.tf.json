@@ -1,6 +1,10 @@
 {
   "resource": {
     "vault_policy": {
+      "anki-sync": {
+        "name": "anki-sync",
+        "policy": "path \"kvv2/data/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "authelia": {
         "name": "authelia",
         "policy": "path \"kvv2/data/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n"
@@ -61,6 +65,10 @@
         "name": "ntfy",
         "policy": "path \"kvv2/data/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "paperless": {
+        "name": "paperless",
+        "policy": "path \"kvv2/data/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/app\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "psono-server": {
         "name": "psono-server",
         "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n"
@@ -68,6 +76,10 @@
       "qbittorrent": {
         "name": "qbittorrent",
         "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "radicale": {
+        "name": "radicale",
+        "policy": "path \"kvv2/data/radicale/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radicale/users\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "tandoor": {
         "name": "tandoor",
@@ -83,6 +95,21 @@
       }
     },
     "vault_kubernetes_auth_backend_role": {
+      "anki-sync": {
+        "backend": "kubernetes",
+        "role_name": "anki-sync",
+        "bound_service_account_names": [
+          "anki-sync-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "anki-sync"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.anki-sync.name}"
+        ],
+        "token_ttl": 600
+      },
       "authelia": {
         "backend": "kubernetes",
         "role_name": "authelia",
@@ -308,6 +335,21 @@
         ],
         "token_ttl": 600
       },
+      "paperless": {
+        "backend": "kubernetes",
+        "role_name": "paperless",
+        "bound_service_account_names": [
+          "paperless-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "paperless"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.paperless.name}"
+        ],
+        "token_ttl": 600
+      },
       "psono-server": {
         "backend": "kubernetes",
         "role_name": "psono-server",
@@ -335,6 +377,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.qbittorrent.name}"
+        ],
+        "token_ttl": 600
+      },
+      "radicale": {
+        "backend": "kubernetes",
+        "role_name": "radicale",
+        "bound_service_account_names": [
+          "radicale-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "radicale"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.radicale.name}"
         ],
         "token_ttl": 600
       },
@@ -386,6 +443,12 @@
     }
   },
   "removed": [
+    {
+      "from": "vault_kv_secret_v2.anki-sync_anki-sync_users",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
     {
       "from": "vault_kv_secret_v2.authelia_authelia_oidc-clients",
       "lifecycle": {
@@ -531,6 +594,18 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.paperless_paperless_app",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.paperless_paperless_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.psono-server_psono",
       "lifecycle": {
         "destroy": false
@@ -538,6 +613,12 @@
     },
     {
       "from": "vault_kv_secret_v2.qbittorrent_vpn",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.radicale_radicale_users",
       "lifecycle": {
         "destroy": false
       }

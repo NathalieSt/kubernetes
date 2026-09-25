@@ -49,6 +49,9 @@ data:
         - 4get.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - anki.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - audiomuse.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -60,6 +63,9 @@ data:
       - domain:
         - bazarr.netbird.nathalie-stiefsohn.eu
         policy: one_factor
+      - domain:
+        - calendar.netbird.nathalie-stiefsohn.eu
+        policy: bypass
       - domain:
         - changedetection.netbird.nathalie-stiefsohn.eu
         policy: one_factor
@@ -115,6 +121,9 @@ data:
         - neko.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - notes.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - ntfy.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
@@ -123,6 +132,12 @@ data:
       - domain:
         - orrery.netbird.nathalie-stiefsohn.eu
         policy: bypass
+      - domain:
+        - paperless.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
+        - pdf.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
       - domain:
         - prowlarr.netbird.nathalie-stiefsohn.eu
         policy: one_factor
@@ -362,6 +377,26 @@ data:
           response_types:
           - code
           token_endpoint_auth_method: none
+          consent_mode: implicit
+        - client_id: paperless
+          client_name: paperless
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/paperless` }}{{ secret `/secrets/oidc-clients/paperless` }}{{ else }}unwritten-secret-for-paperless{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://paperless.netbird.nathalie-stiefsohn.eu/accounts/oidc/authelia/login/callback/
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
         - client_id: tandoor
           client_name: tandoor
