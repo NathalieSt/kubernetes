@@ -3,12 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: limes
-    app.kubernetes.io/version: 16268cc
-  name: limes
+    app.kubernetes.io/name: zyme
+    app.kubernetes.io/version: 80340b8
+  name: zyme
 spec:
   selector:
-    app.kubernetes.io/name: limes
+    app.kubernetes.io/name: zyme
   ports:
   - name: http
     port: 8080

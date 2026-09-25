@@ -1,0 +1,165 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: daybook
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: daybook
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/daybook
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: reflector
+  - name: garage
+  - name: k8up
+  serviceAccountName: flux-daybook
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kavita
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: kavita
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/kavita
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: keda
+  - name: garage
+  - name: k8up
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-kavita
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mail
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: mail
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/mail
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
+  - name: garage
+  - name: k8up
+  - name: reflector
+  serviceAccountName: flux-mail
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: psono-client
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: psono
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/psono/client
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: psono-server
+  serviceAccountName: flux-psono-client
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: psono-server
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: psono
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/psono/server
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: vault-secrets-operator-config
+  - name: mail
+  serviceAccountName: flux-psono-server
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tandoor
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: tandoor
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/tandoor
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: csi-driver-nfs
+  - name: reflector
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-tandoor
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: zyme
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: zyme
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/zyme
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: reflector
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-zyme
