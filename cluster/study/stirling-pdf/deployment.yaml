@@ -17,6 +17,31 @@ spec:
         app.kubernetes.io/name: stirling-pdf
         app.kubernetes.io/version: 2.14.3
     spec:
+      initContainers:
+      - command:
+        - python3
+        - /pennant/jar-stylesheet-override.py
+        - /app/app.jar
+        - static/index.html
+        - /customFiles/static
+        - /pennant/pennant.css
+        image: stirlingtools/stirling-pdf:2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396
+        name: pennant
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant
+          readOnly: true
+        - mountPath: /customFiles
+          name: scratch-customfiles
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -83,6 +108,9 @@ spec:
         emptyDir: {}
       - name: scratch-pipeline
         emptyDir: {}
+      - name: pennant
+        configMap:
+          name: stirling-pdf-pennant
       securityContext:
         seccompProfile:
           type: RuntimeDefault

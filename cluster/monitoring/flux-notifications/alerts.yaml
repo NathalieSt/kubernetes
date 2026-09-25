@@ -95,6 +95,9 @@ spec:
     name: bazarr
     namespace: flux-system
   - kind: Kustomization
+    name: blackbox-exporter
+    namespace: flux-system
+  - kind: Kustomization
     name: cert-manager
     namespace: flux-system
   - kind: Kustomization

@@ -9,4 +9,5 @@ resources:
 - release.yaml
 - datapath-rules.yaml
 - node-rules.yaml
+- cluster-rules.yaml
 - network-policy.yaml

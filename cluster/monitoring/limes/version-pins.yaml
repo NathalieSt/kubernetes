@@ -694,6 +694,17 @@ data:
           ]
         },
         {
+          "key": "blackbox-exporter",
+          "kind": "image",
+          "repository": "quay.io/prometheus/blackbox-exporter",
+          "version": "v0.28.0@sha256:e753ff9f3fc458d02cca5eddab5a77e1c175eee484a8925ac7d524f04366c2fc",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "blackbox-exporter"
+          ]
+        },
+        {
           "key": "clamav",
           "kind": "image",
           "repository": "clamav/clamav",

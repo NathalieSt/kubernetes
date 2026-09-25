@@ -8,3 +8,4 @@ resources:
 - chart.yaml
 - release.yaml
 - network-policy.yaml
+- alert-rules.yaml

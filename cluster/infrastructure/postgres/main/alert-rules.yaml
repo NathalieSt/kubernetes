@@ -1,0 +1,63 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: postgres
+spec:
+  groups:
+  - name: postgres
+    interval: 1m
+    rules:
+    - alert: PostgresDown
+      expr: cnpg_collector_up == 0
+      for: 5m
+      labels:
+        severity: critical
+        topic: alerts-storage
+      annotations:
+        description: CNPG's exporter in {{ $labels.namespace }}/{{ $labels.pod }} cannot query Postgres. Every app with a database there is failing or waiting; the Servarr apps hang rather than exit. `kubectl cnpg status` in that namespace, or the instance's log, says why.
+        summary: Postgres in {{ $labels.namespace }} is not answering its exporter
+    - alert: PostgresClusterUnhealthy
+      expr: kube_cnpg_cluster_info{phase!="Cluster in healthy state"}
+      for: 15m
+      labels:
+        severity: critical
+        topic: alerts-storage
+      annotations:
+        description: The operator has reported {{ $labels.exported_namespace }}/{{ $labels.name }} as "{{ $labels.phase }}" for 15 minutes. `kubectl -n {{ $labels.exported_namespace }} describe cluster {{ $labels.name }}` has the conditions.
+        summary: CNPG cluster {{ $labels.name }} is not healthy
+    - alert: PostgresConnectionsNearLimit
+      expr: sum by (namespace, pod) (cnpg_backends_total) / max by (namespace, pod) (cnpg_pg_settings_setting{name="max_connections"}) > 0.8
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: Past the limit every new connection is refused, which apps report as the database being down. `cnpg_backends_total` by `datname` shows which database holds them.
+        summary: Postgres in {{ $labels.namespace }} is at {{ $value | humanizePercentage }} of max_connections
+    - alert: PostgresTransactionIdAgeHigh
+      expr: max by (namespace, pod, datname) (cnpg_pg_database_xid_age) > 1000000000
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: "{{ $labels.datname }} in {{ $labels.namespace }} has a transaction ID age of {{ $value }}. Postgres stops accepting writes at about 2.1 billion. Find what is blocking autovacuum — usually a long-open transaction — and VACUUM FREEZE the database."
+        summary: Database {{ $labels.datname }} is approaching transaction ID wraparound
+    - alert: PostgresLongTransaction
+      expr: max by (namespace, pod, datname, application_name) (cnpg_backends_max_tx_duration_seconds) > 21600
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: A transaction open this long holds back vacuum for the whole cluster and usually belongs to a client that hung mid-transaction ({{ $labels.application_name }}). pg_stat_activity in {{ $labels.namespace }} shows it; pg_terminate_backend ends it.
+        summary: A transaction in {{ $labels.datname }} has been open for {{ $value | humanizeDuration }}
+    - alert: PostgresDeadlocks
+      expr: sum by (namespace, datname) (increase(cnpg_pg_stat_database_deadlocks[1h])) > 5
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: Postgres resolves each by aborting one side, so the app sees failed writes. A steady rate is an application bug; the Postgres log in {{ $labels.namespace }} names the statements.
+        summary: "{{ $value }} deadlocks in {{ $labels.datname }} in the last hour"

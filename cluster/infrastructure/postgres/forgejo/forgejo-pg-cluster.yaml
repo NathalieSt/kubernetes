@@ -17,3 +17,7 @@ spec:
       periodSeconds: 30
       timeoutSeconds: 30
       failureThreshold: 10
+  monitoring:
+    customQueriesConfigMap:
+    - name: forgejo-pg-monitoring
+      key: queries

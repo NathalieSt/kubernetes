@@ -13,6 +13,7 @@ spec:
       for: 5m
       labels:
         severity: critical
+        topic: alerts-vpn
       annotations:
         description: "The leak detector in {{ $labels.namespace }}/{{ $labels.pod }} saw an exit IP outside NL, stopped every torrent and latched. Nothing left the house: the tunnel was up and the egress policy admits nothing but the VPN. Read `kubectl logs -n {{ $labels.namespace }} {{ $labels.pod }} -c ipleak --previous` for the address and country, then delete the pod to clear the latch."
         summary: qbittorrent left NL — downloads stopped

@@ -1,0 +1,28 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: git-mirror
+spec:
+  groups:
+  - name: git-mirror
+    interval: 1m
+    rules:
+    - alert: GitMirrorFailing
+      expr: cnpg_forgejo_push_mirror_failing == 1
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: The last push of {{ $labels.repo }} to Codeberg recorded an error, and Flux reads Codeberg, so merges there are not reaching the cluster. Forgejo shows the error under the repository's Settings → Mirror settings; Codeberg refusing pushes outright has happened before (see the codeberg-mirror note).
+        summary: Forgejo's push mirror of {{ $labels.repo }} is failing
+    - alert: GitMirrorBehind
+      expr: cnpg_forgejo_push_mirror_repo_updated_seconds - cnpg_forgejo_push_mirror_last_update_seconds > 3600
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: "{{ $labels.repo }} changed on Forgejo {{ $value | humanizeDuration }} after its mirror last pushed, and Flux reads the Codeberg copy, so the cluster is running an older revision than main. Sync it from the repository's mirror settings, or `git push codeberg main` from a checkout."
+        summary: Codeberg's copy of {{ $labels.repo }} is behind Forgejo

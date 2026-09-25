@@ -1,0 +1,19 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: keda
+spec:
+  groups:
+  - name: keda
+    interval: 1m
+    rules:
+    - alert: KedaScalerErrors
+      expr: sum by (exported_namespace, scaledObject) (increase(keda_scaler_detail_errors_total{job="keda"}[15m])) > 0
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: Its scaler has been erroring for 30 minutes, so {{ $labels.exported_namespace }} is stuck at whatever replica count it had. `kubectl -n {{ $labels.exported_namespace }} describe scaledobject {{ $labels.scaledObject }}` has the error.
+        summary: KEDA cannot evaluate {{ $labels.scaledObject }}

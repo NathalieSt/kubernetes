@@ -1,0 +1,19 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vault
+spec:
+  groups:
+  - name: vault
+    interval: 1m
+    rules:
+    - alert: VaultSealed
+      expr: vault_core_unsealed == 0
+      for: 5m
+      labels:
+        severity: critical
+        topic: alerts-platform
+      annotations:
+        description: "{{ $labels.pod }} is running but sealed, so no secret can be read or written. Unseal it with the keys kept offline (`kubectl -n vault exec -it vault-0 -- vault operator unseal`), then check VSO catches up."
+        summary: Vault is sealed

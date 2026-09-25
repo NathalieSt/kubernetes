@@ -14,3 +14,4 @@ resources:
 - acme-storage-secondary.yaml
 - mesh-identity-secondary.yaml
 - deployment-secondary.yaml
+- alert-rules.yaml

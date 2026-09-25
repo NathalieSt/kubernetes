@@ -30,6 +30,7 @@ spec:
           values:
           - internal-gateway
           - internal-gateway-secondary
+          - blackbox-exporter
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: vault-apply

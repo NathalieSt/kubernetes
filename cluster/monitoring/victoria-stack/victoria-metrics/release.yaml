@@ -20,20 +20,90 @@ spec:
       config:
         receivers:
         - name: blackhole
-        - name: ntfy
+        - name: ntfy-alerts-vpn-critical
           webhook_configs:
           - http_config:
               authorization:
                 credentials_file: /etc/alertmanager-ntfy/token
             send_resolved: true
-            url: http://ntfy.ntfy.svc.cluster.local:8080/victoria-metrics?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
-        - name: ntfy-warnings
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-vpn?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-vpn-warning
           webhook_configs:
           - http_config:
               authorization:
                 credentials_file: /etc/alertmanager-ntfy/token
             send_resolved: true
-            url: http://ntfy.ntfy.svc.cluster.local:8080/warnings?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-vpn?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-storage-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-storage?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-storage-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-storage?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-nodes-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-nodes?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-nodes-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-nodes?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-platform-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-platform?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-platform-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-platform?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-apps-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-apps?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-apps-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-apps?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-monitoring-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-monitoring?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-monitoring-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-monitoring?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
         - name: healthchecks
           webhook_configs:
           - send_resolved: false
@@ -54,12 +124,133 @@ spec:
             receiver: healthchecks
             repeat_interval: 1m
           - matchers:
-            - severity="critical"
-            receiver: ntfy
-          - matchers:
-            - severity="warning"
-            receiver: ntfy-warnings
-            repeat_interval: 24h
+            - severity=~"critical|warning"
+            receiver: blackhole
+            routes:
+            - matchers:
+              - topic="alerts-vpn"
+              receiver: ntfy-alerts-vpn-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-vpn-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-vpn-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-storage"
+              receiver: ntfy-alerts-storage-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-storage-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-storage-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-nodes"
+              receiver: ntfy-alerts-nodes-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-nodes-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-nodes-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-platform"
+              receiver: ntfy-alerts-platform-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-platform-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-platform-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-apps"
+              receiver: ntfy-alerts-apps-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-apps-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-apps-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-monitoring"
+              receiver: ntfy-alerts-monitoring-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-monitoring-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-monitoring-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"KubePersistentVolume.*"
+              receiver: ntfy-alerts-storage-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-storage-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-storage-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"Kube(Pod|Container|Deployment|StatefulSet|DaemonSet|Job|Hpa|Pdb).*"
+              receiver: ntfy-alerts-apps-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-apps-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-apps-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"Node.*|Kubelet.*|KubeNode.*|KubeVersionMismatch"
+              receiver: ntfy-alerts-nodes-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-nodes-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-nodes-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"KubeAPI.*|KubeAggregatedAPI.*|KubeClient.*|KubeStateMetrics.*|Kube(CPU|Memory)(Quota)?Overcommit|KubeQuota.*"
+              receiver: ntfy-alerts-platform-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-platform-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-platform-warning
+                repeat_interval: 24h
+            - matchers: []
+              receiver: ntfy-alerts-monitoring-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-monitoring-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-monitoring-warning
+                repeat_interval: 24h
       spec:
         volumeMounts:
         - mountPath: /etc/alertmanager-ntfy
@@ -335,6 +526,57 @@ spec:
                   chart_version:
                   - spec
                   - version
+            - groupVersionKind:
+                group: postgresql.cnpg.io
+                version: v1
+                kind: Cluster
+              metricNamePrefix: kube_cnpg
+              metrics:
+              - name: cluster_info
+                help: The phase CNPG reports for a Postgres cluster.
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      name:
+                      - metadata
+                      - name
+                labelsFromPath:
+                  exported_namespace:
+                  - metadata
+                  - namespace
+                  phase:
+                  - status
+                  - phase
+            - groupVersionKind:
+                group: secrets.hashicorp.com
+                version: v1beta1
+                kind: VaultStaticSecret
+              metricNamePrefix: kube_vso
+              metrics:
+              - name: static_secret_info
+                help: The sync state VSO reports for a VaultStaticSecret.
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      name:
+                      - metadata
+                      - name
+                labelsFromPath:
+                  exported_namespace:
+                  - metadata
+                  - namespace
+                  synced:
+                  - status
+                  - conditions
+                  - "[type=SecretSynced]"
+                  - status
+                  healthy:
+                  - status
+                  - conditions
+                  - "[type=Healthy]"
+                  - status
         enabled: true
       metricDenylist:
       - kube_pod_tolerations
@@ -346,6 +588,8 @@ spec:
           - kustomize.toolkit.fluxcd.io
           - helm.toolkit.fluxcd.io
           - source.toolkit.fluxcd.io
+          - postgresql.cnpg.io
+          - secrets.hashicorp.com
           resources:
           - "*"
           verbs:
@@ -574,6 +818,316 @@ spec:
               - target_label: job
                 replacement: flux
 
+          - job_name: probe-http
+            metrics_path: /probe
+            params:
+              module:
+              - http_up
+            scrape_interval: 1m
+            scrape_timeout: 15s
+            static_configs:
+            - targets:
+              - http://anki-sync.anki-sync.svc.cluster.local:8080/
+              labels:
+                probe_name: anki-sync
+                probe_namespace: anki-sync
+                scale_to_zero: "false"
+            - targets:
+              - http://audiomuse-ai.jellyfin.svc.cluster.local:8000/
+              labels:
+                probe_name: audiomuse-ai
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://authelia.authelia.svc.cluster.local:9091/
+              labels:
+                probe_name: authelia
+                probe_namespace: authelia
+                scale_to_zero: "false"
+            - targets:
+              - http://backup-dashboard.backup-dashboard.svc.cluster.local:8080/
+              labels:
+                probe_name: backup-dashboard
+                probe_namespace: backup-dashboard
+                scale_to_zero: "false"
+            - targets:
+              - http://bazarr.jellyfin.svc.cluster.local:6767/
+              labels:
+                probe_name: bazarr
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://changedetection.changedetection.svc.cluster.local:5000/
+              labels:
+                probe_name: changedetection
+                probe_namespace: changedetection
+                scale_to_zero: "false"
+            - targets:
+              - http://code-server.code-server.svc.cluster.local:8080/
+              labels:
+                probe_name: code-server
+                probe_namespace: code-server
+                scale_to_zero: "false"
+            - targets:
+              - http://daybook.daybook.svc.cluster.local:8080/
+              labels:
+                probe_name: daybook
+                probe_namespace: daybook
+                scale_to_zero: "false"
+            - targets:
+              - http://forgejo-http.forgejo.svc.cluster.local:3000/
+              labels:
+                probe_name: forgejo
+                probe_namespace: forgejo
+                scale_to_zero: "false"
+            - targets:
+              - http://fourget.fourget.svc.cluster.local:8080/
+              labels:
+                probe_name: fourget
+                probe_namespace: fourget
+                scale_to_zero: "true"
+            - targets:
+              - http://glitchtip.glitchtip.svc.cluster.local:8000/
+              labels:
+                probe_name: glitchtip
+                probe_namespace: glitchtip
+                scale_to_zero: "false"
+            - targets:
+              - http://headlamp.headlamp.svc.cluster.local:80/
+              labels:
+                probe_name: headlamp
+                probe_namespace: headlamp
+                scale_to_zero: "false"
+            - targets:
+              - http://healthchecks.healthchecks.svc.cluster.local:8000/
+              labels:
+                probe_name: healthchecks
+                probe_namespace: healthchecks
+                scale_to_zero: "false"
+            - targets:
+              - http://helium-services.helium-services.svc.cluster.local:8080/
+              labels:
+                probe_name: helium-services
+                probe_namespace: helium-services
+                scale_to_zero: "false"
+            - targets:
+              - http://homelab-docs.homelab-docs.svc.cluster.local:8080/
+              labels:
+                probe_name: homelab-docs
+                probe_namespace: homelab-docs
+                scale_to_zero: "false"
+            - targets:
+              - http://homepage.homepage.svc.cluster.local:3000/
+              labels:
+                probe_name: homepage
+                probe_namespace: homepage
+                scale_to_zero: "false"
+            - targets:
+              - http://it-tools.it-tools.svc.cluster.local:8080/
+              labels:
+                probe_name: it-tools
+                probe_namespace: it-tools
+                scale_to_zero: "true"
+            - targets:
+              - http://jellyfin.jellyfin.svc.cluster.local:8096/
+              labels:
+                probe_name: jellyfin
+                probe_namespace: jellyfin
+                scale_to_zero: "true"
+            - targets:
+              - http://kavita.kavita.svc.cluster.local:5000/
+              labels:
+                probe_name: kavita
+                probe_namespace: kavita
+                scale_to_zero: "true"
+            - targets:
+              - http://lidarr.jellyfin.svc.cluster.local:8686/
+              labels:
+                probe_name: lidarr
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://limes.limes.svc.cluster.local:8080/
+              labels:
+                probe_name: limes
+                probe_namespace: limes
+                scale_to_zero: "false"
+            - targets:
+              - http://roundcube.mail.svc.cluster.local:8000/
+              labels:
+                probe_name: mail
+                probe_namespace: mail
+                scale_to_zero: "false"
+            - targets:
+              - http://music-library-builder.jellyfin.svc.cluster.local:8140/
+              labels:
+                probe_name: music-library-builder
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://neko.neko.svc.cluster.local:8080/
+              labels:
+                probe_name: neko
+                probe_namespace: neko
+                scale_to_zero: "true"
+            - targets:
+              - http://ntfy.ntfy.svc.cluster.local:8080/
+              labels:
+                probe_name: ntfy
+                probe_namespace: ntfy
+                scale_to_zero: "false"
+            - targets:
+              - http://omni-tools.omni-tools.svc.cluster.local:8080/
+              labels:
+                probe_name: omni-tools
+                probe_namespace: omni-tools
+                scale_to_zero: "true"
+            - targets:
+              - http://orrery.orrery.svc.cluster.local:8080/
+              labels:
+                probe_name: orrery
+                probe_namespace: orrery
+                scale_to_zero: "false"
+            - targets:
+              - http://paperless.paperless.svc.cluster.local:8000/
+              labels:
+                probe_name: paperless
+                probe_namespace: paperless
+                scale_to_zero: "false"
+            - targets:
+              - http://prowlarr.jellyfin.svc.cluster.local:9696/
+              labels:
+                probe_name: prowlarr
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://psono-client.psono.svc.cluster.local:80/
+              labels:
+                probe_name: psono-client
+                probe_namespace: psono
+                scale_to_zero: "false"
+            - targets:
+              - http://psono-server.psono.svc.cluster.local:80/
+              labels:
+                probe_name: psono-server
+                probe_namespace: psono
+                scale_to_zero: "false"
+            - targets:
+              - http://qbittorrent.qbittorrent.svc.cluster.local:8080/
+              labels:
+                probe_name: qbittorrent
+                probe_namespace: qbittorrent
+                scale_to_zero: "false"
+            - targets:
+              - http://radarr.jellyfin.svc.cluster.local:7878/
+              labels:
+                probe_name: radarr
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://radicale.radicale.svc.cluster.local:5232/
+              labels:
+                probe_name: radicale
+                probe_namespace: radicale
+                scale_to_zero: "false"
+            - targets:
+              - http://redlib.redlib.svc.cluster.local:8080/
+              labels:
+                probe_name: redlib
+                probe_namespace: redlib
+                scale_to_zero: "true"
+            - targets:
+              - http://sabnzbd.qbittorrent.svc.cluster.local:8081/
+              labels:
+                probe_name: sabnzbd
+                probe_namespace: qbittorrent
+                scale_to_zero: "false"
+            - targets:
+              - http://seerr.jellyfin.svc.cluster.local:5055/
+              labels:
+                probe_name: seerr
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://sonarr.jellyfin.svc.cluster.local:8989/
+              labels:
+                probe_name: sonarr
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://stirling-pdf.stirling-pdf.svc.cluster.local:8080/
+              labels:
+                probe_name: stirling-pdf
+                probe_namespace: stirling-pdf
+                scale_to_zero: "true"
+            - targets:
+              - http://tandoor.tandoor.svc.cluster.local:8080/
+              labels:
+                probe_name: tandoor
+                probe_namespace: tandoor
+                scale_to_zero: "false"
+            - targets:
+              - http://trilium.trilium.svc.cluster.local:8080/
+              labels:
+                probe_name: trilium
+                probe_namespace: trilium
+                scale_to_zero: "false"
+            - targets:
+              - http://vault-ui.vault.svc.cluster.local:8200/
+              labels:
+                probe_name: vault
+                probe_namespace: vault
+                scale_to_zero: "false"
+            - targets:
+              - http://vim-dojo.vim-dojo.svc.cluster.local:3000/
+              labels:
+                probe_name: vim-dojo
+                probe_namespace: vim-dojo
+                scale_to_zero: "false"
+            - targets:
+              - http://zyme.zyme.svc.cluster.local:8080/
+              labels:
+                probe_name: zyme
+                probe_namespace: zyme
+                scale_to_zero: "false"
+            relabel_configs:
+            - source_labels:
+              - __address__
+              target_label: __param_target
+            - source_labels:
+              - __param_target
+              target_label: instance
+            - target_label: __address__
+              replacement: blackbox-exporter.internal-gateway.svc.cluster.local:9115
+
+          - job_name: authelia
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - authelia
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: authelia
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9959"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: authelia
           - job_name: cert-manager
             metrics_path: /metrics
             scheme: http
@@ -686,6 +1240,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: forgejo
+          - job_name: forgejo-pg
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - forgejo-pg-cluster
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_cnpg_io_cluster
+              regex: forgejo-pg
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9187"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: forgejo-pg
           - job_name: garage
             metrics_path: /metrics
             scheme: http
@@ -911,6 +1493,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: limes
+          - job_name: main-pg
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - postgres
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_cnpg_io_cluster
+              regex: postgres
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9187"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: main-pg
           - job_name: mariadb
             metrics_path: /metrics
             scheme: http
@@ -1142,6 +1752,37 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: vault
+          - job_name: vault-secrets-operator
+            metrics_path: /metrics
+            scheme: https
+            bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - vault-secrets-operator
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: vault-secrets-operator
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8443"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: vault-secrets-operator
+            tls_config:
+              insecure_skip_verify: true
           - job_name: vector
             metrics_path: /metrics
             scheme: http
@@ -1170,6 +1811,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: vector
+          - job_name: victoria-logs
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - victoria-logs
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: victoria-logs-single
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "9428"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: victoria-logs
           - job_name: zyme
             metrics_path: /metrics
             scheme: http

@@ -1,0 +1,176 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paperless-pennant
+  namespace: paperless
+data:
+  append-stylesheet.sh: |
+    #!/bin/sh
+    # Appends Pennant to an application's own stylesheet, in a copy of the
+    # directory that holds it. Run as an init container from the application's own
+    # image, so the file it copies is the one that version actually serves. See
+    # StylesheetAppend.res for why this exists at all.
+    #
+    #   $1   the directory in the image
+    #   $2   the emptyDir mounted over that directory in the application container
+    #   $3   the stylesheet to append
+    #   $4…  globs, relative to the directory, naming the files to append to
+    #
+    # A theme must never be the reason an application does not start. So a layout
+    # this does not recognise -- the application moved its assets in an upgrade --
+    # is reported on stderr and the pod starts unthemed, from a faithful copy.
+    # Everything else (a failed copy, a full disk) still fails, because then the
+    # copy the application would be served from is incomplete.
+    set -eu
+
+    source_dir=$1
+    target_dir=$2
+    css=$3
+    shift 3
+
+    warn() {
+      echo "WARNING: Pennant not applied: $*" >&2
+    }
+
+    if [ ! -d "$source_dir" ]; then
+      # Nothing to copy, and nothing is hidden by mounting over a path that does
+      # not exist in this image.
+      warn "$source_dir does not exist in this image -- the asset layout has changed"
+      exit 0
+    fi
+
+    cp -R "$source_dir/." "$target_dir/"
+    # An image may ship its assets read-only, and cp keeps the mode. The contents
+    # only: the emptyDir's own root belongs to root, and a chmod of it fails. Not
+    # through symlinks, whose targets are in the image's read-only root.
+    find "$target_dir" -mindepth 1 ! -type l -exec chmod u+w {} +
+
+    for pattern in "$@"; do
+      matched=0
+      # Unquoted on purpose: this is the glob.
+      for file in "$target_dir"/$pattern; do
+        [ -f "$file" ] || continue
+        matched=$((matched + 1))
+        # A symlink stays one in the copy (Paperless' collectstatic links every
+        # file back into its source tree), and appending through it would write
+        # into the image. So the file being themed becomes a real one; links
+        # elsewhere are left, since the image they point into is the same.
+        if [ -L "$file" ]; then
+          cp "$file" "$file.real" && rm "$file" && mv "$file.real" "$file"
+          chmod u+w "$file"
+        fi
+        printf '\n' >>"$file"
+        cat "$css" >>"$file"
+        # A pre-compressed sibling is served in preference to the file itself, so
+        # one left as it was would quietly serve the unthemed stylesheet to every
+        # browser that accepts the encoding -- which is all of them. gzip is in
+        # every image this runs from; brotli is in none, so that copy is dropped
+        # and the server falls back to the gzip one.
+        rm -f "$file.br"
+        # -L too: a compressed sibling may be a link, even one shared with other
+        # directories' identical files, and must not be written through.
+        if [ -e "$file.gz" ] || [ -L "$file.gz" ]; then
+          rm -f "$file.gz"
+          gzip -9 -c "$file" >"$file.gz"
+        fi
+        echo "appended Pennant to ${file#"$target_dir"/}"
+      done
+      if [ "$matched" -eq 0 ]; then
+        warn "no file under $source_dir matches '$pattern' -- the asset layout has changed"
+      fi
+    done
+  pennant.css: |
+    /* Pennant for Paperless-ngx, appended by kubernetes-generator (src/generators/theme). */
+
+    :root {
+      --pngx-primary: 329, 35%;
+      --pngx-primary-lightness: 44%;
+      --pngx-primary-text-contrast: #f9fafb;
+      --pngx-bg-alt: #ffffff;
+      --pngx-bg-alt2: #f1f4f5;
+      --pngx-bg-darker: #f1f4f5;
+      --pngx-bg-disabled: #f1f4f5;
+      --pngx-body-color-accent: #666d71;
+      --pngx-card-hover-border: #838b8e;
+      --bs-body-bg: #f9fafb;
+      --bs-body-bg-rgb: 249, 250, 251;
+      --bs-body-color: #2e3436;
+      --bs-body-color-rgb: 46, 52, 54;
+      --bs-secondary-color: #666d71;
+      --bs-border-color: #e3e7e9;
+      --bs-link-color: #984a72;
+      --bs-link-color-rgb: 152, 74, 114;
+      --bs-link-hover-color: #763757;
+      --bs-focus-ring-color: rgba(185, 95, 140, .35);
+    }
+
+    [data-bs-theme=dark] {
+      --pngx-bg-alt: #121617;
+      --pngx-bg-alt2: #1d2123;
+      --pngx-bg-darker: #090c0d;
+      --pngx-bg-disabled: #1d2123;
+      --pngx-body-color-accent: #b8bfc2;
+      --pngx-card-hover-border: #666d71;
+      --bs-body-bg: #090c0d;
+      --bs-body-bg-rgb: 9, 12, 13;
+      --bs-body-color: #f1f4f5;
+      --bs-body-color-rgb: 241, 244, 245;
+      --bs-secondary-color: #b8bfc2;
+      --bs-border-color: #2e3436;
+      --bs-link-color: #f5adce;
+      --bs-link-color-rgb: 245, 173, 206;
+      --bs-link-hover-color: #ffcbe2;
+      --bs-focus-ring-color: rgba(245, 173, 206, .35);
+    }
+    [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary .dropdown-menu {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+
+    @media (prefers-color-scheme: dark) {
+    [data-bs-theme=auto] body {
+      --pngx-bg-alt: #121617;
+      --pngx-bg-alt2: #1d2123;
+      --pngx-bg-darker: #090c0d;
+      --pngx-bg-disabled: #1d2123;
+      --pngx-body-color-accent: #b8bfc2;
+      --pngx-card-hover-border: #666d71;
+      --bs-body-bg: #090c0d;
+      --bs-body-bg-rgb: 9, 12, 13;
+      --bs-body-color: #f1f4f5;
+      --bs-body-color-rgb: 241, 244, 245;
+      --bs-secondary-color: #b8bfc2;
+      --bs-border-color: #2e3436;
+      --bs-link-color: #f5adce;
+      --bs-link-color-rgb: 245, 173, 206;
+      --bs-link-hover-color: #ffcbe2;
+      --bs-focus-ring-color: rgba(245, 173, 206, .35);
+    }
+    [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary .dropdown-menu {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    }

@@ -1,0 +1,28 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vault-secrets-operator
+spec:
+  groups:
+  - name: vault-secrets-operator
+    interval: 1m
+    rules:
+    - alert: VaultSecretSyncFailing
+      expr: sum by (controller) (increase(controller_runtime_reconcile_errors_total{job="vault-secrets-operator", controller=~"vault.*secret"}[15m])) > 0
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: Secrets from Vault are not reaching the cluster. Pods already running keep their old values; anything new that needs one waits in CreateContainerConfigError. `kubectl -n vault-secrets-operator logs deploy/vault-secrets-operator-controller-manager -c manager` names the path, and a 403 there usually means a meta.vault declaration vault-config has not applied yet.
+        summary: VSO has been failing to sync {{ $labels.controller }} resources for 30 minutes
+    - alert: VaultSecretsNotSynced
+      expr: count(kube_vso_static_secret_info{synced="False"}) > 0
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: "Almost always stale since a Vault outage rather than failing: VSO only clears the condition when the resource's generation changes. If VaultSecretSyncFailing is not firing too, the secrets themselves are fine. List them with `kubectl get vaultstaticsecrets -A | grep -v True`; changing any spec field (e.g. refreshAfter) makes VSO resync, and Flux restores the field on its next reconcile."
+        summary: "{{ $value }} VaultStaticSecrets report SecretSynced=False"

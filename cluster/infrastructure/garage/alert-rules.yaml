@@ -1,0 +1,37 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: garage
+spec:
+  groups:
+  - name: garage
+    interval: 1m
+    rules:
+    - alert: GarageUnhealthy
+      expr: cluster_healthy{job="garage"} == 0 or cluster_available{job="garage"} == 0
+      for: 10m
+      labels:
+        severity: critical
+        topic: alerts-storage
+      annotations:
+        description: Garage says it cannot serve all of its partitions, so backups will fail and restores may. `kubectl -n garage exec deploy/garage -- /garage status` shows which node or layout is at fault.
+        summary: Garage reports itself unhealthy
+    - alert: GarageDiskLow
+      expr: garage_local_disk_avail{job="garage"} / garage_local_disk_total{job="garage"} < 0.1
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: When it fills, every backup fails. Pruning is weekly per namespace; a namespace whose prune is failing keeps everything, and its heartbeat says so.
+        summary: Garage's {{ $labels.volume }} volume is {{ $value | humanizePercentage }} free
+    - alert: GarageResyncErrors
+      expr: block_resync_errored_blocks{job="garage"} > 0
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: Blocks Garage keeps failing to write or verify, usually a disk or NFS problem under its data directory. `/garage block list-errors` in the pod lists them.
+        summary: Garage has {{ $value }} blocks it cannot resync

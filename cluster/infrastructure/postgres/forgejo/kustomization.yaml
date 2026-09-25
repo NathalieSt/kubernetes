@@ -7,3 +7,5 @@ resources:
 - forgejo-pg-cluster.yaml
 - forgejo-db.yaml
 - network-policy.yaml
+- monitoring-queries.yaml
+- alert-rules.yaml

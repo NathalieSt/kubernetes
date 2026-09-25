@@ -1,0 +1,19 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: mariadb
+spec:
+  groups:
+  - name: mariadb
+    interval: 1m
+    rules:
+    - alert: MariadbUnreachable
+      expr: mysql_up{job="mariadb"} == 0
+      for: 10m
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: Either MariaDB is down or the exporter's credentials are wrong — `kubectl -n {{ $labels.namespace }} logs {{ $labels.pod }} -c <exporter>` says which. Access denied means the root password in Vault no longer matches the one the database was initialised with.
+        summary: MariaDB's exporter cannot connect to it
