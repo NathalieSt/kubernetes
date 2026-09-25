@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: glitchtip-pennant
-  namespace: glitchtip
+  name: paperless-pennant
+  namespace: paperless
 data:
   append-stylesheet.sh: |
     #!/bin/sh
@@ -81,54 +81,96 @@ data:
       fi
     done
   pennant.css: |
-    /* Pennant for GlitchTip, appended by kubernetes-generator (src/generators/theme). */
+    /* Pennant for Paperless-ngx, appended by kubernetes-generator (src/generators/theme). */
 
     :root {
-      --mat-sys-primary: light-dark(#984a72, #f5adce);
-      --mat-sys-on-primary: light-dark(#f9fafb, #090c0d);
-      --mat-sys-primary-container: light-dark(#ffe4f0, #371627);
-      --mat-sys-on-primary-container: light-dark(#763757, #ffcbe2);
-      --mat-sys-inverse-primary: light-dark(#f5adce, #984a72);
-      --mat-sys-primary-fixed: #ffe4f0;
-      --mat-sys-primary-fixed-dim: #ffcbe2;
-      --mat-sys-on-primary-fixed: #371627;
-      --mat-sys-on-primary-fixed-variant: #763757;
-      --mat-sys-surface-tint: light-dark(#984a72, #f5adce);
-      --mat-sys-secondary: light-dark(#007495, #6bd5ff);
-      --mat-sys-on-secondary: light-dark(#f9fafb, #090c0d);
-      --mat-sys-secondary-container: light-dark(#d6f2ff, #002735);
-      --mat-sys-on-secondary-container: light-dark(#005873, #aee6ff);
-      --mat-sys-secondary-fixed: #d6f2ff;
-      --mat-sys-secondary-fixed-dim: #aee6ff;
-      --mat-sys-on-secondary-fixed: #002735;
-      --mat-sys-on-secondary-fixed-variant: #005873;
-      --mat-sys-tertiary: light-dark(#984a72, #f5adce);
-      --mat-sys-on-tertiary: light-dark(#f9fafb, #090c0d);
-      --mat-sys-tertiary-container: light-dark(#ffe4f0, #371627);
-      --mat-sys-on-tertiary-container: light-dark(#763757, #ffcbe2);
-      --mat-sys-tertiary-fixed: #ffe4f0;
-      --mat-sys-tertiary-fixed-dim: #ffcbe2;
-      --mat-sys-on-tertiary-fixed: #371627;
-      --mat-sys-on-tertiary-fixed-variant: #763757;
-      --mat-sys-error: light-dark(#af3d34, #ffaea2);
-      --mat-sys-on-error: light-dark(#f9fafb, #090c0d);
-      --mat-sys-error-container: light-dark(#ffe6e3, #40100d);
-      --mat-sys-on-error-container: light-dark(#872c25, #ffcfc8);
-      --mat-sys-background: light-dark(#f9fafb, #090c0d);
-      --mat-sys-surface: light-dark(#f9fafb, #090c0d);
-      --mat-sys-surface-dim: light-dark(#d0d5d8, #121617);
-      --mat-sys-surface-bright: light-dark(#f9fafb, #484e51);
-      --mat-sys-surface-container-lowest: light-dark(#ffffff, #090c0d);
-      --mat-sys-surface-container-low: light-dark(color-mix(in oklab, #f9fafb, #f1f4f5), #121617);
-      --mat-sys-surface-container: light-dark(#f1f4f5, #1d2123);
-      --mat-sys-surface-container-high: light-dark(color-mix(in oklab, #f1f4f5, #e3e7e9), color-mix(in oklab, #1d2123, #2e3436));
-      --mat-sys-surface-container-highest: light-dark(#e3e7e9, #2e3436);
-      --mat-sys-surface-variant: light-dark(#e3e7e9, #2e3436);
-      --mat-sys-on-background: light-dark(#2e3436, #f1f4f5);
-      --mat-sys-on-surface: light-dark(#2e3436, #f1f4f5);
-      --mat-sys-on-surface-variant: light-dark(#666d71, #b8bfc2);
-      --mat-sys-outline: light-dark(#838b8e, #666d71);
-      --mat-sys-outline-variant: light-dark(#e3e7e9, #2e3436);
-      --mat-sys-inverse-surface: light-dark(#2e3436, #e3e7e9);
-      --mat-sys-inverse-on-surface: light-dark(#f1f4f5, #2e3436);
+      --pngx-primary: 329, 35%;
+      --pngx-primary-lightness: 44%;
+      --pngx-primary-text-contrast: #f9fafb;
+      --pngx-bg-alt: #ffffff;
+      --pngx-bg-alt2: #f1f4f5;
+      --pngx-bg-darker: #f1f4f5;
+      --pngx-bg-disabled: #f1f4f5;
+      --pngx-body-color-accent: #666d71;
+      --pngx-card-hover-border: #838b8e;
+      --bs-body-bg: #f9fafb;
+      --bs-body-bg-rgb: 249, 250, 251;
+      --bs-body-color: #2e3436;
+      --bs-body-color-rgb: 46, 52, 54;
+      --bs-secondary-color: #666d71;
+      --bs-border-color: #e3e7e9;
+      --bs-link-color: #984a72;
+      --bs-link-color-rgb: 152, 74, 114;
+      --bs-link-hover-color: #763757;
+      --bs-focus-ring-color: rgba(185, 95, 140, .35);
+    }
+
+    [data-bs-theme=dark] {
+      --pngx-bg-alt: #121617;
+      --pngx-bg-alt2: #1d2123;
+      --pngx-bg-darker: #090c0d;
+      --pngx-bg-disabled: #1d2123;
+      --pngx-body-color-accent: #b8bfc2;
+      --pngx-card-hover-border: #666d71;
+      --bs-body-bg: #090c0d;
+      --bs-body-bg-rgb: 9, 12, 13;
+      --bs-body-color: #f1f4f5;
+      --bs-body-color-rgb: 241, 244, 245;
+      --bs-secondary-color: #b8bfc2;
+      --bs-border-color: #2e3436;
+      --bs-link-color: #f5adce;
+      --bs-link-color-rgb: 245, 173, 206;
+      --bs-link-hover-color: #ffcbe2;
+      --bs-focus-ring-color: rgba(245, 173, 206, .35);
+    }
+    [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary .dropdown-menu {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+
+    @media (prefers-color-scheme: dark) {
+    [data-bs-theme=auto] body {
+      --pngx-bg-alt: #121617;
+      --pngx-bg-alt2: #1d2123;
+      --pngx-bg-darker: #090c0d;
+      --pngx-bg-disabled: #1d2123;
+      --pngx-body-color-accent: #b8bfc2;
+      --pngx-card-hover-border: #666d71;
+      --bs-body-bg: #090c0d;
+      --bs-body-bg-rgb: 9, 12, 13;
+      --bs-body-color: #f1f4f5;
+      --bs-body-color-rgb: 241, 244, 245;
+      --bs-secondary-color: #b8bfc2;
+      --bs-border-color: #2e3436;
+      --bs-link-color: #f5adce;
+      --bs-link-color-rgb: 245, 173, 206;
+      --bs-link-hover-color: #ffcbe2;
+      --bs-focus-ring-color: rgba(245, 173, 206, .35);
+    }
+    [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
+    [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary .dropdown-menu {
+      --pngx-primary: 331, 64%;
+      --pngx-primary-lightness: 73%;
+      --pngx-primary-text-contrast: #090c0d;
+    }
     }

@@ -13,30 +13,34 @@ spec:
       for: 10m
       labels:
         severity: critical
+        topic: alerts-vpn
       annotations:
         description: "The tunnel in {{ $labels.namespace }}/{{ $labels.pod }} is up and carrying traffic, but out of the wrong country — see `vpn_probe_exit_info` for which. Nothing left the house: the egress policy admits nothing but the VPN either way. For qBittorrent this will already have stopped the torrents and latched."
         summary: "{{ $labels.job }} is exiting from a country it was not configured for"
     - alert: VpnProbeStale
-      expr: time() - vpn_probe_last_check_timestamp_seconds{check="ip"} > 1800
+      expr: time() - vpn_probe_last_cycle_timestamp_seconds > 900
       for: 15m
       labels:
         severity: warning
+        topic: alerts-vpn
       annotations:
-        description: No exit-IP verdict from {{ $labels.namespace }}/{{ $labels.pod }} for over 30 minutes, against a 5 minute interval. The tunnel may well be fine; what is certain is that nothing is watching it. `kubectl logs -c ipleak` is the first thing to read.
+        description: The detector in {{ $labels.namespace }}/{{ $labels.pod }} has not completed a pass in over 15 minutes, against a 5 minute loop. The tunnel may well be fine; what is certain is that nothing is watching it. `kubectl logs -c ipleak` is the first thing to read.
         summary: "{{ $labels.job }}'s VPN leak detector has stopped checking"
     - alert: VpnExitUnverified
-      expr: vpn_probe_check_completed{check="ip"} == 0
+      expr: vpn_probe_check_completed{check="ip"} == 0 and on (namespace, pod) count by (namespace, pod) (container_network_receive_bytes_total{interface="tun0"})
       for: 30m
       labels:
         severity: warning
+        topic: alerts-vpn
       annotations:
-        description: Every geolocation provider failed from {{ $labels.namespace }}/{{ $labels.pod }} for half an hour. Usually the tunnel is down, which is safe but not working; occasionally it is all three providers rate-limiting at once.
+        description: Every geolocation provider failed from {{ $labels.namespace }}/{{ $labels.pod }} for half an hour, although the tunnel is up. Usually all three are rate-limiting or bot-checking this exit at once; otherwise traffic is not passing through a tunnel that exists — gluetun's resolver is the usual suspect, and `nslookup example.org 127.0.0.1` in the gluetun container tells the two apart.
         summary: "{{ $labels.job }}'s exit IP cannot be verified"
     - alert: VpnLeakLatched
       expr: vpn_probe_latched == 1
       for: 5m
       labels:
         severity: critical
+        topic: alerts-vpn
       annotations:
         description: The detector in {{ $labels.namespace }}/{{ $labels.pod }} found an exit outside the expected countries, stopped what the pod was doing and latched. It stays latched until the pod is deleted, which is meant to be a decision rather than a retry.
         summary: "{{ $labels.job }} has latched a VPN leak and stopped"
@@ -45,6 +49,33 @@ spec:
       for: 45m
       labels:
         severity: warning
+        topic: alerts-vpn
       annotations:
         description: The resolver answering for {{ $labels.namespace }}/{{ $labels.pod }} has been egressing outside the expected countries for 45 minutes, which is long enough not to be an anycast node answering from somewhere convenient. It suggests lookups are leaving outside the tunnel.
         summary: "{{ $labels.job }}'s DNS is resolving from an unexpected country"
+    - alert: VpnTunnelDown
+      expr: count by (namespace, pod) (vpn_probe_latched) unless on (namespace, pod) count by (namespace, pod) (container_network_receive_bytes_total{interface="tun0"})
+      for: 10m
+      labels:
+        severity: warning
+        topic: alerts-vpn
+      annotations:
+        description: "{{ $labels.namespace }}/{{ $labels.pod }} has had no tun0 for ten minutes: OpenVPN is not connected. Safe — the egress policy admits nothing else — but everything behind it is offline. `kubectl logs -n {{ $labels.namespace }} {{ $labels.pod }} -c <gluetun container>` shows why; AUTH_FAILED usually means more tunnels than the account's 3 sessions (see VpnSessionsOversubscribed)."
+        summary: The VPN tunnel in {{ $labels.namespace }} has no session
+    - alert: VpnSessionsOversubscribed
+      expr: count(count by (namespace, pod) (kube_pod_container_info{image=~".*qmcgaw/gluetun.*"} or kube_pod_init_container_info{image=~".*qmcgaw/gluetun.*"}) and on (namespace, pod) (kube_pod_status_phase{phase="Running"} == 1)) > 3
+      for: 10m
+      labels:
+        severity: warning
+        topic: alerts-vpn
+      annotations:
+        description: ProtonVPN refuses the extra tunnel with AUTH_FAILED, so one of them is down however healthy it looks. List them with `kubectl get pods -A -o wide | grep -e gluetun -e qbittorrent`; one outside gluetun-proxy, gluetun-media and qbittorrent is almost certainly a leftover and can be deleted.
+        summary: "{{ $value }} gluetun pods are running for 3 ProtonVPN sessions"
+    - alert: VpnTunnelFlapping
+      expr: sum by (namespace, pod) (increase(kube_pod_container_status_restarts_total{container=~"gluetun.*"}[1h]) or increase(kube_pod_init_container_status_restarts_total{container=~"gluetun.*"}[1h])) > 3
+      labels:
+        severity: warning
+        topic: alerts-vpn
+      annotations:
+        description: "gluetun in {{ $labels.namespace }}/{{ $labels.pod }} restarted more than three times in the last hour. Each restart picks a new server, so this is a failure that follows it: the account, the session limit or the egress policy. `--previous` on its logs has the last attempt."
+        summary: gluetun in {{ $labels.namespace }} keeps restarting

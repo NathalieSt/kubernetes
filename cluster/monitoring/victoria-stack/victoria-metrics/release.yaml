@@ -20,20 +20,90 @@ spec:
       config:
         receivers:
         - name: blackhole
-        - name: ntfy
+        - name: ntfy-alerts-vpn-critical
           webhook_configs:
           - http_config:
               authorization:
                 credentials_file: /etc/alertmanager-ntfy/token
             send_resolved: true
-            url: http://ntfy.ntfy.svc.cluster.local:8080/victoria-metrics?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
-        - name: ntfy-warnings
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-vpn?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-vpn-warning
           webhook_configs:
           - http_config:
               authorization:
                 credentials_file: /etc/alertmanager-ntfy/token
             send_resolved: true
-            url: http://ntfy.ntfy.svc.cluster.local:8080/warnings?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-vpn?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-storage-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-storage?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-storage-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-storage?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-nodes-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-nodes?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-nodes-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-nodes?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-platform-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-platform?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-platform-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-platform?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-apps-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-apps?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-apps-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-apps?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-monitoring-critical
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-monitoring?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D4%7B%7Belse%7D%7D2%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%F0%9F%9A%A8%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
+        - name: ntfy-alerts-monitoring-warning
+          webhook_configs:
+          - http_config:
+              authorization:
+                credentials_file: /etc/alertmanager-ntfy/token
+            send_resolved: true
+            url: http://ntfy.ntfy.svc.cluster.local:8080/alerts-monitoring?tpl=yes&priority=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D2%7B%7Belse%7D%7D1%7B%7Bend%7D%7D&title=%7B%7Bif%20eq%20.status%20%22firing%22%7D%7D%E2%9A%A0%EF%B8%8F%7B%7Belse%7D%7D%E2%9C%85%20Resolved%3A%7B%7Bend%7D%7D%20%7B%7B.commonLabels.alertname%7D%7D%7B%7Bif%20.commonLabels.namespace%7D%7D%20%C2%B7%20%7B%7B.commonLabels.namespace%7D%7D%7B%7Bend%7D%7D&message=%7B%7Brange%20.alerts%7D%7D%7B%7B.annotations.summary%7D%7D%0A%7B%7B.annotations.description%7D%7D%0A%7B%7Bend%7D%7D&click=https%3A%2F%2Forrery.netbird.nathalie-stiefsohn.eu
         - name: healthchecks
           webhook_configs:
           - send_resolved: false
@@ -54,12 +124,133 @@ spec:
             receiver: healthchecks
             repeat_interval: 1m
           - matchers:
-            - severity="critical"
-            receiver: ntfy
-          - matchers:
-            - severity="warning"
-            receiver: ntfy-warnings
-            repeat_interval: 24h
+            - severity=~"critical|warning"
+            receiver: blackhole
+            routes:
+            - matchers:
+              - topic="alerts-vpn"
+              receiver: ntfy-alerts-vpn-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-vpn-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-vpn-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-storage"
+              receiver: ntfy-alerts-storage-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-storage-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-storage-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-nodes"
+              receiver: ntfy-alerts-nodes-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-nodes-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-nodes-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-platform"
+              receiver: ntfy-alerts-platform-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-platform-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-platform-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-apps"
+              receiver: ntfy-alerts-apps-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-apps-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-apps-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic="alerts-monitoring"
+              receiver: ntfy-alerts-monitoring-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-monitoring-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-monitoring-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"KubePersistentVolume.*"
+              receiver: ntfy-alerts-storage-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-storage-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-storage-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"Kube(Pod|Container|Deployment|StatefulSet|DaemonSet|Job|Hpa|Pdb).*"
+              receiver: ntfy-alerts-apps-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-apps-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-apps-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"Node.*|Kubelet.*|KubeNode.*|KubeVersionMismatch"
+              receiver: ntfy-alerts-nodes-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-nodes-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-nodes-warning
+                repeat_interval: 24h
+            - matchers:
+              - topic=""
+              - alertname=~"KubeAPI.*|KubeAggregatedAPI.*|KubeClient.*|KubeStateMetrics.*|Kube(CPU|Memory)(Quota)?Overcommit|KubeQuota.*"
+              receiver: ntfy-alerts-platform-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-platform-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-platform-warning
+                repeat_interval: 24h
+            - matchers: []
+              receiver: ntfy-alerts-monitoring-warning
+              routes:
+              - matchers:
+                - severity="critical"
+                receiver: ntfy-alerts-monitoring-critical
+              - matchers:
+                - severity="warning"
+                receiver: ntfy-alerts-monitoring-warning
+                repeat_interval: 24h
       spec:
         volumeMounts:
         - mountPath: /etc/alertmanager-ntfy

@@ -29,6 +29,31 @@ spec:
         volumeMounts:
         - mountPath: /home/node/trilium-data
           name: data
+      - command:
+        - sh
+        - /pennant/append-stylesheet.sh
+        - /usr/src/app/public/stylesheets
+        - /pennant-out
+        - /pennant/pennant.css
+        - theme-next-light.css
+        - theme-next-dark.css
+        image: triliumnext/trilium:v0.105.0@sha256:cc6a15edd7ac3df9bb98ad39dd40af8ffda6c1c0bfafe37c26137ddcbecdb7e5
+        name: pennant
+        volumeMounts:
+        - mountPath: /pennant
+          name: pennant-script-volume
+          readOnly: true
+        - mountPath: /pennant-out
+          name: pennant-volume
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
@@ -45,6 +70,9 @@ spec:
           name: data
         - mountPath: /tmp
           name: tmp
+        - mountPath: /usr/src/app/public/stylesheets
+          name: pennant-volume
+          readOnly: true
         env:
         - name: TZ
           value: Europe/Vienna
@@ -95,6 +123,11 @@ spec:
         persistentVolumeClaim:
           claimName: trilium-data-pvc
       - name: tmp
+        emptyDir: {}
+      - name: pennant-script-volume
+        configMap:
+          name: trilium-pennant
+      - name: pennant-volume
         emptyDir: {}
       securityContext:
         seccompProfile:
