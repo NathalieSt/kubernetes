@@ -73,6 +73,12 @@ data:
       curl -sfL --max-time "$TIMEOUT" "$1" 2>/dev/null
     }
 
+    # As fetch, with curl's total time appended as a last line of its own. A command substitution
+    # is a subshell, so the time cannot come back through a variable.
+    timed_fetch() {
+      curl -sfL --max-time "$TIMEOUT" -w '\n%{time_total}' "$1" 2>/dev/null
+    }
+
     # --- expectation
     # A comma-separated list, matched exactly. Spaces are tolerated so the generator can join a
     # list the obvious way without the match silently never succeeding.
@@ -99,6 +105,9 @@ data:
     n_ip_OK=0 n_ip_LEAK=0 n_ip_UNKNOWN=0
     n_dns_OK=0 n_dns_LEAK=0 n_dns_UNKNOWN=0
     latched_value=0
+    ip_duration=""
+    cycle_ts=0
+    last_exit_ip="" n_exit_changes=0
 
     count() {
       # count <check> <status>
@@ -153,6 +162,21 @@ data:
         echo '# HELP vpn_probe_latched Whether a leak was latched and this pod is refusing to work until it is recreated.'
         echo '# TYPE vpn_probe_latched gauge'
         echo "vpn_probe_latched ${latched_value}"
+
+        # Written every pass whatever the checks found, which is what makes it the detector's own
+        # heartbeat. vpn_probe_last_check_timestamp_seconds cannot be: it only moves on a verdict,
+        # so a tunnel that is down stops it too and reads as a detector that has died.
+        echo '# HELP vpn_probe_last_cycle_timestamp_seconds Unix time this detector last completed a pass, verdict or not.'
+        echo '# TYPE vpn_probe_last_cycle_timestamp_seconds gauge'
+        echo "vpn_probe_last_cycle_timestamp_seconds ${cycle_ts}"
+
+        echo '# HELP vpn_probe_request_duration_seconds Total time of the geolocation request that produced the last exit-IP verdict, through the tunnel.'
+        echo '# TYPE vpn_probe_request_duration_seconds gauge'
+        [ -n "$ip_duration" ] && echo "vpn_probe_request_duration_seconds{check=\"ip\"} ${ip_duration}"
+
+        echo '# HELP vpn_probe_exit_changes_total Times the observed exit IP changed since this detector started: server rotations and reconnects, sampled every interval.'
+        echo '# TYPE vpn_probe_exit_changes_total counter'
+        echo "vpn_probe_exit_changes_total ${n_exit_changes}"
       } >"$tmp" 2>/dev/null && mv "$tmp" "$IPLEAK_METRICS_FILE" 2>/dev/null ||
         emit error metrics FAILED "" "could not write $IPLEAK_METRICS_FILE"
     }
@@ -178,6 +202,7 @@ data:
       printf '%s\n' "$1" >"$IPLEAK_LATCH_FILE" 2>/dev/null ||
         emit error latch FAILED "" "could not write $IPLEAK_LATCH_FILE"
       latched_value=1
+      cycle_ts="$(date -u +%s)"
       # Before the exit: the httpd container keeps serving this file while this one crashloops,
       # so it is what carries the alarm to the store for as long as the latch stands.
       write_metrics
@@ -193,20 +218,26 @@ data:
         emit error action FAILED "" "$IPLEAK_ON_LEAK_SCRIPT exited non-zero"
     }
 
+    # Splits timed_fetch's output into body and duration, in this shell rather than a subshell.
+    split_timed() {
+      duration="$(printf '%s\n' "$1" | tail -n 1)"
+      body="$(printf '%s\n' "$1" | sed '$d')"
+    }
+
     # --- external IP
     # Tries several providers in turn; only if every one fails is UNKNOWN reported. The old script
     # treated "no country parsed" as a leak, so any hiccup or rate-limit produced a false alarm.
     check_ip() {
       ip=""; country=""
 
-      body="$(fetch https://api.country.is/)"
+      split_timed "$(timed_fetch https://api.country.is/)"
       if [ -n "$body" ]; then
         ip="$(json_str "$body" ip)"
         country="$(json_str "$body" country)"
       fi
 
       if [ -z "$country" ]; then
-        body="$(fetch https://ipwho.is/)"
+        split_timed "$(timed_fetch https://ipwho.is/)"
         if [ -n "$body" ]; then
           ip="$(json_str "$body" ip)"
           country="$(json_str "$body" country_code)"
@@ -214,7 +245,7 @@ data:
       fi
 
       if [ -z "$country" ]; then
-        body="$(fetch https://ipapi.co/json/)"
+        split_timed "$(timed_fetch https://ipapi.co/json/)"
         if [ -n "$body" ]; then
           ip="$(json_str "$body" ip)"
           country="$(json_str "$body" country)"
@@ -232,6 +263,12 @@ data:
       ip_completed=1
       ip_country="$country"
       ip_ts="$(date -u +%s)"
+      # The provider that answered is the last one tried, so this is its time.
+      ip_duration="$duration"
+      if [ -n "$ip" ]; then
+        [ -n "$last_exit_ip" ] && [ "$ip" != "$last_exit_ip" ] && n_exit_changes=$((n_exit_changes + 1))
+        last_exit_ip="$ip"
+      fi
 
       if country_expected "$country"; then
         ip_ok=1
@@ -308,6 +345,7 @@ data:
 
     # Before the grace period, so the endpoint exists for the first scrape rather than 404ing and
     # reading as a target that has never worked.
+    cycle_ts="$(date -u +%s)"
     write_metrics
     emit info startup OK ",\"interval\":$INTERVAL" "leak detector starting, waiting ${GRACE}s for tunnel"
     sleep "$GRACE"
@@ -315,6 +353,7 @@ data:
     while true; do
       check_ip
       check_dns
+      cycle_ts="$(date -u +%s)"
       write_metrics
       sleep "$INTERVAL"
     done

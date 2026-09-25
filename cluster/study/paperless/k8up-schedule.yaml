@@ -20,9 +20,32 @@ spec:
         key: secret-access-key
   backup:
     schedule: 0 2 * * *
+    podSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      seccompProfile:
+        type: RuntimeDefault
+    podConfigRef:
+      name: paperless-backup-pod
   prune:
     schedule: 0 5 * * 0
     retention:
       keepLast: 14
       keepWeekly: 8
       keepMonthly: 12
+---
+apiVersion: k8up.io/v1
+kind: PodConfig
+metadata:
+  name: paperless-backup-pod
+  namespace: paperless
+spec:
+  template:
+    spec:
+      containers:
+      - name: backup
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
