@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: zyme
-    app.kubernetes.io/version: 80340b8
+    app.kubernetes.io/version: c3a518c
   name: zyme
 spec:
   selector:
