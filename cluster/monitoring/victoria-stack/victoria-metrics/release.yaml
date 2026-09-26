@@ -1521,6 +1521,8 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: main-pg
+            scrape_interval: 5m
+            scrape_timeout: 4m
           - job_name: mariadb
             metrics_path: /metrics
             scheme: http
