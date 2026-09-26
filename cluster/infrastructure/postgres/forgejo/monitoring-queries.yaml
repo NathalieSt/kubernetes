@@ -13,6 +13,14 @@ data:
     # the mirror's last successful push and last error in its own tables, which makes this
     # a query rather than an exporter with a token.
     #
+    # CNPG runs custom queries as pg_monitor, which cannot read Forgejo's tables by default. The
+    # grant below was made by hand on 2026-09-26 and lives in the database, so a restore or a
+    # migration that recreates these tables needs it again — until then this query logs
+    # "permission denied" and the metrics are simply absent:
+    #
+    #   kubectl -n forgejo-pg-cluster exec forgejo-pg-1 -c postgres -- \
+    #     psql -d forgejo -c 'GRANT SELECT ON public.push_mirror, public.repository TO pg_monitor;'
+    #
     # repo_updated_seconds is the repository's last change, so the difference between the
     # two is how far the mirror is behind. last_error is cleared by the next good push.
     forgejo_push_mirror:
