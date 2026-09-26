@@ -36,14 +36,14 @@ data:
           "background": "#ffffff",
           "color": "#2e3436"
         },
-        "radius": 10,
+        "radius": 4,
         "buttonTextTransform": "none"
       },
       {
         "name": "Pennant Dark",
         "base": "dark",
         "primary": "#f5adce",
-        "secondary": "#1d2123",
+        "secondary": "#1f2426",
         "text": {
           "primary": "#f1f4f5"
         },
@@ -52,21 +52,21 @@ data:
         },
         "background": {
           "default": "#090c0d",
-          "surface": "#121617",
-          "muted": "#1d2123"
+          "surface": "#141819",
+          "muted": "#1f2426"
         },
         "sidebar": {
-          "background": "#121617",
+          "background": "#141819",
           "color": "#b8bfc2",
           "selectedBackground": "#371627",
           "selectedColor": "#ffcbe2",
           "actionBackground": "#e68eb8"
         },
         "navbar": {
-          "background": "#121617",
+          "background": "#141819",
           "color": "#f1f4f5"
         },
-        "radius": 10,
+        "radius": 4,
         "buttonTextTransform": "none"
       }
     ];
