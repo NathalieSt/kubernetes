@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: zyme
-    app.kubernetes.io/version: 80340b8
+    app.kubernetes.io/version: 976037a
   name: zyme
 spec:
   replicas: 1
@@ -17,14 +17,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: zyme
-        app.kubernetes.io/version: 80340b8
+        app.kubernetes.io/version: 976037a
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme:80340b8@sha256:2c8f24b00ffdf259845ed0e7f43415a878da900e43ee19a4c63976e0f1945b9f
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme:976037a@sha256:4299ad28db6b04d6264c90ea372a20bb3eaac62cfaca6d163865ba8c493fe512
         name: zyme
         ports:
         - containerPort: 8080
