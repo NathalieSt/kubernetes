@@ -62,7 +62,7 @@ data:
     /* The two soft washes are the flag's colours, faint enough that the page
        still reads as the plain background. */
     body {
-      font-family: 'Inter var', Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
       color: #f1f4f5;
       background:
         radial-gradient(1200px 600px at 10% -10%, #37162766, transparent 60%),
@@ -78,9 +78,9 @@ data:
     #information-widgets .widget-container:not(.information-widget-logo):not(.information-widget-greeting):not(.information-widget-search) {
       height: 4.75rem;
       align-self: center;
-      background: #121617cc !important;
+      background: #141819cc !important;
       border: 1px solid #2e3436;
-      border-radius: 14px !important;
+      border-radius: 6px !important;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
       backdrop-filter: blur(8px);
     }
@@ -112,9 +112,9 @@ data:
     .information-widget-search input {
       height: 2.6rem;
       color: #f1f4f5;
-      background: #1d2123 !important;
+      background: #1f2426 !important;
       border-color: #2e3436 !important;
-      border-radius: 10px !important;
+      border-radius: 4px !important;
     }
     .information-widget-search input:focus { outline: 2px solid #f5adce; outline-offset: 1px; }
 
@@ -156,15 +156,15 @@ data:
 
     .service-card {
       color: #f1f4f5 !important;
-      background: #121617d9 !important;
+      background: #141819d9 !important;
       border: 1px solid #2e3436;
-      border-radius: 10px !important;
+      border-radius: 4px !important;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.30) !important;
       padding: 0.35rem !important;
       transition: transform 180ms cubic-bezier(0.2, 0, 0.2, 1), border-color 180ms cubic-bezier(0.2, 0, 0.2, 1), background 180ms cubic-bezier(0.2, 0, 0.2, 1) !important;
     }
     .service-card:hover {
-      background: #1d2123 !important;
+      background: #1f2426 !important;
       border-color: #e68eb888;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.38) !important;
       transform: translateY(-1px);
@@ -188,7 +188,7 @@ data:
 
     /* The numbers under the Cluster tiles. */
     .service-container { gap: 0.35rem; padding: 0 0.25rem 0.25rem; }
-    .service-block { background: #1d2123 !important; border-radius: 6px !important; padding: 0.4rem 0.25rem !important; }
+    .service-block { background: #1f2426 !important; border-radius: 3px !important; padding: 0.4rem 0.25rem !important; }
     .service-block > div:first-child {
       font-weight: 600 !important;
       font-size: 1rem !important;
@@ -204,8 +204,8 @@ data:
 
     /* ---- Links. */
 
-    .bookmark { background: #121617d9 !important; border: 1px solid #2e3436; border-radius: 10px !important; }
-    .bookmark:hover { background: #1d2123 !important; border-color: #07bff488; }
+    .bookmark { background: #141819d9 !important; border: 1px solid #2e3436; border-radius: 4px !important; }
+    .bookmark:hover { background: #1f2426 !important; border-color: #07bff488; }
     .bookmark-icon { background: transparent !important; }
     .bookmark-text, .bookmark-name { color: #f1f4f5 !important; }
     .bookmark-description { color: #b8bfc2 !important; }
