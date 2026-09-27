@@ -122,10 +122,10 @@ data:
     html:root:has(.v-application.v-theme--dark) {
       --v-theme-background: 9,12,13;
       --v-theme-on-background: 241,244,245;
-      --v-theme-surface: 18,22,23;
+      --v-theme-surface: 20,24,25;
       --v-theme-on-surface: 241,244,245;
-      --v-theme-surface-bright: 18,22,23;
-      --v-theme-surface-light: 29,33,35;
+      --v-theme-surface-bright: 20,24,25;
+      --v-theme-surface-light: 31,36,38;
       --v-theme-surface-variant: 208,213,216;
       --v-theme-on-surface-variant: 9,12,13;
       --v-theme-primary: 230,142,184;
@@ -152,7 +152,7 @@ data:
       --v-theme-on-delete: 9,12,13;
       --v-theme-cancel: 223,160,67;
       --v-theme-on-cancel: 9,12,13;
-      --v-theme-recipeImagePlaceholderBg: 29,33,35;
+      --v-theme-recipeImagePlaceholderBg: 31,36,38;
     }
 
     html .v-theme--light {
@@ -194,10 +194,10 @@ data:
     html .v-theme--dark {
       --v-theme-background: 9,12,13;
       --v-theme-on-background: 241,244,245;
-      --v-theme-surface: 18,22,23;
+      --v-theme-surface: 20,24,25;
       --v-theme-on-surface: 241,244,245;
-      --v-theme-surface-bright: 18,22,23;
-      --v-theme-surface-light: 29,33,35;
+      --v-theme-surface-bright: 20,24,25;
+      --v-theme-surface-light: 31,36,38;
       --v-theme-surface-variant: 208,213,216;
       --v-theme-on-surface-variant: 9,12,13;
       --v-theme-primary: 230,142,184;
@@ -224,7 +224,7 @@ data:
       --v-theme-on-delete: 9,12,13;
       --v-theme-cancel: 223,160,67;
       --v-theme-on-cancel: 9,12,13;
-      --v-theme-recipeImagePlaceholderBg: 29,33,35;
+      --v-theme-recipeImagePlaceholderBg: 31,36,38;
     }
 
     html .v-toolbar.v-app-bar {

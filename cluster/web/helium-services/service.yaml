@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: helium-services
-    app.kubernetes.io/version: ceb2862
+    app.kubernetes.io/version: 137ec6f
   name: helium-services
 spec:
   selector:

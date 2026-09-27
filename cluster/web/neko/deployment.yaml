@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/neko-browser-config-hash: bf2206e8b6c7dd73
+        homelab/neko-browser-config-hash: 050e49168f9a0f5a
       labels:
         app.kubernetes.io/name: neko
         app.kubernetes.io/version: 8342ddb
