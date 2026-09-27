@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: anki-sync
-    app.kubernetes.io/version: 233db3f
+    app.kubernetes.io/version: 137ec6f
   name: anki-sync
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: anki-sync
-        app.kubernetes.io/version: 233db3f
+        app.kubernetes.io/version: 137ec6f
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -34,7 +34,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/anki-sync:233db3f@sha256:fc3d86c600ec4dc52bf0631c86b05d2e198e49a9b8d269067d250d92c7925641
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/anki-sync:137ec6f@sha256:6ef9c7accad7e70263dc52028450f0043d53abec03859656880e812356297fe4
         name: anki-sync
         ports:
         - containerPort: 8080

@@ -116,12 +116,12 @@ data:
       --mat-sys-on-error-container: light-dark(#872c25, #ffcfc8);
       --mat-sys-background: light-dark(#f9fafb, #090c0d);
       --mat-sys-surface: light-dark(#f9fafb, #090c0d);
-      --mat-sys-surface-dim: light-dark(#d0d5d8, #121617);
+      --mat-sys-surface-dim: light-dark(#d0d5d8, #141819);
       --mat-sys-surface-bright: light-dark(#f9fafb, #484e51);
       --mat-sys-surface-container-lowest: light-dark(#ffffff, #090c0d);
-      --mat-sys-surface-container-low: light-dark(color-mix(in oklab, #f9fafb, #f1f4f5), #121617);
-      --mat-sys-surface-container: light-dark(#f1f4f5, #1d2123);
-      --mat-sys-surface-container-high: light-dark(color-mix(in oklab, #f1f4f5, #e3e7e9), color-mix(in oklab, #1d2123, #2e3436));
+      --mat-sys-surface-container-low: light-dark(color-mix(in oklab, #f9fafb, #f1f4f5), #141819);
+      --mat-sys-surface-container: light-dark(#f1f4f5, #1f2426);
+      --mat-sys-surface-container-high: light-dark(color-mix(in oklab, #f1f4f5, #e3e7e9), color-mix(in oklab, #1f2426, #2e3436));
       --mat-sys-surface-container-highest: light-dark(#e3e7e9, #2e3436);
       --mat-sys-surface-variant: light-dark(#e3e7e9, #2e3436);
       --mat-sys-on-background: light-dark(#2e3436, #f1f4f5);
