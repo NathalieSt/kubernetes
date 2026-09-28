@@ -23,6 +23,25 @@ spec:
     - command:
       - sh
       - -c
+      - find /config \! \( -user 1000 -group 10 \) -exec chown -h 1000:10 {} +
+      image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+      name: config-owner
+      volumeMounts:
+      - mountPath: /config
+        name: config
+      securityContext:
+        capabilities:
+          add:
+          - CHOWN
+          - DAC_OVERRIDE
+          drop:
+          - ALL
+        runAsUser: 0
+        allowPrivilegeEscalation: false
+        runAsNonRoot: false
+    - command:
+      - sh
+      - -c
       - mkdir -p /config/config && cp /pennant/branding.xml /config/config/branding.xml
       image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
       name: pennant-branding
@@ -32,6 +51,11 @@ spec:
       - mountPath: /pennant
         name: pennant-theme
         readOnly: true
+      securityContext:
+        capabilities:
+          drop:
+          - ALL
+        allowPrivilegeEscalation: false
     extraVolumeMounts:
       mountPath: /dev/dri
       name: hwa-volume
@@ -48,11 +72,25 @@ spec:
         storageClass: nfs-local
       media:
         existingClaim: jellyfin-pvc
+        readOnly: true
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 10
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     resources:
       requests:
         gpu.intel.com/i915: "1"
       limits:
         gpu.intel.com/i915: "1"
+    securityContext:
+      capabilities:
+        drop:
+        - ALL
+      allowPrivilegeEscalation: false
+    serviceAccount:
+      automount: false
     volumes:
     - name: pennant-theme
       configMap:

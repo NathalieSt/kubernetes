@@ -23,7 +23,17 @@ spec:
     - port: 5353
       protocol: TCP
   - to:
-    - podSelector: {}
+    - podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - sonarr
+          - radarr
+          - lidarr
+          - prowlarr
+          - bazarr
+          - jellyfin
   - to:
     - namespaceSelector:
         matchLabels:

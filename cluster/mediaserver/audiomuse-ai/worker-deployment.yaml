@@ -26,6 +26,7 @@ spec:
                 values:
                 - debian-mgt-0
                 - debian-mgt-1
+      automountServiceAccountToken: false
       dnsPolicy: None
       dnsConfig:
         nameservers:

@@ -29,6 +29,7 @@ spec:
         volumeMounts:
         - mountPath: /state
           name: state-volume
+      automountServiceAccountToken: false
       dnsPolicy: None
       dnsConfig:
         nameservers:

@@ -74,6 +74,9 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: flaresolverr
+    ports:
+    - port: 8888
+      protocol: TCP
   - from:
     - namespaceSelector:
         matchLabels:

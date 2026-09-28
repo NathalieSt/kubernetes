@@ -12,6 +12,12 @@ spec:
   ingress:
   - from:
     - podSelector: {}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gameyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gameyfin
     ports:
     - port: 5353
       protocol: UDP

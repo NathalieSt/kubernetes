@@ -21,6 +21,14 @@ spec:
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - gameyfin.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
       containers:
       - image: ghcr.io/gameyfin/gameyfin:2.4.0@sha256:857730f1807a92dad1a7bb50e1ba5409e0f27119a2207374045a8f52b4a42cc5
         name: gameyfin

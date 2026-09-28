@@ -19,6 +19,7 @@ spec:
         app.kubernetes.io/name: gluetun-proxy
         app.kubernetes.io/version: v3.41
     spec:
+      automountServiceAccountToken: false
       dnsPolicy: None
       dnsConfig:
         nameservers:
@@ -55,7 +56,7 @@ spec:
         - name: FIREWALL_INPUT_PORTS
           value: 8888,9101
         - name: FIREWALL_OUTBOUND_SUBNETS
-          value: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.42.0.0/15
+          value: 10.42.0.0/16
         - name: HTTPPROXY
           value: "on"
         - name: HTTPPROXY_STEALTH

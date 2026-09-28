@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: audiomuse-ai-flask
         app.kubernetes.io/version: sha256_9881304597ce7
     spec:
+      automountServiceAccountToken: false
       dnsPolicy: None
       dnsConfig:
         nameservers:
