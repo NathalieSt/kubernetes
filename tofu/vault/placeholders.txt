@@ -8,6 +8,7 @@ backup-dashboard/oidc backup-dashboard client-secret
 code-server code-server password
 code-server-git code-server username email token
 flux-notifications flux-notifications token
+gamevault/igdb gamevault client-id client-secret
 glitchtip/secret glitchtip secret-key
 glitchtip/oidc glitchtip client-secret
 vpn gluetun-media user password

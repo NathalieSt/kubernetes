@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: gamevault
+resources:
+- deployment.yaml
+- config-pvc.yaml
+- service.yaml
+- vault-secrets.yaml
+- egress-network-policy.yaml

@@ -163,6 +163,7 @@ data:
     code-server code-server password
     code-server-git code-server username email token
     flux-notifications flux-notifications token
+    gamevault/igdb gamevault client-id client-secret
     glitchtip/secret glitchtip secret-key
     glitchtip/oidc glitchtip client-secret
     vpn gluetun-media user password
@@ -251,6 +252,10 @@ data:
           "flux-notifications": {
             "name": "flux-notifications",
             "policy": "path \"kvv2/data/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "gamevault": {
+            "name": "gamevault",
+            "policy": "path \"kvv2/data/gamevault/igdb\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/gamevault/igdb\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "glitchtip": {
             "name": "glitchtip",
@@ -402,6 +407,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.flux-notifications.name}"
+            ],
+            "token_ttl": 600
+          },
+          "gamevault": {
+            "backend": "kubernetes",
+            "role_name": "gamevault",
+            "bound_service_account_names": [
+              "gamevault-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "jellyfin"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.gamevault.name}"
             ],
             "token_ttl": 600
           },
@@ -743,6 +763,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.flux-notifications_flux-notifications",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.gamevault_gamevault_igdb",
           "lifecycle": {
             "destroy": false
           }

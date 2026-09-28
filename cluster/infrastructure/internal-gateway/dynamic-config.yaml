@@ -90,6 +90,11 @@ data:
           service: fourget
           middlewares:
           - authelia
+        gamevault:
+          rule: Host(`gamevault.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: gamevault
         glitchtip:
           rule: Host(`glitchtip.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -351,6 +356,10 @@ data:
           loadBalancer:
             servers:
             - url: http://fourget.fourget.svc.cluster.local:8080
+        gamevault:
+          loadBalancer:
+            servers:
+            - url: http://gamevault.jellyfin.svc.cluster.local:8080
         glitchtip:
           loadBalancer:
             servers:
