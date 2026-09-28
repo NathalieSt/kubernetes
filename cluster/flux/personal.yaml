@@ -76,6 +76,33 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: paperless
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: paperless
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/paperless
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: valkey
+  - name: csi-driver-nfs
+  - name: reflector
+  - name: garage
+  - name: k8up
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-paperless
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: psono-client
   namespace: flux-system
 spec:
@@ -116,6 +143,27 @@ spec:
   - name: vault-secrets-operator-config
   - name: mail
   serviceAccountName: flux-psono-server
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: stirling-pdf
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: stirling-pdf
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/stirling-pdf
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: keda
+  serviceAccountName: flux-stirling-pdf
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

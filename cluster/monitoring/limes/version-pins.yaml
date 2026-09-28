@@ -89,6 +89,15 @@ data:
           "generators": []
         },
         {
+          "key": "golang",
+          "kind": "image",
+          "repository": "golang",
+          "version": "1.25.14-alpine@sha256:1ae0735f00daffa3aaf1363a5184c0d2dc55c78e3db4ec70241cdac97bf84b59",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
           "key": "kubectl",
           "kind": "image",
           "repository": "rancher/kubectl",
@@ -111,6 +120,15 @@ data:
           "kind": "image",
           "repository": "nginx",
           "version": "sha256:a5688ea5d06cccc298505dddac20e8e28bfe7de67b015a374006593bc23700b1",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "node",
+          "kind": "image",
+          "repository": "node",
+          "version": "22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c",
           "file": "versions/auxiliaries.json",
           "inVersionsFile": true,
           "generators": []
@@ -848,6 +866,17 @@ data:
           ]
         },
         {
+          "key": "paperless",
+          "kind": "image",
+          "repository": "ghcr.io/paperless-ngx/paperless-ngx",
+          "version": "3.2.1@sha256:5fa76604a81df6945086e0837b14b56543d137e8ce4f311cc5d9ebe907e74e79",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "paperless"
+          ]
+        },
+        {
           "key": "psono-client",
           "kind": "image",
           "repository": "psono/psono-client",
@@ -878,6 +907,17 @@ data:
           "inVersionsFile": true,
           "generators": [
             "mail"
+          ]
+        },
+        {
+          "key": "stirling-pdf",
+          "kind": "image",
+          "repository": "stirlingtools/stirling-pdf",
+          "version": "2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "stirling-pdf"
           ]
         },
         {
@@ -947,17 +987,6 @@ data:
           ]
         },
         {
-          "key": "paperless",
-          "kind": "image",
-          "repository": "ghcr.io/paperless-ngx/paperless-ngx",
-          "version": "3.2.1@sha256:5fa76604a81df6945086e0837b14b56543d137e8ce4f311cc5d9ebe907e74e79",
-          "file": "versions/study.json",
-          "inVersionsFile": true,
-          "generators": [
-            "paperless"
-          ]
-        },
-        {
           "key": "radicale",
           "kind": "image",
           "repository": "ghcr.io/kozea/radicale",
@@ -966,17 +995,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "radicale"
-          ]
-        },
-        {
-          "key": "stirling-pdf",
-          "kind": "image",
-          "repository": "stirlingtools/stirling-pdf",
-          "version": "2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396",
-          "file": "versions/study.json",
-          "inVersionsFile": true,
-          "generators": [
-            "stirling-pdf"
           ]
         },
         {
