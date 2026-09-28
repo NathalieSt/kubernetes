@@ -153,6 +153,65 @@ spec:
           runAsNonRoot: true
       - command:
         - sh
+        - -c
+        - |-
+          set -eu
+          d=/opt/toolchain/node
+          mkdir -p "$d/bin" "$d/lib"
+          cp /usr/local/bin/node "$d/bin/"
+          cp -R /usr/local/lib/node_modules "$d/lib/"
+          cp -R /opt/yarn-v* "$d/yarn"
+          ln -s ../lib/node_modules/npm/bin/npm-cli.js "$d/bin/npm"
+          ln -s ../lib/node_modules/npm/bin/npx-cli.js "$d/bin/npx"
+          ln -s "$d/yarn/bin/yarn" "$d/bin/yarn"
+        image: node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c
+        name: node-toolchain
+        volumeMounts:
+        - mountPath: /opt/toolchain
+          name: toolchain-volume
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 1000m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
+        - sh
+        - -c
+        - cp -R /usr/local/go /opt/toolchain/go
+        image: golang:1.25.14-alpine@sha256:1ae0735f00daffa3aaf1363a5184c0d2dc55c78e3db4ec70241cdac97bf84b59
+        name: go-toolchain
+        volumeMounts:
+        - mountPath: /opt/toolchain
+          name: toolchain-volume
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 1000m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
+        - sh
         - /etc/code-server/bootstrap/bootstrap.sh
         image: codercom/code-server@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
         name: editor-bootstrap
@@ -265,7 +324,8 @@ spec:
       containers:
       - command:
         - /usr/bin/dumb-init
-        - /usr/bin/code-server
+        - sh
+        - /etc/code-server/bootstrap/editor.sh
         - --bind-addr
         - 0.0.0.0:8080
         - /home/coder/dev/my-homelab/my-homelab.code-workspace
@@ -285,6 +345,12 @@ spec:
         - mountPath: /opt/cluster-tools
           name: cluster-tools-volume
           readOnly: true
+        - mountPath: /opt/toolchain
+          name: toolchain-volume
+          readOnly: true
+        - mountPath: /etc/code-server/bootstrap
+          name: bootstrap-volume
+          readOnly: true
         - mountPath: /etc/code-server/git-credentials
           name: git-secret-volume
           readOnly: true
@@ -303,7 +369,19 @@ spec:
         - name: TZ
           value: Europe/Vienna
         - name: PATH
-          value: /opt/cluster-tools:/home/coder/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          value: /opt/cluster-tools:/opt/toolchain/node/bin:/opt/toolchain/go/bin:/home/coder/go/bin:/home/coder/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        - name: BOOTSTRAP_ASSET_DIR
+          value: /etc/code-server/bootstrap
+        - name: WORKSPACE_DIR
+          value: /home/coder/dev/my-homelab
+        - name: FORGEJO_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: code-server-git-secret
+              optional: true
+        - name: NPM_REGISTRY
+          value: code.netbird.nathalie-stiefsohn.eu/api/packages/my-homelab/npm/
         - name: KUBECONFIG
           value: /etc/kube/config
         - name: HOMELAB_METRICS_URL
@@ -361,6 +439,8 @@ spec:
         configMap:
           name: code-server-kubeconfig
       - name: cluster-tools-volume
+        emptyDir: {}
+      - name: toolchain-volume
         emptyDir: {}
       - name: git-secret-volume
         secret:

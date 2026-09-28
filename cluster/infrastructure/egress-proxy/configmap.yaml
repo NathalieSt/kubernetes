@@ -16,6 +16,7 @@ data:
     ^codeberg\.org$
     ^[a-z0-9_-]+\.codeberg\.org$
     ^[a-z0-9_-]+\.npmjs\.org$
+    ^registry\.yarnpkg\.com$
     ^pypi\.org$
     ^[a-z0-9_-]+\.pythonhosted\.org$
     ^crates\.io$
