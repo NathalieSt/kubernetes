@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: gamevault
+    app.kubernetes.io/version: 17.0.1
+  name: gamevault
+spec:
+  selector:
+    app.kubernetes.io/name: gamevault
+  ports:
+  - name: http-gamevault
+    port: 8080
+    targetPort: 8080

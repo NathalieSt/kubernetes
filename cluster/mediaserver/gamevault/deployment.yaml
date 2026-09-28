@@ -1,0 +1,155 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: gamevault
+    app.kubernetes.io/version: 17.0.1
+  name: gamevault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gamevault
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gamevault
+        app.kubernetes.io/version: 17.0.1
+    spec:
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - cd /gamevault && mkdir -p config media savefiles && chown -R 1000:10 .
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: state-dirs
+        volumeMounts:
+        - mountPath: /gamevault
+          name: config
+      - command:
+        - mkdir
+        - -p
+        - /data/games
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: games-dir
+        volumeMounts:
+        - mountPath: /data
+          name: media
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 10
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - jellyfin.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      containers:
+      - image: phalcode/gamevault-backend:17.0.1@sha256:f3c599d4fc7498eb2028cfd611dc27b3f707c83a7ce9a86ec3ec8256a42409ba
+        name: gamevault
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /gamevault
+          name: config
+        - mountPath: /data
+          name: media
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        - name: DB_SYSTEM
+          value: POSTGRESQL
+        - name: DB_HOST
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_DATABASE
+          value: gamevault
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres-creds-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres-creds-secret
+        - name: VOLUMES_FILES
+          value: /data/games
+        - name: VOLUMES_CONFIG
+          value: /gamevault/config
+        - name: VOLUMES_MEDIA
+          value: /gamevault/media
+        - name: VOLUMES_SAVEFILES
+          value: /gamevault/savefiles
+        - name: METADATA_IGDB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: client-id
+              name: gamevault-igdb-secret
+        - name: METADATA_IGDB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client-secret
+              name: gamevault-igdb-secret
+        - name: NODE_USE_ENV_PROXY
+          value: "1"
+        - name: HTTPS_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: https_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: HTTP_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: http_proxy
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
+        - name: no_proxy
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
+        resources:
+          requests:
+            cpu: 50m
+            memory: 192Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 10
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /api/status
+            port: 8080
+          periodSeconds: 30
+        startupProbe:
+          httpGet:
+            path: /api/status
+            port: 8080
+          periodSeconds: 10
+          failureThreshold: 60
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: gamevault-config
+      - name: media
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc

@@ -27,6 +27,7 @@ spec:
   extraDNSLabels:
   - anki
   - bazarr
+  - gamevault
   - lidarr
   - paperless
   - prowlarr
