@@ -34,6 +34,7 @@ spec:
           values:
           - backup-dashboard
           - forgejo
+          - gameyfin
           - glitchtip
           - healthchecks
           - kavita

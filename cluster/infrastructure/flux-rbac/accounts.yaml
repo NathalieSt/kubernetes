@@ -374,7 +374,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: flux-gameyfin-namespace-admin
-  namespace: jellyfin
+  namespace: gameyfin
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

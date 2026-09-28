@@ -19,34 +19,8 @@ spec:
         app.kubernetes.io/name: gameyfin
         app.kubernetes.io/version: 2.4.0
     spec:
-      initContainers:
-      - command:
-        - mkdir
-        - -p
-        - /data/games
-        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
-        name: games-dir
-        volumeMounts:
-        - mountPath: /data
-          name: media
-        securityContext:
-          capabilities:
-            drop:
-            - ALL
-          runAsUser: 1000
-          runAsGroup: 10
-          allowPrivilegeEscalation: false
-          runAsNonRoot: true
       automountServiceAccountToken: false
       enableServiceLinks: false
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-        - 10.43.0.53
-        searches:
-        - jellyfin.svc.cluster.local
-        - svc.cluster.local
-        - cluster.local
       containers:
       - image: ghcr.io/gameyfin/gameyfin:2.4.0@sha256:857730f1807a92dad1a7bb50e1ba5409e0f27119a2207374045a8f52b4a42cc5
         name: gameyfin
@@ -56,18 +30,18 @@ spec:
         volumeMounts:
         - mountPath: /opt/gameyfin/db
           subPath: db
-          name: config
+          name: state
         - mountPath: /opt/gameyfin/data
           subPath: data
-          name: config
+          name: state
         - mountPath: /opt/gameyfin/plugindata
           subPath: plugindata
-          name: config
+          name: state
         - mountPath: /opt/gameyfin/logs
           subPath: logs
-          name: config
-        - mountPath: /data
-          name: media
+          name: state
+        - mountPath: /games
+          name: games
           readOnly: true
         env:
         - name: TZ
@@ -84,7 +58,7 @@ spec:
         - name: APP_URL
           value: https://gameyfin.netbird.nathalie-stiefsohn.eu
         - name: JAVA_OPTS
-          value: -Dhttps.proxyHost=gluetun-proxy.gluetun-proxy.svc.cluster.local -Dhttps.proxyPort=8888 -Dhttp.proxyHost=gluetun-proxy.gluetun-proxy.svc.cluster.local -Dhttp.proxyPort=8888 -Dhttp.nonProxyHosts=localhost|127.*|*.svc|*.cluster.local
+          value: -Dhttps.proxyHost=gluetun-proxy.gluetun-proxy.svc.cluster.local -Dhttps.proxyPort=8888 -Dhttp.proxyHost=gluetun-proxy.gluetun-proxy.svc.cluster.local -Dhttp.proxyPort=8888 -Dhttp.nonProxyHosts=localhost|127.*|*.svc|*.cluster.local|*.netbird.nathalie-stiefsohn.eu -XX:AOTMode=off
         - name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED
           value: "true"
         resources:
@@ -118,9 +92,9 @@ spec:
           periodSeconds: 10
           failureThreshold: 60
       volumes:
-      - name: config
+      - name: state
         persistentVolumeClaim:
           claimName: gameyfin-config
-      - name: media
+      - name: games
         persistentVolumeClaim:
-          claimName: jellyfin-pvc
+          claimName: gameyfin-games

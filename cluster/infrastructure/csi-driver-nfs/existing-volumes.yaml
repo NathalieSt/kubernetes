@@ -75,3 +75,30 @@ spec:
       server: debian
       share: /mnt/external_ssd
       subDir: jellyfin/sabnzbd-config
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gameyfin-gameyfin-games
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 20Ti
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: gameyfin-games
+    namespace: gameyfin
+  mountOptions:
+  - nfsvers=3
+  - hard
+  - nolock
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: nathisvault.netbird.nathalie-stiefsohn.eu/volume1/nfs/jellyfin/jellyfin-pvc/games#gameyfin-gameyfin-games
+    volumeAttributes:
+      server: nathisvault.netbird.nathalie-stiefsohn.eu
+      share: /volume1/nfs
+      subDir: jellyfin/jellyfin-pvc/games

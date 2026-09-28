@@ -57,6 +57,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: gameyfin
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: glitchtip
   - to:
     - namespaceSelector:

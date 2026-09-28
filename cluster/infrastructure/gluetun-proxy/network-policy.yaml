@@ -28,6 +28,12 @@ spec:
           app.kubernetes.io/name: helium-services
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: gameyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gameyfin
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: jellyfin
       podSelector:
         matchLabels:
@@ -62,12 +68,6 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: seerr
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: jellyfin
-      podSelector:
-        matchLabels:
-          app.kubernetes.io/name: gameyfin
   - from:
     - namespaceSelector:
         matchLabels:
