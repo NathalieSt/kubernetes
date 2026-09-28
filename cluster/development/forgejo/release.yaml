@@ -70,6 +70,8 @@ spec:
           THEMES: forgejo-auto,forgejo-light,forgejo-dark,gitea-auto,gitea-light,gitea-dark,forgejo-auto-deuteranopia-protanopia,forgejo-light-deuteranopia-protanopia,forgejo-dark-deuteranopia-protanopia,forgejo-auto-tritanopia,forgejo-light-tritanopia,forgejo-dark-tritanopia,pennant
       metrics:
         enabled: true
+    image:
+      tag: 15.0.9-rootless
     persistence:
       annotations:
         k8up.io/backup: "true"

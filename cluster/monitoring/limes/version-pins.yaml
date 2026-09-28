@@ -192,6 +192,17 @@ data:
           ]
         },
         {
+          "key": "forgejo-image",
+          "kind": "image",
+          "repository": "code.forgejo.org/forgejo/forgejo",
+          "version": "15.0.9-rootless",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "forgejo"
+          ]
+        },
+        {
           "key": "forgejo-runner",
           "kind": "image",
           "repository": "code.forgejo.org/forgejo/runner",
