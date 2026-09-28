@@ -1813,6 +1813,11 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: vector
+            metric_relabel_configs:
+            - source_labels:
+              - __name__
+              regex: vector_.+_bucket
+              action: drop
           - job_name: victoria-logs
             metrics_path: /metrics
             scheme: http
@@ -1876,8 +1881,23 @@ spec:
           requests:
             cpu: 150m
             memory: 200Mi
+        scrapeInterval: 30s
         secrets:
         - garage-metrics-token-secret
+        streamAggrConfig:
+          rules:
+          - interval: 1m
+            keep_metric_names: true
+            match: apiserver_request_sli_duration_seconds_bucket{job="apiserver"}
+            outputs:
+            - total
+            without:
+            - component
+            - group
+            - resource
+            - scope
+            - subresource
+            - version
     vmalert:
       spec:
         evaluationInterval: 2m

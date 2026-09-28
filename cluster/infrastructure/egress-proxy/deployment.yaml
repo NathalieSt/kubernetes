@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/egress-proxy-config-hash: 39e80f9048c20a20d1570f3e0a6621e183779befec1704e638c0dcb9ea116468
+        homelab/egress-proxy-config-hash: 32abaf6929801525cf14987f9117d06d7185d8925e3b2e305f43c8479dc22281
       labels:
         app.kubernetes.io/name: egress-proxy
         app.kubernetes.io/version: sha256_8f9269b0b5b7b

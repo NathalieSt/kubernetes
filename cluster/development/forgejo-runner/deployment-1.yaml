@@ -199,8 +199,7 @@ spec:
             memory: 128Mi
       volumes:
       - name: runner-data
-        persistentVolumeClaim:
-          claimName: forgejo-runner-data-pvc-1
+        emptyDir: {}
       - name: runner-cache
         hostPath:
           path: /var/lib/forgejo-runner/1/cache
@@ -218,7 +217,6 @@ spec:
           name: forgejo-runner-dockerfiles
       securityContext:
         fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
       nodeSelector:
         kubernetes.io/arch: amd64
         kubernetes.io/hostname: debian-mgt-1

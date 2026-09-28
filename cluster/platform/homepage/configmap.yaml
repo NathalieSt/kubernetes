@@ -362,12 +362,24 @@ data:
           namespace: mail
           app: mail
           podSelector: app.kubernetes.io/name=roundcube
+      - paperless:
+          href: https://paperless.netbird.nathalie-stiefsohn.eu
+          icon: paperless.png
+          description: Documents, OCRed and searchable
+          namespace: paperless
+          app: paperless
       - psono-client:
           href: https://psono.netbird.nathalie-stiefsohn.eu
           icon: mdi-lock-outline
           description: Password manager
           namespace: psono
           app: psono-client
+      - stirling-pdf:
+          href: https://pdf.netbird.nathalie-stiefsohn.eu
+          icon: stirling-pdf.png
+          description: Merge, split, OCR and convert PDFs
+          namespace: stirling-pdf
+          app: stirling-pdf
       - tandoor:
           href: https://tandoor.netbird.nathalie-stiefsohn.eu
           icon: tandoor-recipes.png
@@ -387,24 +399,12 @@ data:
           description: "Flashcard sync: how to point Anki here"
           namespace: anki-sync
           app: anki-sync
-      - paperless:
-          href: https://paperless.netbird.nathalie-stiefsohn.eu
-          icon: paperless.png
-          description: Documents, OCRed and searchable
-          namespace: paperless
-          app: paperless
       - radicale:
           href: https://calendar.netbird.nathalie-stiefsohn.eu
           icon: radicale.png
           description: Calendars and contacts (CalDAV)
           namespace: radicale
           app: radicale
-      - stirling-pdf:
-          href: https://pdf.netbird.nathalie-stiefsohn.eu
-          icon: stirling-pdf.png
-          description: Merge, split, OCR and convert PDFs
-          namespace: stirling-pdf
-          app: stirling-pdf
       - trilium:
           href: https://notes.netbird.nathalie-stiefsohn.eu
           icon: trilium.png
