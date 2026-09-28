@@ -324,6 +324,12 @@ data:
           namespace: jellyfin
           app: audiomuse-ai
           podSelector: app.kubernetes.io/name=audiomuse-ai-flask
+      - gameyfin:
+          href: https://gameyfin.netbird.nathalie-stiefsohn.eu
+          icon: gameyfin.png
+          description: Games
+          namespace: jellyfin
+          app: gameyfin
       - jellyfin:
           href: https://jellyfin.netbird.nathalie-stiefsohn.eu
           icon: jellyfin.png

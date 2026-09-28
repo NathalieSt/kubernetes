@@ -25,6 +25,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `gluetun-media` | `gluetun-media` | `kvv2/vpn` |
 | `music-library-builder` | `jellyfin` | `kvv2/music-library-builder` |
 | `qbittorrent` | `qbittorrent` | `kvv2/vpn` |
+| `gameyfin` | `jellyfin` | `kvv2/gameyfin/secrets` |
 | `psono-server` | `psono` | `kvv2/psono` |
 | `limes` | `limes` | `kvv2/limes` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |

@@ -140,6 +140,9 @@ spec:
     name: fourget
     namespace: flux-system
   - kind: Kustomization
+    name: gameyfin
+    namespace: flux-system
+  - kind: Kustomization
     name: garage
     namespace: flux-system
   - kind: Kustomization
