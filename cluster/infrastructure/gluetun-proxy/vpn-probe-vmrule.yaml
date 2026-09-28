@@ -46,13 +46,13 @@ spec:
         summary: "{{ $labels.job }} has latched a VPN leak and stopped"
     - alert: VpnDnsExitUnexpected
       expr: vpn_probe_country_ok{check="dns"} == 0
-      for: 45m
+      for: 15m
       labels:
         severity: warning
         topic: alerts-vpn
       annotations:
-        description: The resolver answering for {{ $labels.namespace }}/{{ $labels.pod }} has been egressing outside the expected countries for 45 minutes, which is long enough not to be an anycast node answering from somewhere convenient. It suggests lookups are leaving outside the tunnel.
-        summary: "{{ $labels.job }}'s DNS is resolving from an unexpected country"
+        description: A resolver asked from {{ $labels.namespace }}/{{ $labels.pod }} saw the question come from an address other than the tunnel's exit, for 15 minutes. Lookups are leaving outside the tunnel; the ipleak log names the address.
+        summary: "{{ $labels.job }}'s DNS lookups are not leaving through its tunnel"
     - alert: VpnTunnelDown
       expr: count by (namespace, pod) (vpn_probe_latched) unless on (namespace, pod) count by (namespace, pod) (max_over_time(container_network_receive_bytes_total{interface="tun0"}[5m]))
       for: 10m
