@@ -91,6 +91,7 @@ spec:
   - name: flux-rbac
   - name: csi-driver-nfs
   - name: gluetun-proxy
+  - name: media-dns
   - name: vault-secrets-operator-config
   serviceAccountName: flux-gameyfin
 ---

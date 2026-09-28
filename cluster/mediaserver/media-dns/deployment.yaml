@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/media-dns-config-hash: dd11f2c324ede97ad923c1c9aaaca330c5a456ddac457694c5a329ed052a753b
+        homelab/media-dns-config-hash: 92904b1f375ad777303421352d45fcfbdd3251d8fdc8bd6d8a12e34731030814
       labels:
         app.kubernetes.io/name: media-dns
         app.kubernetes.io/version: 1.14.2

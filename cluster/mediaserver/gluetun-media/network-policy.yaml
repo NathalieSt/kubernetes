@@ -17,6 +17,11 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: music-library-builder
+    ports:
+    - port: 8888
+      protocol: TCP
+    - port: 8000
+      protocol: TCP
   - from:
     - namespaceSelector:
         matchLabels:

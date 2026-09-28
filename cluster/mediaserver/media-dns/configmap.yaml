@@ -13,6 +13,12 @@ data:
         cache 30
     }
 
+    netbird.nathalie-stiefsohn.eu:5353 {
+        errors
+        forward . 10.43.0.10
+        cache 30
+    }
+
     .:5353 {
         errors
         log

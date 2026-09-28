@@ -6,6 +6,7 @@ metadata:
 resources:
 - deployment.yaml
 - configmap.yaml
+- egress-network-policy.yaml
 - service.yaml
 - scaled-object.yaml
 - network-policy.yaml

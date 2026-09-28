@@ -17,3 +17,6 @@ spec:
     - podSelector:
         matchLabels:
           app.kubernetes.io/name: audiomuse-ai-worker
+    ports:
+    - port: 8096
+      protocol: TCP
