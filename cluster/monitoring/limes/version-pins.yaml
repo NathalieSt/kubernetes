@@ -638,7 +638,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "9b7abac@sha256:542d11f5eef04eb0b1990a58fd4bff467d08a640785ba4a41a2a60e993b9b553",
+          "version": "d54c716@sha256:a427a7d5959e8a4cc4291bfbaeba6c3199a6cc85dc34dd130c7ba152b2b39a5c",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -770,7 +770,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "512f946@sha256:3e29c7b2ee6fa3c025c3956824feb0a207b537d448e48c2df084eb3c934c2fa3",
+          "version": "3c4d33e@sha256:f1d904c1a245a18059c0c8dede5c01ea016ad7f03c6512944408515aec44a66d",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -836,7 +836,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "28ad95e@sha256:2586ca354bf30d088e44f33fded6e24193293ec2974bdd4e53d20da7c03d36a9",
+          "version": "f2aa4c5@sha256:aec9c55ddd14ba94aa148c6709b020a8b09d9c70495ddb5e13d08875e971b89b",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -946,7 +946,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "305fdc9@sha256:d0ccdb56ee22fd9667545e06c3bd5ee915126e888098c23cf64567f89b511a9d",
+          "version": "6202328@sha256:9b1256cb128a1aaf8802a8733ad1ce8d35a73c74b39c837d168bab40527a8fdf",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1056,7 +1056,7 @@ data:
           "key": "redlib",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
-          "version": "137ec6f@sha256:8155da087af21b407d46caebb540fdf5c76b648749ffc84f2f1fff6e0baabf1a",
+          "version": "f20bae4@sha256:8155da087af21b407d46caebb540fdf5c76b648749ffc84f2f1fff6e0baabf1a",
           "file": "versions/web.json",
           "inVersionsFile": true,
           "generators": [

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: music-library-builder
-    app.kubernetes.io/version: 9b7abac
+    app.kubernetes.io/version: d54c716
   name: music-library-builder
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: music-library-builder
-        app.kubernetes.io/version: 9b7abac
+        app.kubernetes.io/version: d54c716
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -38,7 +38,7 @@ spec:
         - svc.cluster.local
         - cluster.local
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:9b7abac@sha256:542d11f5eef04eb0b1990a58fd4bff467d08a640785ba4a41a2a60e993b9b553
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:d54c716@sha256:a427a7d5959e8a4cc4291bfbaeba6c3199a6cc85dc34dd130c7ba152b2b39a5c
         name: music-library-builder
         ports:
         - containerPort: 8140
