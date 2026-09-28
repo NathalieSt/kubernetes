@@ -15,6 +15,7 @@ resources:
 - zyme-db.yaml
 - limes-db.yaml
 - paperless-db.yaml
+- gamevault-db.yaml
 - sonarr-main-db.yaml
 - sonarr-log-db.yaml
 - radarr-main-db.yaml

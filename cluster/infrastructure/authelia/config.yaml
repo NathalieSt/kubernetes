@@ -82,6 +82,9 @@ data:
         - dojo.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - gamevault.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - glitchtip.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
