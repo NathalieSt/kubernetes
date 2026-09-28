@@ -6,6 +6,10 @@ metadata:
 resources:
 - deployment.yaml
 - config-pvc.yaml
+- gameyfin-games-pvc.yaml
 - service.yaml
 - vault-secrets.yaml
+- network-policy.yaml
+- gateway-ingress-network-policy.yaml
 - egress-network-policy.yaml
+- default-deny-egress.yaml

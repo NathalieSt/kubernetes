@@ -56,7 +56,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: jellyfin
+  targetNamespace: gameyfin
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -67,10 +67,8 @@ spec:
   dependsOn:
   - name: namespaces
   - name: flux-rbac
-  - name: jellyfin
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
   - name: vault-secrets-operator-config
   serviceAccountName: flux-gameyfin
 ---

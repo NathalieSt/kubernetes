@@ -328,7 +328,7 @@ data:
           href: https://gameyfin.netbird.nathalie-stiefsohn.eu
           icon: gameyfin.png
           description: Games
-          namespace: jellyfin
+          namespace: gameyfin
           app: gameyfin
       - jellyfin:
           href: https://jellyfin.netbird.nathalie-stiefsohn.eu

@@ -261,6 +261,25 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
+        - client_id: gameyfin
+          client_name: gameyfin
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/gameyfin` }}{{ secret `/secrets/oidc-clients/gameyfin` }}{{ else }}unwritten-secret-for-gameyfin{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: false
+          redirect_uris:
+          - https://gameyfin.netbird.nathalie-stiefsohn.eu/login/oauth2/code/oidc
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_basic
+          consent_mode: implicit
         - client_id: glitchtip
           client_name: glitchtip
           public: false

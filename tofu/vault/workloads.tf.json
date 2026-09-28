@@ -185,7 +185,7 @@
           "gameyfin-vault-serviceaccount"
         ],
         "bound_service_account_namespaces": [
-          "jellyfin"
+          "gameyfin"
         ],
         "audience": "vault",
         "token_policies": [

@@ -56,33 +56,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: gameyfin-gateway-ingress
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: gameyfin
-  policyTypes:
-  - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: internal-gateway
-      podSelector:
-        matchExpressions:
-        - key: app.kubernetes.io/name
-          operator: In
-          values:
-          - internal-gateway
-          - internal-gateway-secondary
-          - blackbox-exporter
-    ports:
-    - port: 8080
-      protocol: TCP
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
   name: jellyfin-gateway-ingress
 spec:
   podSelector:
