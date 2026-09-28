@@ -76,9 +76,9 @@ spec:
         - name: http_proxy
           value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
         - name: NO_PROXY
-          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,flaresolverr,flaresolverr.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
         - name: no_proxy
-          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
+          value: localhost,127.0.0.1,.svc,.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,flaresolverr,flaresolverr.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent
         resources:
           requests:
             cpu: 50m

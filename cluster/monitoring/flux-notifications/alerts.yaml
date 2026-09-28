@@ -122,6 +122,9 @@ spec:
     name: egress-proxy
     namespace: flux-system
   - kind: Kustomization
+    name: flaresolverr
+    namespace: flux-system
+  - kind: Kustomization
     name: flux-notifications
     namespace: flux-system
   - kind: Kustomization

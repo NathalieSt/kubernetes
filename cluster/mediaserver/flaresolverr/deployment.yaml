@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: flaresolverr
+    app.kubernetes.io/version: v3.5.2
+  name: flaresolverr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flaresolverr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flaresolverr
+        app.kubernetes.io/version: v3.5.2
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - jellyfin.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      containers:
+      - image: ghcr.io/flaresolverr/flaresolverr:v3.5.2@sha256:c80ae007ce2ccdcd217a12426e4f039ef763ff90738c808d38810c3e59323767
+        name: flaresolverr
+        ports:
+        - containerPort: 8191
+          name: http
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        - name: LOG_LEVEL
+          value: info
+        - name: PROXY_URL
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        resources:
+          requests:
+            cpu: 50m
+            memory: 192Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8191
+          periodSeconds: 30
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

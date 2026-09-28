@@ -1,0 +1,34 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: flaresolverr-vpn-only-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flaresolverr
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: media-dns
+    ports:
+    - port: 5353
+      protocol: UDP
+    - port: 5353
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8888
+      protocol: TCP

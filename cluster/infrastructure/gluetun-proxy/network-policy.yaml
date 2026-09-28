@@ -68,6 +68,12 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: seerr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: flaresolverr
   - from:
     - namespaceSelector:
         matchLabels:
