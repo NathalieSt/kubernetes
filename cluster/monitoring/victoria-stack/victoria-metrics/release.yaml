@@ -887,6 +887,12 @@ spec:
                 probe_namespace: fourget
                 scale_to_zero: "true"
             - targets:
+              - http://gameyfin.jellyfin.svc.cluster.local:8080/
+              labels:
+                probe_name: gameyfin
+                probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
               - http://glitchtip.glitchtip.svc.cluster.local:8000/
               labels:
                 probe_name: glitchtip

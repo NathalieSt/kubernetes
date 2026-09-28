@@ -21,6 +21,10 @@
         "name": "flux-notifications",
         "policy": "path \"kvv2/data/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "gameyfin": {
+        "name": "gameyfin",
+        "policy": "path \"kvv2/data/gameyfin/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/gameyfin/secrets\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "glitchtip": {
         "name": "glitchtip",
         "policy": "path \"kvv2/data/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -171,6 +175,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.flux-notifications.name}"
+        ],
+        "token_ttl": 600
+      },
+      "gameyfin": {
+        "backend": "kubernetes",
+        "role_name": "gameyfin",
+        "bound_service_account_names": [
+          "gameyfin-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.gameyfin.name}"
         ],
         "token_ttl": 600
       },
@@ -512,6 +531,12 @@
     },
     {
       "from": "vault_kv_secret_v2.flux-notifications_flux-notifications",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.gameyfin_gameyfin_secrets",
       "lifecycle": {
         "destroy": false
       }
