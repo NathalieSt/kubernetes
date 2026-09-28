@@ -50,7 +50,7 @@ spec:
         - name: PROXY_PORT
           value: "8888"
         - name: PROXY_BYPASS
-          value: "*.svc,*.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent"
+          value: "*.svc,*.cluster.local,sonarr,sonarr.jellyfin,radarr,radarr.jellyfin,lidarr,lidarr.jellyfin,prowlarr,prowlarr.jellyfin,bazarr,bazarr.jellyfin,seerr,seerr.jellyfin,jellyfin,jellyfin.jellyfin,flaresolverr,flaresolverr.jellyfin,qbittorrent.qbittorrent,sabnzbd.qbittorrent"
         securityContext:
           capabilities:
             drop:
