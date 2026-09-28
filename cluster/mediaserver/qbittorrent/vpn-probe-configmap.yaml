@@ -29,11 +29,12 @@ data:
     #                            Must end in .txt: busybox httpd sets Content-Type from the
     #                            extension and sends none at all without one
     #   IPLEAK_ON_LEAK_SCRIPT    run on every exit-IP LEAK, to stop whatever the pod is doing;
-    #                            unset, a leak is only reported. Not run on a DNS one: that
-    #                            geolocates Cloudflare's anycast resolver, which can answer from
-    #                            next door without anything being wrong. What to stop is
-    #                            pod-specific and lives in that script, so this one stays the
-    #                            same detector for any tunnelled pod
+    #                            unset, a leak is only reported. Not run on a DNS one, which
+    #                            reports only: the exit-IP check is the one that latches. What to
+    #                            stop is pod-specific and lives in that script, so this one stays
+    #                            the same detector for any tunnelled pod
+    #   IPLEAK_DNS_WHOAMI        resolver that answers myip.opendns.com with the address that asked
+    #                            (default 208.67.222.222, OpenDNS)
     #   IPLEAK_LATCH_FILE        where an exit-IP LEAK is recorded before this script exits
     #                            non-zero, and what makes every later start exit at once. Unset,
     #                            a leak is reported and the loop carries on — see latch_or_continue
@@ -56,6 +57,7 @@ data:
     EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"
     TIMEOUT="${IPLEAK_TIMEOUT:-15}"
     GRACE="${IPLEAK_STARTUP_GRACE:-30}"
+    WHOAMI="${IPLEAK_DNS_WHOAMI:-208.67.222.222}"
 
     # Extract a top-level JSON string value without jq (not in curlimages/curl).
     json_str() {
@@ -140,7 +142,7 @@ data:
 
         # Only for a check that reached a verdict. Emitting 0 for one that could not would make
         # "not measured" and "leaked" the same number, and the alert is written against this.
-        echo '# HELP vpn_probe_country_ok Whether the observed country was one of the expected ones. 0 is a leak; absent means the check reached no verdict, which vpn_probe_check_completed says loudly.'
+        echo '# HELP vpn_probe_country_ok ip: whether the exit was in an expected country. dns: whether lookups left from that same exit. 0 is a leak; absent means no verdict, which vpn_probe_check_completed says loudly.'
         echo '# TYPE vpn_probe_country_ok gauge'
         [ "$ip_completed" = 1 ] && echo "vpn_probe_country_ok{check=\"ip\"} ${ip_ok}"
         [ "$dns_completed" = 1 ] && echo "vpn_probe_country_ok{check=\"dns\"} ${dns_ok}"
@@ -284,50 +286,43 @@ data:
       fi
     }
 
-    # --- DNS
-    # Geolocating /etc/resolv.conf is useless in-cluster — it is always CoreDNS's private ClusterIP.
-    # edns.ip-api.com reports the egress IP of whichever public resolver queried it: the real signal.
+    # --- DNS: which address a resolver saw asking, against this cycle's exit IP. Why not its
+    # location: https://docs.netbird.nathalie-stiefsohn.eu/platform/generator-internals/#vpnprobe
     check_dns() {
-      body="$(fetch https://edns.ip-api.com/json)"
-      if [ -z "$body" ]; then
+      answer="$(nslookup myip.opendns.com "$WHOAMI" 2>/dev/null)"
+      asker="$(printf '%s\n' "$answer" |
+        sed -n '/^Name:/,$ s/^Address:[[:space:]]*\([0-9a-fA-F][0-9a-fA-F.:]*\)$/\1/p' | head -n 1)"
+      if [ -z "$asker" ]; then
         dns_completed=0
         dns_country=""
         count dns UNKNOWN
-        emit error dns UNKNOWN "" "could not determine resolver egress ip"
+        emit error dns UNKNOWN "" "$WHOAMI did not say which address asked it"
         return
       fi
 
-      resolver="$(json_str "$body" ip)"
-      if [ -z "$resolver" ]; then
+      # Without this cycle's exit there is nothing to compare with; the IP check says why.
+      if [ "$ip_completed" != 1 ] || [ -z "$ip" ]; then
         dns_completed=0
         dns_country=""
         count dns UNKNOWN
-        emit error dns UNKNOWN "" "resolver egress ip missing from response"
-        return
-      fi
-
-      geo="$(fetch "https://api.country.is/$resolver")"
-      country="$(json_str "$geo" country)"
-      if [ -z "$country" ]; then
-        dns_completed=0
-        dns_country=""
-        count dns UNKNOWN
-        emit error dns UNKNOWN ",\"resolver\":\"$resolver\"" "resolver $resolver could not be geolocated"
+        emit error dns UNKNOWN ",\"asker\":\"$asker\"" "no exit ip this cycle to compare lookups from $asker with"
         return
       fi
 
       dns_completed=1
-      dns_country="$country"
       dns_ts="$(date -u +%s)"
 
-      if country_expected "$country"; then
+      if [ "$asker" = "$ip" ]; then
         dns_ok=1
+        dns_country="$ip_country"
         count dns OK
-        emit info dns OK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country"
+        emit info dns OK ",\"asker\":\"$asker\",\"country\":\"$ip_country\"" "lookups leave from the exit ip $asker"
       else
+        # Where the lookup did come from, for the log and the exit_info label.
         dns_ok=0
+        dns_country="$(json_str "$(fetch "https://api.country.is/$asker")" country)"
         count dns LEAK
-        emit error dns LEAK ",\"resolver\":\"$resolver\",\"country\":\"$country\"" "resolver $resolver in $country, expected $EXPECTED - dns is bypassing the tunnel"
+        emit error dns LEAK ",\"asker\":\"$asker\",\"country\":\"$dns_country\",\"exit\":\"$ip\"" "lookups leave from $asker ($dns_country), not the exit ip $ip - dns is bypassing the tunnel"
       fi
     }
 

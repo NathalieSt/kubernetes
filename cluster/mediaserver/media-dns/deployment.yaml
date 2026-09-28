@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: media-dns
-    app.kubernetes.io/version: 1.14.2
+    app.kubernetes.io/version: 1.14.7
   name: media-dns
 spec:
   replicas: 2
@@ -17,7 +17,7 @@ spec:
         homelab/media-dns-config-hash: 92904b1f375ad777303421352d45fcfbdd3251d8fdc8bd6d8a12e34731030814
       labels:
         app.kubernetes.io/name: media-dns
-        app.kubernetes.io/version: 1.14.2
+        app.kubernetes.io/version: 1.14.7
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
@@ -25,7 +25,7 @@ spec:
       - args:
         - -conf
         - /etc/coredns/Corefile
-        image: coredns/coredns:1.14.2@sha256:e7e6440cfd1e919280958f5b5a6ab2b184d385bba774c12ad2a9e1e4183f90d9
+        image: coredns/coredns:1.14.7@sha256:7efd3c635b03efd68c4e8398fc45f0d993d0e9ab016f72c1cefb0fd6d01aa286
         name: media-dns
         ports:
         - containerPort: 5353

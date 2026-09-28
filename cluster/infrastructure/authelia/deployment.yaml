@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: authelia
-    app.kubernetes.io/version: 4.39.25
+    app.kubernetes.io/version: 4.39.28
   name: authelia
 spec:
   replicas: 1
@@ -19,14 +19,14 @@ spec:
         homelab/authelia-config-hash: 9a20248e89b70e63
       labels:
         app.kubernetes.io/name: authelia
-        app.kubernetes.io/version: 4.39.25
+        app.kubernetes.io/version: 4.39.28
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
       - command:
         - authelia
-        image: authelia/authelia:4.39.25
+        image: authelia/authelia:4.39.28
         name: authelia
         ports:
         - containerPort: 9091

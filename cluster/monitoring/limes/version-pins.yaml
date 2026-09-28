@@ -184,7 +184,7 @@ data:
           "key": "forgejo",
           "kind": "chart",
           "repository": "oci://code.forgejo.org/forgejo-helm/forgejo",
-          "version": "17.1.3",
+          "version": "17.1.7",
           "file": "versions/development.json",
           "inVersionsFile": true,
           "generators": [
@@ -239,7 +239,7 @@ data:
           "key": "authelia",
           "kind": "image",
           "repository": "authelia/authelia",
-          "version": "4.39.25",
+          "version": "4.39.28",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -342,7 +342,7 @@ data:
           "kind": "chart",
           "repository": "https://intel.github.io/helm-charts/",
           "chart": "intel-device-plugins-gpu",
-          "version": "0.36.0",
+          "version": "0.37.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -354,7 +354,7 @@ data:
           "kind": "chart",
           "repository": "https://intel.github.io/helm-charts/",
           "chart": "intel-device-plugins-operator",
-          "version": "0.36.0",
+          "version": "0.37.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -479,7 +479,7 @@ data:
           "key": "redis",
           "kind": "image",
           "repository": "redis",
-          "version": "8.10.1",
+          "version": "8.10.2",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -649,7 +649,7 @@ data:
           "key": "media-dns",
           "kind": "image",
           "repository": "coredns/coredns",
-          "version": "1.14.2@sha256:e7e6440cfd1e919280958f5b5a6ab2b184d385bba774c12ad2a9e1e4183f90d9",
+          "version": "1.14.7@sha256:7efd3c635b03efd68c4e8398fc45f0d993d0e9ab016f72c1cefb0fd6d01aa286",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -847,7 +847,7 @@ data:
           "key": "victoria-metrics",
           "kind": "chart",
           "repository": "oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack",
-          "version": "0.92.1",
+          "version": "0.93.0",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -979,7 +979,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "3d22208@sha256:d4efc37d29db23bac26f80c7f0dc41b05f7aa04d5470fb6a240ac0d9bf6c18eb",
+          "version": "e5ebd5c@sha256:2048bf7554eac5b39543989d1b6927d465ca6bfa44e4b6f7f36c22a877399d84",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1034,7 +1034,7 @@ data:
           "key": "changedetection",
           "kind": "image",
           "repository": "ghcr.io/dgtlmoon/changedetection.io",
-          "version": "0.60.4",
+          "version": "0.60.7",
           "file": "versions/web.json",
           "inVersionsFile": true,
           "generators": [
