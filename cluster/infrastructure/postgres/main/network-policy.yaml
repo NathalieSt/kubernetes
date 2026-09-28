@@ -44,6 +44,7 @@ spec:
           - zyme
           - limes
           - paperless
+          - gamevault
           - sonarr
           - radarr
           - lidarr

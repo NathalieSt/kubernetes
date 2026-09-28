@@ -45,8 +45,11 @@ spec:
           ADAPTER: redis
           HOST: redis://valkey.valkey.svc.cluster.local:6379/1
         database:
+          CONN_MAX_LIFETIME: 5m
           DB_TYPE: postgres
           HOST: forgejo-pg-rw.forgejo-pg-cluster.svc.cluster.local:5432
+          MAX_IDLE_CONNS: 10
+          MAX_OPEN_CONNS: 20
           NAME: forgejo
         queue:
           CONN_STR: redis://valkey.valkey.svc.cluster.local:6379/0?
