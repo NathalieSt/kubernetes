@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: anki-sync
-    app.kubernetes.io/version: 233db3f
+    app.kubernetes.io/version: 137ec6f
   name: anki-sync
 spec:
   selector:
