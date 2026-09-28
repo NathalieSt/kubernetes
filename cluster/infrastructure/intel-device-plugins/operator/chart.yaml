@@ -10,4 +10,4 @@ spec:
   sourceRef:
     kind: HelmRepository
     name: intel-device-plugins-operator-repo
-  version: 0.36.0
+  version: 0.37.0
