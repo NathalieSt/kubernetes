@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/heartbeats-config-hash: 12301469ff660a62
+        homelab/heartbeats-config-hash: c73f22f0435fea81
       labels:
         app.kubernetes.io/name: heartbeats
         app.kubernetes.io/version: python-3.13

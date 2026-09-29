@@ -42,7 +42,7 @@ spec:
         - name: LIMES_CLAMAV_NAMESPACE
           value: clamav
         - name: LIMES_CLAMAV_CRONJOBS
-          value: clamav-scan-local,clamav-scan-nas
+          value: clamav-scan-local,clamav-scan-nas,clamav-scan-packages
         - name: LIMES_PATROL_ENABLED
           value: "true"
         - name: LIMES_PATROL_CONCURRENCY

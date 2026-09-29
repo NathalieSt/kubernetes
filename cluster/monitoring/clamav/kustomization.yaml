@@ -11,5 +11,7 @@ resources:
 - service.yaml
 - local-scan-cronjob.yaml
 - nas-scan-cronjob.yaml
+- packages-scan-cronjob.yaml
+- vault-secrets.yaml
 - network-policy.yaml
 - limes-rbac.yaml

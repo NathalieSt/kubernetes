@@ -8,6 +8,100 @@ data:
   clamd.conf: |
     TCPAddr clamav.clamav.svc.cluster.local
     TCPSocket 3310
+  fetch-packages.py: |
+    """Downloads the newest version of every generic package in FORGEJO_OWNER, unpacked beside itself.
+
+    Usage: fetch-packages.py <dir>. Exit 2 on anything clamd would scan only in part.
+    """
+
+    import json
+    import os
+    import sys
+    import tarfile
+    import urllib.request
+    import zipfile
+
+    # clamd's StreamMaxLength: past it clamd scans the first 100 MiB and calls the file clean.
+    STREAM_LIMIT = 100 * 1024 * 1024
+    # Under the emptyDir's sizeLimit, so a bomb stops here rather than evicting the pod.
+    TOTAL_LIMIT = 3 * 1024 * 1024 * 1024
+
+    base = os.environ["FORGEJO_URL"]
+    owner = os.environ["FORGEJO_OWNER"]
+    token = os.environ["FORGEJO_TOKEN"]
+    total = 0
+
+
+    def fail(message):
+        print(message, file=sys.stderr)
+        sys.exit(2)
+
+
+    def request(path):
+        req = urllib.request.Request(f"{base}{path}", headers={"Authorization": f"token {token}"})
+        return urllib.request.urlopen(req, timeout=60)
+
+
+    def api(path):
+        with request(f"/api/v1{path}") as response:
+            return json.load(response)
+
+
+    def admit(name, size):
+        global total
+        if size > STREAM_LIMIT:
+            fail(f"{name} is {size} bytes, over clamd's stream limit")
+        total += size
+        if total > TOTAL_LIMIT:
+            fail(f"More than {TOTAL_LIMIT} bytes unpacked at {name}; refusing to go on")
+
+
+    def unpack(path):
+        target = f"{path}.unpacked"
+        if path.endswith((".tar.gz", ".tgz", ".tar")):
+            with tarfile.open(path) as archive:
+                for member in archive.getmembers():
+                    admit(f"{path}!{member.name}", member.size)
+                archive.extractall(target, filter="data")
+        elif path.endswith(".zip"):
+            with zipfile.ZipFile(path) as archive:
+                for info in archive.infolist():
+                    admit(f"{path}!{info.filename}", info.file_size)
+                archive.extractall(target)
+
+
+    def packages():
+        found, page = [], 1
+        while batch := api(f"/packages/{owner}?type=generic&limit=50&page={page}"):
+            found += batch
+            page += 1
+        newest = {}
+        for package in found:
+            if package["name"] not in newest or package["created_at"] > newest[package["name"]]["created_at"]:
+                newest[package["name"]] = package
+        return sorted(newest.values(), key=lambda p: p["name"])
+
+
+    def main(root):
+        listed = packages()
+        if not listed:
+            fail(f"{owner} has no generic packages visible to this token")
+        for package in listed:
+            name, version = package["name"], package["version"]
+            directory = os.path.join(root, name, version)
+            os.makedirs(directory, exist_ok=True)
+            for file in api(f"/packages/{owner}/generic/{name}/{version}/files"):
+                admit(file["name"], file["Size"])
+                path = os.path.join(directory, os.path.basename(file["name"]))
+                with request(f"/api/packages/{owner}/generic/{name}/{version}/{file['name']}") as body:
+                    with open(path, "wb") as out:
+                        while chunk := body.read(1024 * 1024):
+                            out.write(chunk)
+                unpack(path)
+                print(f"Fetched {name} {version}: {file['name']}")
+
+
+    main(sys.argv[1])
   scan.sh: |
     #!/bin/sh
     # Usage: scan.sh <client config> <share root> [top-level directory to skip]...
@@ -41,7 +135,8 @@ data:
     # The exit status travels down the pipe as a last line: sh has no pipefail.
     # shellcheck disable=SC2086 # top-level entries are namespace names, no spaces
     {
-      clamdscan --config-file="$config" --multiscan --infected --stdout $paths
+      # CLAMDSCAN_MODE=--stream sends bytes, for files clamd has no mount of.
+      clamdscan --config-file="$config" "${CLAMDSCAN_MODE:---multiscan}" --infected --stdout $paths
       echo "clamdscan-exit $?"
     } | awk '
       /^clamdscan-exit / { rc = $2; next }

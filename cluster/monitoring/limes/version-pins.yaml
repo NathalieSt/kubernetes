@@ -979,7 +979,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "7ca4249@sha256:240a78e6c7f18986c079eac281841e193dbf2b2c7e51dadf4971a541c78b8b05",
+          "version": "a9fb6d7@sha256:e1579c5d8c71ceeded499d265f837093830a8f46c184050af0e04b94ce0ffcb5",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -990,7 +990,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "47e336f@sha256:b12fc3b4a4b516b73062cc14be344b2584601a62425999f9c31c3890db1251fd",
+          "version": "b4e3077@sha256:a2db68b746200fb021cb0a135f32c7bcde8001bf04c3b27094925079bfee5d21",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1111,10 +1111,6 @@ data:
       "untracked": [
         {
           "key": "matrix-pg",
-          "file": "versions/infrastructure.json"
-        },
-        {
-          "key": "netbird",
           "file": "versions/infrastructure.json"
         }
       ]
