@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: psono-client
-    app.kubernetes.io/version: ad6c454
+    app.kubernetes.io/version: ea5a717
   name: psono-client
 spec:
   replicas: 1
@@ -15,13 +15,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: psono-client
-        app.kubernetes.io/version: ad6c454
+        app.kubernetes.io/version: ea5a717
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client:ad6c454@sha256:90cffe83be93492b2cb9eb989fe5fefafaf5a2b1f48ff93c82b0a0e09620eabd
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client:ea5a717@sha256:32b78bf211e3f5318f3c3df673900a3c9ea2f4c9d5aa9a5f688d0af0b294bb06
         name: psono-client
         ports:
         - containerPort: 80
