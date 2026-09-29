@@ -43,6 +43,10 @@ spec:
           value: /psono-secrets/public-key
         - name: PSONO_HOST_URL
           value: https://psono-api.netbird.nathalie-stiefsohn.eu
+        - name: PSONO_WEB_CLIENT_URL
+          value: https://psono.netbird.nathalie-stiefsohn.eu
+        - name: PSONO_FAVICON_SERVICE_URL
+          value: ""
         - name: PSONO_ALLOWED_DOMAINS
           value: psono.netbird.nathalie-stiefsohn.eu
         - name: PSONO_DEBUG

@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: music-library-builder
-    app.kubernetes.io/version: "1177836"
+    app.kubernetes.io/version: 4664a0b
   name: music-library-builder
 spec:
   selector:
