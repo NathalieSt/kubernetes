@@ -913,7 +913,7 @@ data:
           "key": "psono-client",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client",
-          "version": "ad6c454@sha256:90cffe83be93492b2cb9eb989fe5fefafaf5a2b1f48ff93c82b0a0e09620eabd",
+          "version": "ea5a717@sha256:32b78bf211e3f5318f3c3df673900a3c9ea2f4c9d5aa9a5f688d0af0b294bb06",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
