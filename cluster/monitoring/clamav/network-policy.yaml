@@ -11,6 +11,16 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: clamav
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: forgejo
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - forgejo-runner
+          - forgejo-runner-1
     ports:
     - port: 3310
       protocol: TCP

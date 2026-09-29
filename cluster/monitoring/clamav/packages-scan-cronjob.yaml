@@ -1,0 +1,107 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: clamav-scan-packages
+    app.kubernetes.io/version: 1.5.4-debian13-slim
+  name: clamav-scan-packages
+spec:
+  schedule: 0 6 * * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: clamav-scan-packages
+            app.kubernetes.io/version: 1.5.4-debian13-slim
+        spec:
+          initContainers:
+          - command:
+            - python3
+            - /etc/clamav-client/fetch-packages.py
+            - /scan/packages
+            image: python:3.14-alpine@sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df
+            name: fetch-packages
+            volumeMounts:
+            - mountPath: /etc/clamav-client
+              name: client-config-volume
+              readOnly: true
+            - mountPath: /scan/packages
+              name: packages-volume
+            env:
+            - name: FORGEJO_URL
+              value: http://forgejo-http.forgejo.svc.cluster.local:3000
+            - name: FORGEJO_OWNER
+              value: my-homelab
+            - name: FORGEJO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: clamav-packages-secret
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - args:
+            - /etc/clamav-client/scan.sh
+            - /etc/clamav-client/clamd.conf
+            - /scan/packages
+            command:
+            - sh
+            image: clamav/clamav:1.5.4-debian13-slim
+            name: clamav-scan-packages
+            volumeMounts:
+            - mountPath: /etc/clamav-client
+              name: client-config-volume
+              readOnly: true
+            - mountPath: /scan/packages
+              name: packages-volume
+              readOnly: true
+            env:
+            - name: TZ
+              value: Europe/Vienna
+            - name: CLAMDSCAN_MODE
+              value: --stream
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: client-config-volume
+            configMap:
+              name: clamav-client-config
+          - name: packages-volume
+            emptyDir:
+              sizeLimit: 4Gi
+          restartPolicy: Never

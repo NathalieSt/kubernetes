@@ -13,6 +13,10 @@
         "name": "backup-dashboard",
         "policy": "path \"kvv2/data/backup-dashboard/basic-auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/backup-dashboard/basic-auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/backup-dashboard/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/backup-dashboard/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "clamav": {
+        "name": "clamav",
+        "policy": "path \"kvv2/data/clamav/forgejo-packages\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/clamav/forgejo-packages\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "code-server": {
         "name": "code-server",
         "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/code-server-git\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server-git\" {\n  capabilities = [\"read\"]\n}\n"
@@ -145,6 +149,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.backup-dashboard.name}"
+        ],
+        "token_ttl": 600
+      },
+      "clamav": {
+        "backend": "kubernetes",
+        "role_name": "clamav",
+        "bound_service_account_names": [
+          "clamav-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "clamav"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.clamav.name}"
         ],
         "token_ttl": 600
       },
@@ -513,6 +532,12 @@
     },
     {
       "from": "vault_kv_secret_v2.backup-dashboard_backup-dashboard_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.clamav_clamav_forgejo-packages",
       "lifecycle": {
         "destroy": false
       }

@@ -5,6 +5,7 @@ authelia/users authelia users.yml
 authelia/oidc-clients authelia backup-dashboard forgejo gameyfin glitchtip healthchecks kavita mail paperless tandoor trilium vault
 backup-dashboard/basic-auth backup-dashboard username password
 backup-dashboard/oidc backup-dashboard client-secret
+clamav/forgejo-packages clamav token
 code-server code-server password
 code-server-git code-server username email token
 flux-notifications flux-notifications token
