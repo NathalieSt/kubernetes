@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: psono-client
-    app.kubernetes.io/version: sha256_487eb17619356
+    app.kubernetes.io/version: ad6c454
   name: psono-client
 spec:
   selector:
