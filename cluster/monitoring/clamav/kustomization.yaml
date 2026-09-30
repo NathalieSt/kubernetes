@@ -11,6 +11,10 @@ resources:
 - service.yaml
 - local-scan-cronjob.yaml
 - nas-scan-cronjob.yaml
+- downloads-scan-cronjob.yaml
+- hash-cache-pvc.yaml
+- hash-lookup-cronjob.yaml
+- hash-lookup-egress.yaml
 - packages-scan-cronjob.yaml
 - vault-secrets.yaml
 - network-policy.yaml

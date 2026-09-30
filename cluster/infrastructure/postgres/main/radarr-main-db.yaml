@@ -7,4 +7,4 @@ spec:
   name: radarr-main
   cluster:
     name: postgres
-  owner: postgres
+  owner: radarr

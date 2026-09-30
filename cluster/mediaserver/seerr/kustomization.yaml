@@ -4,6 +4,7 @@ kind: Kustomization
 metadata:
   name: seerr
 resources:
+- vault-secrets.yaml
 - deployment.yaml
 - scripts-configmap.yaml
 - config-pvc.yaml

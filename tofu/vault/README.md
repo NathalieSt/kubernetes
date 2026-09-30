@@ -18,30 +18,38 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | Role | Namespace | Paths |
 | --- | --- | --- |
 | `backup-dashboard` | `backup-dashboard` | `kvv2/backup-dashboard/basic-auth`, `kvv2/backup-dashboard/oidc` |
-| `clamav` | `clamav` | `kvv2/clamav/forgejo-packages` |
+| `clamav` | `clamav` | `kvv2/clamav/forgejo-packages`, `kvv2/clamav/hash-lookup` |
 | `code-server` | `code-server` | `kvv2/code-server`, `kvv2/code-server-git` |
 | `neko` | `neko` | `kvv2/neko` |
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
 | `mail` | `mail` | `kvv2/mail`, `kvv2/mail/oidc` |
+| `audiomuse-ai` | `jellyfin` | `kvv2/jellyfin`, `kvv2/audiomuseai/db` |
 | `gluetun-media` | `gluetun-media` | `kvv2/vpn` |
 | `music-library-builder` | `jellyfin` | `kvv2/music-library-builder` |
 | `qbittorrent` | `qbittorrent` | `kvv2/vpn` |
+| `sonarr` | `jellyfin` | `kvv2/sonarr/db` |
+| `radarr` | `jellyfin` | `kvv2/radarr/db` |
+| `lidarr` | `jellyfin` | `kvv2/lidarr/db` |
+| `prowlarr` | `jellyfin` | `kvv2/prowlarr/db` |
+| `bazarr` | `jellyfin` | `kvv2/bazarr/db` |
+| `seerr` | `jellyfin` | `kvv2/seerr/db` |
 | `gameyfin` | `gameyfin` | `kvv2/gameyfin/secrets` |
-| `psono-server` | `psono` | `kvv2/psono` |
-| `limes` | `limes` | `kvv2/limes` |
-| `tandoor` | `tandoor` | `kvv2/tandoor/oidc` |
-| `zyme` | `zyme` | `kvv2/zyme` |
+| `psono-server` | `psono` | `kvv2/psono`, `kvv2/psono/db` |
+| `limes` | `limes` | `kvv2/limes`, `kvv2/limes/db` |
+| `tandoor` | `tandoor` | `kvv2/tandoor/oidc`, `kvv2/tandoor/db` |
+| `zyme` | `zyme` | `kvv2/zyme`, `kvv2/zyme/db` |
 | `radicale` | `radicale` | `kvv2/radicale/users` |
 | `anki-sync` | `anki-sync` | `kvv2/anki-sync/users` |
 | `trilium` | `trilium` | `kvv2/trilium/oidc` |
-| `paperless` | `paperless` | `kvv2/paperless/oidc`, `kvv2/paperless/app` |
-| `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients` |
+| `paperless` | `paperless` | `kvv2/paperless/oidc`, `kvv2/paperless/app`, `kvv2/paperless/db` |
+| `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients`, `kvv2/authelia/db` |
 | `gluetun-proxy` | `gluetun-proxy` | `kvv2/vpn` |
+| `main-pg` | `postgres` | `kvv2/psono/db`, `kvv2/authelia/db`, `kvv2/glitchtip/db`, `kvv2/healthchecks/db`, `kvv2/limes/db`, `kvv2/ntfy/db`, `kvv2/paperless/db`, `kvv2/tandoor/db`, `kvv2/zyme/db`, `kvv2/audiomuseai/db`, `kvv2/sonarr/db`, `kvv2/radarr/db`, `kvv2/lidarr/db`, `kvv2/prowlarr/db`, `kvv2/bazarr/db`, `kvv2/seerr/db` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
-| `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc` |
-| `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret`, `kvv2/healthchecks/oidc` |
+| `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc`, `kvv2/glitchtip/db` |
+| `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret`, `kvv2/healthchecks/oidc`, `kvv2/healthchecks/db` |
 | `heartbeats` | `healthchecks` | `kvv2/heartbeats` |
-| `ntfy` | `ntfy` | `kvv2/ntfy/auth` |
+| `ntfy` | `ntfy` | `kvv2/ntfy/auth`, `kvv2/ntfy/db` |
 | `victoria-metrics` | `victoria-metrics` | `kvv2/victoria-metrics`, `kvv2/victoria-metrics/ntfy`, `kvv2/victoria-metrics/healthchecks` |
 
 The web UI's sign-in — the `oidc` auth method, its role and the

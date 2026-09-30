@@ -7,4 +7,4 @@ spec:
   name: ntfy
   cluster:
     name: postgres
-  owner: postgres
+  owner: ntfy

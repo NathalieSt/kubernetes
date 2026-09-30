@@ -7,4 +7,4 @@ spec:
   name: sonarr-log
   cluster:
     name: postgres
-  owner: postgres
+  owner: sonarr

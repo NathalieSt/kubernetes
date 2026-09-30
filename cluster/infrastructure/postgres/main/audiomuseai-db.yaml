@@ -7,4 +7,4 @@ spec:
   name: audiomuseai
   cluster:
     name: postgres
-  owner: postgres
+  owner: audiomuseai

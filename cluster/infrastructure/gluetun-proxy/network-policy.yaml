@@ -74,6 +74,12 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: flaresolverr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: clamav
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: clamav-hash-lookup
     ports:
     - port: 8888
       protocol: TCP

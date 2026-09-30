@@ -200,7 +200,7 @@ data:
       postgres:
         address: tcp://postgres-rw.postgres.svc.cluster.local:5432
         database: authelia
-        username: postgres
+        username: authelia
         password: "{{ secret `/secrets/postgres/password` }}"
     notifier:
       disable_startup_check: true

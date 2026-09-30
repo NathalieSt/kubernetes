@@ -990,7 +990,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "0aee842@sha256:91d2b648a8950ddc9c5de568cc3acb9d19c4bd539c62fa9721be5ee6634f03d7",
+          "version": "6fe9403@sha256:81ca60ba7829000616fe97e81e4e5eecdbb3dab02032a5cad1ef49d8e6bb37a3",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

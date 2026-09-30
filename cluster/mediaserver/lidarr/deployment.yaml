@@ -55,12 +55,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: lidarr-db-secret
         - name: LIDARR__POSTGRES__PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: lidarr-db-secret
         - name: LIDARR__POSTGRES__MAINDB
           value: lidarr-main
         - name: LIDARR__POSTGRES__LOGDB

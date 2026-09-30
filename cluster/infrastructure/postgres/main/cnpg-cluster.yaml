@@ -22,3 +22,85 @@ spec:
       periodSeconds: 30
       timeoutSeconds: 30
       failureThreshold: 10
+  managed:
+    roles:
+    - name: psono
+      ensure: present
+      login: true
+      passwordSecret:
+        name: psono-db-role
+    - name: authelia
+      ensure: present
+      login: true
+      passwordSecret:
+        name: authelia-db-role
+    - name: glitchtip
+      ensure: present
+      login: true
+      passwordSecret:
+        name: glitchtip-db-role
+    - name: healthchecks
+      ensure: present
+      login: true
+      passwordSecret:
+        name: healthchecks-db-role
+    - name: limes
+      ensure: present
+      login: true
+      passwordSecret:
+        name: limes-db-role
+    - name: ntfy
+      ensure: present
+      login: true
+      passwordSecret:
+        name: ntfy-db-role
+    - name: paperless
+      ensure: present
+      login: true
+      passwordSecret:
+        name: paperless-db-role
+    - name: tandoor
+      ensure: present
+      login: true
+      passwordSecret:
+        name: tandoor-db-role
+    - name: zyme
+      ensure: present
+      login: true
+      passwordSecret:
+        name: zyme-db-role
+    - name: audiomuseai
+      ensure: present
+      login: true
+      passwordSecret:
+        name: audiomuseai-db-role
+    - name: sonarr
+      ensure: present
+      login: true
+      passwordSecret:
+        name: sonarr-db-role
+    - name: radarr
+      ensure: present
+      login: true
+      passwordSecret:
+        name: radarr-db-role
+    - name: lidarr
+      ensure: present
+      login: true
+      passwordSecret:
+        name: lidarr-db-role
+    - name: prowlarr
+      ensure: present
+      login: true
+      passwordSecret:
+        name: prowlarr-db-role
+    - name: bazarr
+      ensure: present
+      login: true
+      passwordSecret:
+        name: bazarr-db-role
+    - name: seerr
+      ensure: present
+      login: true
+      passwordSecret:
+        name: seerr-db-role

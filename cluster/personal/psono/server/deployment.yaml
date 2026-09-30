@@ -69,12 +69,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: psono-db-secret
         - name: PSONO_DATABASES_DEFAULT_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: psono-db-secret
         - name: PSONO_EMAIL_HOST
           value: mail.mail.svc.cluster.local
         - name: PSONO_EMAIL_PORT

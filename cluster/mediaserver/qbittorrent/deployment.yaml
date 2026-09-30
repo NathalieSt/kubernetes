@@ -45,13 +45,15 @@ spec:
             [BitTorrent]Session\TempPathEnabled=true
             [BitTorrent]Session\Interface=tun0
             [BitTorrent]Session\InterfaceName=tun0
+            [BitTorrent]ExcludedFileNamesEnabled=true
+            [BitTorrent]Session\ExcludedFileNames=*.exe, *.com, *.scr, *.pif, *.msi, *.msp, *.dll, *.cpl, *.bat, *.cmd, *.ps1, *.psm1, *.vbs, *.vbe, *.js, *.jse, *.wsf, *.wsh, *.hta, *.jar, *.lnk, *.url, *.scf, *.reg, *.inf, *.app, *.dmg, *.pkg, *.command, *.sh, *.run, *.appimage, *.deb, *.rpm, *.apk
             [Preferences]WebUI\LocalHostAuth=false
             [Preferences]WebUI\AuthSubnetWhitelistEnabled=true
             [Preferences]WebUI\AuthSubnetWhitelist=10.42.0.0/16
         - name: INI_OWNER
           value: "1000:10"
         - name: INI_DIRS
-          value: ""
+          value: /data/games-inbox
         - name: INI_COMPACT
           value: "true"
       - command:
@@ -76,6 +78,10 @@ spec:
             [misc]host_whitelist=sabnzbd, sabnzbd.qbittorrent, sabnzbd.qbittorrent.svc.cluster.local, sabnzbd.netbird.nathalie-stiefsohn.eu
             [misc]download_dir=/data/usenet/incomplete
             [misc]complete_dir=/data/usenet/complete
+            [misc]unwanted_extensions=exe, com, scr, pif, msi, msp, dll, cpl, bat, cmd, ps1, psm1, vbs, vbe, js, jse, wsf, wsh, hta, jar, lnk, url, scf, reg, inf, app, dmg, pkg, command, sh, run, appimage, deb, rpm, apk
+            [misc]unwanted_extensions_mode=0
+            [misc]action_on_unwanted_extensions=2
+            [misc]pause_on_pwrar=2
         - name: INI_OWNER
           value: "1000:10"
         - name: INI_DIRS
@@ -164,6 +170,22 @@ spec:
           name: config
         - mountPath: /data
           name: media
+        - mountPath: /data/series
+          subPath: series
+          name: media
+          readOnly: true
+        - mountPath: /data/movies
+          subPath: movies
+          name: media
+          readOnly: true
+        - mountPath: /data/music
+          subPath: music
+          name: media
+          readOnly: true
+        - mountPath: /data/games
+          subPath: games
+          name: media
+          readOnly: true
         env:
         - name: PUID
           value: "1000"
@@ -190,6 +212,22 @@ spec:
           name: sabnzbd-config
         - mountPath: /data
           name: media
+        - mountPath: /data/series
+          subPath: series
+          name: media
+          readOnly: true
+        - mountPath: /data/movies
+          subPath: movies
+          name: media
+          readOnly: true
+        - mountPath: /data/music
+          subPath: music
+          name: media
+          readOnly: true
+        - mountPath: /data/games
+          subPath: games
+          name: media
+          readOnly: true
         env:
         - name: PUID
           value: "1000"

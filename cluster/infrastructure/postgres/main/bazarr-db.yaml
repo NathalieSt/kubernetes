@@ -7,4 +7,4 @@ spec:
   name: bazarr
   cluster:
     name: postgres
-  owner: postgres
+  owner: bazarr

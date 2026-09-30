@@ -59,12 +59,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: bazarr-db-secret
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: bazarr-db-secret
         - name: HTTPS_PROXY
           value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
         - name: https_proxy

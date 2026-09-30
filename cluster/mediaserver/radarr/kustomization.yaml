@@ -4,6 +4,7 @@ kind: Kustomization
 metadata:
   name: radarr
 resources:
+- vault-secrets.yaml
 - deployment.yaml
 - config-pvc.yaml
 - service.yaml

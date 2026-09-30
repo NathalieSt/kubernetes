@@ -55,12 +55,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: radarr-db-secret
         - name: RADARR__POSTGRES__PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: radarr-db-secret
         - name: RADARR__POSTGRES__MAINDB
           value: radarr-main
         - name: RADARR__POSTGRES__LOGDB
