@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: stirling-pdf
-    app.kubernetes.io/version: 2.14.3
+    app.kubernetes.io/version: 3.0.0
   name: stirling-pdf
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: stirling-pdf
-        app.kubernetes.io/version: 2.14.3
+        app.kubernetes.io/version: 3.0.0
     spec:
       initContainers:
       - command:
@@ -25,7 +25,7 @@ spec:
         - static/index.html
         - /customFiles/static
         - /pennant/pennant.css
-        image: stirlingtools/stirling-pdf:2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396
+        image: stirlingtools/stirling-pdf:3.0.0@sha256:66b6edb8ee62e307a8b335166e8931a6e65b39c9bf73b5e517fbfe9c613ba221
         name: pennant
         volumeMounts:
         - mountPath: /pennant
@@ -45,7 +45,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: stirlingtools/stirling-pdf:2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396
+      - image: stirlingtools/stirling-pdf:3.0.0@sha256:66b6edb8ee62e307a8b335166e8931a6e65b39c9bf73b5e517fbfe9c613ba221
         name: stirling-pdf
         ports:
         - containerPort: 8080

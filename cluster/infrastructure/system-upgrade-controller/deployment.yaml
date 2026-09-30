@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: system-upgrade-controller
-    app.kubernetes.io/version: v0.20.1
+    app.kubernetes.io/version: v0.20.2
   name: system-upgrade-controller
 spec:
   selector:
@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: system-upgrade-controller
-        app.kubernetes.io/version: v0.20.1
+        app.kubernetes.io/version: v0.20.2
     spec:
       affinity:
         nodeAffinity:
@@ -29,7 +29,7 @@ spec:
                 - "true"
       serviceAccountName: system-upgrade
       containers:
-      - image: rancher/system-upgrade-controller:v0.20.1@sha256:aaf4dbf640579a6abfa6390aab927ee664f06814e33c371e69df9dd451ca153a
+      - image: rancher/system-upgrade-controller:v0.20.2@sha256:61b68d4372baf7ae90fb0f879feea1c082381a8b7547cc5ec85d393c497b11cb
         name: system-upgrade-controller
         env:
         - name: SYSTEM_UPGRADE_CONTROLLER_NAME

@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: mariadb
-    app.kubernetes.io/version: 11.4.5
+    app.kubernetes.io/version: 11.8.8
   name: mariadb
 spec:
   selector:

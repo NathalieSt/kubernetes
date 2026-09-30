@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: seerr
-    app.kubernetes.io/version: v3.4.1
+    app.kubernetes.io/version: v3.5.0
   name: seerr
 spec:
   selector:

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: psono-server
-    app.kubernetes.io/version: sha256_8b489f203c1ba
+    app.kubernetes.io/version: 7.4.0
   name: psono-server
 spec:
   replicas: 1
@@ -15,11 +15,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: psono-server
-        app.kubernetes.io/version: sha256_8b489f203c1ba
+        app.kubernetes.io/version: 7.4.0
     spec:
       automountServiceAccountToken: false
       containers:
-      - image: psono/psono-server@sha256:8b489f203c1bab3f46296bd4acd7ffa371df83b4fcdd20856f803c364e3c790b
+      - image: psono/psono-server:7.4.0@sha256:8b489f203c1bab3f46296bd4acd7ffa371df83b4fcdd20856f803c364e3c790b
         name: psono-server
         ports:
         - containerPort: 80
@@ -28,6 +28,8 @@ spec:
         - mountPath: /psono-secrets
           name: secret-volume
           readOnly: true
+        - mountPath: /tmp
+          name: tmp
         env:
         - name: PSONO_SECRET_KEY_FILE
           value: /psono-secrets/secret-key
@@ -48,7 +50,7 @@ spec:
         - name: PSONO_FAVICON_SERVICE_URL
           value: ""
         - name: PSONO_ALLOWED_DOMAINS
-          value: psono.netbird.nathalie-stiefsohn.eu
+          value: homelab.internal
         - name: PSONO_DEBUG
           value: "False"
         - name: PSONO_ALLOW_REGISTRATION
@@ -85,6 +87,26 @@ spec:
           value: "False"
         - name: TZ
           value: Europe/Vienna
+        - name: PSONO_ALLOWED_HOSTS
+          value: psono-api.netbird.nathalie-stiefsohn.eu,psono-server.psono.svc.cluster.local
+        - name: PSONO_REPLAY_PROTECTION_DISABLED
+          value: "False"
+        - name: PSONO_DEVICE_PROTECTION_DISABLED
+          value: "False"
+        - name: PSONO_CORS_ALLOW_ALL_ORIGINS
+          value: "False"
+        - name: PSONO_CORS_ALLOWED_ORIGINS
+          value: https://psono.netbird.nathalie-stiefsohn.eu
+        - name: PSONO_MANAGEMENT_ENABLED
+          value: "False"
+        - name: PSONO_ALLOWED_SECOND_FACTORS
+          value: webauthn,google_authenticator
+        - name: PSONO_FILES_ENABLED
+          value: "False"
+        - name: PSONO_FILESERVER_HANDLER_ENABLED
+          value: "False"
+        - name: PSONO_HEALTHCHECK_TIME_SYNC_ENABLED
+          value: "False"
         resources:
           requests:
             cpu: 100m
@@ -92,7 +114,20 @@ spec:
           limits:
             cpu: 1000m
             memory: 1Gi
+        securityContext:
+          capabilities:
+            add:
+            - NET_BIND_SERVICE
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
       volumes:
       - name: secret-volume
         secret:
           secretName: psono-server-secret
+      - name: tmp
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

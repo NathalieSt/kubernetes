@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: changedetection
-    app.kubernetes.io/version: 0.60.7
+    app.kubernetes.io/version: 0.60.8
   name: changedetection
 spec:
   selector:

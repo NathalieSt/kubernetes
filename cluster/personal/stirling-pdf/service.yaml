@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: stirling-pdf
-    app.kubernetes.io/version: 2.14.3
+    app.kubernetes.io/version: 3.0.0
   name: stirling-pdf
 spec:
   selector:

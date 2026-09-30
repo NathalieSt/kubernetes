@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: neko
-    app.kubernetes.io/version: 8342ddb
+    app.kubernetes.io/version: cb62599
   name: neko
 spec:
   selector:
