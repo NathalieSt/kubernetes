@@ -1,0 +1,18 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: pipeline
+spec:
+  groups:
+  - name: pipeline
+    interval: 1m
+    rules:
+    - alert: AlertPathWeeklyTest
+      expr: vector(1) and on() (day_of_week() == 1 and hour() == 7 and minute() < 15)
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: Nothing is wrong. This fires every Monday morning to show that vmalert, Alertmanager and ntfy all still deliver. If a Monday passes without it, the alerting path is broken somewhere past Alertmanager — check its ntfy receiver and the victoria-metrics ntfy token.
+        summary: "Weekly test: alerts reach this phone"

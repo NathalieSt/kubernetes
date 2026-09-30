@@ -10,4 +10,5 @@ resources:
 - datapath-rules.yaml
 - node-rules.yaml
 - cluster-rules.yaml
+- pipeline-rules.yaml
 - network-policy.yaml

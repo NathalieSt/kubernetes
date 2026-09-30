@@ -59,7 +59,7 @@ spec:
       containers:
       - command:
         - node
-        - ./main.cjs
+        - ./main.mjs
         image: triliumnext/trilium:v0.106.0@sha256:be93e82699b12950ac4e2e7b565ce092fe215b8dd6ddfc47921e37b49e6a0e8b
         name: trilium
         ports:

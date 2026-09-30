@@ -26,6 +26,12 @@ rules:
   - get
   - list
 - apiGroups:
+  - operator.victoriametrics.com
+  resources:
+  - vmrules
+  verbs:
+  - list
+- apiGroups:
   - source.toolkit.fluxcd.io
   resources:
   - gitrepositories
