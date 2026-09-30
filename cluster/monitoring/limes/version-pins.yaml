@@ -913,7 +913,7 @@ data:
           "key": "psono-client",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client",
-          "version": "602446d@sha256:e071918b95975fb7ce824eb2747a95489c84ef67d58f6594e92751c6a53d7b67",
+          "version": "9e77ebf@sha256:51108588d1785b272d5f0454086dc2a066c1d09a9945fafd000483298270f8df",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -924,7 +924,7 @@ data:
           "key": "psono-server",
           "kind": "image",
           "repository": "psono/psono-server",
-          "version": "7.4.0@sha256:8b489f203c1bab3f46296bd4acd7ffa371df83b4fcdd20856f803c364e3c790b",
+          "version": "7.4.4@sha256:e06a0d631c276b148a4b2133e6737f38a31b4313e2c2f65d528d4cb55e8d9ce7",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
