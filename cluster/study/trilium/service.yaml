@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: trilium
-    app.kubernetes.io/version: v0.105.0
+    app.kubernetes.io/version: v0.106.0
   name: trilium
 spec:
   selector:

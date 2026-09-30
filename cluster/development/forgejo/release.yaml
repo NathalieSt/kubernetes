@@ -71,7 +71,7 @@ spec:
       metrics:
         enabled: true
     image:
-      tag: 15.0.9-rootless
+      tag: 16.0.5-rootless
     persistence:
       annotations:
         k8up.io/backup: "true"

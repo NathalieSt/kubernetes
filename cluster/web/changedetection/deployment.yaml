@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: changedetection
-    app.kubernetes.io/version: 0.60.7
+    app.kubernetes.io/version: 0.60.8
   name: changedetection
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: changedetection
-        app.kubernetes.io/version: 0.60.7
+        app.kubernetes.io/version: 0.60.8
     spec:
       initContainers:
       - command:
@@ -36,7 +36,7 @@ spec:
         - /pennant-out
         - /pennant/pennant.css
         - styles.css
-        image: ghcr.io/dgtlmoon/changedetection.io:0.60.7
+        image: ghcr.io/dgtlmoon/changedetection.io:0.60.8
         name: pennant
         volumeMounts:
         - mountPath: /pennant
@@ -56,7 +56,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: ghcr.io/dgtlmoon/changedetection.io:0.60.7
+      - image: ghcr.io/dgtlmoon/changedetection.io:0.60.8
         name: changedetection
         ports:
         - containerPort: 5000

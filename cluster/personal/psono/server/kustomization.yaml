@@ -8,3 +8,5 @@ resources:
 - deployment.yaml
 - service.yaml
 - network-policy.yaml
+- default-deny-egress.yaml
+- egress-network-policy.yaml

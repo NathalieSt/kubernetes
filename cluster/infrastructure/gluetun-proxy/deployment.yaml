@@ -54,7 +54,7 @@ spec:
               key: password
               name: gluetun-proxy-vpn
         - name: SERVER_COUNTRIES
-          value: Austria,Finland,Malta
+          value: Austria,Bulgaria,Croatia,Czech Republic,Estonia,Finland,Greece,Hungary,Latvia,Lithuania,Luxembourg,Malta,Netherlands,Portugal,Serbia,Slovakia,Slovenia
         - name: FIREWALL_INPUT_PORTS
           value: 8888,9101
         - name: FIREWALL_OUTBOUND_SUBNETS
@@ -96,7 +96,7 @@ spec:
           name: vpn-probe-state
         env:
         - name: IPLEAK_EXPECTED_COUNTRY
-          value: AT,FI,MT
+          value: AT,BG,HR,CZ,EE,FI,GR,HU,LV,LT,LU,MT,NL,PT,RS,SK,SI
         - name: IPLEAK_INTERVAL
           value: "300"
         - name: IPLEAK_METRICS_FILE

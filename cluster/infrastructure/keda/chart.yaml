@@ -10,4 +10,4 @@ spec:
   sourceRef:
     kind: HelmRepository
     name: keda-repo
-  version: 2.20.2
+  version: 2.21.0

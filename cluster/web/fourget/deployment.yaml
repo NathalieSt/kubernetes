@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: fourget
-    app.kubernetes.io/version: 1.0.58
+    app.kubernetes.io/version: 1.0.59
   name: fourget
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: fourget
-        app.kubernetes.io/version: 1.0.58
+        app.kubernetes.io/version: 1.0.59
     spec:
       initContainers:
       - command:
@@ -27,7 +27,7 @@ spec:
           cd /work
           php /var/www/html/4get/docker/gen_config.php
           echo "4get: config.php generated"
-        image: luuul/4get:1.0.58
+        image: luuul/4get:1.0.59
         name: generate-config
         volumeMounts:
         - mountPath: /work/data
@@ -50,7 +50,7 @@ spec:
         - -DFOREGROUND
         - -f
         - /etc/4get/httpd.conf
-        image: luuul/4get:1.0.58
+        image: luuul/4get:1.0.59
         name: fourget
         ports:
         - containerPort: 8080

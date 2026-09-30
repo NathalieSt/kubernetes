@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: fourget
-    app.kubernetes.io/version: 1.0.58
+    app.kubernetes.io/version: 1.0.59
   name: fourget
 spec:
   selector:

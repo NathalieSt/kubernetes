@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: neko
-    app.kubernetes.io/version: 8342ddb
+    app.kubernetes.io/version: cb62599
   name: neko
 spec:
   replicas: 1
@@ -19,7 +19,7 @@ spec:
         homelab/neko-browser-config-hash: 050e49168f9a0f5a
       labels:
         app.kubernetes.io/name: neko
-        app.kubernetes.io/version: 8342ddb
+        app.kubernetes.io/version: cb62599
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -124,7 +124,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium:8342ddb@sha256:275f535704f5f23a2d5f23b03d71309afa47951c17f5d3b01c565cf55380a370
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium:cb62599@sha256:60c96499633d4f8048dc550a1dd11337c6c79c225775c1c2b0d851e8d412925b
         name: neko
         ports:
         - containerPort: 8080

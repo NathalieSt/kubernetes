@@ -130,7 +130,7 @@ spec:
         - sh
         - -c
         - cp /usr/bin/kubectl /opt/cluster-tools/kubectl
-        image: alpine/k8s:1.37.0@sha256:b421c2e9419edb98db39b6ab641669f4db7bb2acf354f22450c6b7e7176d1ff4
+        image: alpine/k8s:1.37.1@sha256:712dc5385d1c1a3f83b747fa9e40f64d433a97f72ff42f9755ff7dd1f62846e4
         name: cluster-tools
         volumeMounts:
         - mountPath: /opt/cluster-tools
@@ -164,7 +164,7 @@ spec:
           ln -s ../lib/node_modules/npm/bin/npm-cli.js "$d/bin/npm"
           ln -s ../lib/node_modules/npm/bin/npx-cli.js "$d/bin/npx"
           ln -s "$d/yarn/bin/yarn" "$d/bin/yarn"
-        image: node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c
+        image: node:26.10.0-bookworm-slim@sha256:662933cf47f013bc8e4beb31a6116448427a82057ba7c42c97e4c5ba766504c2
         name: node-toolchain
         volumeMounts:
         - mountPath: /opt/toolchain
@@ -189,7 +189,7 @@ spec:
         - sh
         - -c
         - cp -R /usr/local/go /opt/toolchain/go
-        image: golang:1.25.14-alpine@sha256:1ae0735f00daffa3aaf1363a5184c0d2dc55c78e3db4ec70241cdac97bf84b59
+        image: golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414
         name: go-toolchain
         volumeMounts:
         - mountPath: /opt/toolchain
