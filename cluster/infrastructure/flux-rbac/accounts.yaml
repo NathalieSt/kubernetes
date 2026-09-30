@@ -118,6 +118,19 @@ subjects:
   name: flux-bazarr
   namespace: flux-system
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-bazarr-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-bazarr
+  namespace: flux-system
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -815,6 +828,19 @@ subjects:
   name: flux-lidarr
   namespace: flux-system
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-lidarr-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-lidarr
+  namespace: flux-system
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -863,6 +889,19 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-main-pg
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-main-pg-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
 subjects:
 - kind: ServiceAccount
   name: flux-main-pg
@@ -1160,6 +1199,19 @@ subjects:
   name: flux-prowlarr
   namespace: flux-system
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-prowlarr-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-prowlarr
+  namespace: flux-system
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -1261,6 +1313,19 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-radarr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-radarr-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
 subjects:
 - kind: ServiceAccount
   name: flux-radarr
@@ -1432,6 +1497,19 @@ subjects:
   name: flux-seerr
   namespace: flux-system
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-seerr-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-seerr
+  namespace: flux-system
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -1447,6 +1525,19 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-sonarr
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-sonarr-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
 subjects:
 - kind: ServiceAccount
   name: flux-sonarr

@@ -53,12 +53,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: prowlarr-db-secret
         - name: PROWLARR__POSTGRES__PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: prowlarr-db-secret
         - name: PROWLARR__POSTGRES__MAINDB
           value: prowlarr-main
         - name: PROWLARR__POSTGRES__LOGDB

@@ -94,12 +94,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: seerr-db-secret
         - name: DB_PASS
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: seerr-db-secret
         resources:
           requests:
             cpu: 50m

@@ -54,12 +54,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: audiomuseai-db-secret
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: audiomuseai-db-secret
         envFrom:
         - configMapRef:
             name: audiomuse-configmap

@@ -7,4 +7,4 @@ spec:
   name: authelia
   cluster:
     name: postgres
-  owner: postgres
+  owner: authelia

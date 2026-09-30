@@ -1,0 +1,74 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: clamav-scan-downloads
+    app.kubernetes.io/version: 1.5.4-debian13-slim
+  name: clamav-scan-downloads
+spec:
+  schedule: 0 1 * * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: clamav-scan-downloads
+            app.kubernetes.io/version: 1.5.4-debian13-slim
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - args:
+            - /etc/clamav-client/scan-inbound.sh
+            - /etc/clamav-client/clamd.conf
+            - /scan/nas/jellyfin/jellyfin-pvc
+            command:
+            - sh
+            image: clamav/clamav:1.5.4-debian13-slim
+            name: clamav-scan-downloads
+            volumeMounts:
+            - mountPath: /etc/clamav-client
+              name: client-config-volume
+              readOnly: true
+            - mountPath: /scan/nas
+              name: nas-share-volume
+              readOnly: true
+            env:
+            - name: TZ
+              value: Europe/Vienna
+            - name: BLOCKED_EXTENSIONS
+              value: exe com scr pif msi msp dll cpl bat cmd ps1 psm1 vbs vbe js jse wsf wsh hta jar lnk url scf reg inf app dmg pkg command sh run appimage deb rpm apk
+            - name: AUDIT_DIRS
+              value: completed usenet series movies music
+            - name: SCAN_ONLY
+              value: completed usenet games games-inbox
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: client-config-volume
+            configMap:
+              name: clamav-client-config
+          - name: nas-share-volume
+            persistentVolumeClaim:
+              claimName: clamav-nas-pvc
+          restartPolicy: Never

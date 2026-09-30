@@ -7,4 +7,4 @@ spec:
   name: psono
   cluster:
     name: postgres
-  owner: postgres
+  owner: psono

@@ -119,6 +119,103 @@ spec:
           runAsNonRoot: true
       - command:
         - sh
+        - -c
+        - |
+          #!/bin/sh
+          #
+          # Refuses to let a workload start while any secret it depends on is missing,
+          # empty, or still holding the placeholder that vault-config writes when it
+          # creates a KV path.
+          #
+          # Kept next to the generator rather than inlined so it can be linted and run by
+          # hand:
+          #
+          #     GUARDED_SECRET=neko-secret VAULT_PATH=neko \
+          #     EXPECTED_KEYS="password admin-password" \
+          #     GUARD_DIR=./fixture ./check.sh
+          #
+          # See SecretGuard.res for why this exists at all.
+
+          set -eu
+
+          : "${GUARDED_SECRET:?GUARDED_SECRET is required}"
+          : "${VAULT_PATH:?VAULT_PATH is required}"
+          : "${EXPECTED_KEYS:?EXPECTED_KEYS is required}"
+
+          dir="${GUARD_DIR:-/guarded}"
+          status=0
+
+          for key in $EXPECTED_KEYS; do
+              file="$dir/$key"
+
+              if [ ! -f "$file" ]; then
+                  echo "refusing to start: ${GUARDED_SECRET} has no key '${key}'." >&2
+                  echo "  The VaultStaticSecret syncs whatever is at kvv2/${VAULT_PATH}," >&2
+                  echo "  and that key is not there yet." >&2
+                  status=1
+                  continue
+              fi
+
+              value=$(cat "$file")
+
+              case "$value" in
+                  # The prefix, not the whole sentence: the placeholder embeds the path
+                  # and key, so matching it exactly would mean rebuilding the string here
+                  # and keeping two copies of it in step.
+                  "REPLACE ME"*)
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is still the vault-config placeholder." >&2
+                      echo "  This value is written into the manifests repository, so it is" >&2
+                      echo "  public knowledge and must never reach a running workload." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+                  "")
+                      echo "refusing to start: ${GUARDED_SECRET}/${key} is empty." >&2
+                      echo "  Fix it with:  vault kv patch kvv2/${VAULT_PATH} ${key}=<value>" >&2
+                      status=1
+                      ;;
+              esac
+          done
+
+          if [ "$status" -ne 0 ]; then
+              echo "" >&2
+              echo "Once Vault holds real values the VaultStaticSecret picks them up within" >&2
+              echo "its refresh interval, and the next restart of this pod succeeds on its" >&2
+              echo "own — there is nothing else to do here." >&2
+          fi
+
+          exit "$status"
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: healthchecks-db-secret-guard
+        volumeMounts:
+        - mountPath: /guarded
+          name: healthchecks-db-secret-guard-volume
+          readOnly: true
+        env:
+        - name: GUARDED_SECRET
+          value: healthchecks-db-secret
+        - name: VAULT_PATH
+          value: healthchecks/db
+        - name: EXPECTED_KEYS
+          value: username password
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
+        - sh
         - /pennant/append-stylesheet.sh
         - /opt/healthchecks/static-collected/CACHE
         - /pennant-out
@@ -189,12 +286,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: healthchecks-db-secret
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: healthchecks-db-secret
         - name: REGISTRATION_OPEN
           value: "False"
         - name: OIDC_OP_AUTHORIZATION_ENDPOINT
@@ -242,6 +339,9 @@ spec:
       - name: healthchecks-secret-guard-volume
         secret:
           secretName: healthchecks-secret
+      - name: healthchecks-db-secret-guard-volume
+        secret:
+          secretName: healthchecks-db-secret
       - name: tmp-volume
         emptyDir: {}
       - name: pennant-script-volume

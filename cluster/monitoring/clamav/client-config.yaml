@@ -102,6 +102,242 @@ data:
 
 
     main(sys.argv[1])
+  hash-lookup.py: |
+    """Looks up every executable under the given roots at Team Cymru and, with a key, VirusTotal.
+
+    Usage: hash-lookup.py <cache file> <root>... Only hashes leave the cluster, never a file.
+    Exit 1 when a file is known malware, 2 when a root is unreadable or a lookup failed.
+    """
+
+    import hashlib
+    import json
+    import os
+    import sys
+    import stat
+    import subprocess
+    import time
+    from hash_sources import VT_KEY, cymru, report, virustotal
+
+    # Windows PE and Linux ELF, by content: a renamed executable is still one.
+    MAGIC = (b"MZ", b"\x7fELF")
+    # The free VirusTotal key allows 4 lookups a minute and 500 a day; the rest waits for tomorrow.
+    VT_INTERVAL = 15
+    VT_DAILY = int(os.environ.get("VT_DAILY_BUDGET", "450"))
+    RECHECK = int(os.environ.get("RECHECK_DAYS", "30")) * 86400
+    # Libraries last: an installer or a launcher is what gets trojanised.
+    LATE = (".dll", ".sys", ".ocx", ".so")
+
+
+    def load(path):
+        try:
+            with open(path) as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {"files": {}, "verdicts": {}}
+
+
+    def save(path, cache):
+        with open(path + ".new", "w") as f:
+            json.dump(cache, f)
+        os.replace(path + ".new", path)
+
+
+    def hashes_if_executable(path):
+        with open(path, "rb") as f:
+            head = f.read(4)
+            if not head.startswith(MAGIC):
+                return None
+            sha256, sha1 = hashlib.sha256(head), hashlib.sha1(head)
+            while chunk := f.read(1 << 20):
+                sha256.update(chunk)
+                sha1.update(chunk)
+        return [sha256.hexdigest(), sha1.hexdigest()]
+
+
+    def walk(roots, known):
+        """Every file's hash, or None when it is not an executable; unchanged files from the cache."""
+        files = {}
+        for root in roots:
+            if not os.path.isdir(root):
+                print(f"{root} is not a readable directory: is the share mounted?", file=sys.stderr)
+                sys.exit(2)
+            for directory, _, names in os.walk(root, onerror=lambda e: print(f"skipped: {e}")):
+                for name in names:
+                    path = os.path.join(directory, name)
+                    try:
+                        st = os.stat(path, follow_symlinks=False)
+                        if not stat.S_ISREG(st.st_mode):
+                            continue
+                        stamp = [st.st_size, st.st_mtime_ns]
+                        cached = known.get(path)
+                        fresh = cached and len(cached) == 4 and cached[:2] == stamp
+                        hashes = cached[2:] if fresh else hashes_if_executable(path) or [None, None]
+                    except OSError as e:
+                        print(f"unreadable, not checked: {path}: {e}")
+                        continue
+                    files[path] = stamp + hashes
+        return files
+
+
+    def main():
+        cache_path, roots = sys.argv[1], sys.argv[2:]
+        if not VT_KEY:
+            print("No VirusTotal key: Team Cymru only (kvv2/clamav/hash-lookup adds the second).")
+        cache = load(cache_path)
+        cache["files"] = walk(roots, cache["files"])
+        paths, sha1s = {}, {}
+        for path, (_, _, sha, sha1) in cache["files"].items():
+            if sha:
+                paths.setdefault(sha, []).append(path)
+                sha1s[sha] = sha1
+        verdicts = {sha: cache["verdicts"].get(sha, {}) for sha in paths}
+        now = time.time()
+        order = sorted(paths, key=lambda sha: all(p.lower().endswith(LATE) for p in paths[sha]))
+
+        # Cymru is a DNS query, so every run asks again; VirusTotal's quota allows one a month.
+        vt_left, errors = VT_DAILY if VT_KEY else 0, 0
+        for sha in order:
+            verdict = verdicts[sha]
+            try:
+                verdict["cymru"] = cymru(sha1s[sha])
+                if vt_left and now - verdict.get("vt_checked", 0) > RECHECK:
+                    vt = virustotal(sha)
+                    if vt is None:
+                        print("VirusTotal's quota is spent; the rest waits for the next run.")
+                        vt_left = 0
+                        continue
+                    verdict["vt"], verdict["vt_checked"] = vt, now
+                    vt_left -= 1
+                    save(cache_path, {**cache, "verdicts": verdicts})
+                    time.sleep(VT_INTERVAL)
+            except (OSError, RuntimeError, ValueError, KeyError, subprocess.SubprocessError) as e:
+                print(f"lookup failed for {sha}: {e}")
+                errors += 1
+        cache["verdicts"] = verdicts
+        save(cache_path, cache)
+
+        bad = report(verdicts, paths)
+        print(f"{errors} lookups failed.")
+        sys.exit(1 if bad else 2 if errors else 0)
+
+
+    main()
+  hash_sources.py: |
+    """Team Cymru's Malware Hash Registry (DNS, no account) and VirusTotal (optional key): what
+    each knows about one file. A Vault placeholder counts as no key."""
+
+    import json
+    import os
+    import re
+    import subprocess
+    import urllib.error
+    import urllib.request
+
+    # Cracks draw a few HackTool/PUA verdicts whatever they are; this many engines is malware.
+    VT_THRESHOLD = int(os.environ.get("VT_MALICIOUS_THRESHOLD", "5"))
+    # Cymru's answer carries the share of its AV engines that detect the file; the same noise.
+    CYMRU_THRESHOLD = int(os.environ.get("CYMRU_MIN_PERCENT", "10"))
+
+
+    def key(name):
+        value = os.environ.get(name, "").strip()
+        return "" if not value or value.startswith("REPLACE ME") else value
+
+
+    VT_KEY = key("VIRUSTOTAL_API_KEY")
+
+
+    def cymru(sha1):
+        """By SHA-1: a SHA-256 is 64 characters, one more than a DNS label may hold."""
+        name = f"{sha1}.malware.hash.cymru.com"
+        out = subprocess.run(["nslookup", "-type=TXT", name],
+                             capture_output=True, text=True, timeout=30).stdout
+        if "NXDOMAIN" in out:
+            return {"found": False}
+        answer = re.search(r'text = "(\d+) (\d+)"', out)
+        if not answer:
+            raise RuntimeError(f"Team Cymru: no answer for {name}")
+        return {"found": True, "last_seen": int(answer[1]), "percent": int(answer[2])}
+
+
+    def fetch(request):
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                return response.status, json.load(response)
+        except urllib.error.HTTPError as e:
+            return e.code, None
+
+
+    def virustotal(sha):
+        status, data = fetch(urllib.request.Request(
+            f"https://www.virustotal.com/api/v3/files/{sha}", headers={"x-apikey": VT_KEY}))
+        if status == 404:
+            return {"found": False}
+        if status == 429:
+            return None
+        if status != 200:
+            raise RuntimeError(f"VirusTotal: HTTP {status}")
+        attributes = data["data"]["attributes"]
+        stats = attributes.get("last_analysis_stats", {})
+        label = attributes.get("popular_threat_classification", {}).get("suggested_threat_label")
+        return {"found": True, "malicious": stats.get("malicious", 0), "label": label}
+
+
+    def flagged(verdict):
+        cy, vt = verdict.get("cymru") or {}, verdict.get("vt") or {}
+        return cy.get("percent", 0) >= CYMRU_THRESHOLD or vt.get("malicious", 0) >= VT_THRESHOLD
+
+
+    def report(verdicts, paths):
+        """Prints every known-malware hash with its files and a summary; returns how many."""
+        bad = [sha for sha, v in verdicts.items() if flagged(v)]
+        for sha in bad:
+            v = verdicts[sha]
+            print(f"KNOWN MALWARE {sha} cymru={v.get('cymru')} vt={v.get('vt')}")
+            for path in paths[sha]:
+                print(f"  {path}")
+        unknown = sum(1 for v in verdicts.values()
+                      if not (v.get("cymru") or {}).get("found") and not (v.get("vt") or {}).get("found"))
+        vt_pending = sum(1 for v in verdicts.values() if VT_KEY and "vt" not in v)
+        print(f"{len(paths)} executables: {len(bad)} known malware, {unknown} known to neither, "
+              f"{vt_pending} not yet looked up at VirusTotal.")
+        return len(bad)
+  scan-inbound.sh: |
+    #!/bin/sh
+    # Usage: scan-inbound.sh <client config> <media root>. Audits AUDIT_DIRS for BLOCKED_EXTENSIONS,
+    # then scan.sh over SCAN_ONLY; both always run, and the worse exit status wins.
+    config=$1
+    root=$2
+
+    set --
+    for ext in $BLOCKED_EXTENSIONS; do
+      [ $# -gt 0 ] && set -- "$@" -o
+      set -- "$@" -iname "*.$ext"
+    done
+
+    audit_paths=""
+    for dir in $AUDIT_DIRS; do
+      audit_paths="$audit_paths $root/$dir"
+    done
+
+    audit=0
+    # shellcheck disable=SC2086 # directory names from the generator, no spaces
+    if ! blocked=$(find $audit_paths -type f \( "$@" \) -print); then
+      echo "The extension audit could not read $audit_paths."
+      audit=2
+    elif [ -n "$blocked" ]; then
+      echo "Files with an extension the downloaders refuse:"
+      echo "$blocked"
+      audit=1
+    else
+      echo "No file with a blocked extension under$audit_paths."
+    fi
+
+    sh "$(dirname "$0")/scan.sh" "$config" "$root"
+    scan=$?
+
+    [ "$scan" -gt "$audit" ] && exit "$scan"
+    exit "$audit"
   scan.sh: |
     #!/bin/sh
     # Usage: scan.sh <client config> <share root> [top-level directory to skip]...
@@ -119,6 +355,13 @@ data:
       for excluded in "$@"; do
         [ "$dir" = "$root/$excluded" ] && skip=1
       done
+      # SCAN_ONLY: the top-level directories to scan, space-separated; the rest are skipped.
+      if [ -n "${SCAN_ONLY:-}" ]; then
+        case " $SCAN_ONLY " in
+          *" ${dir##*/} "*) ;;
+          *) skip=1 ;;
+        esac
+      fi
       if [ -n "$skip" ]; then
         echo "Skipping $dir"
       else

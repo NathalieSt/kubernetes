@@ -44,6 +44,7 @@ spec:
   - name: flux-rbac
   - name: jellyfin
   - name: main-pg
+  - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
   - name: media-dns
@@ -159,6 +160,7 @@ spec:
   - name: flux-rbac
   - name: jellyfin
   - name: main-pg
+  - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
   - name: media-dns
@@ -229,6 +231,7 @@ spec:
   - name: flux-rbac
   - name: jellyfin
   - name: main-pg
+  - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
   - name: media-dns
@@ -277,6 +280,7 @@ spec:
   - name: flux-rbac
   - name: jellyfin
   - name: main-pg
+  - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
   - name: media-dns
@@ -323,6 +327,7 @@ spec:
   - name: flux-rbac
   - name: jellyfin
   - name: main-pg
+  - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
   - name: media-dns
@@ -348,6 +353,7 @@ spec:
   - name: flux-rbac
   - name: jellyfin
   - name: main-pg
+  - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
   - name: media-dns

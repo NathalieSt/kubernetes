@@ -142,12 +142,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: paperless-db-secret
         - name: PAPERLESS_DBPASS
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: paperless-db-secret
         - name: PAPERLESS_OCR_LANGUAGE
           value: deu+eng
         - name: PAPERLESS_APPS

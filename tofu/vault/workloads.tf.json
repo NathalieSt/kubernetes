@@ -5,17 +5,25 @@
         "name": "anki-sync",
         "policy": "path \"kvv2/data/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "audiomuse-ai": {
+        "name": "audiomuse-ai",
+        "policy": "path \"kvv2/data/jellyfin\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/jellyfin\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "authelia": {
         "name": "authelia",
-        "policy": "path \"kvv2/data/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/secrets\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/oidc-clients\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "backup-dashboard": {
         "name": "backup-dashboard",
         "policy": "path \"kvv2/data/backup-dashboard/basic-auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/backup-dashboard/basic-auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/backup-dashboard/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/backup-dashboard/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "bazarr": {
+        "name": "bazarr",
+        "policy": "path \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "clamav": {
         "name": "clamav",
-        "policy": "path \"kvv2/data/clamav/forgejo-packages\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/clamav/forgejo-packages\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/clamav/forgejo-packages\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/clamav/forgejo-packages\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/clamav/hash-lookup\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/clamav/hash-lookup\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "code-server": {
         "name": "code-server",
@@ -31,7 +39,7 @@
       },
       "glitchtip": {
         "name": "glitchtip",
-        "policy": "path \"kvv2/data/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "gluetun-media": {
         "name": "gluetun-media",
@@ -43,7 +51,7 @@
       },
       "healthchecks": {
         "name": "healthchecks",
-        "policy": "path \"kvv2/data/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/secret\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "heartbeats": {
         "name": "heartbeats",
@@ -53,13 +61,21 @@
         "name": "kavita",
         "policy": "path \"kvv2/data/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "lidarr": {
+        "name": "lidarr",
+        "policy": "path \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "limes": {
         "name": "limes",
-        "policy": "path \"kvv2/data/limes\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/limes\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "mail": {
         "name": "mail",
         "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "main-pg": {
+        "name": "main-pg",
+        "policy": "path \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "music-library-builder": {
         "name": "music-library-builder",
@@ -71,27 +87,43 @@
       },
       "ntfy": {
         "name": "ntfy",
-        "policy": "path \"kvv2/data/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "paperless": {
         "name": "paperless",
-        "policy": "path \"kvv2/data/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/app\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "prowlarr": {
+        "name": "prowlarr",
+        "policy": "path \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "psono-server": {
         "name": "psono-server",
-        "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "qbittorrent": {
         "name": "qbittorrent",
         "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "radarr": {
+        "name": "radarr",
+        "policy": "path \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "radicale": {
         "name": "radicale",
         "policy": "path \"kvv2/data/radicale/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radicale/users\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "seerr": {
+        "name": "seerr",
+        "policy": "path \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "sonarr": {
+        "name": "sonarr",
+        "policy": "path \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "tandoor": {
         "name": "tandoor",
-        "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "trilium": {
         "name": "trilium",
@@ -103,7 +135,7 @@
       },
       "zyme": {
         "name": "zyme",
-        "policy": "path \"kvv2/data/zyme\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/zyme\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n"
       }
     },
     "vault_kubernetes_auth_backend_role": {
@@ -119,6 +151,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.anki-sync.name}"
+        ],
+        "token_ttl": 600
+      },
+      "audiomuse-ai": {
+        "backend": "kubernetes",
+        "role_name": "audiomuse-ai",
+        "bound_service_account_names": [
+          "audiomuse-ai-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.audiomuse-ai.name}"
         ],
         "token_ttl": 600
       },
@@ -149,6 +196,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.backup-dashboard.name}"
+        ],
+        "token_ttl": 600
+      },
+      "bazarr": {
+        "backend": "kubernetes",
+        "role_name": "bazarr",
+        "bound_service_account_names": [
+          "bazarr-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.bazarr.name}"
         ],
         "token_ttl": 600
       },
@@ -302,6 +364,21 @@
         ],
         "token_ttl": 600
       },
+      "lidarr": {
+        "backend": "kubernetes",
+        "role_name": "lidarr",
+        "bound_service_account_names": [
+          "lidarr-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.lidarr.name}"
+        ],
+        "token_ttl": 600
+      },
       "limes": {
         "backend": "kubernetes",
         "role_name": "limes",
@@ -329,6 +406,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.mail.name}"
+        ],
+        "token_ttl": 600
+      },
+      "main-pg": {
+        "backend": "kubernetes",
+        "role_name": "main-pg",
+        "bound_service_account_names": [
+          "main-pg-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "postgres"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.main-pg.name}"
         ],
         "token_ttl": 600
       },
@@ -392,6 +484,21 @@
         ],
         "token_ttl": 600
       },
+      "prowlarr": {
+        "backend": "kubernetes",
+        "role_name": "prowlarr",
+        "bound_service_account_names": [
+          "prowlarr-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.prowlarr.name}"
+        ],
+        "token_ttl": 600
+      },
       "psono-server": {
         "backend": "kubernetes",
         "role_name": "psono-server",
@@ -422,6 +529,21 @@
         ],
         "token_ttl": 600
       },
+      "radarr": {
+        "backend": "kubernetes",
+        "role_name": "radarr",
+        "bound_service_account_names": [
+          "radarr-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.radarr.name}"
+        ],
+        "token_ttl": 600
+      },
       "radicale": {
         "backend": "kubernetes",
         "role_name": "radicale",
@@ -434,6 +556,36 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.radicale.name}"
+        ],
+        "token_ttl": 600
+      },
+      "seerr": {
+        "backend": "kubernetes",
+        "role_name": "seerr",
+        "bound_service_account_names": [
+          "seerr-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.seerr.name}"
+        ],
+        "token_ttl": 600
+      },
+      "sonarr": {
+        "backend": "kubernetes",
+        "role_name": "sonarr",
+        "bound_service_account_names": [
+          "sonarr-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "jellyfin"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.sonarr.name}"
         ],
         "token_ttl": 600
       },
@@ -507,6 +659,24 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.audiomuse-ai_audiomuseai_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.audiomuse-ai_jellyfin",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.authelia_authelia_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.authelia_authelia_oidc-clients",
       "lifecycle": {
         "destroy": false
@@ -537,7 +707,19 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.bazarr_bazarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.clamav_clamav_forgejo-packages",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.clamav_clamav_hash-lookup",
       "lifecycle": {
         "destroy": false
       }
@@ -567,6 +749,12 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.glitchtip_glitchtip_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.glitchtip_glitchtip_oidc",
       "lifecycle": {
         "destroy": false
@@ -586,6 +774,12 @@
     },
     {
       "from": "vault_kv_secret_v2.gluetun-proxy_vpn",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.healthchecks_healthchecks_db",
       "lifecycle": {
         "destroy": false
       }
@@ -615,7 +809,19 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.lidarr_lidarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.limes_limes",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.limes_limes_db",
       "lifecycle": {
         "destroy": false
       }
@@ -645,6 +851,102 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.main-pg_audiomuseai_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_authelia_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_bazarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_glitchtip_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_healthchecks_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_lidarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_limes_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_ntfy_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_paperless_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_prowlarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_psono_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_radarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_seerr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_sonarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_tandoor_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_zyme_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.music-library-builder_music-library-builder",
       "lifecycle": {
         "destroy": false
@@ -663,7 +965,19 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.ntfy_ntfy_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.paperless_paperless_app",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.paperless_paperless_db",
       "lifecycle": {
         "destroy": false
       }
@@ -675,7 +989,19 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.prowlarr_prowlarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.psono-server_psono",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.psono-server_psono_db",
       "lifecycle": {
         "destroy": false
       }
@@ -687,7 +1013,31 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.radarr_radarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.radicale_radicale_users",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.seerr_seerr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.sonarr_sonarr_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.tandoor_tandoor_db",
       "lifecycle": {
         "destroy": false
       }
@@ -724,6 +1074,12 @@
     },
     {
       "from": "vault_kv_secret_v2.zyme_zyme",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.zyme_zyme_db",
       "lifecycle": {
         "destroy": false
       }

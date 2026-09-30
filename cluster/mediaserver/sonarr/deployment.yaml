@@ -55,12 +55,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: sonarr-db-secret
         - name: SONARR__POSTGRES__PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: sonarr-db-secret
         - name: SONARR__POSTGRES__MAINDB
           value: sonarr-main
         - name: SONARR__POSTGRES__LOGDB

@@ -1,0 +1,89 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: clamav-hash-lookup
+  name: clamav-hash-lookup
+spec:
+  schedule: 30 1 * * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: clamav-hash-lookup
+        spec:
+          initContainers:
+          - command:
+            - chown
+            - 1000:1000
+            - /cache
+            image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+            name: cache-owner
+            volumeMounts:
+            - mountPath: /cache
+              name: cache
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - command:
+            - python3
+            - /etc/clamav-client/hash-lookup.py
+            - /cache/hashes.json
+            - /scan/nas/jellyfin/jellyfin-pvc/games
+            - /scan/nas/jellyfin/jellyfin-pvc/games-inbox
+            image: python:3.14-alpine@sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df
+            name: clamav-hash-lookup
+            volumeMounts:
+            - mountPath: /etc/clamav-client
+              name: client-config-volume
+              readOnly: true
+            - mountPath: /scan/nas
+              name: nas-share-volume
+              readOnly: true
+            - mountPath: /cache
+              name: cache
+            env:
+            - name: TZ
+              value: Europe/Vienna
+            - name: HTTPS_PROXY
+              value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+            - name: VIRUSTOTAL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: virustotal
+                  name: clamav-hash-lookup-secret
+                  optional: true
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: client-config-volume
+            configMap:
+              name: clamav-client-config
+          - name: nas-share-volume
+            persistentVolumeClaim:
+              claimName: clamav-nas-pvc
+          - name: cache
+            persistentVolumeClaim:
+              claimName: clamav-hash-cache
+          restartPolicy: Never

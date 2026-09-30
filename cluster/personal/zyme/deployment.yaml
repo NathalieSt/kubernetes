@@ -40,13 +40,13 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres-creds-secret
+              name: zyme-db-secret
               optional: false
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres-creds-secret
+              name: zyme-db-secret
               optional: false
         - name: ZYME_PUBLIC_URL
           value: https://zyme.netbird.nathalie-stiefsohn.eu
