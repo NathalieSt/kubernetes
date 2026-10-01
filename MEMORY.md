@@ -13,17 +13,17 @@ under `cluster/` is **generated output**, not source.
 ## The one rule that matters
 
 **Do not hand-edit generated manifests.** They are produced by the
-`Nathi/kubernetes-generator` repo and overwritten wholesale on its next CI run.
+`my-homelab/kubernetes-generator` repo and overwritten wholesale on its next CI run.
 A fix applied here disappears the moment anything upstream changes.
 
 To change what the cluster runs, change the generator:
 
 | Want to change | Edit, in kubernetes-generator |
 | --- | --- |
-| An image or chart version | `versions/{apps,infrastructure,monitoring}.json` |
-| A workload's spec | `internal/generators/<category>/<name>/manifests.go` |
-| Namespace, exposure, scaling, dependencies | that generator's `main.go` |
-| The Flux Kustomization set | it is emitted from `GeneratorMeta.Flux`; edit the generator |
+| An image or chart version | `versions/<category>.json` — or nothing, for images built in the homelab: their `pin` job writes it |
+| A workload's spec | `src/generators/<category>/<name>/manifests/<Name><Component>.res` |
+| Namespace, exposure, scaling, dependencies | that generator's `<Name>Meta.res` |
+| The Flux Kustomization set | it is emitted from each meta's `flux`; edit the generator |
 
 Then push — CI regenerates and opens a PR here.
 
@@ -33,12 +33,10 @@ follow.
 
 ## What is *not* generated
 
-One exception, and it is the only thing here it is legitimate to edit directly:
-
-- **`cluster/apps/technitium/`** — hand-written manifests for the DNS server,
-  not yet migrated to a generator. It has no entry in the generated
-  `cluster/flux/apps.yaml`, so it is not reconciled by the generated
-  Kustomization set.
+Nothing under `cluster/` is, any more. The last hand-written directory,
+`cluster/apps/technitium/`, was never reconciled and went when CI started
+regenerating `cluster/` from an empty tree (September 2026). Only tracked
+non-YAML files such as `cluster/flux/README.md` survive that wipe.
 
 ### `cluster/flux/flux-system/` is gone — it is its own repo now
 
@@ -90,13 +88,13 @@ the generator's CI.
 ```
 cluster/
   flux/
-    apps.yaml            generated — one Kustomization per app generator
-    infrastructure.yaml  generated
-    monitoring.yaml      generated
+    <category>.yaml      generated — one Kustomization per generator in it
                          (flux-system/ used to be here — it is in the
                           my-homelab/flux-core repo now, see above)
-  apps/ infrastructure/ monitoring/
-                         one directory per generator, matching its Flux `path`
+  <category>/<name>/     one directory per generator, matching its Flux `path`
+
+  categories: platform, development, personal, web, study, infrastructure,
+  monitoring, mediaserver — the generator's source tree mirrors this one
 ```
 
 Each leaf directory holds its generator's output plus a `kustomization.yaml`
@@ -113,9 +111,9 @@ listing the files.
   flux-core, with its own deploy key (`manifests-git-auth`) separate from the
   bootstrap one, because `flux bootstrap` rotates that one.
 - `Kustomization` `manifests` — path `./cluster/flux` **here**, 10m interval,
-  prune on, impersonating `flux-privileged`. This is what applies the 61
-  per-generator Kustomizations. `wait` is left false deliberately: waiting would
-  block on the health of all 61.
+  prune on, impersonating `flux-privileged`. This is what applies the
+  per-generator Kustomizations (85 on 2026-09-30). `wait` is left false
+  deliberately: waiting would block on the health of every one of them.
 - Per-generator Kustomizations — 24h interval, `prune: true`, `wait: true`,
   `timeout: 10m`, with a `dependsOn` graph. `flux-notifications` is the one
   exception: it uses `wait: false` with explicit `healthChecks`, because part
@@ -215,10 +213,10 @@ Two things to check, because both have been wrong:
    The consequence to hold in mind is the lag: a merge is not immediately in
    the cluster's source, so `git log origin/main` on Forgejo can be ahead of
    what Flux has seen.
-2. **Freshness.** As of the last review this checkout had no `garage`, `k8up`
-   or `backup-dashboard` anywhere under `cluster/`, although all three exist as
-   generators upstream. `git fetch && git log --oneline HEAD..origin/main`
-   before assuming the tree is current.
+2. **Freshness.** A local checkout falls behind fast: CI merges a PR here for
+   every image pin, and on 2026-09-30 this one was 14 commits behind.
+   `git fetch && git log --oneline HEAD..origin/main` before assuming the tree
+   is current.
 
 ## Check any new `.gitignore` pattern against the generated tree
 
