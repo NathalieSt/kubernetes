@@ -15,7 +15,7 @@ spec:
       k8up.io/file-extension: .sql
   superuserSecret:
     name: postgres-creds-secret
-  enableSuperuserAccess: true
+  enableSuperuserAccess: false
   probes:
     readiness:
       initialDelaySeconds: 30
