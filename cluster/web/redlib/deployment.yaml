@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: redlib
-    app.kubernetes.io/version: af3839d
+    app.kubernetes.io/version: "7746725"
   name: redlib
 spec:
   replicas: 1
@@ -15,13 +15,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: redlib
-        app.kubernetes.io/version: af3839d
+        app.kubernetes.io/version: "7746725"
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib:af3839d@sha256:95bd0e088988c96eaa5720cac72ac80b3840ad5cac1cdfd049dab910a6ada4a4
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib:7746725@sha256:95f080faa8b23c62c95bb0a5224f928a1ecb3e16d553785fc57459262881e961
         name: redlib
         ports:
         - containerPort: 8080

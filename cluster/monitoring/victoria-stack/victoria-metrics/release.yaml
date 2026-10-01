@@ -1529,34 +1529,6 @@ spec:
               replacement: main-pg
             scrape_interval: 5m
             scrape_timeout: 4m
-          - job_name: mariadb
-            metrics_path: /metrics
-            scheme: http
-            kubernetes_sd_configs:
-            - role: pod
-              namespaces:
-                names:
-                - mariadb
-            relabel_configs:
-            - source_labels:
-              - __meta_kubernetes_pod_label_app_kubernetes_io_name
-              regex: mariadb
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_container_port_number
-              regex: "9104"
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_node_name
-              target_label: node
-            - source_labels:
-              - __meta_kubernetes_pod_name
-              target_label: pod
-            - source_labels:
-              - __meta_kubernetes_namespace
-              target_label: namespace
-            - target_label: job
-              replacement: mariadb
           - job_name: netbird-operator
             metrics_path: /metrics
             scheme: http
