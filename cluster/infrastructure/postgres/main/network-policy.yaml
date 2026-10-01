@@ -17,7 +17,6 @@ spec:
           - psono
           - jellyfin
           - cnpg-system
-          - openclarity
           - authelia
           - healthchecks
           - ntfy
@@ -36,7 +35,6 @@ spec:
           - audiomuse-ai-nvidia-worker
           - audiomuse-ai-flask
           - cloudnative-pg
-          - openclarity
           - authelia
           - healthchecks
           - ntfy

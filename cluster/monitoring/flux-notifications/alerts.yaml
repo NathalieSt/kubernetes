@@ -212,9 +212,6 @@ spec:
     name: main-pg
     namespace: flux-system
   - kind: Kustomization
-    name: mariadb
-    namespace: flux-system
-  - kind: Kustomization
     name: media-dns
     namespace: flux-system
   - kind: Kustomization
