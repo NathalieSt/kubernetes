@@ -141,6 +141,8 @@ spec:
   - name: flux-rbac
   - name: csi-driver-nfs
   - name: reflector
+  - name: garage
+  - name: k8up
   serviceAccountName: flux-forgejo-pg
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
