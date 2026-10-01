@@ -1,0 +1,42 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: orrery-recording
+spec:
+  groups:
+  - name: orrery-recording
+    interval: 30s
+    rules:
+    - record: verdict:hubble_flows_processed:rate2m
+      expr: sum by (verdict) (rate(hubble_flows_processed_total[2m]))
+    - record: source_namespace_source:hubble_flows_processed:rate2m
+      expr: sum by (source_namespace, source) (rate(hubble_flows_processed_total[2m]))
+    - record: le_verb:apiserver_request_sli_duration_seconds_bucket:rate2m
+      expr: sum by (le, verb) (rate(apiserver_request_sli_duration_seconds_bucket{verb!~"WATCH|CONNECT"}[2m]))
+    - record: verb:apiserver_request:rate2m
+      expr: sum by (verb) (rate(apiserver_request_total[2m]))
+    - record: code:apiserver_request:rate2m
+      expr: sum by (code) (rate(apiserver_request_total[2m]))
+    - record: job:http_requests_received:rate2m
+      expr: sum by (job) (rate(http_requests_received_total{job="jellyfin"}[2m]))
+    - record: node_mode:node_cpu_seconds:rate2m
+      expr: sum by (node, mode) (rate(node_cpu_seconds_total{mode!="idle"}[2m]))
+    - record: namespace_pod:container_cpu_usage_seconds:rate2m
+      expr: sum by (namespace, pod) (rate(container_cpu_usage_seconds_total{container!=""}[2m]))
+    - record: namespace:container_cpu_usage_seconds:rate2m
+      expr: sum by (namespace) (rate(container_cpu_usage_seconds_total{container!=""}[2m]))
+    - record: node:container_cpu_usage_seconds:rate2m
+      expr: sum by (node) (rate(container_cpu_usage_seconds_total{container!=""}[2m]))
+    - record: namespace_pod:container_memory_working_set_bytes:sum
+      expr: sum by (namespace, pod) (container_memory_working_set_bytes{container!=""})
+    - record: namespace:container_memory_working_set_bytes:sum
+      expr: sum by (namespace) (container_memory_working_set_bytes{container!=""})
+    - record: node:container_memory_working_set_bytes:sum
+      expr: sum by (node) (container_memory_working_set_bytes{container!=""})
+    - record: namespace_pod:container_network_receive_bytes:rate2m
+      expr: sum by (namespace, pod) (rate(container_network_receive_bytes_total[2m]))
+    - record: namespace_pod:container_fs_writes_bytes:rate2m
+      expr: sum by (namespace, pod) (rate(container_fs_writes_bytes_total[2m]))
+    - record: namespace_pod:container_cpu_cfs_throttled_periods:rate2m
+      expr: sum by (namespace, pod) (rate(container_cpu_cfs_throttled_periods_total[2m]))
