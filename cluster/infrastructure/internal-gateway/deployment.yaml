@@ -71,6 +71,8 @@ spec:
         - --metrics.prometheus.addEntryPointsLabels=true
         - --metrics.prometheus.addRoutersLabels=true
         - --metrics.prometheus.addServicesLabels=true
+        - --entrypoints.fleet-salt-publish.address=:4505
+        - --entrypoints.fleet-salt-return.address=:4506
         - --entrypoints.forgejo-ssh.address=:2222
         - --entrypoints.neko-turn.address=:3478
         - --entrypoints.rimworld-together-game.address=:25555
@@ -83,6 +85,10 @@ spec:
           name: websecure
         - containerPort: 8082
           name: metrics
+        - containerPort: 4505
+          name: tcp-4505
+        - containerPort: 4506
+          name: tcp-4506
         - containerPort: 2222
           name: tcp-2222
         - containerPort: 3478

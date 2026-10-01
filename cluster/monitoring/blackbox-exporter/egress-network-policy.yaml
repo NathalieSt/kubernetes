@@ -49,6 +49,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: fleet
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: forgejo
   - to:
     - namespaceSelector:

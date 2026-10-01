@@ -535,6 +535,12 @@ data:
           description: "K8up backups: browse, restore, trigger"
           namespace: backup-dashboard
           app: backup-dashboard
+      - fleet:
+          href: https://fleet.netbird.nathalie-stiefsohn.eu
+          icon: mdi-server-network
+          description: "Salt for the hosts: packages, NetBird, health"
+          namespace: fleet
+          app: fleet
       - headlamp:
           href: https://headlamp.netbird.nathalie-stiefsohn.eu
           icon: headlamp.png

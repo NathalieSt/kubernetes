@@ -78,6 +78,13 @@ data:
           service: daybook
           middlewares:
           - authelia
+        fleet:
+          rule: Host(`fleet.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: fleet
+          middlewares:
+          - authelia
         forgejo:
           rule: Host(`code.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -350,6 +357,10 @@ data:
           loadBalancer:
             servers:
             - url: http://daybook.daybook.svc.cluster.local:8080
+        fleet:
+          loadBalancer:
+            servers:
+            - url: http://fleet.fleet.svc.cluster.local:8080
         forgejo:
           loadBalancer:
             servers:
@@ -501,6 +512,16 @@ data:
   tcp.yaml: |
     tcp:
       routers:
+        fleet-salt-publish:
+          rule: HostSNI(`*`)
+          entryPoints:
+          - fleet-salt-publish
+          service: fleet-salt-publish
+        fleet-salt-return:
+          rule: HostSNI(`*`)
+          entryPoints:
+          - fleet-salt-return
+          service: fleet-salt-return
         forgejo-ssh:
           rule: HostSNI(`*`)
           entryPoints:
@@ -517,6 +538,14 @@ data:
           - rimworld-together-game
           service: rimworld-together-game
       services:
+        fleet-salt-publish:
+          loadBalancer:
+            servers:
+            - address: fleet.fleet.svc.cluster.local:4505
+        fleet-salt-return:
+          loadBalancer:
+            servers:
+            - address: fleet.fleet.svc.cluster.local:4506
         forgejo-ssh:
           loadBalancer:
             servers:

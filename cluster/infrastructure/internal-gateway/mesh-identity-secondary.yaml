@@ -27,6 +27,7 @@ spec:
   extraDNSLabels:
   - anki
   - bazarr
+  - fleet
   - gameyfin
   - lidarr
   - paperless

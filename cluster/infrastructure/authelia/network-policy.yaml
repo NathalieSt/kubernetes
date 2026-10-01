@@ -33,6 +33,7 @@ spec:
           operator: In
           values:
           - backup-dashboard
+          - fleet
           - forgejo
           - gameyfin
           - glitchtip

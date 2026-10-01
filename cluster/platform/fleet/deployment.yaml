@@ -1,0 +1,214 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: fleet
+    app.kubernetes.io/version: 0a117da
+  name: fleet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fleet
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        checksum/config: 3ce5533a26a00549
+      labels:
+        app.kubernetes.io/name: fleet
+        app.kubernetes.io/version: 0a117da
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown 1000:1000 /var/lib/fleet /run/salt && umask 077 && printf '%s:%s\n' "$SALT_USER" "$SALT_PASSWORD" > /run/salt-auth/users && chown 1000:1000 /run/salt-auth/users
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: setup
+        volumeMounts:
+        - mountPath: /var/lib/fleet
+          name: fleet-data-pvc
+        - mountPath: /run/salt
+          name: salt-run
+        - mountPath: /run/salt-auth
+          name: salt-auth
+        env:
+        - name: SALT_USER
+          value: fleetui
+        - name: SALT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: salt-password
+              name: fleet-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:0a117da@sha256:ab1cc4a50874b761c19148ee1307bcb36835cf81210171afa1ac32d26b3bf344
+        name: fleet
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /var/lib/fleet
+          name: fleet-data-pvc
+        - mountPath: /tmp
+          name: tmp
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: NODE_ENV
+          value: production
+        - name: SALT_API_URL
+          value: http://127.0.0.1:8000
+        - name: SALT_USERNAME
+          value: fleetui
+        - name: SALT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: salt-password
+              name: fleet-secret
+        - name: SALT_EAUTH
+          value: file
+        - name: OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: OIDC_CLIENT_ID
+          value: fleet
+        - name: FLEET_ADMIN_GROUP
+          value: admins
+        - name: FLEET_ALLOW_DESTRUCTIVE
+          value: "1"
+        - name: FLEET_DATA_DIR
+          value: /var/lib/fleet/audit
+        - name: FLEET_SCRIPTS_DIR
+          value: /var/lib/fleet/scripts
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 25m
+            memory: 96Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - args:
+        - -c
+        - /etc/salt
+        - -l
+        - info
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:unbuilt
+        name: salt-master
+        ports:
+        - containerPort: 4505
+          name: salt-publish
+        - containerPort: 4506
+          name: salt-return
+        volumeMounts:
+        - mountPath: /etc/salt
+          name: fleet-salt-config
+          readOnly: true
+        - mountPath: /var/lib/fleet
+          name: fleet-data-pvc
+        - mountPath: /run/salt
+          name: salt-run
+        - mountPath: /run/salt-auth
+          name: salt-auth
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /srv/salt/states
+          name: fleet-salt-states
+          readOnly: true
+        - mountPath: /srv/salt/pillar
+          name: fleet-salt-pillar
+          readOnly: true
+        resources:
+          requests:
+            cpu: 50m
+            memory: 320Mi
+          limits:
+            cpu: 1000m
+            memory: 768Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - args:
+        - -c
+        - /etc/salt
+        - -l
+        - info
+        command:
+        - salt-api
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:unbuilt
+        name: salt-api
+        volumeMounts:
+        - mountPath: /etc/salt
+          name: fleet-salt-config
+          readOnly: true
+        - mountPath: /var/lib/fleet
+          name: fleet-data-pvc
+        - mountPath: /run/salt
+          name: salt-run
+        - mountPath: /run/salt-auth
+          name: salt-auth
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: fleet-data-pvc
+        persistentVolumeClaim:
+          claimName: fleet-data-pvc
+      - name: fleet-salt-config
+        configMap:
+          name: fleet-salt-config
+      - name: fleet-salt-states
+        configMap:
+          name: fleet-salt-states
+      - name: fleet-salt-pillar
+        configMap:
+          name: fleet-salt-pillar
+      - name: salt-run
+        emptyDir: {}
+      - name: salt-auth
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

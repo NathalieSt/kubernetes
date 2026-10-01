@@ -19,6 +19,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | --- | --- | --- |
 | `backup-dashboard` | `backup-dashboard` | `kvv2/backup-dashboard/basic-auth`, `kvv2/backup-dashboard/oidc` |
 | `clamav` | `clamav` | `kvv2/clamav/forgejo-packages`, `kvv2/clamav/hash-lookup` |
+| `fleet` | `fleet` | `kvv2/fleet` |
 | `code-server` | `code-server` | `kvv2/code-server`, `kvv2/code-server-git` |
 | `neko` | `neko` | `kvv2/neko` |
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
