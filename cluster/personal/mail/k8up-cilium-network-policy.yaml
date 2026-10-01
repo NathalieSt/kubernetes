@@ -1,0 +1,19 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: mail-k8up-apiserver
+spec:
+  endpointSelector:
+    matchLabels:
+      k8upjob: "true"
+  description: K8up's pods to the API server, for their Snapshot objects.
+  egress:
+  - toEntities:
+    - kube-apiserver
+    toPorts:
+    - ports:
+      - port: "6443"
+        protocol: TCP
+      - port: "443"
+        protocol: TCP

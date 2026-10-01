@@ -8,6 +8,11 @@ spec:
   storage:
     storageClass: nfs-local
     size: 15Gi
+  inheritedMetadata:
+    annotations:
+      k8up.io/backup: "false"
+      k8up.io/backupcommand: pg_dumpall --clean --if-exists
+      k8up.io/file-extension: .sql
   superuserSecret:
     name: forgejo-pg-creds-secret
   enableSuperuserAccess: true

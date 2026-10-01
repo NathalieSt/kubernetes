@@ -15,4 +15,5 @@ resources:
 - roundcube-config.yaml
 - network-policy.yaml
 - k8up-schedule.yaml
+- k8up-cilium-network-policy.yaml
 - pennant-skin-configmap.yaml
