@@ -875,6 +875,12 @@ spec:
                 probe_namespace: daybook
                 scale_to_zero: "false"
             - targets:
+              - http://fleet.fleet.svc.cluster.local:8080/
+              labels:
+                probe_name: fleet
+                probe_namespace: fleet
+                scale_to_zero: "false"
+            - targets:
               - http://forgejo-http.forgejo.svc.cluster.local:3000/
               labels:
                 probe_name: forgejo

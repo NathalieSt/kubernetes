@@ -1,0 +1,127 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fleet-salt-config
+data:
+  master: |
+    # The Salt master and salt-api, beside Fleet in one pod. Paths are set explicitly: several
+    # defaults sit under /var/cache and /var/log, which the non-root image cannot write.
+    user: salt
+    interface: 0.0.0.0
+    pki_dir: /var/lib/fleet/salt/pki
+    cachedir: /var/lib/fleet/salt/cache
+    sqlite_queue_dir: /var/lib/fleet/salt/cache/queues
+    extension_modules: /var/lib/fleet/salt/cache/extmods
+    sock_dir: /run/salt/master
+    pidfile: /run/salt/salt-master.pid
+    log_file: /dev/stdout
+    key_logfile: /dev/stdout
+    api_pidfile: /run/salt/salt-api.pid
+    api_logfile: /dev/stdout
+
+    # Five by default, ~440 MB idle; two serve a handful of hosts.
+    worker_threads: 2
+
+    # Keys are accepted one at a time, in Fleet's Keys tab.
+    auto_accept: False
+    open_mode: False
+
+    file_roots:
+      base: [/srv/salt/states]
+    pillar_roots:
+      base: [/srv/salt/pillar]
+
+    # On loopback only: the BFF is the one client, in the same pod. Salt 3006+ enables no
+    # netapi client by default; `local`, the blocking one, stays off.
+    netapi_enable_clients: [local_async, runner, wheel]
+    rest_cherrypy:
+      host: 127.0.0.1
+      port: 8000
+      disable_ssl: True
+
+    # The account Fleet signs in as in OIDC mode; FleetMeta.saltUser. Keep the functions in
+    # step with fleet-management-ui's bff/src/allowlist: where they disagree, this wins.
+    external_auth:
+      file:
+        ^filename: /run/salt-auth/users
+        fleetui:
+          - "*":
+              - test.ping
+              - test.version
+              - grains.items
+              - grains.item
+              - status.uptime
+              - status.loadavg
+              - status.meminfo
+              - disk.usage
+              - network.interfaces
+              - pkg.list_upgrades
+              - pkg.version
+              - service.status
+              - state.apply
+              - service.restart
+              - pkg.upgrade
+              - system.reboot
+          - "@wheel":
+              - key.list_all
+              - key.accept
+              - key.reject
+              - key.delete
+          - "@runner":
+              - jobs.list_jobs
+              - jobs.list_job
+              - cache.grains
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fleet-salt-states
+data:
+  netbird.sls: |
+    {#- The NetBird client at the version pinned in pillar/netbird.sls. Run from Fleet as
+        `state.apply netbird`: one canary first, the gateway's own NetBird never. #}
+    {%- set version = salt['pillar.get']('netbird:version') %}
+    {%- if grains['os_family'] == 'Debian' %}
+
+    {#- The same file, keyring and line as NetBird's install.sh writes, so a host installed
+        that way is adopted rather than given a second source apt refuses. #}
+    netbird-repo:
+      pkgrepo.managed:
+        - name: deb [signed-by=/usr/share/keyrings/netbird-archive-keyring.gpg] https://pkgs.netbird.io/debian stable main
+        - file: /etc/apt/sources.list.d/netbird.list
+        - key_url: https://pkgs.netbird.io/debian/public.key
+        - signedby: /usr/share/keyrings/netbird-archive-keyring.gpg
+        - aptkey: False
+
+    {#- The package's postinst stops and restarts the daemon itself, so the mesh drops for a
+        moment here; the minion keeps running and reports once it is back. #}
+    netbird:
+      pkg.installed:
+        - version: {{ version }}
+        - hold: False
+        - require:
+          - pkgrepo: netbird-repo
+
+    {%- else %}
+
+    netbird-unmanaged:
+      test.show_notification:
+        - text: NetBird on {{ grains['os'] }} is not managed by Salt; install {{ version }} by hand.
+
+    {%- endif %}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fleet-salt-pillar
+data:
+  netbird.sls: |
+    # The NetBird client every Debian host is brought to by `state.apply netbird`. Must exist
+    # for amd64 and arm64 in pkgs.netbird.io, and not be newer than the coordination server.
+    netbird:
+      version: 0.79.0
+  top.sls: |
+    base:
+      "*":
+        - netbird

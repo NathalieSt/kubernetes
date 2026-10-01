@@ -22,6 +22,9 @@ spec:
           kubernetes.io/metadata.name: daybook
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: fleet
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: forgejo
     - namespaceSelector:
         matchLabels:

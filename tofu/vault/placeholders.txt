@@ -13,6 +13,7 @@ clamav/forgejo-packages clamav token
 clamav/hash-lookup clamav virustotal
 code-server code-server password
 code-server-git code-server username email token
+fleet fleet salt-password
 flux-notifications flux-notifications token
 gameyfin/secrets gameyfin app-key
 glitchtip/secret glitchtip secret-key

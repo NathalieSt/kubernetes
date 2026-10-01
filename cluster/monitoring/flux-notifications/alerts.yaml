@@ -125,6 +125,9 @@ spec:
     name: flaresolverr
     namespace: flux-system
   - kind: Kustomization
+    name: fleet
+    namespace: flux-system
+  - kind: Kustomization
     name: flux-notifications
     namespace: flux-system
   - kind: Kustomization

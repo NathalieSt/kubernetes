@@ -29,6 +29,10 @@
         "name": "code-server",
         "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/code-server-git\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server-git\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "fleet": {
+        "name": "fleet",
+        "policy": "path \"kvv2/data/fleet\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/fleet\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "flux-notifications": {
         "name": "flux-notifications",
         "policy": "path \"kvv2/data/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/flux-notifications\" {\n  capabilities = [\"read\"]\n}\n"
@@ -241,6 +245,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.code-server.name}"
+        ],
+        "token_ttl": 600
+      },
+      "fleet": {
+        "backend": "kubernetes",
+        "role_name": "fleet",
+        "bound_service_account_names": [
+          "fleet-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "fleet"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.fleet.name}"
         ],
         "token_ttl": 600
       },
@@ -732,6 +751,12 @@
     },
     {
       "from": "vault_kv_secret_v2.code-server_code-server-git",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.fleet_fleet",
       "lifecycle": {
         "destroy": false
       }
