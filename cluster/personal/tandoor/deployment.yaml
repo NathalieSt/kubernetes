@@ -69,7 +69,7 @@ spec:
         - name: TANDOOR_PORT
           value: "8080"
         - name: ALLOWED_HOSTS
-          value: tandoor.netbird.nathalie-stiefsohn.eu
+          value: tandoor.netbird.nathalie-stiefsohn.eu,tandoor.tandoor.svc.cluster.local
         - name: CSRF_TRUSTED_ORIGINS
           value: https://tandoor.netbird.nathalie-stiefsohn.eu
         - name: DB_ENGINE

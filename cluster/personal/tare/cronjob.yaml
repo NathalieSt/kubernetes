@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: tare-crawl
-    app.kubernetes.io/version: 722af24
+    app.kubernetes.io/version: eba9cfd
   name: tare-crawl
 spec:
   schedule: 30 3 * * *
@@ -21,7 +21,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: tare-crawl
-            app.kubernetes.io/version: 722af24
+            app.kubernetes.io/version: eba9cfd
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -30,7 +30,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:722af24@sha256:0197511620205c71bec55cc48b0e3624e3c6b4447329c2ab3448877230e4564b
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:eba9cfd@sha256:2e40d6a206b9849f7b410d495522c8731d19019855750074adb12a0450fb5f4f
             name: tare-crawl
             env:
             - name: TZ
@@ -63,6 +63,14 @@ spec:
                   optional: true
             - name: TARE_PUBLIC_URL
               value: https://tare.netbird.nathalie-stiefsohn.eu
+            - name: TARE_TANDOOR_URL
+              value: http://tandoor.tandoor.svc.cluster.local:8080
+            - name: TARE_TANDOOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: tandoor-token
+                  name: tare-secret
+                  optional: true
             resources:
               requests:
                 cpu: 50m
@@ -89,7 +97,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: tare-crawl
-    app.kubernetes.io/version: 722af24
+    app.kubernetes.io/version: eba9cfd
   name: tare-crawl-dm
 spec:
   schedule: 0 1 * * 0
@@ -106,7 +114,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: tare-crawl
-            app.kubernetes.io/version: 722af24
+            app.kubernetes.io/version: eba9cfd
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -115,7 +123,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:722af24@sha256:0197511620205c71bec55cc48b0e3624e3c6b4447329c2ab3448877230e4564b
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:eba9cfd@sha256:2e40d6a206b9849f7b410d495522c8731d19019855750074adb12a0450fb5f4f
             name: tare-crawl
             env:
             - name: TZ
@@ -148,6 +156,14 @@ spec:
                   optional: true
             - name: TARE_PUBLIC_URL
               value: https://tare.netbird.nathalie-stiefsohn.eu
+            - name: TARE_TANDOOR_URL
+              value: http://tandoor.tandoor.svc.cluster.local:8080
+            - name: TARE_TANDOOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: tandoor-token
+                  name: tare-secret
+                  optional: true
             resources:
               requests:
                 cpu: 50m

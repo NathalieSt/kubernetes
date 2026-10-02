@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: tare
-    app.kubernetes.io/version: 722af24
+    app.kubernetes.io/version: eba9cfd
   name: tare
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: tare
-        app.kubernetes.io/version: 722af24
+        app.kubernetes.io/version: eba9cfd
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:722af24@sha256:0197511620205c71bec55cc48b0e3624e3c6b4447329c2ab3448877230e4564b
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:eba9cfd@sha256:2e40d6a206b9849f7b410d495522c8731d19019855750074adb12a0450fb5f4f
         name: tare
         ports:
         - containerPort: 8080
@@ -44,6 +44,14 @@ spec:
               name: tare-db-secret
         - name: WEB_ADDR
           value: :8080
+        - name: TARE_TANDOOR_URL
+          value: http://tandoor.tandoor.svc.cluster.local:8080
+        - name: TARE_TANDOOR_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: tandoor-token
+              name: tare-secret
+              optional: true
         resources:
           requests:
             cpu: 10m
