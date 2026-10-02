@@ -968,7 +968,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "0edcf20@sha256:75e19e256381078eeb38fcbf153d4d02837693464068c6a6045f3a3cb912429f",
+          "version": "b91de79@sha256:930032d9bd3d1ebd4563512da1d4819db50b528ca3853d90f7355af762aaeef0",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
