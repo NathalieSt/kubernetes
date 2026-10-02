@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: tare-crawl
-    app.kubernetes.io/version: 794c3bb
+    app.kubernetes.io/version: 78f790b
   name: tare-crawl
 spec:
   schedule: 30 3 * * *
@@ -21,7 +21,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: tare-crawl
-            app.kubernetes.io/version: 794c3bb
+            app.kubernetes.io/version: 78f790b
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -30,7 +30,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:794c3bb@sha256:1689c6f2f9c99979ef35461ab98fedc00c988f1bf7e6c2a9b7956b3c8f1eabf3
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:78f790b@sha256:8a49a8557f66870292d4076dcfd5e70b84d6fb4c206e39651c215fe98fcaaad6
             name: tare-crawl
             env:
             - name: TZ
@@ -97,7 +97,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: tare-crawl
-    app.kubernetes.io/version: 794c3bb
+    app.kubernetes.io/version: 78f790b
   name: tare-crawl-dm
 spec:
   schedule: 0 1 * * 0
@@ -114,7 +114,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: tare-crawl
-            app.kubernetes.io/version: 794c3bb
+            app.kubernetes.io/version: 78f790b
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -123,7 +123,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:794c3bb@sha256:1689c6f2f9c99979ef35461ab98fedc00c988f1bf7e6c2a9b7956b3c8f1eabf3
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:78f790b@sha256:8a49a8557f66870292d4076dcfd5e70b84d6fb4c206e39651c215fe98fcaaad6
             name: tare-crawl
             env:
             - name: TZ
