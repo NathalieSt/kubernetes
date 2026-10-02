@@ -69,6 +69,11 @@ spec:
       login: true
       passwordSecret:
         name: zyme-db-role
+    - name: tare
+      ensure: present
+      login: true
+      passwordSecret:
+        name: tare-db-role
     - name: audiomuseai
       ensure: present
       login: true

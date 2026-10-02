@@ -22,6 +22,7 @@ spec:
           - ntfy
           - glitchtip
           - zyme
+          - tare
           - limes
           - paperless
       podSelector:
@@ -40,6 +41,8 @@ spec:
           - ntfy
           - glitchtip
           - zyme
+          - tare
+          - tare-crawl
           - limes
           - paperless
           - sonarr

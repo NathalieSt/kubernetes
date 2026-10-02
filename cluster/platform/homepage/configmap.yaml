@@ -392,6 +392,12 @@ data:
           description: Recipes and meal plans
           namespace: tandoor
           app: tandoor
+      - tare:
+          href: https://tare.netbird.nathalie-stiefsohn.eu
+          icon: mdi-scale-balance
+          description: Supermarket prices per kilo, litre and piece
+          namespace: tare
+          app: tare
       - zyme:
           href: https://zyme.netbird.nathalie-stiefsohn.eu
           icon: mdi-bottle-tonic-outline

@@ -943,6 +943,17 @@ data:
           ]
         },
         {
+          "key": "tare",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
+          "version": "67e5ae0@sha256:4e4df6df1c6a2c70cb08744506f98141e27ea8d6eb0615ba4d9202d8dbfa6910",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "tare"
+          ]
+        },
+        {
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",

@@ -175,6 +175,9 @@ data:
         - tandoor.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - tare.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - vault.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:

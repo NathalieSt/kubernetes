@@ -195,6 +195,7 @@ data:
     paperless/db main-pg username password
     tandoor/db main-pg username password
     zyme/db main-pg username password
+    tare/db main-pg username password
     audiomuseai/db main-pg username password
     sonarr/db main-pg username password
     radarr/db main-pg username password
@@ -219,6 +220,7 @@ data:
     sonarr/db sonarr username password
     tandoor/oidc tandoor client-secret
     tandoor/db tandoor username password
+    tare/db tare username password
     trilium/oidc trilium client-secret
     victoria-metrics victoria-metrics adminAuthKey
     victoria-metrics/ntfy victoria-metrics token
@@ -347,7 +349,7 @@ data:
           },
           "main-pg": {
             "name": "main-pg",
-            "policy": "path \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
+            "policy": "path \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "music-library-builder": {
             "name": "music-library-builder",
@@ -396,6 +398,10 @@ data:
           "tandoor": {
             "name": "tandoor",
             "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "tare": {
+            "name": "tare",
+            "policy": "path \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "trilium": {
             "name": "trilium",
@@ -891,6 +897,21 @@ data:
             ],
             "token_ttl": 600
           },
+          "tare": {
+            "backend": "kubernetes",
+            "role_name": "tare",
+            "bound_service_account_names": [
+              "tare-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "tare"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.tare.name}"
+            ],
+            "token_ttl": 600
+          },
           "trilium": {
             "backend": "kubernetes",
             "role_name": "trilium",
@@ -1234,6 +1255,12 @@ data:
           }
         },
         {
+          "from": "vault_kv_secret_v2.main-pg_tare_db",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
           "from": "vault_kv_secret_v2.main-pg_zyme_db",
           "lifecycle": {
             "destroy": false
@@ -1337,6 +1364,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.tandoor_tandoor_oidc",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.tare_tare_db",
           "lifecycle": {
             "destroy": false
           }
