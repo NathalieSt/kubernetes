@@ -803,7 +803,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "17e05a8@sha256:b81309c403b9d93f2addb82d3a5bc2ff69c9d61548e68b838c41b6acc6ad878f",
+          "version": "a57cbf8@sha256:89452af235fc053f6937b4d5343f615fa514e0ad1747c40a3dd6856a3ad73bf8",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -847,7 +847,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "91d6021@sha256:3fea3b0c7d90444fc09b2fbce2483ebcc735904f0dce47d1cdc7b5ced0ad0e7c",
+          "version": "802f9a5@sha256:65ff86752ce87305d11e8d741ee64ee0020314497024fd38e4b4402191d536fa",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -946,7 +946,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "78f790b@sha256:8a49a8557f66870292d4076dcfd5e70b84d6fb4c206e39651c215fe98fcaaad6",
+          "version": "3180ce3@sha256:430eebe6cb8911cb1ee81b14259bf13942c909acb0b2e3ccfee84ff91e1a7743",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -968,7 +968,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "b91de79@sha256:930032d9bd3d1ebd4563512da1d4819db50b528ca3853d90f7355af762aaeef0",
+          "version": "eb6eea4@sha256:9f7df8533b867f71eec7a916e924bcdc63b2ac08cfbe1f2a638824e909aa578e",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -979,7 +979,7 @@ data:
           "key": "fleet",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet",
-          "version": "81fdb87@sha256:851645ce62d6018f52f985346efb24e29409a6944ff7e4b3ee7242162ed7c19e",
+          "version": "2e69e5a@sha256:d6057c2255d8fc507944db39f0ee33e78af9db75e1dfcb81d8ebf14201ec4deb",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
