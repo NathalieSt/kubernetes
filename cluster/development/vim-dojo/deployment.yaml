@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: vim-dojo
-    app.kubernetes.io/version: 2b9bf33
+    app.kubernetes.io/version: "1681522"
   name: vim-dojo
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: vim-dojo
-        app.kubernetes.io/version: 2b9bf33
+        app.kubernetes.io/version: "1681522"
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -36,7 +36,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo:2b9bf33@sha256:03990fcc0da71d30727d029053afd61b6178d1fd2e69d29f4a721bed0c890372
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo:1681522@sha256:bb45f6eae62ba0f3801636a0433e9366e6f7bef334fdf5063340ea9a37f420a4
         name: vim-dojo
         ports:
         - containerPort: 3000
