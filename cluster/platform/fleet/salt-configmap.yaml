@@ -31,6 +31,10 @@ data:
       base: [/srv/salt/states]
     pillar_roots:
       base: [/srv/salt/pillar]
+    # The kubelet keeps a ConfigMap's files in `..data` and a dated `..<timestamp>` copy, which
+    # would otherwise be listed as states of their own.
+    file_ignore_regex:
+      - '(^|/)\.\.'
 
     # On loopback only: the BFF is the one client, in the same pod. Salt 3006+ enables no
     # netapi client by default; `local`, the blocking one, stays off.

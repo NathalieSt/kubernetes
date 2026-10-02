@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: fleet
-    app.kubernetes.io/version: 0a117da
+    app.kubernetes.io/version: 78ede77
   name: fleet
 spec:
   replicas: 1
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 3ce5533a26a00549
+        checksum/config: 4c9e79c8f05241d3
       labels:
         app.kubernetes.io/name: fleet
-        app.kubernetes.io/version: 0a117da
+        app.kubernetes.io/version: 78ede77
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -48,7 +48,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:0a117da@sha256:ab1cc4a50874b761c19148ee1307bcb36835cf81210171afa1ac32d26b3bf344
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:78ede77@sha256:8c8ffa33e9dffb5095cb1ac2daa9baf89cec56eaff233be74e8b64f1799ce3e1
         name: fleet
         ports:
         - containerPort: 8080
@@ -109,7 +109,7 @@ spec:
         - /etc/salt
         - -l
         - info
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:unbuilt
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:1001d96@sha256:8b24f4146b6467f79048cf77dac39f0751156b377904ebb3e560f376bd037c1e
         name: salt-master
         ports:
         - containerPort: 4505
@@ -158,7 +158,7 @@ spec:
         - info
         command:
         - salt-api
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:unbuilt
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:1001d96@sha256:8b24f4146b6467f79048cf77dac39f0751156b377904ebb3e560f376bd037c1e
         name: salt-api
         volumeMounts:
         - mountPath: /etc/salt
@@ -199,9 +199,17 @@ spec:
       - name: fleet-salt-states
         configMap:
           name: fleet-salt-states
+          items:
+          - key: netbird.sls
+            path: netbird.sls
       - name: fleet-salt-pillar
         configMap:
           name: fleet-salt-pillar
+          items:
+          - key: netbird.sls
+            path: netbird.sls
+          - key: top.sls
+            path: top.sls
       - name: salt-run
         emptyDir: {}
       - name: salt-auth
