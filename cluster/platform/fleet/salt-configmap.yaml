@@ -8,6 +8,9 @@ data:
     # The Salt master and salt-api, beside Fleet in one pod. Paths are set explicitly: several
     # defaults sit under /var/cache and /var/log, which the non-root image cannot write.
     user: salt
+    # Salt 3008 names the master key `<id>.pem`, and the id defaults to the pod name: without
+    # this every rollout gave the master a new key, which every enrolled minion refuses.
+    id: fleet
     interface: 0.0.0.0
     pki_dir: /var/lib/fleet/salt/pki
     cachedir: /var/lib/fleet/salt/cache
