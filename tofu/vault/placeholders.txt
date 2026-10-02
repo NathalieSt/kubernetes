@@ -40,6 +40,7 @@ ntfy/db main-pg username password
 paperless/db main-pg username password
 tandoor/db main-pg username password
 zyme/db main-pg username password
+tare/db main-pg username password
 audiomuseai/db main-pg username password
 sonarr/db main-pg username password
 radarr/db main-pg username password
@@ -64,6 +65,7 @@ seerr/db seerr username password
 sonarr/db sonarr username password
 tandoor/oidc tandoor client-secret
 tandoor/db tandoor username password
+tare/db tare username password
 trilium/oidc trilium client-secret
 victoria-metrics victoria-metrics adminAuthKey
 victoria-metrics/ntfy victoria-metrics token

@@ -153,6 +153,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: tare
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: trilium
   - to:
     - namespaceSelector:

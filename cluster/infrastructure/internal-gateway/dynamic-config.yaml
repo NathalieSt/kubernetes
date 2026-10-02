@@ -296,6 +296,13 @@ data:
           service: tandoor
           middlewares:
           - authelia
+        tare:
+          rule: Host(`tare.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: tare
+          middlewares:
+          - authelia
         trilium:
           rule: Host(`notes.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -493,6 +500,10 @@ data:
           loadBalancer:
             servers:
             - url: http://tandoor.tandoor.svc.cluster.local:8080
+        tare:
+          loadBalancer:
+            servers:
+            - url: http://tare.tare.svc.cluster.local:8080
         trilium:
           loadBalancer:
             servers:

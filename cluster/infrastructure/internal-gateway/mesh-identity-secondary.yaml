@@ -39,6 +39,7 @@ spec:
   - requests
   - sonarr
   - pdf
+  - tare
   - notes
   containerOverride:
     env:

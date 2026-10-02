@@ -299,6 +299,9 @@ spec:
     name: tandoor
     namespace: flux-system
   - kind: Kustomization
+    name: tare
+    namespace: flux-system
+  - kind: Kustomization
     name: trilium
     namespace: flux-system
   - kind: Kustomization
