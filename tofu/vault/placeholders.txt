@@ -66,6 +66,7 @@ sonarr/db sonarr username password
 tandoor/oidc tandoor client-secret
 tandoor/db tandoor username password
 tare/db tare username password
+tare tare ntfy-token
 trilium/oidc trilium client-secret
 victoria-metrics victoria-metrics adminAuthKey
 victoria-metrics/ntfy victoria-metrics token

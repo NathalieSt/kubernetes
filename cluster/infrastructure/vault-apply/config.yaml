@@ -221,6 +221,7 @@ data:
     tandoor/oidc tandoor client-secret
     tandoor/db tandoor username password
     tare/db tare username password
+    tare tare ntfy-token
     trilium/oidc trilium client-secret
     victoria-metrics victoria-metrics adminAuthKey
     victoria-metrics/ntfy victoria-metrics token
@@ -401,7 +402,7 @@ data:
           },
           "tare": {
             "name": "tare",
-            "policy": "path \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n"
+            "policy": "path \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "trilium": {
             "name": "trilium",
@@ -1364,6 +1365,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.tandoor_tandoor_oidc",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.tare_tare",
           "lifecycle": {
             "destroy": false
           }

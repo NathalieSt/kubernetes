@@ -39,7 +39,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `limes` | `limes` | `kvv2/limes`, `kvv2/limes/db` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc`, `kvv2/tandoor/db` |
 | `zyme` | `zyme` | `kvv2/zyme`, `kvv2/zyme/db` |
-| `tare` | `tare` | `kvv2/tare/db` |
+| `tare` | `tare` | `kvv2/tare/db`, `kvv2/tare` |
 | `radicale` | `radicale` | `kvv2/radicale/users` |
 | `anki-sync` | `anki-sync` | `kvv2/anki-sync/users` |
 | `trilium` | `trilium` | `kvv2/trilium/oidc` |
