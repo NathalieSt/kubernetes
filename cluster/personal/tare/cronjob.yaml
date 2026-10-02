@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: tare-crawl
-    app.kubernetes.io/version: e6b7cd0
+    app.kubernetes.io/version: 91ada6e
   name: tare-crawl
 spec:
   schedule: 30 3 * * *
@@ -21,7 +21,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: tare-crawl
-            app.kubernetes.io/version: e6b7cd0
+            app.kubernetes.io/version: 91ada6e
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -30,7 +30,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:e6b7cd0@sha256:4ab69216408fc24d4ea503515b9db434811fe0c1246a152a2a67c08265ef4da7
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:91ada6e@sha256:5c40cbe7334d417fd61bc8b9e235582cb0009baf42862b7e651587427452c39a
             name: tare-crawl
             env:
             - name: TZ
@@ -49,6 +49,105 @@ spec:
                   name: tare-db-secret
             - name: HTTPS_PROXY
               value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+            - name: TARE_SKIP_SOURCES
+              value: dm
+            - name: TARE_NTFY_URL
+              value: http://ntfy.ntfy.svc.cluster.local:8080/
+            - name: TARE_NTFY_TOPIC
+              value: tare
+            - name: TARE_NTFY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: ntfy-token
+                  name: tare-secret
+                  optional: true
+            - name: TARE_PUBLIC_URL
+              value: https://tare.netbird.nathalie-stiefsohn.eu
+            resources:
+              requests:
+                cpu: 50m
+                memory: 192Mi
+              limits:
+                cpu: 1000m
+                memory: 768Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: tare-crawl
+    app.kubernetes.io/version: 91ada6e
+  name: tare-crawl-dm
+spec:
+  schedule: 0 1 * * 0
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: tare-crawl
+            app.kubernetes.io/version: 91ada6e
+        spec:
+          imagePullSecrets:
+          - name: forgejo-registry-secret
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - args:
+            - bff/src/Crawl.res.mjs
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:91ada6e@sha256:5c40cbe7334d417fd61bc8b9e235582cb0009baf42862b7e651587427452c39a
+            name: tare-crawl
+            env:
+            - name: TZ
+              value: Europe/Vienna
+            - name: TARE_DATABASE_URL
+              value: postgres://postgres-rw.postgres.svc.cluster.local:5432/tare
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: tare-db-secret
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: tare-db-secret
+            - name: HTTPS_PROXY
+              value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+            - name: TARE_SOURCES
+              value: dm
+            - name: TARE_NTFY_URL
+              value: http://ntfy.ntfy.svc.cluster.local:8080/
+            - name: TARE_NTFY_TOPIC
+              value: tare
+            - name: TARE_NTFY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: ntfy-token
+                  name: tare-secret
+                  optional: true
+            - name: TARE_PUBLIC_URL
+              value: https://tare.netbird.nathalie-stiefsohn.eu
             resources:
               requests:
                 cpu: 50m

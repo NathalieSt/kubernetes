@@ -40,6 +40,7 @@ spec:
           - jellyfin
           - zyme
           - limes
+          - tare
     ports:
     - port: 8080
       protocol: TCP
