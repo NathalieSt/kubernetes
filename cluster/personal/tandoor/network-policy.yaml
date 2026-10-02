@@ -19,3 +19,20 @@ spec:
           - internal-gateway
           - internal-gateway-secondary
           - blackbox-exporter
+  - from:
+    - namespaceSelector:
+        matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          - tare
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - tare
+          - tare-crawl
+    ports:
+    - port: 8080
+      protocol: TCP
