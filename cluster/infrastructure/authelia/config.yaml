@@ -17,9 +17,6 @@ data:
           forward-auth:
             implementation: ForwardAuth
             authn_strategies:
-            - name: HeaderAuthorization
-              schemes:
-              - Basic
             - name: CookieSession
       asset_path: /assets/
     log:

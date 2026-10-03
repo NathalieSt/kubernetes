@@ -17,6 +17,8 @@ data:
             - Remote-Email
             - Remote-Name
             authRequestHeaders:
+            - Accept
+            - X-Requested-With
             - Cookie
             - X-Forwarded-For
             - X-Forwarded-Host
