@@ -9,3 +9,4 @@ resources:
 - cronjob.yaml
 - network-policy.yaml
 - vault-secrets.yaml
+- alert-rules.yaml

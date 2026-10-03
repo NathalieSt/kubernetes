@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: limes
-    app.kubernetes.io/version: bd91c04
+    app.kubernetes.io/version: 0abf60f
   name: limes
 spec:
   replicas: 1
@@ -15,13 +15,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: limes
-        app.kubernetes.io/version: bd91c04
+        app.kubernetes.io/version: 0abf60f
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: limes
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:bd91c04@sha256:ff80c5b3e2c766756d30ab56a849555f06b1fac2c85097c78729ff6e8b830533
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:0abf60f@sha256:c1e3142f05366c50dd221bf042944cadc26dbdfd8ce195b0078e4289dd47a074
         name: limes
         ports:
         - containerPort: 8080
@@ -53,6 +53,8 @@ spec:
           value: "86400000"
         - name: LIMES_SCAN_AVOID_NODES
           value: raspberry-pi-5-0,raspberry-pi-5-1,raspberry-pi-5-2
+        - name: LIMES_SCAN_PREFER_NODES
+          value: debian
         - name: LIMES_VM_URL
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
         - name: LIMES_PINS_FILE

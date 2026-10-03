@@ -1,0 +1,46 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: limes
+spec:
+  groups:
+  - name: limes
+    interval: 1m
+    rules:
+    - alert: LimesPatrolFailing
+      expr: limes_patrol_healthy{job="limes"} == 0
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: The background patrol is disabled or its last sweep ended in an error, so running images are no longer being rescanned and the Frontier screen is ageing. The error is on that screen's patrol strip and in `kubectl -n limes logs deploy/limes`.
+        summary: limes' patrol is failing
+    - alert: LimesPatrolStalled
+      expr: time() - limes_patrol_last_run_timestamp_seconds{job="limes"} > 7200
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: The patrol wakes every 15 minutes and has not completed a sweep for over two hours, without reporting an error. It is stuck or the pod never started one after a restart; restart the limes pod.
+        summary: limes' patrol has not swept for hours
+    - alert: LimesResultsOld
+      expr: count(time() - limes_scan_last_finished_timestamp_seconds{job="limes", kind="image"} > 259200) > 0
+      for: 2h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: "The patrol rescans every image daily, so a result three days old means it is not keeping up: scans are slow or failing, though each sweep succeeds. orrery's Limes dashboard lists the oldest results; `kubectl -n limes get jobs` shows how long scans take and on which node."
+        summary: "{{ $value }} running images have not been scanned for three days"
+    - alert: LimesUpdateCheckFailing
+      expr: limes_updates_healthy{job="limes"} == 0
+      for: 7h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: Two update checks in a row failed (it runs every six hours), so the Updates screen and its ntfy announcements are behind upstream. The error is on the Updates toolbar and in limes' log.
+        summary: limes' update check is failing
