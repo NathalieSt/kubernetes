@@ -25,20 +25,20 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: gluetun-media
+          kubernetes.io/metadata.name: gluetun-proxy
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: gluetun-media
+          app.kubernetes.io/name: gluetun-proxy
     ports:
     - port: 8888
       protocol: TCP
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: gluetun-media
+          kubernetes.io/metadata.name: gluetun-proxy
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: gluetun-media
+          app.kubernetes.io/name: gluetun-proxy
     ports:
     - port: 8000
       protocol: TCP

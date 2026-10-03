@@ -69,7 +69,7 @@ spec:
         severity: warning
         topic: alerts-vpn
       annotations:
-        description: ProtonVPN refuses the extra tunnel with AUTH_FAILED, so one of them is down however healthy it looks. List them with `kubectl get pods -A -o wide | grep -e gluetun -e qbittorrent`; one outside gluetun-proxy, gluetun-media and qbittorrent is almost certainly a leftover and can be deleted.
+        description: ProtonVPN refuses the extra tunnel with AUTH_FAILED, so one of them is down however healthy it looks. List them with `kubectl get pods -A -o wide | grep -e gluetun -e qbittorrent`; one outside gluetun-proxy and qbittorrent is almost certainly a leftover and can be deleted.
         summary: "{{ $value }} gluetun pods are running for 3 ProtonVPN sessions"
     - alert: VpnTunnelFlapping
       expr: sum by (namespace, pod) (increase(kube_pod_container_status_restarts_total{container=~"gluetun.*"}[1h]) or increase(kube_pod_init_container_status_restarts_total{container=~"gluetun.*"}[1h])) > 3

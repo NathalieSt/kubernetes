@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/vpn-probe-hash: 3c57cf92916cc773
+        homelab/vpn-probe-hash: 95fbe75501c43bab
       labels:
         app.kubernetes.io/name: qbittorrent
         app.kubernetes.io/version: 5.2.3_v2.0.14-ls476

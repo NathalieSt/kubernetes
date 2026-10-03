@@ -99,27 +99,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: gluetun-media
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: gluetun-media
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/mediaserver/gluetun-media
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: vault-secrets-operator-config
-  serviceAccountName: flux-gluetun-media
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: jellyfin
   namespace: flux-system
 spec:
@@ -205,7 +184,7 @@ spec:
   - name: namespaces
   - name: flux-rbac
   - name: jellyfin
-  - name: gluetun-media
+  - name: gluetun-proxy
   - name: csi-driver-nfs
   - name: reflector
   - name: media-dns

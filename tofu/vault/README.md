@@ -25,7 +25,6 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
 | `mail` | `mail` | `kvv2/mail`, `kvv2/mail/oidc` |
 | `audiomuse-ai` | `jellyfin` | `kvv2/jellyfin`, `kvv2/audiomuseai/db` |
-| `gluetun-media` | `gluetun-media` | `kvv2/vpn` |
 | `music-library-builder` | `jellyfin` | `kvv2/music-library-builder` |
 | `qbittorrent` | `qbittorrent` | `kvv2/vpn` |
 | `sonarr` | `jellyfin` | `kvv2/sonarr/db` |
