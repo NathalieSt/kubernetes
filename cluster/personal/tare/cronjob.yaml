@@ -27,6 +27,14 @@ spec:
           - name: forgejo-registry-secret
           automountServiceAccountToken: false
           enableServiceLinks: false
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+            - 10.43.0.53
+            searches:
+            - tare.svc.cluster.local
+            - svc.cluster.local
+            - cluster.local
           containers:
           - args:
             - bff/src/Crawl.res.mjs
@@ -120,6 +128,14 @@ spec:
           - name: forgejo-registry-secret
           automountServiceAccountToken: false
           enableServiceLinks: false
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+            - 10.43.0.53
+            searches:
+            - tare.svc.cluster.local
+            - svc.cluster.local
+            - cluster.local
           containers:
           - args:
             - bff/src/Crawl.res.mjs

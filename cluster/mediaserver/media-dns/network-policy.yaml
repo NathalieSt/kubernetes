@@ -18,6 +18,18 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: gameyfin
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tare
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: tare
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tare
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: tare-crawl
     ports:
     - port: 5353
       protocol: UDP

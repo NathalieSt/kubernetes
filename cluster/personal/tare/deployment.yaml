@@ -21,6 +21,14 @@ spec:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - tare.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
       containers:
       - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:7ef6b4f@sha256:507e7f6806921caa9be160f3e90a06d0018f81cb89c5e18c66f201c90fbffdef
         name: tare
