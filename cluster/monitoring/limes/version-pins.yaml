@@ -803,7 +803,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "e9d5290@sha256:84a558f2cb2d210ba021e4b0ea48c364007bee4a4b013022a31f12bddf543a94",
+          "version": "30d4bb0@sha256:de237e4960c70b759e44b408b3f66465270cef80a511d5bfbec6d52f15ae0099",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
