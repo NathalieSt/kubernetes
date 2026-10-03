@@ -1009,6 +1009,12 @@ spec:
                 probe_namespace: paperless
                 scale_to_zero: "false"
             - targets:
+              - http://pharos.pharos.svc.cluster.local:8080/
+              labels:
+                probe_name: pharos
+                probe_namespace: pharos
+                scale_to_zero: "false"
+            - targets:
               - http://prowlarr.jellyfin.svc.cluster.local:9696/
               labels:
                 probe_name: prowlarr

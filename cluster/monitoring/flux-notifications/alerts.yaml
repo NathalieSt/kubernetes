@@ -245,6 +245,9 @@ spec:
     name: paperless
     namespace: flux-system
   - kind: Kustomization
+    name: pharos
+    namespace: flux-system
+  - kind: Kustomization
     name: prowlarr
     namespace: flux-system
   - kind: Kustomization

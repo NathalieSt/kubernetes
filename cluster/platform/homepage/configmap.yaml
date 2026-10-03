@@ -559,6 +559,12 @@ data:
           description: How the homelab works, and runbooks
           namespace: homelab-docs
           app: homelab-docs
+      - pharos:
+          href: https://pharos.netbird.nathalie-stiefsohn.eu
+          icon: mdi-lighthouse
+          description: "Kubernetes console: pods, reasons, logs, events"
+          namespace: pharos
+          app: pharos
       - psono-server:
           href: https://psono-api.netbird.nathalie-stiefsohn.eu
           icon: mdi-api
