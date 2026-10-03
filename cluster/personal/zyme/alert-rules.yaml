@@ -1,0 +1,19 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: zyme
+spec:
+  groups:
+  - name: zyme
+    interval: 1m
+    rules:
+    - alert: ZymeSchedulerStalled
+      expr: time() - zyme_scheduler_last_run_timestamp_seconds{job="zyme"} > 600
+      for: 10m
+      labels:
+        severity: warning
+        topic: alerts-apps
+      annotations:
+        description: The scheduler runs every minute and has not finished a tick for ten, so stage reminders are not being sent and controllers get no new band. An incubator still switches itself off when its hours run out. `kubectl -n zyme logs deploy/zyme` shows the failing tick; restarting the pod restarts the loop.
+        summary: zyme's scheduler has stopped ticking
