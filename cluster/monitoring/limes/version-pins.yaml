@@ -946,7 +946,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "7ef6b4f@sha256:507e7f6806921caa9be160f3e90a06d0018f81cb89c5e18c66f201c90fbffdef",
+          "version": "efb16fe@sha256:f6d4d608c870077d2fbdd4d36acdbd43950192247d3c86285c17fe9eab7a997a",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -968,7 +968,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "97d3423@sha256:2d680e13b6db152bcea41701bd9ee950bdf92a9380d50a729c596768c31a3fdf",
+          "version": "c4e1dd2@sha256:f9f11166a8954d40334ee3a42ab0aa7353adc19509826893a3029c25cad58cfd",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -990,7 +990,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "987d5b3@sha256:72c58cec00d1854d79c4a846214030f26d4766186b40f2c45a3809d554ffe0b0",
+          "version": "aacb154@sha256:659e6248a68498276d719bff730395460a12662a0a2a7d2713e0bc3b1e24a33e",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

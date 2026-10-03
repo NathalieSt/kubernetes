@@ -328,7 +328,7 @@ spec:
         - /etc/code-server/bootstrap/editor.sh
         - --bind-addr
         - 0.0.0.0:8080
-        - /home/coder/dev/my-homelab/my-homelab.code-workspace
+        - /home/coder/dev/my-homelab
         image: codercom/code-server@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
         name: code-server
         ports:
