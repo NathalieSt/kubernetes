@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: pharos
+    app.kubernetes.io/version: 97ebc4f
+  name: pharos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pharos
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pharos
+        app.kubernetes.io/version: 97ebc4f
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      serviceAccountName: pharos
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos:97ebc4f@sha256:3b66139acccf54552cc7d0c3fa2c8fc57258c7c047cc47112030f4d20e65d37d
+        name: pharos
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: PHAROS_STATIC_ROOT
+          value: /app/ui/dist
+        - name: PHAROS_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: PHAROS_OIDC_CLIENT_ID
+          value: pharos
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

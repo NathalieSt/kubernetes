@@ -935,7 +935,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "6b0a269@sha256:897be589260012746dbf0dc00fc68e3d782b46515c05fc74969ff085d07a6896",
+          "version": "f97a48e@sha256:bc2eb16365b824cca1d9cec0ccfb334d0ce3f6a4abf4c84df437e67bcb965b86",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -995,6 +995,17 @@ data:
           "inVersionsFile": true,
           "generators": [
             "homepage"
+          ]
+        },
+        {
+          "key": "pharos",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
+          "version": "97ebc4f@sha256:3b66139acccf54552cc7d0c3fa2c8fc57258c7c047cc47112030f4d20e65d37d",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "pharos"
           ]
         },
         {

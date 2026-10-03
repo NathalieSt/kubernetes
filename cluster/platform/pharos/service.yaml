@@ -3,12 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: tare
-    app.kubernetes.io/version: f97a48e
-  name: tare
+    app.kubernetes.io/name: pharos
+    app.kubernetes.io/version: 97ebc4f
+  name: pharos
 spec:
   selector:
-    app.kubernetes.io/name: tare
+    app.kubernetes.io/name: pharos
   ports:
   - name: http
     port: 8080

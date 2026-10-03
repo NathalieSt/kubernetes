@@ -220,6 +220,13 @@ data:
           entryPoints:
           - websecure
           service: paperless
+        pharos:
+          rule: Host(`pharos.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: pharos
+          middlewares:
+          - authelia
         prowlarr:
           rule: Host(`prowlarr.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -454,6 +461,10 @@ data:
           loadBalancer:
             servers:
             - url: http://paperless.paperless.svc.cluster.local:8000
+        pharos:
+          loadBalancer:
+            servers:
+            - url: http://pharos.pharos.svc.cluster.local:8080
         prowlarr:
           loadBalancer:
             servers:
