@@ -86,6 +86,12 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: tare-crawl
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tare
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: tare
     ports:
     - port: 8888
       protocol: TCP
