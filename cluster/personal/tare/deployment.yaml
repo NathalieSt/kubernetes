@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: tare
-    app.kubernetes.io/version: 78f7a30
+    app.kubernetes.io/version: 800ed72
   name: tare
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: tare
-        app.kubernetes.io/version: 78f7a30
+        app.kubernetes.io/version: 800ed72
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:78f7a30@sha256:1a14ac5d56a9aa8d1e4ba82541f3ef6588c904a1e038f73d4318e946e3de34ff
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:800ed72@sha256:2955314eb700c67d3eb8c401b4964b9070531e7340c9729a67c153b62c505c6c
         name: tare
         ports:
         - containerPort: 8080
@@ -44,6 +44,20 @@ spec:
               name: tare-db-secret
         - name: WEB_ADDR
           value: :8080
+        - name: HTTPS_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: TARE_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080/
+        - name: TARE_NTFY_TOPIC
+          value: tare
+        - name: TARE_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: tare-secret
+              optional: true
+        - name: TARE_PUBLIC_URL
+          value: https://tare.netbird.nathalie-stiefsohn.eu
         - name: TARE_TANDOOR_URL
           value: http://tandoor.tandoor.svc.cluster.local:8080
         - name: TARE_TANDOOR_TOKEN
@@ -57,8 +71,8 @@ spec:
             cpu: 10m
             memory: 96Mi
           limits:
-            cpu: 500m
-            memory: 256Mi
+            cpu: 1000m
+            memory: 768Mi
         securityContext:
           capabilities:
             drop:

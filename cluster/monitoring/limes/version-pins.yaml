@@ -946,7 +946,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "78f7a30@sha256:1a14ac5d56a9aa8d1e4ba82541f3ef6588c904a1e038f73d4318e946e3de34ff",
+          "version": "800ed72@sha256:2955314eb700c67d3eb8c401b4964b9070531e7340c9729a67c153b62c505c6c",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -990,7 +990,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "a272817@sha256:12ac47b1949e70ef8738befc5546eab84cd12fed6c6a3690fe3fe0ca8c9911bd",
+          "version": "829eb3e@sha256:9e3150134270cf0fd17eda7bae844753a0d3b478402017532523ac39ff430100",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

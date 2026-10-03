@@ -53,9 +53,26 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: ntfy
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: tandoor
     ports:
     - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8888
       protocol: TCP
 ---
 apiVersion: networking.k8s.io/v1
