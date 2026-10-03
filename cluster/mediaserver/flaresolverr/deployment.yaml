@@ -45,8 +45,8 @@ spec:
             cpu: 50m
             memory: 192Mi
           limits:
-            cpu: "1"
-            memory: 1Gi
+            cpu: "3"
+            memory: 2Gi
         securityContext:
           capabilities:
             drop:
