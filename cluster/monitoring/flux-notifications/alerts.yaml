@@ -155,9 +155,6 @@ spec:
     name: glitchtip
     namespace: flux-system
   - kind: Kustomization
-    name: gluetun-media
-    namespace: flux-system
-  - kind: Kustomization
     name: gluetun-proxy
     namespace: flux-system
   - kind: Kustomization

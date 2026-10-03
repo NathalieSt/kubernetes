@@ -6,8 +6,8 @@ metadata:
 data:
   ipleak.sh: |
     #!/bin/sh
-    # VPN leak detector for a pod behind gluetun. Runs beside all three tunnels — the qBittorrent
-    # pod's sidecar, gluetun-media and gluetun-proxy — because a tunnel that is up and carrying
+    # VPN leak detector for a pod behind gluetun. Runs beside both tunnels — the qBittorrent
+    # pod's sidecar and gluetun-proxy — because a tunnel that is up and carrying
     # traffic out of the wrong country looks exactly like a healthy one to every other check in
     # this cluster.
     #
@@ -22,7 +22,7 @@ data:
     #   IPLEAK_INTERVAL          seconds between cycles (default 300); do not set below 60
     #   IPLEAK_EXPECTED_COUNTRY  ISO-3166-2 codes the exit may be in, comma-separated (default NL).
     #                            A list, because gluetun picks a random server from SERVER_COUNTRIES
-    #                            and the two standalone tunnels are given several
+    #                            and the standalone tunnel is given several
     #   IPLEAK_TIMEOUT           per-request curl timeout in seconds (default 15)
     #   IPLEAK_STARTUP_GRACE     seconds to wait before the first check (default 30)
     #   IPLEAK_METRICS_FILE      where to write the Prometheus text; unset, only the log is emitted.
@@ -48,10 +48,10 @@ data:
     # port, which is ingress and therefore allowed. The latch lives on an emptyDir, so recreating
     # the pod clears it and a human deciding the leak is over is what starts the detector again.
     #
-    # The two standalone tunnels deliberately pass no latch file and no leak script: a wrong
-    # country there is not a home-address exposure — the egress policy stands between those pods
+    # The standalone tunnel deliberately passes no latch file and no leak script: a wrong
+    # country there is not a home-address exposure — the egress policy stands between that pod
     # and the house either way — and crashlooping gluetun-proxy would take the whole arr stack,
-    # 4get, neko and helium-services down with it. They report; they do not act.
+    # 4get, neko and helium-services down with it. It reports; it does not act.
 
     INTERVAL="${IPLEAK_INTERVAL:-300}"
     EXPECTED="${IPLEAK_EXPECTED_COUNTRY:-NL}"

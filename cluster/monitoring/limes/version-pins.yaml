@@ -601,17 +601,6 @@ data:
           ]
         },
         {
-          "key": "gluetun-media",
-          "kind": "image",
-          "repository": "qmcgaw/gluetun",
-          "version": "v3.41",
-          "file": "versions/mediaserver.json",
-          "inVersionsFile": true,
-          "generators": [
-            "gluetun-media"
-          ]
-        },
-        {
           "key": "jellyfin",
           "kind": "chart",
           "repository": "https://jellyfin.github.io/jellyfin-helm",

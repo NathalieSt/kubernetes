@@ -19,7 +19,6 @@ gameyfin/secrets gameyfin app-key
 glitchtip/secret glitchtip secret-key
 glitchtip/oidc glitchtip client-secret
 glitchtip/db glitchtip username password
-vpn gluetun-media user password
 vpn gluetun-proxy user password
 healthchecks/secret healthchecks secret-key
 healthchecks/oidc healthchecks client-secret

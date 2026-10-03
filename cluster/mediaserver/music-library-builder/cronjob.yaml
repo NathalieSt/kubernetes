@@ -61,9 +61,9 @@ spec:
             - name: MLB_STATE_DIR
               value: /state
             - name: MLB_PROXY
-              value: http://gluetun-media.gluetun-media.svc.cluster.local:8888
+              value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
             - name: MLB_VPN_CONTROL_URL
-              value: http://gluetun-media.gluetun-media.svc.cluster.local:8000
+              value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8000
             - name: MLB_NO_PROXY
               value: svc.cluster.local,cluster.local,localhost
             - name: MLB_CONCURRENCY

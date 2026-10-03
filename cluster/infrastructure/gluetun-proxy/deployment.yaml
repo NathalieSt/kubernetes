@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/vpn-probe-hash: 3c57cf92916cc773
+        homelab/vpn-probe-hash: 95fbe75501c43bab
       labels:
         app.kubernetes.io/name: gluetun-proxy
         app.kubernetes.io/version: v3.41
@@ -32,6 +32,8 @@ spec:
         ports:
         - containerPort: 8888
           name: gluetun-proxy
+        - containerPort: 8000
+          name: control
         env:
         - name: VPN_SERVICE_PROVIDER
           value: protonvpn
@@ -56,13 +58,17 @@ spec:
         - name: SERVER_COUNTRIES
           value: Austria,Bulgaria,Croatia,Czech Republic,Estonia,Finland,Greece,Hungary,Latvia,Lithuania,Luxembourg,Netherlands,Portugal,Serbia,Slovakia,Slovenia
         - name: FIREWALL_INPUT_PORTS
-          value: 8888,9101
+          value: 8888,8000,9101
         - name: FIREWALL_OUTBOUND_SUBNETS
           value: 10.42.0.0/16
         - name: HTTPPROXY
           value: "on"
         - name: HTTPPROXY_STEALTH
           value: "on"
+        - name: HTTP_CONTROL_SERVER_ADDRESS
+          value: :8000
+        - name: HTTP_CONTROL_SERVER_LOG
+          value: "off"
         securityContext:
           capabilities:
             add:
