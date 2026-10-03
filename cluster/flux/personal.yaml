@@ -211,6 +211,7 @@ spec:
   - name: reflector
   - name: vault-secrets-operator-config
   - name: gluetun-proxy
+  - name: media-dns
   serviceAccountName: flux-tare
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
