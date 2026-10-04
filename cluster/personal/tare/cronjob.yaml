@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: tare-crawl
-    app.kubernetes.io/version: e57d20e
+    app.kubernetes.io/version: "4858931"
   name: tare-crawl
 spec:
   schedule: 30 3 * * *
@@ -21,7 +21,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: tare-crawl
-            app.kubernetes.io/version: e57d20e
+            app.kubernetes.io/version: "4858931"
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -38,7 +38,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:e57d20e@sha256:f10da2ede33c69729e0c4dc690ff4ff226e047e205987152bce10cad4d8db0f2
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:4858931@sha256:9f332e447c1d672df981452400e46886cf73cacfedfbc80c0b2319a84b722654
             name: tare-crawl
             env:
             - name: TZ
@@ -58,7 +58,7 @@ spec:
             - name: HTTPS_PROXY
               value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
             - name: TARE_SKIP_SOURCES
-              value: dm
+              value: dm,mueller
             - name: TARE_NTFY_URL
               value: http://ntfy.ntfy.svc.cluster.local:8080/
             - name: TARE_NTFY_TOPIC
@@ -105,10 +105,10 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: tare-crawl
-    app.kubernetes.io/version: e57d20e
-  name: tare-crawl-dm
+    app.kubernetes.io/version: "4858931"
+  name: tare-crawl-mueller
 spec:
-  schedule: 0 1 * * 0
+  schedule: 0 19 * * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
@@ -122,7 +122,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: tare-crawl
-            app.kubernetes.io/version: e57d20e
+            app.kubernetes.io/version: "4858931"
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -139,7 +139,108 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:e57d20e@sha256:f10da2ede33c69729e0c4dc690ff4ff226e047e205987152bce10cad4d8db0f2
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:4858931@sha256:9f332e447c1d672df981452400e46886cf73cacfedfbc80c0b2319a84b722654
+            name: tare-crawl
+            env:
+            - name: TZ
+              value: Europe/Vienna
+            - name: TARE_DATABASE_URL
+              value: postgres://postgres-rw.postgres.svc.cluster.local:5432/tare
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: tare-db-secret
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: tare-db-secret
+            - name: HTTPS_PROXY
+              value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+            - name: TARE_SOURCES
+              value: mueller
+            - name: TARE_NTFY_URL
+              value: http://ntfy.ntfy.svc.cluster.local:8080/
+            - name: TARE_NTFY_TOPIC
+              value: tare
+            - name: TARE_NTFY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: ntfy-token
+                  name: tare-secret
+                  optional: true
+            - name: TARE_PUBLIC_URL
+              value: https://tare.netbird.nathalie-stiefsohn.eu
+            - name: TARE_TANDOOR_URL
+              value: http://tandoor.tandoor.svc.cluster.local:8080
+            - name: TARE_TANDOOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: tandoor-token
+                  name: tare-secret
+                  optional: true
+            resources:
+              requests:
+                cpu: 50m
+                memory: 192Mi
+              limits:
+                cpu: 1000m
+                memory: 768Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: tare-crawl
+    app.kubernetes.io/version: "4858931"
+  name: tare-crawl-dm
+spec:
+  schedule: 0 1 * * 0
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: tare-crawl
+            app.kubernetes.io/version: "4858931"
+        spec:
+          imagePullSecrets:
+          - name: forgejo-registry-secret
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+            - 10.43.0.53
+            searches:
+            - tare.svc.cluster.local
+            - svc.cluster.local
+            - cluster.local
+          containers:
+          - args:
+            - bff/src/Crawl.res.mjs
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:4858931@sha256:9f332e447c1d672df981452400e46886cf73cacfedfbc80c0b2319a84b722654
             name: tare-crawl
             env:
             - name: TZ

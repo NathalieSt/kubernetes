@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: pharos
-    app.kubernetes.io/version: bfbd5cf
+    app.kubernetes.io/version: "05e7720"
   name: pharos
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: pharos
-        app.kubernetes.io/version: bfbd5cf
+        app.kubernetes.io/version: "05e7720"
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: pharos
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos:bfbd5cf@sha256:3a7808af1f7f08c27f7efac3026913baa6e367d00980c08ea23697f49e935f12
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos:05e7720@sha256:bd75abc71a940269bafaba06c33b5d7a089907591928469050edb0e9de01d819
         name: pharos
         ports:
         - containerPort: 8080
@@ -32,6 +32,8 @@ spec:
           value: :8080
         - name: PHAROS_STATIC_ROOT
           value: /app/ui/dist
+        - name: PHAROS_ADMIN_GROUP
+          value: admins
         - name: PHAROS_VL_URL
           value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
         - name: PHAROS_OIDC_AUTHORITY
