@@ -11,6 +11,13 @@ rules:
   verbs:
   - delete
 - apiGroups:
+  - ""
+  resources:
+  - pods/exec
+  verbs:
+  - create
+  - get
+- apiGroups:
   - apps
   resources:
   - deployments
