@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: pharos
-    app.kubernetes.io/version: 6c10eee
+    app.kubernetes.io/version: 9bbbd02
   name: pharos
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: pharos
-        app.kubernetes.io/version: 6c10eee
+        app.kubernetes.io/version: 9bbbd02
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: pharos
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos:6c10eee@sha256:9e93d0609cab1e268562653f63e573995919e2842fd8bb26caed7e14d32d4920
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos:9bbbd02@sha256:a9c91e72798f21df94058f91ced40d70817bf35a378ddbd86d73e9a633f3204e
         name: pharos
         ports:
         - containerPort: 8080
@@ -32,6 +32,8 @@ spec:
           value: :8080
         - name: PHAROS_STATIC_ROOT
           value: /app/ui/dist
+        - name: PHAROS_VL_URL
+          value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
         - name: PHAROS_OIDC_AUTHORITY
           value: https://auth.netbird.nathalie-stiefsohn.eu
         - name: PHAROS_OIDC_CLIENT_ID
