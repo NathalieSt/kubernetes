@@ -107,6 +107,9 @@ spec:
     name: clamav
     namespace: flux-system
   - kind: Kustomization
+    name: clavis
+    namespace: flux-system
+  - kind: Kustomization
     name: cnpg
     namespace: flux-system
   - kind: Kustomization

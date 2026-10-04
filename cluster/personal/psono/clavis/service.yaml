@@ -3,12 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: pharos
-    app.kubernetes.io/version: 482ebe3
-  name: pharos
+    app.kubernetes.io/name: clavis
+    app.kubernetes.io/version: 1e10d16
+  name: clavis
 spec:
   selector:
-    app.kubernetes.io/name: pharos
+    app.kubernetes.io/name: clavis
   ports:
   - name: http
     port: 8080

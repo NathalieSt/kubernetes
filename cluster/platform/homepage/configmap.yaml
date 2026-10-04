@@ -355,6 +355,12 @@ data:
           namespace: jellyfin
           app: seerr
     - Personal:
+      - clavis:
+          href: https://clavis.netbird.nathalie-stiefsohn.eu
+          icon: mdi-key-outline
+          description: Password manager, our client
+          namespace: psono
+          app: clavis
       - daybook:
           href: https://daybook.netbird.nathalie-stiefsohn.eu
           icon: mdi-book-lock-outline

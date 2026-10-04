@@ -67,6 +67,9 @@ data:
         - changedetection.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - clavis.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - code.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:

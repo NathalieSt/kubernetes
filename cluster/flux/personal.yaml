@@ -2,6 +2,27 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: clavis
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: psono
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/psono/clavis
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: psono-server
+  serviceAccountName: flux-clavis
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: daybook
   namespace: flux-system
 spec:

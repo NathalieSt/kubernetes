@@ -865,6 +865,12 @@ spec:
                 probe_namespace: changedetection
                 scale_to_zero: "false"
             - targets:
+              - http://clavis.psono.svc.cluster.local:8080/
+              labels:
+                probe_name: clavis
+                probe_namespace: psono
+                scale_to_zero: "false"
+            - targets:
               - http://code-server.code-server.svc.cluster.local:8080/
               labels:
                 probe_name: code-server

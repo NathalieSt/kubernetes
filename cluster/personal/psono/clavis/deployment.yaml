@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: clavis
+    app.kubernetes.io/version: 1e10d16
+  name: clavis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: clavis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: clavis
+        app.kubernetes.io/version: 1e10d16
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis:1e10d16@sha256:0fc546e92d542863771d3c7929569e193e0de30240c40b94975ef42b30a01891
+        name: clavis
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: conf
+        - mountPath: /tmp
+          name: tmp
+        env:
+        - name: CLAVIS_SERVER
+          value: https://psono-api.netbird.nathalie-stiefsohn.eu
+        - name: CLAVIS_VERIFY_KEY
+          value: eaaf761c976ca2c489f9aa9706298643cb0e10fd239470fc1aa69a7c9d8c0fc8
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 101
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      volumes:
+      - name: conf
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
