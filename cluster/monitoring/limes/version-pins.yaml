@@ -239,7 +239,7 @@ data:
           "key": "vim-dojo",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "a1aa7ba@sha256:eb23ca83d01927ff0acfe54cadf87de6246d4d52c4e13a55db5b5c76ec22609b",
+          "version": "644076c@sha256:e012dce3ab67176d12d2c7a8147dc2866913453e754fabfbcb855716f17ed99c",
           "file": "versions/development.json",
           "inVersionsFile": true,
           "generators": [
@@ -638,7 +638,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "64baadd@sha256:edf28fd83432e9bc114721bdfdad8e7ae249cbde6f859c7fb632e8ceff36adeb",
+          "version": "e876aba@sha256:35031902c104683a127a1ab96b542fe24877ef8389dfcdf7804fdbae57dea9e2",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -770,7 +770,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "a64afef@sha256:3f4aa32cd8b0283ff7f8074cf0321ff1d7910208aebebab4d473c38297716601",
+          "version": "aabef71@sha256:c56df0cde55ed6a4666941f0cf9dbef6875f5958be77e301ecf856690cfd7820",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -792,7 +792,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "e40896e@sha256:e16ca9d4f061663c18ffc96a82fdc37559b1b089bd6e3017292af01d79faca82",
+          "version": "cc0dd8c@sha256:eec44d571defcfb2709be504dd7d22971cd47a2d26b2d8425c52823f1e50345e",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -836,7 +836,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "187acde@sha256:4b431394f7f42a42fb08849dc27e364389bd00287c4b082e75fdffe5c6242d8a",
+          "version": "f078c9e@sha256:f31a77c8a5310497c7bcf0d37071d76fc38fdc5473e13a445964a9bfd50bb80c",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -935,7 +935,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "4858931@sha256:9f332e447c1d672df981452400e46886cf73cacfedfbc80c0b2319a84b722654",
+          "version": "8454563@sha256:29e75962b2591138d67f2096c14833daed34e8c39ff50f5fd51ceb903bf5e156",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -946,7 +946,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "b4738db@sha256:eaf870e60300b7cbfb5488b765c90eefc5a0977c3e845100fa393a5601c3cc52",
+          "version": "9aa9a43@sha256:d29cec91b34eb5e549e495865dfc706f7ee3c646df200881ff8c7e370141b376",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -957,7 +957,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "c4e1dd2@sha256:f9f11166a8954d40334ee3a42ab0aa7353adc19509826893a3029c25cad58cfd",
+          "version": "0b20605@sha256:d89d7c4cfede4d0e1fb76ad29ffc0528b341b124f273dd2b2f05a6b709d3109d",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -968,7 +968,7 @@ data:
           "key": "fleet",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet",
-          "version": "3b870c4@sha256:047ef0c93ef3cc8f22c749365fc1a0496ffbc35e8afd2c90e854e334600616d9",
+          "version": "0b83619@sha256:9d5624d48727a64612e9586caa6700ab6e9c478f0973a544c6e39ed2d51d1470",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -979,7 +979,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "eaef061@sha256:34cf6552083e0a4d39b747a133ccb2fa54a4a40d062c79e6d69aef2e2c2c8f75",
+          "version": "dee8cf5@sha256:70299e839c4201881eece9906da0bcb92c874c462571f7b625eb91415a4f480e",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1001,7 +1001,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "05e7720@sha256:bd75abc71a940269bafaba06c33b5d7a089907591928469050edb0e9de01d819",
+          "version": "ad99e4f@sha256:9251131f3e1b24d6141044f6112908068304dfff9550c223eca189aa6c555c22",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1100,7 +1100,7 @@ data:
           "key": "redlib",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
-          "version": "1f81e21@sha256:485e4eb0c61e6dcfe4969f46c7a068209208e7fd43eb349f91b8327b536a91fe",
+          "version": "60ead6a@sha256:14e46cc9ea34e545adf5170f9d02ba5a0a1d58ccafc038f4810d7cc378654289",
           "file": "versions/web.json",
           "inVersionsFile": true,
           "generators": [
