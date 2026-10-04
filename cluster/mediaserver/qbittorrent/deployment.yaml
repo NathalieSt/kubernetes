@@ -151,7 +151,7 @@ spec:
             - /gluetun-entrypoint
             - healthcheck
           periodSeconds: 5
-          failureThreshold: 120
+          failureThreshold: 24
         restartPolicy: Always
       automountServiceAccountToken: false
       enableServiceLinks: false
