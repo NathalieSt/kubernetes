@@ -836,7 +836,7 @@ data:
           "key": "clavis",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis",
-          "version": "c16048f@sha256:2acd95a63ece4503f9cbcaabaae98e390ac68fcbd8e8a2fd36e1540610816784",
+          "version": "e6acc90@sha256:5fcdf787c55009e2edf392b4b6fdf52082dd6c207a0f01b48b281c3eccc25c4d",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -946,7 +946,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "f75bfca@sha256:b2ae23070bca509d6645d44bd9c6a0bc25bce6307f92e8acd14bdb64bc6fee61",
+          "version": "c2b5ad6@sha256:161f89adcab0668e1a4238752692b87b2f62dbe61476d04a9f1ac049ff8e052f",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
