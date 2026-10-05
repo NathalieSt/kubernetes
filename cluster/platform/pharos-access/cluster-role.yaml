@@ -18,6 +18,12 @@ rules:
   - create
   - get
 - apiGroups:
+  - ""
+  resources:
+  - pods/ephemeralcontainers
+  verbs:
+  - patch
+- apiGroups:
   - apps
   resources:
   - deployments
