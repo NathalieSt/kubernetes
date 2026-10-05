@@ -44,6 +44,13 @@ spec:
     - port: 9428
       protocol: TCP
   - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 8428
+      protocol: TCP
+  - to:
     - ipBlock:
         cidr: 100.64.0.0/10
     ports:

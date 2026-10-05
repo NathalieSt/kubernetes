@@ -28,6 +28,9 @@ spec:
           kubernetes.io/metadata.name: orrery
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: pharos
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: victoria-metrics
     ports:
     - port: 8428
