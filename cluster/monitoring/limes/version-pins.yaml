@@ -891,7 +891,7 @@ data:
           "key": "psono-client",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client",
-          "version": "c86f1d2@sha256:60a6d1166b0d9bb3142456ac3bf0211ae744bece1d90945bd980bdab21c1725d",
+          "version": "81dee51@sha256:20157674f9b9535f281e399d1959318fa6231b1fd3e9dc0bf11eb48f315058ae",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
