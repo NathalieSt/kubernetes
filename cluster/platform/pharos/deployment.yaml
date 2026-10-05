@@ -36,6 +36,8 @@ spec:
           value: admins
         - name: PHAROS_VL_URL
           value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
+        - name: PHAROS_VM_URL
+          value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
         - name: PHAROS_OIDC_AUTHORITY
           value: https://auth.netbird.nathalie-stiefsohn.eu
         - name: PHAROS_OIDC_CLIENT_ID

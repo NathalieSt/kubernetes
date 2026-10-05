@@ -96,7 +96,7 @@ spec:
         - name: PSONO_CORS_ALLOW_ALL_ORIGINS
           value: "False"
         - name: PSONO_CORS_ALLOWED_ORIGINS
-          value: https://psono.netbird.nathalie-stiefsohn.eu,https://clavis.netbird.nathalie-stiefsohn.eu
+          value: https://psono.netbird.nathalie-stiefsohn.eu,https://clavis.netbird.nathalie-stiefsohn.eu,tauri://localhost,http://tauri.localhost
         - name: PSONO_MANAGEMENT_ENABLED
           value: "False"
         - name: PSONO_ALLOWED_SECOND_FACTORS
