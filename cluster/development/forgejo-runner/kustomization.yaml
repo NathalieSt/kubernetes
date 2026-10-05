@@ -11,3 +11,5 @@ resources:
 - scaled-object.yaml
 - deployment-1.yaml
 - scaled-object-1.yaml
+- deployment-2.yaml
+- scaled-object-2.yaml

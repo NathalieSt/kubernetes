@@ -1,0 +1,137 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: fdroid
+    app.kubernetes.io/version: 75b5b28
+  name: fdroid
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fdroid
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fdroid
+        app.kubernetes.io/version: 75b5b28
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      initContainers:
+      - command:
+        - mkdir
+        - -p
+        - /data/repo
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync:75b5b28@sha256:8e5586cf6813b88e34b17a62a9a7fca7ef0c33f9e1497287b12a023c68a5cbfb
+        name: prepare
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync:75b5b28@sha256:8e5586cf6813b88e34b17a62a9a7fca7ef0c33f9e1497287b12a023c68a5cbfb
+        name: sync
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        - mountPath: /auth
+          name: registry-auth
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp-volume
+        env:
+        - name: FORGEJO_URL
+          value: http://forgejo-http.forgejo.svc.cluster.local:3000
+        - name: FORGEJO_OWNER
+          value: my-homelab
+        - name: FORGEJO_AUTH_FILE
+          value: /auth/.dockerconfigjson
+        - name: REPO_URL
+          value: https://fdroid.netbird.nathalie-stiefsohn.eu/repo
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            cpu: "1"
+            memory: 768Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
+        - nginx
+        - -c
+        - /etc/nginx/nginx.conf
+        - -g
+        - daemon off;
+        image: nginx@sha256:a5688ea5d06cccc298505dddac20e8e28bfe7de67b015a374006593bc23700b1
+        name: nginx
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          name: nginx-config-volume
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp-volume
+        - mountPath: /usr/share/nginx/html/repo
+          subPath: repo
+          name: data
+          readOnly: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 101
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: fdroid-data-pvc
+      - name: registry-auth
+        secret:
+          secretName: forgejo-registry-secret
+      - name: nginx-config-volume
+        configMap:
+          name: fdroid-nginx-config
+      - name: tmp-volume
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      nodeSelector:
+        kubernetes.io/arch: amd64

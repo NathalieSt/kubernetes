@@ -21,6 +21,7 @@ spec:
           values:
           - forgejo-runner
           - forgejo-runner-1
+          - forgejo-runner-2
     ports:
     - port: 3310
       protocol: TCP
