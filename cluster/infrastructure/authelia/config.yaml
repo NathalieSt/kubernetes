@@ -82,6 +82,9 @@ data:
         - dojo.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - fdroid.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - fleet.netbird.nathalie-stiefsohn.eu
         policy: two_factor
       - domain:

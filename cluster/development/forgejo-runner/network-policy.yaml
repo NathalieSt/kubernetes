@@ -11,5 +11,6 @@ spec:
       values:
       - forgejo-runner
       - forgejo-runner-1
+      - forgejo-runner-2
   policyTypes:
   - Ingress

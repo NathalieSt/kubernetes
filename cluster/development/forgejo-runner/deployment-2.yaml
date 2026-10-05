@@ -3,18 +3,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: forgejo-runner
+    app.kubernetes.io/name: forgejo-runner-2
     app.kubernetes.io/version: "13.2"
-  name: forgejo-runner
+  name: forgejo-runner-2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: forgejo-runner
+      app.kubernetes.io/name: forgejo-runner-2
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: forgejo-runner
+        app.kubernetes.io/name: forgejo-runner-2
         app.kubernetes.io/version: "13.2"
     spec:
       initContainers:
@@ -58,7 +58,7 @@ spec:
           runner:
             # Per runner, from its row in ForgejoRunnerMeta: sized to the node's cores. Scaling the Deployment
             # is not the way: replicas share a connection uuid, one config.yml and one bolt lock.
-            capacity: 2
+            capacity: 3
             timeout: 3h
             shutdown_timeout: 3h
           cache:
@@ -111,7 +111,7 @@ spec:
         - name: FORGEJO_RUNNER_SECRET
           valueFrom:
             secretKeyRef:
-              key: RUNNER_SECRET
+              key: RUNNER_SECRET_2
               name: forgejo-runner-secret
         resources:
           requests:
@@ -214,11 +214,11 @@ spec:
         emptyDir: {}
       - name: runner-cache
         hostPath:
-          path: /var/lib/forgejo-runner/0/cache
+          path: /mnt/external_ssd/forgejo-runner/2/cache
           type: DirectoryOrCreate
       - name: docker-storage
         hostPath:
-          path: /var/lib/forgejo-runner/0/docker
+          path: /mnt/external_ssd/forgejo-runner/2/docker
           type: DirectoryOrCreate
       - name: docker-certs
         emptyDir: {}
@@ -231,4 +231,4 @@ spec:
         fsGroup: 1000
       nodeSelector:
         kubernetes.io/arch: amd64
-        kubernetes.io/hostname: debian-mgt-0
+        kubernetes.io/hostname: debian

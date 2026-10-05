@@ -87,6 +87,11 @@ data:
           service: daybook
           middlewares:
           - authelia
+        fdroid:
+          rule: Host(`fdroid.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: fdroid
         fleet:
           rule: Host(`fleet.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -384,6 +389,10 @@ data:
           loadBalancer:
             servers:
             - url: http://daybook.daybook.svc.cluster.local:8080
+        fdroid:
+          loadBalancer:
+            servers:
+            - url: http://fdroid.fdroid.svc.cluster.local:8080
         fleet:
           loadBalancer:
             servers:

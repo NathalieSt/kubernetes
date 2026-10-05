@@ -1,0 +1,18 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: forgejo-runner-2-scaledobject
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: forgejo-runner-2
+  minReplicaCount: 0
+  cooldownPeriod: 300
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Europe/Vienna
+      start: 0 7 * * *
+      end: 0 1 * * *
+      desiredReplicas: "1"

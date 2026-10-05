@@ -3,12 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: limes
-    app.kubernetes.io/version: a542276
-  name: limes
+    app.kubernetes.io/name: fdroid
+    app.kubernetes.io/version: 75b5b28
+  name: fdroid
 spec:
   selector:
-    app.kubernetes.io/name: limes
+    app.kubernetes.io/name: fdroid
   ports:
   - name: http
     port: 8080

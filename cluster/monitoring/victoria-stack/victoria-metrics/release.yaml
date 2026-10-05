@@ -883,6 +883,12 @@ spec:
                 probe_namespace: daybook
                 scale_to_zero: "false"
             - targets:
+              - http://fdroid.fdroid.svc.cluster.local:8080/
+              labels:
+                probe_name: fdroid
+                probe_namespace: fdroid
+                scale_to_zero: "false"
+            - targets:
               - http://fleet.fleet.svc.cluster.local:8080/
               labels:
                 probe_name: fleet

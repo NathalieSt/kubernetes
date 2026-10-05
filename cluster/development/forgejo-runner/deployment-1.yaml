@@ -56,9 +56,9 @@ spec:
             level: info
             job_level: info
           runner:
-            # The only correct way to make CI parallel here. Scaling the Deployment does not: replicas share a
-            # connection uuid, one config.yml and one bolt lock. Jobs run in the dind sidecar — raise both.
-            capacity: 3
+            # Per runner, from its row in ForgejoRunnerMeta: sized to the node's cores. Scaling the Deployment
+            # is not the way: replicas share a connection uuid, one config.yml and one bolt lock.
+            capacity: 2
             timeout: 3h
             shutdown_timeout: 3h
           cache:
@@ -154,7 +154,7 @@ spec:
           export DOCKER_HOST=unix:///var/run/docker-shared/docker.sock
 
           # QEMU for the architectures this node is not: images are built for amd64 and arm64 while this pod is
-          # pinned to arm64. Writes the host kernel's binfmt_misc, is idempotent, and is not fatal on failure.
+          # pinned to amd64. Writes the host kernel's binfmt_misc, is idempotent, and is not fatal on failure.
           echo "registering binfmt handlers"
           if docker run --privileged --rm tonistiigi/binfmt:qemu-v10.2.3 --install arm64,amd64; then
             echo "  ok: qemu registered"
@@ -181,8 +181,20 @@ spec:
             fi
           done
 
-          echo "image warmer done; idling"
-          while true; do sleep 3600; done
+          # A job that starts a container of its own (clavis' and psono's builds) labels it with its own
+          # container id. A cancelled job is killed before its trap runs, and the build then ran on for an hour.
+          echo "image warmer done; reaping builds whose job is gone"
+          while true; do
+            for id in $(docker ps -q --filter label=homelab.ci/parent); do
+              parent=$(docker inspect -f '{{index .Config.Labels "homelab.ci/parent"}}' "$id" 2>/dev/null) || continue
+              [ -n "$parent" ] || continue
+              if [ "$(docker inspect -f '{{.State.Running}}' "$parent" 2>/dev/null)" != "true" ]; then
+                echo "removing $id: its job container $parent is gone"
+                docker rm -f "$id" >/dev/null 2>&1 || true
+              fi
+            done
+            sleep 60
+          done
         image: docker:29-cli
         name: image-warmer
         volumeMounts:
