@@ -792,7 +792,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "06f66f7@sha256:75745e3355b523326411510b1449bf132ea60b79edb9ebfe01cb4c5dcf21d4a3",
+          "version": "6a5b3a8@sha256:f16f09ce4724cec8d494072e7c3e494117438941ee0d5f477eccf7d9ccd2a2fd",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -836,7 +836,7 @@ data:
           "key": "clavis",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis",
-          "version": "2486ce6@sha256:a0a5f1d1a8b04871daee848ede4757d2647365e70fd9d4c26c4da5183ca2fd1f",
+          "version": "1162b63@sha256:058204145f835f45ceb8e2481b5e30fa44b6ef404a61761d9129ddbc6aa8cb20",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -957,7 +957,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "cb20aa1@sha256:e2342e660b1cade8d47968d6c973af310725a9ce4f284ca1f87b85b168cb780e",
+          "version": "829d04a@sha256:c602000d9a9d458dcc6115f4a009170f77199df1b4c5a1c96de177683c26d1af",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -968,7 +968,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "9b572be@sha256:819256ae476876d64d158cf20934b803ae0aa487cd20732444fb9cdd3559825a",
+          "version": "8c54848@sha256:518147dca9806f52ff3100d355ec1d73af380f6e64f2b576d1abfc57e5b3c3d5",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1023,7 +1023,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "e1a1de3@sha256:8d0912fbe7e9208c27b59cffbd40bceab5bb1f38a834e96054e8d229ffd1460a",
+          "version": "a2b06cb@sha256:9fb7bfde98ac8a94fe612f4d1f3d4c408d98edc1bc7a698c5c06a64f2c8924af",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
