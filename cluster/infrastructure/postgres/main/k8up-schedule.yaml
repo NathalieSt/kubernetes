@@ -27,6 +27,7 @@ spec:
         type: RuntimeDefault
     podConfigRef:
       name: main-pg-backup-pod
+    activeDeadlineSeconds: 28800
   prune:
     schedule: 0 4 * * 0
     retention:

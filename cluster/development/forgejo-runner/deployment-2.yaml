@@ -123,6 +123,19 @@ spec:
       - args:
         - --host=unix:///var/run/docker-shared/docker.sock
         - --group=1000
+        command:
+        - /bin/sh
+        - -c
+        - |
+          set -eu
+
+          # Privileged means the host's cgroup tree: without this, job and BuildKit containers land beside
+          # kubepods and this container's limits bound nothing. See the docs site, platform/ci-cd.
+          own=$(sed -n 's/^0:://p' /proc/self/cgroup)
+          mount --bind "/sys/fs/cgroup$own" /sys/fs/cgroup
+
+          exec dockerd-entrypoint.sh "$@"
+        - dind
         image: docker:29-dind
         name: docker
         volumeMounts:
@@ -141,7 +154,7 @@ spec:
             memory: 1Gi
           limits:
             cpu: 4000m
-            memory: 8Gi
+            memory: 16Gi
         securityContext:
           privileged: true
       - command:

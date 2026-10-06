@@ -43,3 +43,12 @@ spec:
       annotations:
         description: Threads are piling up in the k3s process, almost always kubelet calls hung on a dead NFS mount; at 10,000 the process dies. Find the mount (`cat /proc/loadavg`, then `grep <server> /proc/mounts` via kubectl debug --profile=sysadmin), unmount it lazily, and restart k3s to reclaim the threads — see the load-average note.
         summary: k3s on {{ $labels.node }} is leaking threads
+    - alert: ClaimStuckTerminating
+      expr: time() - kube_persistentvolumeclaim_deletion_timestamp > 3600
+      for: 30m
+      labels:
+        severity: warning
+        topic: alerts-storage
+      annotations:
+        description: A pod still names the claim, usually a finished one (a completed K8up backup pod counts). Backups in that namespace cannot be scheduled until it is gone. `kubectl -n {{ $labels.namespace }} describe pvc {{ $labels.persistentvolumeclaim }}` lists them under Used By; delete the finished ones.
+        summary: Claim {{ $labels.persistentvolumeclaim }} in {{ $labels.namespace }} has been Terminating for over an hour
