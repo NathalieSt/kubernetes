@@ -58,7 +58,7 @@ spec:
           runner:
             # Per runner, from its row in ForgejoRunnerMeta: sized to the node's cores. Scaling the Deployment
             # is not the way: replicas share a connection uuid, one config.yml and one bolt lock.
-            capacity: 2
+            capacity: 1
             timeout: 3h
             shutdown_timeout: 3h
           cache:
@@ -123,6 +123,19 @@ spec:
       - args:
         - --host=unix:///var/run/docker-shared/docker.sock
         - --group=1000
+        command:
+        - /bin/sh
+        - -c
+        - |
+          set -eu
+
+          # Privileged means the host's cgroup tree: without this, job and BuildKit containers land beside
+          # kubepods and this container's limits bound nothing. See the docs site, platform/ci-cd.
+          own=$(sed -n 's/^0:://p' /proc/self/cgroup)
+          mount --bind "/sys/fs/cgroup$own" /sys/fs/cgroup
+
+          exec dockerd-entrypoint.sh "$@"
+        - dind
         image: docker:29-dind
         name: docker
         volumeMounts:
@@ -140,7 +153,7 @@ spec:
             cpu: 500m
             memory: 1Gi
           limits:
-            cpu: 4000m
+            cpu: 1500m
             memory: 8Gi
         securityContext:
           privileged: true

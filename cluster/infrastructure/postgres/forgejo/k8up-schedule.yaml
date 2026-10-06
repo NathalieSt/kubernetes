@@ -27,6 +27,7 @@ spec:
         type: RuntimeDefault
     podConfigRef:
       name: forgejo-pg-backup-pod
+    activeDeadlineSeconds: 28800
   prune:
     schedule: 30 4 * * 0
     retention:
