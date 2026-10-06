@@ -27,6 +27,7 @@ spec:
         type: RuntimeDefault
     podConfigRef:
       name: mail-backup-pod
+    activeDeadlineSeconds: 28800
   prune:
     schedule: 0 4 * * 0
     retention:

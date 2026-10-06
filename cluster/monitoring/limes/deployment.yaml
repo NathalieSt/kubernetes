@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: limes
-    app.kubernetes.io/version: 5a1490f
+    app.kubernetes.io/version: 43a138f
   name: limes
 spec:
   replicas: 1
@@ -15,13 +15,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: limes
-        app.kubernetes.io/version: 5a1490f
+        app.kubernetes.io/version: 43a138f
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: limes
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:5a1490f@sha256:1b15381bafb9d75e3b3818265569a4d27dcc5c74ad26d8cd6879aae89d24809b
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:43a138f@sha256:838a243c7fc5c113f24c0e8a86f992df3b37624313b9910dfa95d34b548061f8
         name: limes
         ports:
         - containerPort: 8080
