@@ -184,7 +184,7 @@ Two things to check, because both have been wrong:
    it — the SHAs are preserved across the mirror.
 
    **That was not true for a while, and it is worth knowing why.** The mirror
-   was described here as automatic while it was in fact `push-all.sh` doing it
+   was described here as automatic while it was in fact the workspace's push script (now `./lab push`) doing it
    by hand, deliberately, because pushing to Codeberg meant pushing whatever
    was in `cluster/flux/flux-system/` at the cluster's only source of truth —
    so it was done rarely and carefully. Measured at the time of the flux-core
