@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: tare
-    app.kubernetes.io/version: ce81aec
+    app.kubernetes.io/version: 9fe15fc
   name: tare
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: tare
-        app.kubernetes.io/version: ce81aec
+        app.kubernetes.io/version: 9fe15fc
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -30,7 +30,7 @@ spec:
         - svc.cluster.local
         - cluster.local
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:ce81aec@sha256:cd81cd0f7475835eb94021d9d7ddcd9125f7c2401ec4a18d0ecb174907c56395
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tare:9fe15fc@sha256:e9e9b89289359410331e53ef624c5c1d5c84872c006f29aa2710a9dc1156ef9a
         name: tare
         ports:
         - containerPort: 8080

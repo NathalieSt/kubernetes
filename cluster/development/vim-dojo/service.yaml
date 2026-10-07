@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: vim-dojo
-    app.kubernetes.io/version: fa5fab0
+    app.kubernetes.io/version: d7ab5c5
   name: vim-dojo
 spec:
   selector:
