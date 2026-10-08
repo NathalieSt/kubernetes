@@ -8,3 +8,5 @@ spec:
   cluster:
     name: postgres
   owner: tare
+  extensions:
+  - name: vector
