@@ -123,6 +123,8 @@ spec:
       - args:
         - --host=unix:///var/run/docker-shared/docker.sock
         - --group=1000
+        - --mtu=1280
+        - --default-network-opt=bridge=com.docker.network.driver.mtu=1280
         image: docker:29-dind
         name: docker
         volumeMounts:
