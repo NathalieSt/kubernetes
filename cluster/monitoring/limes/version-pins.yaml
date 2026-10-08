@@ -891,7 +891,7 @@ data:
           "key": "psono-client",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client",
-          "version": "2d8af14@sha256:b687a1d790467878e665ee7ce09e277eda78c427b45f1d8c38469ad1ca9dccba",
+          "version": "d8785ce@sha256:08b8d3759e83fc74c635650aaedac307b48fc8227621b62bd12ba14a4330cf65",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1001,7 +1001,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "ec9de6a@sha256:ae2ed5bb1c0534eea0317dbd21e7363b74553d6176941de506901d82511a1d54",
+          "version": "d3d7b8e@sha256:f9cdc6d5fc48e18c018f133767ec825d6cb75decd63d0a905cd39477a9f24742",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
