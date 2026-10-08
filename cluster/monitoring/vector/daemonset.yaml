@@ -4,7 +4,7 @@ kind: DaemonSet
 metadata:
   labels:
     app.kubernetes.io/name: vector
-    app.kubernetes.io/version: sha256_5dcf67db0ee37
+    app.kubernetes.io/version: 0.58.0-alpine
   name: vector
 spec:
   selector:
@@ -16,7 +16,7 @@ spec:
         homelab/vector-config-hash: e85c8997e65de1d4
       labels:
         app.kubernetes.io/name: vector
-        app.kubernetes.io/version: sha256_5dcf67db0ee37
+        app.kubernetes.io/version: 0.58.0-alpine
     spec:
       serviceAccountName: vector
       dnsPolicy: ClusterFirst
@@ -24,7 +24,7 @@ spec:
       - args:
         - --config-dir
         - /etc/vector/
-        image: timberio/vector@sha256:5dcf67db0ee378caa87f3395cb9484ebe3e97bb0334d119f2ac33116e00c5773
+        image: timberio/vector:0.58.0-alpine@sha256:5dcf67db0ee378caa87f3395cb9484ebe3e97bb0334d119f2ac33116e00c5773
         name: vector
         ports:
         - containerPort: 9090

@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: egress-proxy
-    app.kubernetes.io/version: sha256_8f9269b0b5b7b
+    app.kubernetes.io/version: "1.7"
   name: egress-proxy
 spec:
   selector:

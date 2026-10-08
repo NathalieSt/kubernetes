@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: tandoor
-    app.kubernetes.io/version: sha256_f6c58afdea7a7
+    app.kubernetes.io/version: 2.6.13
   name: tandoor
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: tandoor
-        app.kubernetes.io/version: sha256_f6c58afdea7a7
+        app.kubernetes.io/version: 2.6.13
     spec:
       initContainers:
       - command:
@@ -25,7 +25,7 @@ spec:
         - /pennant-out
         - /pennant/pennant.css
         - main-*.css
-        image: vabene1111/recipes@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
+        image: vabene1111/recipes:2.6.13@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
         name: pennant
         volumeMounts:
         - mountPath: /pennant
@@ -45,7 +45,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: vabene1111/recipes@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
+      - image: vabene1111/recipes:2.6.13@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
         name: tandoor
         ports:
         - containerPort: 8080

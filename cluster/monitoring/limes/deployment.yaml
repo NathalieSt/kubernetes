@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: limes
-    app.kubernetes.io/version: 296a192
+    app.kubernetes.io/version: 9b19283
   name: limes
 spec:
   replicas: 1
@@ -15,13 +15,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: limes
-        app.kubernetes.io/version: 296a192
+        app.kubernetes.io/version: 9b19283
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: limes
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:296a192@sha256:c577e51cb518660330e1eac939e826a7b497a4596fd7f7b1ac70b5f025b0756e
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:9b19283@sha256:e6169579efded1a52221755cafb38bbf2f0e212a8fba8ff5e99ebe26980fd32a
         name: limes
         ports:
         - containerPort: 8080
@@ -36,7 +36,7 @@ spec:
         - name: LIMES_INVENTORY_NAMESPACES
           value: ""
         - name: LIMES_GRYPE_IMAGE
-          value: anchore/grype@sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b
+          value: anchore/grype:v0.118.0-nonroot@sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b
         - name: LIMES_GRYPE_CACHE_CLAIM
           value: limes-grype-cache-pvc
         - name: LIMES_CLAMAV_NAMESPACE

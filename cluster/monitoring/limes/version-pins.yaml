@@ -173,7 +173,7 @@ data:
           "key": "code-server",
           "kind": "image",
           "repository": "codercom/code-server",
-          "version": "sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012",
+          "version": "4.135.0@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012",
           "file": "versions/development.json",
           "inVersionsFile": true,
           "generators": [
@@ -217,7 +217,7 @@ data:
           "key": "it-tools",
           "kind": "image",
           "repository": "ghcr.io/sharevb/it-tools",
-          "version": "sha256:5d79e8c7fbf39d6473c282b9c4f86ff85c4900ec22ef766ae3c6f0f9ca8dbb37",
+          "version": "2026.7.11@sha256:5d79e8c7fbf39d6473c282b9c4f86ff85c4900ec22ef766ae3c6f0f9ca8dbb37",
           "file": "versions/development.json",
           "inVersionsFile": true,
           "generators": [
@@ -228,7 +228,7 @@ data:
           "key": "omni-tools",
           "kind": "image",
           "repository": "iib0011/omni-tools",
-          "version": "sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69",
+          "version": "0.6.0@sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69",
           "file": "versions/development.json",
           "inVersionsFile": true,
           "generators": [
@@ -296,7 +296,7 @@ data:
           "key": "egress-proxy",
           "kind": "image",
           "repository": "kalaksi/tinyproxy",
-          "version": "sha256:8f9269b0b5b7b872b2fe8471299330c9fcf2ffb12eebdbb152feb7b9084f866a",
+          "version": "1.7@sha256:5a65354cbb5f9c0fdcc8de3d3af8dd1c5ea072b3a1f52e5961a9a5cce6eba227",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -318,7 +318,7 @@ data:
           "key": "garage",
           "kind": "image",
           "repository": "dxflrs/garage",
-          "version": "sha256:8e854083d23122ccfb1f8d715fce298826dd7eca938f03694cb05a53a43dc0a4",
+          "version": "v2.4.1@sha256:9c96caa2612d3411acc5b0e6701fb238dbfba33e533a6d7d3d811a4b12d0d020",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
@@ -560,7 +560,7 @@ data:
           "key": "audiomuse-ai",
           "kind": "image",
           "repository": "ghcr.io/neptunehub/audiomuse-ai",
-          "version": "sha256:9881304597ce7ea4938b670509e227a97aab42dcf8ca349139cebab321f2dd33",
+          "version": "3.5.1@sha256:9881304597ce7ea4938b670509e227a97aab42dcf8ca349139cebab321f2dd33",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -638,7 +638,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "56206e4@sha256:8bdaa80f6fe09805bad0bdc8007e9576f87885979610154dc41e7cc46376870c",
+          "version": "d8a4936@sha256:96a3f93d7d98fe9e4f64040e2b54a20c94da8d3feeddf228e16a5717dd8776d8",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -748,7 +748,7 @@ data:
           "key": "grype",
           "kind": "image",
           "repository": "anchore/grype",
-          "version": "sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b",
+          "version": "v0.118.0-nonroot@sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -770,7 +770,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "296a192@sha256:c577e51cb518660330e1eac939e826a7b497a4596fd7f7b1ac70b5f025b0756e",
+          "version": "9b19283@sha256:e6169579efded1a52221755cafb38bbf2f0e212a8fba8ff5e99ebe26980fd32a",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -792,7 +792,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "754b08d@sha256:e5f105f0e64087cd8186ff4fe8b3c2401bda51e40c2f484b1328219c3ccd271a",
+          "version": "5e33dc7@sha256:719b2678210f647f4eec4fea6fcf7bd9dc77e3a87b25e61b3b12329bbf8be48b",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -803,7 +803,7 @@ data:
           "key": "vector",
           "kind": "image",
           "repository": "timberio/vector",
-          "version": "sha256:5dcf67db0ee378caa87f3395cb9484ebe3e97bb0334d119f2ac33116e00c5773",
+          "version": "0.58.0-alpine@sha256:5dcf67db0ee378caa87f3395cb9484ebe3e97bb0334d119f2ac33116e00c5773",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -836,7 +836,7 @@ data:
           "key": "clavis",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis",
-          "version": "f82df3c@sha256:814819d1f9e5459a0d35f033f6cb5cb7aa2db88b536612acf8b4e866afe1d3ad",
+          "version": "7233e82@sha256:e31251d61328248faefeacde42c90c42638de86d03eeaa6fa09e891b381911b3",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -847,7 +847,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "9b92988@sha256:d9145a8d657f95aa742982924d8b655758e8653b9fe904c9ff2eccb2106f0888",
+          "version": "3b9b48d@sha256:7a2c8ab3e3b7aeffd075a2074e3fe14520ad1fc2f3f9ba7009f9d26a566dfa07",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -858,7 +858,7 @@ data:
           "key": "kavita",
           "kind": "image",
           "repository": "jvmilazz0/kavita",
-          "version": "sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982",
+          "version": "0.9.0.2@sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -869,7 +869,7 @@ data:
           "key": "mail",
           "kind": "image",
           "repository": "ghcr.io/docker-mailserver/docker-mailserver",
-          "version": "sha256:5961d79488def84b030a2e164168dd64fb262ac6a2393a4f77b3ceebe5261d4f",
+          "version": "16.0.0@sha256:5961d79488def84b030a2e164168dd64fb262ac6a2393a4f77b3ceebe5261d4f",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -913,7 +913,7 @@ data:
           "key": "roundcube",
           "kind": "image",
           "repository": "roundcube/roundcubemail",
-          "version": "sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a",
+          "version": "1.7.3-apache-nonroot@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -935,7 +935,7 @@ data:
           "key": "tandoor",
           "kind": "image",
           "repository": "vabene1111/recipes",
-          "version": "sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451",
+          "version": "2.6.13@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -946,7 +946,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "9fe15fc@sha256:e9e9b89289359410331e53ef624c5c1d5c84872c006f29aa2710a9dc1156ef9a",
+          "version": "1c395ab@sha256:f3d3894c86ce26718c60b2e768d231d7b3f7a3ff1f07b67998034655ce7614d0",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -957,7 +957,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "7819268@sha256:df27232d05f8db4e6d863d6098cca699593c62232676dc96526a97c9ae34d2cd",
+          "version": "2a4b1b3@sha256:6cf7ed7c1462a3c8712c7b1a6b62c6593b380e3868ae4579d7b3c9e57e2a5317",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -990,7 +990,7 @@ data:
           "key": "fleet",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet",
-          "version": "f95c605@sha256:122be03e84cf45e8f5f452be5e9b25cc3d271d064ec96a6c221f787deee847ea",
+          "version": "5c8230e@sha256:e9b0261506ae45e9740247b1a86c89437eaf98f0bb206f5310046cee8cccc754",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1023,7 +1023,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "9d9365c@sha256:715b70276c17a0dbe3f8592cbca8983bb44e91c880c21ca4d5543fe2c40bf81b",
+          "version": "16ca3de@sha256:eb758f2bbdf35f4bf6fad8b3cb53d9cfdb31755a2516875196934097356851da",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1133,7 +1133,7 @@ data:
           "key": "rimworld-together",
           "kind": "image",
           "repository": "ghcr.io/rimworld-together/rimworld-together",
-          "version": "sha256:a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285",
+          "version": "26.4.18.1@sha256:a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285",
           "file": "versions/web.json",
           "inVersionsFile": true,
           "generators": [

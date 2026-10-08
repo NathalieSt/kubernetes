@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: tare
-    app.kubernetes.io/version: 9fe15fc
+    app.kubernetes.io/version: 1c395ab
   name: tare
 spec:
   selector:

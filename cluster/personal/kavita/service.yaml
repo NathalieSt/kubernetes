@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: kavita
-    app.kubernetes.io/version: sha256_ca6af7a18d712
+    app.kubernetes.io/version: 0.9.0.2
   name: kavita
 spec:
   selector:

@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: tandoor
-    app.kubernetes.io/version: sha256_f6c58afdea7a7
+    app.kubernetes.io/version: 2.6.13
   name: tandoor
 spec:
   selector:
