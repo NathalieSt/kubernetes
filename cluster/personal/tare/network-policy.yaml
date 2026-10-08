@@ -74,6 +74,16 @@ spec:
     ports:
     - port: 8888
       protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: embeddings
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: embeddings
+    ports:
+    - port: 8080
+      protocol: TCP
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -129,4 +139,14 @@ spec:
           app.kubernetes.io/name: gluetun-proxy
     ports:
     - port: 8888
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: embeddings
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: embeddings
+    ports:
+    - port: 8080
       protocol: TCP

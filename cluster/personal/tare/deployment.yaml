@@ -54,6 +54,8 @@ spec:
           value: :8080
         - name: HTTPS_PROXY
           value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: TARE_EMBEDDINGS_URL
+          value: http://embeddings.embeddings.svc.cluster.local:8080
         - name: TARE_NTFY_URL
           value: http://ntfy.ntfy.svc.cluster.local:8080/
         - name: TARE_NTFY_TOPIC

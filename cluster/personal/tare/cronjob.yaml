@@ -57,6 +57,8 @@ spec:
                   name: tare-db-secret
             - name: HTTPS_PROXY
               value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+            - name: TARE_EMBEDDINGS_URL
+              value: http://embeddings.embeddings.svc.cluster.local:8080
             - name: TARE_SKIP_SOURCES
               value: dm,mueller
             - name: TARE_NTFY_URL
@@ -158,6 +160,8 @@ spec:
                   name: tare-db-secret
             - name: HTTPS_PROXY
               value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+            - name: TARE_EMBEDDINGS_URL
+              value: http://embeddings.embeddings.svc.cluster.local:8080
             - name: TARE_SOURCES
               value: mueller
             - name: TARE_NTFY_URL
@@ -259,6 +263,8 @@ spec:
                   name: tare-db-secret
             - name: HTTPS_PROXY
               value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+            - name: TARE_EMBEDDINGS_URL
+              value: http://embeddings.embeddings.svc.cluster.local:8080
             - name: TARE_SOURCES
               value: dm
             - name: TARE_NTFY_URL

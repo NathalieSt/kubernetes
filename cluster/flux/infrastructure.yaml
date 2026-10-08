@@ -106,6 +106,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: embeddings
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: embeddings
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/infrastructure/embeddings
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: reflector
+  serviceAccountName: flux-embeddings
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: flux-rbac
   namespace: flux-system
 spec:
