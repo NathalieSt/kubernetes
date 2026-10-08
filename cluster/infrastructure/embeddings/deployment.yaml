@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: embeddings
+    app.kubernetes.io/version: becdeee
+  name: embeddings
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: embeddings
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: embeddings
+        app.kubernetes.io/version: becdeee
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/embeddings:becdeee@sha256:e7ffefe4a038e5940fc7849b08b60f27a19ff571fd15e35e2091cecc5c0c2929
+        name: embeddings
+        ports:
+        - containerPort: 8080
+          name: http
+        resources:
+          requests:
+            cpu: 50m
+            memory: 1536Mi
+          limits:
+            cpu: "4"
+            memory: 3Gi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          periodSeconds: 30
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          periodSeconds: 5
+          failureThreshold: 60
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      nodeSelector:
+        kubernetes.io/hostname: debian

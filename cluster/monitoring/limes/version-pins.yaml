@@ -304,6 +304,17 @@ data:
           ]
         },
         {
+          "key": "embeddings",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/embeddings",
+          "version": "becdeee@sha256:e7ffefe4a038e5940fc7849b08b60f27a19ff571fd15e35e2091cecc5c0c2929",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "embeddings"
+          ]
+        },
+        {
           "key": "forgejo-pg",
           "kind": "image",
           "repository": "ghcr.io/cloudnative-pg/postgresql",
