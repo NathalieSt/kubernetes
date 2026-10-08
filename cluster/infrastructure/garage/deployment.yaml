@@ -89,7 +89,7 @@ spec:
       serviceAccountName: garage-vault-serviceaccount
       automountServiceAccountToken: true
       containers:
-      - image: dxflrs/garage@sha256:8e854083d23122ccfb1f8d715fce298826dd7eca938f03694cb05a53a43dc0a4
+      - image: dxflrs/garage:v2.4.1@sha256:9c96caa2612d3411acc5b0e6701fb238dbfba33e533a6d7d3d811a4b12d0d020
         name: garage
         ports:
         - containerPort: 3900

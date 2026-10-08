@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: rimworld-together
-    app.kubernetes.io/version: sha256_a978f0f139ea2
+    app.kubernetes.io/version: 26.4.18.1
   name: rimworld-together
 spec:
   selector:

@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: omni-tools
-    app.kubernetes.io/version: sha256_ceb5acc317daf
+    app.kubernetes.io/version: 0.6.0
   name: omni-tools
 spec:
   selector:

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: it-tools
-    app.kubernetes.io/version: sha256_5d79e8c7fbf39
+    app.kubernetes.io/version: 2026.7.11
   name: it-tools
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: it-tools
-        app.kubernetes.io/version: sha256_5d79e8c7fbf39
+        app.kubernetes.io/version: 2026.7.11
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
@@ -26,7 +26,7 @@ spec:
         - /etc/nginx/nginx.conf
         - -g
         - daemon off;
-        image: ghcr.io/sharevb/it-tools@sha256:5d79e8c7fbf39d6473c282b9c4f86ff85c4900ec22ef766ae3c6f0f9ca8dbb37
+        image: ghcr.io/sharevb/it-tools:2026.7.11@sha256:5d79e8c7fbf39d6473c282b9c4f86ff85c4900ec22ef766ae3c6f0f9ca8dbb37
         name: it-tools
         ports:
         - containerPort: 8080

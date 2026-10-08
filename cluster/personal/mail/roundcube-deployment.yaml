@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: roundcube
-    app.kubernetes.io/version: sha256_c018c84f59872
+    app.kubernetes.io/version: 1.7.3-apache-nonroot
   name: roundcube
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: roundcube
-        app.kubernetes.io/version: sha256_c018c84f59872
+        app.kubernetes.io/version: 1.7.3-apache-nonroot
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -36,7 +36,7 @@ spec:
         - /pennant/roundcube-skin-sources.sh
         - /pennant-skin
         - /pennant/_variables.less
-        image: roundcube/roundcubemail@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a
+        image: roundcube/roundcubemail:1.7.3-apache-nonroot@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a
         name: pennant-skin-sources
         volumeMounts:
         - mountPath: /pennant
@@ -76,7 +76,7 @@ spec:
           runAsNonRoot: true
       automountServiceAccountToken: false
       containers:
-      - image: roundcube/roundcubemail@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a
+      - image: roundcube/roundcubemail:1.7.3-apache-nonroot@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a
         name: roundcube
         ports:
         - containerPort: 8000
