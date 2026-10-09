@@ -14,5 +14,5 @@ spec:
     port: 8888
     targetPort: 8888
   - name: control-gluetun-proxy
-    port: 8000
-    targetPort: 8000
+    port: 8001
+    targetPort: 8001

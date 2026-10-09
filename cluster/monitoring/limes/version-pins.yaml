@@ -649,7 +649,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "d8a4936@sha256:96a3f93d7d98fe9e4f64040e2b54a20c94da8d3feeddf228e16a5717dd8776d8",
+          "version": "2ebb8d8@sha256:6abc7caab130f7fcf9b89e6a5d0ab08ee6f8b4b6d15852d3d2bb45268997d027",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -957,7 +957,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "8239c73@sha256:1752d3f6f8880f2653f5ef73bb42a8385949ef6341251ba2a2d78b33f3d0ee8d",
+          "version": "dd09130@sha256:107d9e9ba8237c5f6372d1d9d6a42cd04b39a908c63dabe7b46cb9d89db192c9",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [

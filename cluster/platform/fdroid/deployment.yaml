@@ -131,6 +131,7 @@ spec:
       - name: tmp-volume
         emptyDir: {}
       securityContext:
+        fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       nodeSelector:

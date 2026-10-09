@@ -16,6 +16,7 @@ spec:
   template:
     metadata:
       annotations:
+        homelab/vpn-control-hash: cc0b55451e27bce3
         homelab/vpn-probe-hash: 95fbe75501c43bab
       labels:
         app.kubernetes.io/name: gluetun-proxy
@@ -32,8 +33,6 @@ spec:
         ports:
         - containerPort: 8888
           name: gluetun-proxy
-        - containerPort: 8000
-          name: control
         env:
         - name: VPN_SERVICE_PROVIDER
           value: protonvpn
@@ -58,7 +57,7 @@ spec:
         - name: SERVER_COUNTRIES
           value: Austria,Bulgaria,Croatia,Czech Republic,Estonia,Finland,Greece,Hungary,Latvia,Lithuania,Luxembourg,Netherlands,Portugal,Serbia,Slovakia,Slovenia
         - name: FIREWALL_INPUT_PORTS
-          value: 8888,8000,9101
+          value: 8888,8001,9101
         - name: FIREWALL_OUTBOUND_SUBNETS
           value: 10.42.0.0/16
         - name: HTTPPROXY
@@ -66,7 +65,7 @@ spec:
         - name: HTTPPROXY_STEALTH
           value: "on"
         - name: HTTP_CONTROL_SERVER_ADDRESS
-          value: :8000
+          value: 127.0.0.1:8000
         - name: HTTP_CONTROL_SERVER_LOG
           value: "off"
         securityContext:
@@ -137,9 +136,46 @@ spec:
           limits:
             cpu: 50m
             memory: 32Mi
+      - command:
+        - /bin/sh
+        - -c
+        - while true; do node /vpn-control/vpn-control.mjs; sleep 5; done
+        image: node:24.21.0-bookworm-slim@sha256:0e0ff40c39bc087845bfb27465a0df4ea419520094bc35842ff83dd8cbe6f9b6
+        name: vpn-control
+        ports:
+        - containerPort: 8001
+          name: control
+        volumeMounts:
+        - mountPath: /vpn-control
+          name: vpn-control-script
+          readOnly: true
+        env:
+        - name: VPN_CONTROL_PORT
+          value: "8001"
+        - name: GLUETUN_CONTROL_URL
+          value: http://127.0.0.1:8000
+        resources:
+          requests:
+            cpu: 5m
+            memory: 48Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       volumes:
       - name: vpn-probe-scripts
         configMap:
           name: gluetun-proxy-vpn-probe
       - name: vpn-probe-state
         emptyDir: {}
+      - name: vpn-control-script
+        configMap:
+          name: gluetun-proxy-vpn-control

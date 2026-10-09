@@ -40,7 +40,7 @@ spec:
         matchLabels:
           app.kubernetes.io/name: gluetun-proxy
     ports:
-    - port: 8000
+    - port: 8001
       protocol: TCP
   - to:
     - namespaceSelector:
