@@ -10,5 +10,6 @@ resources:
 - network-policy.yaml
 - egress-network-policy.yaml
 - vpn-probe-configmap.yaml
+- vpn-control-configmap.yaml
 - vpn-probe-vmrule.yaml
 - default-deny-egress.yaml

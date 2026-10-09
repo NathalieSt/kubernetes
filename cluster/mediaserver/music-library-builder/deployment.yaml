@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: music-library-builder
-    app.kubernetes.io/version: d8a4936
+    app.kubernetes.io/version: 2ebb8d8
   name: music-library-builder
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: music-library-builder
-        app.kubernetes.io/version: d8a4936
+        app.kubernetes.io/version: 2ebb8d8
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -39,7 +39,7 @@ spec:
         - svc.cluster.local
         - cluster.local
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:d8a4936@sha256:96a3f93d7d98fe9e4f64040e2b54a20c94da8d3feeddf228e16a5717dd8776d8
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:2ebb8d8@sha256:6abc7caab130f7fcf9b89e6a5d0ab08ee6f8b4b6d15852d3d2bb45268997d027
         name: music-library-builder
         ports:
         - containerPort: 8140
@@ -57,7 +57,7 @@ spec:
         - name: MLB_PROXY
           value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
         - name: MLB_VPN_CONTROL_URL
-          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8000
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8001
         - name: MLB_NO_PROXY
           value: svc.cluster.local,cluster.local,localhost
         - name: MLB_CONCURRENCY

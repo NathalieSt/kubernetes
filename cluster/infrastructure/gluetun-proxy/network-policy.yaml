@@ -108,8 +108,20 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: music-library-builder
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tare
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: tare-crawl
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tare
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: tare
     ports:
-    - port: 8000
+    - port: 8001
       protocol: TCP
   - from:
     - namespaceSelector:
