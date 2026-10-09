@@ -11,8 +11,8 @@ spec:
   inheritedMetadata:
     annotations:
       k8up.io/backup: "false"
-      k8up.io/backupcommand: pg_dumpall --clean --if-exists
-      k8up.io/file-extension: .sql
+      k8up.io/backupcommand: bash -c 'set -o pipefail; pg_dumpall --clean --if-exists | zstd -T0 -3 -q'
+      k8up.io/file-extension: .sql.zst
   superuserSecret:
     name: forgejo-pg-creds-secret
   enableSuperuserAccess: true
