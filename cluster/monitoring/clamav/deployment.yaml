@@ -46,12 +46,6 @@ spec:
           name: database-volume
         - mountPath: /var/log/clamav
           name: log-volume
-        - mountPath: /scan/local
-          name: local-share-volume
-          readOnly: true
-        - mountPath: /scan/nas
-          name: nas-share-volume
-          readOnly: true
         env:
         - name: TZ
           value: Europe/Vienna
@@ -77,9 +71,3 @@ spec:
           claimName: clamav-db-pvc
       - name: log-volume
         emptyDir: {}
-      - name: local-share-volume
-        persistentVolumeClaim:
-          claimName: clamav-local-pvc
-      - name: nas-share-volume
-        persistentVolumeClaim:
-          claimName: clamav-nas-pvc

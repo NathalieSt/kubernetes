@@ -375,22 +375,31 @@ data:
       exit 2
     fi
 
-    # The exit status travels down the pipe as a last line: sh has no pipefail.
+    # clamd is another host, so clamdscan streams the first 100 MB of every file it is given;
+    # MAX_FILE_BYTES leaves out the larger ones, which clamd would skip unread.
+    size=""
+    [ -n "${MAX_FILE_BYTES:-}" ] && size="-size -$((MAX_FILE_BYTES + 1))c"
+
+    # sh has no pipefail: the exit status travels down the pipe as a last line, find's errors by fd 3.
     # shellcheck disable=SC2086 # top-level entries are namespace names, no spaces
     {
-      # CLAMDSCAN_MODE=--stream sends bytes, for files clamd has no mount of.
-      clamdscan --config-file="$config" "${CLAMDSCAN_MODE:---multiscan}" --infected --stdout $paths
+      find $paths -type f $size -print 2>&3 |
+        clamdscan --config-file="$config" "${CLAMDSCAN_MODE:---multiscan}" --infected --stdout \
+          --file-list=/dev/stdin
       echo "clamdscan-exit $?"
-    } | awk '
+    } 3>&1 | awk '
       /^clamdscan-exit / { rc = $2; next }
       { print }
       /: Failed to open file\. ERROR$/ { unreadable++; next }
-      /ERROR/ { other++ }
+      /^find: .*: Permission denied$/ { closed++; next }
+      /^find: / || /ERROR/ { other++ }
       /^Infected files: / { summary = 1 }
       END {
+        if (closed) print closed " directories were not readable and were not scanned."
         if (rc == 2 && summary && !other) {
           print unreadable + 0 " files were not readable by clamd and were not scanned."
           exit 0
         }
+        if (rc == 0 && other) exit 2
         exit rc
       }'

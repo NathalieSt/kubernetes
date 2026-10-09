@@ -44,6 +44,8 @@ spec:
             env:
             - name: TZ
               value: Europe/Vienna
+            - name: MAX_FILE_BYTES
+              value: "104857600"
             - name: BLOCKED_EXTENSIONS
               value: exe com scr pif msi msp dll cpl bat cmd ps1 psm1 vbs vbe js jse wsf wsh hta jar lnk url scf reg inf app dmg pkg command sh run appimage deb rpm apk
             - name: AUDIT_DIRS
