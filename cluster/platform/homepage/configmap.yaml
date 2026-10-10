@@ -535,6 +535,12 @@ data:
           namespace: redlib
           app: redlib
     - Platform:
+      - arx:
+          href: https://arx.netbird.nathalie-stiefsohn.eu
+          icon: mdi-castle
+          description: The homelab as the map of a walled city
+          namespace: arx
+          app: arx
       - authelia:
           href: https://auth.netbird.nathalie-stiefsohn.eu
           icon: authelia.png

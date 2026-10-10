@@ -17,6 +17,18 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
+    homelab.nathalie-stiefsohn.eu/category: platform
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: arx
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
     homelab.nathalie-stiefsohn.eu/category: infrastructure
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline

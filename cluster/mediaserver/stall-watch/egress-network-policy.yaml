@@ -1,0 +1,64 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: stall-watch-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: stall-watch
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: media-dns
+    ports:
+    - port: 5353
+      protocol: UDP
+    - port: 5353
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: qbittorrent
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: qbittorrent
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: sonarr
+    ports:
+    - port: 8989
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: radarr
+    ports:
+    - port: 7878
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: lidarr
+    ports:
+    - port: 8686
+      protocol: TCP

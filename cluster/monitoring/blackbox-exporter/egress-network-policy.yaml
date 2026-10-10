@@ -29,6 +29,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: arx
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: authelia
   - to:
     - namespaceSelector:

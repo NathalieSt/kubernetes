@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: arx
+    app.kubernetes.io/version: afb85c2
+  name: arx
+spec:
+  selector:
+    app.kubernetes.io/name: arx
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

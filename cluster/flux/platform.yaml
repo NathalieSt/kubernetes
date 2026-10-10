@@ -2,6 +2,28 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: arx
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: arx
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/platform/arx
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: reflector
+  - name: victoria-metrics
+  serviceAccountName: flux-arx
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: backup-dashboard
   namespace: flux-system
 spec:

@@ -48,6 +48,11 @@ data:
     var name = getOrUndefined("name");
     var fileName = getOrUndefined("fileName");
 
+    // node_modules/@rescript/runtime/lib/es6/Stdlib_JsError.js
+    function throwWithMessage(str) {
+      throw new Error(str);
+    }
+
     // node_modules/@rescript/runtime/lib/es6/Stdlib_Option.js
     function filter(opt, p) {
       if (opt !== void 0 && p(valFromOption(opt))) {
@@ -311,21 +316,12 @@ data:
       let match = await send("/v1/vpn/status", "PUT", body);
       let code = match[0];
       if (code !== 200) {
-        throw {
-          RE_EXN_ID: "Failure",
-          _1: `gluetun refused "` + status + `": HTTP ` + code.toString() + ` ` + match[1],
-          Error: new Error()
-        };
+        throwWithMessage(`gluetun refused "` + status + `": HTTP ` + code.toString() + ` ` + match[1]);
       }
       let reached = await waitFor(async () => filter(await readStatus(), (now) => now === status), 30);
-      if (!isNone(reached)) {
-        return;
+      if (isNone(reached)) {
+        return throwWithMessage(`the tunnel did not become ` + status + ` within a minute`);
       }
-      throw {
-        RE_EXN_ID: "Failure",
-        _1: `the tunnel did not become ` + status + ` within a minute`,
-        Error: new Error()
-      };
     }
     async function rotate() {
       let before = await readExit();

@@ -83,6 +83,9 @@ spec:
     name: anki-sync
     namespace: flux-system
   - kind: Kustomization
+    name: arx
+    namespace: flux-system
+  - kind: Kustomization
     name: audiomuse-ai
     namespace: flux-system
   - kind: Kustomization
@@ -297,6 +300,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: sonarr
+    namespace: flux-system
+  - kind: Kustomization
+    name: stall-watch
     namespace: flux-system
   - kind: Kustomization
     name: stirling-pdf

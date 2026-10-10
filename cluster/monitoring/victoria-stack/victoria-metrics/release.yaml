@@ -835,6 +835,12 @@ spec:
                 probe_namespace: anki-sync
                 scale_to_zero: "false"
             - targets:
+              - http://arx.arx.svc.cluster.local:8080/
+              labels:
+                probe_name: arx
+                probe_namespace: arx
+                scale_to_zero: "false"
+            - targets:
               - http://audiomuse-ai.jellyfin.svc.cluster.local:8000/
               labels:
                 probe_name: audiomuse-ai

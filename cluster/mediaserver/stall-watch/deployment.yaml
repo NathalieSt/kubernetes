@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: stall-watch
+    app.kubernetes.io/version: 24.21.0-bookworm-sli
+  name: stall-watch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: stall-watch
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        homelab/stall-watch-hash: 925aed5a1c576f4c
+      labels:
+        app.kubernetes.io/name: stall-watch
+        app.kubernetes.io/version: 24.21.0-bookworm-sli
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.53
+        searches:
+        - jellyfin.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      containers:
+      - command:
+        - node
+        - /stall-watch/stall-watch.mjs
+        image: node:24.21.0-bookworm-slim@sha256:0e0ff40c39bc087845bfb27465a0df4ea419520094bc35842ff83dd8cbe6f9b6
+        name: stall-watch
+        volumeMounts:
+        - mountPath: /stall-watch
+          name: script
+          readOnly: true
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        - name: STALL_WATCH_QBITTORRENT_URL
+          value: http://qbittorrent.qbittorrent.svc.cluster.local:8080
+        - name: STALL_WATCH_ARR_URLS
+          value: http://sonarr.jellyfin.svc.cluster.local:8989,http://radarr.jellyfin.svc.cluster.local:7878,http://lidarr.jellyfin.svc.cluster.local:8686
+        - name: STALL_WATCH_AFTER_MINUTES
+          value: "360"
+        - name: STALL_WATCH_EVERY_SECONDS
+          value: "300"
+        resources:
+          requests:
+            cpu: 5m
+            memory: 48Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: script
+        configMap:
+          name: stall-watch-script
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

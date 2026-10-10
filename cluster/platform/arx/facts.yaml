@@ -1,0 +1,930 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arx-facts
+data:
+  facts.json: |
+    {
+      "houses": [
+        {
+          "generator": "anki-sync",
+          "namespace": "anki-sync",
+          "group": "study",
+          "about": "Flashcard sync: how to point Anki here",
+          "url": "https://docs.ankiweb.net/sync-server.html",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "audiomuse-ai",
+          "namespace": "jellyfin",
+          "group": "media",
+          "about": "Playlists from how the music sounds",
+          "url": "https://audiomuse.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "authelia",
+          "namespace": "authelia",
+          "group": "platform",
+          "about": "Single sign-on",
+          "url": "https://auth.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "backup-dashboard",
+          "namespace": "backup-dashboard",
+          "group": "platform",
+          "about": "K8up backups: browse, restore, trigger",
+          "url": "https://backups.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "bazarr",
+          "namespace": "jellyfin",
+          "group": "downloads",
+          "about": "Subtitles for the library",
+          "url": "https://bazarr.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "blackbox-exporter",
+          "namespace": "internal-gateway",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "cert-manager",
+          "namespace": "cert-manager",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "changedetection",
+          "namespace": "changedetection",
+          "group": "web",
+          "about": "Watches pages for changes",
+          "url": "https://changedetection.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "clamav",
+          "namespace": "clamav",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "clavis",
+          "namespace": "psono",
+          "group": "personal",
+          "about": "Password manager, our client",
+          "url": "https://clavis.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "cnpg",
+          "namespace": "cnpg-system",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "code-server",
+          "namespace": "code-server",
+          "group": "development",
+          "about": "VS Code in the browser",
+          "url": "https://vscode.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false,
+          "leavesBy": "egress-proxy"
+        },
+        {
+          "generator": "csi-driver-nfs",
+          "namespace": "csi-driver-nfs",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "daybook",
+          "namespace": "daybook",
+          "group": "personal",
+          "about": "Encrypted diary and habit tracker",
+          "url": "https://daybook.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "egress-proxy",
+          "namespace": "egress-proxy",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "embeddings",
+          "namespace": "embeddings",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "fdroid",
+          "namespace": "fdroid",
+          "group": "platform",
+          "url": "https://fdroid.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "flaresolverr",
+          "namespace": "jellyfin",
+          "group": "mediaserver",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "fleet",
+          "namespace": "fleet",
+          "group": "platform",
+          "about": "Salt for the hosts: packages, NetBird, health",
+          "url": "https://fleet.netbird.nathalie-stiefsohn.eu",
+          "entry": "second",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "flux-notifications",
+          "namespace": "flux-system",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "flux-rbac",
+          "namespace": "flux-system",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "forgejo",
+          "namespace": "forgejo",
+          "group": "development",
+          "about": "Git, CI and package registry",
+          "url": "https://code.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "forgejo-pg",
+          "namespace": "forgejo-pg-cluster",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "forgejo-runner",
+          "namespace": "forgejo",
+          "group": "development",
+          "sleeps": true,
+          "wakes": "07:00 to 01:00",
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "fourget",
+          "namespace": "fourget",
+          "group": "web",
+          "about": "Private metasearch",
+          "url": "https://4get.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": true,
+          "wakes": "07:00 to 01:00",
+          "sendsBackup": false,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "gameyfin",
+          "namespace": "gameyfin",
+          "group": "media",
+          "about": "Games",
+          "url": "https://gameyfin.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "garage",
+          "namespace": "garage",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "glitchtip",
+          "namespace": "glitchtip",
+          "group": "observability",
+          "about": "Error tracking",
+          "url": "https://glitchtip.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "gluetun-proxy",
+          "namespace": "gluetun-proxy",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "headlamp",
+          "namespace": "headlamp",
+          "group": "platform",
+          "about": "Kubernetes UI",
+          "url": "https://headlamp.netbird.nathalie-stiefsohn.eu",
+          "entry": "second",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "healthchecks",
+          "namespace": "healthchecks",
+          "group": "observability",
+          "about": "Cron job monitoring",
+          "url": "https://healthchecks.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "heartbeats",
+          "namespace": "healthchecks",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "helium-services",
+          "namespace": "helium-services",
+          "group": "web",
+          "about": "Extensions, filter lists and bangs for Helium",
+          "url": "https://helium.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "homelab-docs",
+          "namespace": "homelab-docs",
+          "group": "platform",
+          "about": "How the homelab works, and runbooks",
+          "url": "https://docs.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "homepage",
+          "namespace": "homepage",
+          "group": "platform",
+          "url": "https://home.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "intel-device-gpu-plugin",
+          "namespace": "inteldeviceplugins-system",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "intel-device-plugins-operator",
+          "namespace": "inteldeviceplugins-system",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "internal-gateway",
+          "namespace": "internal-gateway",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "it-tools",
+          "namespace": "it-tools",
+          "group": "development",
+          "about": "Developer utilities",
+          "url": "https://it-tools.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": true,
+          "wakes": "07:00 to 00:00",
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "jellyfin",
+          "namespace": "jellyfin",
+          "group": "media",
+          "about": "Films, series and music",
+          "url": "https://jellyfin.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": true,
+          "wakes": "07:00 to 01:00",
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "k8up",
+          "namespace": "k8up",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "kavita",
+          "namespace": "kavita",
+          "group": "media",
+          "about": "Books and comics",
+          "url": "https://kavita.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": true,
+          "wakes": "07:00 to 00:00",
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "keda",
+          "namespace": "keda",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "lidarr",
+          "namespace": "jellyfin",
+          "group": "downloads",
+          "about": "Albums, fetched and sorted",
+          "url": "https://lidarr.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "limes",
+          "namespace": "limes",
+          "group": "observability",
+          "about": "Security scans of every image in the cluster",
+          "url": "https://limes.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "mail",
+          "namespace": "mail",
+          "group": "personal",
+          "about": "Webmail",
+          "url": "https://mail.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "main-pg",
+          "namespace": "postgres",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": true
+        },
+        {
+          "generator": "media-dns",
+          "namespace": "jellyfin",
+          "group": "mediaserver",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "music-library-builder",
+          "namespace": "jellyfin",
+          "group": "media",
+          "about": "yt-dlp into the Jellyfin music library",
+          "url": "https://music.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "namespaces",
+          "namespace": "flux-system",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "neko",
+          "namespace": "neko",
+          "group": "web",
+          "about": "Disposable Firefox, streamed",
+          "url": "https://neko.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": true,
+          "wakes": "09:00 to 02:00",
+          "sendsBackup": false,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "netbird-operator",
+          "namespace": "netbird",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "nfd",
+          "namespace": "nfd",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "ntfy",
+          "namespace": "ntfy",
+          "group": "observability",
+          "about": "Push notifications",
+          "url": "https://ntfy.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "nvidia-k8s-device-plugin",
+          "namespace": "nvidia-k8s-device-plugin",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "omni-tools",
+          "namespace": "omni-tools",
+          "group": "development",
+          "about": "File, image and text tools",
+          "url": "https://omni-tools.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": true,
+          "wakes": "07:00 to 00:00",
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "orrery",
+          "namespace": "orrery",
+          "group": "observability",
+          "about": "Topology, metrics and logs",
+          "url": "https://orrery.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "paperless",
+          "namespace": "paperless",
+          "group": "personal",
+          "about": "Documents, OCRed and searchable",
+          "url": "https://paperless.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": true
+        },
+        {
+          "generator": "pharos",
+          "namespace": "pharos",
+          "group": "platform",
+          "about": "Kubernetes console: pods, reasons, logs, events",
+          "url": "https://pharos.netbird.nathalie-stiefsohn.eu",
+          "entry": "second",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "pharos-access",
+          "namespace": "pharos",
+          "group": "platform",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "prowlarr",
+          "namespace": "jellyfin",
+          "group": "downloads",
+          "about": "Indexers for the arr stack",
+          "url": "https://prowlarr.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "psono-client",
+          "namespace": "psono",
+          "group": "personal",
+          "about": "Password manager",
+          "url": "https://psono.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "psono-server",
+          "namespace": "psono",
+          "group": "platform",
+          "about": "Psono's API, which the web client and apps call",
+          "url": "https://psono-api.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "qbittorrent",
+          "namespace": "qbittorrent",
+          "group": "downloads",
+          "about": "Torrents, through the VPN",
+          "url": "https://qbittorrent.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "radarr",
+          "namespace": "jellyfin",
+          "group": "downloads",
+          "about": "Films, fetched and sorted",
+          "url": "https://radarr.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "radicale",
+          "namespace": "radicale",
+          "group": "study",
+          "about": "Calendars and contacts (CalDAV)",
+          "url": "https://calendar.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "redis",
+          "namespace": "redis",
+          "group": "infrastructure",
+          "sleeps": true,
+          "wakes": "06:00 to 00:00",
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "redlib",
+          "namespace": "redlib",
+          "group": "web",
+          "about": "Private Reddit front end",
+          "url": "https://redlib.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": true,
+          "wakes": "07:00 to 00:00",
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "reflector",
+          "namespace": "reflector",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "rimworld-together",
+          "namespace": "rimworld-together",
+          "group": "web",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "sabnzbd",
+          "namespace": "qbittorrent",
+          "group": "downloads",
+          "about": "Usenet, through the VPN",
+          "url": "https://sabnzbd.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "seerr",
+          "namespace": "jellyfin",
+          "group": "media",
+          "about": "Ask for a film or series",
+          "url": "https://requests.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "sonarr",
+          "namespace": "jellyfin",
+          "group": "downloads",
+          "about": "Series, fetched and sorted",
+          "url": "https://sonarr.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "stall-watch",
+          "namespace": "jellyfin",
+          "group": "mediaserver",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "stirling-pdf",
+          "namespace": "stirling-pdf",
+          "group": "personal",
+          "about": "Merge, split, OCR and convert PDFs",
+          "url": "https://pdf.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": true,
+          "wakes": "07:00 to 00:00",
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "system-upgrade-controller",
+          "namespace": "system-upgrade",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "system-upgrade-plans",
+          "namespace": "system-upgrade",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "tandoor",
+          "namespace": "tandoor",
+          "group": "personal",
+          "about": "Recipes and meal plans",
+          "url": "https://tandoor.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": true
+        },
+        {
+          "generator": "tare",
+          "namespace": "tare",
+          "group": "personal",
+          "about": "Supermarket prices per kilo, litre and piece",
+          "url": "https://tare.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
+          "generator": "trilium",
+          "namespace": "trilium",
+          "group": "study",
+          "about": "Lecture notes and placement reflections",
+          "url": "https://notes.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "valkey",
+          "namespace": "valkey",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vault",
+          "namespace": "vault",
+          "group": "platform",
+          "about": "Secrets",
+          "url": "https://vault.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vault-apply",
+          "namespace": "vault-apply",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vault-backup",
+          "namespace": "vault",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "vault-config",
+          "namespace": "vault",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vault-oidc-config",
+          "namespace": "vault",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vault-secrets-operator",
+          "namespace": "vault-secrets-operator",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vault-secrets-operator-config",
+          "namespace": "vault-secrets-operator",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vector",
+          "namespace": "vector",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "victoria-logs",
+          "namespace": "victoria-logs",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "victoria-metrics",
+          "namespace": "victoria-metrics",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "vim-dojo",
+          "namespace": "vim-dojo",
+          "group": "development",
+          "about": "Neovim in the browser",
+          "url": "https://dojo.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false,
+          "leavesBy": "egress-proxy"
+        },
+        {
+          "generator": "zyme",
+          "namespace": "zyme",
+          "group": "personal",
+          "about": "Fermentation: batches, sensors and reminders",
+          "url": "https://zyme.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        }
+      ]
+    }
