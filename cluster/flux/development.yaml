@@ -69,6 +69,7 @@ spec:
   - name: flux-rbac
   - name: forgejo
   - name: vault-secrets-operator-config
+  - name: keda
   serviceAccountName: flux-forgejo-runner
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1

@@ -1,0 +1,19 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: forgejo-runner
+spec:
+  groups:
+  - name: forgejo-runner
+    interval: 1m
+    rules:
+    - alert: CiJobsWaitingNoRunner
+      expr: max(cnpg_forgejo_actions_waiting) > 0 and on() sum(kube_deployment_status_replicas_available{namespace="forgejo",deployment=~"forgejo-runner.*"}) == 0
+      for: 10m
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: "Forgejo has had {{ $value }} job(s) waiting for 10 minutes while every runner is at zero replicas. The runners are woken by KEDA from that count: `kubectl -n ${meta.namespace} describe scaledobject` has the scaler's state, and `kubectl -n ${meta.namespace} scale deploy ${meta.name}-2 --replicas=1` starts one by hand until the next evaluation."
+        summary: CI jobs are waiting and no runner has started

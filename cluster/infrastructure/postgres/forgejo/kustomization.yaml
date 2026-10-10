@@ -8,5 +8,7 @@ resources:
 - forgejo-db.yaml
 - network-policy.yaml
 - monitoring-queries.yaml
+- monitoring-grants.yaml
+- monitoring-grants-cronjob.yaml
 - alert-rules.yaml
 - k8up-schedule.yaml

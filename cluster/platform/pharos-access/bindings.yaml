@@ -465,6 +465,20 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: pharos-operate
+  namespace: waking-page
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pharos-operate
+subjects:
+- kind: ServiceAccount
+  name: pharos
+  namespace: pharos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pharos-operate
   namespace: zyme
 roleRef:
   apiGroup: rbac.authorization.k8s.io

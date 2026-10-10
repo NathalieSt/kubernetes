@@ -25,6 +25,12 @@ data:
             - X-Forwarded-Proto
             - X-Forwarded-Uri
             - X-Forwarded-Method
+        waking:
+          errors:
+            status:
+            - 502-504
+            service: waking-page
+            query: /
   routers.yaml: |
     http:
       routers:
@@ -182,6 +188,7 @@ data:
           service: kavita
           middlewares:
           - authelia
+          - waking
         lidarr:
           rule: Host(`lidarr.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -317,6 +324,7 @@ data:
           service: stirling-pdf
           middlewares:
           - authelia
+          - waking
         tandoor:
           rule: Host(`tandoor.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -560,6 +568,10 @@ data:
           loadBalancer:
             servers:
             - url: http://vim-dojo.vim-dojo.svc.cluster.local:3000
+        waking-page:
+          loadBalancer:
+            servers:
+            - url: http://waking-page.waking-page.svc.cluster.local:8080
         zyme:
           loadBalancer:
             servers:

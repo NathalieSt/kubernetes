@@ -234,8 +234,7 @@ data:
           "generator": "forgejo-runner",
           "namespace": "forgejo",
           "group": "development",
-          "sleeps": true,
-          "wakes": "07:00 to 01:00",
+          "sleeps": false,
           "sendsBackup": false,
           "usesCistern": false
         },
@@ -418,7 +417,7 @@ data:
           "url": "https://kavita.netbird.nathalie-stiefsohn.eu",
           "entry": "guard",
           "sleeps": true,
-          "wakes": "07:00 to 00:00",
+          "wakes": "when asked for",
           "sendsBackup": true,
           "usesCistern": false
         },
@@ -758,7 +757,7 @@ data:
           "url": "https://pdf.netbird.nathalie-stiefsohn.eu",
           "entry": "guard",
           "sleeps": true,
-          "wakes": "07:00 to 00:00",
+          "wakes": "when asked for",
           "sendsBackup": false,
           "usesCistern": false
         },
@@ -914,6 +913,14 @@ data:
           "sendsBackup": true,
           "usesCistern": false,
           "leavesBy": "egress-proxy"
+        },
+        {
+          "generator": "waking-page",
+          "namespace": "waking-page",
+          "group": "platform",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
         },
         {
           "generator": "zyme",

@@ -8,11 +8,15 @@ spec:
     kind: Deployment
     name: forgejo-runner
   minReplicaCount: 0
-  cooldownPeriod: 300
+  maxReplicaCount: 1
+  cooldownPeriod: 600
+  fallback:
+    failureThreshold: 3
+    replicas: 1
   triggers:
-  - type: cron
+  - type: prometheus
     metadata:
-      timezone: Europe/Vienna
-      start: 0 7 * * *
-      end: 0 1 * * *
-      desiredReplicas: "1"
+      serverAddress: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+      query: max(cnpg_forgejo_actions_active)
+      threshold: "1"
+      ignoreNullValues: "false"

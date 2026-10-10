@@ -25,6 +25,9 @@ spec:
           kubernetes.io/metadata.name: homepage
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: keda
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: limes
     - namespaceSelector:
         matchLabels:

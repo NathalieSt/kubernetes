@@ -23,6 +23,13 @@ spec:
           - forgejo
           - cloudnative-pg
   - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: forgejo-pg-monitoring-grants
+    ports:
+    - port: 5432
+      protocol: TCP
+  - from:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: victoria-metrics
