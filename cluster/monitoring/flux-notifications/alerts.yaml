@@ -353,6 +353,9 @@ spec:
     name: vim-dojo
     namespace: flux-system
   - kind: Kustomization
+    name: waking-page
+    namespace: flux-system
+  - kind: Kustomization
     name: zyme
     namespace: flux-system
   exclusionList:

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: homelab-docs
-    app.kubernetes.io/version: 855ed06
+    app.kubernetes.io/version: 3bd7fa3
   name: homelab-docs
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: homelab-docs
-        app.kubernetes.io/version: 855ed06
+        app.kubernetes.io/version: 3bd7fa3
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -28,7 +28,7 @@ spec:
         - /etc/nginx/nginx.conf
         - -g
         - daemon off;
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs:855ed06@sha256:fba08758cae32674327c0ee7ae337b31668061220cd8a19c67e4396037d6e511
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs:3bd7fa3@sha256:f25cee208125edb8e02c685a078a13bb3786d05de296c2cea5378614426fd605
         name: homelab-docs
         ports:
         - containerPort: 8080

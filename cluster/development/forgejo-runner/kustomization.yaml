@@ -13,3 +13,4 @@ resources:
 - scaled-object-1.yaml
 - deployment-2.yaml
 - scaled-object-2.yaml
+- alert-rules.yaml

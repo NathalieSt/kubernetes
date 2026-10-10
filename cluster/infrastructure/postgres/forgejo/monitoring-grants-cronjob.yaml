@@ -1,0 +1,80 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: forgejo-pg-monitoring-grants
+  name: forgejo-pg-monitoring-grants
+spec:
+  schedule: 17 * * * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 1800
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: forgejo-pg-monitoring-grants
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - command:
+            - psql
+            - -X
+            - -v
+            - ON_ERROR_STOP=1
+            - -f
+            - /sql/monitoring-grants.sql
+            image: ghcr.io/cloudnative-pg/postgresql:18.6
+            name: forgejo-pg-monitoring-grants
+            volumeMounts:
+            - mountPath: /sql
+              name: sql
+              readOnly: true
+            env:
+            - name: PGHOST
+              value: forgejo-pg-rw.forgejo-pg-cluster.svc.cluster.local
+            - name: PGDATABASE
+              value: forgejo
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: forgejo-pg-creds-secret
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: forgejo-pg-creds-secret
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                cpu: 200m
+                memory: 128Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+          volumes:
+          - name: sql
+            configMap:
+              name: forgejo-pg-monitoring-grants
+          securityContext:
+            runAsUser: 26
+            runAsGroup: 26
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: Never

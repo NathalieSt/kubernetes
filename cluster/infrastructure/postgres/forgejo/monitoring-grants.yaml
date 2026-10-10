@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forgejo-pg-monitoring-grants
+data:
+  monitoring-grants.sql: |
+    -- What monitoring-queries.yaml reads. CNPG runs custom queries as pg_monitor, which cannot
+    -- read Forgejo's tables by itself. Run every hour by the forgejo-pg-monitoring-grants CronJob:
+    -- a grant lives in the database, and a table Forgejo's migrations recreate comes back without it.
+    GRANT SELECT ON public.push_mirror, public.repository, public.action_run_job TO pg_monitor;

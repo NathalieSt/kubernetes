@@ -2,10 +2,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  labels:
+    cnpg.io/reload: "true"
   name: forgejo-pg-monitoring
 data:
   queries: |
-    # CNPG custom queries for Forgejo's cluster, exported as cnpg_forgejo_push_mirror_*.
+    # CNPG custom queries for Forgejo's cluster, exported as cnpg_forgejo_push_mirror_* and
+    # cnpg_forgejo_actions_*.
     #
     # Forgejo's push mirrors are how the cluster's own source reaches Codeberg, which is what
     # Flux reads, so a mirror that stopped is a cluster that stopped deploying — and every
@@ -14,12 +17,8 @@ data:
     # a query rather than an exporter with a token.
     #
     # CNPG runs custom queries as pg_monitor, which cannot read Forgejo's tables by default. The
-    # grant below was made by hand on 2026-09-26 and lives in the database, so a restore or a
-    # migration that recreates these tables needs it again — until then this query logs
-    # "permission denied" and the metrics are simply absent:
-    #
-    #   kubectl -n forgejo-pg-cluster exec forgejo-pg-1 -c postgres -- \
-    #     psql -d forgejo -c 'GRANT SELECT ON public.push_mirror, public.repository TO pg_monitor;'
+    # grants are in monitoring-grants.sql and a CronJob applies them every hour; until one has run
+    # after a table was recreated, the query logs "permission denied" and its metrics are absent.
     #
     # repo_updated_seconds is the repository's last change, so the difference between the
     # two is how far the mirror is behind. last_error is cleared by the next good push.
@@ -49,3 +48,25 @@ data:
         - failing:
             usage: GAUGE
             description: 1 while the mirror's last push attempt recorded an error
+
+    # What the CI runners are scaled by (ForgejoRunnerScaling): they are up while active is above
+    # zero. Status 5 is waiting and 6 running, from Forgejo's models/actions/status.go. The query
+    # always answers one row, so a missing series means the query failed (a lost grant), and
+    # the runners' scaler treats that as an error and keeps them on.
+    forgejo_actions:
+      query: |
+        SELECT count(*) FILTER (WHERE status = 5)::float AS waiting,
+               count(*) FILTER (WHERE status = 6)::float AS running,
+               count(*) FILTER (WHERE status IN (5, 6))::float AS active
+        FROM action_run_job
+      target_databases: ["forgejo"]
+      metrics:
+        - waiting:
+            usage: GAUGE
+            description: CI jobs no runner has taken yet
+        - running:
+            usage: GAUGE
+            description: CI jobs a runner is working on
+        - active:
+            usage: GAUGE
+            description: CI jobs waiting or running; the runners sleep at zero
