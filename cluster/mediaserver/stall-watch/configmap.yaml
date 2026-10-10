@@ -171,6 +171,16 @@ data:
     function arrayField(json, name2) {
       return flatMap(field(json, name2), array2);
     }
+    function stringsField(json, name2) {
+      return map(arrayField(json, name2), (items) => filterMap(items, string2));
+    }
+    function stringOr(json, name2, defaultOpt) {
+      let $$default = defaultOpt !== void 0 ? defaultOpt : "";
+      return getOr(stringField(json, name2), $$default);
+    }
+    function listOf(json, name2, decode) {
+      return filterMap(getOr(arrayField(json, name2), []), decode);
+    }
 
     // src/kubernetes-generator/stallwatch/StallWatchHttp.res.mjs
     async function send(url, methodOpt, headersOpt, body) {
@@ -190,6 +200,25 @@ data:
     }
     async function fetchJson(url, headers) {
       return JSON.parse(await send(url, void 0, headers, void 0));
+    }
+
+    // src/kubernetes-generator/stallwatch/StallWatchImport.res.mjs
+    var complaints = ["Unable to determine if file is a sample"];
+    var waiting = [
+      "importPending",
+      "importBlocked"
+    ];
+    function listMessages(record) {
+      return listOf(record, "statusMessages", (item) => stringsField(item, "messages")).flat();
+    }
+    function isUnreadable(record) {
+      let messages = listMessages(record);
+      let state = getOr(stringField(record, "trackedDownloadState"), "");
+      if (waiting.includes(state) && messages.length !== 0) {
+        return messages.every((message2) => complaints.includes(message2));
+      } else {
+        return false;
+      }
     }
 
     // node_modules/@rescript/runtime/lib/es6/Primitive_exceptions.js
@@ -250,7 +279,9 @@ data:
             api,
             key,
             id: match,
-            downloadId: match$1.toUpperCase()
+            downloadId: match$1.toUpperCase(),
+            title: stringOr(record, "title", void 0),
+            unreadable: isUnreadable(record)
           };
         }
       });
@@ -283,38 +314,25 @@ data:
       let id = hash.toUpperCase();
       return queues.entries.find((entry) => entry.downloadId === id);
     }
+    function listUnreadable(queues) {
+      return queues.entries.filter((entry, index) => {
+        if (queues.entries.findIndex((other) => other.downloadId === entry.downloadId) === index) {
+          return queues.entries.every((other) => {
+            if (other.downloadId !== entry.downloadId) {
+              return true;
+            } else {
+              return other.unreadable;
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    }
     async function blocklist(entry) {
       await send(entry.api + `/queue/` + entry.id.toString() + `?removeFromClient=true&blocklist=true&skipRedownload=false`, "DELETE", {
         "x-api-key": entry.key
       }, void 0);
-    }
-
-    // src/kubernetes-generator/stallwatch/StallWatchClock.res.mjs
-    var stalledStates = [
-      "stalledDL",
-      "metaDL",
-      "forcedMetaDL"
-    ];
-    function isStalled(torrent) {
-      return stalledStates.includes(torrent.state);
-    }
-    function judge(since2, torrents, now, connected, limitMs2) {
-      if (!connected) {
-        return {
-          since: {},
-          due: []
-        };
-      }
-      let stalled = torrents.filter(isStalled);
-      let next = Object.fromEntries(stalled.map((torrent) => [
-        torrent.hash,
-        getOr(since2[torrent.hash], now)
-      ]));
-      let due = stalled.filter((torrent) => now - getOr(next[torrent.hash], now) >= limitMs2);
-      return {
-        since: next,
-        due
-      };
     }
 
     // node_modules/@rescript/runtime/lib/es6/Stdlib_Int.js
@@ -410,8 +428,74 @@ data:
     var qbittorrentUrl = getOr(getEnv("STALL_WATCH_QBITTORRENT_URL"), "http://127.0.0.1:8080");
     var arrUrls = getOr(getEnv("STALL_WATCH_ARR_URLS"), "").split(",").map((prim) => prim.trim()).filter((url) => url !== "");
     var afterMinutes = readInt("STALL_WATCH_AFTER_MINUTES", 360);
+    var unreadableAfterMinutes = readInt("STALL_WATCH_UNREADABLE_AFTER_MINUTES", 60);
     var everySeconds = readInt("STALL_WATCH_EVERY_SECONDS", 300);
     var dryRun = equal(getEnv("STALL_WATCH_DRY_RUN"), "true");
+
+    // src/kubernetes-generator/stallwatch/StallWatchLog.res.mjs
+    function write(message2, fields) {
+      fields["message"] = message2;
+      fields["ts"] = (/* @__PURE__ */ new Date()).toISOString();
+      console.error(JSON.stringify(fields));
+    }
+    function formatDone(done) {
+      if (dryRun) {
+        return `dry run, would have ` + done;
+      } else {
+        return done;
+      }
+    }
+    function describeTorrent(torrent) {
+      return {
+        torrent: torrent.name,
+        hash: torrent.hash,
+        state: torrent.state,
+        dryRun
+      };
+    }
+    function describeEntry(entry) {
+      return {
+        torrent: entry.title,
+        hash: entry.downloadId,
+        app: entry.app,
+        dryRun
+      };
+    }
+
+    // src/kubernetes-generator/stallwatch/StallWatchClock.res.mjs
+    var stalledStates = [
+      "stalledDL",
+      "metaDL",
+      "forcedMetaDL"
+    ];
+    function isStalled(torrent) {
+      return stalledStates.includes(torrent.state);
+    }
+    function tick(since2, keys, now, limitMs) {
+      let next = Object.fromEntries(keys.map((key) => [
+        key,
+        getOr(since2[key], now)
+      ]));
+      return [
+        next,
+        keys.filter((key) => now - getOr(next[key], now) >= limitMs)
+      ];
+    }
+    function judge(since2, torrents, now, connected, limitMs) {
+      if (!connected) {
+        return {
+          since: {},
+          due: []
+        };
+      }
+      let stalled = torrents.filter(isStalled);
+      let match = tick(since2, stalled.map((torrent) => torrent.hash), now, limitMs);
+      let dueKeys = match[1];
+      return {
+        since: match[0],
+        due: stalled.filter((torrent) => dueKeys.includes(torrent.hash))
+      };
+    }
 
     // src/kubernetes-generator/stallwatch/StallWatchQbittorrent.res.mjs
     async function fetchConnected() {
@@ -450,81 +534,89 @@ data:
     }
 
     // src/kubernetes-generator/StallWatch.res.mjs
-    var limitMs = afterMinutes * 6e4;
+    function toMs(minutes) {
+      return minutes * 6e4;
+    }
     var since = {
       contents: {}
     };
-    function log(message2, fields) {
-      fields["message"] = message2;
-      fields["ts"] = (/* @__PURE__ */ new Date()).toISOString();
-      console.error(JSON.stringify(fields));
-    }
-    function describe(torrent) {
-      return {
-        torrent: torrent.name,
-        hash: torrent.hash,
-        state: torrent.state,
-        dryRun
-      };
-    }
-    function say(done) {
-      if (dryRun) {
-        return `dry run, would have ` + done;
-      } else {
-        return done;
-      }
+    var unreadableSince = {
+      contents: {}
+    };
+    function listQueues2() {
+      return listQueues(arrUrls, (url, error) => write("an app's queue could not be read", {
+        url,
+        error
+      }));
     }
     async function giveUp(torrent, queues) {
-      let fields = describe(torrent);
+      let fields = describeTorrent(torrent);
       let entry = findOwner(queues, torrent.hash);
       if (entry !== void 0) {
         fields["app"] = entry.app;
         if (!dryRun) {
           await blocklist(entry);
         }
-        return log(dryRun ? `dry run, would have blocklisted and removed` : "blocklisted and removed", fields);
+        return write(formatDone("blocklisted and removed"), fields);
       } else if (queues.complete) {
         if (!dryRun) {
           await stop(torrent.hash);
         }
-        return log(dryRun ? `dry run, would have stopped: no app has it in its queue` : "stopped: no app has it in its queue", fields);
+        return write(formatDone("stopped: no app has it in its queue"), fields);
       } else {
-        return log("left alone: an app did not answer, and it may be that app's", fields);
+        return write("left alone: an app did not answer, and it may be that app's", fields);
+      }
+    }
+    async function giveUpUnreadable(entry) {
+      if (!dryRun) {
+        await blocklist(entry);
+      }
+      return write(formatDone("blocklisted and removed: its app can read none of its files"), describeEntry(entry));
+    }
+    async function attempt(fields, run) {
+      try {
+        return await run();
+      } catch (raw_error) {
+        let error = internalToException(raw_error);
+        fields["error"] = getMessage(error);
+        return write("giving up failed; tried again next round", fields);
       }
     }
     async function runRound() {
       let connected = await fetchConnected();
       let torrents = await listDownloads();
-      let verdict = judge(since.contents, torrents, Date.now(), connected, limitMs);
+      let queues = await listQueues2();
+      let now = Date.now();
+      let limitMs = afterMinutes * 6e4;
+      let verdict = judge(since.contents, torrents, now, connected, limitMs);
       since.contents = verdict.since;
       if (!connected) {
-        log("qBittorrent is offline: every clock starts again", {});
+        write("qBittorrent is offline: every clock starts again", {});
       }
-      if (verdict.due.length !== 0) {
-        let queues = await listQueues(arrUrls, (url, error) => log("an app's queue could not be read", {
-          url,
-          error
-        }));
-        for (let index = 0, index_finish = verdict.due.length; index < index_finish; ++index) {
-          let torrent = verdict.due[index];
-          try {
-            await giveUp(torrent, queues);
-          } catch (raw_error) {
-            let error = internalToException(raw_error);
-            let fields = describe(torrent);
-            fields["error"] = getMessage(error);
-            log("giving up failed; tried again next round", fields);
-          }
-        }
+      for (let index = 0, index_finish = verdict.due.length; index < index_finish; ++index) {
+        let torrent = verdict.due[index];
+        await attempt(describeTorrent(torrent), () => giveUp(torrent, queues));
       }
-      return log("round", {
+      let unreadable = listUnreadable(queues);
+      let match = tick(unreadableSince.contents, unreadable.map((entry) => entry.downloadId), now, unreadableAfterMinutes * 6e4);
+      let dueIds = match[1];
+      unreadableSince.contents = match[0];
+      let dueEntries = unreadable.filter((entry) => dueIds.includes(entry.downloadId));
+      for (let index$1 = 0, index_finish$1 = dueEntries.length; index$1 < index_finish$1; ++index$1) {
+        let entry = dueEntries[index$1];
+        await attempt(describeEntry(entry), () => giveUpUnreadable(entry));
+      }
+      return write("round", {
         downloads: torrents.length,
         stalled: Object.keys(verdict.since).length,
-        due: verdict.due.length
+        due: verdict.due.length,
+        unreadable: unreadable.length,
+        unreadableDue: dueEntries.length
       });
     }
-    log("watching", {
+    write("watching", {
       afterMinutes,
+      unreadableAfterMinutes,
       everySeconds,
       apps: arrUrls.length,
       dryRun
@@ -534,18 +626,19 @@ data:
         await runRound();
       } catch (raw_error) {
         let error = internalToException(raw_error);
-        log("round failed", {
+        write("round failed", {
           error: getMessage(error)
         });
       }
       await sleep(everySeconds * 1e3 | 0);
     }
     export {
-      describe,
+      attempt,
       giveUp,
-      limitMs,
-      log,
+      giveUpUnreadable,
+      listQueues2 as listQueues,
       runRound,
-      say,
-      since
+      since,
+      toMs,
+      unreadableSince
     };

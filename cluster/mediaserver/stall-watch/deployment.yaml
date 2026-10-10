@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/stall-watch-hash: 925aed5a1c576f4c
+        homelab/stall-watch-hash: 40da84deb0ed9698
       labels:
         app.kubernetes.io/name: stall-watch
         app.kubernetes.io/version: 24.21.0-bookworm-sli
@@ -50,6 +50,8 @@ spec:
           value: http://sonarr.jellyfin.svc.cluster.local:8989,http://radarr.jellyfin.svc.cluster.local:7878,http://lidarr.jellyfin.svc.cluster.local:8686
         - name: STALL_WATCH_AFTER_MINUTES
           value: "360"
+        - name: STALL_WATCH_UNREADABLE_AFTER_MINUTES
+          value: "60"
         - name: STALL_WATCH_EVERY_SECONDS
           value: "300"
         resources:
