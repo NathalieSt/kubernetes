@@ -33,6 +33,13 @@ data:
           entryPoints:
           - websecure
           service: anki-sync
+        arx:
+          rule: Host(`arx.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: arx
+          middlewares:
+          - authelia
         audiomuse-ai:
           rule: Host(`audiomuse.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -357,6 +364,10 @@ data:
           loadBalancer:
             servers:
             - url: http://anki-sync.anki-sync.svc.cluster.local:8080
+        arx:
+          loadBalancer:
+            servers:
+            - url: http://arx.arx.svc.cluster.local:8080
         audiomuse-ai:
           loadBalancer:
             servers:

@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/vpn-control-hash: cc0b55451e27bce3
+        homelab/vpn-control-hash: db639b8f1551564a
         homelab/vpn-probe-hash: 95fbe75501c43bab
       labels:
         app.kubernetes.io/name: gluetun-proxy

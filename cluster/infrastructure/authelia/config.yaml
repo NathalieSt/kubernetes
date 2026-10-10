@@ -49,6 +49,9 @@ data:
         - anki.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
+        - arx.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - audiomuse.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
