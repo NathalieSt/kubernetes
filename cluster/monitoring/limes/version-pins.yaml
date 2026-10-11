@@ -979,7 +979,7 @@ data:
           "key": "arx",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/arx",
-          "version": "d702146@sha256:76c61b4385ce44360b8f68608d0f57ea314046c5a50ef7e6c0c41d65f72ee4eb",
+          "version": "aa57a68@sha256:00bda76cfbf48b5df03d6af9c327812e353e2cf97986f04b163b6b992c7d29f7",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
