@@ -20,19 +20,19 @@ spec:
       initContainers:
       - command:
         - sh
-        - /pennant/append-stylesheet.sh
+        - /halcyon/append-stylesheet.sh
         - /opt/recipes/cookbook/static/vue3/assets
-        - /pennant-out
-        - /pennant/pennant.css
+        - /halcyon-out
+        - /halcyon/halcyon.css
         - main-*.css
         image: vabene1111/recipes:2.6.13@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
-        name: pennant
+        name: halcyon
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant-script-volume
+        - mountPath: /halcyon
+          name: halcyon-script-volume
           readOnly: true
-        - mountPath: /pennant-out
-          name: pennant-volume
+        - mountPath: /halcyon-out
+          name: halcyon-volume
         securityContext:
           capabilities:
             drop:
@@ -56,7 +56,7 @@ spec:
         - mountPath: /opt/recipes/staticfiles
           name: static-volume
         - mountPath: /opt/recipes/cookbook/static/vue3/assets
-          name: pennant-volume
+          name: halcyon-volume
           readOnly: true
         env:
         - name: SECRET_KEY
@@ -118,8 +118,8 @@ spec:
           claimName: tandoor-media-pvc
       - name: static-volume
         emptyDir: {}
-      - name: pennant-script-volume
+      - name: halcyon-script-volume
         configMap:
-          name: tandoor-pennant
-      - name: pennant-volume
+          name: tandoor-halcyon
+      - name: halcyon-volume
         emptyDir: {}

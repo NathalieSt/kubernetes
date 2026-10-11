@@ -2,65 +2,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: stirling-pdf-pennant
+  name: stirling-pdf-halcyon
   namespace: stirling-pdf
 data:
-  jar-stylesheet-override.py: |
-    """Pennant for an app that serves its frontend from inside a jar but lets files under
-    a custom static directory override it (Stirling-PDF's customFiles/static).
-
-      $1  the jar
-      $2  the index page inside the jar, which names the stylesheet (content-hashed)
-      $3  the static directory to write the override into
-      $4  the stylesheet to append
-
-    Copies each stylesheet the index links out of the jar, appends Pennant, and writes
-    it under the same path in the override directory, so the app serves it in place of
-    its own. Like append-stylesheet.sh it fails soft: a jar or index that is not where it
-    was, or an index that links no stylesheet, starts the app unthemed with a warning.
-    """
-
-    import os
-    import re
-    import sys
-    import zipfile
-
-    jar, index, out_dir, css = sys.argv[1:5]
-
-
-    def warn(message):
-        print(f"WARNING: Pennant not applied: {message}", file=sys.stderr)
-        sys.exit(0)
-
-
-    try:
-        archive = zipfile.ZipFile(jar)
-        page = archive.read(index).decode()
-    except (OSError, KeyError, zipfile.BadZipFile) as error:
-        warn(f"cannot read {index} from {jar}: {error}")
-
-    links = re.findall(r'<link[^>]+rel="stylesheet"[^>]+href="\.?/?([^"]+\.css)"', page)
-    links += re.findall(r'<link[^>]+href="\.?/?([^"]+\.css)"[^>]+rel="stylesheet"', page)
-    if not links:
-        warn(f"{index} links no stylesheet -- the frontend layout has changed")
-
-    prefix = os.path.dirname(index)
-    with open(css) as handle:
-        pennant = handle.read()
-
-    for link in sorted(set(links)):
-        member = f"{prefix}/{link}" if prefix else link
-        try:
-            original = archive.read(member)
-        except KeyError:
-            warn(f"{index} links {link}, which is not in {jar}")
-        target = os.path.join(out_dir, link)
-        os.makedirs(os.path.dirname(target), exist_ok=True)
-        with open(target, "wb") as handle:
-            handle.write(original + b"\n" + pennant.encode())
-        print(f"appended Pennant to {link}")
-  pennant.css: |
-    /* Pennant for Stirling-PDF, appended by kubernetes-generator (src/generators/theme). */
+  halcyon.css: |
+    /* Halcyon for Stirling-PDF, appended by kubernetes-generator (src/generators/theme). */
 
     :root:root {
       --mantine-color-blue-0: #f2f7ff;
@@ -180,3 +126,57 @@ data:
       --color-border: #484e54;
       --color-text-1: #f2f4f6;
     }
+  jar-stylesheet-override.py: |
+    """Halcyon for an app that serves its frontend from inside a jar but lets files under
+    a custom static directory override it (Stirling-PDF's customFiles/static).
+
+      $1  the jar
+      $2  the index page inside the jar, which names the stylesheet (content-hashed)
+      $3  the static directory to write the override into
+      $4  the stylesheet to append
+
+    Copies each stylesheet the index links out of the jar, appends Halcyon, and writes
+    it under the same path in the override directory, so the app serves it in place of
+    its own. Like append-stylesheet.sh it fails soft: a jar or index that is not where it
+    was, or an index that links no stylesheet, starts the app unthemed with a warning.
+    """
+
+    import os
+    import re
+    import sys
+    import zipfile
+
+    jar, index, out_dir, css = sys.argv[1:5]
+
+
+    def warn(message):
+        print(f"WARNING: Halcyon not applied: {message}", file=sys.stderr)
+        sys.exit(0)
+
+
+    try:
+        archive = zipfile.ZipFile(jar)
+        page = archive.read(index).decode()
+    except (OSError, KeyError, zipfile.BadZipFile) as error:
+        warn(f"cannot read {index} from {jar}: {error}")
+
+    links = re.findall(r'<link[^>]+rel="stylesheet"[^>]+href="\.?/?([^"]+\.css)"', page)
+    links += re.findall(r'<link[^>]+href="\.?/?([^"]+\.css)"[^>]+rel="stylesheet"', page)
+    if not links:
+        warn(f"{index} links no stylesheet -- the frontend layout has changed")
+
+    prefix = os.path.dirname(index)
+    with open(css) as handle:
+        halcyon = handle.read()
+
+    for link in sorted(set(links)):
+        member = f"{prefix}/{link}" if prefix else link
+        try:
+            original = archive.read(member)
+        except KeyError:
+            warn(f"{index} links {link}, which is not in {jar}")
+        target = os.path.join(out_dir, link)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        with open(target, "wb") as handle:
+            handle.write(original + b"\n" + halcyon.encode())
+        print(f"appended Halcyon to {link}")

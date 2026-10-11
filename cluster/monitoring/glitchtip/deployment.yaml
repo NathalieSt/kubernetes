@@ -225,19 +225,19 @@ spec:
           name: uploads-volume
       - command:
         - sh
-        - /pennant/append-stylesheet.sh
+        - /halcyon/append-stylesheet.sh
         - /code/static
-        - /pennant-out
-        - /pennant/pennant.css
+        - /halcyon-out
+        - /halcyon/halcyon.css
         - styles-*.css
         image: glitchtip/glitchtip:6.2.6
-        name: pennant
+        name: halcyon
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant-script-volume
+        - mountPath: /halcyon
+          name: halcyon-script-volume
           readOnly: true
-        - mountPath: /pennant-out
-          name: pennant-volume
+        - mountPath: /halcyon-out
+          name: halcyon-volume
         securityContext:
           capabilities:
             drop:
@@ -430,7 +430,7 @@ spec:
         - mountPath: /tmp
           name: tmp-volume
         - mountPath: /code/static
-          name: pennant-volume
+          name: halcyon-volume
           readOnly: true
         env:
         - name: SERVER_ROLE
@@ -517,10 +517,10 @@ spec:
           claimName: glitchtip-uploads-pvc
       - name: tmp-volume
         emptyDir: {}
-      - name: pennant-script-volume
+      - name: halcyon-script-volume
         configMap:
-          name: glitchtip-pennant
-      - name: pennant-volume
+          name: glitchtip-halcyon
+      - name: halcyon-volume
         emptyDir: {}
       securityContext:
         seccompProfile:

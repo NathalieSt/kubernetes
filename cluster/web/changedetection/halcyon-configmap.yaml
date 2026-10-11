@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: changedetection-pennant
+  name: changedetection-halcyon
   namespace: changedetection
 data:
   append-stylesheet.sh: |
     #!/bin/sh
-    # Appends Pennant to an application's own stylesheet, in a copy of the
+    # Appends Halcyon to an application's own stylesheet, in a copy of the
     # directory that holds it. Run as an init container from the application's own
     # image, so the file it copies is the one that version actually serves. See
     # StylesheetAppend.res for why this exists at all.
@@ -30,7 +30,7 @@ data:
     shift 3
 
     warn() {
-      echo "WARNING: Pennant not applied: $*" >&2
+      echo "WARNING: Halcyon not applied: $*" >&2
     }
 
     if [ ! -d "$source_dir" ]; then
@@ -74,14 +74,14 @@ data:
           rm -f "$file.gz"
           gzip -9 -c "$file" >"$file.gz"
         fi
-        echo "appended Pennant to ${file#"$target_dir"/}"
+        echo "appended Halcyon to ${file#"$target_dir"/}"
       done
       if [ "$matched" -eq 0 ]; then
         warn "no file under $source_dir matches '$pattern' -- the asset layout has changed"
       fi
     done
-  pennant.css: |
-    /* Pennant for changedetection.io, appended by kubernetes-generator (src/generators/theme). */
+  halcyon.css: |
+    /* Halcyon for changedetection.io, appended by kubernetes-generator (src/generators/theme). */
 
     :root {
       --color-background-page: #2f3339;

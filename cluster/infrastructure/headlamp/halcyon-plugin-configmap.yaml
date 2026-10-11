@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: headlamp-pennant-plugin
+  name: headlamp-halcyon-plugin
   namespace: headlamp
 data:
   main.js: |

@@ -33,17 +33,17 @@ spec:
           name: roundcube-db-volume
       - command:
         - sh
-        - /pennant/roundcube-skin-sources.sh
-        - /pennant-skin
-        - /pennant/_variables.less
+        - /halcyon/roundcube-skin-sources.sh
+        - /halcyon-skin
+        - /halcyon/_variables.less
         image: roundcube/roundcubemail:1.7.3-apache-nonroot@sha256:c018c84f59872905c1b8da9326bf2aece4ce3ea87add7de03f16850d3a830f7a
-        name: pennant-skin-sources
+        name: halcyon-skin-sources
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant-scripts-volume
+        - mountPath: /halcyon
+          name: halcyon-scripts-volume
           readOnly: true
-        - mountPath: /pennant-skin
-          name: pennant-skin-volume
+        - mountPath: /halcyon-skin
+          name: halcyon-skin-volume
         securityContext:
           capabilities:
             drop:
@@ -55,16 +55,16 @@ spec:
           runAsNonRoot: true
       - command:
         - sh
-        - /pennant/roundcube-skin-compile.sh
-        - /pennant-skin
+        - /halcyon/roundcube-skin-compile.sh
+        - /halcyon-skin
         image: code.netbird.nathalie-stiefsohn.eu/my-homelab/lessc@sha256:58bf86bb2cfe2975cd02f6ff76d5629f9b5950905929abd0209b0652295b1acc
-        name: pennant-skin-compile
+        name: halcyon-skin-compile
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant-scripts-volume
+        - mountPath: /halcyon
+          name: halcyon-scripts-volume
           readOnly: true
-        - mountPath: /pennant-skin
-          name: pennant-skin-volume
+        - mountPath: /halcyon-skin
+          name: halcyon-skin-volume
         securityContext:
           capabilities:
             drop:
@@ -90,11 +90,11 @@ spec:
         - mountPath: /var/roundcube/oidc
           name: roundcube-oidc-volume
           readOnly: true
-        - mountPath: /pennant-skin
-          name: pennant-skin-volume
+        - mountPath: /halcyon-skin
+          name: halcyon-skin-volume
           readOnly: true
         - mountPath: /entrypoint-tasks/post-setup
-          name: pennant-task-volume
+          name: halcyon-task-volume
           readOnly: true
         env:
         - name: ROUNDCUBEMAIL_DEFAULT_HOST
@@ -146,15 +146,15 @@ spec:
         secret:
           secretName: mail-oidc-secret
           optional: true
-      - name: pennant-scripts-volume
+      - name: halcyon-scripts-volume
         configMap:
-          name: roundcube-pennant-skin
-      - name: pennant-skin-volume
+          name: roundcube-halcyon-skin
+      - name: halcyon-skin-volume
         emptyDir: {}
-      - name: pennant-task-volume
+      - name: halcyon-task-volume
         configMap:
-          name: roundcube-pennant-skin
+          name: roundcube-halcyon-skin
           items:
           - key: roundcube-skin-install.sh
-            path: pennant-skin.sh
+            path: halcyon-skin.sh
           defaultMode: 365

@@ -31,20 +31,20 @@ spec:
           name: data
       - command:
         - sh
-        - /pennant/append-stylesheet.sh
+        - /halcyon/append-stylesheet.sh
         - /usr/src/app/public/stylesheets
-        - /pennant-out
-        - /pennant/pennant.css
+        - /halcyon-out
+        - /halcyon/halcyon.css
         - theme-next-light.css
         - theme-next-dark.css
         image: triliumnext/trilium:v0.106.0@sha256:be93e82699b12950ac4e2e7b565ce092fe215b8dd6ddfc47921e37b49e6a0e8b
-        name: pennant
+        name: halcyon
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant-script-volume
+        - mountPath: /halcyon
+          name: halcyon-script-volume
           readOnly: true
-        - mountPath: /pennant-out
-          name: pennant-volume
+        - mountPath: /halcyon-out
+          name: halcyon-volume
         securityContext:
           capabilities:
             drop:
@@ -71,7 +71,7 @@ spec:
         - mountPath: /tmp
           name: tmp
         - mountPath: /usr/src/app/public/stylesheets
-          name: pennant-volume
+          name: halcyon-volume
           readOnly: true
         env:
         - name: TZ
@@ -124,10 +124,10 @@ spec:
           claimName: trilium-data-pvc
       - name: tmp
         emptyDir: {}
-      - name: pennant-script-volume
+      - name: halcyon-script-volume
         configMap:
-          name: trilium-pennant
-      - name: pennant-volume
+          name: trilium-halcyon
+      - name: halcyon-volume
         emptyDir: {}
       securityContext:
         seccompProfile:
