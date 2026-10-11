@@ -15,10 +15,22 @@ spec:
       retries: 3
   values:
     server:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - ai-node
       dataStorage:
         annotations:
           k8up.io/backup: "true"
         storageClass: nfs-local
+      resources:
+        requests:
+          memory: 256Mi
       standalone:
         config: |
           ui = true

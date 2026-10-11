@@ -14,6 +14,15 @@ spec:
     remediation:
       retries: 3
   values:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: NotIn
+              values:
+              - ai-node
     extraContainerVolumeMounts:
     - mountPath: /data/git
       name: git
@@ -80,6 +89,9 @@ spec:
     podSecurityContext:
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
+    resources:
+      requests:
+        memory: 1Gi
     service:
       ssh:
         port: 2222
