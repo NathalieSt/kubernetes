@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/stall-watch-hash: 40da84deb0ed9698
+        homelab/stall-watch-hash: 57129ab6b95c716a
       labels:
         app.kubernetes.io/name: stall-watch
         app.kubernetes.io/version: 24.21.0-bookworm-sli
