@@ -117,6 +117,198 @@ data:
         - text: NetBird on {{ grains['os'] }} is not managed by Salt; install {{ version }} by hand.
 
     {%- endif %}
+  rescue__earlyoom.sls: |
+    {#- Kills the largest process before the machine thrashes; the kubelet's eviction comes
+        first, this is for what grows faster than it looks. Locked in memory, so it still runs. #}
+    {%- set percent = salt['pillar.get']('rescue:earlyoom:memory_percent') %}
+    {%- if grains['os_family'] == 'Debian' %}
+
+    {#- No quotes and no spaces in the pattern: systemd splits the value into arguments. It
+        matches a process's `comm`, 15 characters at most. #}
+    earlyoom:
+      pkg.installed: []
+      file.managed:
+        - name: /etc/default/earlyoom
+        - contents: |
+            # Managed by Salt (rescue.earlyoom); edit the pillar in kubernetes-generator.
+            EARLYOOM_ARGS="-m {{ percent }} -r 3600 --avoid ^(systemd|sshd|k3s-agent|k3s-server|containerd|containerd-shim|netbird|cilium-agent)$"
+        - require:
+          - pkg: earlyoom
+      service.running:
+        - enable: True
+        - watch:
+          - file: earlyoom
+
+    {%- else %}
+
+    earlyoom-unmanaged:
+      test.show_notification:
+        - text: earlyoom on {{ grains['os'] }} is not managed by Salt.
+
+    {%- endif %}
+  rescue__init.sls: |
+    {#- Everything a host needs to get out of trouble by itself. Each part applies alone too:
+        `state.apply rescue.earlyoom`. One canary first, as for `netbird`. #}
+    include:
+      - rescue.reserve
+      - rescue.earlyoom
+      - rescue.watchdog
+      - rescue.mesh
+  rescue__mesh-watch.sh: |
+    #!/bin/sh
+    # Restarts NetBird after $MESH_WATCH_FAILURES checks in a row with peers known and none
+    # connected, or with no answer from the daemon. Run by mesh-watch.timer (Salt: rescue.mesh).
+    set -u
+
+    limit="${MESH_WATCH_FAILURES:-5}"
+    count_file=/run/mesh-watch.failures
+
+    # Stopped on purpose is not a fault.
+    systemctl is-enabled --quiet netbird || exit 0
+
+    status=$(netbird status --json 2>/dev/null | tr -d ' \n\t')
+    total=$(printf '%s' "$status" | grep -o '"peers":{"total":[0-9]*' | grep -o '[0-9]*$')
+    connected=$(printf '%s' "$status" | grep -o '"peers":{"total":[0-9]*,"connected":[0-9]*' | grep -o '[0-9]*$')
+
+    # Management being down is not counted: a restart would drop the tunnels still standing.
+    if [ -n "$total" ] && { [ "$total" -eq 0 ] || [ "${connected:-0}" -gt 0 ]; }; then
+      rm -f "$count_file"
+      exit 0
+    fi
+
+    seen="${connected:-0} of $total peers connected"
+    [ -n "$total" ] || seen="no answer from the daemon"
+    count=$(( $(cat "$count_file" 2>/dev/null || echo 0) + 1 ))
+    if [ "$count" -lt "$limit" ]; then
+      echo "$count" > "$count_file"
+      echo "mesh-watch: $seen, check $count of $limit"
+      exit 0
+    fi
+
+    rm -f "$count_file"
+    echo "mesh-watch: $seen for $limit checks, restarting netbird"
+    systemctl restart netbird
+  rescue__mesh.sls: |
+    {#- Restarts a NetBird client that knows peers and reaches none: the state the gateway's
+        sidecar sat in for fifteen hours on 2026-09-15. The check is rescue/mesh-watch.sh. #}
+    {%- set failures = salt['pillar.get']('rescue:mesh:failures') %}
+    {%- if salt['service.available']('netbird') %}
+
+    mesh-watch-script:
+      file.managed:
+        - name: /usr/local/sbin/mesh-watch
+        - source: salt://rescue/mesh-watch.sh
+        - mode: '0755'
+
+    mesh-watch-service:
+      file.managed:
+        - name: /etc/systemd/system/mesh-watch.service
+        - contents: |
+            # Managed by Salt (rescue.mesh).
+            [Unit]
+            Description=Restart NetBird when it reaches no peer
+            After=netbird.service
+
+            [Service]
+            Type=oneshot
+            Environment=MESH_WATCH_FAILURES={{ failures }}
+            ExecStart=/usr/local/sbin/mesh-watch
+
+    mesh-watch-timer:
+      file.managed:
+        - name: /etc/systemd/system/mesh-watch.timer
+        - contents: |
+            # Managed by Salt (rescue.mesh).
+            [Unit]
+            Description=Check the NetBird mesh every two minutes
+
+            [Timer]
+            OnBootSec=5min
+            OnUnitActiveSec=2min
+
+            [Install]
+            WantedBy=timers.target
+      cmd.run:
+        - name: systemctl daemon-reload
+        - onchanges:
+          - file: mesh-watch-service
+          - file: mesh-watch-timer
+      service.running:
+        - name: mesh-watch.timer
+        - enable: True
+        - require:
+          - file: mesh-watch-script
+          - cmd: mesh-watch-timer
+
+    {%- else %}
+
+    mesh-watch-skipped:
+      test.show_notification:
+        - text: No netbird service on this host; nothing to watch.
+
+    {%- endif %}
+  rescue__reserve.sls: |
+    {#- Memory the kubelet may not hand to pods. Without it allocatable is the whole machine
+        and a pod that grows freezes the node (ai-node, 2026-10-11) instead of being evicted. #}
+    {%- set reserve = salt['pillar.get']('rescue:reserve') %}
+    {%- set unit = 'k3s' if salt['service.available']('k3s') else 'k3s-agent' %}
+    {%- if salt['service.available'](unit) %}
+
+    {#- `kubelet-arg+` appends to what config.yaml sets. eviction-hard replaces k3s's own, so
+        its two disk thresholds are repeated here. #}
+    k3s-memory-reserve:
+      file.managed:
+        - name: /etc/rancher/k3s/config.yaml.d/50-memory-reserve.yaml
+        - makedirs: True
+        - mode: '0600'
+        - contents: |
+            # Managed by Salt (rescue.reserve); edit the pillar in kubernetes-generator.
+            kubelet-arg+:
+              - "system-reserved=memory={{ reserve['system_memory'] }}"
+              - "kube-reserved=memory={{ reserve['kube_memory'] }}"
+              - "eviction-hard=memory.available<{{ reserve['evict_below'] }},imagefs.available<5%,nodefs.available<5%"
+
+    {#- Not restarted here: three servers restarting at once is etcd without a quorum. #}
+    k3s-memory-reserve-pending:
+      test.show_notification:
+        - text: Written. It applies once {{ unit }} restarts; run service.restart {{ unit }} from Fleet, one host at a time.
+        - onchanges:
+          - file: k3s-memory-reserve
+
+    {%- else %}
+
+    k3s-memory-reserve-skipped:
+      test.show_notification:
+        - text: No k3s service on this host; nothing to reserve.
+
+    {%- endif %}
+  rescue__watchdog.sls: |
+    {#- systemd pings the hardware watchdog; a machine too far gone to do that is reset by it.
+        `daemon-reexec` makes PID 1 read the setting without a reboot. #}
+    {%- set watchdog = salt['pillar.get']('rescue:watchdog') %}
+    {%- if salt['file.is_chrdev']('/dev/watchdog0') %}
+
+    systemd-watchdog:
+      file.managed:
+        - name: /etc/systemd/system.conf.d/10-watchdog.conf
+        - makedirs: True
+        - contents: |
+            # Managed by Salt (rescue.watchdog); edit the pillar in kubernetes-generator.
+            [Manager]
+            RuntimeWatchdogSec={{ watchdog['runtime'] }}
+            RebootWatchdogSec={{ watchdog['reboot'] }}
+      cmd.run:
+        - name: systemctl daemon-reexec
+        - onchanges:
+          - file: systemd-watchdog
+
+    {%- else %}
+
+    systemd-watchdog-absent:
+      test.show_notification:
+        - text: No /dev/watchdog0 on this host. Load its watchdog driver first (iTCO_wdt on Intel; Debian does not load it by itself).
+
+    {%- endif %}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -128,7 +320,27 @@ data:
     # for amd64 and arm64 in pkgs.netbird.io, and not be newer than the coordination server.
     netbird:
       version: 0.79.0
+  rescue.sls: |
+    # What `state.apply rescue` sets on every host, so that a host in trouble recovers without
+    # anyone reaching it. https://docs.netbird.nathalie-stiefsohn.eu/platform/hosts/#rescue
+    rescue:
+      # Memory the kubelet keeps away from pods, and the free memory under which it evicts one.
+      reserve:
+        system_memory: 400Mi
+        kube_memory: 400Mi
+        evict_below: 500Mi
+      # Percent of memory left at which earlyoom kills the largest process: below the kubelet's.
+      earlyoom:
+        memory_percent: 4
+      # A Pi 5's watchdog takes at most 15s; systemd pings it at half of this.
+      watchdog:
+        runtime: 15s
+        reboot: 10min
+      # Checks two minutes apart with peers known and none connected before NetBird restarts.
+      mesh:
+        failures: 5
   top.sls: |
     base:
       "*":
         - netbird
+        - rescue

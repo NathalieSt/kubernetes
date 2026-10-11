@@ -202,12 +202,26 @@ spec:
           items:
           - key: netbird.sls
             path: netbird.sls
+          - key: rescue__earlyoom.sls
+            path: rescue/earlyoom.sls
+          - key: rescue__init.sls
+            path: rescue/init.sls
+          - key: rescue__mesh-watch.sh
+            path: rescue/mesh-watch.sh
+          - key: rescue__mesh.sls
+            path: rescue/mesh.sls
+          - key: rescue__reserve.sls
+            path: rescue/reserve.sls
+          - key: rescue__watchdog.sls
+            path: rescue/watchdog.sls
       - name: fleet-salt-pillar
         configMap:
           name: fleet-salt-pillar
           items:
           - key: netbird.sls
             path: netbird.sls
+          - key: rescue.sls
+            path: rescue.sls
           - key: top.sls
             path: top.sls
       - name: salt-run
