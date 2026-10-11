@@ -11,76 +11,76 @@ data:
 
     :root {
       color-scheme: light dark;
-      --1d2021: #f9fafb;
+      --1d2021: #f9fafc;
       --282828: #ffffff;
-      --3c3836: #f1f4f5;
-      --504945: #e3e7e9;
-      --928374: #838b8e;
-      --a89984: #666d71;
-      --bdae93: #2e3436;
-      --8ec07c: #1e7c44;
-      --ebdbb2: #2e3436;
-      --comment: #838b8e;
-      --default: #2e3436;
-      --keyword: #984a72;
-      --string: #1e7c44;
+      --3c3836: #f2f4f6;
+      --504945: #e3e6ea;
+      --928374: #676c74;
+      --a89984: #484e54;
+      --bdae93: #2f3339;
+      --8ec07c: #2b5c37;
+      --ebdbb2: #2f3339;
+      --comment: #676c74;
+      --default: #2f3339;
+      --keyword: #2c517f;
+      --string: #2b5c37;
     }
 
     .web .text-result .title {
-      color: #984a72;
+      color: #2c517f;
     }
 
     .tabs .tab.selected {
-      border-bottom-color: #984a72;
+      border-bottom-color: #2c517f;
     }
 
     .searchbox:focus-within {
-      border-color: #b95f8c;
+      border-color: #3c6aa4;
     }
 
     .quote {
-      border-left-color: #e3e7e9;
+      border-left-color: #e3e6ea;
     }
 
     #images .duration {
-      border-color: #e3e7e9;
+      border-color: #e3e6ea;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --1d2021: #090c0d;
-        --282828: #141819;
-        --3c3836: #1f2426;
-        --504945: #2e3436;
-        --928374: #9ea6a9;
-        --a89984: #b8bfc2;
-        --bdae93: #f1f4f5;
-        --8ec07c: #93d9a6;
-        --ebdbb2: #f1f4f5;
-        --comment: #9ea6a9;
-        --default: #f1f4f5;
-        --keyword: #f5adce;
-        --string: #93d9a6;
+        --1d2021: #15171b;
+        --282828: #202327;
+        --3c3836: #2f3339;
+        --504945: #484e54;
+        --928374: #b9bec5;
+        --a89984: #d0d5da;
+        --bdae93: #f2f4f6;
+        --8ec07c: #a1d5ab;
+        --ebdbb2: #f2f4f6;
+        --comment: #b9bec5;
+        --default: #f2f4f6;
+        --keyword: #a0c9fd;
+        --string: #a1d5ab;
       }
 
       .web .text-result .title {
-        color: #f5adce;
+        color: #a0c9fd;
       }
 
       .tabs .tab.selected {
-        border-bottom-color: #f5adce;
+        border-bottom-color: #a0c9fd;
       }
 
       .searchbox:focus-within {
-        border-color: #f5adce;
+        border-color: #a0c9fd;
       }
 
       .quote {
-        border-left-color: #2e3436;
+        border-left-color: #484e54;
       }
 
       #images .duration {
-        border-color: #2e3436;
+        border-color: #484e54;
       }
     }
   httpd.conf: |

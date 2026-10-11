@@ -11,4 +11,7 @@ resources:
 - monitoring-grants.yaml
 - monitoring-grants-cronjob.yaml
 - alert-rules.yaml
+- dump-pvc.yaml
+- dump-access.yaml
+- dump-cronjob.yaml
 - k8up-schedule.yaml

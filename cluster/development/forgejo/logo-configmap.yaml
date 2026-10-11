@@ -13,13 +13,13 @@ data:
       <style>
         circle { fill: none; stroke-width: 15; }
         path { fill: none; stroke-width: 25; }
-        circle, path { stroke: #984a72; }
-        .primary { stroke: #984a72; }
-        .secondary { stroke: #007495; }
+        circle, path { stroke: #2c517f; }
+        .primary { stroke: #2c517f; }
+        .secondary { stroke: #005c60; }
         @media (prefers-color-scheme: dark) {
-          circle, path { stroke: #f5adce; }
-          .primary { stroke: #f5adce; }
-          .secondary { stroke: #6bd5ff; }
+          circle, path { stroke: #a0c9fd; }
+          .primary { stroke: #a0c9fd; }
+          .secondary { stroke: #89d5d9; }
         }
       </style>
       <g transform="translate(6,6)">
@@ -38,13 +38,13 @@ data:
       <style>
         circle { fill: none; stroke-width: 15; }
         path { fill: none; stroke-width: 25; }
-        circle, path { stroke: #984a72; }
-        .primary { stroke: #984a72; }
-        .secondary { stroke: #007495; }
+        circle, path { stroke: #2c517f; }
+        .primary { stroke: #2c517f; }
+        .secondary { stroke: #005c60; }
         @media (prefers-color-scheme: dark) {
-          circle, path { stroke: #f5adce; }
-          .primary { stroke: #f5adce; }
-          .secondary { stroke: #6bd5ff; }
+          circle, path { stroke: #a0c9fd; }
+          .primary { stroke: #a0c9fd; }
+          .secondary { stroke: #89d5d9; }
         }
       </style>
       <g transform="translate(6,6)">

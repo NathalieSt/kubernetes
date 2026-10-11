@@ -14,13 +14,13 @@ data:
     <title>Starting…</title>
     <style>
     :root {
-      --bg: #f9fafb; --surface: #ffffff; --border: #e3e7e9;
-      --text: #2e3436; --muted: #666d71; --primary: #984a72;
+      --bg: #f9fafc; --surface: #ffffff; --border: #e3e6ea;
+      --text: #2f3339; --muted: #484e54; --primary: #2c517f;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #090c0d; --surface: #141819; --border: #2e3436;
-        --text: #f1f4f5; --muted: #b8bfc2; --primary: #f5adce;
+        --bg: #15171b; --surface: #202327; --border: #484e54;
+        --text: #f2f4f6; --muted: #d0d5da; --primary: #a0c9fd;
       }
     }
     * { box-sizing: border-box; }

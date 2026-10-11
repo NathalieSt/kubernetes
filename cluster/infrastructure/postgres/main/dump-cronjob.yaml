@@ -1,0 +1,82 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: main-pg-dump
+  name: main-pg-dump
+spec:
+  schedule: 30 0 * * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 1800
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: main-pg-dump
+        spec:
+          serviceAccountName: main-pg-dump
+          enableServiceLinks: false
+          containers:
+          - command:
+            - sh
+            - -c
+            - |
+              #!/bin/sh
+              # pg_dumpall from a CNPG cluster's primary into /dump/dump.sql. Needs NAMESPACE and CLUSTER.
+              # Written beside the last good dump and moved over it only once it is whole.
+              set -eu
+
+              part=/dump/dump.sql.part
+              trap 'rm -f "$part"' EXIT
+
+              pod=$(kubectl -n "$NAMESPACE" get pod -o name \
+                -l "cnpg.io/cluster=$CLUSTER,cnpg.io/instanceRole=primary")
+              [ -n "$pod" ] || { echo "no primary of $CLUSTER is running"; exit 1; }
+
+              kubectl -n "$NAMESPACE" exec "$pod" -c postgres -- pg_dumpall --clean --if-exists > "$part"
+
+              # pg_dumpall's own last line: a stream that ended early does not have it.
+              tail -c 200 "$part" | grep -q 'PostgreSQL database cluster dump complete' ||
+                { echo "the dump of $pod ends early"; exit 1; }
+
+              mv "$part" /dump/dump.sql
+              echo "dumped $pod: $(wc -c < /dump/dump.sql) bytes"
+            image: alpine/k8s:1.37.1@sha256:712dc5385d1c1a3f83b747fa9e40f64d433a97f72ff42f9755ff7dd1f62846e4
+            name: main-pg-dump
+            volumeMounts:
+            - mountPath: /dump
+              name: dump
+            env:
+            - name: NAMESPACE
+              value: postgres
+            - name: CLUSTER
+              value: postgres
+            resources:
+              requests:
+                cpu: 20m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: dump
+            persistentVolumeClaim:
+              claimName: main-pg-dump
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: Never
+      activeDeadlineSeconds: 10800

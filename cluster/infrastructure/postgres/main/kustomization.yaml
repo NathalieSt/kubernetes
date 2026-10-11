@@ -28,5 +28,8 @@ resources:
 - bazarr-db.yaml
 - seerr-db.yaml
 - network-policy.yaml
+- dump-pvc.yaml
+- dump-access.yaml
+- dump-cronjob.yaml
 - k8up-schedule.yaml
 - alert-rules.yaml
