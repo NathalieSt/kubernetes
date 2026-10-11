@@ -13,31 +13,31 @@ data:
      * styles and regenerate; Dashboard &gt; Branding will not stick, branding.xml is rewritten on pod start. */
 
     :root {
-      --pennant-accent: #b95f8c;
-      --pennant-accent-hover: #d375a4;
-      --pennant-accent-tint: #b95f8c33;
-      --pennant-on-accent: #f9fafb;
-      --pennant-danger: #d35145;
+      --pennant-accent: #4e84c7;
+      --pennant-accent-hover: #639be1;
+      --pennant-accent-tint: #4e84c733;
+      --pennant-on-accent: #f9fafc;
+      --pennant-danger: #c25f61;
     }
 
     html[data-theme="light"],
     html[data-theme="appletv"] {
-      --pennant-accent: #984a72;
-      --pennant-accent-hover: #763757;
-      --pennant-accent-tint: #984a7233;
-      --pennant-on-accent: #f9fafb;
-      --pennant-danger: #af3d34;
+      --pennant-accent: #2c517f;
+      --pennant-accent-hover: #1d395b;
+      --pennant-accent-tint: #2c517f33;
+      --pennant-on-accent: #f9fafc;
+      --pennant-danger: #7c3739;
     }
 
     html[data-theme="dark"],
     html[data-theme="blueradiance"],
     html[data-theme="purplehaze"],
     html[data-theme="wmc"] {
-      --pennant-accent: #f5adce;
-      --pennant-accent-hover: #ffcbe2;
-      --pennant-accent-tint: #f5adce33;
-      --pennant-on-accent: #090c0d;
-      --pennant-danger: #ff8577;
+      --pennant-accent: #a0c9fd;
+      --pennant-accent-hover: #c6dfff;
+      --pennant-accent-tint: #a0c9fd33;
+      --pennant-on-accent: #090b0e;
+      --pennant-danger: #fdadad;
     }
 
     @media (hover: hover) and (pointer: fine) {
@@ -198,7 +198,7 @@ data:
     }
 
     .layout-tv .emby-button.detailFloatingButton:focus {
-      color: #984a72;
+      color: #3c6aa4;
     }
 
     #dialogToc .bookplayerButtonIcon:hover {
@@ -212,7 +212,7 @@ data:
 
     /* Two rules that are accent-coloured in some built-in themes and a plain
      surface in others, so they are scoped to exactly the themes that paint them
-     with the accent. Overriding them unscoped would put a pink bar across the dark
+     with the accent. Overriding them unscoped would put an accent bar across the dark
      theme's dialogs, which that theme deliberately keeps grey. */
     html[data-theme="light"] .formDialogHeader:not(.formDialogHeader-clear) {
       background-color: var(--pennant-accent);
