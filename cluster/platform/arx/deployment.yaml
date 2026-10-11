@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: arx
-    app.kubernetes.io/version: afb85c2
+    app.kubernetes.io/version: da75a71
   name: arx
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: arx
-        app.kubernetes.io/version: afb85c2
+        app.kubernetes.io/version: da75a71
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arx:afb85c2@sha256:91ebb6bb084dc0265eefb54666ac5f64fa4deca016809b00145eaaf8aa470214
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arx:da75a71@sha256:8f9f0baf6e18c1c887508a6bc60a7623abe4578ddeee1b95c1892096a5684b6c
         name: arx
         ports:
         - containerPort: 8080
