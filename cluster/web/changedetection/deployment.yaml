@@ -31,19 +31,19 @@ spec:
           name: data-volume
       - command:
         - sh
-        - /pennant/append-stylesheet.sh
+        - /halcyon/append-stylesheet.sh
         - /app/changedetectionio/static/styles
-        - /pennant-out
-        - /pennant/pennant.css
+        - /halcyon-out
+        - /halcyon/halcyon.css
         - styles.css
         image: ghcr.io/dgtlmoon/changedetection.io:0.60.8
-        name: pennant
+        name: halcyon
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant-script-volume
+        - mountPath: /halcyon
+          name: halcyon-script-volume
           readOnly: true
-        - mountPath: /pennant-out
-          name: pennant-volume
+        - mountPath: /halcyon-out
+          name: halcyon-volume
         securityContext:
           capabilities:
             drop:
@@ -67,7 +67,7 @@ spec:
         - mountPath: /tmp
           name: tmp-volume
         - mountPath: /app/changedetectionio/static/styles
-          name: pennant-volume
+          name: halcyon-volume
           readOnly: true
         env:
         - name: BASE_URL
@@ -102,10 +102,10 @@ spec:
           claimName: changedetection-data-pvc
       - name: tmp-volume
         emptyDir: {}
-      - name: pennant-script-volume
+      - name: halcyon-script-volume
         configMap:
-          name: changedetection-pennant
-      - name: pennant-volume
+          name: changedetection-halcyon
+      - name: halcyon-volume
         emptyDir: {}
       securityContext:
         seccompProfile:

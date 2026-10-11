@@ -100,12 +100,12 @@ spec:
     - mountPath: /headlamp/plugins
       name: plugins
     - mountPath: /headlamp/plugins/pennant
-      name: pennant-plugin
+      name: halcyon-plugin
       readOnly: true
     volumes:
     - configMap:
-        name: headlamp-pennant-plugin
-      name: pennant-plugin
+        name: headlamp-halcyon-plugin
+      name: halcyon-plugin
     - emptyDir: {}
       name: plugins
     - configMap:

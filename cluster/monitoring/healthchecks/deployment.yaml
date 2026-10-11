@@ -216,19 +216,19 @@ spec:
           runAsNonRoot: true
       - command:
         - sh
-        - /pennant/append-stylesheet.sh
+        - /halcyon/append-stylesheet.sh
         - /opt/healthchecks/static-collected/CACHE
-        - /pennant-out
-        - /pennant/pennant.css
+        - /halcyon-out
+        - /halcyon/halcyon.css
         - css/output.*.css
         image: code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks:137ec6f@sha256:3b8cdc665217348f54c8fc7baca289ad678d1ef5175599d2a3adaf15cb371516
-        name: pennant
+        name: halcyon
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant-script-volume
+        - mountPath: /halcyon
+          name: halcyon-script-volume
           readOnly: true
-        - mountPath: /pennant-out
-          name: pennant-volume
+        - mountPath: /halcyon-out
+          name: halcyon-volume
         securityContext:
           capabilities:
             drop:
@@ -250,7 +250,7 @@ spec:
         - mountPath: /tmp
           name: tmp-volume
         - mountPath: /opt/healthchecks/static-collected/CACHE
-          name: pennant-volume
+          name: halcyon-volume
           readOnly: true
         env:
         - name: POD_IP
@@ -344,10 +344,10 @@ spec:
           secretName: healthchecks-db-secret
       - name: tmp-volume
         emptyDir: {}
-      - name: pennant-script-volume
+      - name: halcyon-script-volume
         configMap:
-          name: healthchecks-pennant
-      - name: pennant-volume
+          name: healthchecks-halcyon
+      - name: halcyon-volume
         emptyDir: {}
       securityContext:
         seccompProfile:

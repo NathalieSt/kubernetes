@@ -8,4 +8,4 @@ resources:
 - vault-secrets.yaml
 - service.yaml
 - network-policy.yaml
-- pennant-configmap.yaml
+- halcyon-configmap.yaml

@@ -5,7 +5,7 @@ metadata:
   name: stirling-pdf
 resources:
 - deployment.yaml
-- pennant-configmap.yaml
+- halcyon-configmap.yaml
 - egress-network-policy.yaml
 - service.yaml
 - network-policy.yaml

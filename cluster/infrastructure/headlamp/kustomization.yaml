@@ -8,5 +8,5 @@ resources:
 - chart.yaml
 - release.yaml
 - network-policy.yaml
-- pennant-plugin-configmap.yaml
+- halcyon-plugin-configmap.yaml
 - plugin-installer-configmap.yaml

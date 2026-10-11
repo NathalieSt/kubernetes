@@ -19,7 +19,7 @@ spec:
       - name: forgejo-registry-secret
       serviceAccountName: backup-dashboard
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:01b58a4@sha256:086ab8bec3afb4df9eb295e9b5888aa6cbe0bd659a4ed1f5fc159b155b8861e4
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:28fccef@sha256:74264f5bbb717edc359e337f8f7ae99d0a9ebdcef0db68444d5abb3efb4d6762
         name: backup-dashboard
         ports:
         - containerPort: 8080

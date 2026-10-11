@@ -20,16 +20,16 @@ spec:
       initContainers:
       - command:
         - python3
-        - /pennant/jar-stylesheet-override.py
+        - /halcyon/jar-stylesheet-override.py
         - /app/app.jar
         - static/index.html
         - /customFiles/static
-        - /pennant/pennant.css
+        - /halcyon/halcyon.css
         image: stirlingtools/stirling-pdf:3.0.0@sha256:66b6edb8ee62e307a8b335166e8931a6e65b39c9bf73b5e517fbfe9c613ba221
-        name: pennant
+        name: halcyon
         volumeMounts:
-        - mountPath: /pennant
-          name: pennant
+        - mountPath: /halcyon
+          name: halcyon
           readOnly: true
         - mountPath: /customFiles
           name: scratch-customfiles
@@ -108,9 +108,9 @@ spec:
         emptyDir: {}
       - name: scratch-pipeline
         emptyDir: {}
-      - name: pennant
+      - name: halcyon
         configMap:
-          name: stirling-pdf-pennant
+          name: stirling-pdf-halcyon
       securityContext:
         seccompProfile:
           type: RuntimeDefault
