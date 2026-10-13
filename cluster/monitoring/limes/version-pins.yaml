@@ -1163,5 +1163,10 @@ data:
           ]
         }
       ],
-      "untracked": []
+      "untracked": [
+        {
+          "key": "jellyfin-image",
+          "file": "versions/mediaserver.json"
+        }
+      ]
     }
