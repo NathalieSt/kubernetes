@@ -624,6 +624,17 @@ data:
           ]
         },
         {
+          "key": "jellyfin-image",
+          "kind": "image",
+          "repository": "docker.io/jellyfin/jellyfin",
+          "version": "12.2@sha256:357724bf0ae27a672c7cbaa899db2d9abeb13dbd8657ccce750258a4c059d037",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "jellyfin"
+          ]
+        },
+        {
           "key": "lidarr",
           "kind": "image",
           "repository": "linuxserver/lidarr",
@@ -649,7 +660,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "859d8c1@sha256:ff9dc3b2db1f05d63e99d574f24af3529c95632b0398432be9af0bf1b5619280",
+          "version": "163574a@sha256:a158a98601f97c9ba47c35f4772dcc6c409ff89ce0079f9231c3e282bc7b00a0",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -957,7 +968,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "31b4835@sha256:ef838a10e6ebfdf5ea539d0a80b1389faf6483c0199cadb4d96ef01f105cab4b",
+          "version": "ff21e6e@sha256:c48a4b885671689fe9e3304ed21e7849137db549621eeb09ec05dc6a8dea119c",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1023,7 +1034,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "98b5420@sha256:5bbb387a2ff215546d1be464588e02f1912cfc058e1a3e45be6725f3fc4cc509",
+          "version": "66f9fe7@sha256:c9ce05863e7ab605cbc127fea8f31ec9d91d274c10fc376b751accb267f3f6d9",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1045,7 +1056,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "eaaf4ff@sha256:4d0d15c4b969473b32dbad54c103d6071cefd90f30e6fbb646910cb3df5d9b26",
+          "version": "b47f299@sha256:1eef01059414c5f8cac69d242d1534fad060f585e143745942f1b88101df14da",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1163,10 +1174,5 @@ data:
           ]
         }
       ],
-      "untracked": [
-        {
-          "key": "jellyfin-image",
-          "file": "versions/mediaserver.json"
-        }
-      ]
+      "untracked": []
     }

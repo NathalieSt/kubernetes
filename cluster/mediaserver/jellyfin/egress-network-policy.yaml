@@ -38,3 +38,13 @@ spec:
       protocol: TCP
     - port: 80
       protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ntfy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ntfy
+    ports:
+    - port: 8080
+      protocol: TCP

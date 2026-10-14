@@ -25,6 +25,14 @@ spec:
       annotations:
         description: A CoreDNS pod recovered from a panic. One is a bug to report; a stream of them is DNS going away. `kubectl -n kube-system logs -l k8s-app=kube-dns` has the trace.
         summary: CoreDNS panicked
+    - alert: NetworkPolicyRefusingPeer
+      expr: sum by (source_namespace, source, destination_namespace, destination) (increase(hubble_drop_total{job="hubble", reason="POLICY_DENIED", protocol="TCP", source_namespace!="", destination_namespace!=""}[1h])) > 0
+      labels:
+        severity: warning
+        topic: alerts-platform
+      annotations:
+        description: "Cilium dropped {{ $value }} TCP packets from {{ $labels.source }} to {{ $labels.destination_namespace }}/{{ $labels.destination }} in the last hour: the source's egress or the destination's ingress does not admit the other end. To the app it is a timeout. `hubble observe --verdict DROPPED --from-namespace {{ $labels.source_namespace }}` on the source's node shows which; see the networking runbook."
+        summary: "{{ $labels.source_namespace }}/{{ $labels.source }} is refused by a NetworkPolicy on its way to {{ $labels.destination_namespace }}"
     - alert: NfsRetransmitting
       expr: rate(node_nfs_rpc_retransmissions_total[15m]) > 0.1
       for: 30m

@@ -64,6 +64,7 @@ spec:
       hostPath:
         path: /dev/dri
     image:
+      repository: docker.io/jellyfin/jellyfin
       tag: 12.2@sha256:357724bf0ae27a672c7cbaa899db2d9abeb13dbd8657ccce750258a4c059d037
     metrics:
       enabled: true
