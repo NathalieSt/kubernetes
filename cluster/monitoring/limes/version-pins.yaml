@@ -1034,7 +1034,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "66f9fe7@sha256:c9ce05863e7ab605cbc127fea8f31ec9d91d274c10fc376b751accb267f3f6d9",
+          "version": "6b201c1@sha256:5fa18eb807bdf9e0622cfb1f8f608c5cac9db57bde458f264775cde3119182da",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1056,7 +1056,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "b47f299@sha256:1eef01059414c5f8cac69d242d1534fad060f585e143745942f1b88101df14da",
+          "version": "dc7428d@sha256:be266ad6bd26df9f9e22909b5a93c6a44862b72282b657ff318e85d43b66e809",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
