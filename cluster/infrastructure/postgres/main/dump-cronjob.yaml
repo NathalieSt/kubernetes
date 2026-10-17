@@ -31,7 +31,7 @@ spec:
               #!/bin/sh
               # pg_dumpall from a CNPG cluster's primary into /dump/dump.sql. Needs NAMESPACE and CLUSTER.
               # Written beside the last good dump and moved over it only once it is whole.
-              set -eu
+              set -eu -o pipefail
 
               part=/dump/dump.sql.part
               trap 'rm -f "$part"' EXIT
@@ -40,7 +40,10 @@ spec:
                 -l "cnpg.io/cluster=$CLUSTER,cnpg.io/instanceRole=primary")
               [ -n "$pod" ] || { echo "no primary of $CLUSTER is running"; exit 1; }
 
-              kubectl -n "$NAMESPACE" exec "$pod" -c postgres -- pg_dumpall --clean --if-exists > "$part"
+              # O_DIRECT: on raspberry-pi-5-2's 6.12 kernel the NFS page cache filled the 256Mi limit and
+              # the pod was OOM-killed (2026-10-14 to -16); direct writes peak at 8 MB.
+              kubectl -n "$NAMESPACE" exec "$pod" -c postgres -- pg_dumpall --clean --if-exists |
+                dd of="$part" bs=1M iflag=fullblock oflag=direct 2>/dev/null
 
               # pg_dumpall's own last line: a stream that ended early does not have it.
               tail -c 200 "$part" | grep -q 'PostgreSQL database cluster dump complete' ||
