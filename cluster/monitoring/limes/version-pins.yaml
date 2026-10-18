@@ -1012,7 +1012,7 @@ data:
           "key": "fdroid",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync",
-          "version": "75b5b28@sha256:8e5586cf6813b88e34b17a62a9a7fca7ef0c33f9e1497287b12a023c68a5cbfb",
+          "version": "c0cef9e@sha256:d8439fe90424e06aabc0c958b4fc46c6bf0a8d9c14e25bff1fc8ca39dc439a4e",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1034,7 +1034,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "b62ff94@sha256:67f27f4403791b6e874ed50baa7260f113e389990f31fc7d2c2418a8373ae1a5",
+          "version": "c69f49a@sha256:f6951bd30c196414467712d2411304b8dfcfa66c5831dae690ef0dd75b298ff5",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1056,7 +1056,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "dc7428d@sha256:be266ad6bd26df9f9e22909b5a93c6a44862b72282b657ff318e85d43b66e809",
+          "version": "a4a3873@sha256:3f16076d244dd3f15086812ee361f0fecf0a206785f6d4d9e629d00d763da7e5",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1144,7 +1144,7 @@ data:
           "key": "neko",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium",
-          "version": "cb62599@sha256:60c96499633d4f8048dc550a1dd11337c6c79c225775c1c2b0d851e8d412925b",
+          "version": "c0cef9e@sha256:03191082c3aca7e6ec1fb8dc12943765019c2297fd016042076ccd0e13a7566f",
           "file": "versions/web.json",
           "inVersionsFile": true,
           "generators": [

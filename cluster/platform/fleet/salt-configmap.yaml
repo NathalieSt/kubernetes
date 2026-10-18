@@ -85,6 +85,12 @@ kind: ConfigMap
 metadata:
   name: fleet-salt-states
 data:
+  inotify.sls: |
+    {#- Debian allows root 128 inotify instances, and k3s takes about one per container: `debian`
+        sat at 128 of 128 on 2026-10-18 and clavis' Tauri build died with "Too many open files". #}
+    fs.inotify.max_user_instances:
+      sysctl.present:
+        - value: 1024
   netbird.sls: |
     {#- The NetBird client at the version pinned in pillar/netbird.sls. Run from Fleet as
         `state.apply netbird`: one canary first, the gateway's own NetBird never. #}

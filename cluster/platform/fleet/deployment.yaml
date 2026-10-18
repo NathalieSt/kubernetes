@@ -200,6 +200,8 @@ spec:
         configMap:
           name: fleet-salt-states
           items:
+          - key: inotify.sls
+            path: inotify.sls
           - key: netbird.sls
             path: netbird.sls
           - key: rescue__earlyoom.sls
