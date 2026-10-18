@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: fdroid
-    app.kubernetes.io/version: 75b5b28
+    app.kubernetes.io/version: c0cef9e
   name: fdroid
 spec:
   selector:

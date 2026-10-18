@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: fdroid
-    app.kubernetes.io/version: 75b5b28
+    app.kubernetes.io/version: c0cef9e
   name: fdroid
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: fdroid
-        app.kubernetes.io/version: 75b5b28
+        app.kubernetes.io/version: c0cef9e
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -26,7 +26,7 @@ spec:
         - mkdir
         - -p
         - /data/repo
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync:75b5b28@sha256:8e5586cf6813b88e34b17a62a9a7fca7ef0c33f9e1497287b12a023c68a5cbfb
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync:c0cef9e@sha256:d8439fe90424e06aabc0c958b4fc46c6bf0a8d9c14e25bff1fc8ca39dc439a4e
         name: prepare
         volumeMounts:
         - mountPath: /data
@@ -43,7 +43,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync:75b5b28@sha256:8e5586cf6813b88e34b17a62a9a7fca7ef0c33f9e1497287b12a023c68a5cbfb
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync:c0cef9e@sha256:d8439fe90424e06aabc0c958b4fc46c6bf0a8d9c14e25bff1fc8ca39dc439a4e
         name: sync
         volumeMounts:
         - mountPath: /data
