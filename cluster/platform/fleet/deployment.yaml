@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: fleet
-    app.kubernetes.io/version: "9098000"
+    app.kubernetes.io/version: c7b0cf7
   name: fleet
 spec:
   replicas: 1
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: de9787430bfdc3a3
+        checksum/config: 066d4732dc2e5854
       labels:
         app.kubernetes.io/name: fleet
-        app.kubernetes.io/version: "9098000"
+        app.kubernetes.io/version: c7b0cf7
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -48,7 +48,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:9098000@sha256:b8ef791960714b03b7ac568bcad41a35a06086ff23c4ecf6a1f50f3fe0170141
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:c7b0cf7@sha256:36b87168b225d1b60f5af52553cc110ba17a51866e7d960a024b726359d90239
         name: fleet
         ports:
         - containerPort: 8080
@@ -82,6 +82,10 @@ spec:
           value: admins
         - name: FLEET_ALLOW_DESTRUCTIVE
           value: "1"
+        - name: FLEET_MASTER_HOST
+          value: fleet.netbird.nathalie-stiefsohn.eu
+        - name: FLEET_SALT_VERSION
+          value: "3008.3"
         - name: FLEET_DATA_DIR
           value: /var/lib/fleet/audit
         - name: FLEET_SCRIPTS_DIR

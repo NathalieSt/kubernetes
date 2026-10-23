@@ -70,15 +70,24 @@ data:
               - service.restart
               - pkg.upgrade
               - system.reboot
+              # One path only: Debian's "a reboot is waiting" flag, for the health sweep.
+              - file.file_exists:
+                  args:
+                    - ^/var/run/reboot-required$
           - "@wheel":
               - key.list_all
               - key.accept
               - key.reject
               - key.delete
+              # Public-key fingerprints, compared with the host's before a key is accepted.
+              - key.finger
+              - key.finger_master
           - "@runner":
               - jobs.list_jobs
               - jobs.list_job
               - cache.grains
+              # The states Fleet offers: file names under file_roots, never their contents.
+              - fileserver.file_list
 ---
 apiVersion: v1
 kind: ConfigMap
