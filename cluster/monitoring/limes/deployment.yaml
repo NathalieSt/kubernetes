@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: limes
-    app.kubernetes.io/version: 40ff8a9
+    app.kubernetes.io/version: 92bf994
   name: limes
 spec:
   replicas: 1
@@ -15,13 +15,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: limes
-        app.kubernetes.io/version: 40ff8a9
+        app.kubernetes.io/version: 92bf994
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: limes
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:40ff8a9@sha256:375b24108ad3abf14e66277daecb6b7a451d61e332987139ee79512032b754c5
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/limes:92bf994@sha256:dffc92486b23daeb02c80db52b9755b9ce87fcb22485c45661312c3ad9169187
         name: limes
         ports:
         - containerPort: 8080
@@ -77,6 +77,8 @@ spec:
           value: http://forgejo-http.forgejo.svc.cluster.local:3000
         - name: LIMES_FORGEJO_REPO
           value: my-homelab/kubernetes-generator
+        - name: LIMES_COMPOSE_REPOS
+          value: my-homelab/coordination-vps
         - name: LIMES_FORGEJO_TOKEN
           valueFrom:
             secretKeyRef:
