@@ -169,6 +169,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: tessera
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: trilium
   - to:
     - namespaceSelector:

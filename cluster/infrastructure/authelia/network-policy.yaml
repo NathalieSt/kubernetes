@@ -45,6 +45,7 @@ spec:
           - paperless
           - pharos
           - tandoor
+          - tessera
           - trilium
           - vault
           - zyme

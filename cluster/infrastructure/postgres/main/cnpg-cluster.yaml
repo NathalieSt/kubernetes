@@ -67,6 +67,11 @@ spec:
       login: true
       passwordSecret:
         name: zyme-db-role
+    - name: tessera
+      ensure: present
+      login: true
+      passwordSecret:
+        name: tessera-db-role
     - name: tare
       ensure: present
       login: true

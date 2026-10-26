@@ -801,6 +801,17 @@ data:
           "leavesBy": "gluetun-proxy"
         },
         {
+          "generator": "tessera",
+          "namespace": "tessera",
+          "group": "personal",
+          "about": "Device designs, compared with what each device is",
+          "url": "https://tessera.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
           "generator": "trilium",
           "namespace": "trilium",
           "group": "study",

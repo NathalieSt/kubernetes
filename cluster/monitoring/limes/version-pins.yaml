@@ -976,6 +976,17 @@ data:
           ]
         },
         {
+          "key": "tessera",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tessera",
+          "version": "d6c2ab7@sha256:ce88e9311b2caaca159eb11693b79ee6e88185dd2505dd353cb943d005e751f3",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "tessera"
+          ]
+        },
+        {
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
@@ -1034,7 +1045,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "f764bb1@sha256:83897420e3ad05fb344ca23936cfa26eef5c4df85be47b7a97ce18c2107c548a",
+          "version": "f67374d@sha256:cebd3413d936aaeeed25bba48f13d1ac352d14871dee1ff14f11686d851d69ef",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

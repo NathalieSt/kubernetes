@@ -320,6 +320,9 @@ spec:
     name: tare
     namespace: flux-system
   - kind: Kustomization
+    name: tessera
+    namespace: flux-system
+  - kind: Kustomization
     name: trilium
     namespace: flux-system
   - kind: Kustomization

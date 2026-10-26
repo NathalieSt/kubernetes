@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: tessera
+    app.kubernetes.io/version: d6c2ab7
+  name: tessera
+spec:
+  selector:
+    app.kubernetes.io/name: tessera
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
