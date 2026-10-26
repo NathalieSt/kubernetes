@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: fleet
-    app.kubernetes.io/version: c7b0cf7
+    app.kubernetes.io/version: e985fd3
   name: fleet
 spec:
   replicas: 1
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 066d4732dc2e5854
+        checksum/config: 56937ba270d1a4a5
       labels:
         app.kubernetes.io/name: fleet
-        app.kubernetes.io/version: c7b0cf7
+        app.kubernetes.io/version: e985fd3
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -27,7 +27,7 @@ spec:
       - command:
         - sh
         - -c
-        - chown 1000:1000 /var/lib/fleet /run/salt && umask 077 && printf '%s:%s\n' "$SALT_USER" "$SALT_PASSWORD" > /run/salt-auth/users && chown 1000:1000 /run/salt-auth/users
+        - mkdir -p /var/lib/fleet/salt-files/_modules && chown 1000:1000 /var/lib/fleet /var/lib/fleet/salt-files /var/lib/fleet/salt-files/_modules /run/salt && umask 077 && printf '%s:%s\n' "$SALT_USER" "$SALT_PASSWORD" > /run/salt-auth/users && chown 1000:1000 /run/salt-auth/users
         image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
         name: setup
         volumeMounts:
@@ -48,7 +48,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:c7b0cf7@sha256:36b87168b225d1b60f5af52553cc110ba17a51866e7d960a024b726359d90239
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:e985fd3@sha256:d31ced7175333670878a722330d15c3531dcee90d65affbc28449e7816d7a2e9
         name: fleet
         ports:
         - containerPort: 8080
@@ -82,6 +82,18 @@ spec:
           value: admins
         - name: FLEET_ALLOW_DESTRUCTIVE
           value: "1"
+        - name: FLEET_ALLOW_MODULES
+          value: "1"
+        - name: FLEET_MODULES_DIR
+          value: /var/lib/fleet/modules
+        - name: FLEET_SALT_FILES_DIR
+          value: /var/lib/fleet/salt-files
+        - name: FLEET_MODULES_PASSWORD_HASH
+          valueFrom:
+            secretKeyRef:
+              key: modules-password-hash
+              name: fleet-secret
+              optional: true
         - name: FLEET_MASTER_HOST
           value: fleet.netbird.nathalie-stiefsohn.eu
         - name: FLEET_SALT_VERSION
