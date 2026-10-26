@@ -168,7 +168,7 @@ data:
     clamav/hash-lookup clamav virustotal
     code-server code-server password
     code-server-git code-server username email token
-    fleet fleet salt-password
+    fleet fleet salt-password modules-password-hash
     flux-notifications flux-notifications token
     gameyfin/secrets gameyfin app-key
     glitchtip/secret glitchtip secret-key

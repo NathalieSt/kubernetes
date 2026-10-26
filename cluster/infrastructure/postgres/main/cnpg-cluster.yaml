@@ -112,3 +112,12 @@ spec:
       login: true
       passwordSecret:
         name: seerr-db-role
+  postgresql:
+    parameters:
+      effective_cache_size: 8GB
+      maintenance_work_mem: 256MB
+      shared_buffers: 2GB
+      work_mem: 16MB
+  resources:
+    requests:
+      memory: 3Gi

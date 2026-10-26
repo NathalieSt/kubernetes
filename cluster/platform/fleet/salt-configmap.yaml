@@ -30,8 +30,9 @@ data:
     auto_accept: False
     open_mode: False
 
+    # The second root is Fleet's: the execution modules it publishes, as `_modules/fleet_*.py`.
     file_roots:
-      base: [/srv/salt/states]
+      base: [/srv/salt/states, /var/lib/fleet/salt-files]
     pillar_roots:
       base: [/srv/salt/pillar]
     # The kubelet keeps a ConfigMap's files in `..data` and a dated `..<timestamp>` copy, which
@@ -70,6 +71,10 @@ data:
               - service.restart
               - pkg.upgrade
               - system.reboot
+              # Modules written in Fleet: syncing them, and calling theirs and nobody else's. Salt
+              # matches a grant with re.match, so the `$` is what stops a longer name.
+              - saltutil.sync_modules
+              - 'fleet_[a-z][a-z0-9_]*\.[a-z_][a-z0-9_]*$'
               # One path only: Debian's "a reboot is waiting" flag, for the health sweep.
               - file.file_exists:
                   args:
