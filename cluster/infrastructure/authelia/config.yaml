@@ -187,6 +187,9 @@ data:
         - tare.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - tessera.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - vault.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
@@ -498,6 +501,27 @@ data:
           response_types:
           - code
           token_endpoint_auth_method: client_secret_post
+          consent_mode: implicit
+        - client_id: tessera
+          client_name: tessera
+          public: true
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://tessera.netbird.nathalie-stiefsohn.eu/auth/callback
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          - offline_access
+          grant_types:
+          - authorization_code
+          - refresh_token
+          response_types:
+          - code
+          token_endpoint_auth_method: none
           consent_mode: implicit
         - client_id: trilium
           client_name: trilium

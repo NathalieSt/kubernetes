@@ -339,6 +339,11 @@ data:
           service: tare
           middlewares:
           - authelia
+        tessera:
+          rule: Host(`tessera.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: tessera
         trilium:
           rule: Host(`notes.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -556,6 +561,10 @@ data:
           loadBalancer:
             servers:
             - url: http://tare.tare.svc.cluster.local:8080
+        tessera:
+          loadBalancer:
+            servers:
+            - url: http://tessera.tessera.svc.cluster.local:8080
         trilium:
           loadBalancer:
             servers:

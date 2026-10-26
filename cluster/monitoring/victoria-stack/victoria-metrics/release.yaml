@@ -1111,6 +1111,12 @@ spec:
                 probe_namespace: tare
                 scale_to_zero: "false"
             - targets:
+              - http://tessera.tessera.svc.cluster.local:8080/
+              labels:
+                probe_name: tessera
+                probe_namespace: tessera
+                scale_to_zero: "false"
+            - targets:
               - http://trilium.trilium.svc.cluster.local:8080/
               labels:
                 probe_name: trilium

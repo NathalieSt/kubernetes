@@ -1,0 +1,80 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: tessera
+    app.kubernetes.io/version: d6c2ab7
+  name: tessera
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tessera
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tessera
+        app.kubernetes.io/version: d6c2ab7
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tessera:d6c2ab7@sha256:ce88e9311b2caaca159eb11693b79ee6e88185dd2505dd353cb943d005e751f3
+        name: tessera
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: TZ
+          value: Europe/Vienna
+        - name: TESSERA_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/tessera
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: tessera-db-secret
+              optional: false
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: tessera-db-secret
+              optional: false
+        - name: TESSERA_PUBLIC_URL
+          value: https://tessera.netbird.nathalie-stiefsohn.eu
+        - name: TESSERA_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: TESSERA_OIDC_CLIENT_ID
+          value: tessera
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

@@ -404,6 +404,12 @@ data:
           description: Supermarket prices per kilo, litre and piece
           namespace: tare
           app: tare
+      - tessera:
+          href: https://tessera.netbird.nathalie-stiefsohn.eu
+          icon: mdi-view-grid-outline
+          description: Device designs, compared with what each device is
+          namespace: tessera
+          app: tessera
       - zyme:
           href: https://zyme.netbird.nathalie-stiefsohn.eu
           icon: mdi-bottle-tonic-outline
