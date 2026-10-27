@@ -84,93 +84,93 @@ data:
     /* Halcyon for Paperless-ngx, appended by kubernetes-generator (src/generators/theme). */
 
     :root {
-      --pngx-primary: 213, 49%;
-      --pngx-primary-lightness: 34%;
-      --pngx-primary-text-contrast: #f9fafc;
-      --pngx-bg-alt: #ffffff;
-      --pngx-bg-alt2: #f2f4f6;
-      --pngx-bg-darker: #f2f4f6;
-      --pngx-bg-disabled: #f2f4f6;
-      --pngx-body-color-accent: #484e54;
-      --pngx-card-hover-border: #676c74;
-      --bs-body-bg: #f9fafc;
-      --bs-body-bg-rgb: 249, 250, 252;
-      --bs-body-color: #2f3339;
-      --bs-body-color-rgb: 47, 51, 57;
-      --bs-secondary-color: #484e54;
-      --bs-border-color: #e3e6ea;
-      --bs-link-color: #2c517f;
-      --bs-link-color-rgb: 44, 81, 127;
-      --bs-link-hover-color: #1d395b;
-      --bs-focus-ring-color: rgba(60, 106, 164, .35);
+      --pngx-primary: 187, 100%;
+      --pngx-primary-lightness: 20%;
+      --pngx-primary-text-contrast: #f4fcff;
+      --pngx-bg-alt: #e8f8fb;
+      --pngx-bg-alt2: #eaf6fb;
+      --pngx-bg-darker: #eaf6fb;
+      --pngx-bg-disabled: #eaf6fb;
+      --pngx-body-color-accent: #305360;
+      --pngx-card-hover-border: #4c7281;
+      --bs-body-bg: #eaf6fb;
+      --bs-body-bg-rgb: 234, 246, 251;
+      --bs-body-color: #1a3742;
+      --bs-body-color-rgb: 26, 55, 66;
+      --bs-secondary-color: #305360;
+      --bs-border-color: #d8eaf1;
+      --bs-link-color: #005a66;
+      --bs-link-color-rgb: 0, 90, 102;
+      --bs-link-hover-color: #004049;
+      --bs-focus-ring-color: rgba(0, 119, 133, .35);
     }
 
     [data-bs-theme=dark] {
-      --pngx-bg-alt: #202327;
-      --pngx-bg-alt2: #2f3339;
-      --pngx-bg-darker: #15171b;
-      --pngx-bg-disabled: #2f3339;
-      --pngx-body-color-accent: #d0d5da;
-      --pngx-card-hover-border: #848a92;
-      --bs-body-bg: #15171b;
-      --bs-body-bg-rgb: 21, 23, 27;
-      --bs-body-color: #f2f4f6;
-      --bs-body-color-rgb: 242, 244, 246;
-      --bs-secondary-color: #d0d5da;
-      --bs-border-color: #484e54;
-      --bs-link-color: #a0c9fd;
-      --bs-link-color-rgb: 160, 201, 253;
-      --bs-link-hover-color: #c6dfff;
-      --bs-focus-ring-color: rgba(160, 201, 253, .35);
+      --pngx-bg-alt: #093842;
+      --pngx-bg-alt2: #1a3742;
+      --pngx-bg-darker: #071a21;
+      --pngx-bg-disabled: #1a3742;
+      --pngx-body-color-accent: #c0d9e4;
+      --pngx-card-hover-border: #6890a0;
+      --bs-body-bg: #071a21;
+      --bs-body-bg-rgb: 7, 26, 33;
+      --bs-body-color: #eaf6fb;
+      --bs-body-color-rgb: 234, 246, 251;
+      --bs-secondary-color: #c0d9e4;
+      --bs-border-color: #305360;
+      --bs-link-color: #86d4e2;
+      --bs-link-color-rgb: 134, 212, 226;
+      --bs-link-hover-color: #b3e7f1;
+      --bs-focus-ring-color: rgba(134, 212, 226, .35);
     }
     [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) {
-      --pngx-primary: 214, 96%;
-      --pngx-primary-lightness: 81%;
-      --pngx-primary-text-contrast: #090b0e;
+      --pngx-primary: 190, 69%;
+      --pngx-primary-lightness: 82%;
+      --pngx-primary-text-contrast: #020d12;
     }
     [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary {
-      --pngx-primary: 214, 96%;
-      --pngx-primary-lightness: 81%;
-      --pngx-primary-text-contrast: #090b0e;
+      --pngx-primary: 190, 69%;
+      --pngx-primary-lightness: 82%;
+      --pngx-primary-text-contrast: #020d12;
     }
     [data-bs-theme=dark] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary .dropdown-menu {
-      --pngx-primary: 214, 96%;
-      --pngx-primary-lightness: 81%;
-      --pngx-primary-text-contrast: #090b0e;
+      --pngx-primary: 190, 69%;
+      --pngx-primary-lightness: 82%;
+      --pngx-primary-text-contrast: #020d12;
     }
 
     @media (prefers-color-scheme: dark) {
     [data-bs-theme=auto] body {
-      --pngx-bg-alt: #202327;
-      --pngx-bg-alt2: #2f3339;
-      --pngx-bg-darker: #15171b;
-      --pngx-bg-disabled: #2f3339;
-      --pngx-body-color-accent: #d0d5da;
-      --pngx-card-hover-border: #848a92;
-      --bs-body-bg: #15171b;
-      --bs-body-bg-rgb: 21, 23, 27;
-      --bs-body-color: #f2f4f6;
-      --bs-body-color-rgb: 242, 244, 246;
-      --bs-secondary-color: #d0d5da;
-      --bs-border-color: #484e54;
-      --bs-link-color: #a0c9fd;
-      --bs-link-color-rgb: 160, 201, 253;
-      --bs-link-hover-color: #c6dfff;
-      --bs-focus-ring-color: rgba(160, 201, 253, .35);
+      --pngx-bg-alt: #093842;
+      --pngx-bg-alt2: #1a3742;
+      --pngx-bg-darker: #071a21;
+      --pngx-bg-disabled: #1a3742;
+      --pngx-body-color-accent: #c0d9e4;
+      --pngx-card-hover-border: #6890a0;
+      --bs-body-bg: #071a21;
+      --bs-body-bg-rgb: 7, 26, 33;
+      --bs-body-color: #eaf6fb;
+      --bs-body-color-rgb: 234, 246, 251;
+      --bs-secondary-color: #c0d9e4;
+      --bs-border-color: #305360;
+      --bs-link-color: #86d4e2;
+      --bs-link-color-rgb: 134, 212, 226;
+      --bs-link-hover-color: #b3e7f1;
+      --bs-focus-ring-color: rgba(134, 212, 226, .35);
     }
     [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) {
-      --pngx-primary: 214, 96%;
-      --pngx-primary-lightness: 81%;
-      --pngx-primary-text-contrast: #090b0e;
+      --pngx-primary: 190, 69%;
+      --pngx-primary-lightness: 82%;
+      --pngx-primary-text-contrast: #020d12;
     }
     [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary {
-      --pngx-primary: 214, 96%;
-      --pngx-primary-lightness: 81%;
-      --pngx-primary-text-contrast: #090b0e;
+      --pngx-primary: 190, 69%;
+      --pngx-primary-lightness: 82%;
+      --pngx-primary-text-contrast: #020d12;
     }
     [data-bs-theme=auto] body:not(.primary-light):not(.primary-dark) .navbar.bg-primary .dropdown-menu {
-      --pngx-primary: 214, 96%;
-      --pngx-primary-lightness: 81%;
-      --pngx-primary-text-contrast: #090b0e;
+      --pngx-primary: 190, 69%;
+      --pngx-primary-lightness: 82%;
+      --pngx-primary-text-contrast: #020d12;
     }
     }

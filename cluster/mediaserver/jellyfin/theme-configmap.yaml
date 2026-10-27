@@ -16,28 +16,28 @@ data:
       --halcyon-accent: #4e84c7;
       --halcyon-accent-hover: #639be1;
       --halcyon-accent-tint: #4e84c733;
-      --halcyon-on-accent: #f9fafc;
-      --halcyon-danger: #c25f61;
+      --halcyon-on-accent: #f4fcff;
+      --halcyon-danger: #bc6749;
     }
 
     html[data-theme="light"],
     html[data-theme="appletv"] {
-      --halcyon-accent: #2c517f;
-      --halcyon-accent-hover: #1d395b;
-      --halcyon-accent-tint: #2c517f33;
-      --halcyon-on-accent: #f9fafc;
-      --halcyon-danger: #7c3739;
+      --halcyon-accent: #005a66;
+      --halcyon-accent-hover: #004049;
+      --halcyon-accent-tint: #005a6633;
+      --halcyon-on-accent: #f4fcff;
+      --halcyon-danger: #783d28;
     }
 
     html[data-theme="dark"],
     html[data-theme="blueradiance"],
     html[data-theme="purplehaze"],
     html[data-theme="wmc"] {
-      --halcyon-accent: #a0c9fd;
-      --halcyon-accent-hover: #c6dfff;
-      --halcyon-accent-tint: #a0c9fd33;
-      --halcyon-on-accent: #090b0e;
-      --halcyon-danger: #fdadad;
+      --halcyon-accent: #86d4e2;
+      --halcyon-accent-hover: #b3e7f1;
+      --halcyon-accent-tint: #86d4e233;
+      --halcyon-on-accent: #020d12;
+      --halcyon-danger: #f7b39b;
     }
 
     @media (hover: hover) and (pointer: fine) {
