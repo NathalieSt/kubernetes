@@ -979,7 +979,7 @@ data:
           "key": "tessera",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tessera",
-          "version": "9695a95@sha256:8cca0bf3b161b4bb97c3fb6bebeed4bd4b7c3d03371ea09d89bf2cbed77ed78a",
+          "version": "0a71e0a@sha256:0db7d148b075ec3a313d7d7478cdc6d422629e5f571b67ac5edd9c7f826ba289",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1045,7 +1045,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "067074d@sha256:000c8d139225a8a0a1378a79bd65f70144d02cb82de81fdcaabd6346bf66fe01",
+          "version": "aac5491@sha256:cec67a4fa7a665c19aee14e087a5beed5affb4270675ab4c2d2a87cdba12ae4d",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
