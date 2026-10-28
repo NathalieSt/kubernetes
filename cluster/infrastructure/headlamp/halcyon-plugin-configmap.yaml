@@ -12,61 +12,61 @@ data:
       {
         "name": "Pennant",
         "base": "light",
-        "primary": "#2c517f",
-        "secondary": "#f2f4f6",
+        "primary": "#005a66",
+        "secondary": "#eaf6fb",
         "text": {
-          "primary": "#2f3339"
+          "primary": "#1a3742"
         },
         "link": {
-          "color": "#2c517f"
+          "color": "#005a66"
         },
         "background": {
-          "default": "#f9fafc",
-          "surface": "#ffffff",
-          "muted": "#f2f4f6"
+          "default": "#eaf6fb",
+          "surface": "#e8f8fb",
+          "muted": "#eaf6fb"
         },
         "sidebar": {
-          "background": "#ffffff",
-          "color": "#484e54",
-          "selectedBackground": "#e1eeff",
-          "selectedColor": "#1d395b",
-          "actionBackground": "#2c517f"
+          "background": "#e8f8fb",
+          "color": "#305360",
+          "selectedBackground": "#d5f3f9",
+          "selectedColor": "#004049",
+          "actionBackground": "#005a66"
         },
         "navbar": {
-          "background": "#ffffff",
-          "color": "#2f3339"
+          "background": "#e8f8fb",
+          "color": "#1a3742"
         },
-        "radius": 6,
+        "radius": 12,
         "buttonTextTransform": "none"
       },
       {
         "name": "Pennant Dark",
         "base": "dark",
-        "primary": "#a0c9fd",
-        "secondary": "#2f3339",
+        "primary": "#86d4e2",
+        "secondary": "#1a3742",
         "text": {
-          "primary": "#f2f4f6"
+          "primary": "#eaf6fb"
         },
         "link": {
-          "color": "#a0c9fd"
+          "color": "#86d4e2"
         },
         "background": {
-          "default": "#15171b",
-          "surface": "#202327",
-          "muted": "#2f3339"
+          "default": "#071a21",
+          "surface": "#093842",
+          "muted": "#1a3742"
         },
         "sidebar": {
-          "background": "#202327",
-          "color": "#d0d5da",
-          "selectedBackground": "#10233c",
-          "selectedColor": "#c6dfff",
-          "actionBackground": "#a0c9fd"
+          "background": "#093842",
+          "color": "#c0d9e4",
+          "selectedBackground": "#00282e",
+          "selectedColor": "#b3e7f1",
+          "actionBackground": "#b3e7f1"
         },
         "navbar": {
-          "background": "#202327",
-          "color": "#f2f4f6"
+          "background": "#093842",
+          "color": "#eaf6fb"
         },
-        "radius": 6,
+        "radius": 12,
         "buttonTextTransform": "none"
       }
     ];

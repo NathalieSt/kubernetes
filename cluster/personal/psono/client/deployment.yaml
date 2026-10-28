@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: psono-client
-    app.kubernetes.io/version: 9eb1073
+    app.kubernetes.io/version: 94201a8
   name: psono-client
 spec:
   replicas: 1
@@ -15,20 +15,20 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: psono-client
-        app.kubernetes.io/version: 9eb1073
+        app.kubernetes.io/version: 94201a8
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client:9eb1073@sha256:981f1c476ebd729d00ebe598742a38614958aec6f7f06233741a048d6e2869f6
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client:94201a8@sha256:af1d42ff2b4a6eb246d38c505f2b0fcada6cec2105c23206920920cb60afb0df
         name: psono-client
         ports:
         - containerPort: 80
           name: http
         env:
         - name: PSONO_WEBCLIENT_CONFIG_JSON
-          value: "{\"backend_servers\":[{\"title\":\"Homelab\",\"url\":\"https://psono-api.netbird.nathalie-stiefsohn.eu\",\"domain\":\"homelab.internal\"}],\"base_url\":\"https://psono.netbird.nathalie-stiefsohn.eu/\",\"allow_custom_server\":false,\"allow_registration\":false,\"allow_lost_password\":false,\"allow_delete_account\":false,\"authentication_methods\":[\"AUTHKEY\"],\"more_links\":[],\"theme\":{\"palette\":{\"background\":{\"default\":\"#15171b\",\"paper\":\"#ffffff\"},\"primary\":{\"main\":\"#2c517f\"},\"secondary\":{\"main\":\"#005c60\"},\"action\":{\"disabledBackground\":\"#2c517f80\"},\"lightGreyText\":{\"main\":\"#676c74\",\"light\":\"#676c74\",\"dark\":\"#676c74\",\"contrastText\":\"#676c74\"},\"greyText\":{\"main\":\"#484e54\",\"light\":\"#484e54\",\"dark\":\"#484e54\",\"contrastText\":\"#484e54\"},\"checked\":{\"main\":\"#2c517f\",\"light\":\"#2c517f\",\"dark\":\"#2c517f\",\"contrastText\":\"#2c517f\"},\"blueBackground\":{\"main\":\"#202327\",\"light\":\"#202327\",\"dark\":\"#202327\",\"contrastText\":\"#202327\"},\"badgeBackground\":{\"main\":\"#676c74\",\"light\":\"#676c74\",\"dark\":\"#676c74\",\"contrastText\":\"#676c74\"},\"appBarText\":{\"main\":\"#484e54\",\"light\":\"#484e54\",\"dark\":\"#484e54\",\"contrastText\":\"#484e54\"},\"appBarBackground\":{\"main\":\"#ffffff\",\"light\":\"#ffffff\",\"dark\":\"#ffffff\",\"contrastText\":\"#ffffff\"},\"appBarReadOnlyText\":{\"main\":\"#493409\",\"light\":\"#493409\",\"dark\":\"#493409\",\"contrastText\":\"#493409\"},\"appBarReadOnlyBackground\":{\"main\":\"#f9ebd5\",\"light\":\"#f9ebd5\",\"dark\":\"#f9ebd5\",\"contrastText\":\"#f9ebd5\"},\"baseBackground\":{\"main\":\"#e3e6ea\",\"light\":\"#e3e6ea\",\"dark\":\"#e3e6ea\",\"contrastText\":\"#e3e6ea\"},\"baseTitleBackground\":{\"main\":\"#f2f4f6\",\"light\":\"#f2f4f6\",\"dark\":\"#f2f4f6\",\"contrastText\":\"#f2f4f6\"},\"lightBackground\":{\"main\":\"#ffffff\",\"light\":\"#ffffff\",\"dark\":\"#ffffff\",\"contrastText\":\"#ffffff\"}}}}"
+          value: "{\"backend_servers\":[{\"title\":\"Homelab\",\"url\":\"https://psono-api.netbird.nathalie-stiefsohn.eu\",\"domain\":\"homelab.internal\"}],\"base_url\":\"https://psono.netbird.nathalie-stiefsohn.eu/\",\"allow_custom_server\":false,\"allow_registration\":false,\"allow_lost_password\":false,\"allow_delete_account\":false,\"authentication_methods\":[\"AUTHKEY\"],\"more_links\":[],\"theme\":{\"palette\":{\"background\":{\"default\":\"#071a21\",\"paper\":\"#e8f8fb\"},\"primary\":{\"main\":\"#005a66\"},\"secondary\":{\"main\":\"#2c517f\"},\"action\":{\"disabledBackground\":\"#005a6680\"},\"lightGreyText\":{\"main\":\"#4c7281\",\"light\":\"#4c7281\",\"dark\":\"#4c7281\",\"contrastText\":\"#4c7281\"},\"greyText\":{\"main\":\"#305360\",\"light\":\"#305360\",\"dark\":\"#305360\",\"contrastText\":\"#305360\"},\"checked\":{\"main\":\"#005a66\",\"light\":\"#005a66\",\"dark\":\"#005a66\",\"contrastText\":\"#005a66\"},\"blueBackground\":{\"main\":\"#093842\",\"light\":\"#093842\",\"dark\":\"#093842\",\"contrastText\":\"#093842\"},\"badgeBackground\":{\"main\":\"#4c7281\",\"light\":\"#4c7281\",\"dark\":\"#4c7281\",\"contrastText\":\"#4c7281\"},\"appBarText\":{\"main\":\"#305360\",\"light\":\"#305360\",\"dark\":\"#305360\",\"contrastText\":\"#305360\"},\"appBarBackground\":{\"main\":\"#e8f8fb\",\"light\":\"#e8f8fb\",\"dark\":\"#e8f8fb\",\"contrastText\":\"#e8f8fb\"},\"appBarReadOnlyText\":{\"main\":\"#463608\",\"light\":\"#463608\",\"dark\":\"#463608\",\"contrastText\":\"#463608\"},\"appBarReadOnlyBackground\":{\"main\":\"#f6ecd4\",\"light\":\"#f6ecd4\",\"dark\":\"#f6ecd4\",\"contrastText\":\"#f6ecd4\"},\"baseBackground\":{\"main\":\"#d8eaf1\",\"light\":\"#d8eaf1\",\"dark\":\"#d8eaf1\",\"contrastText\":\"#d8eaf1\"},\"baseTitleBackground\":{\"main\":\"#eaf6fb\",\"light\":\"#eaf6fb\",\"dark\":\"#eaf6fb\",\"contrastText\":\"#eaf6fb\"},\"lightBackground\":{\"main\":\"#e8f8fb\",\"light\":\"#e8f8fb\",\"dark\":\"#e8f8fb\",\"contrastText\":\"#e8f8fb\"}}}}"
         - name: PSONO_SERVICE_WORKER_DISABLE
           value: "true"
         - name: TZ

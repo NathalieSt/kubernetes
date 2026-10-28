@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: arx
-    app.kubernetes.io/version: 4a3b600
+    app.kubernetes.io/version: f379b63
   name: arx
 spec:
   selector:

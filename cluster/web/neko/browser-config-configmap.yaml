@@ -105,105 +105,105 @@ data:
   theme-manifest.json: |
     {
       "manifest_version": 3,
-      "name": "Halcyon",
+      "name": "Fjord",
       "version": "1.0",
-      "description": "Halcyon dark, from @my-homelab/styles. GENERATED FILE — edit tokens/tokens.json and run `yarn build`.",
+      "description": "Fjord dark, from @my-homelab/styles. GENERATED FILE — edit tokens/tokens.json and run `yarn build`.",
       "theme": {
         "colors": {
           "frame": [
-            21,
-            23,
-            27
+            7,
+            26,
+            33
           ],
           "frame_inactive": [
-            21,
-            23,
-            27
+            7,
+            26,
+            33
           ],
           "frame_incognito": [
-            16,
-            35,
-            60
+            0,
+            40,
+            46
           ],
           "frame_incognito_inactive": [
-            16,
-            35,
-            60
+            0,
+            40,
+            46
           ],
           "background_tab": [
-            21,
-            23,
-            27
+            7,
+            26,
+            33
           ],
           "background_tab_inactive": [
-            21,
-            23,
-            27
+            7,
+            26,
+            33
           ],
           "toolbar": [
-            32,
-            35,
-            39
+            9,
+            56,
+            66
           ],
           "tab_text": [
-            242,
-            244,
-            246
+            234,
+            246,
+            251
           ],
           "tab_background_text": [
-            208,
-            213,
-            218
+            192,
+            217,
+            228
           ],
           "tab_background_text_inactive": [
-            185,
-            190,
-            197
+            164,
+            196,
+            209
           ],
           "bookmark_text": [
-            208,
-            213,
-            218
+            192,
+            217,
+            228
           ],
           "toolbar_button_icon": [
-            160,
-            201,
-            253
+            134,
+            212,
+            226
           ],
           "toolbar_text": [
-            242,
-            244,
-            246
+            234,
+            246,
+            251
           ],
           "omnibox_background": [
-            47,
-            51,
-            57
+            26,
+            55,
+            66
           ],
           "omnibox_text": [
-            242,
-            244,
-            246
+            234,
+            246,
+            251
           ],
           "ntp_background": [
-            21,
-            23,
-            27
+            7,
+            26,
+            33
           ],
           "ntp_header": [
-            47,
-            51,
-            57
+            26,
+            55,
+            66
           ],
           "ntp_text": [
-            242,
-            244,
-            246
+            234,
+            246,
+            251
           ],
           "ntp_link": [
-            160,
-            201,
-            253
+            134,
+            212,
+            226
           ]
         }
       }

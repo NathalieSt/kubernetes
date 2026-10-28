@@ -40,13 +40,13 @@ data:
       --color-primary-alpha-90: #3c6aa4e1;
       --color-primary-hover: var(--color-primary-dark-2);
       --color-primary-active: var(--color-primary-dark-4);
-      --color-accent: #005c60;
+      --color-accent: #2c517f;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --color-primary: #a0c9fd;
-        --color-primary-contrast: #090b0e;
+        --color-primary-contrast: #020d12;
         --color-primary-dark-1: #c6dfff;
         --color-primary-dark-2: #c6dfff;
         --color-primary-dark-3: #e1eeff;
@@ -72,6 +72,6 @@ data:
         --color-primary-alpha-90: #a0c9fde1;
         --color-primary-hover: var(--color-primary-dark-2);
         --color-primary-active: var(--color-primary-dark-4);
-        --color-accent: #89d5d9;
+        --color-accent: #a0c9fd;
       }
     }
