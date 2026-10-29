@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: fleet
-    app.kubernetes.io/version: 4f406dd
+    app.kubernetes.io/version: b82a152
   name: fleet
 spec:
   replicas: 1
@@ -19,7 +19,7 @@ spec:
         checksum/config: 56937ba270d1a4a5
       labels:
         app.kubernetes.io/name: fleet
-        app.kubernetes.io/version: 4f406dd
+        app.kubernetes.io/version: b82a152
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -48,7 +48,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:4f406dd@sha256:98fd47ab0e784037db43808cd9233130f35c8d19b41e34c56d3780cc66761964
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:b82a152@sha256:f645565c345f0ad338273fe4995ee64b5b92708b5f9000b8340ed512d47cd621
         name: fleet
         ports:
         - containerPort: 8080
