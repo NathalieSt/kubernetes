@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: orrery
-    app.kubernetes.io/version: 0bfcae4
+    app.kubernetes.io/version: 231a336
   name: orrery
 spec:
   selector:
