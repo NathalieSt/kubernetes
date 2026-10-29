@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: tessera
-    app.kubernetes.io/version: c249083
+    app.kubernetes.io/version: c0123f5
   name: tessera
 spec:
   replicas: 1
@@ -17,14 +17,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: tessera
-        app.kubernetes.io/version: c249083
+        app.kubernetes.io/version: c0123f5
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tessera:c249083@sha256:b6489523cb77f5d6b282e03dd0ea7155c95e2484d80ba868926955fbc1dd8505
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/tessera:c0123f5@sha256:4e7db352aabcafcecd785e90ae92045ae253236869476ce6d4755094596c1c93
         name: tessera
         ports:
         - containerPort: 8080

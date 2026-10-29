@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: tessera
-    app.kubernetes.io/version: c249083
+    app.kubernetes.io/version: c0123f5
   name: tessera
 spec:
   selector:
