@@ -758,6 +758,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-internal-dns
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-internal-dns-namespace-admin
+  namespace: internal-dns
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-internal-dns
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-internal-gateway
   namespace: flux-system
 ---
@@ -998,26 +1018,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-main-pg
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-media-dns
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-media-dns-namespace-admin
-  namespace: jellyfin
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-media-dns
   namespace: flux-system
 ---
 apiVersion: v1

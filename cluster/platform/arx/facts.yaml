@@ -370,6 +370,14 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "internal-dns",
+          "namespace": "internal-dns",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
           "generator": "internal-gateway",
           "namespace": "internal-gateway",
           "group": "infrastructure",
@@ -470,14 +478,6 @@ data:
           "sleeps": false,
           "sendsBackup": true,
           "usesCistern": true
-        },
-        {
-          "generator": "media-dns",
-          "namespace": "jellyfin",
-          "group": "mediaserver",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": false
         },
         {
           "generator": "music-library-builder",

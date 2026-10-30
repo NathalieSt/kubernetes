@@ -21,7 +21,7 @@ spec:
   - name: redis
   - name: main-pg
   - name: vault-secrets-operator-config
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-audiomuse-ai
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -47,7 +47,7 @@ spec:
   - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-bazarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -69,7 +69,7 @@ spec:
   - name: namespaces
   - name: flux-rbac
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-flaresolverr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -92,7 +92,7 @@ spec:
   - name: flux-rbac
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   - name: vault-secrets-operator-config
   serviceAccountName: flux-gameyfin
 ---
@@ -142,28 +142,8 @@ spec:
   - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-lidarr
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: media-dns
-  namespace: flux-system
-spec:
-  interval: 24h
-  targetNamespace: jellyfin
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/mediaserver/media-dns
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  serviceAccountName: flux-media-dns
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -187,7 +167,7 @@ spec:
   - name: gluetun-proxy
   - name: csi-driver-nfs
   - name: reflector
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-music-library-builder
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -213,7 +193,7 @@ spec:
   - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-prowlarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -262,7 +242,7 @@ spec:
   - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-radarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -309,7 +289,7 @@ spec:
   - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-seerr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -335,7 +315,7 @@ spec:
   - name: vault-secrets-operator-config
   - name: csi-driver-nfs
   - name: gluetun-proxy
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-sonarr
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -360,5 +340,5 @@ spec:
   - name: radarr
   - name: lidarr
   - name: qbittorrent
-  - name: media-dns
+  - name: internal-dns
   serviceAccountName: flux-stall-watch

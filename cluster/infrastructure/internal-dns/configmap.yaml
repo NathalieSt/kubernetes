@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: media-dns-config
+  name: internal-dns-config
 data:
   Corefile: |
     cluster.local:5353 {

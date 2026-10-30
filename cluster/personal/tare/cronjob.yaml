@@ -30,7 +30,7 @@ spec:
           dnsPolicy: None
           dnsConfig:
             nameservers:
-            - 10.43.0.53
+            - 10.43.0.54
             searches:
             - tare.svc.cluster.local
             - svc.cluster.local
@@ -135,7 +135,7 @@ spec:
           dnsPolicy: None
           dnsConfig:
             nameservers:
-            - 10.43.0.53
+            - 10.43.0.54
             searches:
             - tare.svc.cluster.local
             - svc.cluster.local
@@ -240,7 +240,7 @@ spec:
           dnsPolicy: None
           dnsConfig:
             nameservers:
-            - 10.43.0.53
+            - 10.43.0.54
             searches:
             - tare.svc.cluster.local
             - svc.cluster.local

@@ -194,6 +194,9 @@ spec:
     name: intel-device-plugins-operator
     namespace: flux-system
   - kind: Kustomization
+    name: internal-dns
+    namespace: flux-system
+  - kind: Kustomization
     name: internal-gateway
     namespace: flux-system
   - kind: Kustomization
@@ -222,9 +225,6 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: main-pg
-    namespace: flux-system
-  - kind: Kustomization
-    name: media-dns
     namespace: flux-system
   - kind: Kustomization
     name: music-library-builder

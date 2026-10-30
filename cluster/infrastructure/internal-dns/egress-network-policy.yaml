@@ -2,11 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: media-dns-egress
+  name: internal-dns-egress
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: media-dns
+      app.kubernetes.io/name: internal-dns
   policyTypes:
   - Egress
   egress:
