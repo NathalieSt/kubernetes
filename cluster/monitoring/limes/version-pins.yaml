@@ -990,7 +990,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "f24394d@sha256:9fa10e07b3b957ef639ae5c64d03601266db779356fe0275aa69d6b144f10bab",
+          "version": "510e5e7@sha256:ee67dbef0c53d90f932e0fc9a351ad6b95498f401bdad3d3e967d937e40545d4",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1067,7 +1067,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "15b2ead@sha256:6928317538197a50bf82829dfc02c5f8cb1bd09606bcd2d051d226ba53e3fa8b",
+          "version": "87d9d9f@sha256:cc44409768d52ef4a7cd7c9f3bf22fc496421f129ee38a2553868d4658511356",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
