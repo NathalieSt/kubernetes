@@ -97,7 +97,7 @@ spec:
         - name: FLEET_MASTER_HOST
           value: fleet.netbird.nathalie-stiefsohn.eu
         - name: FLEET_SALT_VERSION
-          value: "3008.3"
+          value: "3008.5"
         - name: FLEET_DATA_DIR
           value: /var/lib/fleet/audit
         - name: FLEET_SCRIPTS_DIR
@@ -125,7 +125,7 @@ spec:
         - /etc/salt
         - -l
         - info
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:1001d96@sha256:8b24f4146b6467f79048cf77dac39f0751156b377904ebb3e560f376bd037c1e
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:cf5cf80@sha256:53c610885a5b29b2c41fd04d0e7ba98f2f5e717767d7246bf937f3e2d4cdfc7e
         name: salt-master
         ports:
         - containerPort: 4505
@@ -174,7 +174,7 @@ spec:
         - info
         command:
         - salt-api
-        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:1001d96@sha256:8b24f4146b6467f79048cf77dac39f0751156b377904ebb3e560f376bd037c1e
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:cf5cf80@sha256:53c610885a5b29b2c41fd04d0e7ba98f2f5e717767d7246bf937f3e2d4cdfc7e
         name: salt-api
         volumeMounts:
         - mountPath: /etc/salt

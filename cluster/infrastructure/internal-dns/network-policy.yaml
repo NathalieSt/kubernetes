@@ -1,0 +1,56 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: internal-dns-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: internal-dns
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: jellyfin
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - sonarr
+          - radarr
+          - lidarr
+          - prowlarr
+          - bazarr
+          - seerr
+          - flaresolverr
+          - music-library-builder
+          - stall-watch
+          - audiomuse-ai-flask
+          - audiomuse-ai-worker
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gameyfin
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - gameyfin
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tare
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - tare
+          - tare-crawl
+    ports:
+    - port: 5353
+      protocol: UDP
+    - port: 5353
+      protocol: TCP

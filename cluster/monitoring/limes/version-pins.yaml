@@ -409,6 +409,17 @@ data:
           ]
         },
         {
+          "key": "internal-dns",
+          "kind": "image",
+          "repository": "coredns/coredns",
+          "version": "1.14.7@sha256:7efd3c635b03efd68c4e8398fc45f0d993d0e9ab016f72c1cefb0fd6d01aa286",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "internal-dns"
+          ]
+        },
+        {
           "key": "internal-gateway",
           "kind": "image",
           "repository": "traefik",
@@ -709,17 +720,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "lidarr"
-          ]
-        },
-        {
-          "key": "media-dns",
-          "kind": "image",
-          "repository": "coredns/coredns",
-          "version": "1.14.7@sha256:7efd3c635b03efd68c4e8398fc45f0d993d0e9ab016f72c1cefb0fd6d01aa286",
-          "file": "versions/mediaserver.json",
-          "inVersionsFile": true,
-          "generators": [
-            "media-dns"
           ]
         },
         {
@@ -1123,7 +1123,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "3e1d2bb@sha256:935069a8d8303608b3464d30064954a890ac67dab92df98bff40d3ad95cf9781",
+          "version": "8dbf712@sha256:45583abbf8aee855e460a81b294ccfcb58f426662bc2247e4675274adf50b825",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1145,7 +1145,7 @@ data:
           "key": "pharos",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "2796dee@sha256:7d94f3d45f19ce21edccf837f14623233682c1ce453fe9a438a52689dcdd1474",
+          "version": "4d48b37@sha256:cffb60edd5595bfbce5364b7caf6f4a901c13f093ed7950e16daec14c0738b4a",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1156,7 +1156,7 @@ data:
           "key": "salt-master",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master",
-          "version": "1001d96@sha256:8b24f4146b6467f79048cf77dac39f0751156b377904ebb3e560f376bd037c1e",
+          "version": "cf5cf80@sha256:53c610885a5b29b2c41fd04d0e7ba98f2f5e717767d7246bf937f3e2d4cdfc7e",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

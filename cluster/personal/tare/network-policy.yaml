@@ -34,10 +34,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: jellyfin
+          kubernetes.io/metadata.name: internal-dns
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: media-dns
+          app.kubernetes.io/name: internal-dns
     ports:
     - port: 5353
       protocol: UDP
@@ -110,10 +110,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: jellyfin
+          kubernetes.io/metadata.name: internal-dns
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: media-dns
+          app.kubernetes.io/name: internal-dns
     ports:
     - port: 5353
       protocol: UDP
