@@ -25,5 +25,6 @@ spec:
     operator:
       nodeSelector:
         kubernetes.io/hostname: debian
+    routingClientImage: ghcr.io/netbirdio/netbird:0.72.4@sha256:6c6c20baffae4a3ec50f29ec9361608a420625185505e8cd6f0c44d71c5d4798
   driftDetection:
     mode: warn

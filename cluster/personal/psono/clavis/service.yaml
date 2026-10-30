@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: clavis
-    app.kubernetes.io/version: d6423bf
+    app.kubernetes.io/version: 7758fca
   name: clavis
 spec:
   selector:
