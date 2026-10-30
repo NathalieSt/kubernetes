@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: pharos
-    app.kubernetes.io/version: 15b2ead
+    app.kubernetes.io/version: 87d9d9f
   name: pharos
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: pharos
-        app.kubernetes.io/version: 15b2ead
+        app.kubernetes.io/version: 87d9d9f
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: pharos
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos:15b2ead@sha256:6928317538197a50bf82829dfc02c5f8cb1bd09606bcd2d051d226ba53e3fa8b
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos:87d9d9f@sha256:cc44409768d52ef4a7cd7c9f3bf22fc496421f129ee38a2553868d4658511356
         name: pharos
         ports:
         - containerPort: 8080
