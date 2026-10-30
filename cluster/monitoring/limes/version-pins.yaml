@@ -660,7 +660,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "da85c48@sha256:661997858a2f466c43c1909b99e43b3bba8e80e92703a7683d6f38a2db540612",
+          "version": "9b7c787@sha256:cae15604a0e089dcdf3ca5f47dd462ed5bc0c162afa734de1bbbbf136e3d10b7",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -792,7 +792,7 @@ data:
           "key": "limes",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/limes",
-          "version": "3d0b64a@sha256:680f12dfc160ac528182e977de5292b5f5d9e73beaf513aa261299af5f39c70c",
+          "version": "196f848@sha256:2423057cffade296c99bf31301dc6bf6e6307afef3d16c580dbb97bea1bafee9",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -1034,7 +1034,7 @@ data:
           "key": "fleet",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet",
-          "version": "2e750e1@sha256:18ad95873e9616e1288b63578bea0e663961e569035e6eecd420051f30cd3ce7",
+          "version": "49b568d@sha256:cece79e1511d4de566e31f0e9fb7bae27e1494bae2455d7dd18f0539fb903e43",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
