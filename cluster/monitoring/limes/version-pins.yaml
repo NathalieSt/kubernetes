@@ -869,7 +869,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "028ea7e@sha256:d1b4805fcf9137f8c2e823c6bf94b2555812ace82a3781820de842706119bbb3",
+          "version": "aeaa1a3@sha256:23c6aa12efa3395d89b4c7046f4e91a49658878bbf0c915b5dee7466d49d033b",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
