@@ -239,7 +239,7 @@ data:
           "key": "vim-dojo",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "552b252@sha256:9d521e2fd9bb70c818d86d7fe3fa5d2bc5671b57c7ba02a3c38f05e0e883e78b",
+          "version": "9be6fd5@sha256:8b5e7e8f71fb07454dbfb936bc5425908e2e426265acfb9b9fbf7e62d8fffb9d",
           "file": "versions/development.json",
           "inVersionsFile": true,
           "generators": [
@@ -266,6 +266,11 @@ data:
           "inVersionsFile": true,
           "generators": [
             "cert-manager"
+          ],
+          "ships": [
+            "quay.io/jetstack/cert-manager-cainjector",
+            "quay.io/jetstack/cert-manager-controller",
+            "quay.io/jetstack/cert-manager-webhook"
           ]
         },
         {
@@ -278,6 +283,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "cnpg"
+          ],
+          "ships": [
+            "ghcr.io/cloudnative-pg/cloudnative-pg"
           ]
         },
         {
@@ -290,6 +298,14 @@ data:
           "inVersionsFile": true,
           "generators": [
             "csi-driver-nfs"
+          ],
+          "ships": [
+            "registry.k8s.io/sig-storage/csi-node-driver-registrar",
+            "registry.k8s.io/sig-storage/csi-provisioner",
+            "registry.k8s.io/sig-storage/csi-resizer",
+            "registry.k8s.io/sig-storage/csi-snapshotter",
+            "registry.k8s.io/sig-storage/livenessprobe",
+            "registry.k8s.io/sig-storage/nfsplugin"
           ]
         },
         {
@@ -357,6 +373,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "headlamp"
+          ],
+          "ships": [
+            "ghcr.io/headlamp-k8s/headlamp"
           ]
         },
         {
@@ -369,6 +388,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "intel-device-gpu-plugin"
+          ],
+          "ships": [
+            "intel/intel-gpu-plugin"
           ]
         },
         {
@@ -381,6 +403,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "intel-device-plugins-operator"
+          ],
+          "ships": [
+            "intel/intel-deviceplugin-operator"
           ]
         },
         {
@@ -403,6 +428,11 @@ data:
           "inVersionsFile": true,
           "generators": [
             "system-upgrade-plans"
+          ],
+          "ships": [
+            "rancher/mirrored-coredns-coredns",
+            "rancher/local-path-provisioner",
+            "rancher/mirrored-metrics-server"
           ]
         },
         {
@@ -415,6 +445,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "k8up"
+          ],
+          "ships": [
+            "ghcr.io/k8up-io/k8up"
           ]
         },
         {
@@ -427,6 +460,11 @@ data:
           "inVersionsFile": true,
           "generators": [
             "keda"
+          ],
+          "ships": [
+            "ghcr.io/kedacore/keda",
+            "ghcr.io/kedacore/keda-admission-webhooks",
+            "ghcr.io/kedacore/keda-metrics-apiserver"
           ]
         },
         {
@@ -441,6 +479,17 @@ data:
           ]
         },
         {
+          "key": "netbird-client",
+          "kind": "image",
+          "repository": "ghcr.io/netbirdio/netbird",
+          "version": "0.72.4@sha256:6c6c20baffae4a3ec50f29ec9361608a420625185505e8cd6f0c44d71c5d4798",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "netbird-operator"
+          ]
+        },
+        {
           "key": "netbird-operator",
           "kind": "chart",
           "repository": "oci://ghcr.io/netbirdio/helm-charts/netbird-operator",
@@ -449,6 +498,10 @@ data:
           "inVersionsFile": true,
           "generators": [
             "netbird-operator"
+          ],
+          "ships": [
+            "ghcr.io/netbirdio/netbird-operator",
+            "ghcr.io/netbirdio/kube-egress-forwarder"
           ]
         },
         {
@@ -461,6 +514,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "nfd"
+          ],
+          "ships": [
+            "registry.k8s.io/nfd/node-feature-discovery"
           ]
         },
         {
@@ -508,6 +564,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "reflector"
+          ],
+          "ships": [
+            "emberstack/kubernetes-reflector"
           ]
         },
         {
@@ -542,6 +601,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "vault"
+          ],
+          "ships": [
+            "hashicorp/vault-k8s"
           ]
         },
         {
@@ -565,6 +627,10 @@ data:
           "inVersionsFile": true,
           "generators": [
             "vault-secrets-operator"
+          ],
+          "ships": [
+            "hashicorp/vault-secrets-operator",
+            "quay.io/brancz/kube-rbac-proxy"
           ]
         },
         {
@@ -814,7 +880,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "edb0a04@sha256:d4625d323c71874836fdb6ee534f1ee7ab438b611b23f2f217202b1e1da4bdae",
+          "version": "4a15158@sha256:ebf202075b03d747f48717c7bd445a6a9f50ef13e8bd7f1acb9ae71e08aebcea",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -841,6 +907,9 @@ data:
           "inVersionsFile": true,
           "generators": [
             "victoria-logs"
+          ],
+          "ships": [
+            "victoriametrics/victoria-logs"
           ]
         },
         {
@@ -852,13 +921,22 @@ data:
           "inVersionsFile": true,
           "generators": [
             "victoria-metrics"
+          ],
+          "ships": [
+            "victoriametrics/operator",
+            "victoriametrics/victoria-metrics",
+            "victoriametrics/vmagent",
+            "victoriametrics/vmalert",
+            "prom/alertmanager",
+            "quay.io/prometheus/node-exporter",
+            "registry.k8s.io/kube-state-metrics/kube-state-metrics"
           ]
         },
         {
           "key": "clavis",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis",
-          "version": "d6423bf@sha256:00fb7b17710a0eb89320962ea3de410b8988024fceafc03cca6db289c2142fdd",
+          "version": "7758fca@sha256:b49e5e3eff58597fe08581e75e47556aa8acf3082604803b66cb977b42fb8b41",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -869,7 +947,7 @@ data:
           "key": "daybook",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "aeaa1a3@sha256:23c6aa12efa3395d89b4c7046f4e91a49658878bbf0c915b5dee7466d49d033b",
+          "version": "1f570ec@sha256:970bce46db15d0d3929aaa1fe5ef9b8ce885c42ad38ae1e1382017e6e73947ed",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -913,7 +991,7 @@ data:
           "key": "psono-client",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client",
-          "version": "94201a8@sha256:af1d42ff2b4a6eb246d38c505f2b0fcada6cec2105c23206920920cb60afb0df",
+          "version": "07ca456@sha256:9a058739d2c3a680e35e7f04027ddf49dc0136c2ce8779aabb3eb4f97c7cc75b",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -968,7 +1046,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "d0a215e@sha256:82cc3904c328debe526c75172283cd12dec6e03228d2e9548c642341d30554e3",
+          "version": "2adb157@sha256:77593ad7cfc4b630bd0681193513db0a3d8deee1ef79b297046d86951bf29c0d",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -979,7 +1057,7 @@ data:
           "key": "tessera",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tessera",
-          "version": "503215d@sha256:26a559942cacd3dfd4e82d65c5abfb746e2cacfa963c358ceb54b6517b7da3e6",
+          "version": "4d989af@sha256:c56c4904335314fb7d036f852872f847cf2ac842063540f95eab3e672b9ea18e",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -990,7 +1068,7 @@ data:
           "key": "zyme",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/zyme",
-          "version": "510e5e7@sha256:ee67dbef0c53d90f932e0fc9a351ad6b95498f401bdad3d3e967d937e40545d4",
+          "version": "6d683ec@sha256:1a86d75f7d9917f380fe42a79e840ff6e783c59c92227609e7d68d0f0865da15",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1001,7 +1079,7 @@ data:
           "key": "arx",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/arx",
-          "version": "f379b63@sha256:f841c793fb523eab305afe8d2cb4b1329a08493c0d82c008342313842e0f202a",
+          "version": "786c895@sha256:f1bd41771c1fd1d534fca46d98a6465f5af7da7e681eb0f50f10b7a1e8265066",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1012,7 +1090,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "a295050@sha256:724b2e1c5f19287fcc12e5647d411bec9d7c5d6bdf1d199e410d99274e5f47a8",
+          "version": "ba91bdd@sha256:f04514eb250dfa58471fb5749a53a75c49060578d4e4790c1d5a6005968eed83",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1045,7 +1123,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "a0094a8@sha256:eb648258bd30e1b6f4b6d24b1de56633eb71c1f3f36177dea7e30b72eca81163",
+          "version": "fd2c3a9@sha256:c11712ec4de72608cb3689393104f5b5ce2c864b185b594b512b48fdd4047c4d",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1166,7 +1244,7 @@ data:
           "key": "redlib",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
-          "version": "d3055e7@sha256:2f8bc9c3eac3bad1a4e57637f7eb15df3700b68c1064ce85421791ce6ad22a7e",
+          "version": "ff9f96b@sha256:2c38b9c77fe3090c1ac49bcd1f4d772890eb57d6c03183ed116433b808263579",
           "file": "versions/web.json",
           "inVersionsFile": true,
           "generators": [
@@ -1185,5 +1263,57 @@ data:
           ]
         }
       ],
-      "untracked": []
+      "untracked": [],
+      "elsewhere": [
+        {
+          "key": "helm-controller",
+          "repository": "ghcr.io/fluxcd/helm-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "kustomize-controller",
+          "repository": "ghcr.io/fluxcd/kustomize-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "notification-controller",
+          "repository": "ghcr.io/fluxcd/notification-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "source-controller",
+          "repository": "ghcr.io/fluxcd/source-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "cilium",
+          "repository": "quay.io/cilium/cilium",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "cilium-envoy",
+          "repository": "quay.io/cilium/cilium-envoy",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "hubble-relay",
+          "repository": "quay.io/cilium/hubble-relay",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "hubble-ui",
+          "repository": "quay.io/cilium/hubble-ui",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "hubble-ui-backend",
+          "repository": "quay.io/cilium/hubble-ui-backend",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "operator-generic",
+          "repository": "quay.io/cilium/operator-generic",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        }
+      ]
     }
