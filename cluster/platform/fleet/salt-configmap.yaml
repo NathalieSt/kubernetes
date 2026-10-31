@@ -35,6 +35,10 @@ data:
       base: [/srv/salt/states, /var/lib/fleet/salt-files]
     pillar_roots:
       base: [/srv/salt/pillar]
+    # Fleet's Pillar tab, over the pillar above key by key: layers/fleet.yaml, then the host's
+    # layers/hosts/<id>.yaml. stack.cfg, beside them, is the setup container's.
+    ext_pillar:
+      - stack: /var/lib/fleet/pillar/stack.cfg
     # The kubelet keeps a ConfigMap's files in `..data` and a dated `..<timestamp>` copy, which
     # would otherwise be listed as states of their own.
     file_ignore_regex:
@@ -329,17 +333,306 @@ data:
         - text: No /dev/watchdog0 on this host. Load its watchdog driver first (iTCO_wdt on Intel; Debian does not load it by itself).
 
     {%- endif %}
+  rosenpass__netbird-rosenpass.py: |
+    """Switches NetBird's Rosenpass mode and keeps it only if the host stays connected; anything
+    else is reverted. Run by the rosenpass.* states. `netbird-rosenpass apply strict --master …`"""
+    import argparse, fcntl, json, os, socket, sys, time
+
+    from netbird_cli import MODES, connected_peers, mode_of, read_status, run, switch
+
+    PENDING = "/var/lib/netbird-rosenpass/pending"
+    LOCK = "/run/netbird-rosenpass.lock"
+    PASSES, PAUSE = 3, 10
+
+
+    def judge(mode, before, args):
+        status = read_status()
+        if status is None:
+            return "the NetBird daemon did not answer"
+        if mode_of(status) != mode:
+            return f"NetBird reports Rosenpass {mode_of(status)}"
+        if not status["management"]["connected"]:
+            return "management is not connected"
+        for port in args.ports:
+            try:
+                socket.create_connection((args.master, port), timeout=5).close()
+            except OSError as error:
+                return f"the Salt master {args.master}:{port} is unreachable ({error})"
+        back = before & connected_peers(status)
+        if len(back) * 100 < args.keep * len(before):
+            return f"{len(back)} of the {len(before)} peers connected before are connected"
+        return None
+
+
+    def wait_healthy(mode, before, args):
+        """None once the host passed PASSES checks in a row, else the last failure."""
+        deadline, passes, reason = time.monotonic() + args.confirm, 0, "no check finished"
+        while time.monotonic() < deadline:
+            reason = judge(mode, before, args)
+            passes = 0 if reason else passes + 1
+            if passes == PASSES:
+                return None
+            time.sleep(PAUSE)
+        return reason
+
+
+    def write_pending(previous):
+        os.makedirs(os.path.dirname(PENDING), exist_ok=True)
+        with open(PENDING, "w") as file:
+            json.dump({"previous": previous}, file)
+
+
+    def recover():
+        """Undoes a change that was never confirmed: a reboot or a killed trial in between."""
+        try:
+            with open(PENDING) as file:
+                previous = json.load(file)["previous"]
+        except (OSError, ValueError, KeyError):
+            return
+        print(f"An earlier change was never confirmed; going back to Rosenpass {previous}.")
+        switch(previous)
+        os.remove(PENDING)
+
+
+    def apply(args):
+        lock = open(LOCK, "w")
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            sys.exit("Another Rosenpass trial is running on this host; nothing was changed.")
+        recover()
+        status = read_status()
+        if status is None:
+            sys.exit("The NetBird daemon did not answer; nothing was changed.")
+        previous, before = mode_of(status), connected_peers(status)
+        if previous == args.mode:
+            return print(f"Rosenpass is already {args.mode}.")
+        write_pending(previous)
+        switch(args.mode)
+        reason = wait_healthy(args.mode, before, args)
+        if reason is None:
+            os.remove(PENDING)
+            return print(f"Rosenpass {previous} -> {args.mode}, connectivity confirmed.")
+        print(f"Rosenpass {args.mode} failed: {reason}. Going back to {previous}.")
+        switch(previous)
+        os.remove(PENDING)
+        again = wait_healthy(previous, before, args)
+        if again:
+            # The old mode is back; a fresh daemon is the last thing left to try.
+            run("systemctl", "restart", "netbird")
+            sys.exit(f"Reverted to Rosenpass {previous}, but the host is still cut off: {again}.")
+        sys.exit(f"Reverted to Rosenpass {previous}, connectivity confirmed.")
+
+
+    def main():
+        parser = argparse.ArgumentParser(prog="netbird-rosenpass")
+        sub = parser.add_subparsers(dest="command", required=True)
+        sub.add_parser("recover")
+        sub.add_parser("is").add_argument("mode", choices=MODES)
+        trial = sub.add_parser("apply")
+        trial.add_argument("mode", choices=MODES)
+        trial.add_argument("--master", required=True)
+        trial.add_argument("--ports", type=lambda v: [int(p) for p in v.split(",")], required=True)
+        trial.add_argument("--confirm", type=int, default=180)
+        trial.add_argument("--keep", type=int, default=75)
+        args = parser.parse_args()
+        if args.command == "recover":
+            return recover()
+        if args.command == "is":
+            status = read_status()
+            sys.exit(0 if status and mode_of(status) == args.mode else 1)
+        apply(args)
+
+
+    main()
+  rosenpass__netbird_cli.py: |
+    """Reading and setting NetBird's Rosenpass mode through its CLI, for netbird-rosenpass.py.
+    `switch("permissive")`, `mode_of(read_status())`"""
+    import json, subprocess
+
+    MODES = {"off": (False, False), "permissive": (True, True), "strict": (True, False)}
+
+
+    def run(*args, timeout=60):
+        try:
+            return subprocess.run(args, capture_output=True, text=True, timeout=timeout)
+        except (OSError, subprocess.TimeoutExpired):
+            return None
+
+
+    def read_status():
+        done = run("netbird", "status", "--json", timeout=15)
+        try:
+            return json.loads(done.stdout) if done and done.returncode == 0 else None
+        except ValueError:
+            return None
+
+
+    def mode_of(status):
+        # Permissive is reported true with Rosenpass off, so it only counts when Rosenpass is on.
+        if not status["quantumResistance"]:
+            return "off"
+        return "permissive" if status["quantumResistancePermissive"] else "strict"
+
+
+    def connected_peers(status):
+        return {p["fqdn"] for p in status["peers"]["details"] if p["status"] == "Connected"}
+
+
+    def switch(mode):
+        # `up` on a connected client answers "Already connected" and applies nothing.
+        enabled, permissive = (str(v).lower() for v in MODES[mode])
+        run("netbird", "down", timeout=30)
+        run("netbird", "up", f"--enable-rosenpass={enabled}", f"--rosenpass-permissive={permissive}")
+  rosenpass__off.sls: |
+    {#- Rosenpass off: plain WireGuard to every peer.
+        Reverted by itself if the host loses the master or its peers; see trial.jinja. #}
+    {%- from 'rosenpass/trial.jinja' import trial with context %}
+    {{ trial('off') }}
+  rosenpass__permissive.sls: |
+    {#- Rosenpass on, permissive: post-quantum to peers that have it, plain WireGuard to the rest.
+        Reverted by itself if the host loses the master or its peers; see trial.jinja. #}
+    {%- from 'rosenpass/trial.jinja' import trial with context %}
+    {{ trial('permissive') }}
+  rosenpass__strict.sls: |
+    {#- Rosenpass on, strict: peers without Rosenpass are refused, the gateway's included.
+        Reverted by itself if the host loses the master or its peers; see trial.jinja. #}
+    {%- from 'rosenpass/trial.jinja' import trial with context %}
+    {{ trial('strict') }}
+  rosenpass__trial.jinja: |
+    {#- One Rosenpass mode for NetBird, kept only if the host still reaches the Salt master and
+        most of its peers afterwards; netbird-rosenpass.py has the checks and the revert. #}
+    {%- macro trial(mode) %}
+    {%- set conf = salt['pillar.get']('rosenpass') %}
+    {%- set python = grains['pythonexecutable'] %}
+    {%- set lib = '/usr/local/lib/netbird-rosenpass' %}
+    {%- set script = lib ~ '/netbird-rosenpass.py' %}
+    {%- set master = salt['config.get']('master') %}
+    {%- set ports = [salt['config.get']('publish_port', 4505), salt['config.get']('master_port', 4506)] %}
+    {%- if salt['service.available']('netbird') %}
+
+    rosenpass-script:
+      file.managed:
+        - names:
+          - {{ script }}:
+            - source: salt://rosenpass/netbird-rosenpass.py
+          - {{ lib }}/netbird_cli.py:
+            - source: salt://rosenpass/netbird_cli.py
+        - makedirs: True
+        - mode: '0644'
+
+    {#- The trial runs as its own unit, so it outlives the minion losing the mesh; a reboot
+        during it would keep the untried mode, and the recover unit puts the old one back. #}
+    rosenpass-units:
+      file.managed:
+        - names:
+          - /etc/systemd/system/netbird-rosenpass-trial@.service:
+            - contents: |
+                # Managed by Salt (rosenpass).
+                [Unit]
+                Description=Try NetBird Rosenpass %i, reverting unless the host stays connected
+                After=netbird.service
+
+                [Service]
+                Type=oneshot
+                TimeoutStartSec={{ conf['confirm_seconds'] * 2 + 300 }}
+                StandardOutput=truncate:/run/netbird-rosenpass-%i.log
+                StandardError=inherit
+                ExecStart={{ python }} -u {{ script }} apply %i --master {{ master }} --ports {{ ports | join(',') }} --confirm {{ conf['confirm_seconds'] }} --keep {{ conf['keep_percent'] }}
+          - /etc/systemd/system/netbird-rosenpass-recover.service:
+            - contents: |
+                # Managed by Salt (rosenpass).
+                [Unit]
+                Description=Undo a NetBird Rosenpass change that was never confirmed
+                After=netbird.service
+                Wants=netbird.service
+                ConditionPathExists=/var/lib/netbird-rosenpass/pending
+
+                [Service]
+                Type=oneshot
+                ExecStart={{ python }} -u {{ script }} recover
+
+                [Install]
+                WantedBy=multi-user.target
+      cmd.run:
+        - name: systemctl daemon-reload
+        - onchanges:
+          - file: rosenpass-units
+      service.enabled:
+        - name: netbird-rosenpass-recover.service
+        - require:
+          - cmd: rosenpass-units
+
+    {#- `systemctl start` waits for a oneshot and fails with it; the log is what Fleet shows. #}
+    rosenpass-{{ mode }}:
+      cmd.run:
+        - name: >-
+            systemctl start netbird-rosenpass-trial@{{ mode }}.service; rc=$?;
+            cat /run/netbird-rosenpass-{{ mode }}.log; exit $rc
+        - unless: {{ python }} {{ script }} is {{ mode }}
+        - require:
+          - file: rosenpass-script
+          - service: rosenpass-units
+
+    {%- else %}
+
+    rosenpass-skipped:
+      test.show_notification:
+        - text: No netbird service on this host; Rosenpass is left alone.
+
+    {%- endif %}
+    {%- endmacro %}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: fleet-salt-pillar
 data:
+  netbird.schema.yaml: |
+    # What Fleet's Pillar tab may override in netbird.sls. A host given a newer version is a
+    # canary: it must exist for its architecture at pkgs.netbird.io.
+    netbird:version:
+      type: string
+      pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
+      description: The NetBird client `state.apply netbird` installs. Not newer than the coordination server.
   netbird.sls: |
     # The NetBird client every Debian host is brought to by `state.apply netbird`. Must exist
     # for amd64 and arm64 in pkgs.netbird.io, and not be newer than the coordination server.
     netbird:
       version: 0.79.0
+  rescue.schema.yaml: |
+    # What Fleet's Pillar tab may override in rescue.sls. The memory values go into k3s's
+    # kubelet arguments as they are, so they are MiB only.
+    rescue:reserve:system_memory:
+      type: string
+      pattern: ^[1-9][0-9]{1,4}Mi$
+      description: Memory the kubelet keeps for the system (system-reserved). Applies after k3s restarts.
+    rescue:reserve:kube_memory:
+      type: string
+      pattern: ^[1-9][0-9]{1,4}Mi$
+      description: Memory the kubelet keeps for k3s itself (kube-reserved). Applies after k3s restarts.
+    rescue:reserve:evict_below:
+      type: string
+      pattern: ^[1-9][0-9]{1,4}Mi$
+      description: Free memory under which the kubelet evicts a pod. Applies after k3s restarts.
+    rescue:earlyoom:memory_percent:
+      type: int
+      min: 1
+      max: 20
+      description: Percent of memory left at which earlyoom kills the largest process. Keep it below the kubelet's eviction.
+    rescue:watchdog:runtime:
+      type: string
+      pattern: ^[1-9][0-9]?s$
+      description: How long a hung host waits before the hardware watchdog resets it. A Pi 5's takes at most 15s.
+    rescue:watchdog:reboot:
+      type: string
+      pattern: ^[1-9][0-9]?min$
+      description: How long a reboot may take before the watchdog forces it.
+    rescue:mesh:failures:
+      type: int
+      min: 2
+      max: 30
+      description: Checks two minutes apart with peers known and none connected before NetBird is restarted.
   rescue.sls: |
     # What `state.apply rescue` sets on every host, so that a host in trouble recovers without
     # anyone reaching it. https://docs.netbird.nathalie-stiefsohn.eu/platform/hosts/#rescue
@@ -359,8 +652,30 @@ data:
       # Checks two minutes apart with peers known and none connected before NetBird restarts.
       mesh:
         failures: 5
+  rosenpass.schema.yaml: |
+    # What Fleet's Pillar tab may override in rosenpass.sls, fleet-wide or per host, and within
+    # what. Keys are Salt's colon paths; a key not listed here stays git's.
+    rosenpass:confirm_seconds:
+      type: int
+      min: 60
+      max: 900
+      description: Seconds a new Rosenpass mode has to pass three checks in a row, ten seconds apart, before it is reverted.
+    rosenpass:keep_percent:
+      type: int
+      min: 0
+      max: 100
+      description: Of the peers connected before a Rosenpass change, the percentage that must be connected again.
+  rosenpass.sls: |
+    # How `state.apply rosenpass.<mode>` tries a Rosenpass mode before keeping it. The mode
+    # itself is chosen in Fleet, by which state is applied to which hosts.
+    rosenpass:
+      # How long the new mode has to pass three checks in a row, ten seconds apart.
+      confirm_seconds: 180
+      # Of the peers connected before the change, the percentage that must be connected again.
+      keep_percent: 75
   top.sls: |
     base:
       "*":
         - netbird
         - rescue
+        - rosenpass

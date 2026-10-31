@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: fleet
-    app.kubernetes.io/version: 8eb6de3
+    app.kubernetes.io/version: ced1b19
   name: fleet
 spec:
   replicas: 1
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 56937ba270d1a4a5
+        checksum/config: da247d3e27d2aec6
       labels:
         app.kubernetes.io/name: fleet
-        app.kubernetes.io/version: 8eb6de3
+        app.kubernetes.io/version: ced1b19
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -27,7 +27,7 @@ spec:
       - command:
         - sh
         - -c
-        - mkdir -p /var/lib/fleet/salt-files/_modules && chown 1000:1000 /var/lib/fleet /var/lib/fleet/salt-files /var/lib/fleet/salt-files/_modules /run/salt && umask 077 && printf '%s:%s\n' "$SALT_USER" "$SALT_PASSWORD" > /run/salt-auth/users && chown 1000:1000 /run/salt-auth/users
+        - mkdir -p /var/lib/fleet/salt-files/_modules /var/lib/fleet/pillar/layers/hosts && chown 1000:1000 /var/lib/fleet /var/lib/fleet/salt-files /var/lib/fleet/salt-files/_modules /run/salt && chown root:root /var/lib/fleet/pillar && chown 1000:1000 /var/lib/fleet/pillar/layers /var/lib/fleet/pillar/layers/hosts && printf '%s\n' layers/fleet.yaml 'layers/hosts/{{ minion_id }}.yaml' > /var/lib/fleet/pillar/stack.cfg && umask 077 && printf '%s:%s\n' "$SALT_USER" "$SALT_PASSWORD" > /run/salt-auth/users && chown 1000:1000 /run/salt-auth/users
         image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
         name: setup
         volumeMounts:
@@ -48,7 +48,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:8eb6de3@sha256:4baef4b8d96b28a8cbf12c24dab5d352d2e794444d8d7bb37dc4331e1bcc8604
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet:ced1b19@sha256:f7c2abfa12f4f86568a980c1bfa4eefddf3748a93432bf23f0c792cd88a935d5
         name: fleet
         ports:
         - containerPort: 8080
@@ -58,6 +58,9 @@ spec:
           name: fleet-data-pvc
         - mountPath: /tmp
           name: tmp
+        - mountPath: /etc/fleet/pillar
+          name: fleet-salt-pillar
+          readOnly: true
         env:
         - name: WEB_ADDR
           value: :8080
@@ -94,6 +97,12 @@ spec:
               key: modules-password-hash
               name: fleet-secret
               optional: true
+        - name: FLEET_ALLOW_PILLAR
+          value: "1"
+        - name: FLEET_PILLAR_DEFAULTS_DIR
+          value: /etc/fleet/pillar
+        - name: FLEET_PILLAR_DIR
+          value: /var/lib/fleet/pillar/layers
         - name: FLEET_MASTER_HOST
           value: fleet.netbird.nathalie-stiefsohn.eu
         - name: FLEET_SALT_VERSION
@@ -232,14 +241,34 @@ spec:
             path: rescue/reserve.sls
           - key: rescue__watchdog.sls
             path: rescue/watchdog.sls
+          - key: rosenpass__netbird-rosenpass.py
+            path: rosenpass/netbird-rosenpass.py
+          - key: rosenpass__netbird_cli.py
+            path: rosenpass/netbird_cli.py
+          - key: rosenpass__off.sls
+            path: rosenpass/off.sls
+          - key: rosenpass__permissive.sls
+            path: rosenpass/permissive.sls
+          - key: rosenpass__strict.sls
+            path: rosenpass/strict.sls
+          - key: rosenpass__trial.jinja
+            path: rosenpass/trial.jinja
       - name: fleet-salt-pillar
         configMap:
           name: fleet-salt-pillar
           items:
+          - key: netbird.schema.yaml
+            path: netbird.schema.yaml
           - key: netbird.sls
             path: netbird.sls
+          - key: rescue.schema.yaml
+            path: rescue.schema.yaml
           - key: rescue.sls
             path: rescue.sls
+          - key: rosenpass.schema.yaml
+            path: rosenpass.schema.yaml
+          - key: rosenpass.sls
+            path: rosenpass.sls
           - key: top.sls
             path: top.sls
       - name: salt-run
