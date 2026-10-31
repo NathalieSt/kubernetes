@@ -1112,7 +1112,7 @@ data:
           "key": "fleet",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet",
-          "version": "8eb6de3@sha256:4baef4b8d96b28a8cbf12c24dab5d352d2e794444d8d7bb37dc4331e1bcc8604",
+          "version": "ced1b19@sha256:f7c2abfa12f4f86568a980c1bfa4eefddf3748a93432bf23f0c792cd88a935d5",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1123,7 +1123,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "8dbf712@sha256:45583abbf8aee855e460a81b294ccfcb58f426662bc2247e4675274adf50b825",
+          "version": "80816e4@sha256:9355c5b4531e8e69194c562d988c701917efe523515a372f466a17f8c53b451d",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
