@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: music-library-builder
-    app.kubernetes.io/version: 3ffdefe
+    app.kubernetes.io/version: b460ac6
   name: music-library-builder-sync
 spec:
   schedule: 30 4 * * *
@@ -21,7 +21,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: music-library-builder
-            app.kubernetes.io/version: 3ffdefe
+            app.kubernetes.io/version: b460ac6
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -48,7 +48,7 @@ spec:
           - args:
             - ./bin/mlb.mjs
             - sync
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:3ffdefe@sha256:66fe2391acdc20a4dab7434a1edd0dcacd004c65a507f993cc618edd3dc4f68d
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder:b460ac6@sha256:27a413c4ee0f1dd06b5608cff7527dfd1548c1b16d69e6b293ff0de187065134
             name: music-library-builder-sync
             volumeMounts:
             - mountPath: /media
