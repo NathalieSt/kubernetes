@@ -15,8 +15,7 @@ spec:
       retries: 3
   values:
     clusterRoleBinding:
-      clusterRoleName: cluster-admin
-      create: true
+      create: false
     config:
       extraArgs:
       - -default-light-theme=Pennant

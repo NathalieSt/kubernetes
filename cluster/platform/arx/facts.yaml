@@ -150,6 +150,14 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "egress-guard",
+          "namespace": "flux-system",
+          "group": "infrastructure",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
           "generator": "egress-proxy",
           "namespace": "egress-proxy",
           "group": "infrastructure",

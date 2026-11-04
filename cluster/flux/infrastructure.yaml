@@ -86,6 +86,25 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: egress-guard
+  namespace: flux-system
+spec:
+  interval: 24h
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/infrastructure/egress-guard
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: egress-proxy
   namespace: flux-system
 spec:
@@ -228,7 +247,7 @@ spec:
   dependsOn:
   - name: namespaces
   - name: flux-rbac
-  serviceAccountName: flux-headlamp
+  serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
