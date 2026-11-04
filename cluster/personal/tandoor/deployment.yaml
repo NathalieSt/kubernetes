@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: tandoor
-    app.kubernetes.io/version: 2.6.13
+    app.kubernetes.io/version: 2.7.2
   name: tandoor
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: tandoor
-        app.kubernetes.io/version: 2.6.13
+        app.kubernetes.io/version: 2.7.2
     spec:
       initContainers:
       - command:
@@ -25,7 +25,7 @@ spec:
         - /halcyon-out
         - /halcyon/halcyon.css
         - main-*.css
-        image: vabene1111/recipes:2.6.13@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
+        image: vabene1111/recipes:2.7.2@sha256:1b6d43c3c0f5d2888aa564d9daf29883212b79ad496f59f3c684c099eb1a57b9
         name: halcyon
         volumeMounts:
         - mountPath: /halcyon
@@ -45,7 +45,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: vabene1111/recipes:2.6.13@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
+      - image: vabene1111/recipes:2.7.2@sha256:1b6d43c3c0f5d2888aa564d9daf29883212b79ad496f59f3c684c099eb1a57b9
         name: tandoor
         ports:
         - containerPort: 8080

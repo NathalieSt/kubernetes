@@ -36,7 +36,7 @@ spec:
         - /halcyon-out
         - /halcyon/halcyon.css
         - styles.css
-        image: ghcr.io/dgtlmoon/changedetection.io:0.60.8
+        image: ghcr.io/dgtlmoon/changedetection.io:0.60.8@sha256:34df3680db1cbffc45ac1e9c1514bc0507dd0c5b5fde47d1992fe6f14a7b40e4
         name: halcyon
         volumeMounts:
         - mountPath: /halcyon
@@ -56,7 +56,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: ghcr.io/dgtlmoon/changedetection.io:0.60.8
+      - image: ghcr.io/dgtlmoon/changedetection.io:0.60.8@sha256:34df3680db1cbffc45ac1e9c1514bc0507dd0c5b5fde47d1992fe6f14a7b40e4
         name: changedetection
         ports:
         - containerPort: 5000

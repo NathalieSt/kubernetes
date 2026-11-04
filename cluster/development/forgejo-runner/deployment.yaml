@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: forgejo-runner
-    app.kubernetes.io/version: "13.2"
+    app.kubernetes.io/version: 13.2.1
   name: forgejo-runner
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: forgejo-runner
-        app.kubernetes.io/version: "13.2"
+        app.kubernetes.io/version: 13.2.1
     spec:
       initContainers:
       - command:
@@ -96,7 +96,7 @@ spec:
           EOF
 
           exec forgejo-runner daemon --config /data/config.yml
-        image: code.forgejo.org/forgejo/runner:13.2
+        image: code.forgejo.org/forgejo/runner:13.2.1@sha256:568cea8c15ddc01fc8f330124892f572af7db37fa28344a2c1914405793bf61d
         name: forgejo-runner
         volumeMounts:
         - mountPath: /data
@@ -125,7 +125,7 @@ spec:
         - --group=1000
         - --mtu=1280
         - --default-network-opt=bridge=com.docker.network.driver.mtu=1280
-        image: docker:29-dind
+        image: docker:29.9.3-dind@sha256:d035bd30886e451b2727ef3cdb9af9a5c537a10d4bc5d18c08d0ffa597e46aeb
         name: docker
         volumeMounts:
         - mountPath: /certs
@@ -158,7 +158,7 @@ spec:
           # QEMU for the architectures this node is not: images are built for amd64 and arm64 while this pod is
           # pinned to amd64. Writes the host kernel's binfmt_misc, is idempotent, and is not fatal on failure.
           echo "registering binfmt handlers"
-          if docker run --privileged --rm tonistiigi/binfmt:qemu-v10.2.3 --install arm64,amd64; then
+          if docker run --privileged --rm tonistiigi/binfmt:qemu-v10.2.3@sha256:400a4873b838d1b89194d982c45e5fb3cda4593fbfd7e08a02e76b03b21166f0 --install arm64,amd64; then
             echo "  ok: qemu registered"
           else
             echo "  WARNING: could not register binfmt; multi-arch builds that need emulation will fail" >&2
@@ -197,7 +197,7 @@ spec:
             done
             sleep 60
           done
-        image: docker:29-cli
+        image: docker:29.9.3-cli@sha256:4d742ab934c2149b628bf26369ac3ec51cb91e2e28fe6722a0e86a6d6efc4bd5
         name: image-warmer
         volumeMounts:
         - mountPath: /var/run/docker-shared

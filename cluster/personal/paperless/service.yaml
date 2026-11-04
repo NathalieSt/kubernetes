@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: paperless
-    app.kubernetes.io/version: 3.2.1
+    app.kubernetes.io/version: 3.4.2
   name: paperless
 spec:
   selector:

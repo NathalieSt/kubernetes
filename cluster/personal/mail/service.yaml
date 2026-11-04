@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: mail
-    app.kubernetes.io/version: 16.0.0
+    app.kubernetes.io/version: 16.0.1
   name: mail
 spec:
   selector:

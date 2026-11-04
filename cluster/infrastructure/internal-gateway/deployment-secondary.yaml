@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: internal-gateway-secondary
-    app.kubernetes.io/version: v3.7
+    app.kubernetes.io/version: v3.7.17
   name: internal-gateway-secondary
 spec:
   replicas: 1
@@ -19,14 +19,14 @@ spec:
         internal-gateway.nathalie-stiefsohn.eu/dns-labels: 2c25befd9f07ddcb899f38ad777264d9f68a0df4d72298391be31a1033604481
       labels:
         app.kubernetes.io/name: internal-gateway-secondary
-        app.kubernetes.io/version: v3.7
+        app.kubernetes.io/version: v3.7.17
     spec:
       initContainers:
       - command:
         - sh
         - -c
         - chmod 600 /letsencrypt/acme.json 2>/dev/null || true
-        image: traefik:v3.7
+        image: traefik:v3.7.17@sha256:68ae5fe5b64ca166704b746a9e8afcd385e36b3f569a5691401bf652d57b3748
         name: fix-acme-permissions
         volumeMounts:
         - mountPath: /letsencrypt
@@ -76,7 +76,7 @@ spec:
         - --entrypoints.forgejo-ssh.address=:2222
         - --entrypoints.neko-turn.address=:3478
         - --entrypoints.rimworld-together-game.address=:25555
-        image: traefik:v3.7
+        image: traefik:v3.7.17@sha256:68ae5fe5b64ca166704b746a9e8afcd385e36b3f569a5691401bf652d57b3748
         name: internal-gateway
         ports:
         - containerPort: 80

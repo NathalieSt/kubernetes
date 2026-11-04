@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: internal-dns
-    app.kubernetes.io/version: 1.14.7
+    app.kubernetes.io/version: 1.15.0
   name: internal-dns
 spec:
   selector:

@@ -7,6 +7,6 @@ spec:
   url: oci://code.forgejo.org/forgejo-helm/forgejo
   interval: 24h
   ref:
-    tag: 17.1.7
+    tag: 17.3.2
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip

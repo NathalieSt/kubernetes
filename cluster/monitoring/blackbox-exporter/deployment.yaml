@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: blackbox-exporter
-    app.kubernetes.io/version: v0.28.0
+    app.kubernetes.io/version: v0.29.1
   name: blackbox-exporter
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
         checksum/config: f35b83e99aed5bfd
       labels:
         app.kubernetes.io/name: blackbox-exporter
-        app.kubernetes.io/version: v0.28.0
+        app.kubernetes.io/version: v0.29.1
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
@@ -25,7 +25,7 @@ spec:
       - args:
         - --config.file=/etc/blackbox/blackbox.yml
         - --web.listen-address=:9115
-        image: quay.io/prometheus/blackbox-exporter:v0.28.0@sha256:e753ff9f3fc458d02cca5eddab5a77e1c175eee484a8925ac7d524f04366c2fc
+        image: quay.io/prometheus/blackbox-exporter:v0.29.1@sha256:ea1c7aa3ef3f307cd03e85f34abb604478ccb90b567fc690da0cd9776da76b13
         name: blackbox-exporter
         ports:
         - containerPort: 9115
