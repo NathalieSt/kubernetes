@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: ntfy
-    app.kubernetes.io/version: v2.28.0
+    app.kubernetes.io/version: v2.37.2
   name: ntfy
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
         homelab/ntfy-start-hash: 9e1e29097c5d8a14
       labels:
         app.kubernetes.io/name: ntfy
-        app.kubernetes.io/version: v2.28.0
+        app.kubernetes.io/version: v2.37.2
     spec:
       initContainers:
       - command:
@@ -220,7 +220,7 @@ spec:
       - command:
         - /bin/sh
         - /scripts/ntfy-start.sh
-        image: binwiederhier/ntfy:v2.28.0
+        image: binwiederhier/ntfy:v2.37.2@sha256:1875ddcf815c8a3c981d6d78c67a93452d0abba79b1ab9520b1f5f5238902bd7
         name: ntfy
         ports:
         - containerPort: 8080

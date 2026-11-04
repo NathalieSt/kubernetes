@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 8.10.2
+    app.kubernetes.io/version: 8.10.3
   name: redis
 spec:
   selector:

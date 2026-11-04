@@ -260,7 +260,7 @@ spec:
       - command:
         - /bin/sh
         - /vpn-probe/ipleak.sh
-        image: curlimages/curl:8.22.0
+        image: curlimages/curl:8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
         name: ipleak
         volumeMounts:
         - mountPath: /vpn-probe

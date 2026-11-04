@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: valkey
-    app.kubernetes.io/version: 9-alpine3.22
+    app.kubernetes.io/version: 9.0.0-alpine3.22
   name: valkey
 spec:
   replicas: 1
@@ -15,11 +15,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: valkey
-        app.kubernetes.io/version: 9-alpine3.22
+        app.kubernetes.io/version: 9.0.0-alpine3.22
     spec:
       automountServiceAccountToken: false
       containers:
-      - image: valkey/valkey:9-alpine3.22
+      - image: valkey/valkey:9.0.0-alpine3.22@sha256:bef37d06d4856710973ee31dd1eac1482e4c8e6e7b847f999ad25433e646587b
         name: valkey
         ports:
         - containerPort: 6379
@@ -36,7 +36,7 @@ spec:
             memory: 512Mi
       - args:
         - --redis.addr=redis://localhost:6379
-        image: oliver006/redis_exporter:v1.92.1
+        image: oliver006/redis_exporter:v1.92.1@sha256:7fbc93d30f0f91eed1b2fe6968a956259cc5d260a984dd9071f1d1e9c2692ecd
         name: redis-exporter
         ports:
         - containerPort: 9121

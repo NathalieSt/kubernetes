@@ -4,7 +4,7 @@ kind: DaemonSet
 metadata:
   labels:
     app.kubernetes.io/name: audiomuse-ai-worker
-    app.kubernetes.io/version: 3.5.1
+    app.kubernetes.io/version: 3.7.0
   name: audiomuse-ai-worker
 spec:
   selector:
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: audiomuse-ai-worker
-        app.kubernetes.io/version: 3.5.1
+        app.kubernetes.io/version: 3.7.0
     spec:
       affinity:
         nodeAffinity:
@@ -36,7 +36,7 @@ spec:
         - svc.cluster.local
         - cluster.local
       containers:
-      - image: ghcr.io/neptunehub/audiomuse-ai:3.5.1@sha256:9881304597ce7ea4938b670509e227a97aab42dcf8ca349139cebab321f2dd33
+      - image: ghcr.io/neptunehub/audiomuse-ai:3.7.0@sha256:38ac3c2cdb1a82e89c1bd405e5865e2efe5ad924a53b8373f5989f964a7de110
         name: audiomuse-ai-worker
         ports:
         - containerPort: 8000

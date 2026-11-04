@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: stirling-pdf
-    app.kubernetes.io/version: 3.0.0
+    app.kubernetes.io/version: 3.2.2
   name: stirling-pdf
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: stirling-pdf
-        app.kubernetes.io/version: 3.0.0
+        app.kubernetes.io/version: 3.2.2
     spec:
       initContainers:
       - command:
@@ -25,7 +25,7 @@ spec:
         - static/index.html
         - /customFiles/static
         - /halcyon/halcyon.css
-        image: stirlingtools/stirling-pdf:3.0.0@sha256:66b6edb8ee62e307a8b335166e8931a6e65b39c9bf73b5e517fbfe9c613ba221
+        image: stirlingtools/stirling-pdf:3.2.2@sha256:c6872dd056b0046a14c5de1e9970283e7f1e1ff685bb08090c6b37a231127d31
         name: halcyon
         volumeMounts:
         - mountPath: /halcyon
@@ -45,7 +45,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: stirlingtools/stirling-pdf:3.0.0@sha256:66b6edb8ee62e307a8b335166e8931a6e65b39c9bf73b5e517fbfe9c613ba221
+      - image: stirlingtools/stirling-pdf:3.2.2@sha256:c6872dd056b0046a14c5de1e9970283e7f1e1ff685bb08090c6b37a231127d31
         name: stirling-pdf
         ports:
         - containerPort: 8080

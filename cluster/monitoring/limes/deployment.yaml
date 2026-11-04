@@ -36,7 +36,7 @@ spec:
         - name: LIMES_INVENTORY_NAMESPACES
           value: ""
         - name: LIMES_GRYPE_IMAGE
-          value: anchore/grype:v0.118.0-nonroot@sha256:58ab03590058b55a3815e90fc44d9475c7621629c366e7053ab941e3fcf9ec1b
+          value: anchore/grype:v0.121.1-nonroot@sha256:05f98b229a1041d5e8397edba7b073c84a4a2242f2b75fe5efeaba33ee4a3247
         - name: LIMES_GRYPE_CACHE_CLAIM
           value: limes-grype-cache-pvc
         - name: LIMES_CLAMAV_NAMESPACE
@@ -102,7 +102,7 @@ spec:
         - name: LIMES_REGISTRY_PULL_ADDRESS
           value: forgejo-http.forgejo.svc.cluster.local:3000
         - name: LIMES_REGISTRY_TOKEN_IMAGE
-          value: curlimages/curl:8.22.0
+          value: curlimages/curl:8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
         - name: TZ
           value: Europe/Vienna
         - name: LIMES_OIDC_AUTHORITY

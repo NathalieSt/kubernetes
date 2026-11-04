@@ -27,7 +27,7 @@ spec:
           cd /work
           php /var/www/html/4get/docker/gen_config.php
           echo "4get: config.php generated"
-        image: luuul/4get:1.0.59
+        image: luuul/4get:1.0.59@sha256:5a316103930ddfc9a838f28d60ca739002022bed736f06fb021b2a8823d682e3
         name: generate-config
         volumeMounts:
         - mountPath: /work/data
@@ -50,7 +50,7 @@ spec:
         - -DFOREGROUND
         - -f
         - /etc/4get/httpd.conf
-        image: luuul/4get:1.0.59
+        image: luuul/4get:1.0.59@sha256:5a316103930ddfc9a838f28d60ca739002022bed736f06fb021b2a8823d682e3
         name: fourget
         ports:
         - containerPort: 8080

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 8.10.2
+    app.kubernetes.io/version: 8.10.3
   name: redis
 spec:
   replicas: 1
@@ -15,11 +15,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: redis
-        app.kubernetes.io/version: 8.10.2
+        app.kubernetes.io/version: 8.10.3
     spec:
       automountServiceAccountToken: false
       containers:
-      - image: redis:8.10.2
+      - image: redis:8.10.3@sha256:de1068af6f552240dfab67bcc9bfef99bfc60f776bb4580ef077ea4c8c97e848
         name: redis
         ports:
         - containerPort: 6379
@@ -36,7 +36,7 @@ spec:
             memory: 512Mi
       - args:
         - --redis.addr=redis://localhost:6379
-        image: oliver006/redis_exporter:v1.92.1
+        image: oliver006/redis_exporter:v1.92.1@sha256:7fbc93d30f0f91eed1b2fe6968a956259cc5d260a984dd9071f1d1e9c2692ecd
         name: redis-exporter
         ports:
         - containerPort: 9121

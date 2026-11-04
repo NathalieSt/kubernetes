@@ -36,7 +36,7 @@ spec:
       containers:
       - command:
         - /init-unprivileged
-        image: clamav/clamav:1.5.4-debian13-slim
+        image: clamav/clamav:1.5.4-debian13-slim@sha256:c21aa18cc0a358678255a3dfb343a4555b58f71b97d7b869df8fdf7ea0a5b4b1
         name: clamav
         ports:
         - containerPort: 3310

@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: vault-apply-apply
     app.kubernetes.io/version: 1.12.6
-  name: vault-apply-apply-acb93aaaa5
+  name: vault-apply-apply-56d1108622
 spec:
   backoffLimit: 2
   template:
@@ -50,7 +50,7 @@ spec:
         - -chdir=/work
         - init
         - -input=false
-        image: ghcr.io/opentofu/opentofu:1.12.6
+        image: ghcr.io/opentofu/opentofu:1.12.6@sha256:22cb52f6c5bf5c72a48a8f56d993d8df3e9462b1cdfb5db7e77143c87e8d159f
         name: tofu-init
         volumeMounts:
         - mountPath: /work
@@ -80,7 +80,7 @@ spec:
         - apply
         - -input=false
         - -auto-approve
-        image: ghcr.io/opentofu/opentofu:1.12.6
+        image: ghcr.io/opentofu/opentofu:1.12.6@sha256:22cb52f6c5bf5c72a48a8f56d993d8df3e9462b1cdfb5db7e77143c87e8d159f
         name: vault-apply-apply
         volumeMounts:
         - mountPath: /work
