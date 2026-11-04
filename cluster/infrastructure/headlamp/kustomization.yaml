@@ -7,6 +7,7 @@ resources:
 - repo.yaml
 - chart.yaml
 - release.yaml
+- cluster-access.yaml
 - network-policy.yaml
 - halcyon-plugin-configmap.yaml
 - plugin-installer-configmap.yaml
