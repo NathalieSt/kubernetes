@@ -225,6 +225,12 @@ spec:
         configMap:
           name: fleet-salt-states
           items:
+          - key: harden__init.sls
+            path: harden/init.sls
+          - key: harden__seccomp.sls
+            path: harden/seccomp.sls
+          - key: harden__ssh.sls
+            path: harden/ssh.sls
           - key: inotify.sls
             path: inotify.sls
           - key: netbird.sls
