@@ -504,7 +504,7 @@ data:
           "key": "netbird-operator",
           "kind": "chart",
           "repository": "oci://ghcr.io/netbirdio/helm-charts/netbird-operator",
-          "version": "0.9.0",
+          "version": "0.8.0",
           "file": "versions/infrastructure.json",
           "inVersionsFile": true,
           "generators": [
