@@ -936,7 +936,7 @@ data:
           "key": "clavis",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis",
-          "version": "62c36b5@sha256:8bf69043d1fe5d32cbf66dd6e8acb58fa491a2b7d81cddee71d21c1b1ae28fdd",
+          "version": "83ac5fa@sha256:b02dab9c48f193e871c5ec9de8ca4aec5bfec158a63c16b03ce57c827f166230",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
