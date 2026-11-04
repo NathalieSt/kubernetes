@@ -66,9 +66,6 @@ spec:
   - dojo
   - zyme
   containerOverride:
-    env:
-    - name: NB_DISABLE_UPDATE_SETTINGS
-      value: "false"
     livenessProbe:
       exec:
         command:

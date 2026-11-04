@@ -47,9 +47,6 @@ spec:
   - tessera
   - notes
   containerOverride:
-    env:
-    - name: NB_DISABLE_UPDATE_SETTINGS
-      value: "false"
     livenessProbe:
       exec:
         command:

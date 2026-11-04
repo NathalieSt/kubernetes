@@ -103,6 +103,82 @@ kind: ConfigMap
 metadata:
   name: fleet-salt-states
 data:
+  harden__init.sls: |
+    {#- What a host does so that a compromised pod or a guessed password gets less far. Each part
+        applies alone too: `state.apply harden.seccomp`. One canary first, as for `rescue`. #}
+    include:
+      - harden.seccomp
+      - harden.ssh
+  harden__seccomp.sls: |
+    {#- Every container without a seccomp profile gets the runtime's default one, which refuses the
+        system calls kernel escapes tend to use. Privileged containers are exempt by design. #}
+    {%- set unit = 'k3s' if salt['service.available']('k3s') else 'k3s-agent' %}
+    {%- if salt['service.available'](unit) %}
+
+    k3s-seccomp-default:
+      file.managed:
+        - name: /etc/rancher/k3s/config.yaml.d/60-seccomp-default.yaml
+        - makedirs: True
+        - mode: '0600'
+        - contents: |
+            # Managed by Salt (harden.seccomp), from kubernetes-generator.
+            kubelet-arg+:
+              - "seccomp-default=true"
+
+    {#- Not restarted here: three servers restarting at once is etcd without a quorum. A pod that
+        breaks under it shows at its next start; give that one its own profile, not this host none. #}
+    k3s-seccomp-default-pending:
+      test.show_notification:
+        - text: Written. It applies once {{ unit }} restarts; run service.restart {{ unit }} from Fleet, one host at a time, and watch its pods come back.
+        - onchanges:
+          - file: k3s-seccomp-default
+
+    {%- else %}
+
+    k3s-seccomp-default-skipped:
+      test.show_notification:
+        - text: No k3s service on this host; nothing to change.
+
+    {%- endif %}
+  harden__ssh.sls: |
+    {#- Keys only: every pod without an egress policy can reach port 22 on the nodes. Refused on a
+        host where nobody has a key yet, which would be a lockout rather than a hardening. #}
+    {%- set keys = salt['cmd.shell']("cat /root/.ssh/authorized_keys /home/*/.ssh/authorized_keys 2>/dev/null | grep -cE '^(ssh-|ecdsa-|sk-)' || true", python_shell=True) | int %}
+    {%- set unit = 'ssh' if salt['service.available']('ssh') else 'sshd' %}
+    {%- if keys == 0 %}
+
+    ssh-keys-only-refused:
+      test.fail_without_changes:
+        - name: No authorized key on this host; add one before turning passwords off.
+
+    {%- else %}
+
+    {#- sshd takes the first value it reads, and Debian reads sshd_config.d before the rest. #}
+    ssh-keys-only:
+      file.managed:
+        - name: /etc/ssh/sshd_config.d/10-keys-only.conf
+        - mode: '0644'
+        - contents: |
+            # Managed by Salt (harden.ssh), from kubernetes-generator.
+            PasswordAuthentication no
+            KbdInteractiveAuthentication no
+            PermitRootLogin prohibit-password
+
+    ssh-keys-only-valid:
+      cmd.run:
+        - name: sshd -t
+        - onchanges:
+          - file: ssh-keys-only
+
+    {#- A reload keeps every open session, so a mistake here does not end the one fixing it. #}
+    ssh-keys-only-reload:
+      module.run:
+        - service.reload:
+          - name: {{ unit }}
+        - onchanges:
+          - cmd: ssh-keys-only-valid
+
+    {%- endif %}
   inotify.sls: |
     {#- Debian allows root 128 inotify instances, and k3s takes about one per container: `debian`
         sat at 128 of 128 on 2026-10-18 and clavis' Tauri build died with "Too many open files". #}
