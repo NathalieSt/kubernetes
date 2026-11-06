@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: arca
-    app.kubernetes.io/version: 7e4d477
+    app.kubernetes.io/version: cb62b8c
   name: arca
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: arca
-        app.kubernetes.io/version: 7e4d477
+        app.kubernetes.io/version: cb62b8c
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arca:7e4d477@sha256:8a13481e4a86a3b0ce8a5d7209a20849f807e2883f932a84b325b342bf6ef6bd
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arca:cb62b8c@sha256:97557bd201271af31f05cae5ec6e2b76abd1926cedf02d62d5c05d23760e3686
         name: arca
         ports:
         - containerPort: 8080
@@ -63,6 +63,18 @@ spec:
               optional: false
         - name: ARCA_CORS_ORIGINS
           value: https://clavis.netbird.nathalie-stiefsohn.eu,tauri://localhost,http://tauri.localhost
+        - name: ARCA_WEBAUTHN_ORIGINS
+          value: https://clavis.netbird.nathalie-stiefsohn.eu
+        - name: ARCA_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080/
+        - name: ARCA_NTFY_TOPIC
+          value: arca
+        - name: ARCA_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: arca-ntfy-secret
+              optional: true
         resources:
           requests:
             cpu: 20m
