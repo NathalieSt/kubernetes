@@ -22,11 +22,6 @@ spec:
       failureThreshold: 10
   managed:
     roles:
-    - name: psono
-      ensure: present
-      login: true
-      passwordSecret:
-        name: psono-db-role
     - name: authelia
       ensure: present
       login: true

@@ -8,7 +8,6 @@ resources:
 - cnpg-cluster.yaml
 - audiomuseai-db.yaml
 - tandoor-db.yaml
-- psono-db.yaml
 - authelia-db.yaml
 - healthchecks-db.yaml
 - ntfy-db.yaml
