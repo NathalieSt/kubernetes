@@ -10,7 +10,6 @@ spec:
   - garage
   - backup-dashboard
   - mail
-  - psono
   - vault-apply
   defaultAuthMethod: kubernetes
   kubernetes:

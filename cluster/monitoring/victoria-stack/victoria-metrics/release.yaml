@@ -1045,18 +1045,6 @@ spec:
                 probe_namespace: jellyfin
                 scale_to_zero: "false"
             - targets:
-              - http://psono-client.psono.svc.cluster.local:80/
-              labels:
-                probe_name: psono-client
-                probe_namespace: psono
-                scale_to_zero: "false"
-            - targets:
-              - http://psono-server.psono.svc.cluster.local:80/
-              labels:
-                probe_name: psono-server
-                probe_namespace: psono
-                scale_to_zero: "false"
-            - targets:
               - http://qbittorrent.qbittorrent.svc.cluster.local:8080/
               labels:
                 probe_name: qbittorrent

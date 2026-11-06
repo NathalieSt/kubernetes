@@ -23,7 +23,7 @@ data:
           "namespace": "clavis",
           "group": "platform",
           "about": "Our own server for clavis",
-          "url": "https://arca.netbird.nathalie-stiefsohn.eu",
+          "url": "https://psono-api.netbird.nathalie-stiefsohn.eu",
           "entry": "own",
           "sleeps": false,
           "sendsBackup": false,
@@ -630,28 +630,6 @@ data:
           "sendsBackup": false,
           "usesCistern": true,
           "leavesBy": "gluetun-proxy"
-        },
-        {
-          "generator": "psono-client",
-          "namespace": "psono",
-          "group": "personal",
-          "about": "Password manager",
-          "url": "https://psono.netbird.nathalie-stiefsohn.eu",
-          "entry": "own",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": false
-        },
-        {
-          "generator": "psono-server",
-          "namespace": "psono",
-          "group": "platform",
-          "about": "Psono's API, which the web client and apps call",
-          "url": "https://psono-api.netbird.nathalie-stiefsohn.eu",
-          "entry": "own",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": true
         },
         {
           "generator": "qbittorrent",

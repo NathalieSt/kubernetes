@@ -59,8 +59,6 @@ paperless/oidc paperless client-secret
 paperless/app paperless secret-key
 paperless/db paperless username=paperless password@random
 prowlarr/db prowlarr username=prowlarr password@random
-psono psono-server secret-key activation-link-secret db-secret email-secret-salt private-key public-key
-psono/db psono-server username=psono password@random
 vpn qbittorrent user password
 radarr/db radarr username=radarr password@random
 radicale/users radicale htpasswd

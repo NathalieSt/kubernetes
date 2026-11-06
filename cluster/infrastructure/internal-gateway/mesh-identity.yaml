@@ -33,6 +33,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: internal-gateway
   extraDNSLabels:
+  - psono-api
   - audiomuse
   - auth
   - backups
@@ -57,8 +58,6 @@ spec:
   - ntfy
   - omni-tools
   - orrery
-  - psono
-  - psono-api
   - redlib
   - rimworld
   - tandoor

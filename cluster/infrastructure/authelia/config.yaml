@@ -49,9 +49,6 @@ data:
         - anki.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
-        - arca.netbird.nathalie-stiefsohn.eu
-        policy: bypass
-      - domain:
         - arx.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -161,9 +158,6 @@ data:
         policy: one_factor
       - domain:
         - psono-api.netbird.nathalie-stiefsohn.eu
-        policy: bypass
-      - domain:
-        - psono.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
         - qbittorrent.netbird.nathalie-stiefsohn.eu
