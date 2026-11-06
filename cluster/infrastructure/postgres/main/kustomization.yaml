@@ -15,6 +15,7 @@ resources:
 - glitchtip-db.yaml
 - zyme-db.yaml
 - tessera-db.yaml
+- arca-db.yaml
 - tare-db.yaml
 - limes-db.yaml
 - paperless-db.yaml
@@ -32,5 +33,7 @@ resources:
 - dump-pvc.yaml
 - dump-access.yaml
 - dump-cronjob.yaml
+- role-nudge-access.yaml
+- role-nudge-cronjob.yaml
 - k8up-schedule.yaml
 - alert-rules.yaml

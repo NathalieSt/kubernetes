@@ -2,15 +2,37 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: arca
+  namespace: flux-system
+spec:
+  interval: 24h
+  targetNamespace: clavis
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/clavis/arca
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-arca
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: clavis
   namespace: flux-system
 spec:
   interval: 24h
-  targetNamespace: psono
+  targetNamespace: clavis
   sourceRef:
     kind: GitRepository
     name: manifests
-  path: ./cluster/personal/psono/clavis
+  path: ./cluster/personal/clavis/web
   prune: true
   wait: true
   timeout: 10m

@@ -359,7 +359,7 @@ data:
           href: https://clavis.netbird.nathalie-stiefsohn.eu
           icon: mdi-key-outline
           description: Password manager, our client
-          namespace: psono
+          namespace: clavis
           app: clavis
       - daybook:
           href: https://daybook.netbird.nathalie-stiefsohn.eu
@@ -541,6 +541,12 @@ data:
           namespace: redlib
           app: redlib
     - Platform:
+      - arca:
+          href: https://arca.netbird.nathalie-stiefsohn.eu
+          icon: mdi-safe
+          description: Our own server for clavis
+          namespace: clavis
+          app: arca
       - arx:
           href: https://arx.netbird.nathalie-stiefsohn.eu
           icon: mdi-castle

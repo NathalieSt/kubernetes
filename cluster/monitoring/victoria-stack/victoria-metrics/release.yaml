@@ -835,6 +835,12 @@ spec:
                 probe_namespace: anki-sync
                 scale_to_zero: "false"
             - targets:
+              - http://arca.clavis.svc.cluster.local:8080/
+              labels:
+                probe_name: arca
+                probe_namespace: clavis
+                scale_to_zero: "false"
+            - targets:
               - http://arx.arx.svc.cluster.local:8080/
               labels:
                 probe_name: arx
@@ -871,10 +877,10 @@ spec:
                 probe_namespace: changedetection
                 scale_to_zero: "false"
             - targets:
-              - http://clavis.psono.svc.cluster.local:8080/
+              - http://clavis.clavis.svc.cluster.local:8080/
               labels:
                 probe_name: clavis
-                probe_namespace: psono
+                probe_namespace: clavis
                 scale_to_zero: "false"
             - targets:
               - http://code-server.code-server.svc.cluster.local:8080/

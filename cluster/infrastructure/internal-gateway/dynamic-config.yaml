@@ -39,6 +39,11 @@ data:
           entryPoints:
           - websecure
           service: anki-sync
+        arca:
+          rule: Host(`arca.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: arca
         arx:
           rule: Host(`arx.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -377,6 +382,10 @@ data:
           loadBalancer:
             servers:
             - url: http://anki-sync.anki-sync.svc.cluster.local:8080
+        arca:
+          loadBalancer:
+            servers:
+            - url: http://arca.clavis.svc.cluster.local:8080
         arx:
           loadBalancer:
             servers:
@@ -404,7 +413,7 @@ data:
         clavis:
           loadBalancer:
             servers:
-            - url: http://clavis.psono.svc.cluster.local:8080
+            - url: http://clavis.clavis.svc.cluster.local:8080
         code-server:
           loadBalancer:
             servers:

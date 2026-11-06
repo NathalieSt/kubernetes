@@ -933,6 +933,17 @@ data:
           ]
         },
         {
+          "key": "arca",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/arca",
+          "version": "7e4d477@sha256:8a13481e4a86a3b0ce8a5d7209a20849f807e2883f932a84b325b342bf6ef6bd",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "arca"
+          ]
+        },
+        {
           "key": "clavis",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis",
@@ -1123,7 +1134,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "baad085@sha256:cb51acbac93da87e22a798d0b961f3fe594ee7c02dda0b1f86f1a2b5f876514e",
+          "version": "aa4bcff@sha256:ad072ddb47aaa650e6424372fb50e56dfedee7d02f246f0a0c4216a5b2da07b0",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

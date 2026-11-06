@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: arca
+spec:
+  name: arca
+  cluster:
+    name: postgres
+  owner: arca

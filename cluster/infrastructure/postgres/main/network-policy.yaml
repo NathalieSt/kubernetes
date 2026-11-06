@@ -15,6 +15,7 @@ spec:
           values:
           - tandoor
           - psono
+          - clavis
           - jellyfin
           - cnpg-system
           - authelia
@@ -43,6 +44,7 @@ spec:
           - glitchtip
           - zyme
           - tessera
+          - arca
           - tare
           - tare-crawl
           - limes

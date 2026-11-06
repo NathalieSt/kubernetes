@@ -35,6 +35,39 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-arca
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-arca-namespace-admin
+  namespace: clavis
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-arca
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-arca-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-arca
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-arx
   namespace: flux-system
 ---
@@ -221,7 +254,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: flux-clavis-namespace-admin
-  namespace: psono
+  namespace: clavis
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
