@@ -32,7 +32,6 @@ limes limes ntfy-token forgejo-token
 limes/db limes username=limes password@random
 mail mail postfix-accounts.cf
 mail/oidc mail client-secret
-psono/db main-pg username=psono password@random
 authelia/db main-pg username=authelia password@random
 glitchtip/db main-pg username=glitchtip password@random
 healthchecks/db main-pg username=healthchecks password@random
