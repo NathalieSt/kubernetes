@@ -19,6 +19,17 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "arca",
+          "namespace": "clavis",
+          "group": "platform",
+          "about": "Our own server for clavis",
+          "url": "https://arca.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
           "generator": "audiomuse-ai",
           "namespace": "jellyfin",
           "group": "media",
@@ -101,7 +112,7 @@ data:
         },
         {
           "generator": "clavis",
-          "namespace": "psono",
+          "namespace": "clavis",
           "group": "personal",
           "about": "Password manager, our client",
           "url": "https://clavis.netbird.nathalie-stiefsohn.eu",

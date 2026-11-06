@@ -45,6 +45,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: clavis
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: code-server
   - to:
     - namespaceSelector:

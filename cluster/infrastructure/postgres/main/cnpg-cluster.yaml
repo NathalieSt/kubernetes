@@ -72,6 +72,11 @@ spec:
       login: true
       passwordSecret:
         name: tessera-db-role
+    - name: arca
+      ensure: present
+      login: true
+      passwordSecret:
+        name: arca-db-role
     - name: tare
       ensure: present
       login: true

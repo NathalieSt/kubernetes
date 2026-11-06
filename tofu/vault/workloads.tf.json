@@ -5,6 +5,10 @@
         "name": "anki-sync",
         "policy": "path \"kvv2/data/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "arca": {
+        "name": "arca",
+        "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "audiomuse-ai": {
         "name": "audiomuse-ai",
         "policy": "path \"kvv2/data/jellyfin\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/jellyfin\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n"
@@ -75,7 +79,7 @@
       },
       "main-pg": {
         "name": "main-pg",
-        "policy": "path \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "music-library-builder": {
         "name": "music-library-builder",
@@ -159,6 +163,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.anki-sync.name}"
+        ],
+        "token_ttl": 600
+      },
+      "arca": {
+        "backend": "kubernetes",
+        "role_name": "arca",
+        "bound_service_account_names": [
+          "arca-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "clavis"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.arca.name}"
         ],
         "token_ttl": 600
       },
@@ -697,6 +716,18 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.arca_arca_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.arca_psono",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.audiomuse-ai_audiomuseai_db",
       "lifecycle": {
         "destroy": false
@@ -884,6 +915,12 @@
     },
     {
       "from": "vault_kv_secret_v2.mail_mail_oidc",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_arca_db",
       "lifecycle": {
         "destroy": false
       }

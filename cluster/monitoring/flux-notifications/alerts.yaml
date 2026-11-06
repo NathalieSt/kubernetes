@@ -83,6 +83,9 @@ spec:
     name: anki-sync
     namespace: flux-system
   - kind: Kustomization
+    name: arca
+    namespace: flux-system
+  - kind: Kustomization
     name: arx
     namespace: flux-system
   - kind: Kustomization

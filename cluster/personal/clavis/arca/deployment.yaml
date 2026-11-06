@@ -1,0 +1,92 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: arca
+    app.kubernetes.io/version: 7e4d477
+  name: arca
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: arca
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: arca
+        app.kubernetes.io/version: 7e4d477
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arca:7e4d477@sha256:8a13481e4a86a3b0ce8a5d7209a20849f807e2883f932a84b325b342bf6ef6bd
+        name: arca
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: TZ
+          value: Europe/Vienna
+        - name: ARCA_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/arca
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: arca-db-secret
+              optional: false
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: arca-db-secret
+              optional: false
+        - name: ARCA_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              key: private-key
+              name: arca-secret
+              optional: false
+        - name: ARCA_DB_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: db-secret
+              name: arca-secret
+              optional: false
+        - name: ARCA_CORS_ORIGINS
+          value: https://clavis.netbird.nathalie-stiefsohn.eu,tauri://localhost,http://tauri.localhost
+        resources:
+          requests:
+            cpu: 20m
+            memory: 96Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
