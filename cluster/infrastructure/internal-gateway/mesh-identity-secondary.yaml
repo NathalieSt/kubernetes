@@ -26,7 +26,6 @@ spec:
       app.kubernetes.io/name: internal-gateway-secondary
   extraDNSLabels:
   - anki
-  - arca
   - arx
   - bazarr
   - clavis

@@ -272,12 +272,6 @@ spec:
     name: prowlarr
     namespace: flux-system
   - kind: Kustomization
-    name: psono-client
-    namespace: flux-system
-  - kind: Kustomization
-    name: psono-server
-    namespace: flux-system
-  - kind: Kustomization
     name: qbittorrent
     namespace: flux-system
   - kind: Kustomization

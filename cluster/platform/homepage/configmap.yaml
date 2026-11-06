@@ -380,12 +380,6 @@ data:
           description: Documents, OCRed and searchable
           namespace: paperless
           app: paperless
-      - psono-client:
-          href: https://psono.netbird.nathalie-stiefsohn.eu
-          icon: mdi-lock-outline
-          description: Password manager
-          namespace: psono
-          app: psono-client
       - stirling-pdf:
           href: https://pdf.netbird.nathalie-stiefsohn.eu
           icon: stirling-pdf.png
@@ -542,7 +536,7 @@ data:
           app: redlib
     - Platform:
       - arca:
-          href: https://arca.netbird.nathalie-stiefsohn.eu
+          href: https://psono-api.netbird.nathalie-stiefsohn.eu
           icon: mdi-safe
           description: Our own server for clavis
           namespace: clavis
@@ -589,12 +583,6 @@ data:
           description: "Kubernetes console: pods, reasons, logs, events"
           namespace: pharos
           app: pharos
-      - psono-server:
-          href: https://psono-api.netbird.nathalie-stiefsohn.eu
-          icon: mdi-api
-          description: Psono's API, which the web client and apps call
-          namespace: psono
-          app: psono-server
       - vault:
           href: https://vault.netbird.nathalie-stiefsohn.eu
           icon: hashicorp-vault.png

@@ -34,7 +34,6 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `bazarr` | `jellyfin` | `kvv2/bazarr/db` |
 | `seerr` | `jellyfin` | `kvv2/seerr/db` |
 | `gameyfin` | `gameyfin` | `kvv2/gameyfin/secrets` |
-| `psono-server` | `psono` | `kvv2/psono`, `kvv2/psono/db` |
 | `limes` | `limes` | `kvv2/limes`, `kvv2/limes/db` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc`, `kvv2/tandoor/db` |
 | `zyme` | `zyme` | `kvv2/zyme`, `kvv2/zyme/db` |

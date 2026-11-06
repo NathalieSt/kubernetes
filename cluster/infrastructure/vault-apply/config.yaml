@@ -237,8 +237,6 @@ data:
     paperless/app paperless secret-key
     paperless/db paperless username=paperless password@random
     prowlarr/db prowlarr username=prowlarr password@random
-    psono psono-server secret-key activation-link-secret db-secret email-secret-salt private-key public-key
-    psono/db psono-server username=psono password@random
     vpn qbittorrent user password
     radarr/db radarr username=radarr password@random
     radicale/users radicale htpasswd
@@ -398,10 +396,6 @@ data:
           "prowlarr": {
             "name": "prowlarr",
             "policy": "path \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n"
-          },
-          "psono-server": {
-            "name": "psono-server",
-            "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "qbittorrent": {
             "name": "qbittorrent",
@@ -821,21 +815,6 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.prowlarr.name}"
-            ],
-            "token_ttl": 600
-          },
-          "psono-server": {
-            "backend": "kubernetes",
-            "role_name": "psono-server",
-            "bound_service_account_names": [
-              "psono-server-vault-serviceaccount"
-            ],
-            "bound_service_account_namespaces": [
-              "psono"
-            ],
-            "audience": "vault",
-            "token_policies": [
-              "${vault_policy.psono-server.name}"
             ],
             "token_ttl": 600
           },
@@ -1375,18 +1354,6 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.prowlarr_prowlarr_db",
-          "lifecycle": {
-            "destroy": false
-          }
-        },
-        {
-          "from": "vault_kv_secret_v2.psono-server_psono",
-          "lifecycle": {
-            "destroy": false
-          }
-        },
-        {
-          "from": "vault_kv_secret_v2.psono-server_psono_db",
           "lifecycle": {
             "destroy": false
           }

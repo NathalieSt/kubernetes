@@ -999,28 +999,6 @@ data:
           ]
         },
         {
-          "key": "psono-client",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/psono-client",
-          "version": "47e479b@sha256:2681d140d53e3fcb592beb233243495cd05e85a4a3310a98b8f9583878e77e79",
-          "file": "versions/personal.json",
-          "inVersionsFile": true,
-          "generators": [
-            "psono-client"
-          ]
-        },
-        {
-          "key": "psono-server",
-          "kind": "image",
-          "repository": "psono/psono-server",
-          "version": "7.5.7@sha256:5b3fbc6fec98f8f7fe244233c2b40fe97568c53d04750e0a219a6e7e49306ef8",
-          "file": "versions/personal.json",
-          "inVersionsFile": true,
-          "generators": [
-            "psono-server"
-          ]
-        },
-        {
           "key": "roundcube",
           "kind": "image",
           "repository": "roundcube/roundcubemail",
@@ -1057,7 +1035,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "57fbbc7@sha256:0597e36bbe00f8e5e5713404d9438d26e23b8b8788658a003ecdcc5271bbbacf",
+          "version": "792449b@sha256:9ef21fe80dd5621a61fed579d3925c8d6251502fa9b19c0c1cdc7d80cd0e85e6",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1134,7 +1112,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "aa4bcff@sha256:ad072ddb47aaa650e6424372fb50e56dfedee7d02f246f0a0c4216a5b2da07b0",
+          "version": "663f080@sha256:fa51eff102f156231d26c64040cbabd25ede28050d18d2b483c1c43ae75765cd",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

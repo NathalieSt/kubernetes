@@ -23,6 +23,12 @@ spec:
       podSecurityContext:
         fsGroup: 2000
         fsGroupChangePolicy: OnRootMismatch
+      probe:
+        startup:
+          failureThreshold: 240
+          httpGet: {}
+          periodSeconds: 30
+          timeoutSeconds: 5
       resources:
         limits:
           memory: 2Gi

@@ -145,10 +145,6 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: psono
-  - to:
-    - namespaceSelector:
-        matchLabels:
           kubernetes.io/metadata.name: qbittorrent
   - to:
     - namespaceSelector:

@@ -40,7 +40,7 @@ data:
           - websecure
           service: anki-sync
         arca:
-          rule: Host(`arca.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`psono-api.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: arca
@@ -265,16 +265,6 @@ data:
           service: prowlarr
           middlewares:
           - authelia
-        psono-client:
-          rule: Host(`psono.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: psono-client
-        psono-server:
-          rule: Host(`psono-api.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: psono-server
         qbittorrent:
           rule: Host(`qbittorrent.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -522,14 +512,6 @@ data:
           loadBalancer:
             servers:
             - url: http://prowlarr.jellyfin.svc.cluster.local:9696
-        psono-client:
-          loadBalancer:
-            servers:
-            - url: http://psono-client.psono.svc.cluster.local:80
-        psono-server:
-          loadBalancer:
-            servers:
-            - url: http://psono-server.psono.svc.cluster.local:80
         qbittorrent:
           loadBalancer:
             servers:

@@ -101,10 +101,6 @@
         "name": "prowlarr",
         "policy": "path \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
-      "psono-server": {
-        "name": "psono-server",
-        "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/psono/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono/db\" {\n  capabilities = [\"read\"]\n}\n"
-      },
       "qbittorrent": {
         "name": "qbittorrent",
         "policy": "path \"kvv2/data/vpn\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/vpn\" {\n  capabilities = [\"read\"]\n}\n"
@@ -523,21 +519,6 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.prowlarr.name}"
-        ],
-        "token_ttl": 600
-      },
-      "psono-server": {
-        "backend": "kubernetes",
-        "role_name": "psono-server",
-        "bound_service_account_names": [
-          "psono-server-vault-serviceaccount"
-        ],
-        "bound_service_account_namespaces": [
-          "psono"
-        ],
-        "audience": "vault",
-        "token_policies": [
-          "${vault_policy.psono-server.name}"
         ],
         "token_ttl": 600
       },
@@ -1077,18 +1058,6 @@
     },
     {
       "from": "vault_kv_secret_v2.prowlarr_prowlarr_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.psono-server_psono",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.psono-server_psono_db",
       "lifecycle": {
         "destroy": false
       }
