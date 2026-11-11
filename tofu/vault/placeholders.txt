@@ -55,6 +55,7 @@ music-library-builder music-library-builder ntfy-token
 neko neko password admin-password
 ntfy/auth ntfy auth-users auth-tokens
 ntfy/db ntfy username=ntfy password@random
+opnsense-backup opnsense-backup key secret
 paperless/oidc paperless client-secret
 paperless/app paperless secret-key
 paperless/db paperless username=paperless password@random

@@ -235,6 +235,8 @@ spec:
             path: inotify.sls
           - key: netbird.sls
             path: netbird.sls
+          - key: ntp.sls
+            path: ntp.sls
           - key: rescue__earlyoom.sls
             path: rescue/earlyoom.sls
           - key: rescue__init.sls
