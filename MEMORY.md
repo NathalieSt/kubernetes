@@ -114,7 +114,7 @@ listing the files.
   prune on, impersonating `flux-privileged`. This is what applies the
   per-generator Kustomizations (85 on 2026-09-30). `wait` is left false
   deliberately: waiting would block on the health of every one of them.
-- Per-generator Kustomizations — 24h interval, `prune: true`, `wait: true`,
+- Per-generator Kustomizations — 24h interval, 2m `retryInterval`, `prune: true`, `wait: true`,
   `timeout: 10m`, with a `dependsOn` graph. `flux-notifications` is the one
   exception: it uses `wait: false` with explicit `healthChecks`, because part
   of its inventory cannot be healthy until a human has put a token in Vault.
@@ -159,7 +159,9 @@ that stops existing does not produce an error anywhere; check before trusting a
 quiet panel.
 
 The 24h interval is not slow reconciliation: Git pushes drive changes, and the
-interval is only the drift-correction backstop.
+interval is only the drift-correction backstop. A *failed* reconcile retries after
+`retryInterval` (2m); without it Flux waited the full 24h, and a seven-hour DNS outage on
+2026-11-10 left 83 of 96 Kustomizations not Ready for a day.
 
 ```sh
 flux get kustomizations --watch
