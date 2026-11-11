@@ -40,6 +40,7 @@ spec:
           - jellyfin
           - zyme
           - limes
+          - clavis
           - tare
     ports:
     - port: 8080

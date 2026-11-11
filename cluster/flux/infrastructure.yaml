@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: authelia
   sourceRef:
     kind: GitRepository
@@ -29,6 +30,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: cert-manager
   sourceRef:
     kind: GitRepository
@@ -49,6 +51,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: cnpg-system
   sourceRef:
     kind: GitRepository
@@ -70,6 +73,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: csi-driver-nfs
   sourceRef:
     kind: GitRepository
@@ -90,6 +94,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -109,6 +114,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: egress-proxy
   sourceRef:
     kind: GitRepository
@@ -129,6 +135,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: embeddings
   sourceRef:
     kind: GitRepository
@@ -150,6 +157,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -168,6 +176,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: forgejo-pg-cluster
   sourceRef:
     kind: GitRepository
@@ -192,6 +201,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: garage
   sourceRef:
     kind: GitRepository
@@ -215,6 +225,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: gluetun-proxy
   sourceRef:
     kind: GitRepository
@@ -236,6 +247,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: headlamp
   sourceRef:
     kind: GitRepository
@@ -256,6 +268,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: inteldeviceplugins-system
   sourceRef:
     kind: GitRepository
@@ -277,6 +290,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: inteldeviceplugins-system
   sourceRef:
     kind: GitRepository
@@ -298,6 +312,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: internal-dns
   sourceRef:
     kind: GitRepository
@@ -318,6 +333,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: internal-gateway
   sourceRef:
     kind: GitRepository
@@ -348,6 +364,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: k8up
   sourceRef:
     kind: GitRepository
@@ -369,6 +386,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: keda
   sourceRef:
     kind: GitRepository
@@ -389,6 +407,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: postgres
   sourceRef:
     kind: GitRepository
@@ -413,6 +432,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -429,6 +449,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: netbird
   sourceRef:
     kind: GitRepository
@@ -449,6 +470,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: nfd
   sourceRef:
     kind: GitRepository
@@ -469,6 +491,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: nvidia-k8s-device-plugin
   sourceRef:
     kind: GitRepository
@@ -489,6 +512,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: redis
   sourceRef:
     kind: GitRepository
@@ -511,6 +535,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: reflector
   sourceRef:
     kind: GitRepository
@@ -533,6 +558,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: system-upgrade
   sourceRef:
     kind: GitRepository
@@ -553,6 +579,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: system-upgrade
   sourceRef:
     kind: GitRepository
@@ -574,6 +601,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: valkey
   sourceRef:
     kind: GitRepository
@@ -596,6 +624,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: vault
   sourceRef:
     kind: GitRepository
@@ -617,6 +646,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: vault-apply
   sourceRef:
     kind: GitRepository
@@ -639,6 +669,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: vault
   sourceRef:
     kind: GitRepository
@@ -661,6 +692,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: vault-secrets-operator
   sourceRef:
     kind: GitRepository
@@ -682,6 +714,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: vault-secrets-operator
   sourceRef:
     kind: GitRepository

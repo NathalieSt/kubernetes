@@ -72,6 +72,8 @@ spec:
         - -c
         - |-
           s=$(netbird status --json 2>/dev/null | tr -d ' \n\t') || exit 1
+          st=$(printf '%s' "$s" | grep -o '"daemonStatus":"[A-Za-z]*"' | cut -d'"' -f4)
+          case "$st" in NeedsLogin|LoginFailed|SessionExpired) echo "daemon $st: peer refused"; exit 1;; esac
           total=$(printf '%s' "$s" | grep -o '"peers":{"total":[0-9]*' | grep -o '[0-9]*$')
           connected=$(printf '%s' "$s" | grep -o '"peers":{"total":[0-9]*,"connected":[0-9]*' | grep -o '[0-9]*$')
           [ -n "$total" ] || { echo "no peer count in netbird status"; exit 1; }

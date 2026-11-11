@@ -38,7 +38,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc`, `kvv2/tandoor/db` |
 | `zyme` | `zyme` | `kvv2/zyme`, `kvv2/zyme/db` |
 | `tessera` | `tessera` | `kvv2/tessera/db` |
-| `arca` | `clavis` | `kvv2/psono`, `kvv2/arca/db` |
+| `arca` | `clavis` | `kvv2/psono`, `kvv2/arca/db`, `kvv2/arca/ntfy` |
 | `tare` | `tare` | `kvv2/tare/db`, `kvv2/tare` |
 | `radicale` | `radicale` | `kvv2/radicale/users` |
 | `anki-sync` | `anki-sync` | `kvv2/anki-sync/users` |
