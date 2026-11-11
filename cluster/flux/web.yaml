@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: changedetection
   sourceRef:
     kind: GitRepository
@@ -29,6 +30,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: fourget
   sourceRef:
     kind: GitRepository
@@ -51,6 +53,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: helium-services
   sourceRef:
     kind: GitRepository
@@ -73,6 +76,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: neko
   sourceRef:
     kind: GitRepository
@@ -96,6 +100,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: redlib
   sourceRef:
     kind: GitRepository
@@ -118,6 +123,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: rimworld-together
   sourceRef:
     kind: GitRepository

@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: arx
   sourceRef:
     kind: GitRepository
@@ -28,6 +29,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: backup-dashboard
   sourceRef:
     kind: GitRepository
@@ -51,6 +53,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: fdroid
   sourceRef:
     kind: GitRepository
@@ -72,6 +75,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: fleet
   sourceRef:
     kind: GitRepository
@@ -97,6 +101,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: homelab-docs
   sourceRef:
     kind: GitRepository
@@ -118,6 +123,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: homepage
   sourceRef:
     kind: GitRepository
@@ -138,6 +144,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: pharos
   sourceRef:
     kind: GitRepository
@@ -159,6 +166,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: manifests
@@ -179,6 +187,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: waking-page
   sourceRef:
     kind: GitRepository

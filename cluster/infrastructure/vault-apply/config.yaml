@@ -180,6 +180,7 @@ data:
     anki-sync/users anki-sync sync-user1
     psono arca private-key db-secret
     arca/db arca username=arca password@random
+    arca/ntfy arca ntfy-token
     jellyfin audiomuse-ai userid token
     audiomuseai/db audiomuse-ai username=audiomuseai password@random
     authelia/secrets authelia session-secret storage-encryption-key reset-password-jwt-secret oidc-hmac-secret oidc-issuer-private-key
@@ -302,7 +303,7 @@ data:
           },
           "arca": {
             "name": "arca",
-            "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n"
+            "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/ntfy\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "audiomuse-ai": {
             "name": "audiomuse-ai",
@@ -993,6 +994,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.arca_arca_db",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.arca_arca_ntfy",
           "lifecycle": {
             "destroy": false
           }

@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: code-server
   sourceRef:
     kind: GitRepository
@@ -31,6 +32,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: forgejo
   sourceRef:
     kind: GitRepository
@@ -56,6 +58,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: forgejo
   sourceRef:
     kind: GitRepository
@@ -79,6 +82,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: it-tools
   sourceRef:
     kind: GitRepository
@@ -100,6 +104,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: omni-tools
   sourceRef:
     kind: GitRepository
@@ -121,6 +126,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: vim-dojo
   sourceRef:
     kind: GitRepository

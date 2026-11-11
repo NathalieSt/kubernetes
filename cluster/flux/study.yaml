@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: anki-sync
   sourceRef:
     kind: GitRepository
@@ -31,6 +32,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: radicale
   sourceRef:
     kind: GitRepository
@@ -55,6 +57,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: trilium
   sourceRef:
     kind: GitRepository

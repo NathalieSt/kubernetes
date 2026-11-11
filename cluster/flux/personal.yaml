@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: clavis
   sourceRef:
     kind: GitRepository
@@ -28,6 +29,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: clavis
   sourceRef:
     kind: GitRepository
@@ -49,6 +51,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: daybook
   sourceRef:
     kind: GitRepository
@@ -73,6 +76,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: kavita
   sourceRef:
     kind: GitRepository
@@ -98,6 +102,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: mail
   sourceRef:
     kind: GitRepository
@@ -123,6 +128,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: paperless
   sourceRef:
     kind: GitRepository
@@ -150,6 +156,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: stirling-pdf
   sourceRef:
     kind: GitRepository
@@ -171,6 +178,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: tandoor
   sourceRef:
     kind: GitRepository
@@ -195,6 +203,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: tare
   sourceRef:
     kind: GitRepository
@@ -220,6 +229,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: tessera
   sourceRef:
     kind: GitRepository
@@ -243,6 +253,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: zyme
   sourceRef:
     kind: GitRepository

@@ -2,6 +2,7 @@
 anki-sync/users anki-sync sync-user1
 psono arca private-key db-secret
 arca/db arca username=arca password@random
+arca/ntfy arca ntfy-token
 jellyfin audiomuse-ai userid token
 audiomuseai/db audiomuse-ai username=audiomuseai password@random
 authelia/secrets authelia session-secret storage-encryption-key reset-password-jwt-secret oidc-hmac-secret oidc-issuer-private-key

@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: internal-gateway
   sourceRef:
     kind: GitRepository
@@ -26,6 +27,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: clamav
   sourceRef:
     kind: GitRepository
@@ -48,6 +50,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: flux-system
   sourceRef:
     kind: GitRepository
@@ -79,6 +82,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: glitchtip
   sourceRef:
     kind: GitRepository
@@ -103,6 +107,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: healthchecks
   sourceRef:
     kind: GitRepository
@@ -126,6 +131,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: healthchecks
   sourceRef:
     kind: GitRepository
@@ -148,6 +154,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: limes
   sourceRef:
     kind: GitRepository
@@ -172,6 +179,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: ntfy
   sourceRef:
     kind: GitRepository
@@ -195,6 +203,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: orrery
   sourceRef:
     kind: GitRepository
@@ -216,6 +225,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: vector
   sourceRef:
     kind: GitRepository
@@ -238,6 +248,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: victoria-logs
   sourceRef:
     kind: GitRepository
@@ -259,6 +270,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  retryInterval: 2m
   targetNamespace: victoria-metrics
   sourceRef:
     kind: GitRepository

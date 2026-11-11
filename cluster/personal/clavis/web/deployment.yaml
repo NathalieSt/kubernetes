@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: clavis
-    app.kubernetes.io/version: 7e4d477
+    app.kubernetes.io/version: 5b2c044
   name: clavis
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: clavis
-        app.kubernetes.io/version: 7e4d477
+        app.kubernetes.io/version: 5b2c044
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis:7e4d477@sha256:b02dab9c48f193e871c5ec9de8ca4aec5bfec158a63c16b03ce57c827f166230
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/clavis:5b2c044@sha256:8e25135e065f88df2e641c422120726e51f0f191b76166c4335540d25aa8bb3c
         name: clavis
         ports:
         - containerPort: 8080
