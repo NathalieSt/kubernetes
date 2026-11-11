@@ -1,0 +1,96 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: opnsense-backup
+  name: opnsense-backup
+spec:
+  schedule: 15 0 * * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 1800
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: opnsense-backup
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - command:
+            - sh
+            - -c
+            - |
+              #!/bin/sh
+              # config.xml from OPNsense's API onto the claim K8up backs up. The router's key is pinned:
+              # any other certificate is refused before the API key is sent (-k only skips the CA check).
+              set -eu
+              part="$BACKUP_DIR/.config.xml.part"
+              code=$(printf 'user = "%s:%s"\n' "$OPNSENSE_KEY" "$OPNSENSE_SECRET" |
+                curl -sS -K - -k --pinnedpubkey "$OPNSENSE_PIN" -m 120 -o "$part" -w '%{http_code}' \
+                  "$OPNSENSE_URL/api/core/backup/download/this") || code=000
+              if [ "$code" != 200 ]; then
+                echo "OPNsense answered $code:" >&2
+                head -c 500 "$part" >&2 2>/dev/null || true
+                rm -f "$part"
+                exit 1
+              fi
+              if ! grep -q '<opnsense>' "$part"; then
+                echo "the answer is not a config.xml" >&2
+                rm -f "$part"
+                exit 1
+              fi
+              chmod 600 "$part"
+              mv "$part" "$BACKUP_DIR/config.xml"
+              echo "config.xml: $(wc -c <"$BACKUP_DIR/config.xml") bytes"
+            image: curlimages/curl:8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
+            name: opnsense-backup
+            volumeMounts:
+            - mountPath: /backup
+              name: backup
+            env:
+            - name: OPNSENSE_URL
+              value: https://192.168.1.1
+            - name: OPNSENSE_PIN
+              value: sha256//eSR3o1CMjM/VZeoPWZP2/wARyrGrvg3RV8+yIkMGN78=
+            - name: BACKUP_DIR
+              value: /backup
+            - name: OPNSENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: key
+                  name: opnsense-backup-api
+            - name: OPNSENSE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: secret
+                  name: opnsense-backup-api
+            resources:
+              requests:
+                cpu: 10m
+                memory: 16Mi
+              limits:
+                memory: 64Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: backup
+            persistentVolumeClaim:
+              claimName: opnsense-backup
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: Never
+      activeDeadlineSeconds: 900

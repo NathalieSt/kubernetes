@@ -257,6 +257,9 @@ spec:
     name: omni-tools
     namespace: flux-system
   - kind: Kustomization
+    name: opnsense-backup
+    namespace: flux-system
+  - kind: Kustomization
     name: orrery
     namespace: flux-system
   - kind: Kustomization

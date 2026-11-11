@@ -217,6 +217,32 @@ data:
         - text: NetBird on {{ grains['os'] }} is not managed by Salt; install {{ version }} by hand.
 
     {%- endif %}
+  ntp.sls: |
+    {#- Time from OPNsense on the LAN first, so a node keeps it while the internet is gone; the
+        pool after it, which timesyncd moves to when OPNsense does not answer. #}
+    {%- if salt['file.file_exists']('/usr/lib/systemd/systemd-timesyncd') %}
+
+    timesyncd-servers:
+      file.managed:
+        - name: /etc/systemd/timesyncd.conf.d/10-opnsense.conf
+        - makedirs: True
+        - contents: |
+            # Managed by Salt (ntp); edit the state in kubernetes-generator.
+            [Time]
+            NTP=192.168.1.1 0.debian.pool.ntp.org 1.debian.pool.ntp.org
+      service.running:
+        - name: systemd-timesyncd
+        - enable: True
+        - watch:
+          - file: timesyncd-servers
+
+    {%- else %}
+
+    timesyncd-absent:
+      test.show_notification:
+        - text: No systemd-timesyncd on this host; point its NTP client at 192.168.1.1 by hand.
+
+    {%- endif %}
   rescue__earlyoom.sls: |
     {#- Kills the largest process before the machine thrashes; the kubelet's eviction comes
         first, this is for what grows faster than it looks. Locked in memory, so it still runs. #}

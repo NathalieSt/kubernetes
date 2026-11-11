@@ -233,6 +233,7 @@ data:
     neko neko password admin-password
     ntfy/auth ntfy auth-users auth-tokens
     ntfy/db ntfy username=ntfy password@random
+    opnsense-backup opnsense-backup key secret
     paperless/oidc paperless client-secret
     paperless/app paperless secret-key
     paperless/db paperless username=paperless password@random
@@ -388,6 +389,10 @@ data:
           "ntfy": {
             "name": "ntfy",
             "policy": "path \"kvv2/data/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/auth\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "opnsense-backup": {
+            "name": "opnsense-backup",
+            "policy": "path \"kvv2/data/opnsense-backup\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/opnsense-backup\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "paperless": {
             "name": "paperless",
@@ -785,6 +790,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.ntfy.name}"
+            ],
+            "token_ttl": 600
+          },
+          "opnsense-backup": {
+            "backend": "kubernetes",
+            "role_name": "opnsense-backup",
+            "bound_service_account_names": [
+              "opnsense-backup-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "opnsense-backup"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.opnsense-backup.name}"
             ],
             "token_ttl": 600
           },
@@ -1330,6 +1350,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.ntfy_ntfy_db",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.opnsense-backup_opnsense-backup",
           "lifecycle": {
             "destroy": false
           }

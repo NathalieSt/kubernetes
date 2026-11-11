@@ -508,6 +508,29 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: opnsense-backup
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: opnsense-backup
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/infrastructure/opnsense-backup
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: garage
+  - name: k8up
+  serviceAccountName: flux-opnsense-backup
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: redis
   namespace: flux-system
 spec:
