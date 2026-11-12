@@ -97,6 +97,10 @@
         "name": "opnsense-backup",
         "policy": "path \"kvv2/data/opnsense-backup\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/opnsense-backup\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "opnsense-exporter": {
+        "name": "opnsense-exporter",
+        "policy": "path \"kvv2/data/opnsense-exporter\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/opnsense-exporter\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "paperless": {
         "name": "paperless",
         "policy": "path \"kvv2/data/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n"
@@ -508,6 +512,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.opnsense-backup.name}"
+        ],
+        "token_ttl": 600
+      },
+      "opnsense-exporter": {
+        "backend": "kubernetes",
+        "role_name": "opnsense-exporter",
+        "bound_service_account_names": [
+          "opnsense-exporter-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "opnsense-exporter"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.opnsense-exporter.name}"
         ],
         "token_ttl": 600
       },
@@ -1059,6 +1078,12 @@
     },
     {
       "from": "vault_kv_secret_v2.opnsense-backup_opnsense-backup",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.opnsense-exporter_opnsense-exporter",
       "lifecycle": {
         "destroy": false
       }

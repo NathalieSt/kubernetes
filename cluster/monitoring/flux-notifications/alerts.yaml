@@ -260,6 +260,9 @@ spec:
     name: opnsense-backup
     namespace: flux-system
   - kind: Kustomization
+    name: opnsense-exporter
+    namespace: flux-system
+  - kind: Kustomization
     name: orrery
     namespace: flux-system
   - kind: Kustomization

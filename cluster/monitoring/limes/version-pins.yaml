@@ -80,6 +80,15 @@ data:
           "generators": []
         },
         {
+          "key": "git",
+          "kind": "image",
+          "repository": "alpine/git",
+          "version": "v2.52.0@sha256:4a0e72d49596a1f5d3701aeedafdadc5c0da4062be4657c7bdc4017387f591cc",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
           "key": "gluetun",
           "kind": "image",
           "repository": "qmcgaw/gluetun",
@@ -877,6 +886,17 @@ data:
           ]
         },
         {
+          "key": "opnsense-exporter",
+          "kind": "image",
+          "repository": "ghcr.io/athennamind/opnsense-exporter",
+          "version": "0.0.19@sha256:e1f79c770dba7d3165e12836e4b6f849be93a8b2a25116b7ea11c5da8c3ad2db",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "opnsense-exporter"
+          ]
+        },
+        {
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
@@ -1079,7 +1099,7 @@ data:
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
-          "version": "5a8caeb@sha256:4542e2102d2133c575ca9fe03739da28edc9f131148d7886afeac101031ef149",
+          "version": "b2fa9d0@sha256:82f92e396fa5d02ad692ce9ace95a1a8b5c01819301f76bc19f4b252b14c2da8",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1112,7 +1132,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "ed740f5@sha256:b618377891da11902a3dca1f977f78bdf4e4f01a64af7b0ac9de80fcf7d14484",
+          "version": "09154c2@sha256:2d2a42cf15388cfb6961b4c94cb93c2c3a85f6f9d8bd4a73b021c1d52c65d84f",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

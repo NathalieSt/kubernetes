@@ -5,3 +5,4 @@ metadata:
   name: namespaces
 resources:
 - namespaces.yaml
+- default-deny-egress.yaml
