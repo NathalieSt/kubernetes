@@ -1627,6 +1627,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: ntfy
+          - job_name: opnsense-exporter
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - opnsense-exporter
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: opnsense-exporter
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: opnsense-exporter
           - job_name: qbittorrent
             metrics_path: /metrics
             scheme: http

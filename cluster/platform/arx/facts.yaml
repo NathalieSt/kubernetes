@@ -587,6 +587,14 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "opnsense-exporter",
+          "namespace": "opnsense-exporter",
+          "group": "monitoring",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
           "generator": "orrery",
           "namespace": "orrery",
           "group": "observability",

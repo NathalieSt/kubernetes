@@ -1,0 +1,46 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: opnsense-exporter
+spec:
+  groups:
+  - name: opnsense-exporter
+    interval: 1m
+    rules:
+    - alert: InternetDown
+      expr: opnsense_gateways_status{name="WAN_DHCP"} != 1
+      for: 3m
+      labels:
+        severity: critical
+        topic: alerts-nodes
+      annotations:
+        description: "WAN_DHCP has not been Online for 3 minutes (status {{ $value }}: 0 offline, 4 loss, 5 latency). OPNsense pings 9.9.9.9 past the Fritz!Box, so this is the line or the Fritz!Box, not the cluster. Names already looked up keep resolving from Unbound's cache meanwhile."
+        summary: OPNsense cannot reach the internet
+    - alert: InternetLossy
+      expr: opnsense_gateways_loss_percentage{name="WAN_DHCP"} > 10
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-nodes
+      annotations:
+        description: OPNsense has lost {{ $value }}% of its pings to 9.9.9.9 for 15 minutes.
+        summary: The internet line is losing packets
+    - alert: RouterServiceStopped
+      expr: opnsense_services_status{name=~"unbound|dnsmasq|ntpd"} == 0
+      for: 5m
+      labels:
+        severity: critical
+        topic: alerts-nodes
+      annotations:
+        description: "{{ $labels.description }} is not running on OPNsense: Unbound is every node's DNS, Dnsmasq their DHCP, ntpd their time. Start it under System → Diagnostics → Services."
+        summary: OPNsense's {{ $labels.name }} is stopped
+    - alert: RouterNotScraped
+      expr: absent(opnsense_up == 1)
+      for: 15m
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: "opnsense-exporter is down or its API key is refused, so InternetDown can say nothing. `kubectl -n opnsense-exporter logs deploy/opnsense-exporter`: a 403 names a missing privilege."
+        summary: Nothing reads OPNsense's metrics

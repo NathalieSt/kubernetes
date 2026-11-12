@@ -48,6 +48,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `gluetun-proxy` | `gluetun-proxy` | `kvv2/vpn` |
 | `main-pg` | `postgres` | `kvv2/authelia/db`, `kvv2/glitchtip/db`, `kvv2/healthchecks/db`, `kvv2/limes/db`, `kvv2/ntfy/db`, `kvv2/paperless/db`, `kvv2/tandoor/db`, `kvv2/zyme/db`, `kvv2/tessera/db`, `kvv2/arca/db`, `kvv2/tare/db`, `kvv2/audiomuseai/db`, `kvv2/sonarr/db`, `kvv2/radarr/db`, `kvv2/lidarr/db`, `kvv2/prowlarr/db`, `kvv2/bazarr/db`, `kvv2/seerr/db` |
 | `opnsense-backup` | `opnsense-backup` | `kvv2/opnsense-backup` |
+| `opnsense-exporter` | `opnsense-exporter` | `kvv2/opnsense-exporter` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |
 | `glitchtip` | `glitchtip` | `kvv2/glitchtip/secret`, `kvv2/glitchtip/oidc`, `kvv2/glitchtip/db` |
 | `healthchecks` | `healthchecks` | `kvv2/healthchecks/secret`, `kvv2/healthchecks/oidc`, `kvv2/healthchecks/db` |

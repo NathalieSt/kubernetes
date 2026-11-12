@@ -234,6 +234,7 @@ data:
     ntfy/auth ntfy auth-users auth-tokens
     ntfy/db ntfy username=ntfy password@random
     opnsense-backup opnsense-backup key secret
+    opnsense-exporter opnsense-exporter key secret
     paperless/oidc paperless client-secret
     paperless/app paperless secret-key
     paperless/db paperless username=paperless password@random
@@ -393,6 +394,10 @@ data:
           "opnsense-backup": {
             "name": "opnsense-backup",
             "policy": "path \"kvv2/data/opnsense-backup\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/opnsense-backup\" {\n  capabilities = [\"read\"]\n}\n"
+          },
+          "opnsense-exporter": {
+            "name": "opnsense-exporter",
+            "policy": "path \"kvv2/data/opnsense-exporter\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/opnsense-exporter\" {\n  capabilities = [\"read\"]\n}\n"
           },
           "paperless": {
             "name": "paperless",
@@ -805,6 +810,21 @@ data:
             "audience": "vault",
             "token_policies": [
               "${vault_policy.opnsense-backup.name}"
+            ],
+            "token_ttl": 600
+          },
+          "opnsense-exporter": {
+            "backend": "kubernetes",
+            "role_name": "opnsense-exporter",
+            "bound_service_account_names": [
+              "opnsense-exporter-vault-serviceaccount"
+            ],
+            "bound_service_account_namespaces": [
+              "opnsense-exporter"
+            ],
+            "audience": "vault",
+            "token_policies": [
+              "${vault_policy.opnsense-exporter.name}"
             ],
             "token_ttl": 600
           },
@@ -1356,6 +1376,12 @@ data:
         },
         {
           "from": "vault_kv_secret_v2.opnsense-backup_opnsense-backup",
+          "lifecycle": {
+            "destroy": false
+          }
+        },
+        {
+          "from": "vault_kv_secret_v2.opnsense-exporter_opnsense-exporter",
           "lifecycle": {
             "destroy": false
           }

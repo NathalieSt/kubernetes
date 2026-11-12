@@ -1,0 +1,151 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-dashboard-drill-scripts
+data:
+  drill-git.sh: |
+    #!/bin/sh
+    # git fsck on every bare repository a restore drill brought back. Needs SCRATCH.
+    # A repository is a directory holding HEAD, objects/ and refs/; exit 1 if any fails.
+    set -eu
+
+    checked=0
+    failed=0
+    list=$(mktemp -p "$SCRATCH" .git-XXXXXX)
+    find "$SCRATCH" -name '.*' -prune -o -type f -name HEAD -print > "$list"
+    while IFS= read -r head; do
+      repo=$(dirname "$head")
+      [ -d "$repo/objects" ] && [ -d "$repo/refs" ] || continue
+      checked=$((checked + 1))
+      if out=$(git -C "$repo" fsck --no-dangling --no-progress 2>&1); then
+        echo "ok    ${repo#"$SCRATCH"/}"
+      else
+        failed=$((failed + 1))
+        echo "FAIL  ${repo#"$SCRATCH"/}: $(echo "$out" | head -5)"
+      fi
+    done < "$list"
+    rm -f "$list"
+
+    echo "git: $checked repositories, $failed failed"
+    [ "$failed" -eq 0 ]
+  drill-postgres.sh: |
+    #!/bin/sh
+    # Loads every pg_dumpall a drill restored into a throwaway server of the pinned image; fails on
+    # any error but the one a whole-cluster dump always meets. Needs SCRATCH.
+    set -eu
+
+    data="$SCRATCH/.pg"
+    log="$SCRATCH/.pg-load.log"
+    checked=0
+
+    stop() { pg_ctl -D "$data" -m immediate stop >/dev/null 2>&1 || true; }
+    trap stop EXIT
+
+    dumps=$(mktemp -p "$SCRATCH" .dumps-XXXXXX)
+    find "$SCRATCH" -name '.*' -prune -o -type f -name '*.sql' -print > "$dumps"
+    while IFS= read -r dump; do
+      # pg_dumpall's own last line: a stream that ended early does not have it.
+      tail -c 200 "$dump" | grep -q 'PostgreSQL database cluster dump complete' ||
+        { echo "FAIL  ${dump#"$SCRATCH"/}: ends early"; exit 1; }
+      checked=$((checked + 1))
+
+      rm -rf "$data"
+      initdb -D "$data" -U postgres --auth=trust >/dev/null
+      pg_ctl -D "$data" -w -l "$SCRATCH/.pg-server.log" \
+        -o "-c listen_addresses= -k $SCRATCH -c fsync=off -c full_page_writes=off" start >/dev/null
+      psql -h "$SCRATCH" -U postgres -d postgres -X -q -f "$dump" > "$log" 2>&1 || true
+
+      # --clean drops and recreates the role the dump was taken as, which is the one loading it.
+      errors=$(grep 'ERROR:' "$log" |
+        grep -v -e 'current user cannot be dropped' -e 'role "postgres" already exists' || true)
+      if [ -n "$errors" ]; then
+        echo "FAIL  ${dump#"$SCRATCH"/}: $(echo "$errors" | wc -l) errors loading it"
+        echo "$errors" | head -20
+        exit 1
+      fi
+
+      # Every database the dump creates must be there afterwards, by name.
+      loaded=0
+      for db in $(sed -n 's/^CREATE DATABASE \("[^"]*"\|[^ ]*\) .*/\1/p' "$dump" | tr -d '"'); do
+        tables=$(psql -h "$SCRATCH" -U postgres -d "$db" -XAtc \
+          "select count(*) from pg_tables where schemaname not in ('pg_catalog', 'information_schema')") ||
+          { echo "FAIL  ${dump#"$SCRATCH"/}: database $db is missing after loading it"; exit 1; }
+        loaded=$((loaded + 1))
+        echo "      $db: $tables tables"
+      done
+      [ "$loaded" -gt 0 ] || { echo "FAIL  ${dump#"$SCRATCH"/}: creates no database"; exit 1; }
+      echo "ok    ${dump#"$SCRATCH"/} ($loaded databases)"
+      stop
+      rm -rf "$data"
+    done < "$dumps"
+    rm -f "$dumps"
+
+    echo "postgres: $checked dumps"
+  drill-sqlite.py: |
+    """integrity_check on every SQLite database a restore drill brought back, found by its header.
+
+    Each database is checked on a copy beside its WAL and journal, so a hot backup is opened the way
+    the app would open it after a restore. Exit 1 if any is not "ok".
+    """
+
+    import os
+    import shutil
+    import sqlite3
+    import sys
+    import tempfile
+
+    SCRATCH = os.environ["SCRATCH"]
+    HEADER = b"SQLite format 3\x00"
+    SIDECARS = ("-wal", "-journal")
+
+
+    def is_sqlite(path):
+        try:
+            with open(path, "rb") as f:
+                return f.read(len(HEADER)) == HEADER
+        except OSError:
+            return False
+
+
+    def check(path):
+        with tempfile.TemporaryDirectory(dir=SCRATCH, prefix=".sqlite-") as tmp:
+            copy = os.path.join(tmp, "db")
+            shutil.copyfile(path, copy)
+            for suffix in SIDECARS:
+                if os.path.exists(path + suffix):
+                    shutil.copyfile(path + suffix, copy + suffix)
+            connection = sqlite3.connect(copy)
+            try:
+                rows = connection.execute("pragma integrity_check").fetchall()
+                tables = connection.execute("select count(*) from sqlite_master where type = 'table'").fetchone()[0]
+            finally:
+                connection.close()
+        result = "; ".join(row[0] for row in rows)
+        return result, tables
+
+
+    def main():
+        checked, failed = 0, 0
+        for root, dirs, files in os.walk(SCRATCH):
+            dirs[:] = [d for d in dirs if not d.startswith(".")]
+            for name in sorted(files):
+                path = os.path.join(root, name)
+                if name.endswith(SIDECARS + ("-shm",)) or not is_sqlite(path):
+                    continue
+                checked += 1
+                try:
+                    result, tables = check(path)
+                except sqlite3.Error as error:
+                    result, tables = f"cannot open: {error}", 0
+                relative = os.path.relpath(path, SCRATCH)
+                if result == "ok":
+                    print(f"ok    {relative} ({tables} tables)", flush=True)
+                else:
+                    failed += 1
+                    print(f"FAIL  {relative}: {result[:500]}", flush=True)
+        print(f"sqlite: {checked} databases, {failed} failed", flush=True)
+        sys.exit(1 if failed else 0)
+
+
+    main()

@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: opnsense-exporter
+resources:
+- vault-secrets.yaml
+- certificate-configmap.yaml
+- deployment.yaml
+- network-policy.yaml
+- alert-rules.yaml

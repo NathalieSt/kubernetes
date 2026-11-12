@@ -199,6 +199,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: opnsense-exporter
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: opnsense-exporter
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/opnsense-exporter
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  serviceAccountName: flux-opnsense-exporter
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: orrery
   namespace: flux-system
 spec:
