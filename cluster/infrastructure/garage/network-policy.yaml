@@ -31,6 +31,9 @@ spec:
           kubernetes.io/metadata.name: forgejo-pg-cluster
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: karakeep
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: kavita
     - namespaceSelector:
         matchLabels:

@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        internal-gateway.nathalie-stiefsohn.eu/sidecar: 5f560a6d091523fd8d0c6c53792aa2888a98deee36c50922b7ac10ea4a8c168f
+        internal-gateway.nathalie-stiefsohn.eu/sidecar: 81cf6072fc1c7c413ebb91892c23d732054028d1d7f2eaef6432ba7fb6cb1878
       labels:
         app.kubernetes.io/name: internal-gateway-secondary
         app.kubernetes.io/version: v3.7.17

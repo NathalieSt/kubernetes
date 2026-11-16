@@ -215,6 +215,9 @@ spec:
     name: k8up
     namespace: flux-system
   - kind: Kustomization
+    name: karakeep
+    namespace: flux-system
+  - kind: Kustomization
     name: kavita
     namespace: flux-system
   - kind: Kustomization
@@ -231,6 +234,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: main-pg
+    namespace: flux-system
+  - kind: Kustomization
+    name: miniflux
     namespace: flux-system
   - kind: Kustomization
     name: music-library-builder

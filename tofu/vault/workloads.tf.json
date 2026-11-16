@@ -61,6 +61,10 @@
         "name": "heartbeats",
         "policy": "path \"kvv2/data/heartbeats\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/heartbeats\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "karakeep": {
+        "name": "karakeep",
+        "policy": "path \"kvv2/data/karakeep\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/karakeep\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "kavita": {
         "name": "kavita",
         "policy": "path \"kvv2/data/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/kavita/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -79,7 +83,11 @@
       },
       "main-pg": {
         "name": "main-pg",
-        "policy": "path \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "miniflux": {
+        "name": "miniflux",
+        "policy": "path \"kvv2/data/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/miniflux/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/miniflux/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "music-library-builder": {
         "name": "music-library-builder",
@@ -380,6 +388,21 @@
         ],
         "token_ttl": 600
       },
+      "karakeep": {
+        "backend": "kubernetes",
+        "role_name": "karakeep",
+        "bound_service_account_names": [
+          "karakeep-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "karakeep"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.karakeep.name}"
+        ],
+        "token_ttl": 600
+      },
       "kavita": {
         "backend": "kubernetes",
         "role_name": "kavita",
@@ -452,6 +475,21 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.main-pg.name}"
+        ],
+        "token_ttl": 600
+      },
+      "miniflux": {
+        "backend": "kubernetes",
+        "role_name": "miniflux",
+        "bound_service_account_names": [
+          "miniflux-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "miniflux"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.miniflux.name}"
         ],
         "token_ttl": 600
       },
@@ -897,6 +935,12 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.karakeep_karakeep",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.kavita_kavita_oidc",
       "lifecycle": {
         "destroy": false
@@ -993,6 +1037,12 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.main-pg_miniflux_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.main-pg_ntfy_db",
       "lifecycle": {
         "destroy": false
@@ -1048,6 +1098,18 @@
     },
     {
       "from": "vault_kv_secret_v2.main-pg_zyme_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.miniflux_miniflux_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.miniflux_miniflux_oidc",
       "lifecycle": {
         "destroy": false
       }

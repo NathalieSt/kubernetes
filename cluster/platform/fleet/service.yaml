@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: fleet
-    app.kubernetes.io/version: 9ca360c
+    app.kubernetes.io/version: 0f7f0b6
   name: fleet
 spec:
   selector:

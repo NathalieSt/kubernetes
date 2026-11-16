@@ -1265,11 +1265,191 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   labels:
+    app.kubernetes.io/instance: karakeep
+    app.kubernetes.io/name: restore-drill
+  name: restore-drill-karakeep
+spec:
+  schedule: 30 10 8 * *
+  timeZone: Europe/Vienna
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  startingDeadlineSeconds: 3600
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/instance: karakeep
+            app.kubernetes.io/name: restore-drill
+        spec:
+          imagePullSecrets:
+          - name: forgejo-registry-secret
+          initContainers:
+          - command:
+            - /backup-dashboard
+            - drill
+            - --namespace
+            - karakeep
+            - --target
+            - /scratch
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:b2fa9d0@sha256:82f92e396fa5d02ad692ce9ace95a1a8b5c01819301f76bc19f4b252b14c2da8
+            name: restore
+            volumeMounts:
+            - mountPath: /scratch
+              name: scratch
+            - mountPath: /secrets/restic-seed
+              name: restic-seed
+            - mountPath: /secrets/restic-overrides
+              name: restic-overrides
+            - mountPath: /secrets/garage-key
+              name: garage-key
+            resources:
+              requests:
+                cpu: 100m
+                ephemeral-storage: 4Gi
+                memory: 128Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+          - command:
+            - python3
+            - /drill/drill-sqlite.py
+            image: python:3.14-alpine@sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df
+            name: sqlite
+            volumeMounts:
+            - mountPath: /scratch
+              name: scratch
+            - mountPath: /drill
+              name: scripts
+            env:
+            - name: SCRATCH
+              value: /scratch
+            - name: HOME
+              value: /scratch
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+          - command:
+            - sh
+            - /drill/drill-git.sh
+            image: alpine/git:v2.52.0@sha256:4a0e72d49596a1f5d3701aeedafdadc5c0da4062be4657c7bdc4017387f591cc
+            name: git
+            volumeMounts:
+            - mountPath: /scratch
+              name: scratch
+            - mountPath: /drill
+              name: scripts
+            env:
+            - name: SCRATCH
+              value: /scratch
+            - name: HOME
+              value: /scratch
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+          - command:
+            - sh
+            - /drill/drill-postgres.sh
+            image: ghcr.io/cloudnative-pg/postgresql:18.6@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533
+            name: postgres
+            volumeMounts:
+            - mountPath: /scratch
+              name: scratch
+            - mountPath: /drill
+              name: scripts
+            env:
+            - name: SCRATCH
+              value: /scratch
+            - name: HOME
+              value: /scratch
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          containers:
+          - command:
+            - cat
+            - /scratch/drill.json
+            image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+            name: report
+            volumeMounts:
+            - mountPath: /scratch
+              name: scratch
+            resources:
+              limits:
+                memory: 16Mi
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+              allowPrivilegeEscalation: false
+          volumes:
+          - name: scratch
+            emptyDir:
+              sizeLimit: 30Gi
+          - name: scripts
+            configMap:
+              name: backup-dashboard-drill-scripts
+          - name: restic-seed
+            secret:
+              secretName: restic-seed-password-secret
+          - name: restic-overrides
+            secret:
+              secretName: restic-override-passwords-secret
+              optional: true
+          - name: garage-key
+            secret:
+              secretName: garage-backup-access-key-secret
+          securityContext:
+            fsGroup: 26
+            runAsUser: 26
+            runAsGroup: 26
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: Never
+      activeDeadlineSeconds: 14400
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
     app.kubernetes.io/instance: kavita
     app.kubernetes.io/name: restore-drill
   name: restore-drill-kavita
 spec:
-  schedule: 30 10 8 * *
+  schedule: 30 10 9 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -1449,7 +1629,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-mail
 spec:
-  schedule: 30 10 9 * *
+  schedule: 30 10 10 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -1629,7 +1809,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-opnsense-backup
 spec:
-  schedule: 30 10 10 * *
+  schedule: 30 10 11 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -1809,7 +1989,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-paperless
 spec:
-  schedule: 30 10 11 * *
+  schedule: 30 10 12 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -1989,7 +2169,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-postgres
 spec:
-  schedule: 30 10 12 * *
+  schedule: 30 10 13 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -2169,7 +2349,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-radicale
 spec:
-  schedule: 30 10 13 * *
+  schedule: 30 10 14 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -2349,7 +2529,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-tandoor
 spec:
-  schedule: 30 10 14 * *
+  schedule: 30 10 15 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -2529,7 +2709,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-trilium
 spec:
-  schedule: 30 10 15 * *
+  schedule: 30 10 16 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -2709,7 +2889,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-vault
 spec:
-  schedule: 30 10 16 * *
+  schedule: 30 10 17 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -2895,7 +3075,7 @@ metadata:
     app.kubernetes.io/name: restore-drill
   name: restore-drill-vim-dojo
 spec:
-  schedule: 30 10 17 * *
+  schedule: 30 10 18 * *
   timeZone: Europe/Vienna
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1

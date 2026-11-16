@@ -522,6 +522,18 @@ data:
           description: Extensions, filter lists and bangs for Helium
           namespace: helium-services
           app: helium-services
+      - karakeep:
+          href: https://karakeep.netbird.nathalie-stiefsohn.eu
+          icon: karakeep.png
+          description: Bookmarks and read-later, crawled into readable copies
+          namespace: karakeep
+          app: karakeep
+      - miniflux:
+          href: https://miniflux.netbird.nathalie-stiefsohn.eu
+          icon: miniflux.png
+          description: Feeds, read in one place
+          namespace: miniflux
+          app: miniflux
       - neko:
           href: https://neko.netbird.nathalie-stiefsohn.eu
           icon: neko.png

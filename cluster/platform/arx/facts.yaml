@@ -437,6 +437,18 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "karakeep",
+          "namespace": "karakeep",
+          "group": "web",
+          "about": "Bookmarks and read-later, crawled into readable copies",
+          "url": "https://karakeep.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false,
+          "leavesBy": "gluetun-proxy"
+        },
+        {
           "generator": "kavita",
           "namespace": "kavita",
           "group": "media",
@@ -497,6 +509,18 @@ data:
           "sleeps": false,
           "sendsBackup": true,
           "usesCistern": true
+        },
+        {
+          "generator": "miniflux",
+          "namespace": "miniflux",
+          "group": "web",
+          "about": "Feeds, read in one place",
+          "url": "https://miniflux.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
         },
         {
           "generator": "music-library-builder",

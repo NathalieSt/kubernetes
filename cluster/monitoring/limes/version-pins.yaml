@@ -900,7 +900,7 @@ data:
           "key": "orrery",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "e8b0c2b@sha256:202154e8decdbec9387db202f34ba475e774d9d60514dc611d72315dc4299aeb",
+          "version": "ca444e7@sha256:6d44e039ba6e5f0f2fce773cfd5768f6ea6b0ef2ced421c5e77ef7e05ceb60b1",
           "file": "versions/monitoring.json",
           "inVersionsFile": true,
           "generators": [
@@ -1121,7 +1121,7 @@ data:
           "key": "fleet",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fleet",
-          "version": "9ca360c@sha256:42f6a459a95f64842c5b1c94c01f8ed2487f8ae8b562f3dee42ff0e2f8267a93",
+          "version": "0f7f0b6@sha256:aa7e068320d14179699fe1090c84c97d39e81412eece31466d2db32bb5ddf892",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1132,7 +1132,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "09154c2@sha256:2d2a42cf15388cfb6961b4c94cb93c2c3a85f6f9d8bd4a73b021c1d52c65d84f",
+          "version": "fbef7dd@sha256:485843f825bcf06ae7e83d04c9145622630cb8f97876f353109b9421c231acc0",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1236,6 +1236,50 @@ data:
           "inVersionsFile": true,
           "generators": [
             "helium-services"
+          ]
+        },
+        {
+          "key": "karakeep",
+          "kind": "image",
+          "repository": "ghcr.io/karakeep-app/karakeep",
+          "version": "0.34.1@sha256:69ae5315c618b7c14c1af3e34c6e211acdb231793af424ecd1cab0b70691d987",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "karakeep"
+          ]
+        },
+        {
+          "key": "karakeep-chrome",
+          "kind": "image",
+          "repository": "ghcr.io/karakeep-app/karakeep-chrome",
+          "version": "157.0.8103.38-r1@sha256:6c80ed470871bb8c129dc58692ca1714cddbc1392faad3ebf59aecd2e6e58eac",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "karakeep"
+          ]
+        },
+        {
+          "key": "karakeep-meilisearch",
+          "kind": "image",
+          "repository": "getmeili/meilisearch",
+          "version": "v1.41.0@sha256:860fa4baed04ae1c235de870edab0c8006227546dea1bbb6411fbfc5e27cf1db",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "karakeep"
+          ]
+        },
+        {
+          "key": "miniflux",
+          "kind": "image",
+          "repository": "ghcr.io/miniflux/miniflux",
+          "version": "2.3.5@sha256:8fd6c3c434ecc3d4083306f83e03c0bb74c632e0f8378da5ead7e1773b0b89c9",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "miniflux"
           ]
         },
         {
