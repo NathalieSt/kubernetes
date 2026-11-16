@@ -1,0 +1,52 @@
+---
+apiVersion: k8up.io/v1
+kind: Schedule
+metadata:
+  name: karakeep-backup
+  namespace: karakeep
+spec:
+  backend:
+    repoPasswordSecretRef:
+      name: restic-repo-password-secret
+      key: password
+    s3:
+      endpoint: http://garage.garage.svc.cluster.local:3900
+      bucket: kubernetes-backups-karakeep
+      accessKeyIDSecretRef:
+        name: garage-backup-access-key-secret
+        key: access-key-id
+      secretAccessKeySecretRef:
+        name: garage-backup-access-key-secret
+        key: secret-access-key
+  backup:
+    schedule: 30 3 * * *
+    podSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      seccompProfile:
+        type: RuntimeDefault
+    podConfigRef:
+      name: karakeep-backup-pod
+    activeDeadlineSeconds: 28800
+  prune:
+    schedule: 30 4 * * 0
+    retention:
+      keepLast: 14
+      keepWeekly: 8
+      keepMonthly: 6
+---
+apiVersion: k8up.io/v1
+kind: PodConfig
+metadata:
+  name: karakeep-backup-pod
+  namespace: karakeep
+spec:
+  template:
+    spec:
+      containers:
+      - name: backup
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          allowPrivilegeEscalation: false

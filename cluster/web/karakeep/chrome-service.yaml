@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: karakeep-chrome
+    app.kubernetes.io/version: 157.0.8103.38-r1
+  name: karakeep-chrome
+spec:
+  selector:
+    app.kubernetes.io/name: karakeep-chrome
+  ports:
+  - name: devtools
+    port: 9222
+    targetPort: 9222

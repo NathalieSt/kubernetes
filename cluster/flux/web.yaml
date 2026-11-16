@@ -72,6 +72,58 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: karakeep
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: karakeep
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/karakeep
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: k8up
+  - name: garage
+  - name: vault-secrets-operator-config
+  - name: gluetun-proxy
+  - name: internal-dns
+  serviceAccountName: flux-karakeep
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: miniflux
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: miniflux
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/web/miniflux
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: vault-secrets-operator-config
+  - name: gluetun-proxy
+  - name: internal-dns
+  serviceAccountName: flux-miniflux
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: neko
   namespace: flux-system
 spec:

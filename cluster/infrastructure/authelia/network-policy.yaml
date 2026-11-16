@@ -38,9 +38,11 @@ spec:
           - gameyfin
           - glitchtip
           - healthchecks
+          - karakeep
           - kavita
           - limes
           - mail
+          - miniflux
           - orrery
           - paperless
           - pharos

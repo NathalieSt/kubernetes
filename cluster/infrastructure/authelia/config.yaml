@@ -115,6 +115,9 @@ data:
         - jellyfin.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
+        - karakeep.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
         - kavita.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -126,6 +129,9 @@ data:
       - domain:
         - mail.netbird.nathalie-stiefsohn.eu
         policy: one_factor
+      - domain:
+        - miniflux.netbird.nathalie-stiefsohn.eu
+        policy: bypass
       - domain:
         - music.netbird.nathalie-stiefsohn.eu
         policy: one_factor
@@ -355,6 +361,24 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
+        - client_id: karakeep
+          client_name: karakeep
+          public: true
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://karakeep.netbird.nathalie-stiefsohn.eu/api/auth/callback/custom
+          scopes:
+          - openid
+          - profile
+          - email
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: none
+          consent_mode: implicit
         - client_id: kavita
           client_name: kavita
           public: false
@@ -416,6 +440,26 @@ data:
           response_types:
           - code
           token_endpoint_auth_method: client_secret_post
+          consent_mode: implicit
+        - client_id: miniflux
+          client_name: miniflux
+          public: false
+          client_secret: "{{ if glob `/secrets/oidc-clients/miniflux` }}{{ secret `/secrets/oidc-clients/miniflux` }}{{ else }}unwritten-secret-for-miniflux{{ end }}"
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://miniflux.netbird.nathalie-stiefsohn.eu/oauth2/oidc/callback
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          grant_types:
+          - authorization_code
+          response_types:
+          - code
+          token_endpoint_auth_method: client_secret_basic
           consent_mode: implicit
         - client_id: orrery
           client_name: orrery

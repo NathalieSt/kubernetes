@@ -1,0 +1,154 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: karakeep-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: karakeep
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-gateway
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - internal-gateway
+          - internal-gateway-secondary
+          - blackbox-exporter
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: miniflux
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: miniflux
+    ports:
+    - port: 3000
+      protocol: TCP
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-dns
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-dns
+    ports:
+    - port: 5353
+      protocol: UDP
+    - port: 5353
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8888
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: karakeep
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: karakeep-chrome
+    ports:
+    - port: 9222
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: karakeep
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: karakeep-meilisearch
+    ports:
+    - port: 7700
+      protocol: TCP
+  - to:
+    - ipBlock:
+        cidr: 100.64.0.0/10
+    ports:
+    - port: 443
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: karakeep-chrome-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: karakeep-chrome
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: karakeep
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: karakeep
+    ports:
+    - port: 9222
+      protocol: TCP
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-dns
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-dns
+    ports:
+    - port: 5353
+      protocol: UDP
+    - port: 5353
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8888
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: karakeep-meilisearch-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: karakeep-meilisearch
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: karakeep
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: karakeep
+    ports:
+    - port: 7700
+      protocol: TCP
+  egress: []

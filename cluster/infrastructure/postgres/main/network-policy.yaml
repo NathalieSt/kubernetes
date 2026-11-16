@@ -26,6 +26,7 @@ spec:
           - tare
           - limes
           - paperless
+          - miniflux
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
@@ -47,6 +48,7 @@ spec:
           - tare-crawl
           - limes
           - paperless
+          - miniflux
           - sonarr
           - radarr
           - lidarr

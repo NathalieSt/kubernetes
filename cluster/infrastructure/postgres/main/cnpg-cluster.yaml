@@ -77,6 +77,11 @@ spec:
       login: true
       passwordSecret:
         name: tare-db-role
+    - name: miniflux
+      ensure: present
+      login: true
+      passwordSecret:
+        name: miniflux-db-role
     - name: audiomuseai
       ensure: present
       login: true

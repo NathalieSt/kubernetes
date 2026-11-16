@@ -186,6 +186,11 @@ data:
           entryPoints:
           - websecure
           service: jellyfin
+        karakeep:
+          rule: Host(`karakeep.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: karakeep
         kavita:
           rule: Host(`kavita.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -215,6 +220,11 @@ data:
           service: mail
           middlewares:
           - authelia
+        miniflux:
+          rule: Host(`miniflux.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: miniflux
         music-library-builder:
           rule: Host(`music.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -464,6 +474,10 @@ data:
           loadBalancer:
             servers:
             - url: http://jellyfin.jellyfin.svc.cluster.local:8096
+        karakeep:
+          loadBalancer:
+            servers:
+            - url: http://karakeep.karakeep.svc.cluster.local:3000
         kavita:
           loadBalancer:
             servers:
@@ -480,6 +494,10 @@ data:
           loadBalancer:
             servers:
             - url: http://roundcube.mail.svc.cluster.local:8000
+        miniflux:
+          loadBalancer:
+            servers:
+            - url: http://miniflux.miniflux.svc.cluster.local:8080
         music-library-builder:
           loadBalancer:
             servers:

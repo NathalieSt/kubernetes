@@ -49,6 +49,25 @@ spec:
           values:
           - tare
           - tare-crawl
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: karakeep
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - karakeep
+          - karakeep-chrome
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: miniflux
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - miniflux
     ports:
     - port: 5353
       protocol: UDP

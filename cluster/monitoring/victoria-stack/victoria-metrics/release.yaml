@@ -973,6 +973,12 @@ spec:
                 probe_namespace: jellyfin
                 scale_to_zero: "true"
             - targets:
+              - http://karakeep.karakeep.svc.cluster.local:3000/
+              labels:
+                probe_name: karakeep
+                probe_namespace: karakeep
+                scale_to_zero: "false"
+            - targets:
               - http://kavita.kavita.svc.cluster.local:5000/
               labels:
                 probe_name: kavita
@@ -995,6 +1001,12 @@ spec:
               labels:
                 probe_name: mail
                 probe_namespace: mail
+                scale_to_zero: "false"
+            - targets:
+              - http://miniflux.miniflux.svc.cluster.local:8080/
+              labels:
+                probe_name: miniflux
+                probe_namespace: miniflux
                 scale_to_zero: "false"
             - targets:
               - http://music-library-builder.jellyfin.svc.cluster.local:8140/

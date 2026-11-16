@@ -36,7 +36,7 @@ spec:
         - name: OPNSENSE_EXPORTER_OPS_PROTOCOL
           value: https
         - name: OPNSENSE_EXPORTER_OPS_API
-          value: OPNsense.internal
+          value: opnsense.internal
         - name: OPNSENSE_EXPORTER_INSTANCE_LABEL
           value: opnsense
         - name: OPS_API_KEY_FILE
@@ -95,4 +95,4 @@ spec:
       hostAliases:
       - ip: 192.168.1.1
         hostnames:
-        - OPNsense.internal
+        - opnsense.internal

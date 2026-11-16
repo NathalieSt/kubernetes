@@ -16,6 +16,7 @@ resources:
 - tessera-db.yaml
 - arca-db.yaml
 - tare-db.yaml
+- miniflux-db.yaml
 - limes-db.yaml
 - paperless-db.yaml
 - sonarr-main-db.yaml

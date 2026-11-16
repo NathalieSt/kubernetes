@@ -1,0 +1,112 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: miniflux
+    app.kubernetes.io/version: 2.3.5
+  name: miniflux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: miniflux
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: miniflux
+        app.kubernetes.io/version: 2.3.5
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.54
+        searches:
+        - miniflux.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      containers:
+      - image: ghcr.io/miniflux/miniflux:2.3.5@sha256:8fd6c3c434ecc3d4083306f83e03c0bb74c632e0f8378da5ead7e1773b0b89c9
+        name: miniflux
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: miniflux-db-secret
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: miniflux-db-secret
+        - name: DATABASE_URL
+          value: postgres://$(PGUSER):$(PGPASSWORD)@postgres-rw.postgres.svc.cluster.local:5432/miniflux?sslmode=require
+        - name: RUN_MIGRATIONS
+          value: "1"
+        - name: BASE_URL
+          value: https://miniflux.netbird.nathalie-stiefsohn.eu
+        - name: DISABLE_LOCAL_AUTH
+          value: "1"
+        - name: OAUTH2_PROVIDER
+          value: oidc
+        - name: OAUTH2_OIDC_PROVIDER_NAME
+          value: Authelia
+        - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: OAUTH2_CLIENT_ID
+          value: miniflux
+        - name: OAUTH2_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client-secret
+              name: miniflux-oidc-secret
+        - name: OAUTH2_REDIRECT_URL
+          value: https://miniflux.netbird.nathalie-stiefsohn.eu/oauth2/oidc/callback
+        - name: OAUTH2_USER_CREATION
+          value: "1"
+        - name: OAUTH2_ADDITIONAL_SCOPES
+          value: groups
+        - name: OAUTH2_GROUP_CLAIM
+          value: groups
+        - name: OAUTH2_ADMIN_GROUP
+          value: admins
+        - name: LISTEN_ADDR
+          value: 0.0.0.0:8080
+        - name: HTTP_CLIENT_PROXIES
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: INTEGRATION_ALLOW_PRIVATE_NETWORKS
+          value: "1"
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 65534
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+          periodSeconds: 30
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
