@@ -1055,7 +1055,7 @@ data:
           "key": "tare",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/tare",
-          "version": "71720e9@sha256:19e56c227742912e15e241815276c7c47800546eeee654f92d5c52141f7af384",
+          "version": "c467e88@sha256:19e56c227742912e15e241815276c7c47800546eeee654f92d5c52141f7af384",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
