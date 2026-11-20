@@ -59,6 +59,13 @@ data:
         return opt;
       }
     }
+    function mapOr(opt, $$default, f) {
+      if (opt !== void 0) {
+        return f(valFromOption(opt));
+      } else {
+        return $$default;
+      }
+    }
     function map(opt, f) {
       if (opt !== void 0) {
         return some(f(valFromOption(opt)));
@@ -272,7 +279,7 @@ data:
     function readField(json, key) {
       return flatMap(flatMap(Decode.object(json), (__x) => __x[key]), Decode.string);
     }
-    async function readExit() {
+    async function readGluetunExit() {
       let val;
       try {
         val = await send("/v1/publicip/ip", void 0, void 0);
@@ -284,6 +291,33 @@ data:
       }
       let json = parse(val[1]);
       return map(filter(readField(json, "public_ip"), (ip) => ip !== ""), (param) => json);
+    }
+    var echoUrl = "https://api.country.is/";
+    async function readEchoedExit() {
+      let response;
+      try {
+        response = await fetch(echoUrl, {
+          signal: some(AbortSignal.timeout(8e3))
+        });
+      } catch (exn) {
+        return;
+      }
+      if (response.status !== 200) {
+        return;
+      }
+      let json = parse(await response.text());
+      return map(readField(json, "ip"), (ip) => ({
+        public_ip: ip,
+        country: mapOr(readField(json, "country"), null, (prim) => prim)
+      }));
+    }
+    async function readExit() {
+      let exit = await readGluetunExit();
+      if (exit !== void 0) {
+        return exit;
+      } else {
+        return await readEchoedExit();
+      }
     }
     async function readStatus() {
       let val;
