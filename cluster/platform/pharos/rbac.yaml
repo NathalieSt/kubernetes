@@ -119,6 +119,7 @@ rules:
   resources:
   - schedules
   - backups
+  - prunes
   verbs:
   - get
   - list
