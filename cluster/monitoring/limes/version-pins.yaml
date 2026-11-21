@@ -735,7 +735,7 @@ data:
           "key": "music-library-builder",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
-          "version": "d445b02@sha256:9a793f92e4319014b3ece533d7674f5d88f040958f33e3a2ab87de3a822c7cf9",
+          "version": "faa588e@sha256:6829907922631817f4c5ffaeed0ff0cac761367ef235fcffb62f5debcfdb1588",
           "file": "versions/mediaserver.json",
           "inVersionsFile": true,
           "generators": [
@@ -1132,7 +1132,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "614098f@sha256:840e693d0434b9636e8c6de5faf76fa2cdc91f196e22fa20df3c2727a5978b58",
+          "version": "c450404@sha256:7cee18039e04c0052ca22dddb2b8c4e073df2c25b2ebad00c69ab4d4f63f0344",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
