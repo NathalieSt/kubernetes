@@ -30,6 +30,28 @@ spec:
         - mountPath: /kavita/config
           name: config-volume
       - command:
+        - python3
+        - -I
+        - /scripts/clear-migration-lock.py
+        - /kavita/config/kavita.db
+        image: python:3.14-alpine@sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df
+        name: clear-migration-lock
+        volumeMounts:
+        - mountPath: /kavita/config
+          name: config-volume
+        - mountPath: /scripts
+          name: migration-lock-script-volume
+          readOnly: true
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - command:
         - sh
         - /scripts/oidc-appsettings.sh
         - /kavita/config/appsettings.json
@@ -115,5 +137,9 @@ spec:
       - name: oidc-secret-volume
         secret:
           secretName: kavita-oidc-secret
+      - name: migration-lock-script-volume
+        configMap:
+          name: kavita-migration-lock-script
+          defaultMode: 365
       - name: tmp
         emptyDir: {}

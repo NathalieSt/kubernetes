@@ -6,6 +6,7 @@ metadata:
 resources:
 - theme-configmap.yaml
 - oidc-script-configmap.yaml
+- migration-lock-script-configmap.yaml
 - vault-secrets.yaml
 - deployment.yaml
 - config-pvc.yaml
