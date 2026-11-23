@@ -8,6 +8,7 @@ resources:
 - config-pvc.yaml
 - gameyfin-games-pvc.yaml
 - service.yaml
+- scaled-object.yaml
 - vault-secrets.yaml
 - network-policy.yaml
 - gateway-ingress-network-policy.yaml

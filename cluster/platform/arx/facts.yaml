@@ -277,7 +277,8 @@ data:
           "about": "Games",
           "url": "https://gameyfin.netbird.nathalie-stiefsohn.eu",
           "entry": "guard",
-          "sleeps": false,
+          "sleeps": true,
+          "wakes": "when asked for",
           "sendsBackup": false,
           "usesCistern": false,
           "leavesBy": "gluetun-proxy"

@@ -94,6 +94,7 @@ spec:
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  - name: keda
   - name: csi-driver-nfs
   - name: gluetun-proxy
   - name: internal-dns
