@@ -13,19 +13,19 @@ data:
      * styles and regenerate; Dashboard &gt; Branding will not stick, branding.xml is rewritten on pod start. */
 
     :root {
-      --halcyon-accent: #4e84c7;
-      --halcyon-accent-hover: #639be1;
-      --halcyon-accent-tint: #4e84c733;
-      --halcyon-on-accent: #f4fcff;
+      --halcyon-accent: #7e818f;
+      --halcyon-accent-hover: #9498a6;
+      --halcyon-accent-tint: #7e818f33;
+      --halcyon-on-accent: #f9fafd;
       --halcyon-danger: #bc6749;
     }
 
     html[data-theme="light"],
     html[data-theme="appletv"] {
-      --halcyon-accent: #005a66;
-      --halcyon-accent-hover: #004049;
-      --halcyon-accent-tint: #005a6633;
-      --halcyon-on-accent: #f4fcff;
+      --halcyon-accent: #30323c;
+      --halcyon-accent-hover: #21222a;
+      --halcyon-accent-tint: #30323c33;
+      --halcyon-on-accent: #f9fafd;
       --halcyon-danger: #783d28;
     }
 
@@ -33,10 +33,10 @@ data:
     html[data-theme="blueradiance"],
     html[data-theme="purplehaze"],
     html[data-theme="wmc"] {
-      --halcyon-accent: #86d4e2;
-      --halcyon-accent-hover: #b3e7f1;
-      --halcyon-accent-tint: #86d4e233;
-      --halcyon-on-accent: #020d12;
+      --halcyon-accent: #f2f3f8;
+      --halcyon-accent-hover: #f9fafd;
+      --halcyon-accent-tint: #f2f3f833;
+      --halcyon-on-accent: #0a0b0f;
       --halcyon-danger: #f7b39b;
     }
 
@@ -198,7 +198,7 @@ data:
     }
 
     .layout-tv .emby-button.detailFloatingButton:focus {
-      color: #3c6aa4;
+      color: #656874;
     }
 
     #dialogToc .bookplayerButtonIcon:hover {

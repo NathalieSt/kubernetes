@@ -11,76 +11,76 @@ data:
 
     :root {
       color-scheme: light dark;
-      --1d2021: #eaf6fb;
-      --282828: #e8f8fb;
-      --3c3836: #eaf6fb;
-      --504945: #d8eaf1;
-      --928374: #4c7281;
-      --a89984: #305360;
-      --bdae93: #1a3742;
+      --1d2021: #f2f3f8;
+      --282828: #ffffff;
+      --3c3836: #f2f3f8;
+      --504945: #d1d4dd;
+      --928374: #686b79;
+      --a89984: #4a4c58;
+      --bdae93: #30323c;
       --8ec07c: #1d5d40;
-      --ebdbb2: #1a3742;
-      --comment: #4c7281;
-      --default: #1a3742;
-      --keyword: #005a66;
+      --ebdbb2: #30323c;
+      --comment: #686b79;
+      --default: #30323c;
+      --keyword: #30323c;
       --string: #1d5d40;
     }
 
     .web .text-result .title {
-      color: #005a66;
+      color: #30323c;
     }
 
     .tabs .tab.selected {
-      border-bottom-color: #005a66;
+      border-bottom-color: #30323c;
     }
 
     .searchbox:focus-within {
-      border-color: #007785;
+      border-color: #30323c;
     }
 
     .quote {
-      border-left-color: #d8eaf1;
+      border-left-color: #d1d4dd;
     }
 
     #images .duration {
-      border-color: #d8eaf1;
+      border-color: #d1d4dd;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --1d2021: #071a21;
-        --282828: #093842;
-        --3c3836: #1a3742;
-        --504945: #305360;
-        --928374: #a4c4d1;
-        --a89984: #c0d9e4;
-        --bdae93: #eaf6fb;
+        --1d2021: #15171d;
+        --282828: #21222a;
+        --3c3836: #30323c;
+        --504945: #4a4c58;
+        --928374: #babdc9;
+        --a89984: #d1d4dd;
+        --bdae93: #f2f3f8;
         --8ec07c: #98d6b4;
-        --ebdbb2: #eaf6fb;
-        --comment: #a4c4d1;
-        --default: #eaf6fb;
-        --keyword: #86d4e2;
+        --ebdbb2: #f2f3f8;
+        --comment: #babdc9;
+        --default: #f2f3f8;
+        --keyword: #f2f3f8;
         --string: #98d6b4;
       }
 
       .web .text-result .title {
-        color: #86d4e2;
+        color: #f2f3f8;
       }
 
       .tabs .tab.selected {
-        border-bottom-color: #86d4e2;
+        border-bottom-color: #f2f3f8;
       }
 
       .searchbox:focus-within {
-        border-color: #86d4e2;
+        border-color: #f2f3f8;
       }
 
       .quote {
-        border-left-color: #305360;
+        border-left-color: #4a4c58;
       }
 
       #images .duration {
-        border-color: #305360;
+        border-color: #4a4c58;
       }
     }
   httpd.conf: |
