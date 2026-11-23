@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: arca
-    app.kubernetes.io/version: 5b2c044
+    app.kubernetes.io/version: 72bf6fd
   name: arca
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: arca
-        app.kubernetes.io/version: 5b2c044
+        app.kubernetes.io/version: 72bf6fd
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arca:5b2c044@sha256:e14f22b5fa880528630f0a3488b8b0ea8a564f960051927e0fa09a845632d433
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arca:72bf6fd@sha256:6259c9f45ea98a3e26cc27967170036d4eac257692636e1023d084fd53bd9e1a
         name: arca
         ports:
         - containerPort: 8080

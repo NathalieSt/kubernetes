@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: orrery
-    app.kubernetes.io/version: ca444e7
+    app.kubernetes.io/version: afcf8bd
   name: orrery
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: orrery
-        app.kubernetes.io/version: ca444e7
+        app.kubernetes.io/version: afcf8bd
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery:ca444e7@sha256:6d44e039ba6e5f0f2fce773cfd5768f6ea6b0ef2ced421c5e77ef7e05ceb60b1
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery:afcf8bd@sha256:9a93a9490137a994f2636b4d42e78f9679d8cfd0a793548dae2ebfe2309bc578
         name: orrery
         ports:
         - containerPort: 8080
