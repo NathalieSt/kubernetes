@@ -147,6 +147,7 @@ spec:
   dependsOn:
   - name: namespaces
   - name: flux-rbac
+  - name: keda
   - name: reflector
   serviceAccountName: flux-embeddings
 ---

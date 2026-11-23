@@ -1,0 +1,22 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: embeddings-scaledobject
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: embeddings
+  minReplicaCount: 0
+  maxReplicaCount: 1
+  cooldownPeriod: 300
+  fallback:
+    failureThreshold: 3
+    replicas: 1
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+      query: (sum(kube_job_status_active{namespace="tare",job_name=~"tare-crawl.*"}) or vector(0)) + on() (0 * max(up{job="kube-state-metrics"} == 1))
+      threshold: "1"
+      ignoreNullValues: "false"

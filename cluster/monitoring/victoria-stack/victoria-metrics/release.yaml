@@ -923,7 +923,7 @@ spec:
               labels:
                 probe_name: gameyfin
                 probe_namespace: gameyfin
-                scale_to_zero: "false"
+                scale_to_zero: "true"
             - targets:
               - http://glitchtip.glitchtip.svc.cluster.local:8000/
               labels:

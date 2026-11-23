@@ -136,6 +136,7 @@ data:
           service: gameyfin
           middlewares:
           - authelia
+          - waking
         glitchtip:
           rule: Host(`glitchtip.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
