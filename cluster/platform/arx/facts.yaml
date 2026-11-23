@@ -412,7 +412,7 @@ data:
           "url": "https://it-tools.netbird.nathalie-stiefsohn.eu",
           "entry": "guard",
           "sleeps": true,
-          "wakes": "07:00 to 00:00",
+          "wakes": "when asked for",
           "sendsBackup": false,
           "usesCistern": false
         },
@@ -598,7 +598,7 @@ data:
           "url": "https://omni-tools.netbird.nathalie-stiefsohn.eu",
           "entry": "guard",
           "sleeps": true,
-          "wakes": "07:00 to 00:00",
+          "wakes": "when asked for",
           "sendsBackup": false,
           "usesCistern": false
         },

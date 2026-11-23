@@ -7,5 +7,5 @@ resources:
 - nginx-configmap.yaml
 - deployment.yaml
 - service.yaml
-- scaled-object.yaml
 - network-policy.yaml
+- scaled-object.yaml

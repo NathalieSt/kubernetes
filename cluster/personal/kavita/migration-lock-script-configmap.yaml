@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kavita-migration-lock-script
+  namespace: kavita
+data:
+  clear-migration-lock.py: |
+    """Clear the migration lock a killed Kavita left behind; Kavita waits on it for ever.
+
+    Safe only because the Deployment is Recreate with one replica: no other Kavita is running.
+    A failure is reported and the start goes on, as a pod stuck in Init helps nobody.
+    """
+    import os
+    import sqlite3
+    import sys
+
+    path = sys.argv[1]
+
+    if not os.path.exists(path):
+        print(f"no {path} yet, nothing to clear")
+        sys.exit(0)
+
+    try:
+        db = sqlite3.connect(path, timeout=10)
+        try:
+            known = db.execute(
+                "select 1 from sqlite_schema where type = 'table' and name = '__EFMigrationsLock'"
+            ).fetchone()
+            rows = db.execute("select Timestamp from __EFMigrationsLock").fetchall() if known else []
+            if rows:
+                with db:
+                    db.execute("delete from __EFMigrationsLock")
+                print(f"cleared a stale migration lock from {rows[0][0]}")
+            else:
+                print("no stale migration lock")
+        finally:
+            db.close()
+    except sqlite3.Error as error:
+        print(f"could not check the migration lock: {error}", file=sys.stderr)

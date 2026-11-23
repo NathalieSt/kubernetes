@@ -181,6 +181,7 @@ data:
           service: it-tools
           middlewares:
           - authelia
+          - waking
         jellyfin:
           rule: Host(`jellyfin.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -251,6 +252,7 @@ data:
           service: omni-tools
           middlewares:
           - authelia
+          - waking
         orrery:
           rule: Host(`orrery.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
