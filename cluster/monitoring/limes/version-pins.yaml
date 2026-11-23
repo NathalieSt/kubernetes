@@ -1297,7 +1297,7 @@ data:
           "key": "redlib",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
-          "version": "b0508af@sha256:1109741088a0990f6af100f97937b4f99eba05eb978be748498e76bf187be55f",
+          "version": "b49d7f7@sha256:95afc6280e0c3daba096d1f82fbcf59740bde64346635edcd103d462568cbc12",
           "file": "versions/web.json",
           "inVersionsFile": true,
           "generators": [
