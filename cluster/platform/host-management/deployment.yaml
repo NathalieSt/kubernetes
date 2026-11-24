@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: host-management
-    app.kubernetes.io/version: 8e5f24c
+    app.kubernetes.io/version: bf6dc6c
   name: host-management
 spec:
   replicas: 1
@@ -19,7 +19,7 @@ spec:
         checksum/config: 0a578b8db7c80252
       labels:
         app.kubernetes.io/name: host-management
-        app.kubernetes.io/version: 8e5f24c
+        app.kubernetes.io/version: bf6dc6c
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -48,7 +48,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/host-management:8e5f24c@sha256:9db3dc9806de841084af4592ff36a3b91b1320d1e5253476d6f23eb5f8c53cd9
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/host-management:bf6dc6c@sha256:c00c89aba1b293b333b65e1442b4705b936eb13b624bb7871bd07ad4c1883579
         name: host-management
         ports:
         - containerPort: 8080
@@ -104,7 +104,7 @@ spec:
         - name: HOST_MANAGEMENT_PILLAR_DIR
           value: /var/lib/fleet/pillar/layers
         - name: HOST_MANAGEMENT_MASTER_HOST
-          value: fleet.netbird.nathalie-stiefsohn.eu
+          value: host-management.netbird.nathalie-stiefsohn.eu
         - name: HOST_MANAGEMENT_SALT_VERSION
           value: "3008.5"
         - name: HOST_MANAGEMENT_DATA_DIR

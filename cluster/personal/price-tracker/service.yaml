@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: price-tracker
-    app.kubernetes.io/version: 6bd35ba
+    app.kubernetes.io/version: e4d1256
   name: price-tracker
 spec:
   selector:

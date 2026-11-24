@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: image-scanner
-    app.kubernetes.io/version: c146c4d
+    app.kubernetes.io/version: dd83df1
   name: image-scanner
 spec:
   selector:

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: monitoring-dashboard
-    app.kubernetes.io/version: 08163b3
+    app.kubernetes.io/version: 5b7f5cf
   name: monitoring-dashboard
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: monitoring-dashboard
-        app.kubernetes.io/version: 08163b3
+        app.kubernetes.io/version: 5b7f5cf
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/monitoring-dashboard:08163b3@sha256:54c0cd483f26f59d3b8efe10c05dc1962d71ab74fafb0f0c932d6155950d9537
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/monitoring-dashboard:5b7f5cf@sha256:1e13b9be0b33ccb4d8a02875cb74202794d67afc46b9661c029f03f90f133a49
         name: monitoring-dashboard
         ports:
         - containerPort: 8080

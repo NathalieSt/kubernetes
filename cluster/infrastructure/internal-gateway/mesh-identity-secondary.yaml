@@ -27,17 +27,17 @@ spec:
   extraDNSLabels:
   - anki
   - bazarr
-  - pharos
-  - tessera
+  - cluster-console
+  - device-configuration-manager
   - fdroid
   - gameyfin
-  - fleet
+  - host-management
   - karakeep
   - lidarr
   - miniflux
   - paperless
-  - clavis
-  - tare
+  - password-manager
+  - price-tracker
   - prowlarr
   - qbittorrent
   - radarr
@@ -45,7 +45,7 @@ spec:
   - sabnzbd
   - requests
   - sonarr
-  - arx
+  - start-page
   - pdf
   - notes
   containerOverride:

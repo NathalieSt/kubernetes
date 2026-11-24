@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: password-server
-    app.kubernetes.io/version: 45777db
+    app.kubernetes.io/version: 4e3039e
   name: password-server
 spec:
   selector:

@@ -32,7 +32,7 @@ spec:
             - anki-sync
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -212,7 +212,7 @@ spec:
             - changedetection
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -392,7 +392,7 @@ spec:
             - code-server
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -572,7 +572,7 @@ spec:
             - diary
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -754,7 +754,7 @@ spec:
             - /scratch
             - --sample
             - /data/gitea-shared-storage=20
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -934,7 +934,7 @@ spec:
             - forgejo-pg-cluster
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -1114,7 +1114,7 @@ spec:
             - host-management
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -1294,7 +1294,7 @@ spec:
             - karakeep
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -1474,7 +1474,7 @@ spec:
             - kavita
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -1654,7 +1654,7 @@ spec:
             - mail
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -1834,7 +1834,7 @@ spec:
             - opnsense-backup
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -2014,7 +2014,7 @@ spec:
             - paperless
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -2194,7 +2194,7 @@ spec:
             - postgres
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -2374,7 +2374,7 @@ spec:
             - radicale
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -2554,7 +2554,7 @@ spec:
             - tandoor
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -2734,7 +2734,7 @@ spec:
             - trilium
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -2920,7 +2920,7 @@ spec:
             - _seal-config
             - --expect
             - _shamir-kek
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch
@@ -3100,7 +3100,7 @@ spec:
             - vim-trainer
             - --target
             - /scratch
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:478a49d@sha256:66e1c3dbcc055b1330867342c178d66b339ca94070ec1dc20732520014b4f7af
             name: restore
             volumeMounts:
             - mountPath: /scratch

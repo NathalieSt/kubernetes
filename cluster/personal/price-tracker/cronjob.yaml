@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: price-tracker-crawl
-    app.kubernetes.io/version: 6bd35ba
+    app.kubernetes.io/version: e4d1256
   name: price-tracker-crawl
 spec:
   schedule: 30 3 * * *
@@ -21,7 +21,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: price-tracker-crawl
-            app.kubernetes.io/version: 6bd35ba
+            app.kubernetes.io/version: e4d1256
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -38,7 +38,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker:6bd35ba@sha256:9eacba0c557d049a4dee22de84a44521c61f9718a5a8011d1c9919879e4e373a
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker:e4d1256@sha256:16e3204c31a859ff307cc7aa75e203c78e76a1f0cce0217765e5c73e2fe7864e
             name: price-tracker-crawl
             env:
             - name: TZ
@@ -74,7 +74,7 @@ spec:
                   name: price-tracker-secret
                   optional: true
             - name: PRICE_TRACKER_PUBLIC_URL
-              value: https://tare.netbird.nathalie-stiefsohn.eu
+              value: https://price-tracker.netbird.nathalie-stiefsohn.eu
             - name: PRICE_TRACKER_TANDOOR_URL
               value: http://tandoor.tandoor.svc.cluster.local:8080
             - name: PRICE_TRACKER_TANDOOR_TOKEN
@@ -109,7 +109,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: price-tracker-crawl
-    app.kubernetes.io/version: 6bd35ba
+    app.kubernetes.io/version: e4d1256
   name: price-tracker-crawl-mueller
 spec:
   schedule: 0 19 * * *
@@ -126,7 +126,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: price-tracker-crawl
-            app.kubernetes.io/version: 6bd35ba
+            app.kubernetes.io/version: e4d1256
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -143,7 +143,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker:6bd35ba@sha256:9eacba0c557d049a4dee22de84a44521c61f9718a5a8011d1c9919879e4e373a
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker:e4d1256@sha256:16e3204c31a859ff307cc7aa75e203c78e76a1f0cce0217765e5c73e2fe7864e
             name: price-tracker-crawl
             env:
             - name: TZ
@@ -179,7 +179,7 @@ spec:
                   name: price-tracker-secret
                   optional: true
             - name: PRICE_TRACKER_PUBLIC_URL
-              value: https://tare.netbird.nathalie-stiefsohn.eu
+              value: https://price-tracker.netbird.nathalie-stiefsohn.eu
             - name: PRICE_TRACKER_TANDOOR_URL
               value: http://tandoor.tandoor.svc.cluster.local:8080
             - name: PRICE_TRACKER_TANDOOR_TOKEN
@@ -214,7 +214,7 @@ kind: CronJob
 metadata:
   labels:
     app.kubernetes.io/name: price-tracker-crawl
-    app.kubernetes.io/version: 6bd35ba
+    app.kubernetes.io/version: e4d1256
   name: price-tracker-crawl-dm
 spec:
   schedule: 0 1 * * 0
@@ -231,7 +231,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: price-tracker-crawl
-            app.kubernetes.io/version: 6bd35ba
+            app.kubernetes.io/version: e4d1256
         spec:
           imagePullSecrets:
           - name: forgejo-registry-secret
@@ -248,7 +248,7 @@ spec:
           containers:
           - args:
             - bff/src/Crawl.res.mjs
-            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker:6bd35ba@sha256:9eacba0c557d049a4dee22de84a44521c61f9718a5a8011d1c9919879e4e373a
+            image: code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker:e4d1256@sha256:16e3204c31a859ff307cc7aa75e203c78e76a1f0cce0217765e5c73e2fe7864e
             name: price-tracker-crawl
             env:
             - name: TZ
@@ -284,7 +284,7 @@ spec:
                   name: price-tracker-secret
                   optional: true
             - name: PRICE_TRACKER_PUBLIC_URL
-              value: https://tare.netbird.nathalie-stiefsohn.eu
+              value: https://price-tracker.netbird.nathalie-stiefsohn.eu
             - name: PRICE_TRACKER_TANDOOR_URL
               value: http://tandoor.tandoor.svc.cluster.local:8080
             - name: PRICE_TRACKER_TANDOOR_TOKEN

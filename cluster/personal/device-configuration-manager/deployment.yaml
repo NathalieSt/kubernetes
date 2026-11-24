@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: device-configuration-manager
-    app.kubernetes.io/version: e626c12
+    app.kubernetes.io/version: 2f49a70
   name: device-configuration-manager
 spec:
   replicas: 1
@@ -17,14 +17,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: device-configuration-manager
-        app.kubernetes.io/version: e626c12
+        app.kubernetes.io/version: 2f49a70
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/device-configuration-manager:e626c12@sha256:f4f76e1dad92ced5b77d9b3fd2b31e81456f1f0e56b9eacc9d3b0ba0ca7d2896
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/device-configuration-manager:2f49a70@sha256:fb05adfce1a3d46591c74e3f908d61f7c7ef949cd7403d0c441afec942a52fb8
         name: device-configuration-manager
         ports:
         - containerPort: 8080
@@ -49,7 +49,7 @@ spec:
               name: device-configuration-manager-db-secret
               optional: false
         - name: DEVICE_CONFIGURATION_MANAGER_PUBLIC_URL
-          value: https://tessera.netbird.nathalie-stiefsohn.eu
+          value: https://device-configuration-manager.netbird.nathalie-stiefsohn.eu
         - name: DEVICE_CONFIGURATION_MANAGER_OIDC_AUTHORITY
           value: https://auth.netbird.nathalie-stiefsohn.eu
         - name: DEVICE_CONFIGURATION_MANAGER_OIDC_CLIENT_ID

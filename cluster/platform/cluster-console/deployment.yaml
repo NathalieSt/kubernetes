@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: cluster-console
-    app.kubernetes.io/version: 7c655bf
+    app.kubernetes.io/version: ced5e5e
   name: cluster-console
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: cluster-console
-        app.kubernetes.io/version: 7c655bf
+        app.kubernetes.io/version: ced5e5e
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       serviceAccountName: cluster-console
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/cluster-console:7c655bf@sha256:e9ed1d0bf3b3df3d8f28b0f17924290a51b708b07c081e3057bd2c4863486f4f
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/cluster-console:ced5e5e@sha256:8da9d056cb8cebbc95fd51b84de956d7699a28265d974c5566dddf22da2efff5
         name: cluster-console
         ports:
         - containerPort: 8080

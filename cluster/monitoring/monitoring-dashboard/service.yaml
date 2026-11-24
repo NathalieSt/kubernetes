@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: monitoring-dashboard
-    app.kubernetes.io/version: 08163b3
+    app.kubernetes.io/version: 5b7f5cf
   name: monitoring-dashboard
 spec:
   selector:
