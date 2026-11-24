@@ -122,16 +122,16 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: vim-dojo
+  name: vim-trainer
   namespace: flux-system
 spec:
   interval: 24h
   retryInterval: 2m
-  targetNamespace: vim-dojo
+  targetNamespace: vim-trainer
   sourceRef:
     kind: GitRepository
     name: manifests
-  path: ./cluster/development/vim-dojo
+  path: ./cluster/development/vim-trainer
   prune: true
   wait: true
   timeout: 10m
@@ -143,4 +143,4 @@ spec:
   - name: garage
   - name: k8up
   - name: egress-proxy
-  serviceAccountName: flux-vim-dojo
+  serviceAccountName: flux-vim-trainer

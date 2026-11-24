@@ -861,7 +861,7 @@ metadata:
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
-  name: vim-dojo
+  name: vim-trainer
 ---
 apiVersion: v1
 kind: Namespace

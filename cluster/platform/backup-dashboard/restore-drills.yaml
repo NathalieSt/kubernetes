@@ -3071,9 +3071,9 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   labels:
-    app.kubernetes.io/instance: vim-dojo
+    app.kubernetes.io/instance: vim-trainer
     app.kubernetes.io/name: restore-drill
-  name: restore-drill-vim-dojo
+  name: restore-drill-vim-trainer
 spec:
   schedule: 30 10 18 * *
   timeZone: Europe/Vienna
@@ -3087,7 +3087,7 @@ spec:
       template:
         metadata:
           labels:
-            app.kubernetes.io/instance: vim-dojo
+            app.kubernetes.io/instance: vim-trainer
             app.kubernetes.io/name: restore-drill
         spec:
           imagePullSecrets:
@@ -3097,7 +3097,7 @@ spec:
             - /backup-dashboard
             - drill
             - --namespace
-            - vim-dojo
+            - vim-trainer
             - --target
             - /scratch
             image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03

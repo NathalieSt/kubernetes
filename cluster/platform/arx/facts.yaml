@@ -952,8 +952,8 @@ data:
           "usesCistern": false
         },
         {
-          "generator": "vim-dojo",
-          "namespace": "vim-dojo",
+          "generator": "vim-trainer",
+          "namespace": "vim-trainer",
           "group": "development",
           "about": "Neovim in the browser",
           "url": "https://dojo.netbird.nathalie-stiefsohn.eu",

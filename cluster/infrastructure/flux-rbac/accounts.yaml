@@ -2102,21 +2102,21 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-vim-dojo
+  name: flux-vim-trainer
   namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: flux-vim-dojo-namespace-admin
-  namespace: vim-dojo
+  name: flux-vim-trainer-namespace-admin
+  namespace: vim-trainer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
 subjects:
 - kind: ServiceAccount
-  name: flux-vim-dojo
+  name: flux-vim-trainer
   namespace: flux-system
 ---
 apiVersion: v1
@@ -2170,4 +2170,24 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-zyme
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-vim-dojo
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-vim-dojo-namespace-admin
+  namespace: vim-dojo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-vim-dojo
   namespace: flux-system

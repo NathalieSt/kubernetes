@@ -245,14 +245,14 @@ data:
           ]
         },
         {
-          "key": "vim-dojo",
+          "key": "vim-trainer",
           "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo",
-          "version": "cebe3c2@sha256:e43d95b683709c021ecfb2ccc1bca044b44f8228733ce3483c542e62bef585fe",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-trainer",
+          "version": "dd196d2@sha256:920fab611ef45bcae802b7d9ed7f4a9275278e4a47ed51a4b60c61cf5b40a292",
           "file": "versions/development.json",
           "inVersionsFile": true,
           "generators": [
-            "vim-dojo"
+            "vim-trainer"
           ]
         },
         {
@@ -1132,7 +1132,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "0e12487@sha256:6c0c558145275a8f7180ead75d84b0357b18a0618bad5d70cd61de7c8fbeafe5",
+          "version": "7e26a0b@sha256:a603a068e74752e202962bb8ecb214a7b70ee18d2706341942f63dfa0dea4d8d",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

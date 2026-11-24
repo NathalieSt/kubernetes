@@ -2,10 +2,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: vim-dojo
+  name: vim-trainer
 resources:
-- state-pvc.yaml
-- workspace-pvc.yaml
+- vim-trainer-state-pvc-pvc.yaml
+- vim-trainer-workspace-pvc-pvc.yaml
 - deployment.yaml
 - service.yaml
 - network-policy.yaml

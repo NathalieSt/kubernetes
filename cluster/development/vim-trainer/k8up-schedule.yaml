@@ -2,8 +2,8 @@
 apiVersion: k8up.io/v1
 kind: Schedule
 metadata:
-  name: vim-dojo-backup
-  namespace: vim-dojo
+  name: vim-trainer-backup
+  namespace: vim-trainer
 spec:
   backend:
     repoPasswordSecretRef:
@@ -11,7 +11,7 @@ spec:
       key: password
     s3:
       endpoint: http://garage.garage.svc.cluster.local:3900
-      bucket: kubernetes-backups-vim-dojo
+      bucket: kubernetes-backups-vim-trainer
       accessKeyIDSecretRef:
         name: garage-backup-access-key-secret
         key: access-key-id
@@ -26,7 +26,7 @@ spec:
       seccompProfile:
         type: RuntimeDefault
     podConfigRef:
-      name: vim-dojo-backup-pod
+      name: vim-trainer-backup-pod
     activeDeadlineSeconds: 28800
   prune:
     schedule: 0 5 * * 0
@@ -37,8 +37,8 @@ spec:
 apiVersion: k8up.io/v1
 kind: PodConfig
 metadata:
-  name: vim-dojo-backup-pod
-  namespace: vim-dojo
+  name: vim-trainer-backup-pod
+  namespace: vim-trainer
 spec:
   template:
     spec:

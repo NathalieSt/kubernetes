@@ -102,3 +102,54 @@ spec:
       server: nathisvault.netbird.nathalie-stiefsohn.eu
       share: /volume1/nfs
       subDir: jellyfin/jellyfin-pvc/games
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vim-trainer-vim-trainer-state-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: vim-trainer-state-pvc
+    namespace: vim-trainer
+  mountOptions:
+  - nfsvers=4.1
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: debian/mnt/external_ssd/vim-dojo/vim-dojo-state-pvc#vim-trainer-vim-trainer-state-pvc
+    volumeAttributes:
+      server: debian
+      share: /mnt/external_ssd
+      subDir: vim-dojo/vim-dojo-state-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vim-trainer-vim-trainer-workspace-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 20Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: vim-trainer-workspace-pvc
+    namespace: vim-trainer
+  mountOptions:
+  - nfsvers=4.1
+  - hard
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: remote-fs.netbird.nathalie-stiefsohn.eu/mnt/HC_Volume_103061115/vim-dojo/vim-dojo-workspace-pvc#vim-trainer-vim-trainer-workspace-pvc
+    volumeAttributes:
+      server: remote-fs.netbird.nathalie-stiefsohn.eu
+      share: /mnt/HC_Volume_103061115
+      subDir: vim-dojo/vim-dojo-workspace-pvc

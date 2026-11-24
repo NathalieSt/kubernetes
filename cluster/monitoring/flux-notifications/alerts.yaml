@@ -365,7 +365,7 @@ spec:
     name: victoria-metrics
     namespace: flux-system
   - kind: Kustomization
-    name: vim-dojo
+    name: vim-trainer
     namespace: flux-system
   - kind: Kustomization
     name: waking-page

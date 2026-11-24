@@ -2,13 +2,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  annotations:
-    k8up.io/backup: "true"
-  name: vim-dojo-workspace-pvc
+  name: vim-trainer-workspace-pvc
 spec:
   accessModes:
   - ReadWriteMany
   resources:
     requests:
       storage: 20Gi
-  storageClassName: nfs-remote
+  storageClassName: ""
+  volumeName: vim-trainer-vim-trainer-workspace-pvc

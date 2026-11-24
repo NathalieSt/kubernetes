@@ -2,11 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: vim-dojo-networkpolicy
+  name: vim-trainer-networkpolicy
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: vim-dojo
+      app.kubernetes.io/name: vim-trainer
   policyTypes:
   - Ingress
   - Egress
