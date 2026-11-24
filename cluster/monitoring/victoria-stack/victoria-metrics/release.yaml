@@ -1135,10 +1135,10 @@ spec:
                 probe_namespace: vault
                 scale_to_zero: "false"
             - targets:
-              - http://vim-dojo.vim-dojo.svc.cluster.local:3000/
+              - http://vim-trainer.vim-trainer.svc.cluster.local:3000/
               labels:
-                probe_name: vim-dojo
-                probe_namespace: vim-dojo
+                probe_name: vim-trainer
+                probe_namespace: vim-trainer
                 scale_to_zero: "false"
             - targets:
               - http://zyme.zyme.svc.cluster.local:8080/

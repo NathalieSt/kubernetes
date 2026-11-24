@@ -535,7 +535,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: pharos-operate
-  namespace: vim-dojo
+  namespace: vim-trainer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

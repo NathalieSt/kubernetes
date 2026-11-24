@@ -497,12 +497,12 @@ data:
           description: File, image and text tools
           namespace: omni-tools
           app: omni-tools
-      - vim-dojo:
+      - vim-trainer:
           href: https://dojo.netbird.nathalie-stiefsohn.eu
           icon: si-neovim
           description: Neovim in the browser
-          namespace: vim-dojo
-          app: vim-dojo
+          namespace: vim-trainer
+          app: vim-trainer
     - Web:
       - changedetection:
           href: https://changedetection.netbird.nathalie-stiefsohn.eu

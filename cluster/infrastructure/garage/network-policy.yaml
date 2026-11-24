@@ -61,7 +61,7 @@ spec:
           kubernetes.io/metadata.name: vault
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: vim-dojo
+          kubernetes.io/metadata.name: vim-trainer
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: backup-dashboard

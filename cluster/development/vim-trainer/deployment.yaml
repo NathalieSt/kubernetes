@@ -3,21 +3,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: vim-dojo
-    app.kubernetes.io/version: cebe3c2
-  name: vim-dojo
+    app.kubernetes.io/name: vim-trainer
+    app.kubernetes.io/version: dd196d2
+  name: vim-trainer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: vim-dojo
+      app.kubernetes.io/name: vim-trainer
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: vim-dojo
-        app.kubernetes.io/version: cebe3c2
+        app.kubernetes.io/name: vim-trainer
+        app.kubernetes.io/version: dd196d2
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -36,8 +36,8 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-dojo:cebe3c2@sha256:e43d95b683709c021ecfb2ccc1bca044b44f8228733ce3483c542e62bef585fe
-        name: vim-dojo
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-trainer:dd196d2@sha256:920fab611ef45bcae802b7d9ed7f4a9275278e4a47ed51a4b60c61cf5b40a292
+        name: vim-trainer
         ports:
         - containerPort: 3000
           name: http
@@ -49,7 +49,7 @@ spec:
         - mountPath: /tmp
           name: socket-volume
         env:
-        - name: VIM_DOJO_WORKSPACE
+        - name: VIM_TRAINER_WORKSPACE
           value: /workspace
         - name: HOME
           value: /state/home
@@ -93,10 +93,10 @@ spec:
       volumes:
       - name: state-volume
         persistentVolumeClaim:
-          claimName: vim-dojo-state-pvc
+          claimName: vim-trainer-state-pvc
       - name: workspace-volume
         persistentVolumeClaim:
-          claimName: vim-dojo-workspace-pvc
+          claimName: vim-trainer-workspace-pvc
       - name: socket-volume
         emptyDir: {}
       securityContext:

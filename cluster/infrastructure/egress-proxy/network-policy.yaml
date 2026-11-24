@@ -20,10 +20,10 @@ spec:
           app.kubernetes.io/name: code-server
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: vim-dojo
+          kubernetes.io/metadata.name: vim-trainer
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: vim-dojo
+          app.kubernetes.io/name: vim-trainer
     ports:
     - port: 8888
       protocol: TCP

@@ -44,7 +44,7 @@ kind: Job
 metadata:
   labels:
     app.kubernetes.io/name: garage-init
-  name: garage-init-39f8b623
+  name: garage-init-3a9bd105
 spec:
   backoffLimit: 5
   ttlSecondsAfterFinished: 3600
@@ -658,14 +658,14 @@ spec:
             echo "             restic-repo-password-secret --from-literal=password=<password>" >&2
           fi
 
-          echo "Provisioning backup repository for namespace vim-dojo"
-          BUCKET_ID=$(ensure_bucket "kubernetes-backups-vim-dojo")
+          echo "Provisioning backup repository for namespace vim-trainer"
+          BUCKET_ID=$(ensure_bucket "kubernetes-backups-vim-trainer")
           if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
-            echo "ERROR: could not determine bucket ID for kubernetes-backups-vim-dojo" >&2
+            echo "ERROR: could not determine bucket ID for kubernetes-backups-vim-trainer" >&2
             exit 1
           fi
 
-          set -- $(ensure_key "backup-vim-dojo")
+          set -- $(ensure_key "backup-vim-trainer")
           ACCESS_KEY_ID="$1"
           SECRET_ACCESS_KEY="$2"
 
@@ -675,12 +675,12 @@ spec:
           GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
           api POST v2/AllowBucketKey "$GRANT"
 
-          write_secret "vim-dojo" "garage-backup-access-key-secret" \
+          write_secret "vim-trainer" "garage-backup-access-key-secret" \
             "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
 
 
-          REPO_PASSWORD=$(derive_password "vim-dojo")
-          write_secret "vim-dojo" "restic-repo-password-secret" \
+          REPO_PASSWORD=$(derive_password "vim-trainer")
+          write_secret "vim-trainer" "restic-repo-password-secret" \
             "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
           echo "Provisioning read-only dashboard key"
@@ -796,7 +796,7 @@ spec:
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
           api POST v2/AllowBucketKey "$READER_GRANT"
 
-          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-vim-dojo")
+          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-vim-trainer")
           READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
           READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"

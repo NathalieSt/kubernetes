@@ -364,11 +364,11 @@ data:
           entryPoints:
           - websecure
           service: vault
-        vim-dojo:
+        vim-trainer:
           rule: Host(`dojo.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
-          service: vim-dojo
+          service: vim-trainer
           middlewares:
           - authelia
         zyme:
@@ -585,10 +585,10 @@ data:
           loadBalancer:
             servers:
             - url: http://vault-ui.vault.svc.cluster.local:8200
-        vim-dojo:
+        vim-trainer:
           loadBalancer:
             servers:
-            - url: http://vim-dojo.vim-dojo.svc.cluster.local:3000
+            - url: http://vim-trainer.vim-trainer.svc.cluster.local:3000
         waking-page:
           loadBalancer:
             servers:
