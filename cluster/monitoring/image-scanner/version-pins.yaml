@@ -1022,7 +1022,7 @@ data:
           "key": "password-manager",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/password-manager",
-          "version": "4e3039e@sha256:963c00da88215a1923ae117e5bddc973bce3e398e2be11bb4d1db42991dfb08c",
+          "version": "e1c120d@sha256:963c00da88215a1923ae117e5bddc973bce3e398e2be11bb4d1db42991dfb08c",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1033,7 +1033,7 @@ data:
           "key": "password-server",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/password-server",
-          "version": "4e3039e@sha256:039da32b2617142addf2a105639026f6465ae23a047d1bf3e8565598cc6b3605",
+          "version": "e1c120d@sha256:60a9a16bd2c0556b54ad6126d15d7e9092be73f51c96b04f84f77bf27cd20ca4",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
@@ -1121,7 +1121,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "75530a6@sha256:6b04975ef07c80ab9e716c37e3d1b34f324233327cd2cce1aae920e0f71b4d6f",
+          "version": "5aa00fc@sha256:2795eac787962b3aee728afe1ca2bad35cd1defcdf582d8c3ac379fad9abb3eb",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [

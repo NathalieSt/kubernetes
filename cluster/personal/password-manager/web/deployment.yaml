@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: password-manager
-    app.kubernetes.io/version: 4e3039e
+    app.kubernetes.io/version: e1c120d
   name: password-manager
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: password-manager
-        app.kubernetes.io/version: 4e3039e
+        app.kubernetes.io/version: e1c120d
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/password-manager:4e3039e@sha256:963c00da88215a1923ae117e5bddc973bce3e398e2be11bb4d1db42991dfb08c
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/password-manager:e1c120d@sha256:963c00da88215a1923ae117e5bddc973bce3e398e2be11bb4d1db42991dfb08c
         name: password-manager
         ports:
         - containerPort: 8080
