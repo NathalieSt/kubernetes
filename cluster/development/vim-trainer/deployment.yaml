@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: vim-trainer
-    app.kubernetes.io/version: dd196d2
+    app.kubernetes.io/version: 00f9bbf
   name: vim-trainer
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: vim-trainer
-        app.kubernetes.io/version: dd196d2
+        app.kubernetes.io/version: 00f9bbf
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -36,7 +36,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-trainer:dd196d2@sha256:920fab611ef45bcae802b7d9ed7f4a9275278e4a47ed51a4b60c61cf5b40a292
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-trainer:00f9bbf@sha256:f87525a240a20c5ddaf634c6752128e28ae69c0612c1c0ba7cf9841481ec4ae4
         name: vim-trainer
         ports:
         - containerPort: 3000

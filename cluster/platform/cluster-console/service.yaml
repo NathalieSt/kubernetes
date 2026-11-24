@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: cluster-console
-    app.kubernetes.io/version: 7c655bf
+    app.kubernetes.io/version: ced5e5e
   name: cluster-console
 spec:
   selector:

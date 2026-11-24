@@ -73,7 +73,7 @@ data:
           middlewares:
           - authelia
         cluster-console:
-          rule: Host(`pharos.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`cluster-console.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: cluster-console
@@ -87,12 +87,12 @@ data:
           middlewares:
           - authelia
         device-configuration-manager:
-          rule: Host(`tessera.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`device-configuration-manager.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: device-configuration-manager
         diary:
-          rule: Host(`daybook.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`diary.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: diary
@@ -104,7 +104,7 @@ data:
           - websecure
           service: fdroid
         fermentation-tracker:
-          rule: Host(`zyme.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`fermentation-tracker.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: fermentation-tracker
@@ -169,14 +169,14 @@ data:
           middlewares:
           - authelia
         host-management:
-          rule: Host(`fleet.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`host-management.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: host-management
           middlewares:
           - authelia
         image-scanner:
-          rule: Host(`limes.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`image-scanner.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: image-scanner
@@ -228,7 +228,7 @@ data:
           - websecure
           service: miniflux
         monitoring-dashboard:
-          rule: Host(`orrery.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`monitoring-dashboard.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: monitoring-dashboard
@@ -265,19 +265,19 @@ data:
           - websecure
           service: paperless
         password-manager:
-          rule: Host(`clavis.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`password-manager.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: password-manager
           middlewares:
           - authelia
         password-server:
-          rule: Host(`psono-api.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`password-server.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: password-server
         price-tracker:
-          rule: Host(`tare.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`price-tracker.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: price-tracker
@@ -338,7 +338,7 @@ data:
           middlewares:
           - authelia
         start-page:
-          rule: Host(`arx.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`start-page.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: start-page
@@ -372,7 +372,7 @@ data:
           - websecure
           service: vault
         vim-trainer:
-          rule: Host(`dojo.netbird.nathalie-stiefsohn.eu`)
+          rule: Host(`vim-trainer.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: vim-trainer

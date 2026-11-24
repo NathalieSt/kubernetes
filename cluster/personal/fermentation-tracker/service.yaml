@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: fermentation-tracker
-    app.kubernetes.io/version: e557c8f
+    app.kubernetes.io/version: 68c9e25
   name: fermentation-tracker
 spec:
   selector:

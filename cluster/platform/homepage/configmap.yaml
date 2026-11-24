@@ -241,7 +241,7 @@ data:
               format:
                 type: number
       - Workloads:
-          href: https://orrery.netbird.nathalie-stiefsohn.eu
+          href: https://monitoring-dashboard.netbird.nathalie-stiefsohn.eu
           icon: mdi-cube-outline
           description: Pods across every namespace
           widget:
@@ -262,7 +262,7 @@ data:
               format:
                 type: number
       - Alerts:
-          href: https://orrery.netbird.nathalie-stiefsohn.eu
+          href: https://monitoring-dashboard.netbird.nathalie-stiefsohn.eu
           icon: mdi-bell-ring-outline
           description: Firing in vmalert
           widget:
@@ -356,19 +356,19 @@ data:
           app: seerr
     - Personal:
       - device-configuration-manager:
-          href: https://tessera.netbird.nathalie-stiefsohn.eu
+          href: https://device-configuration-manager.netbird.nathalie-stiefsohn.eu
           icon: mdi-view-grid-outline
           description: Device designs, compared with what each device is
           namespace: device-configuration-manager
           app: device-configuration-manager
       - diary:
-          href: https://daybook.netbird.nathalie-stiefsohn.eu
+          href: https://diary.netbird.nathalie-stiefsohn.eu
           icon: mdi-book-lock-outline
           description: Encrypted diary and habit tracker
           namespace: diary
           app: diary
       - fermentation-tracker:
-          href: https://zyme.netbird.nathalie-stiefsohn.eu
+          href: https://fermentation-tracker.netbird.nathalie-stiefsohn.eu
           icon: mdi-bottle-tonic-outline
           description: "Fermentation: batches, sensors and reminders"
           namespace: fermentation-tracker
@@ -387,13 +387,13 @@ data:
           namespace: paperless
           app: paperless
       - password-manager:
-          href: https://clavis.netbird.nathalie-stiefsohn.eu
+          href: https://password-manager.netbird.nathalie-stiefsohn.eu
           icon: mdi-key-outline
           description: Password manager, our client
           namespace: password-manager
           app: password-manager
       - price-tracker:
-          href: https://tare.netbird.nathalie-stiefsohn.eu
+          href: https://price-tracker.netbird.nathalie-stiefsohn.eu
           icon: mdi-scale-balance
           description: Supermarket prices per kilo, litre and piece
           namespace: price-tracker
@@ -498,7 +498,7 @@ data:
           namespace: omni-tools
           app: omni-tools
       - vim-trainer:
-          href: https://dojo.netbird.nathalie-stiefsohn.eu
+          href: https://vim-trainer.netbird.nathalie-stiefsohn.eu
           icon: si-neovim
           description: Neovim in the browser
           namespace: vim-trainer
@@ -560,7 +560,7 @@ data:
           namespace: backup-dashboard
           app: backup-dashboard
       - cluster-console:
-          href: https://pharos.netbird.nathalie-stiefsohn.eu
+          href: https://cluster-console.netbird.nathalie-stiefsohn.eu
           icon: mdi-lighthouse
           description: "Kubernetes console: pods, reasons, logs, events"
           namespace: cluster-console
@@ -578,19 +578,19 @@ data:
           namespace: homelab-docs
           app: homelab-docs
       - host-management:
-          href: https://fleet.netbird.nathalie-stiefsohn.eu
+          href: https://host-management.netbird.nathalie-stiefsohn.eu
           icon: mdi-server-network
           description: "Salt for the hosts: packages, NetBird, health"
           namespace: host-management
           app: host-management
       - password-server:
-          href: https://psono-api.netbird.nathalie-stiefsohn.eu
+          href: https://password-server.netbird.nathalie-stiefsohn.eu
           icon: mdi-safe
           description: Our own server for the password manager
           namespace: password-manager
           app: password-server
       - start-page:
-          href: https://arx.netbird.nathalie-stiefsohn.eu
+          href: https://start-page.netbird.nathalie-stiefsohn.eu
           icon: mdi-castle
           description: The homelab as the map of a walled city
           namespace: start-page
@@ -615,13 +615,13 @@ data:
           namespace: healthchecks
           app: healthchecks
       - image-scanner:
-          href: https://limes.netbird.nathalie-stiefsohn.eu
+          href: https://image-scanner.netbird.nathalie-stiefsohn.eu
           icon: mdi-shield-search
           description: Security scans of every image in the cluster
           namespace: image-scanner
           app: image-scanner
       - monitoring-dashboard:
-          href: https://orrery.netbird.nathalie-stiefsohn.eu
+          href: https://monitoring-dashboard.netbird.nathalie-stiefsohn.eu
           icon: mdi-orbit
           description: Topology, metrics and logs
           namespace: monitoring-dashboard

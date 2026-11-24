@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: vim-trainer
-    app.kubernetes.io/version: dd196d2
+    app.kubernetes.io/version: 00f9bbf
   name: vim-trainer
 spec:
   selector:

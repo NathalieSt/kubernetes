@@ -49,9 +49,6 @@ data:
         - anki.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
-        - arx.netbird.nathalie-stiefsohn.eu
-        policy: one_factor
-      - domain:
         - audiomuse.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -70,26 +67,26 @@ data:
         - changedetection.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - clavis.netbird.nathalie-stiefsohn.eu
-        policy: one_factor
+        - cluster-console.netbird.nathalie-stiefsohn.eu
+        policy: two_factor
       - domain:
         - code.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
-        - daybook.netbird.nathalie-stiefsohn.eu
+        - device-configuration-manager.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
+        - diary.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
         - docs.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - dojo.netbird.nathalie-stiefsohn.eu
-        policy: one_factor
-      - domain:
         - fdroid.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
-        - fleet.netbird.nathalie-stiefsohn.eu
-        policy: two_factor
+        - fermentation-tracker.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
       - domain:
         - gameyfin.netbird.nathalie-stiefsohn.eu
         policy: one_factor
@@ -109,6 +106,12 @@ data:
         - home.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - host-management.netbird.nathalie-stiefsohn.eu
+        policy: two_factor
+      - domain:
+        - image-scanner.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - it-tools.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
@@ -124,13 +127,13 @@ data:
         - lidarr.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - limes.netbird.nathalie-stiefsohn.eu
-        policy: one_factor
-      - domain:
         - mail.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
         - miniflux.netbird.nathalie-stiefsohn.eu
+        policy: bypass
+      - domain:
+        - monitoring-dashboard.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
         - music.netbird.nathalie-stiefsohn.eu
@@ -148,23 +151,23 @@ data:
         - omni-tools.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - orrery.netbird.nathalie-stiefsohn.eu
+        - paperless.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
-        - paperless.netbird.nathalie-stiefsohn.eu
+        - password-manager.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
+        - password-server.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
         - pdf.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - pharos.netbird.nathalie-stiefsohn.eu
-        policy: two_factor
+        - price-tracker.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
       - domain:
         - prowlarr.netbird.nathalie-stiefsohn.eu
         policy: one_factor
-      - domain:
-        - psono-api.netbird.nathalie-stiefsohn.eu
-        policy: bypass
       - domain:
         - qbittorrent.netbird.nathalie-stiefsohn.eu
         policy: one_factor
@@ -184,29 +187,26 @@ data:
         - sonarr.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
+        - start-page.netbird.nathalie-stiefsohn.eu
+        policy: one_factor
+      - domain:
         - tandoor.netbird.nathalie-stiefsohn.eu
         policy: one_factor
-      - domain:
-        - tare.netbird.nathalie-stiefsohn.eu
-        policy: one_factor
-      - domain:
-        - tessera.netbird.nathalie-stiefsohn.eu
-        policy: bypass
       - domain:
         - vault.netbird.nathalie-stiefsohn.eu
         policy: bypass
       - domain:
-        - vscode.netbird.nathalie-stiefsohn.eu
+        - vim-trainer.netbird.nathalie-stiefsohn.eu
         policy: one_factor
       - domain:
-        - zyme.netbird.nathalie-stiefsohn.eu
+        - vscode.netbird.nathalie-stiefsohn.eu
         policy: one_factor
     session:
       secret: "{{ secret `/secrets/authelia/session-secret` }}"
       cookies:
       - domain: netbird.nathalie-stiefsohn.eu
         authelia_url: https://auth.netbird.nathalie-stiefsohn.eu
-        default_redirection_url: https://orrery.netbird.nathalie-stiefsohn.eu
+        default_redirection_url: https://monitoring-dashboard.netbird.nathalie-stiefsohn.eu
         name: authelia_session
         same_site: lax
         expiration: 1M
@@ -271,7 +271,7 @@ data:
           require_pkce: true
           pkce_challenge_method: S256
           redirect_uris:
-          - https://pharos.netbird.nathalie-stiefsohn.eu/auth/callback
+          - https://cluster-console.netbird.nathalie-stiefsohn.eu/auth/callback
           scopes:
           - openid
           - profile
@@ -292,7 +292,7 @@ data:
           require_pkce: true
           pkce_challenge_method: S256
           redirect_uris:
-          - https://tessera.netbird.nathalie-stiefsohn.eu/auth/callback
+          - https://device-configuration-manager.netbird.nathalie-stiefsohn.eu/auth/callback
           scopes:
           - openid
           - profile
@@ -313,7 +313,7 @@ data:
           require_pkce: true
           pkce_challenge_method: S256
           redirect_uris:
-          - https://zyme.netbird.nathalie-stiefsohn.eu/auth/callback
+          - https://fermentation-tracker.netbird.nathalie-stiefsohn.eu/auth/callback
           scopes:
           - openid
           - profile
@@ -410,7 +410,7 @@ data:
           require_pkce: true
           pkce_challenge_method: S256
           redirect_uris:
-          - https://fleet.netbird.nathalie-stiefsohn.eu/auth/callback
+          - https://host-management.netbird.nathalie-stiefsohn.eu/auth/callback
           scopes:
           - openid
           - profile
@@ -431,7 +431,7 @@ data:
           require_pkce: true
           pkce_challenge_method: S256
           redirect_uris:
-          - https://limes.netbird.nathalie-stiefsohn.eu/auth/callback
+          - https://image-scanner.netbird.nathalie-stiefsohn.eu/auth/callback
           scopes:
           - openid
           - profile
@@ -533,7 +533,7 @@ data:
           require_pkce: true
           pkce_challenge_method: S256
           redirect_uris:
-          - https://orrery.netbird.nathalie-stiefsohn.eu/auth/callback
+          - https://monitoring-dashboard.netbird.nathalie-stiefsohn.eu/auth/callback
           scopes:
           - openid
           - profile

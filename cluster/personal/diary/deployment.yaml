@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: diary
-    app.kubernetes.io/version: "5615191"
+    app.kubernetes.io/version: 03c5b05
   name: diary
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: diary
-        app.kubernetes.io/version: "5615191"
+        app.kubernetes.io/version: 03c5b05
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -34,7 +34,7 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/diary:5615191@sha256:3d2651f2eb425af0de51991adbf67390458b2e646aac0a90cbdd4da1f0a1b6a4
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/diary:03c5b05@sha256:c060a82e168f0e3b3498adbb371312e24b9c03b4abd564d1fbc81b4653a40820
         name: diary
         ports:
         - containerPort: 8080

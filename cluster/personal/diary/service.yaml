@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: diary
-    app.kubernetes.io/version: "5615191"
+    app.kubernetes.io/version: 03c5b05
   name: diary
 spec:
   selector:

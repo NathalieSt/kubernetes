@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: device-configuration-manager
-    app.kubernetes.io/version: e626c12
+    app.kubernetes.io/version: 2f49a70
   name: device-configuration-manager
 spec:
   selector:

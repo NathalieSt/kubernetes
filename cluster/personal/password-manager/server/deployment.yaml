@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: password-server
-    app.kubernetes.io/version: 45777db
+    app.kubernetes.io/version: 4e3039e
   name: password-server
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: password-server
-        app.kubernetes.io/version: 45777db
+        app.kubernetes.io/version: 4e3039e
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/password-server:45777db@sha256:03bb2f71eda278a1f8dc4998616dda28b95427cd9ba28e7f67f59f80696b28ca
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/password-server:4e3039e@sha256:039da32b2617142addf2a105639026f6465ae23a047d1bf3e8565598cc6b3605
         name: password-server
         ports:
         - containerPort: 8080
@@ -62,9 +62,9 @@ spec:
               name: password-server-secret
               optional: false
         - name: PASSWORD_SERVER_CORS_ORIGINS
-          value: https://clavis.netbird.nathalie-stiefsohn.eu,tauri://localhost,http://tauri.localhost
+          value: https://password-manager.netbird.nathalie-stiefsohn.eu,tauri://localhost,http://tauri.localhost
         - name: PASSWORD_SERVER_WEBAUTHN_ORIGINS
-          value: https://clavis.netbird.nathalie-stiefsohn.eu
+          value: https://password-manager.netbird.nathalie-stiefsohn.eu
         - name: PASSWORD_SERVER_NTFY_URL
           value: http://ntfy.ntfy.svc.cluster.local:8080/
         - name: PASSWORD_SERVER_NTFY_TOPIC
