@@ -38,10 +38,10 @@ spec:
           - victoria-metrics
           - forgejo
           - jellyfin
-          - zyme
-          - limes
-          - clavis
-          - tare
+          - fermentation-tracker
+          - image-scanner
+          - password-manager
+          - price-tracker
     ports:
     - port: 8080
       protocol: TCP

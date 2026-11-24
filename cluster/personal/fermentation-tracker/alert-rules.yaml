@@ -1,0 +1,19 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: fermentation-tracker
+spec:
+  groups:
+  - name: fermentation-tracker
+    interval: 1m
+    rules:
+    - alert: FermentationTrackerSchedulerStalled
+      expr: time() - fermentation_tracker_scheduler_last_run_timestamp_seconds{job="fermentation-tracker"} > 600
+      for: 10m
+      labels:
+        severity: warning
+        topic: alerts-apps
+      annotations:
+        description: The scheduler runs every minute and has not finished a tick for ten, so stage reminders are not being sent and controllers get no new band. An incubator still switches itself off when its hours run out. `kubectl -n fermentation-tracker logs deploy/fermentation-tracker` shows the failing tick; restarting the pod restarts the loop.
+        summary: the fermentation tracker's scheduler has stopped ticking

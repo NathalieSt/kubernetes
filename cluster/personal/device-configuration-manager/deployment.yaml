@@ -1,0 +1,80 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: device-configuration-manager
+    app.kubernetes.io/version: e626c12
+  name: device-configuration-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: device-configuration-manager
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: device-configuration-manager
+        app.kubernetes.io/version: e626c12
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/device-configuration-manager:e626c12@sha256:f4f76e1dad92ced5b77d9b3fd2b31e81456f1f0e56b9eacc9d3b0ba0ca7d2896
+        name: device-configuration-manager
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: TZ
+          value: Europe/Vienna
+        - name: DEVICE_CONFIGURATION_MANAGER_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/device-configuration-manager
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: device-configuration-manager-db-secret
+              optional: false
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: device-configuration-manager-db-secret
+              optional: false
+        - name: DEVICE_CONFIGURATION_MANAGER_PUBLIC_URL
+          value: https://tessera.netbird.nathalie-stiefsohn.eu
+        - name: DEVICE_CONFIGURATION_MANAGER_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: DEVICE_CONFIGURATION_MANAGER_OIDC_CLIENT_ID
+          value: device-configuration-manager
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

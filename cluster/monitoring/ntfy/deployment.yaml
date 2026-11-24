@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        homelab/ntfy-start-hash: 162d8f09a60aded2
+        homelab/ntfy-start-hash: e41d9ae337927db1
       labels:
         app.kubernetes.io/name: ntfy
         app.kubernetes.io/version: v2.37.2
@@ -269,7 +269,7 @@ spec:
               key: auth-tokens
               name: ntfy-auth-secret
         - name: NTFY_AUTH_ACCESS_DECLARED
-          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo,victoria-metrics:alerts-vpn:wo,victoria-metrics:alerts-storage:wo,victoria-metrics:alerts-nodes:wo,victoria-metrics:alerts-platform:wo,victoria-metrics:alerts-apps:wo,victoria-metrics:alerts-monitoring:wo,forgejo-ci:ci:wo,jellyfin:jellyfin:wo,music-library-builder:music-library-builder:wo,zyme:zyme:wo,limes:limes:wo,arca:arca:wo,tare:tare:wo,hosts:hosts:wo
+          value: healthchecks:healthchecks:wo,glitchtip:glitchtip:wo,changedetection:changedetection:wo,victoria-metrics:alerts-vpn:wo,victoria-metrics:alerts-storage:wo,victoria-metrics:alerts-nodes:wo,victoria-metrics:alerts-platform:wo,victoria-metrics:alerts-apps:wo,victoria-metrics:alerts-monitoring:wo,forgejo-ci:ci:wo,jellyfin:jellyfin:wo,music-library-builder:music-library-builder:wo,fermentation-tracker:fermentation-tracker:wo,image-scanner:image-scanner:wo,password-server:password-server:wo,price-tracker:price-tracker:wo,hosts:hosts:wo
         resources:
           requests:
             cpu: 10m

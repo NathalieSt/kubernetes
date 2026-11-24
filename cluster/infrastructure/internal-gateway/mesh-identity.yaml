@@ -33,13 +33,13 @@ spec:
     matchLabels:
       app.kubernetes.io/name: internal-gateway
   extraDNSLabels:
-  - psono-api
   - audiomuse
   - auth
   - backups
   - changedetection
   - vscode
   - daybook
+  - zyme
   - code
   - 4get
   - glitchtip
@@ -48,22 +48,22 @@ spec:
   - helium
   - docs
   - home
+  - limes
   - it-tools
   - jellyfin
   - kavita
-  - limes
   - mail
   - orrery
   - music
   - neko
   - ntfy
   - omni-tools
+  - psono-api
   - redlib
   - rimworld
   - tandoor
   - vault
   - dojo
-  - zyme
   containerOverride:
     livenessProbe:
       exec:

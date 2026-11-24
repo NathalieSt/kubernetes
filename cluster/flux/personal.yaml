@@ -2,16 +2,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: arca
+  name: device-configuration-manager
   namespace: flux-system
 spec:
   interval: 24h
   retryInterval: 2m
-  targetNamespace: clavis
+  targetNamespace: device-configuration-manager
   sourceRef:
     kind: GitRepository
     name: manifests
-  path: ./cluster/personal/clavis/arca
+  path: ./cluster/personal/device-configuration-manager
   prune: true
   wait: true
   timeout: 10m
@@ -19,30 +19,9 @@ spec:
   - name: namespaces
   - name: flux-rbac
   - name: main-pg
+  - name: reflector
   - name: vault-secrets-operator-config
-  serviceAccountName: flux-arca
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: clavis
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  targetNamespace: clavis
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/personal/clavis/web
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: arca
-  serviceAccountName: flux-clavis
+  serviceAccountName: flux-device-configuration-manager
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -68,6 +47,30 @@ spec:
   - name: garage
   - name: k8up
   serviceAccountName: flux-diary
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: fermentation-tracker
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: fermentation-tracker
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/fermentation-tracker
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: reflector
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-fermentation-tracker
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -152,6 +155,77 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: password-manager
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: password-manager
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/password-manager/web
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: password-server
+  serviceAccountName: flux-password-manager
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: password-server
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: password-manager
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/password-manager/server
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: vault-secrets-operator-config
+  serviceAccountName: flux-password-server
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: price-tracker
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: price-tracker
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/personal/price-tracker
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: main-pg
+  - name: reflector
+  - name: vault-secrets-operator-config
+  - name: gluetun-proxy
+  - name: internal-dns
+  serviceAccountName: flux-price-tracker
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: stirling-pdf
   namespace: flux-system
 spec:
@@ -195,77 +269,3 @@ spec:
   - name: reflector
   - name: vault-secrets-operator-config
   serviceAccountName: flux-tandoor
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: tare
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  targetNamespace: tare
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/personal/tare
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: main-pg
-  - name: reflector
-  - name: vault-secrets-operator-config
-  - name: gluetun-proxy
-  - name: internal-dns
-  serviceAccountName: flux-tare
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: tessera
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  targetNamespace: tessera
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/personal/tessera
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: main-pg
-  - name: reflector
-  - name: vault-secrets-operator-config
-  serviceAccountName: flux-tessera
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: zyme
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  targetNamespace: zyme
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/personal/zyme
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: main-pg
-  - name: reflector
-  - name: vault-secrets-operator-config
-  serviceAccountName: flux-zyme

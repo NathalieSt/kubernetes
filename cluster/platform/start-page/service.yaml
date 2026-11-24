@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: start-page
-    app.kubernetes.io/version: 9ca912b
+    app.kubernetes.io/version: e0c9c25
   name: start-page
 spec:
   selector:

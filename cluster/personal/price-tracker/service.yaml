@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: price-tracker
+    app.kubernetes.io/version: 6bd35ba
+  name: price-tracker
+spec:
+  selector:
+    app.kubernetes.io/name: price-tracker
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

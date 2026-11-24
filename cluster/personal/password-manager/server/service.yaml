@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: password-server
+    app.kubernetes.io/version: 45777db
+  name: password-server
+spec:
+  selector:
+    app.kubernetes.io/name: password-server
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

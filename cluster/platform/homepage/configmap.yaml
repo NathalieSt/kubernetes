@@ -355,18 +355,24 @@ data:
           namespace: jellyfin
           app: seerr
     - Personal:
-      - clavis:
-          href: https://clavis.netbird.nathalie-stiefsohn.eu
-          icon: mdi-key-outline
-          description: Password manager, our client
-          namespace: clavis
-          app: clavis
+      - device-configuration-manager:
+          href: https://tessera.netbird.nathalie-stiefsohn.eu
+          icon: mdi-view-grid-outline
+          description: Device designs, compared with what each device is
+          namespace: device-configuration-manager
+          app: device-configuration-manager
       - diary:
           href: https://daybook.netbird.nathalie-stiefsohn.eu
           icon: mdi-book-lock-outline
           description: Encrypted diary and habit tracker
           namespace: diary
           app: diary
+      - fermentation-tracker:
+          href: https://zyme.netbird.nathalie-stiefsohn.eu
+          icon: mdi-bottle-tonic-outline
+          description: "Fermentation: batches, sensors and reminders"
+          namespace: fermentation-tracker
+          app: fermentation-tracker
       - mail:
           href: https://mail.netbird.nathalie-stiefsohn.eu
           icon: roundcube.png
@@ -380,6 +386,18 @@ data:
           description: Documents, OCRed and searchable
           namespace: paperless
           app: paperless
+      - password-manager:
+          href: https://clavis.netbird.nathalie-stiefsohn.eu
+          icon: mdi-key-outline
+          description: Password manager, our client
+          namespace: password-manager
+          app: password-manager
+      - price-tracker:
+          href: https://tare.netbird.nathalie-stiefsohn.eu
+          icon: mdi-scale-balance
+          description: Supermarket prices per kilo, litre and piece
+          namespace: price-tracker
+          app: price-tracker
       - stirling-pdf:
           href: https://pdf.netbird.nathalie-stiefsohn.eu
           icon: stirling-pdf.png
@@ -392,24 +410,6 @@ data:
           description: Recipes and meal plans
           namespace: tandoor
           app: tandoor
-      - tare:
-          href: https://tare.netbird.nathalie-stiefsohn.eu
-          icon: mdi-scale-balance
-          description: Supermarket prices per kilo, litre and piece
-          namespace: tare
-          app: tare
-      - tessera:
-          href: https://tessera.netbird.nathalie-stiefsohn.eu
-          icon: mdi-view-grid-outline
-          description: Device designs, compared with what each device is
-          namespace: tessera
-          app: tessera
-      - zyme:
-          href: https://zyme.netbird.nathalie-stiefsohn.eu
-          icon: mdi-bottle-tonic-outline
-          description: "Fermentation: batches, sensors and reminders"
-          namespace: zyme
-          app: zyme
     - Study:
       - anki-sync:
           href: https://docs.ankiweb.net/sync-server.html
@@ -547,12 +547,6 @@ data:
           namespace: redlib
           app: redlib
     - Platform:
-      - arca:
-          href: https://psono-api.netbird.nathalie-stiefsohn.eu
-          icon: mdi-safe
-          description: Our own server for clavis
-          namespace: clavis
-          app: arca
       - authelia:
           href: https://auth.netbird.nathalie-stiefsohn.eu
           icon: authelia.png
@@ -571,12 +565,6 @@ data:
           description: "Kubernetes console: pods, reasons, logs, events"
           namespace: cluster-console
           app: cluster-console
-      - fleet:
-          href: https://fleet.netbird.nathalie-stiefsohn.eu
-          icon: mdi-server-network
-          description: "Salt for the hosts: packages, NetBird, health"
-          namespace: fleet
-          app: fleet
       - headlamp:
           href: https://headlamp.netbird.nathalie-stiefsohn.eu
           icon: headlamp.png
@@ -589,6 +577,18 @@ data:
           description: How the homelab works, and runbooks
           namespace: homelab-docs
           app: homelab-docs
+      - host-management:
+          href: https://fleet.netbird.nathalie-stiefsohn.eu
+          icon: mdi-server-network
+          description: "Salt for the hosts: packages, NetBird, health"
+          namespace: host-management
+          app: host-management
+      - password-server:
+          href: https://psono-api.netbird.nathalie-stiefsohn.eu
+          icon: mdi-safe
+          description: Our own server for the password manager
+          namespace: password-manager
+          app: password-server
       - start-page:
           href: https://arx.netbird.nathalie-stiefsohn.eu
           icon: mdi-castle
@@ -614,12 +614,12 @@ data:
           description: Cron job monitoring
           namespace: healthchecks
           app: healthchecks
-      - limes:
+      - image-scanner:
           href: https://limes.netbird.nathalie-stiefsohn.eu
           icon: mdi-shield-search
           description: Security scans of every image in the cluster
-          namespace: limes
-          app: limes
+          namespace: image-scanner
+          app: image-scanner
       - monitoring-dashboard:
           href: https://orrery.netbird.nathalie-stiefsohn.eu
           icon: mdi-orbit

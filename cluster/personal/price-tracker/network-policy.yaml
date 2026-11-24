@@ -1,0 +1,172 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: price-tracker-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: price-tracker
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-gateway
+      podSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - internal-gateway
+          - internal-gateway-secondary
+          - blackbox-exporter
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: victoria-metrics
+    ports:
+    - port: 8080
+      protocol: TCP
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-dns
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-dns
+    ports:
+    - port: 5353
+      protocol: UDP
+    - port: 5353
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: postgres
+    ports:
+    - port: 5432
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ntfy
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tandoor
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8888
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: embeddings
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: embeddings
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8001
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: price-tracker-crawl-networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: price-tracker-crawl
+  policyTypes:
+  - Ingress
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: internal-dns
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: internal-dns
+    ports:
+    - port: 5353
+      protocol: UDP
+    - port: 5353
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: postgres
+    ports:
+    - port: 5432
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ntfy
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tandoor
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8888
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: embeddings
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: embeddings
+    ports:
+    - port: 8080
+      protocol: TCP
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gluetun-proxy
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: gluetun-proxy
+    ports:
+    - port: 8001
+      protocol: TCP

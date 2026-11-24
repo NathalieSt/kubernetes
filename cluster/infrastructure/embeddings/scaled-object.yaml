@@ -17,6 +17,6 @@ spec:
   - type: prometheus
     metadata:
       serverAddress: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
-      query: (sum(kube_job_status_active{namespace="tare",job_name=~"tare-crawl.*"}) or vector(0)) + on() (0 * max(up{job="kube-state-metrics"} == 1))
+      query: (sum(kube_job_status_active{namespace="price-tracker",job_name=~"price-tracker-crawl.*"}) or vector(0)) + on() (0 * max(up{job="kube-state-metrics"} == 1))
       threshold: "1"
       ignoreNullValues: "false"

@@ -35,39 +35,6 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-arca
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-arca-namespace-admin
-  namespace: clavis
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-arca
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-arca-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-arca
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
   name: flux-audiomuse-ai
   namespace: flux-system
 ---
@@ -227,26 +194,6 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-clavis
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-clavis-namespace-admin
-  namespace: clavis
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-clavis
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
   name: flux-cnpg
   namespace: flux-system
 ---
@@ -262,6 +209,39 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-cnpg
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-device-configuration-manager
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-device-configuration-manager-namespace-admin
+  namespace: device-configuration-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-device-configuration-manager
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-device-configuration-manager-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-device-configuration-manager
   namespace: flux-system
 ---
 apiVersion: v1
@@ -347,6 +327,39 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-fermentation-tracker
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-fermentation-tracker-namespace-admin
+  namespace: fermentation-tracker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-fermentation-tracker
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-fermentation-tracker-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-fermentation-tracker
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-flaresolverr
   namespace: flux-system
 ---
@@ -362,39 +375,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-flaresolverr
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-fleet
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-fleet-namespace-admin
-  namespace: fleet
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-fleet
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-fleet-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-fleet
   namespace: flux-system
 ---
 apiVersion: v1
@@ -706,6 +686,39 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-homelab-docs
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-host-management
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-host-management-namespace-admin
+  namespace: host-management
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-host-management
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-host-management-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-host-management
   namespace: flux-system
 ---
 apiVersion: v1
@@ -1380,6 +1393,92 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-password-manager
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-password-manager-namespace-admin
+  namespace: password-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-password-manager
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-password-server
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-password-server-namespace-admin
+  namespace: password-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-password-server
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-password-server-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-password-server
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-price-tracker
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-price-tracker-namespace-admin
+  namespace: price-tracker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-price-tracker
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flux-price-tracker-token-reviewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-token-reviewer
+subjects:
+- kind: ServiceAccount
+  name: flux-price-tracker
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-prowlarr
   namespace: flux-system
 ---
@@ -1804,72 +1903,6 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-tare
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-tare-namespace-admin
-  namespace: tare
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-tare
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-tare-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-tare
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-tessera
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-tessera-namespace-admin
-  namespace: tessera
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-tessera
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-tessera-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-tessera
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
   name: flux-trilium
   namespace: flux-system
 ---
@@ -2142,6 +2175,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-fleet
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-fleet-namespace-admin
+  namespace: fleet
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-fleet
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-zyme
   namespace: flux-system
 ---
@@ -2159,95 +2212,82 @@ subjects:
   name: flux-zyme
   namespace: flux-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: flux-zyme-token-reviewer
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-token-reviewer
-subjects:
-- kind: ServiceAccount
-  name: flux-zyme
-  namespace: flux-system
----
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-vim-dojo
+  name: flux-tare
   namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: flux-vim-dojo-namespace-admin
-  namespace: vim-dojo
+  name: flux-tare-namespace-admin
+  namespace: tare
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
 subjects:
 - kind: ServiceAccount
-  name: flux-vim-dojo
+  name: flux-tare
   namespace: flux-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-arx
+  name: flux-tessera
   namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: flux-arx-namespace-admin
-  namespace: arx
+  name: flux-tessera-namespace-admin
+  namespace: tessera
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
 subjects:
 - kind: ServiceAccount
-  name: flux-arx
+  name: flux-tessera
   namespace: flux-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-daybook
+  name: flux-clavis
   namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: flux-daybook-namespace-admin
-  namespace: daybook
+  name: flux-clavis-namespace-admin
+  namespace: clavis
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
 subjects:
 - kind: ServiceAccount
-  name: flux-daybook
+  name: flux-clavis
   namespace: flux-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-orrery
+  name: flux-arca
   namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: flux-orrery-namespace-admin
-  namespace: orrery
+  name: flux-arca-namespace-admin
+  namespace: clavis
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
 subjects:
 - kind: ServiceAccount
-  name: flux-orrery
+  name: flux-arca
   namespace: flux-system

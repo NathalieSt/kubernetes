@@ -83,9 +83,6 @@ spec:
     name: anki-sync
     namespace: flux-system
   - kind: Kustomization
-    name: arca
-    namespace: flux-system
-  - kind: Kustomization
     name: audiomuse-ai
     namespace: flux-system
   - kind: Kustomization
@@ -110,9 +107,6 @@ spec:
     name: clamav
     namespace: flux-system
   - kind: Kustomization
-    name: clavis
-    namespace: flux-system
-  - kind: Kustomization
     name: cluster-console
     namespace: flux-system
   - kind: Kustomization
@@ -126,6 +120,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: csi-driver-nfs
+    namespace: flux-system
+  - kind: Kustomization
+    name: device-configuration-manager
     namespace: flux-system
   - kind: Kustomization
     name: diary
@@ -143,10 +140,10 @@ spec:
     name: fdroid
     namespace: flux-system
   - kind: Kustomization
-    name: flaresolverr
+    name: fermentation-tracker
     namespace: flux-system
   - kind: Kustomization
-    name: fleet
+    name: flaresolverr
     namespace: flux-system
   - kind: Kustomization
     name: flux-notifications
@@ -197,6 +194,12 @@ spec:
     name: homepage
     namespace: flux-system
   - kind: Kustomization
+    name: host-management
+    namespace: flux-system
+  - kind: Kustomization
+    name: image-scanner
+    namespace: flux-system
+  - kind: Kustomization
     name: intel-device-gpu-plugin
     namespace: flux-system
   - kind: Kustomization
@@ -228,9 +231,6 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: lidarr
-    namespace: flux-system
-  - kind: Kustomization
-    name: limes
     namespace: flux-system
   - kind: Kustomization
     name: mail
@@ -276,6 +276,15 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: paperless
+    namespace: flux-system
+  - kind: Kustomization
+    name: password-manager
+    namespace: flux-system
+  - kind: Kustomization
+    name: password-server
+    namespace: flux-system
+  - kind: Kustomization
+    name: price-tracker
     namespace: flux-system
   - kind: Kustomization
     name: prowlarr
@@ -329,12 +338,6 @@ spec:
     name: tandoor
     namespace: flux-system
   - kind: Kustomization
-    name: tare
-    namespace: flux-system
-  - kind: Kustomization
-    name: tessera
-    namespace: flux-system
-  - kind: Kustomization
     name: trilium
     namespace: flux-system
   - kind: Kustomization
@@ -369,9 +372,6 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: waking-page
-    namespace: flux-system
-  - kind: Kustomization
-    name: zyme
     namespace: flux-system
   exclusionList:
   - ^Dependencies do not meet ready condition

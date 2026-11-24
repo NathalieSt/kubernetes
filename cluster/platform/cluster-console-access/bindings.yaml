@@ -31,7 +31,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cluster-console-operate
-  namespace: clavis
+  namespace: device-configuration-manager
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -88,6 +88,20 @@ kind: RoleBinding
 metadata:
   name: cluster-console-operate
   namespace: fdroid
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-console-operate
+subjects:
+- kind: ServiceAccount
+  name: cluster-console
+  namespace: cluster-console
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cluster-console-operate
+  namespace: fermentation-tracker
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -367,6 +381,34 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cluster-console-operate
+  namespace: password-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-console-operate
+subjects:
+- kind: ServiceAccount
+  name: cluster-console
+  namespace: cluster-console
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cluster-console-operate
+  namespace: price-tracker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-console-operate
+subjects:
+- kind: ServiceAccount
+  name: cluster-console
+  namespace: cluster-console
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cluster-console-operate
   namespace: radicale
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -465,34 +507,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cluster-console-operate
-  namespace: tare
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-console-operate
-subjects:
-- kind: ServiceAccount
-  name: cluster-console
-  namespace: cluster-console
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: cluster-console-operate
-  namespace: tessera
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-console-operate
-subjects:
-- kind: ServiceAccount
-  name: cluster-console
-  namespace: cluster-console
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: cluster-console-operate
   namespace: trilium
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -550,20 +564,6 @@ kind: RoleBinding
 metadata:
   name: cluster-console-operate
   namespace: waking-page
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-console-operate
-subjects:
-- kind: ServiceAccount
-  name: cluster-console
-  namespace: cluster-console
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: cluster-console-operate
-  namespace: zyme
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

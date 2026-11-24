@@ -27,15 +27,17 @@ spec:
   extraDNSLabels:
   - anki
   - bazarr
-  - clavis
   - pharos
+  - tessera
   - fdroid
-  - fleet
   - gameyfin
+  - fleet
   - karakeep
   - lidarr
   - miniflux
   - paperless
+  - clavis
+  - tare
   - prowlarr
   - qbittorrent
   - radarr
@@ -45,8 +47,6 @@ spec:
   - sonarr
   - arx
   - pdf
-  - tare
-  - tessera
   - notes
   containerOverride:
     livenessProbe:

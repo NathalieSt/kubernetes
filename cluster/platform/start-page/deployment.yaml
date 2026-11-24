@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: start-page
-    app.kubernetes.io/version: 9ca912b
+    app.kubernetes.io/version: e0c9c25
   name: start-page
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: start-page
-        app.kubernetes.io/version: 9ca912b
+        app.kubernetes.io/version: e0c9c25
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/start-page:9ca912b@sha256:cd1273bf0b4a764d6d7d3d5fbf1d9327ad2ef25f2883493f0d8a6981c19974fe
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/start-page:e0c9c25@sha256:3172bd07e7d3cfb0cd9c5d28dfa1f67060d38c17976c6e957f66646d82e0f489
         name: start-page
         ports:
         - containerPort: 8080

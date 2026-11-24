@@ -14,17 +14,17 @@ spec:
           operator: In
           values:
           - tandoor
-          - clavis
+          - password-manager
           - jellyfin
           - cnpg-system
           - authelia
           - healthchecks
           - ntfy
           - glitchtip
-          - zyme
-          - tessera
-          - tare
-          - limes
+          - fermentation-tracker
+          - device-configuration-manager
+          - price-tracker
+          - image-scanner
           - paperless
           - miniflux
       podSelector:
@@ -41,12 +41,12 @@ spec:
           - healthchecks
           - ntfy
           - glitchtip
-          - zyme
-          - tessera
-          - arca
-          - tare
-          - tare-crawl
-          - limes
+          - fermentation-tracker
+          - device-configuration-manager
+          - password-server
+          - price-tracker
+          - price-tracker-crawl
+          - image-scanner
           - paperless
           - miniflux
           - sonarr

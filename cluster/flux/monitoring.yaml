@@ -150,16 +150,16 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: limes
+  name: image-scanner
   namespace: flux-system
 spec:
   interval: 24h
   retryInterval: 2m
-  targetNamespace: limes
+  targetNamespace: image-scanner
   sourceRef:
     kind: GitRepository
     name: manifests
-  path: ./cluster/monitoring/limes
+  path: ./cluster/monitoring/image-scanner
   prune: true
   wait: true
   timeout: 10m

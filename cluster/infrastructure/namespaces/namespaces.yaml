@@ -77,18 +77,6 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
-    homelab.nathalie-stiefsohn.eu/category: personal
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/warn: restricted
-  name: clavis
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
     homelab.nathalie-stiefsohn.eu/category: platform
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline
@@ -130,6 +118,18 @@ metadata:
     pod-security.kubernetes.io/enforce: privileged
     pod-security.kubernetes.io/warn: restricted
   name: csi-driver-nfs
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    homelab.nathalie-stiefsohn.eu/category: personal
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: device-configuration-manager
 ---
 apiVersion: v1
 kind: Namespace
@@ -185,11 +185,11 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
-    homelab.nathalie-stiefsohn.eu/category: platform
+    homelab.nathalie-stiefsohn.eu/category: personal
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
-  name: fleet
+  name: fermentation-tracker
 ---
 apiVersion: v1
 kind: Namespace
@@ -341,6 +341,30 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
+    homelab.nathalie-stiefsohn.eu/category: platform
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: host-management
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    homelab.nathalie-stiefsohn.eu/category: monitoring
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: image-scanner
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
     homelab.nathalie-stiefsohn.eu/category: infrastructure
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: privileged
@@ -442,18 +466,6 @@ metadata:
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
   name: keda
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    homelab.nathalie-stiefsohn.eu/category: monitoring
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/warn: restricted
-  name: limes
 ---
 apiVersion: v1
 kind: Namespace
@@ -605,11 +617,35 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
+    homelab.nathalie-stiefsohn.eu/category: personal
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: password-manager
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
     homelab.nathalie-stiefsohn.eu/category: infrastructure
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
   name: postgres
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    homelab.nathalie-stiefsohn.eu/category: personal
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+  name: price-tracker
 ---
 apiVersion: v1
 kind: Namespace
@@ -737,30 +773,6 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
-    homelab.nathalie-stiefsohn.eu/category: personal
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/warn: restricted
-  name: tare
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    homelab.nathalie-stiefsohn.eu/category: personal
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/warn: restricted
-  name: tessera
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
     homelab.nathalie-stiefsohn.eu/category: study
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/enforce: baseline
@@ -874,15 +886,3 @@ metadata:
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
   name: waking-page
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    homelab.nathalie-stiefsohn.eu/category: personal
-    pod-security.kubernetes.io/audit: restricted
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/warn: restricted
-  name: zyme

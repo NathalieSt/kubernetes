@@ -12,12 +12,12 @@ resources:
 - healthchecks-db.yaml
 - ntfy-db.yaml
 - glitchtip-db.yaml
-- zyme-db.yaml
-- tessera-db.yaml
-- arca-db.yaml
-- tare-db.yaml
+- fermentation-tracker-db.yaml
+- device-configuration-manager-db.yaml
+- password-server-db.yaml
+- price-tracker-db.yaml
 - miniflux-db.yaml
-- limes-db.yaml
+- image-scanner-db.yaml
 - paperless-db.yaml
 - sonarr-main-db.yaml
 - sonarr-log-db.yaml

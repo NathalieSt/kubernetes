@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: device-configuration-manager
+spec:
+  name: device-configuration-manager
+  cluster:
+    name: postgres
+  owner: device-configuration-manager

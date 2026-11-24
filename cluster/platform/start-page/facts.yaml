@@ -19,17 +19,6 @@ data:
           "usesCistern": false
         },
         {
-          "generator": "arca",
-          "namespace": "clavis",
-          "group": "platform",
-          "about": "Our own server for clavis",
-          "url": "https://psono-api.netbird.nathalie-stiefsohn.eu",
-          "entry": "own",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": true
-        },
-        {
           "generator": "audiomuse-ai",
           "namespace": "jellyfin",
           "group": "media",
@@ -111,17 +100,6 @@ data:
           "leavesBy": "gluetun-proxy"
         },
         {
-          "generator": "clavis",
-          "namespace": "clavis",
-          "group": "personal",
-          "about": "Password manager, our client",
-          "url": "https://clavis.netbird.nathalie-stiefsohn.eu",
-          "entry": "guard",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": false
-        },
-        {
           "generator": "cluster-console",
           "namespace": "cluster-console",
           "group": "platform",
@@ -169,6 +147,17 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "device-configuration-manager",
+          "namespace": "device-configuration-manager",
+          "group": "personal",
+          "about": "Device designs, compared with what each device is",
+          "url": "https://tessera.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
           "generator": "diary",
           "namespace": "diary",
           "group": "personal",
@@ -214,6 +203,17 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "fermentation-tracker",
+          "namespace": "fermentation-tracker",
+          "group": "personal",
+          "about": "Fermentation: batches, sensors and reminders",
+          "url": "https://zyme.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
           "generator": "flaresolverr",
           "namespace": "jellyfin",
           "group": "mediaserver",
@@ -221,17 +221,6 @@ data:
           "sendsBackup": false,
           "usesCistern": false,
           "leavesBy": "gluetun-proxy"
-        },
-        {
-          "generator": "fleet",
-          "namespace": "fleet",
-          "group": "platform",
-          "about": "Salt for the hosts: packages, NetBird, health",
-          "url": "https://fleet.netbird.nathalie-stiefsohn.eu",
-          "entry": "second",
-          "sleeps": false,
-          "sendsBackup": true,
-          "usesCistern": false
         },
         {
           "generator": "flux-notifications",
@@ -393,6 +382,28 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "host-management",
+          "namespace": "host-management",
+          "group": "platform",
+          "about": "Salt for the hosts: packages, NetBird, health",
+          "url": "https://fleet.netbird.nathalie-stiefsohn.eu",
+          "entry": "second",
+          "sleeps": false,
+          "sendsBackup": true,
+          "usesCistern": false
+        },
+        {
+          "generator": "image-scanner",
+          "namespace": "image-scanner",
+          "group": "observability",
+          "about": "Security scans of every image in the cluster",
+          "url": "https://limes.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
           "generator": "intel-device-gpu-plugin",
           "namespace": "inteldeviceplugins-system",
           "group": "infrastructure",
@@ -499,17 +510,6 @@ data:
           "sendsBackup": false,
           "usesCistern": true,
           "leavesBy": "gluetun-proxy"
-        },
-        {
-          "generator": "limes",
-          "namespace": "limes",
-          "group": "observability",
-          "about": "Security scans of every image in the cluster",
-          "url": "https://limes.netbird.nathalie-stiefsohn.eu",
-          "entry": "guard",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": true
         },
         {
           "generator": "mail",
@@ -659,6 +659,40 @@ data:
           "sleeps": false,
           "sendsBackup": true,
           "usesCistern": true
+        },
+        {
+          "generator": "password-manager",
+          "namespace": "password-manager",
+          "group": "personal",
+          "about": "Password manager, our client",
+          "url": "https://clavis.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "password-server",
+          "namespace": "password-manager",
+          "group": "platform",
+          "about": "Our own server for the password manager",
+          "url": "https://psono-api.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true
+        },
+        {
+          "generator": "price-tracker",
+          "namespace": "price-tracker",
+          "group": "personal",
+          "about": "Supermarket prices per kilo, litre and piece",
+          "url": "https://tare.netbird.nathalie-stiefsohn.eu",
+          "entry": "guard",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": true,
+          "leavesBy": "gluetun-proxy"
         },
         {
           "generator": "prowlarr",
@@ -827,29 +861,6 @@ data:
           "usesCistern": true
         },
         {
-          "generator": "tare",
-          "namespace": "tare",
-          "group": "personal",
-          "about": "Supermarket prices per kilo, litre and piece",
-          "url": "https://tare.netbird.nathalie-stiefsohn.eu",
-          "entry": "guard",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": true,
-          "leavesBy": "gluetun-proxy"
-        },
-        {
-          "generator": "tessera",
-          "namespace": "tessera",
-          "group": "personal",
-          "about": "Device designs, compared with what each device is",
-          "url": "https://tessera.netbird.nathalie-stiefsohn.eu",
-          "entry": "own",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": true
-        },
-        {
           "generator": "trilium",
           "namespace": "trilium",
           "group": "study",
@@ -970,17 +981,6 @@ data:
           "sleeps": false,
           "sendsBackup": false,
           "usesCistern": false
-        },
-        {
-          "generator": "zyme",
-          "namespace": "zyme",
-          "group": "personal",
-          "about": "Fermentation: batches, sensors and reminders",
-          "url": "https://zyme.netbird.nathalie-stiefsohn.eu",
-          "entry": "guard",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": true
         }
       ]
     }

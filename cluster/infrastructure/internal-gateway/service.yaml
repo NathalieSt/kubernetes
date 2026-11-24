@@ -15,15 +15,15 @@ spec:
   - name: https
     port: 443
     targetPort: 443
-  - name: fleet-salt-publish
-    port: 4505
-    targetPort: 4505
-  - name: fleet-salt-return
-    port: 4506
-    targetPort: 4506
   - name: forgejo-ssh
     port: 2222
     targetPort: 2222
+  - name: host-management-salt-publish
+    port: 4505
+    targetPort: 4505
+  - name: host-management-salt-return
+    port: 4506
+    targetPort: 4506
   - name: neko-turn
     port: 3478
     targetPort: 3478

@@ -1,0 +1,130 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: image-scanner
+    app.kubernetes.io/version: c146c4d
+  name: image-scanner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: image-scanner
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: image-scanner
+        app.kubernetes.io/version: c146c4d
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      serviceAccountName: image-scanner
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/image-scanner:c146c4d@sha256:266416f4581b27e02a33e39caf24be689d18be15090a87ff3204d3438566452d
+        name: image-scanner
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /etc/image-scanner/pins
+          name: version-pins
+          readOnly: true
+        env:
+        - name: IMAGE_SCANNER_SCAN_NAMESPACE
+          value: image-scanner
+        - name: IMAGE_SCANNER_INVENTORY_NAMESPACES
+          value: ""
+        - name: IMAGE_SCANNER_GRYPE_IMAGE
+          value: anchore/grype:v0.121.1-nonroot@sha256:05f98b229a1041d5e8397edba7b073c84a4a2242f2b75fe5efeaba33ee4a3247
+        - name: IMAGE_SCANNER_GRYPE_CACHE_CLAIM
+          value: image-scanner-grype-cache-pvc
+        - name: IMAGE_SCANNER_CLAMAV_NAMESPACE
+          value: clamav
+        - name: IMAGE_SCANNER_CLAMAV_CRONJOBS
+          value: clamav-scan-local,clamav-scan-nas,clamav-scan-packages,clamav-scan-downloads,clamav-hash-lookup
+        - name: IMAGE_SCANNER_PATROL_ENABLED
+          value: "true"
+        - name: IMAGE_SCANNER_PATROL_CONCURRENCY
+          value: "2"
+        - name: IMAGE_SCANNER_PATROL_INTERVAL_MS
+          value: "900000"
+        - name: IMAGE_SCANNER_PATROL_MAX_AGE_MS
+          value: "86400000"
+        - name: IMAGE_SCANNER_SCAN_AVOID_NODES
+          value: raspberry-pi-5-0,raspberry-pi-5-1,raspberry-pi-5-2
+        - name: IMAGE_SCANNER_SCAN_PREFER_NODES
+          value: debian
+        - name: IMAGE_SCANNER_VM_URL
+          value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
+        - name: IMAGE_SCANNER_PINS_FILE
+          value: /etc/image-scanner/pins/pins.json
+        - name: IMAGE_SCANNER_OWN_REGISTRY
+          value: code.netbird.nathalie-stiefsohn.eu/my-homelab
+        - name: IMAGE_SCANNER_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080
+        - name: IMAGE_SCANNER_NTFY_TOPIC
+          value: image-scanner
+        - name: IMAGE_SCANNER_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: image-scanner-secret
+              optional: true
+        - name: IMAGE_SCANNER_PUBLIC_URL
+          value: https://limes.netbird.nathalie-stiefsohn.eu
+        - name: IMAGE_SCANNER_FORGEJO_URL
+          value: http://forgejo-http.forgejo.svc.cluster.local:3000
+        - name: IMAGE_SCANNER_FORGEJO_REPO
+          value: my-homelab/kubernetes-generator
+        - name: IMAGE_SCANNER_COMPOSE_REPOS
+          value: my-homelab/coordination-vps
+        - name: IMAGE_SCANNER_FORGEJO_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: forgejo-token
+              name: image-scanner-secret
+              optional: true
+        - name: IMAGE_SCANNER_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/image-scanner
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: image-scanner-db-secret
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: image-scanner-db-secret
+        - name: IMAGE_SCANNER_REGISTRY_SECRET
+          value: forgejo-registry-secret
+        - name: IMAGE_SCANNER_REGISTRY_PULL_ADDRESS
+          value: forgejo-http.forgejo.svc.cluster.local:3000
+        - name: IMAGE_SCANNER_REGISTRY_TOKEN_IMAGE
+          value: curlimages/curl:8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
+        - name: TZ
+          value: Europe/Vienna
+        - name: IMAGE_SCANNER_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: IMAGE_SCANNER_OIDC_CLIENT_ID
+          value: image-scanner
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+      volumes:
+      - name: version-pins
+        configMap:
+          name: image-scanner-version-pins

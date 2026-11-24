@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: password-manager
+    app.kubernetes.io/version: 45777db
+  name: password-manager
+spec:
+  selector:
+    app.kubernetes.io/name: password-manager
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

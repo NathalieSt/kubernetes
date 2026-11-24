@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: password-server
+    app.kubernetes.io/version: 45777db
+  name: password-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: password-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: password-server
+        app.kubernetes.io/version: 45777db
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/password-server:45777db@sha256:03bb2f71eda278a1f8dc4998616dda28b95427cd9ba28e7f67f59f80696b28ca
+        name: password-server
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: TZ
+          value: Europe/Vienna
+        - name: PASSWORD_SERVER_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/password-server
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: password-server-db-secret
+              optional: false
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: password-server-db-secret
+              optional: false
+        - name: PASSWORD_SERVER_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              key: private-key
+              name: password-server-secret
+              optional: false
+        - name: PASSWORD_SERVER_DB_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: db-secret
+              name: password-server-secret
+              optional: false
+        - name: PASSWORD_SERVER_CORS_ORIGINS
+          value: https://clavis.netbird.nathalie-stiefsohn.eu,tauri://localhost,http://tauri.localhost
+        - name: PASSWORD_SERVER_WEBAUTHN_ORIGINS
+          value: https://clavis.netbird.nathalie-stiefsohn.eu
+        - name: PASSWORD_SERVER_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080/
+        - name: PASSWORD_SERVER_NTFY_TOPIC
+          value: password-server
+        - name: PASSWORD_SERVER_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: password-server-ntfy-secret
+              optional: true
+        resources:
+          requests:
+            cpu: 20m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

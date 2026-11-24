@@ -835,12 +835,6 @@ spec:
                 probe_namespace: anki-sync
                 scale_to_zero: "false"
             - targets:
-              - http://arca.clavis.svc.cluster.local:8080/
-              labels:
-                probe_name: arca
-                probe_namespace: clavis
-                scale_to_zero: "false"
-            - targets:
               - http://audiomuse-ai.jellyfin.svc.cluster.local:8000/
               labels:
                 probe_name: audiomuse-ai
@@ -871,12 +865,6 @@ spec:
                 probe_namespace: changedetection
                 scale_to_zero: "false"
             - targets:
-              - http://clavis.clavis.svc.cluster.local:8080/
-              labels:
-                probe_name: clavis
-                probe_namespace: clavis
-                scale_to_zero: "false"
-            - targets:
               - http://cluster-console.cluster-console.svc.cluster.local:8080/
               labels:
                 probe_name: cluster-console
@@ -887,6 +875,12 @@ spec:
               labels:
                 probe_name: code-server
                 probe_namespace: code-server
+                scale_to_zero: "false"
+            - targets:
+              - http://device-configuration-manager.device-configuration-manager.svc.cluster.local:8080/
+              labels:
+                probe_name: device-configuration-manager
+                probe_namespace: device-configuration-manager
                 scale_to_zero: "false"
             - targets:
               - http://diary.diary.svc.cluster.local:8080/
@@ -901,10 +895,10 @@ spec:
                 probe_namespace: fdroid
                 scale_to_zero: "false"
             - targets:
-              - http://fleet.fleet.svc.cluster.local:8080/
+              - http://fermentation-tracker.fermentation-tracker.svc.cluster.local:8080/
               labels:
-                probe_name: fleet
-                probe_namespace: fleet
+                probe_name: fermentation-tracker
+                probe_namespace: fermentation-tracker
                 scale_to_zero: "false"
             - targets:
               - http://forgejo-http.forgejo.svc.cluster.local:3000/
@@ -961,6 +955,18 @@ spec:
                 probe_namespace: homepage
                 scale_to_zero: "false"
             - targets:
+              - http://host-management.host-management.svc.cluster.local:8080/
+              labels:
+                probe_name: host-management
+                probe_namespace: host-management
+                scale_to_zero: "false"
+            - targets:
+              - http://image-scanner.image-scanner.svc.cluster.local:8080/
+              labels:
+                probe_name: image-scanner
+                probe_namespace: image-scanner
+                scale_to_zero: "false"
+            - targets:
               - http://it-tools.it-tools.svc.cluster.local:8080/
               labels:
                 probe_name: it-tools
@@ -989,12 +995,6 @@ spec:
               labels:
                 probe_name: lidarr
                 probe_namespace: jellyfin
-                scale_to_zero: "false"
-            - targets:
-              - http://limes.limes.svc.cluster.local:8080/
-              labels:
-                probe_name: limes
-                probe_namespace: limes
                 scale_to_zero: "false"
             - targets:
               - http://roundcube.mail.svc.cluster.local:8000/
@@ -1043,6 +1043,24 @@ spec:
               labels:
                 probe_name: paperless
                 probe_namespace: paperless
+                scale_to_zero: "false"
+            - targets:
+              - http://password-manager.password-manager.svc.cluster.local:8080/
+              labels:
+                probe_name: password-manager
+                probe_namespace: password-manager
+                scale_to_zero: "false"
+            - targets:
+              - http://password-server.password-manager.svc.cluster.local:8080/
+              labels:
+                probe_name: password-server
+                probe_namespace: password-manager
+                scale_to_zero: "false"
+            - targets:
+              - http://price-tracker.price-tracker.svc.cluster.local:8080/
+              labels:
+                probe_name: price-tracker
+                probe_namespace: price-tracker
                 scale_to_zero: "false"
             - targets:
               - http://prowlarr.jellyfin.svc.cluster.local:9696/
@@ -1111,18 +1129,6 @@ spec:
                 probe_namespace: tandoor
                 scale_to_zero: "false"
             - targets:
-              - http://tare.tare.svc.cluster.local:8080/
-              labels:
-                probe_name: tare
-                probe_namespace: tare
-                scale_to_zero: "false"
-            - targets:
-              - http://tessera.tessera.svc.cluster.local:8080/
-              labels:
-                probe_name: tessera
-                probe_namespace: tessera
-                scale_to_zero: "false"
-            - targets:
               - http://trilium.trilium.svc.cluster.local:8080/
               labels:
                 probe_name: trilium
@@ -1139,12 +1145,6 @@ spec:
               labels:
                 probe_name: vim-trainer
                 probe_namespace: vim-trainer
-                scale_to_zero: "false"
-            - targets:
-              - http://zyme.zyme.svc.cluster.local:8080/
-              labels:
-                probe_name: zyme
-                probe_namespace: zyme
                 scale_to_zero: "false"
             relabel_configs:
             - source_labels:
@@ -1296,6 +1296,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: embeddings
+          - job_name: fermentation-tracker
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - fermentation-tracker
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: fermentation-tracker
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: fermentation-tracker
           - job_name: forgejo
             metrics_path: /metrics
             scheme: http
@@ -1409,6 +1437,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: gluetun-proxy
+          - job_name: image-scanner
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - image-scanner
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: image-scanner
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: image-scanner
           - job_name: internal-gateway
             metrics_path: /metrics
             scheme: http
@@ -1521,34 +1577,6 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: keda
-          - job_name: limes
-            metrics_path: /metrics
-            scheme: http
-            kubernetes_sd_configs:
-            - role: pod
-              namespaces:
-                names:
-                - limes
-            relabel_configs:
-            - source_labels:
-              - __meta_kubernetes_pod_label_app_kubernetes_io_name
-              regex: limes
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_container_port_number
-              regex: "8080"
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_node_name
-              target_label: node
-            - source_labels:
-              - __meta_kubernetes_pod_name
-              target_label: pod
-            - source_labels:
-              - __meta_kubernetes_namespace
-              target_label: namespace
-            - target_label: job
-              replacement: limes
           - job_name: main-pg
             metrics_path: /metrics
             scheme: http
@@ -1667,6 +1695,34 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: opnsense-exporter
+          - job_name: price-tracker
+            metrics_path: /metrics
+            scheme: http
+            kubernetes_sd_configs:
+            - role: pod
+              namespaces:
+                names:
+                - price-tracker
+            relabel_configs:
+            - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              regex: price-tracker
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_container_port_number
+              regex: "8080"
+              action: keep
+            - source_labels:
+              - __meta_kubernetes_pod_node_name
+              target_label: node
+            - source_labels:
+              - __meta_kubernetes_pod_name
+              target_label: pod
+            - source_labels:
+              - __meta_kubernetes_namespace
+              target_label: namespace
+            - target_label: job
+              replacement: price-tracker
           - job_name: qbittorrent
             metrics_path: /metrics
             scheme: http
@@ -1751,34 +1807,6 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: redis
-          - job_name: tare
-            metrics_path: /metrics
-            scheme: http
-            kubernetes_sd_configs:
-            - role: pod
-              namespaces:
-                names:
-                - tare
-            relabel_configs:
-            - source_labels:
-              - __meta_kubernetes_pod_label_app_kubernetes_io_name
-              regex: tare
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_container_port_number
-              regex: "8080"
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_node_name
-              target_label: node
-            - source_labels:
-              - __meta_kubernetes_pod_name
-              target_label: pod
-            - source_labels:
-              - __meta_kubernetes_namespace
-              target_label: namespace
-            - target_label: job
-              replacement: tare
           - job_name: valkey
             metrics_path: /metrics
             scheme: http
@@ -1930,34 +1958,6 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: victoria-logs
-          - job_name: zyme
-            metrics_path: /metrics
-            scheme: http
-            kubernetes_sd_configs:
-            - role: pod
-              namespaces:
-                names:
-                - zyme
-            relabel_configs:
-            - source_labels:
-              - __meta_kubernetes_pod_label_app_kubernetes_io_name
-              regex: zyme
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_container_port_number
-              regex: "8080"
-              action: keep
-            - source_labels:
-              - __meta_kubernetes_pod_node_name
-              target_label: node
-            - source_labels:
-              - __meta_kubernetes_pod_name
-              target_label: pod
-            - source_labels:
-              - __meta_kubernetes_namespace
-              target_label: namespace
-            - target_label: job
-              replacement: zyme
         resources:
           limits:
             cpu: "1"
