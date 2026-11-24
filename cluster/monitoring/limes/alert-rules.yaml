@@ -33,7 +33,7 @@ spec:
         severity: warning
         topic: alerts-monitoring
       annotations:
-        description: "The patrol rescans every image daily, so a result three days old means it is not keeping up: scans are slow or failing, though each sweep succeeds. orrery's Limes dashboard lists the oldest results; `kubectl -n limes get jobs` shows how long scans take and on which node."
+        description: "The patrol rescans every image daily, so a result three days old means it is not keeping up: scans are slow or failing, though each sweep succeeds. The monitoring dashboard's Limes screen lists the oldest results; `kubectl -n limes get jobs` shows how long scans take and on which node."
         summary: "{{ $value }} running images have not been scanned for three days"
     - alert: LimesUpdateCheckFailing
       expr: limes_updates_healthy{job="limes"} == 0

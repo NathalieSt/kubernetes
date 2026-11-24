@@ -86,9 +86,6 @@ spec:
     name: arca
     namespace: flux-system
   - kind: Kustomization
-    name: arx
-    namespace: flux-system
-  - kind: Kustomization
     name: audiomuse-ai
     namespace: flux-system
   - kind: Kustomization
@@ -116,6 +113,12 @@ spec:
     name: clavis
     namespace: flux-system
   - kind: Kustomization
+    name: cluster-console
+    namespace: flux-system
+  - kind: Kustomization
+    name: cluster-console-access
+    namespace: flux-system
+  - kind: Kustomization
     name: cnpg
     namespace: flux-system
   - kind: Kustomization
@@ -125,7 +128,7 @@ spec:
     name: csi-driver-nfs
     namespace: flux-system
   - kind: Kustomization
-    name: daybook
+    name: diary
     namespace: flux-system
   - kind: Kustomization
     name: egress-guard
@@ -239,6 +242,9 @@ spec:
     name: miniflux
     namespace: flux-system
   - kind: Kustomization
+    name: monitoring-dashboard
+    namespace: flux-system
+  - kind: Kustomization
     name: music-library-builder
     namespace: flux-system
   - kind: Kustomization
@@ -269,16 +275,7 @@ spec:
     name: opnsense-exporter
     namespace: flux-system
   - kind: Kustomization
-    name: orrery
-    namespace: flux-system
-  - kind: Kustomization
     name: paperless
-    namespace: flux-system
-  - kind: Kustomization
-    name: pharos
-    namespace: flux-system
-  - kind: Kustomization
-    name: pharos-access
     namespace: flux-system
   - kind: Kustomization
     name: prowlarr
@@ -315,6 +312,9 @@ spec:
     namespace: flux-system
   - kind: Kustomization
     name: stall-watch
+    namespace: flux-system
+  - kind: Kustomization
+    name: start-page
     namespace: flux-system
   - kind: Kustomization
     name: stirling-pdf

@@ -264,6 +264,27 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
+        - client_id: cluster-console
+          client_name: cluster-console
+          public: true
+          authorization_policy: two_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://pharos.netbird.nathalie-stiefsohn.eu/auth/callback
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          - offline_access
+          grant_types:
+          - authorization_code
+          - refresh_token
+          response_types:
+          - code
+          token_endpoint_auth_method: none
+          consent_mode: implicit
         - client_id: fleet
           client_name: fleet
           public: true
@@ -463,8 +484,8 @@ data:
           - code
           token_endpoint_auth_method: client_secret_basic
           consent_mode: implicit
-        - client_id: orrery
-          client_name: orrery
+        - client_id: monitoring-dashboard
+          client_name: monitoring-dashboard
           public: true
           authorization_policy: one_factor
           require_pkce: true
@@ -503,27 +524,6 @@ data:
           response_types:
           - code
           token_endpoint_auth_method: client_secret_post
-          consent_mode: implicit
-        - client_id: pharos
-          client_name: pharos
-          public: true
-          authorization_policy: two_factor
-          require_pkce: true
-          pkce_challenge_method: S256
-          redirect_uris:
-          - https://pharos.netbird.nathalie-stiefsohn.eu/auth/callback
-          scopes:
-          - openid
-          - profile
-          - email
-          - groups
-          - offline_access
-          grant_types:
-          - authorization_code
-          - refresh_token
-          response_types:
-          - code
-          token_endpoint_auth_method: none
           consent_mode: implicit
         - client_id: tandoor
           client_name: tandoor

@@ -175,6 +175,28 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: monitoring-dashboard
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: monitoring-dashboard
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/monitoring/monitoring-dashboard
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: victoria-metrics
+  serviceAccountName: flux-monitoring-dashboard
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: ntfy
   namespace: flux-system
 spec:
@@ -216,28 +238,6 @@ spec:
   - name: namespaces
   - name: flux-rbac
   serviceAccountName: flux-opnsense-exporter
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: orrery
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  targetNamespace: orrery
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/monitoring/orrery
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: victoria-metrics
-  serviceAccountName: flux-orrery
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

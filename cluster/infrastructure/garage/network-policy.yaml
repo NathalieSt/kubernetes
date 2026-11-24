@@ -19,7 +19,7 @@ spec:
           kubernetes.io/metadata.name: code-server
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: daybook
+          kubernetes.io/metadata.name: diary
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: fleet

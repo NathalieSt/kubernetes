@@ -68,26 +68,6 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-arx
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-arx-namespace-admin
-  namespace: arx
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-arx
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
   name: flux-audiomuse-ai
   namespace: flux-system
 ---
@@ -287,21 +267,21 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: flux-daybook
+  name: flux-diary
   namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: flux-daybook-namespace-admin
-  namespace: daybook
+  name: flux-diary-namespace-admin
+  namespace: diary
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: flux-namespace-admin
 subjects:
 - kind: ServiceAccount
-  name: flux-daybook
+  name: flux-diary
   namespace: flux-system
 ---
 apiVersion: v1
@@ -1102,6 +1082,26 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: flux-monitoring-dashboard
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-monitoring-dashboard-namespace-admin
+  namespace: monitoring-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-monitoring-dashboard
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: flux-music-library-builder
   namespace: flux-system
 ---
@@ -1342,26 +1342,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-opnsense-exporter
-  namespace: flux-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: flux-orrery
-  namespace: flux-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: flux-orrery-namespace-admin
-  namespace: orrery
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux-namespace-admin
-subjects:
-- kind: ServiceAccount
-  name: flux-orrery
   namespace: flux-system
 ---
 apiVersion: v1
@@ -1726,6 +1706,26 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-stall-watch
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-start-page
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-start-page-namespace-admin
+  namespace: start-page
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-start-page
   namespace: flux-system
 ---
 apiVersion: v1
@@ -2190,4 +2190,64 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: flux-vim-dojo
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-arx
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-arx-namespace-admin
+  namespace: arx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-arx
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-daybook
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-daybook-namespace-admin
+  namespace: daybook
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-daybook
+  namespace: flux-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux-orrery
+  namespace: flux-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux-orrery-namespace-admin
+  namespace: orrery
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux-namespace-admin
+subjects:
+- kind: ServiceAccount
+  name: flux-orrery
   namespace: flux-system

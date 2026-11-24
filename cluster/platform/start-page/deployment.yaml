@@ -3,41 +3,41 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: arx
-    app.kubernetes.io/version: 56205dd
-  name: arx
+    app.kubernetes.io/name: start-page
+    app.kubernetes.io/version: 9ca912b
+  name: start-page
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: arx
+      app.kubernetes.io/name: start-page
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: arx
-        app.kubernetes.io/version: 56205dd
+        app.kubernetes.io/name: start-page
+        app.kubernetes.io/version: 9ca912b
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/arx:56205dd@sha256:6e530f3c5820d5a59d5828c30dccae19020165a739f1d0807d9e4db182fbcb24
-        name: arx
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/start-page:9ca912b@sha256:cd1273bf0b4a764d6d7d3d5fbf1d9327ad2ef25f2883493f0d8a6981c19974fe
+        name: start-page
         ports:
         - containerPort: 8080
           name: http
         volumeMounts:
-        - mountPath: /etc/arx/facts
+        - mountPath: /etc/start-page/facts
           name: facts
           readOnly: true
         env:
-        - name: ARX_VM_URL
+        - name: START_PAGE_VM_URL
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
         - name: WEB_ADDR
           value: :8080
-        - name: ARX_FACTS_FILE
-          value: /etc/arx/facts/facts.json
+        - name: START_PAGE_FACTS_FILE
+          value: /etc/start-page/facts/facts.json
         resources:
           requests:
             cpu: 25m
@@ -59,7 +59,7 @@ spec:
       volumes:
       - name: facts
         configMap:
-          name: arx-facts
+          name: start-page-facts
       securityContext:
         fsGroup: 1000
         runAsUser: 1000

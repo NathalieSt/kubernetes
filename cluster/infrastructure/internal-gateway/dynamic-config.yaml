@@ -44,13 +44,6 @@ data:
           entryPoints:
           - websecure
           service: arca
-        arx:
-          rule: Host(`arx.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: arx
-          middlewares:
-          - authelia
         audiomuse-ai:
           rule: Host(`audiomuse.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -91,6 +84,13 @@ data:
           service: clavis
           middlewares:
           - authelia
+        cluster-console:
+          rule: Host(`pharos.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: cluster-console
+          middlewares:
+          - authelia
         code-server:
           rule: Host(`vscode.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -98,11 +98,11 @@ data:
           service: code-server
           middlewares:
           - authelia
-        daybook:
+        diary:
           rule: Host(`daybook.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
-          service: daybook
+          service: diary
           middlewares:
           - authelia
         fdroid:
@@ -227,6 +227,11 @@ data:
           entryPoints:
           - websecure
           service: miniflux
+        monitoring-dashboard:
+          rule: Host(`orrery.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: monitoring-dashboard
         music-library-builder:
           rule: Host(`music.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -254,23 +259,11 @@ data:
           middlewares:
           - authelia
           - waking
-        orrery:
-          rule: Host(`orrery.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: orrery
         paperless:
           rule: Host(`paperless.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
           service: paperless
-        pharos:
-          rule: Host(`pharos.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: pharos
-          middlewares:
-          - authelia
         prowlarr:
           rule: Host(`prowlarr.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -323,6 +316,13 @@ data:
           entryPoints:
           - websecure
           service: sonarr
+          middlewares:
+          - authelia
+        start-page:
+          rule: Host(`arx.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: start-page
           middlewares:
           - authelia
         stirling-pdf:
@@ -389,10 +389,6 @@ data:
           loadBalancer:
             servers:
             - url: http://arca.clavis.svc.cluster.local:8080
-        arx:
-          loadBalancer:
-            servers:
-            - url: http://arx.arx.svc.cluster.local:8080
         audiomuse-ai:
           loadBalancer:
             servers:
@@ -417,14 +413,18 @@ data:
           loadBalancer:
             servers:
             - url: http://clavis.clavis.svc.cluster.local:8080
+        cluster-console:
+          loadBalancer:
+            servers:
+            - url: http://cluster-console.cluster-console.svc.cluster.local:8080
         code-server:
           loadBalancer:
             servers:
             - url: http://code-server.code-server.svc.cluster.local:8080
-        daybook:
+        diary:
           loadBalancer:
             servers:
-            - url: http://daybook.daybook.svc.cluster.local:8080
+            - url: http://diary.diary.svc.cluster.local:8080
         fdroid:
           loadBalancer:
             servers:
@@ -501,6 +501,10 @@ data:
           loadBalancer:
             servers:
             - url: http://miniflux.miniflux.svc.cluster.local:8080
+        monitoring-dashboard:
+          loadBalancer:
+            servers:
+            - url: http://monitoring-dashboard.monitoring-dashboard.svc.cluster.local:8080
         music-library-builder:
           loadBalancer:
             servers:
@@ -517,18 +521,10 @@ data:
           loadBalancer:
             servers:
             - url: http://omni-tools.omni-tools.svc.cluster.local:8080
-        orrery:
-          loadBalancer:
-            servers:
-            - url: http://orrery.orrery.svc.cluster.local:8080
         paperless:
           loadBalancer:
             servers:
             - url: http://paperless.paperless.svc.cluster.local:8000
-        pharos:
-          loadBalancer:
-            servers:
-            - url: http://pharos.pharos.svc.cluster.local:8080
         prowlarr:
           loadBalancer:
             servers:
@@ -561,6 +557,10 @@ data:
           loadBalancer:
             servers:
             - url: http://sonarr.jellyfin.svc.cluster.local:8989
+        start-page:
+          loadBalancer:
+            servers:
+            - url: http://start-page.start-page.svc.cluster.local:8080
         stirling-pdf:
           loadBalancer:
             servers:

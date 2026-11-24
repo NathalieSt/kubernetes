@@ -3,21 +3,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: daybook
-    app.kubernetes.io/version: 60efa74
-  name: daybook
+    app.kubernetes.io/name: diary
+    app.kubernetes.io/version: "5615191"
+  name: diary
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: daybook
+      app.kubernetes.io/name: diary
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: daybook
-        app.kubernetes.io/version: 60efa74
+        app.kubernetes.io/name: diary
+        app.kubernetes.io/version: "5615191"
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
@@ -25,29 +25,29 @@ spec:
       - command:
         - sh
         - -c
-        - chown 1000:1000 /var/lib/daybook
+        - chown 1000:1000 /var/lib/diary
         image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
         name: permission-fix
         volumeMounts:
-        - mountPath: /var/lib/daybook
+        - mountPath: /var/lib/diary
           name: data-volume
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook:60efa74@sha256:d5aa034137e73c858a481c290ed336fa83b33b4eb127c4f0871b7f5ff705fb4d
-        name: daybook
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/diary:5615191@sha256:3d2651f2eb425af0de51991adbf67390458b2e646aac0a90cbdd4da1f0a1b6a4
+        name: diary
         ports:
         - containerPort: 8080
           name: http
         volumeMounts:
-        - mountPath: /var/lib/daybook
+        - mountPath: /var/lib/diary
           name: data-volume
         env:
         - name: WEB_ADDR
           value: :8080
-        - name: DAYBOOK_DATA_DIR
-          value: /var/lib/daybook
-        - name: DAYBOOK_STATIC_ROOT
+        - name: DIARY_DATA_DIR
+          value: /var/lib/diary
+        - name: DIARY_STATIC_ROOT
           value: /app/ui/dist
         resources:
           requests:
@@ -67,7 +67,7 @@ spec:
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: daybook-data-pvc
+          claimName: diary-data-pvc
       securityContext:
         seccompProfile:
           type: RuntimeDefault

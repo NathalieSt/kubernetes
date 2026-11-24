@@ -2,13 +2,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  annotations:
-    k8up.io/backup: "true"
-  name: daybook-data-pvc
+  name: diary-data-pvc
 spec:
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
-  storageClassName: nfs-local
+  storageClassName: ""
+  volumeName: diary-diary-data-pvc

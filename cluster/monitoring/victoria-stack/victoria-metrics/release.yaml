@@ -841,12 +841,6 @@ spec:
                 probe_namespace: clavis
                 scale_to_zero: "false"
             - targets:
-              - http://arx.arx.svc.cluster.local:8080/
-              labels:
-                probe_name: arx
-                probe_namespace: arx
-                scale_to_zero: "false"
-            - targets:
               - http://audiomuse-ai.jellyfin.svc.cluster.local:8000/
               labels:
                 probe_name: audiomuse-ai
@@ -883,16 +877,22 @@ spec:
                 probe_namespace: clavis
                 scale_to_zero: "false"
             - targets:
+              - http://cluster-console.cluster-console.svc.cluster.local:8080/
+              labels:
+                probe_name: cluster-console
+                probe_namespace: cluster-console
+                scale_to_zero: "false"
+            - targets:
               - http://code-server.code-server.svc.cluster.local:8080/
               labels:
                 probe_name: code-server
                 probe_namespace: code-server
                 scale_to_zero: "false"
             - targets:
-              - http://daybook.daybook.svc.cluster.local:8080/
+              - http://diary.diary.svc.cluster.local:8080/
               labels:
-                probe_name: daybook
-                probe_namespace: daybook
+                probe_name: diary
+                probe_namespace: diary
                 scale_to_zero: "false"
             - targets:
               - http://fdroid.fdroid.svc.cluster.local:8080/
@@ -1009,6 +1009,12 @@ spec:
                 probe_namespace: miniflux
                 scale_to_zero: "false"
             - targets:
+              - http://monitoring-dashboard.monitoring-dashboard.svc.cluster.local:8080/
+              labels:
+                probe_name: monitoring-dashboard
+                probe_namespace: monitoring-dashboard
+                scale_to_zero: "false"
+            - targets:
               - http://music-library-builder.jellyfin.svc.cluster.local:8140/
               labels:
                 probe_name: music-library-builder
@@ -1033,22 +1039,10 @@ spec:
                 probe_namespace: omni-tools
                 scale_to_zero: "true"
             - targets:
-              - http://orrery.orrery.svc.cluster.local:8080/
-              labels:
-                probe_name: orrery
-                probe_namespace: orrery
-                scale_to_zero: "false"
-            - targets:
               - http://paperless.paperless.svc.cluster.local:8000/
               labels:
                 probe_name: paperless
                 probe_namespace: paperless
-                scale_to_zero: "false"
-            - targets:
-              - http://pharos.pharos.svc.cluster.local:8080/
-              labels:
-                probe_name: pharos
-                probe_namespace: pharos
                 scale_to_zero: "false"
             - targets:
               - http://prowlarr.jellyfin.svc.cluster.local:9696/
@@ -1097,6 +1091,12 @@ spec:
               labels:
                 probe_name: sonarr
                 probe_namespace: jellyfin
+                scale_to_zero: "false"
+            - targets:
+              - http://start-page.start-page.svc.cluster.local:8080/
+              labels:
+                probe_name: start-page
+                probe_namespace: start-page
                 scale_to_zero: "false"
             - targets:
               - http://stirling-pdf.stirling-pdf.svc.cluster.local:8080/
@@ -1240,18 +1240,18 @@ spec:
               target_label: namespace
             - target_label: job
               replacement: cnpg
-          - job_name: daybook
+          - job_name: diary
             metrics_path: /metrics
             scheme: http
             kubernetes_sd_configs:
             - role: pod
               namespaces:
                 names:
-                - daybook
+                - diary
             relabel_configs:
             - source_labels:
               - __meta_kubernetes_pod_label_app_kubernetes_io_name
-              regex: daybook
+              regex: diary
               action: keep
             - source_labels:
               - __meta_kubernetes_pod_container_port_number
@@ -1267,7 +1267,7 @@ spec:
               - __meta_kubernetes_namespace
               target_label: namespace
             - target_label: job
-              replacement: daybook
+              replacement: diary
           - job_name: embeddings
             metrics_path: /metrics
             scheme: http

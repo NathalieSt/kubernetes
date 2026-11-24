@@ -33,6 +33,7 @@ spec:
           operator: In
           values:
           - backup-dashboard
+          - cluster-console
           - fleet
           - forgejo
           - gameyfin
@@ -43,9 +44,8 @@ spec:
           - limes
           - mail
           - miniflux
-          - orrery
+          - monitoring-dashboard
           - paperless
-          - pharos
           - tandoor
           - tessera
           - trilium

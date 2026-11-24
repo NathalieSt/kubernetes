@@ -543,9 +543,9 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   labels:
-    app.kubernetes.io/instance: daybook
+    app.kubernetes.io/instance: diary
     app.kubernetes.io/name: restore-drill
-  name: restore-drill-daybook
+  name: restore-drill-diary
 spec:
   schedule: 30 10 4 * *
   timeZone: Europe/Vienna
@@ -559,7 +559,7 @@ spec:
       template:
         metadata:
           labels:
-            app.kubernetes.io/instance: daybook
+            app.kubernetes.io/instance: diary
             app.kubernetes.io/name: restore-drill
         spec:
           imagePullSecrets:
@@ -569,7 +569,7 @@ spec:
             - /backup-dashboard
             - drill
             - --namespace
-            - daybook
+            - diary
             - --target
             - /scratch
             image: code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard:538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03

@@ -13,7 +13,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: arx
+          kubernetes.io/metadata.name: cluster-console
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: code-server
@@ -31,10 +31,10 @@ spec:
           kubernetes.io/metadata.name: limes
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: orrery
+          kubernetes.io/metadata.name: monitoring-dashboard
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: pharos
+          kubernetes.io/metadata.name: start-page
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: victoria-metrics

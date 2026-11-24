@@ -2,8 +2,8 @@
 apiVersion: k8up.io/v1
 kind: Schedule
 metadata:
-  name: daybook-backup
-  namespace: daybook
+  name: diary-backup
+  namespace: diary
 spec:
   backend:
     repoPasswordSecretRef:
@@ -11,7 +11,7 @@ spec:
       key: password
     s3:
       endpoint: http://garage.garage.svc.cluster.local:3900
-      bucket: kubernetes-backups-daybook
+      bucket: kubernetes-backups-diary
       accessKeyIDSecretRef:
         name: garage-backup-access-key-secret
         key: access-key-id
@@ -26,7 +26,7 @@ spec:
       seccompProfile:
         type: RuntimeDefault
     podConfigRef:
-      name: daybook-backup-pod
+      name: diary-backup-pod
     activeDeadlineSeconds: 28800
   prune:
     schedule: 0 5 * * 0
@@ -39,8 +39,8 @@ spec:
 apiVersion: k8up.io/v1
 kind: PodConfig
 metadata:
-  name: daybook-backup-pod
-  namespace: daybook
+  name: diary-backup-pod
+  namespace: diary
 spec:
   template:
     spec:
