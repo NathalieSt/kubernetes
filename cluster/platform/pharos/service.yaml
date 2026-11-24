@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: pharos
-    app.kubernetes.io/version: d9b1a51
+    app.kubernetes.io/version: 1134fdc
   name: pharos
 spec:
   selector:
