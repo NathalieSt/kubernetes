@@ -8,14 +8,14 @@ data:
     # The Salt master and salt-api, beside Fleet in one pod. Paths are set explicitly: several
     # defaults sit under /var/cache and /var/log, which the non-root image cannot write.
     user: salt
-    # Salt 3008 names the master key `<id>.pem`, and the id defaults to the pod name: without
-    # this every rollout gave the master a new key, which every enrolled minion refuses.
-    id: host-management
+    # Salt 3008 keeps the master key as `<id>.pem`, master.pem an absolute link to it under /var/lib/fleet:
+    # a new id or path (as in the 2026-11-24 rename) is a new key, which every enrolled minion refuses.
+    id: fleet
     interface: 0.0.0.0
-    pki_dir: /var/lib/host-management/salt/pki
-    cachedir: /var/lib/host-management/salt/cache
-    sqlite_queue_dir: /var/lib/host-management/salt/cache/queues
-    extension_modules: /var/lib/host-management/salt/cache/extmods
+    pki_dir: /var/lib/fleet/salt/pki
+    cachedir: /var/lib/fleet/salt/cache
+    sqlite_queue_dir: /var/lib/fleet/salt/cache/queues
+    extension_modules: /var/lib/fleet/salt/cache/extmods
     sock_dir: /run/salt/master
     pidfile: /run/salt/salt-master.pid
     log_file: /dev/stdout
@@ -32,13 +32,13 @@ data:
 
     # The second root is Fleet's: the execution modules it publishes, as `_modules/fleet_*.py`.
     file_roots:
-      base: [/srv/salt/states, /var/lib/host-management/salt-files]
+      base: [/srv/salt/states, /var/lib/fleet/salt-files]
     pillar_roots:
       base: [/srv/salt/pillar]
     # Fleet's Pillar tab, over the pillar above key by key: layers/fleet.yaml, then the host's
     # layers/hosts/<id>.yaml. stack.cfg, beside them, is the setup container's.
     ext_pillar:
-      - stack: /var/lib/host-management/pillar/stack.cfg
+      - stack: /var/lib/fleet/pillar/stack.cfg
     # The kubelet keeps a ConfigMap's files in `..data` and a dated `..<timestamp>` copy, which
     # would otherwise be listed as states of their own.
     file_ignore_regex:
