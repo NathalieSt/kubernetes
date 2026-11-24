@@ -39,11 +39,6 @@ data:
           entryPoints:
           - websecure
           service: anki-sync
-        arca:
-          rule: Host(`psono-api.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: arca
         audiomuse-ai:
           rule: Host(`audiomuse.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -77,13 +72,6 @@ data:
           service: changedetection
           middlewares:
           - authelia
-        clavis:
-          rule: Host(`clavis.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: clavis
-          middlewares:
-          - authelia
         cluster-console:
           rule: Host(`pharos.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -98,6 +86,11 @@ data:
           service: code-server
           middlewares:
           - authelia
+        device-configuration-manager:
+          rule: Host(`tessera.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: device-configuration-manager
         diary:
           rule: Host(`daybook.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -110,11 +103,11 @@ data:
           entryPoints:
           - websecure
           service: fdroid
-        fleet:
-          rule: Host(`fleet.netbird.nathalie-stiefsohn.eu`)
+        fermentation-tracker:
+          rule: Host(`zyme.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
           - websecure
-          service: fleet
+          service: fermentation-tracker
           middlewares:
           - authelia
         forgejo:
@@ -175,6 +168,20 @@ data:
           service: homepage
           middlewares:
           - authelia
+        host-management:
+          rule: Host(`fleet.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: host-management
+          middlewares:
+          - authelia
+        image-scanner:
+          rule: Host(`limes.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: image-scanner
+          middlewares:
+          - authelia
         it-tools:
           rule: Host(`it-tools.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -206,13 +213,6 @@ data:
           entryPoints:
           - websecure
           service: lidarr
-          middlewares:
-          - authelia
-        limes:
-          rule: Host(`limes.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: limes
           middlewares:
           - authelia
         mail:
@@ -264,6 +264,25 @@ data:
           entryPoints:
           - websecure
           service: paperless
+        password-manager:
+          rule: Host(`clavis.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: password-manager
+          middlewares:
+          - authelia
+        password-server:
+          rule: Host(`psono-api.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: password-server
+        price-tracker:
+          rule: Host(`tare.netbird.nathalie-stiefsohn.eu`)
+          entryPoints:
+          - websecure
+          service: price-tracker
+          middlewares:
+          - authelia
         prowlarr:
           rule: Host(`prowlarr.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -340,18 +359,6 @@ data:
           service: tandoor
           middlewares:
           - authelia
-        tare:
-          rule: Host(`tare.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: tare
-          middlewares:
-          - authelia
-        tessera:
-          rule: Host(`tessera.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: tessera
         trilium:
           rule: Host(`notes.netbird.nathalie-stiefsohn.eu`)
           entryPoints:
@@ -371,13 +378,6 @@ data:
           service: vim-trainer
           middlewares:
           - authelia
-        zyme:
-          rule: Host(`zyme.netbird.nathalie-stiefsohn.eu`)
-          entryPoints:
-          - websecure
-          service: zyme
-          middlewares:
-          - authelia
   services.yaml: |
     http:
       services:
@@ -385,10 +385,6 @@ data:
           loadBalancer:
             servers:
             - url: http://anki-sync.anki-sync.svc.cluster.local:8080
-        arca:
-          loadBalancer:
-            servers:
-            - url: http://arca.clavis.svc.cluster.local:8080
         audiomuse-ai:
           loadBalancer:
             servers:
@@ -409,10 +405,6 @@ data:
           loadBalancer:
             servers:
             - url: http://changedetection.changedetection.svc.cluster.local:5000
-        clavis:
-          loadBalancer:
-            servers:
-            - url: http://clavis.clavis.svc.cluster.local:8080
         cluster-console:
           loadBalancer:
             servers:
@@ -421,6 +413,10 @@ data:
           loadBalancer:
             servers:
             - url: http://code-server.code-server.svc.cluster.local:8080
+        device-configuration-manager:
+          loadBalancer:
+            servers:
+            - url: http://device-configuration-manager.device-configuration-manager.svc.cluster.local:8080
         diary:
           loadBalancer:
             servers:
@@ -429,10 +425,10 @@ data:
           loadBalancer:
             servers:
             - url: http://fdroid.fdroid.svc.cluster.local:8080
-        fleet:
+        fermentation-tracker:
           loadBalancer:
             servers:
-            - url: http://fleet.fleet.svc.cluster.local:8080
+            - url: http://fermentation-tracker.fermentation-tracker.svc.cluster.local:8080
         forgejo:
           loadBalancer:
             servers:
@@ -469,6 +465,14 @@ data:
           loadBalancer:
             servers:
             - url: http://homepage.homepage.svc.cluster.local:3000
+        host-management:
+          loadBalancer:
+            servers:
+            - url: http://host-management.host-management.svc.cluster.local:8080
+        image-scanner:
+          loadBalancer:
+            servers:
+            - url: http://image-scanner.image-scanner.svc.cluster.local:8080
         it-tools:
           loadBalancer:
             servers:
@@ -489,10 +493,6 @@ data:
           loadBalancer:
             servers:
             - url: http://lidarr.jellyfin.svc.cluster.local:8686
-        limes:
-          loadBalancer:
-            servers:
-            - url: http://limes.limes.svc.cluster.local:8080
         mail:
           loadBalancer:
             servers:
@@ -525,6 +525,18 @@ data:
           loadBalancer:
             servers:
             - url: http://paperless.paperless.svc.cluster.local:8000
+        password-manager:
+          loadBalancer:
+            servers:
+            - url: http://password-manager.password-manager.svc.cluster.local:8080
+        password-server:
+          loadBalancer:
+            servers:
+            - url: http://password-server.password-manager.svc.cluster.local:8080
+        price-tracker:
+          loadBalancer:
+            servers:
+            - url: http://price-tracker.price-tracker.svc.cluster.local:8080
         prowlarr:
           loadBalancer:
             servers:
@@ -569,14 +581,6 @@ data:
           loadBalancer:
             servers:
             - url: http://tandoor.tandoor.svc.cluster.local:8080
-        tare:
-          loadBalancer:
-            servers:
-            - url: http://tare.tare.svc.cluster.local:8080
-        tessera:
-          loadBalancer:
-            servers:
-            - url: http://tessera.tessera.svc.cluster.local:8080
         trilium:
           loadBalancer:
             servers:
@@ -593,28 +597,24 @@ data:
           loadBalancer:
             servers:
             - url: http://waking-page.waking-page.svc.cluster.local:8080
-        zyme:
-          loadBalancer:
-            servers:
-            - url: http://zyme.zyme.svc.cluster.local:8080
   tcp.yaml: |
     tcp:
       routers:
-        fleet-salt-publish:
-          rule: HostSNI(`*`)
-          entryPoints:
-          - fleet-salt-publish
-          service: fleet-salt-publish
-        fleet-salt-return:
-          rule: HostSNI(`*`)
-          entryPoints:
-          - fleet-salt-return
-          service: fleet-salt-return
         forgejo-ssh:
           rule: HostSNI(`*`)
           entryPoints:
           - forgejo-ssh
           service: forgejo-ssh
+        host-management-salt-publish:
+          rule: HostSNI(`*`)
+          entryPoints:
+          - host-management-salt-publish
+          service: host-management-salt-publish
+        host-management-salt-return:
+          rule: HostSNI(`*`)
+          entryPoints:
+          - host-management-salt-return
+          service: host-management-salt-return
         neko-turn:
           rule: HostSNI(`*`)
           entryPoints:
@@ -626,18 +626,18 @@ data:
           - rimworld-together-game
           service: rimworld-together-game
       services:
-        fleet-salt-publish:
-          loadBalancer:
-            servers:
-            - address: fleet.fleet.svc.cluster.local:4505
-        fleet-salt-return:
-          loadBalancer:
-            servers:
-            - address: fleet.fleet.svc.cluster.local:4506
         forgejo-ssh:
           loadBalancer:
             servers:
             - address: forgejo-ssh.forgejo.svc.cluster.local:2222
+        host-management-salt-publish:
+          loadBalancer:
+            servers:
+            - address: host-management.host-management.svc.cluster.local:4505
+        host-management-salt-return:
+          loadBalancer:
+            servers:
+            - address: host-management.host-management.svc.cluster.local:4506
         neko-turn:
           loadBalancer:
             servers:

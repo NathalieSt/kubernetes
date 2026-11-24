@@ -1,0 +1,1372 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: image-scanner-version-pins
+data:
+  pins.json: |
+    {
+      "pins": [
+        {
+          "key": "alpine",
+          "kind": "image",
+          "repository": "alpine",
+          "version": "3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "alpine-k8s",
+          "kind": "image",
+          "repository": "alpine/k8s",
+          "version": "1.37.1@sha256:712dc5385d1c1a3f83b747fa9e40f64d433a97f72ff42f9755ff7dd1f62846e4",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "binfmt",
+          "kind": "image",
+          "repository": "tonistiigi/binfmt",
+          "version": "qemu-v10.2.3@sha256:400a4873b838d1b89194d982c45e5fb3cda4593fbfd7e08a02e76b03b21166f0",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "busybox",
+          "kind": "image",
+          "repository": "busybox",
+          "version": "1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "coturn",
+          "kind": "image",
+          "repository": "coturn/coturn",
+          "version": "4.18.0-alpine@sha256:c29135c08565810d37053f384584392b7c24b69570fc81a721b878d6fe63e04e",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "curl",
+          "kind": "image",
+          "repository": "curlimages/curl",
+          "version": "8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "docker-cli",
+          "kind": "image",
+          "repository": "docker",
+          "version": "29.9.3-cli@sha256:4d742ab934c2149b628bf26369ac3ec51cb91e2e28fe6722a0e86a6d6efc4bd5",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "docker-dind",
+          "kind": "image",
+          "repository": "docker",
+          "version": "29.9.3-dind@sha256:d035bd30886e451b2727ef3cdb9af9a5c537a10d4bc5d18c08d0ffa597e46aeb",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "git",
+          "kind": "image",
+          "repository": "alpine/git",
+          "version": "v2.52.0@sha256:4a0e72d49596a1f5d3701aeedafdadc5c0da4062be4657c7bdc4017387f591cc",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "gluetun",
+          "kind": "image",
+          "repository": "qmcgaw/gluetun",
+          "version": "v3.41.3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "golang",
+          "kind": "image",
+          "repository": "golang",
+          "version": "1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "kubectl",
+          "kind": "image",
+          "repository": "rancher/kubectl",
+          "version": "v1.36.2@sha256:06c7a7a9772737494ae1e0c3af90f1b5385630c147e47c1c7cea92f4bed55fbe",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "lessc",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/lessc",
+          "version": "sha256:58bf86bb2cfe2975cd02f6ff76d5629f9b5950905929abd0209b0652295b1acc",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "nginx",
+          "kind": "image",
+          "repository": "nginx",
+          "version": "sha256:a5688ea5d06cccc298505dddac20e8e28bfe7de67b015a374006593bc23700b1",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "node",
+          "kind": "image",
+          "repository": "node",
+          "version": "24.21.0-bookworm-slim@sha256:0e0ff40c39bc087845bfb27465a0df4ea419520094bc35842ff83dd8cbe6f9b6",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "python",
+          "kind": "image",
+          "repository": "python",
+          "version": "3.14-alpine@sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "qbittorrent-exporter",
+          "kind": "image",
+          "repository": "ghcr.io/martabal/qbittorrent-exporter",
+          "version": "v2.0.3@sha256:bc4fa09481634ee894ebfb4d47c8aa239a32a12567b043afa01fa42a3075d1a5",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "vault-cli",
+          "kind": "image",
+          "repository": "hashicorp/vault",
+          "version": "2.1.1@sha256:47f14a6acb98f48d798a07df7c83f23a6e636e1cf724c5f8ff165cb32667a1e2",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "yq",
+          "kind": "image",
+          "repository": "mikefarah/yq",
+          "version": "4.53.6@sha256:cfc4eee658595834ef304eadb0c3ea721f3b7cb6404ad8b7cb909cc5b5145b23",
+          "file": "versions/auxiliaries.json",
+          "inVersionsFile": true,
+          "generators": []
+        },
+        {
+          "key": "code-server",
+          "kind": "image",
+          "repository": "codercom/code-server",
+          "version": "4.144.0@sha256:b9e8056bb74bd0c4f90284c7559eddeccd38400cfedc28e64c9d3ca50fef1f83",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "code-server"
+          ]
+        },
+        {
+          "key": "forgejo",
+          "kind": "chart",
+          "repository": "oci://code.forgejo.org/forgejo-helm/forgejo",
+          "version": "17.3.2",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "forgejo"
+          ]
+        },
+        {
+          "key": "forgejo-image",
+          "kind": "image",
+          "repository": "code.forgejo.org/forgejo/forgejo",
+          "version": "17.0.1-rootless@sha256:5ef02fbcf22beef56b8c844952ffad58cfe177b6f98e46e6abb5df90b88dc8d3",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "forgejo"
+          ]
+        },
+        {
+          "key": "forgejo-runner",
+          "kind": "image",
+          "repository": "code.forgejo.org/forgejo/runner",
+          "version": "13.2.1@sha256:568cea8c15ddc01fc8f330124892f572af7db37fa28344a2c1914405793bf61d",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "forgejo-runner"
+          ]
+        },
+        {
+          "key": "it-tools",
+          "kind": "image",
+          "repository": "ghcr.io/sharevb/it-tools",
+          "version": "2026.7.11@sha256:5d79e8c7fbf39d6473c282b9c4f86ff85c4900ec22ef766ae3c6f0f9ca8dbb37",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "it-tools"
+          ]
+        },
+        {
+          "key": "omni-tools",
+          "kind": "image",
+          "repository": "iib0011/omni-tools",
+          "version": "0.6.0@sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "omni-tools"
+          ]
+        },
+        {
+          "key": "vim-trainer",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/vim-trainer",
+          "version": "dd196d2@sha256:920fab611ef45bcae802b7d9ed7f4a9275278e4a47ed51a4b60c61cf5b40a292",
+          "file": "versions/development.json",
+          "inVersionsFile": true,
+          "generators": [
+            "vim-trainer"
+          ]
+        },
+        {
+          "key": "authelia",
+          "kind": "image",
+          "repository": "authelia/authelia",
+          "version": "4.39.28@sha256:bd97cff4fcbf715b5ff1f9ae286afbe6033afce385302520b0368122d43a6f54",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "authelia"
+          ]
+        },
+        {
+          "key": "cert-manager",
+          "kind": "chart",
+          "repository": "oci://quay.io/jetstack/charts/cert-manager",
+          "version": "v1.21.3",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "cert-manager"
+          ],
+          "ships": [
+            "quay.io/jetstack/cert-manager-cainjector",
+            "quay.io/jetstack/cert-manager-controller",
+            "quay.io/jetstack/cert-manager-webhook"
+          ]
+        },
+        {
+          "key": "cnpg",
+          "kind": "chart",
+          "repository": "https://cloudnative-pg.github.io/charts",
+          "chart": "cloudnative-pg",
+          "version": "0.29.1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "cnpg"
+          ],
+          "ships": [
+            "ghcr.io/cloudnative-pg/cloudnative-pg"
+          ]
+        },
+        {
+          "key": "csi-driver-nfs",
+          "kind": "chart",
+          "repository": "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts",
+          "chart": "csi-driver-nfs",
+          "version": "4.13.6",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "csi-driver-nfs"
+          ],
+          "ships": [
+            "registry.k8s.io/sig-storage/csi-node-driver-registrar",
+            "registry.k8s.io/sig-storage/csi-provisioner",
+            "registry.k8s.io/sig-storage/csi-resizer",
+            "registry.k8s.io/sig-storage/csi-snapshotter",
+            "registry.k8s.io/sig-storage/livenessprobe",
+            "registry.k8s.io/sig-storage/nfsplugin"
+          ]
+        },
+        {
+          "key": "egress-proxy",
+          "kind": "image",
+          "repository": "kalaksi/tinyproxy",
+          "version": "1.7@sha256:5a65354cbb5f9c0fdcc8de3d3af8dd1c5ea072b3a1f52e5961a9a5cce6eba227",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "egress-proxy"
+          ]
+        },
+        {
+          "key": "embeddings",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/embeddings",
+          "version": "becdeee@sha256:e7ffefe4a038e5940fc7849b08b60f27a19ff571fd15e35e2091cecc5c0c2929",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "embeddings"
+          ]
+        },
+        {
+          "key": "forgejo-pg",
+          "kind": "image",
+          "repository": "ghcr.io/cloudnative-pg/postgresql",
+          "version": "18.6@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "forgejo-pg"
+          ]
+        },
+        {
+          "key": "garage",
+          "kind": "image",
+          "repository": "dxflrs/garage",
+          "version": "v2.5.0@sha256:677e5b758e4425a325b811c425c026bf35a4bf42f7ddbaa773de3f4fd779a5a5",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "garage"
+          ]
+        },
+        {
+          "key": "gluetun-proxy",
+          "kind": "image",
+          "repository": "qmcgaw/gluetun",
+          "version": "v3.41.3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "gluetun-proxy"
+          ]
+        },
+        {
+          "key": "headlamp",
+          "kind": "chart",
+          "repository": "https://kubernetes-sigs.github.io/headlamp/",
+          "chart": "headlamp",
+          "version": "0.45.0",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "headlamp"
+          ],
+          "ships": [
+            "ghcr.io/headlamp-k8s/headlamp"
+          ]
+        },
+        {
+          "key": "intel-device-gpu-plugin",
+          "kind": "chart",
+          "repository": "https://intel.github.io/helm-charts/",
+          "chart": "intel-device-plugins-gpu",
+          "version": "0.37.1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "intel-device-gpu-plugin"
+          ],
+          "ships": [
+            "intel/intel-gpu-plugin"
+          ]
+        },
+        {
+          "key": "intel-device-plugins-operator",
+          "kind": "chart",
+          "repository": "https://intel.github.io/helm-charts/",
+          "chart": "intel-device-plugins-operator",
+          "version": "0.37.1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "intel-device-plugins-operator"
+          ],
+          "ships": [
+            "intel/intel-deviceplugin-operator"
+          ]
+        },
+        {
+          "key": "internal-dns",
+          "kind": "image",
+          "repository": "coredns/coredns",
+          "version": "1.15.0@sha256:0a9d8c8ddf34347eb59aad9a8784f0710de88d6d112726d11d271f9bc6daca26",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "internal-dns"
+          ]
+        },
+        {
+          "key": "internal-gateway",
+          "kind": "image",
+          "repository": "traefik",
+          "version": "v3.7.17@sha256:68ae5fe5b64ca166704b746a9e8afcd385e36b3f569a5691401bf652d57b3748",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "internal-gateway"
+          ]
+        },
+        {
+          "key": "k3s",
+          "kind": "image",
+          "repository": "rancher/k3s-upgrade",
+          "version": "v1.34.4+k3s1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "system-upgrade-plans"
+          ],
+          "ships": [
+            "rancher/mirrored-coredns-coredns",
+            "rancher/local-path-provisioner",
+            "rancher/mirrored-metrics-server"
+          ]
+        },
+        {
+          "key": "k8up",
+          "kind": "chart",
+          "repository": "https://k8up-io.github.io/k8up",
+          "chart": "k8up",
+          "version": "4.10.1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "k8up"
+          ],
+          "ships": [
+            "ghcr.io/k8up-io/k8up"
+          ]
+        },
+        {
+          "key": "keda",
+          "kind": "chart",
+          "repository": "https://kedacore.github.io/charts",
+          "chart": "keda",
+          "version": "2.21.0",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "keda"
+          ],
+          "ships": [
+            "ghcr.io/kedacore/keda",
+            "ghcr.io/kedacore/keda-admission-webhooks",
+            "ghcr.io/kedacore/keda-metrics-apiserver"
+          ]
+        },
+        {
+          "key": "main-pg",
+          "kind": "image",
+          "repository": "ghcr.io/cloudnative-pg/postgresql",
+          "version": "18.6@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "main-pg"
+          ]
+        },
+        {
+          "key": "netbird-client",
+          "kind": "image",
+          "repository": "ghcr.io/netbirdio/netbird",
+          "version": "0.72.4@sha256:6c6c20baffae4a3ec50f29ec9361608a420625185505e8cd6f0c44d71c5d4798",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "netbird-operator"
+          ]
+        },
+        {
+          "key": "netbird-operator",
+          "kind": "chart",
+          "repository": "oci://ghcr.io/netbirdio/helm-charts/netbird-operator",
+          "version": "0.9.0",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "netbird-operator"
+          ],
+          "ships": [
+            "ghcr.io/netbirdio/netbird-operator",
+            "ghcr.io/netbirdio/kube-egress-forwarder"
+          ]
+        },
+        {
+          "key": "nfd",
+          "kind": "chart",
+          "repository": "https://kubernetes-sigs.github.io/node-feature-discovery/charts",
+          "chart": "node-feature-discovery",
+          "version": "0.19.0",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "nfd"
+          ],
+          "ships": [
+            "registry.k8s.io/nfd/node-feature-discovery"
+          ]
+        },
+        {
+          "key": "nvidia-k8s-device-plugin",
+          "kind": "chart",
+          "repository": "https://nvidia.github.io/k8s-device-plugin",
+          "chart": "nvidia-device-plugin",
+          "version": "v0.17.1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "nvidia-k8s-device-plugin"
+          ]
+        },
+        {
+          "key": "redis",
+          "kind": "image",
+          "repository": "redis",
+          "version": "8.10.3@sha256:de1068af6f552240dfab67bcc9bfef99bfc60f776bb4580ef077ea4c8c97e848",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "redis"
+          ]
+        },
+        {
+          "key": "redis-exporter",
+          "kind": "image",
+          "repository": "oliver006/redis_exporter",
+          "version": "v1.92.1@sha256:7fbc93d30f0f91eed1b2fe6968a956259cc5d260a984dd9071f1d1e9c2692ecd",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "redis",
+            "valkey"
+          ]
+        },
+        {
+          "key": "reflector",
+          "kind": "chart",
+          "repository": "https://emberstack.github.io/helm-charts",
+          "chart": "reflector",
+          "version": "10.0.72",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "reflector"
+          ],
+          "ships": [
+            "emberstack/kubernetes-reflector"
+          ]
+        },
+        {
+          "key": "system-upgrade-controller",
+          "kind": "image",
+          "repository": "rancher/system-upgrade-controller",
+          "version": "v0.20.2@sha256:61b68d4372baf7ae90fb0f879feea1c082381a8b7547cc5ec85d393c497b11cb",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "system-upgrade-controller"
+          ]
+        },
+        {
+          "key": "valkey",
+          "kind": "image",
+          "repository": "valkey/valkey",
+          "version": "9.0.0-alpine3.22@sha256:bef37d06d4856710973ee31dd1eac1482e4c8e6e7b847f999ad25433e646587b",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "valkey"
+          ]
+        },
+        {
+          "key": "vault",
+          "kind": "chart",
+          "repository": "https://helm.releases.hashicorp.com",
+          "chart": "vault",
+          "version": "0.34.1",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "vault"
+          ],
+          "ships": [
+            "hashicorp/vault-k8s"
+          ]
+        },
+        {
+          "key": "vault-apply",
+          "kind": "image",
+          "repository": "ghcr.io/opentofu/opentofu",
+          "version": "1.12.6@sha256:22cb52f6c5bf5c72a48a8f56d993d8df3e9462b1cdfb5db7e77143c87e8d159f",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "vault-apply"
+          ]
+        },
+        {
+          "key": "vault-secrets-operator",
+          "kind": "chart",
+          "repository": "https://helm.releases.hashicorp.com",
+          "chart": "vault-secrets-operator",
+          "version": "1.6.2",
+          "file": "versions/infrastructure.json",
+          "inVersionsFile": true,
+          "generators": [
+            "vault-secrets-operator"
+          ],
+          "ships": [
+            "hashicorp/vault-secrets-operator",
+            "quay.io/brancz/kube-rbac-proxy"
+          ]
+        },
+        {
+          "key": "audiomuse-ai",
+          "kind": "image",
+          "repository": "ghcr.io/neptunehub/audiomuse-ai",
+          "version": "3.7.0@sha256:38ac3c2cdb1a82e89c1bd405e5865e2efe5ad924a53b8373f5989f964a7de110",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "audiomuse-ai"
+          ]
+        },
+        {
+          "key": "bazarr",
+          "kind": "image",
+          "repository": "linuxserver/bazarr",
+          "version": "v1.6.1-ls364@sha256:d24bd0048c759a468970989e9df11a6b96a7628d556d00f923e60a35ba59237b",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "bazarr"
+          ]
+        },
+        {
+          "key": "flaresolverr",
+          "kind": "image",
+          "repository": "ghcr.io/flaresolverr/flaresolverr",
+          "version": "v3.5.2@sha256:c80ae007ce2ccdcd217a12426e4f039ef763ff90738c808d38810c3e59323767",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "flaresolverr"
+          ]
+        },
+        {
+          "key": "gameyfin",
+          "kind": "image",
+          "repository": "ghcr.io/gameyfin/gameyfin",
+          "version": "2.4.0@sha256:857730f1807a92dad1a7bb50e1ba5409e0f27119a2207374045a8f52b4a42cc5",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "gameyfin"
+          ]
+        },
+        {
+          "key": "jellyfin",
+          "kind": "chart",
+          "repository": "https://jellyfin.github.io/jellyfin-helm",
+          "chart": "jellyfin",
+          "version": "3.7.0",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "jellyfin"
+          ]
+        },
+        {
+          "key": "jellyfin-image",
+          "kind": "image",
+          "repository": "docker.io/jellyfin/jellyfin",
+          "version": "12.4@sha256:fea863d0cd9ec445985d9c75fc6ed64e38a1d2766cf0c250a33d553f4fc1b771",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "jellyfin"
+          ]
+        },
+        {
+          "key": "lidarr",
+          "kind": "image",
+          "repository": "linuxserver/lidarr",
+          "version": "3.1.0.4875-ls41@sha256:8ab0fd370b604ae034d9a9c261a9d8d873bece33d9736852e7ce4f3566e4a35d",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "lidarr"
+          ]
+        },
+        {
+          "key": "music-library-builder",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/music-library-builder",
+          "version": "a8c82a0@sha256:3c68b18d367f385f9b74f98ada852efbc01c5516a101cb14e893b43335e26f26",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "music-library-builder"
+          ]
+        },
+        {
+          "key": "prowlarr",
+          "kind": "image",
+          "repository": "linuxserver/prowlarr",
+          "version": "2.6.5.5623-ls161@sha256:c96b56d94d116a9f4de94bc23d3381689492e6c3cfb7435320e8d982e406f99a",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "prowlarr"
+          ]
+        },
+        {
+          "key": "qbittorrent",
+          "kind": "image",
+          "repository": "linuxserver/qbittorrent",
+          "version": "5.2.3_v2.0.14-ls476@sha256:2be038f3421f60f62e8e4bf201f66f385b68e4fbc9ed3ab79051069ea22e2650",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "qbittorrent"
+          ]
+        },
+        {
+          "key": "radarr",
+          "kind": "image",
+          "repository": "linuxserver/radarr",
+          "version": "6.4.4.10685-ls317@sha256:c960f2b52ec6542dbe6707c5a21e696a7c74fd8b17997454f4d10a55dacee133",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "radarr"
+          ]
+        },
+        {
+          "key": "sabnzbd",
+          "kind": "image",
+          "repository": "linuxserver/sabnzbd",
+          "version": "5.1.3-ls273@sha256:948ea3dc45d68943ec14b33ba37ffa1488da3e9837bf3ca0f75621e971614d85",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "sabnzbd"
+          ]
+        },
+        {
+          "key": "seerr",
+          "kind": "image",
+          "repository": "ghcr.io/seerr-team/seerr",
+          "version": "v3.5.1@sha256:d8fab675b55ad293ded98fd71efcfd46054cbad9746534ae1cc4794a88c0b3be",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "seerr"
+          ]
+        },
+        {
+          "key": "sonarr",
+          "kind": "image",
+          "repository": "linuxserver/sonarr",
+          "version": "4.0.20.3014-ls325@sha256:a5c1a5fecbef946927ab90ad68df319ac5fe644057e5fc18cd993f01ac07b2b2",
+          "file": "versions/mediaserver.json",
+          "inVersionsFile": true,
+          "generators": [
+            "sonarr"
+          ]
+        },
+        {
+          "key": "blackbox-exporter",
+          "kind": "image",
+          "repository": "quay.io/prometheus/blackbox-exporter",
+          "version": "v0.29.1@sha256:ea1c7aa3ef3f307cd03e85f34abb604478ccb90b567fc690da0cd9776da76b13",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "blackbox-exporter"
+          ]
+        },
+        {
+          "key": "clamav",
+          "kind": "image",
+          "repository": "clamav/clamav",
+          "version": "1.5.4-debian13-slim@sha256:c21aa18cc0a358678255a3dfb343a4555b58f71b97d7b869df8fdf7ea0a5b4b1",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "clamav"
+          ]
+        },
+        {
+          "key": "glitchtip",
+          "kind": "image",
+          "repository": "glitchtip/glitchtip",
+          "version": "6.2.6@sha256:a3d8eb1b36c1e1603d55ab32711ea3dd8115874742a781a57391a62a16e0dff6",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "glitchtip"
+          ]
+        },
+        {
+          "key": "grype",
+          "kind": "image",
+          "repository": "anchore/grype",
+          "version": "v0.121.1-nonroot@sha256:05f98b229a1041d5e8397edba7b073c84a4a2242f2b75fe5efeaba33ee4a3247",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "image-scanner"
+          ]
+        },
+        {
+          "key": "healthchecks",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/healthchecks",
+          "version": "137ec6f@sha256:3b8cdc665217348f54c8fc7baca289ad678d1ef5175599d2a3adaf15cb371516",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "healthchecks"
+          ]
+        },
+        {
+          "key": "image-scanner",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/image-scanner",
+          "version": "c146c4d@sha256:266416f4581b27e02a33e39caf24be689d18be15090a87ff3204d3438566452d",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "image-scanner"
+          ]
+        },
+        {
+          "key": "monitoring-dashboard",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/monitoring-dashboard",
+          "version": "08163b3@sha256:54c0cd483f26f59d3b8efe10c05dc1962d71ab74fafb0f0c932d6155950d9537",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "monitoring-dashboard"
+          ]
+        },
+        {
+          "key": "ntfy",
+          "kind": "image",
+          "repository": "binwiederhier/ntfy",
+          "version": "v2.37.2@sha256:1875ddcf815c8a3c981d6d78c67a93452d0abba79b1ab9520b1f5f5238902bd7",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "ntfy"
+          ]
+        },
+        {
+          "key": "opnsense-exporter",
+          "kind": "image",
+          "repository": "ghcr.io/athennamind/opnsense-exporter",
+          "version": "0.0.19@sha256:e1f79c770dba7d3165e12836e4b6f849be93a8b2a25116b7ea11c5da8c3ad2db",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "opnsense-exporter"
+          ]
+        },
+        {
+          "key": "vector",
+          "kind": "image",
+          "repository": "timberio/vector",
+          "version": "0.61.0-alpine@sha256:3bb7ed5152910ed51729e256937b1d8a4bf67ff624e9d565e8e5877bffd015c7",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "vector"
+          ]
+        },
+        {
+          "key": "victoria-logs",
+          "kind": "chart",
+          "repository": "oci://ghcr.io/victoriametrics/helm-charts/victoria-logs-single",
+          "version": "0.13.11",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "victoria-logs"
+          ],
+          "ships": [
+            "victoriametrics/victoria-logs"
+          ]
+        },
+        {
+          "key": "victoria-metrics",
+          "kind": "chart",
+          "repository": "oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack",
+          "version": "0.97.1",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "victoria-metrics"
+          ],
+          "ships": [
+            "victoriametrics/operator",
+            "victoriametrics/victoria-metrics",
+            "victoriametrics/vmagent",
+            "victoriametrics/vmalert",
+            "prom/alertmanager",
+            "quay.io/prometheus/node-exporter",
+            "registry.k8s.io/kube-state-metrics/kube-state-metrics"
+          ]
+        },
+        {
+          "key": "device-configuration-manager",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/device-configuration-manager",
+          "version": "e626c12@sha256:f4f76e1dad92ced5b77d9b3fd2b31e81456f1f0e56b9eacc9d3b0ba0ca7d2896",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "device-configuration-manager"
+          ]
+        },
+        {
+          "key": "diary",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/diary",
+          "version": "5615191@sha256:3d2651f2eb425af0de51991adbf67390458b2e646aac0a90cbdd4da1f0a1b6a4",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "diary"
+          ]
+        },
+        {
+          "key": "fermentation-tracker",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fermentation-tracker",
+          "version": "e557c8f@sha256:60c0e7a1d1eeaf7acc1aab083f430e969300df397f1abc3174ac5e9ddd18bedc",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "fermentation-tracker"
+          ]
+        },
+        {
+          "key": "kavita",
+          "kind": "image",
+          "repository": "jvmilazz0/kavita",
+          "version": "0.9.0.2@sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "kavita"
+          ]
+        },
+        {
+          "key": "mail",
+          "kind": "image",
+          "repository": "ghcr.io/docker-mailserver/docker-mailserver",
+          "version": "16.0.1@sha256:d0fe7668defe157aad57ea31b1707ad1e2fb57d7a91bdf17cbdf876549946c86",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "mail"
+          ]
+        },
+        {
+          "key": "paperless",
+          "kind": "image",
+          "repository": "ghcr.io/paperless-ngx/paperless-ngx",
+          "version": "3.4.2@sha256:d704e84f88300eb6ab001ab15720a2330ff99169cf9f94d6b8fcc44b63a84c84",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "paperless"
+          ]
+        },
+        {
+          "key": "password-manager",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/password-manager",
+          "version": "45777db@sha256:4b447630753eb35d0ed99a73b7ff14e0eeec606cb339162b5dfe448f0ceb694d",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "password-manager"
+          ]
+        },
+        {
+          "key": "password-server",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/password-server",
+          "version": "45777db@sha256:03bb2f71eda278a1f8dc4998616dda28b95427cd9ba28e7f67f59f80696b28ca",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "password-server"
+          ]
+        },
+        {
+          "key": "price-tracker",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker",
+          "version": "6bd35ba@sha256:9eacba0c557d049a4dee22de84a44521c61f9718a5a8011d1c9919879e4e373a",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "price-tracker"
+          ]
+        },
+        {
+          "key": "roundcube",
+          "kind": "image",
+          "repository": "roundcube/roundcubemail",
+          "version": "1.7.5-apache-nonroot@sha256:b0a0ed861d6786fad93ee33757470da605d4a39a4ff9081cdd4529e0196deaf9",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "mail"
+          ]
+        },
+        {
+          "key": "stirling-pdf",
+          "kind": "image",
+          "repository": "stirlingtools/stirling-pdf",
+          "version": "3.2.2@sha256:c6872dd056b0046a14c5de1e9970283e7f1e1ff685bb08090c6b37a231127d31",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "stirling-pdf"
+          ]
+        },
+        {
+          "key": "tandoor",
+          "kind": "image",
+          "repository": "vabene1111/recipes",
+          "version": "2.7.2@sha256:1b6d43c3c0f5d2888aa564d9daf29883212b79ad496f59f3c684c099eb1a57b9",
+          "file": "versions/personal.json",
+          "inVersionsFile": true,
+          "generators": [
+            "tandoor"
+          ]
+        },
+        {
+          "key": "backup-dashboard",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
+          "version": "538e8c7@sha256:5cf8fe6d1a0c2542bd9a244d4d6b99a8b7084d85f8ce2f1d565f8c5c6b4e2e03",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "backup-dashboard"
+          ]
+        },
+        {
+          "key": "cluster-console",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/cluster-console",
+          "version": "7c655bf@sha256:e9ed1d0bf3b3df3d8f28b0f17924290a51b708b07c081e3057bd2c4863486f4f",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "cluster-console"
+          ]
+        },
+        {
+          "key": "fdroid",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/fdroid-sync",
+          "version": "c0cef9e@sha256:d8439fe90424e06aabc0c958b4fc46c6bf0a8d9c14e25bff1fc8ca39dc439a4e",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "fdroid"
+          ]
+        },
+        {
+          "key": "homelab-docs",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
+          "version": "e8174e4@sha256:4f71e89c20bcf57fbc5d606aecd8d8dc7e4faec72863d702a8821d95db0e7298",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "homelab-docs"
+          ]
+        },
+        {
+          "key": "homepage",
+          "kind": "image",
+          "repository": "ghcr.io/gethomepage/homepage",
+          "version": "v2.4.0@sha256:643bd0be730d40f69d58028a55d1a896739333e8815786df42bc97f109ecbe61",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "homepage"
+          ]
+        },
+        {
+          "key": "host-management",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/host-management",
+          "version": "8e5f24c@sha256:9db3dc9806de841084af4592ff36a3b91b1320d1e5253476d6f23eb5f8c53cd9",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "host-management"
+          ]
+        },
+        {
+          "key": "salt-master",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master",
+          "version": "cf5cf80@sha256:53c610885a5b29b2c41fd04d0e7ba98f2f5e717767d7246bf937f3e2d4cdfc7e",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "host-management"
+          ]
+        },
+        {
+          "key": "start-page",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/start-page",
+          "version": "e0c9c25@sha256:3172bd07e7d3cfb0cd9c5d28dfa1f67060d38c17976c6e957f66646d82e0f489",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "start-page"
+          ]
+        },
+        {
+          "key": "anki-sync",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/anki-sync",
+          "version": "137ec6f@sha256:6ef9c7accad7e70263dc52028450f0043d53abec03859656880e812356297fe4",
+          "file": "versions/study.json",
+          "inVersionsFile": true,
+          "generators": [
+            "anki-sync"
+          ]
+        },
+        {
+          "key": "radicale",
+          "kind": "image",
+          "repository": "ghcr.io/kozea/radicale",
+          "version": "3.8.1@sha256:54d9406cd30f9e206a9dd6d61dfac48da26b9afc37200e14f23beb8fafa7d11c",
+          "file": "versions/study.json",
+          "inVersionsFile": true,
+          "generators": [
+            "radicale"
+          ]
+        },
+        {
+          "key": "trilium",
+          "kind": "image",
+          "repository": "triliumnext/trilium",
+          "version": "v0.106.0@sha256:be93e82699b12950ac4e2e7b565ce092fe215b8dd6ddfc47921e37b49e6a0e8b",
+          "file": "versions/study.json",
+          "inVersionsFile": true,
+          "generators": [
+            "trilium"
+          ]
+        },
+        {
+          "key": "changedetection",
+          "kind": "image",
+          "repository": "ghcr.io/dgtlmoon/changedetection.io",
+          "version": "0.60.8@sha256:34df3680db1cbffc45ac1e9c1514bc0507dd0c5b5fde47d1992fe6f14a7b40e4",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "changedetection"
+          ]
+        },
+        {
+          "key": "fourget",
+          "kind": "image",
+          "repository": "luuul/4get",
+          "version": "1.0.59@sha256:5a316103930ddfc9a838f28d60ca739002022bed736f06fb021b2a8823d682e3",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "fourget"
+          ]
+        },
+        {
+          "key": "helium-services",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/helium-services",
+          "version": "137ec6f@sha256:d2b36b71bb885e093b5939e46dcfaf6c02014a6dd6c01404399f4f2716f12a24",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "helium-services"
+          ]
+        },
+        {
+          "key": "karakeep",
+          "kind": "image",
+          "repository": "ghcr.io/karakeep-app/karakeep",
+          "version": "0.34.1@sha256:69ae5315c618b7c14c1af3e34c6e211acdb231793af424ecd1cab0b70691d987",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "karakeep"
+          ]
+        },
+        {
+          "key": "karakeep-chrome",
+          "kind": "image",
+          "repository": "ghcr.io/karakeep-app/karakeep-chrome",
+          "version": "157.0.8103.38-r1@sha256:6c80ed470871bb8c129dc58692ca1714cddbc1392faad3ebf59aecd2e6e58eac",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "karakeep"
+          ]
+        },
+        {
+          "key": "karakeep-meilisearch",
+          "kind": "image",
+          "repository": "getmeili/meilisearch",
+          "version": "v1.41.0@sha256:860fa4baed04ae1c235de870edab0c8006227546dea1bbb6411fbfc5e27cf1db",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "karakeep"
+          ]
+        },
+        {
+          "key": "miniflux",
+          "kind": "image",
+          "repository": "ghcr.io/miniflux/miniflux",
+          "version": "2.3.5@sha256:8fd6c3c434ecc3d4083306f83e03c0bb74c632e0f8378da5ead7e1773b0b89c9",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "miniflux"
+          ]
+        },
+        {
+          "key": "neko",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/neko-helium",
+          "version": "c0cef9e@sha256:03191082c3aca7e6ec1fb8dc12943765019c2297fd016042076ccd0e13a7566f",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "neko"
+          ]
+        },
+        {
+          "key": "redlib",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/redlib",
+          "version": "7863139@sha256:660abc3160a32716e63d2b3321803d6f4c7031160b0fb425a40cd97e0dfe94e5",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "redlib"
+          ]
+        },
+        {
+          "key": "rimworld-together",
+          "kind": "image",
+          "repository": "ghcr.io/rimworld-together/rimworld-together",
+          "version": "26.4.18.1@sha256:a978f0f139ea2c1c2bd433476ff9a080600f5753cac5acf662e168e48a2ed285",
+          "file": "versions/web.json",
+          "inVersionsFile": true,
+          "generators": [
+            "rimworld-together"
+          ]
+        }
+      ],
+      "untracked": [],
+      "elsewhere": [
+        {
+          "key": "helm-controller",
+          "repository": "ghcr.io/fluxcd/helm-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "kustomize-controller",
+          "repository": "ghcr.io/fluxcd/kustomize-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "notification-controller",
+          "repository": "ghcr.io/fluxcd/notification-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "source-controller",
+          "repository": "ghcr.io/fluxcd/source-controller",
+          "file": "flux-core/clusters/homelab/flux-system/gotk-components.yaml"
+        },
+        {
+          "key": "cilium",
+          "repository": "quay.io/cilium/cilium",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "cilium-envoy",
+          "repository": "quay.io/cilium/cilium-envoy",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "hubble-relay",
+          "repository": "quay.io/cilium/hubble-relay",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "hubble-ui",
+          "repository": "quay.io/cilium/hubble-ui",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "hubble-ui-backend",
+          "repository": "quay.io/cilium/hubble-ui-backend",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        },
+        {
+          "key": "operator-generic",
+          "repository": "quay.io/cilium/operator-generic",
+          "file": "flux-core/clusters/homelab/cilium/release.yaml"
+        }
+      ]
+    }

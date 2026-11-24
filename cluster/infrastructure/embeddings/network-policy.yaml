@@ -14,7 +14,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: tare
+          kubernetes.io/metadata.name: price-tracker
     ports:
     - port: 8080
       protocol: TCP

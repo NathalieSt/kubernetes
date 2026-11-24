@@ -22,13 +22,13 @@ spec:
           kubernetes.io/metadata.name: diary
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: fleet
-    - namespaceSelector:
-        matchLabels:
           kubernetes.io/metadata.name: forgejo
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: forgejo-pg-cluster
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: host-management
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: karakeep

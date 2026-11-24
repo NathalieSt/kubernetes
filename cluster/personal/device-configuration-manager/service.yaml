@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: device-configuration-manager
+    app.kubernetes.io/version: e626c12
+  name: device-configuration-manager
+spec:
+  selector:
+    app.kubernetes.io/name: device-configuration-manager
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

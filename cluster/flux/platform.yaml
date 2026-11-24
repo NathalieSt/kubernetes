@@ -91,32 +91,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: fleet
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  targetNamespace: fleet
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/platform/fleet
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: csi-driver-nfs
-  - name: vault-secrets-operator-config
-  - name: garage
-  - name: k8up
-  - name: reflector
-  serviceAccountName: flux-fleet
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: homelab-docs
   namespace: flux-system
 spec:
@@ -156,6 +130,32 @@ spec:
   - name: namespaces
   - name: flux-rbac
   serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: host-management
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: host-management
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/platform/host-management
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: csi-driver-nfs
+  - name: vault-secrets-operator-config
+  - name: garage
+  - name: k8up
+  - name: reflector
+  serviceAccountName: flux-host-management
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        internal-gateway.nathalie-stiefsohn.eu/sidecar: 87b9dc3e44763b7cc305e6a133d1d96ef7dbf1546451e8e65b4138515beb6ba6
+        internal-gateway.nathalie-stiefsohn.eu/sidecar: ff234c22fc9d88e162ccd70173d162efec6dbdd2e515ea56881982a112ea6f5b
       labels:
         app.kubernetes.io/name: internal-gateway-secondary
         app.kubernetes.io/version: v3.7.17
@@ -71,9 +71,9 @@ spec:
         - --metrics.prometheus.addEntryPointsLabels=true
         - --metrics.prometheus.addRoutersLabels=true
         - --metrics.prometheus.addServicesLabels=true
-        - --entrypoints.fleet-salt-publish.address=:4505
-        - --entrypoints.fleet-salt-return.address=:4506
         - --entrypoints.forgejo-ssh.address=:2222
+        - --entrypoints.host-management-salt-publish.address=:4505
+        - --entrypoints.host-management-salt-return.address=:4506
         - --entrypoints.neko-turn.address=:3478
         - --entrypoints.rimworld-together-game.address=:25555
         image: traefik:v3.7.17@sha256:68ae5fe5b64ca166704b746a9e8afcd385e36b3f569a5691401bf652d57b3748
@@ -85,12 +85,12 @@ spec:
           name: websecure
         - containerPort: 8082
           name: metrics
+        - containerPort: 2222
+          name: tcp-2222
         - containerPort: 4505
           name: tcp-4505
         - containerPort: 4506
           name: tcp-4506
-        - containerPort: 2222
-          name: tcp-2222
         - containerPort: 3478
           name: tcp-3478
         - containerPort: 25555

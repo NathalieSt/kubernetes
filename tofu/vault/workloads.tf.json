@@ -5,10 +5,6 @@
         "name": "anki-sync",
         "policy": "path \"kvv2/data/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/anki-sync/users\" {\n  capabilities = [\"read\"]\n}\n"
       },
-      "arca": {
-        "name": "arca",
-        "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/ntfy\" {\n  capabilities = [\"read\"]\n}\n"
-      },
       "audiomuse-ai": {
         "name": "audiomuse-ai",
         "policy": "path \"kvv2/data/jellyfin\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/jellyfin\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n"
@@ -33,9 +29,13 @@
         "name": "code-server",
         "policy": "path \"kvv2/data/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/code-server-git\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/code-server-git\" {\n  capabilities = [\"read\"]\n}\n"
       },
-      "fleet": {
-        "name": "fleet",
-        "policy": "path \"kvv2/data/fleet\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/fleet\" {\n  capabilities = [\"read\"]\n}\n"
+      "device-configuration-manager": {
+        "name": "device-configuration-manager",
+        "policy": "path \"kvv2/data/device-configuration-manager/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/device-configuration-manager/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "fermentation-tracker": {
+        "name": "fermentation-tracker",
+        "policy": "path \"kvv2/data/fermentation-tracker\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/fermentation-tracker\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/fermentation-tracker/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/fermentation-tracker/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "flux-notifications": {
         "name": "flux-notifications",
@@ -61,6 +61,14 @@
         "name": "heartbeats",
         "policy": "path \"kvv2/data/heartbeats\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/heartbeats\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "host-management": {
+        "name": "host-management",
+        "policy": "path \"kvv2/data/host-management\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/host-management\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "image-scanner": {
+        "name": "image-scanner",
+        "policy": "path \"kvv2/data/image-scanner\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/image-scanner\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/image-scanner/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/image-scanner/db\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "karakeep": {
         "name": "karakeep",
         "policy": "path \"kvv2/data/karakeep\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/karakeep\" {\n  capabilities = [\"read\"]\n}\n"
@@ -73,17 +81,13 @@
         "name": "lidarr",
         "policy": "path \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
-      "limes": {
-        "name": "limes",
-        "policy": "path \"kvv2/data/limes\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n"
-      },
       "mail": {
         "name": "mail",
         "policy": "path \"kvv2/data/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/mail/oidc\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "main-pg": {
         "name": "main-pg",
-        "policy": "path \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/limes/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/arca/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
+        "policy": "path \"kvv2/data/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/authelia/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/glitchtip/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/healthchecks/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/image-scanner/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/image-scanner/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/ntfy/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/fermentation-tracker/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/fermentation-tracker/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/device-configuration-manager/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/device-configuration-manager/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/password-server/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/password-server/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/price-tracker/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/price-tracker/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/miniflux/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/audiomuseai/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/sonarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/radarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/lidarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/bazarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/seerr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/seerr/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
       "miniflux": {
         "name": "miniflux",
@@ -113,6 +117,14 @@
         "name": "paperless",
         "policy": "path \"kvv2/data/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/app\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/paperless/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/paperless/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
+      "password-server": {
+        "name": "password-server",
+        "policy": "path \"kvv2/data/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/psono\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/password-server/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/password-server/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/password-server/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/password-server/ntfy\" {\n  capabilities = [\"read\"]\n}\n"
+      },
+      "price-tracker": {
+        "name": "price-tracker",
+        "policy": "path \"kvv2/data/price-tracker/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/price-tracker/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/price-tracker\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/price-tracker\" {\n  capabilities = [\"read\"]\n}\n"
+      },
       "prowlarr": {
         "name": "prowlarr",
         "policy": "path \"kvv2/data/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/prowlarr/db\" {\n  capabilities = [\"read\"]\n}\n"
@@ -141,14 +153,6 @@
         "name": "tandoor",
         "policy": "path \"kvv2/data/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tandoor/db\" {\n  capabilities = [\"read\"]\n}\n"
       },
-      "tare": {
-        "name": "tare",
-        "policy": "path \"kvv2/data/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/tare\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tare\" {\n  capabilities = [\"read\"]\n}\n"
-      },
-      "tessera": {
-        "name": "tessera",
-        "policy": "path \"kvv2/data/tessera/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/tessera/db\" {\n  capabilities = [\"read\"]\n}\n"
-      },
       "trilium": {
         "name": "trilium",
         "policy": "path \"kvv2/data/trilium/oidc\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/trilium/oidc\" {\n  capabilities = [\"read\"]\n}\n"
@@ -156,10 +160,6 @@
       "victoria-metrics": {
         "name": "victoria-metrics",
         "policy": "path \"kvv2/data/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/ntfy\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/victoria-metrics/healthchecks\" {\n  capabilities = [\"read\"]\n}\n"
-      },
-      "zyme": {
-        "name": "zyme",
-        "policy": "path \"kvv2/data/zyme\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/data/zyme/db\" {\n  capabilities = [\"read\"]\n}\n\npath \"kvv2/metadata/zyme/db\" {\n  capabilities = [\"read\"]\n}\n"
       }
     },
     "vault_kubernetes_auth_backend_role": {
@@ -175,21 +175,6 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.anki-sync.name}"
-        ],
-        "token_ttl": 600
-      },
-      "arca": {
-        "backend": "kubernetes",
-        "role_name": "arca",
-        "bound_service_account_names": [
-          "arca-vault-serviceaccount"
-        ],
-        "bound_service_account_namespaces": [
-          "clavis"
-        ],
-        "audience": "vault",
-        "token_policies": [
-          "${vault_policy.arca.name}"
         ],
         "token_ttl": 600
       },
@@ -283,18 +268,33 @@
         ],
         "token_ttl": 600
       },
-      "fleet": {
+      "device-configuration-manager": {
         "backend": "kubernetes",
-        "role_name": "fleet",
+        "role_name": "device-configuration-manager",
         "bound_service_account_names": [
-          "fleet-vault-serviceaccount"
+          "device-configuration-manager-vault-serviceaccount"
         ],
         "bound_service_account_namespaces": [
-          "fleet"
+          "device-configuration-manager"
         ],
         "audience": "vault",
         "token_policies": [
-          "${vault_policy.fleet.name}"
+          "${vault_policy.device-configuration-manager.name}"
+        ],
+        "token_ttl": 600
+      },
+      "fermentation-tracker": {
+        "backend": "kubernetes",
+        "role_name": "fermentation-tracker",
+        "bound_service_account_names": [
+          "fermentation-tracker-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "fermentation-tracker"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.fermentation-tracker.name}"
         ],
         "token_ttl": 600
       },
@@ -388,6 +388,36 @@
         ],
         "token_ttl": 600
       },
+      "host-management": {
+        "backend": "kubernetes",
+        "role_name": "host-management",
+        "bound_service_account_names": [
+          "host-management-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "host-management"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.host-management.name}"
+        ],
+        "token_ttl": 600
+      },
+      "image-scanner": {
+        "backend": "kubernetes",
+        "role_name": "image-scanner",
+        "bound_service_account_names": [
+          "image-scanner-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "image-scanner"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.image-scanner.name}"
+        ],
+        "token_ttl": 600
+      },
       "karakeep": {
         "backend": "kubernetes",
         "role_name": "karakeep",
@@ -430,21 +460,6 @@
         "audience": "vault",
         "token_policies": [
           "${vault_policy.lidarr.name}"
-        ],
-        "token_ttl": 600
-      },
-      "limes": {
-        "backend": "kubernetes",
-        "role_name": "limes",
-        "bound_service_account_names": [
-          "limes-vault-serviceaccount"
-        ],
-        "bound_service_account_namespaces": [
-          "limes"
-        ],
-        "audience": "vault",
-        "token_policies": [
-          "${vault_policy.limes.name}"
         ],
         "token_ttl": 600
       },
@@ -583,6 +598,36 @@
         ],
         "token_ttl": 600
       },
+      "password-server": {
+        "backend": "kubernetes",
+        "role_name": "password-server",
+        "bound_service_account_names": [
+          "password-server-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "password-manager"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.password-server.name}"
+        ],
+        "token_ttl": 600
+      },
+      "price-tracker": {
+        "backend": "kubernetes",
+        "role_name": "price-tracker",
+        "bound_service_account_names": [
+          "price-tracker-vault-serviceaccount"
+        ],
+        "bound_service_account_namespaces": [
+          "price-tracker"
+        ],
+        "audience": "vault",
+        "token_policies": [
+          "${vault_policy.price-tracker.name}"
+        ],
+        "token_ttl": 600
+      },
       "prowlarr": {
         "backend": "kubernetes",
         "role_name": "prowlarr",
@@ -688,36 +733,6 @@
         ],
         "token_ttl": 600
       },
-      "tare": {
-        "backend": "kubernetes",
-        "role_name": "tare",
-        "bound_service_account_names": [
-          "tare-vault-serviceaccount"
-        ],
-        "bound_service_account_namespaces": [
-          "tare"
-        ],
-        "audience": "vault",
-        "token_policies": [
-          "${vault_policy.tare.name}"
-        ],
-        "token_ttl": 600
-      },
-      "tessera": {
-        "backend": "kubernetes",
-        "role_name": "tessera",
-        "bound_service_account_names": [
-          "tessera-vault-serviceaccount"
-        ],
-        "bound_service_account_namespaces": [
-          "tessera"
-        ],
-        "audience": "vault",
-        "token_policies": [
-          "${vault_policy.tessera.name}"
-        ],
-        "token_ttl": 600
-      },
       "trilium": {
         "backend": "kubernetes",
         "role_name": "trilium",
@@ -747,45 +762,12 @@
           "${vault_policy.victoria-metrics.name}"
         ],
         "token_ttl": 600
-      },
-      "zyme": {
-        "backend": "kubernetes",
-        "role_name": "zyme",
-        "bound_service_account_names": [
-          "zyme-vault-serviceaccount"
-        ],
-        "bound_service_account_namespaces": [
-          "zyme"
-        ],
-        "audience": "vault",
-        "token_policies": [
-          "${vault_policy.zyme.name}"
-        ],
-        "token_ttl": 600
       }
     }
   },
   "removed": [
     {
       "from": "vault_kv_secret_v2.anki-sync_anki-sync_users",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.arca_arca_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.arca_arca_ntfy",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.arca_psono",
       "lifecycle": {
         "destroy": false
       }
@@ -869,7 +851,19 @@
       }
     },
     {
-      "from": "vault_kv_secret_v2.fleet_fleet",
+      "from": "vault_kv_secret_v2.device-configuration-manager_device-configuration-manager_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.fermentation-tracker_fermentation-tracker",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.fermentation-tracker_fermentation-tracker_db",
       "lifecycle": {
         "destroy": false
       }
@@ -935,6 +929,24 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.host-management_host-management",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.image-scanner_image-scanner",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.image-scanner_image-scanner_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.karakeep_karakeep",
       "lifecycle": {
         "destroy": false
@@ -948,18 +960,6 @@
     },
     {
       "from": "vault_kv_secret_v2.lidarr_lidarr_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.limes_limes",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.limes_limes_db",
       "lifecycle": {
         "destroy": false
       }
@@ -989,12 +989,6 @@
       }
     },
     {
-      "from": "vault_kv_secret_v2.main-pg_arca_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
       "from": "vault_kv_secret_v2.main-pg_audiomuseai_db",
       "lifecycle": {
         "destroy": false
@@ -1013,6 +1007,18 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.main-pg_device-configuration-manager_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_fermentation-tracker_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.main-pg_glitchtip_db",
       "lifecycle": {
         "destroy": false
@@ -1025,13 +1031,13 @@
       }
     },
     {
-      "from": "vault_kv_secret_v2.main-pg_lidarr_db",
+      "from": "vault_kv_secret_v2.main-pg_image-scanner_db",
       "lifecycle": {
         "destroy": false
       }
     },
     {
-      "from": "vault_kv_secret_v2.main-pg_limes_db",
+      "from": "vault_kv_secret_v2.main-pg_lidarr_db",
       "lifecycle": {
         "destroy": false
       }
@@ -1050,6 +1056,18 @@
     },
     {
       "from": "vault_kv_secret_v2.main-pg_paperless_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_password-server_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.main-pg_price-tracker_db",
       "lifecycle": {
         "destroy": false
       }
@@ -1080,24 +1098,6 @@
     },
     {
       "from": "vault_kv_secret_v2.main-pg_tandoor_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.main-pg_tare_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.main-pg_tessera_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.main-pg_zyme_db",
       "lifecycle": {
         "destroy": false
       }
@@ -1169,6 +1169,36 @@
       }
     },
     {
+      "from": "vault_kv_secret_v2.password-server_password-server_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.password-server_password-server_ntfy",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.password-server_psono",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.price-tracker_price-tracker",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
+      "from": "vault_kv_secret_v2.price-tracker_price-tracker_db",
+      "lifecycle": {
+        "destroy": false
+      }
+    },
+    {
       "from": "vault_kv_secret_v2.prowlarr_prowlarr_db",
       "lifecycle": {
         "destroy": false
@@ -1217,24 +1247,6 @@
       }
     },
     {
-      "from": "vault_kv_secret_v2.tare_tare",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.tare_tare_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.tessera_tessera_db",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
       "from": "vault_kv_secret_v2.trilium_trilium_oidc",
       "lifecycle": {
         "destroy": false
@@ -1254,18 +1266,6 @@
     },
     {
       "from": "vault_kv_secret_v2.victoria-metrics_victoria-metrics_ntfy",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.zyme_zyme",
-      "lifecycle": {
-        "destroy": false
-      }
-    },
-    {
-      "from": "vault_kv_secret_v2.zyme_zyme_db",
       "lifecycle": {
         "destroy": false
       }

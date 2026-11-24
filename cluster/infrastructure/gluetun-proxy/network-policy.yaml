@@ -82,16 +82,16 @@ spec:
           app.kubernetes.io/name: clamav-hash-lookup
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: tare
+          kubernetes.io/metadata.name: price-tracker
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: tare-crawl
+          app.kubernetes.io/name: price-tracker-crawl
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: tare
+          kubernetes.io/metadata.name: price-tracker
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: tare
+          app.kubernetes.io/name: price-tracker
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: jellyfin
@@ -128,16 +128,16 @@ spec:
           app.kubernetes.io/name: music-library-builder
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: tare
+          kubernetes.io/metadata.name: price-tracker
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: tare-crawl
+          app.kubernetes.io/name: price-tracker-crawl
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: tare
+          kubernetes.io/metadata.name: price-tracker
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: tare
+          app.kubernetes.io/name: price-tracker
     ports:
     - port: 8001
       protocol: TCP

@@ -1,0 +1,291 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: host-management
+    app.kubernetes.io/version: 8e5f24c
+  name: host-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: host-management
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        checksum/config: b500edaab0b6fb11
+      labels:
+        app.kubernetes.io/name: host-management
+        app.kubernetes.io/version: 8e5f24c
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - mkdir -p /var/lib/host-management/salt-files/_modules /var/lib/host-management/pillar/layers/hosts && chown 1000:1000 /var/lib/host-management /var/lib/host-management/salt-files /var/lib/host-management/salt-files/_modules /run/salt && chown root:root /var/lib/host-management/pillar && chown 1000:1000 /var/lib/host-management/pillar/layers /var/lib/host-management/pillar/layers/hosts && printf '%s\n' layers/fleet.yaml 'layers/hosts/{{ minion_id }}.yaml' > /var/lib/host-management/pillar/stack.cfg && umask 077 && printf '%s:%s\n' "$SALT_USER" "$SALT_PASSWORD" > /run/salt-auth/users && chown 1000:1000 /run/salt-auth/users
+        image: busybox:1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+        name: setup
+        volumeMounts:
+        - mountPath: /var/lib/host-management
+          name: host-management-data-pvc
+        - mountPath: /run/salt
+          name: salt-run
+        - mountPath: /run/salt-auth
+          name: salt-auth
+        env:
+        - name: SALT_USER
+          value: fleetui
+        - name: SALT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: salt-password
+              name: host-management-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/host-management:8e5f24c@sha256:9db3dc9806de841084af4592ff36a3b91b1320d1e5253476d6f23eb5f8c53cd9
+        name: host-management
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /var/lib/host-management
+          name: host-management-data-pvc
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /etc/host-management/pillar
+          name: host-management-salt-pillar
+          readOnly: true
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: NODE_ENV
+          value: production
+        - name: SALT_API_URL
+          value: http://127.0.0.1:8000
+        - name: SALT_USERNAME
+          value: fleetui
+        - name: SALT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: salt-password
+              name: host-management-secret
+        - name: SALT_EAUTH
+          value: file
+        - name: OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: OIDC_CLIENT_ID
+          value: host-management
+        - name: HOST_MANAGEMENT_ADMIN_GROUP
+          value: admins
+        - name: HOST_MANAGEMENT_ALLOW_DESTRUCTIVE
+          value: "1"
+        - name: HOST_MANAGEMENT_ALLOW_MODULES
+          value: "1"
+        - name: HOST_MANAGEMENT_MODULES_DIR
+          value: /var/lib/host-management/modules
+        - name: HOST_MANAGEMENT_SALT_FILES_DIR
+          value: /var/lib/host-management/salt-files
+        - name: HOST_MANAGEMENT_MODULES_PASSWORD_HASH
+          valueFrom:
+            secretKeyRef:
+              key: modules-password-hash
+              name: host-management-secret
+              optional: true
+        - name: HOST_MANAGEMENT_ALLOW_PILLAR
+          value: "1"
+        - name: HOST_MANAGEMENT_PILLAR_DEFAULTS_DIR
+          value: /etc/host-management/pillar
+        - name: HOST_MANAGEMENT_PILLAR_DIR
+          value: /var/lib/host-management/pillar/layers
+        - name: HOST_MANAGEMENT_MASTER_HOST
+          value: fleet.netbird.nathalie-stiefsohn.eu
+        - name: HOST_MANAGEMENT_SALT_VERSION
+          value: "3008.5"
+        - name: HOST_MANAGEMENT_DATA_DIR
+          value: /var/lib/host-management/audit
+        - name: HOST_MANAGEMENT_SCRIPTS_DIR
+          value: /var/lib/host-management/scripts
+        - name: TZ
+          value: Europe/Vienna
+        resources:
+          requests:
+            cpu: 25m
+            memory: 96Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - args:
+        - -c
+        - /etc/salt
+        - -l
+        - info
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:cf5cf80@sha256:53c610885a5b29b2c41fd04d0e7ba98f2f5e717767d7246bf937f3e2d4cdfc7e
+        name: salt-master
+        ports:
+        - containerPort: 4505
+          name: salt-publish
+        - containerPort: 4506
+          name: salt-return
+        volumeMounts:
+        - mountPath: /etc/salt
+          name: host-management-salt-config
+          readOnly: true
+        - mountPath: /var/lib/host-management
+          name: host-management-data-pvc
+        - mountPath: /run/salt
+          name: salt-run
+        - mountPath: /run/salt-auth
+          name: salt-auth
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /srv/salt/states
+          name: host-management-salt-states
+          readOnly: true
+        - mountPath: /srv/salt/pillar
+          name: host-management-salt-pillar
+          readOnly: true
+        resources:
+          requests:
+            cpu: 50m
+            memory: 320Mi
+          limits:
+            cpu: 1000m
+            memory: 768Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      - args:
+        - -c
+        - /etc/salt
+        - -l
+        - info
+        command:
+        - salt-api
+        image: code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master:cf5cf80@sha256:53c610885a5b29b2c41fd04d0e7ba98f2f5e717767d7246bf937f3e2d4cdfc7e
+        name: salt-api
+        volumeMounts:
+        - mountPath: /etc/salt
+          name: host-management-salt-config
+          readOnly: true
+        - mountPath: /var/lib/host-management
+          name: host-management-data-pvc
+        - mountPath: /run/salt
+          name: salt-run
+        - mountPath: /run/salt-auth
+          name: salt-auth
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: host-management-data-pvc
+        persistentVolumeClaim:
+          claimName: host-management-data-pvc
+      - name: host-management-salt-config
+        configMap:
+          name: host-management-salt-config
+      - name: host-management-salt-states
+        configMap:
+          name: host-management-salt-states
+          items:
+          - key: harden__init.sls
+            path: harden/init.sls
+          - key: harden__seccomp.sls
+            path: harden/seccomp.sls
+          - key: harden__ssh.sls
+            path: harden/ssh.sls
+          - key: inotify.sls
+            path: inotify.sls
+          - key: netbird.sls
+            path: netbird.sls
+          - key: ntp.sls
+            path: ntp.sls
+          - key: rescue__earlyoom.sls
+            path: rescue/earlyoom.sls
+          - key: rescue__init.sls
+            path: rescue/init.sls
+          - key: rescue__mesh-watch.sh
+            path: rescue/mesh-watch.sh
+          - key: rescue__mesh.sls
+            path: rescue/mesh.sls
+          - key: rescue__reserve.sls
+            path: rescue/reserve.sls
+          - key: rescue__watchdog.sls
+            path: rescue/watchdog.sls
+          - key: rosenpass__netbird-rosenpass.py
+            path: rosenpass/netbird-rosenpass.py
+          - key: rosenpass__netbird_cli.py
+            path: rosenpass/netbird_cli.py
+          - key: rosenpass__off.sls
+            path: rosenpass/off.sls
+          - key: rosenpass__permissive.sls
+            path: rosenpass/permissive.sls
+          - key: rosenpass__strict.sls
+            path: rosenpass/strict.sls
+          - key: rosenpass__trial.jinja
+            path: rosenpass/trial.jinja
+      - name: host-management-salt-pillar
+        configMap:
+          name: host-management-salt-pillar
+          items:
+          - key: netbird.schema.yaml
+            path: netbird.schema.yaml
+          - key: netbird.sls
+            path: netbird.sls
+          - key: rescue.schema.yaml
+            path: rescue.schema.yaml
+          - key: rescue.sls
+            path: rescue.sls
+          - key: rosenpass.schema.yaml
+            path: rosenpass.schema.yaml
+          - key: rosenpass.sls
+            path: rosenpass.sls
+          - key: top.sls
+            path: top.sls
+      - name: salt-run
+        emptyDir: {}
+      - name: salt-auth
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

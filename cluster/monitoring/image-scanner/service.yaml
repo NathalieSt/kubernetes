@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: image-scanner
+    app.kubernetes.io/version: c146c4d
+  name: image-scanner
+spec:
+  selector:
+    app.kubernetes.io/name: image-scanner
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

@@ -1,0 +1,12 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: price-tracker
+spec:
+  name: price-tracker
+  cluster:
+    name: postgres
+  owner: price-tracker
+  extensions:
+  - name: vector

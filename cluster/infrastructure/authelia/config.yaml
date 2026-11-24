@@ -285,14 +285,35 @@ data:
           - code
           token_endpoint_auth_method: none
           consent_mode: implicit
-        - client_id: fleet
-          client_name: fleet
+        - client_id: device-configuration-manager
+          client_name: device-configuration-manager
           public: true
-          authorization_policy: two_factor
+          authorization_policy: one_factor
           require_pkce: true
           pkce_challenge_method: S256
           redirect_uris:
-          - https://fleet.netbird.nathalie-stiefsohn.eu/auth/callback
+          - https://tessera.netbird.nathalie-stiefsohn.eu/auth/callback
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          - offline_access
+          grant_types:
+          - authorization_code
+          - refresh_token
+          response_types:
+          - code
+          token_endpoint_auth_method: none
+          consent_mode: implicit
+        - client_id: fermentation-tracker
+          client_name: fermentation-tracker
+          public: true
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://zyme.netbird.nathalie-stiefsohn.eu/auth/callback
           scopes:
           - openid
           - profile
@@ -382,6 +403,48 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
+        - client_id: host-management
+          client_name: host-management
+          public: true
+          authorization_policy: two_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://fleet.netbird.nathalie-stiefsohn.eu/auth/callback
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          - offline_access
+          grant_types:
+          - authorization_code
+          - refresh_token
+          response_types:
+          - code
+          token_endpoint_auth_method: none
+          consent_mode: implicit
+        - client_id: image-scanner
+          client_name: image-scanner
+          public: true
+          authorization_policy: one_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+          - https://limes.netbird.nathalie-stiefsohn.eu/auth/callback
+          scopes:
+          - openid
+          - profile
+          - email
+          - groups
+          - offline_access
+          grant_types:
+          - authorization_code
+          - refresh_token
+          response_types:
+          - code
+          token_endpoint_auth_method: none
+          consent_mode: implicit
         - client_id: karakeep
           client_name: karakeep
           public: true
@@ -421,27 +484,6 @@ data:
           response_types:
           - code
           token_endpoint_auth_method: client_secret_post
-          consent_mode: implicit
-        - client_id: limes
-          client_name: limes
-          public: true
-          authorization_policy: one_factor
-          require_pkce: true
-          pkce_challenge_method: S256
-          redirect_uris:
-          - https://limes.netbird.nathalie-stiefsohn.eu/auth/callback
-          scopes:
-          - openid
-          - profile
-          - email
-          - groups
-          - offline_access
-          grant_types:
-          - authorization_code
-          - refresh_token
-          response_types:
-          - code
-          token_endpoint_auth_method: none
           consent_mode: implicit
         - client_id: mail
           client_name: mail
@@ -545,27 +587,6 @@ data:
           - code
           token_endpoint_auth_method: client_secret_post
           consent_mode: implicit
-        - client_id: tessera
-          client_name: tessera
-          public: true
-          authorization_policy: one_factor
-          require_pkce: true
-          pkce_challenge_method: S256
-          redirect_uris:
-          - https://tessera.netbird.nathalie-stiefsohn.eu/auth/callback
-          scopes:
-          - openid
-          - profile
-          - email
-          - groups
-          - offline_access
-          grant_types:
-          - authorization_code
-          - refresh_token
-          response_types:
-          - code
-          token_endpoint_auth_method: none
-          consent_mode: implicit
         - client_id: trilium
           client_name: trilium
           public: false
@@ -604,27 +625,6 @@ data:
           response_types:
           - code
           token_endpoint_auth_method: client_secret_post
-          consent_mode: implicit
-        - client_id: zyme
-          client_name: zyme
-          public: true
-          authorization_policy: one_factor
-          require_pkce: true
-          pkce_challenge_method: S256
-          redirect_uris:
-          - https://zyme.netbird.nathalie-stiefsohn.eu/auth/callback
-          scopes:
-          - openid
-          - profile
-          - email
-          - groups
-          - offline_access
-          grant_types:
-          - authorization_code
-          - refresh_token
-          response_types:
-          - code
-          token_endpoint_auth_method: none
           consent_mode: implicit
     telemetry:
       metrics:

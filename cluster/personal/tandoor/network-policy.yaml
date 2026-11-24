@@ -25,14 +25,14 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          - tare
+          - price-tracker
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - tare
-          - tare-crawl
+          - price-tracker
+          - price-tracker-crawl
     ports:
     - port: 8080
       protocol: TCP

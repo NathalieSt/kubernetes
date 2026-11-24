@@ -27,6 +27,31 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  name: host-management-host-management-data-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 2Gi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: host-management-data-pvc
+    namespace: host-management
+  mountOptions:
+  - nfsvers=4.1
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: debian/mnt/external_ssd/fleet/fleet-data-pvc#host-management-host-management-data-pvc
+    volumeAttributes:
+      server: debian
+      share: /mnt/external_ssd
+      subDir: fleet/fleet-data-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
   name: qbittorrent-qbittorrent-config
 spec:
   accessModes:

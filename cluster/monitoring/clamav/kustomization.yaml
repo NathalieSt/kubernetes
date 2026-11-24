@@ -18,4 +18,4 @@ resources:
 - packages-scan-cronjob.yaml
 - vault-secrets.yaml
 - network-policy.yaml
-- limes-rbac.yaml
+- image-scanner-rbac.yaml

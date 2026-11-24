@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: price-tracker
+    app.kubernetes.io/version: 6bd35ba
+  name: price-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: price-tracker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: price-tracker
+        app.kubernetes.io/version: 6bd35ba
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - 10.43.0.54
+        searches:
+        - price-tracker.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/price-tracker:6bd35ba@sha256:9eacba0c557d049a4dee22de84a44521c61f9718a5a8011d1c9919879e4e373a
+        name: price-tracker
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: TZ
+          value: Europe/Vienna
+        - name: PRICE_TRACKER_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/price-tracker
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: price-tracker-db-secret
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: price-tracker-db-secret
+        - name: WEB_ADDR
+          value: :8080
+        - name: HTTPS_PROXY
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8888
+        - name: PRICE_TRACKER_EMBEDDINGS_URL
+          value: http://embeddings.embeddings.svc.cluster.local:8080
+        - name: PRICE_TRACKER_VPN_CONTROL_URL
+          value: http://gluetun-proxy.gluetun-proxy.svc.cluster.local:8001
+        - name: PRICE_TRACKER_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080/
+        - name: PRICE_TRACKER_NTFY_TOPIC
+          value: price-tracker
+        - name: PRICE_TRACKER_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: price-tracker-secret
+              optional: true
+        - name: PRICE_TRACKER_PUBLIC_URL
+          value: https://tare.netbird.nathalie-stiefsohn.eu
+        - name: PRICE_TRACKER_TANDOOR_URL
+          value: http://tandoor.tandoor.svc.cluster.local:8080
+        - name: PRICE_TRACKER_TANDOOR_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: tandoor-token
+              name: price-tracker-secret
+              optional: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 96Mi
+          limits:
+            cpu: 1000m
+            memory: 768Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

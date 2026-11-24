@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: fermentation-tracker
+    app.kubernetes.io/version: e557c8f
+  name: fermentation-tracker
+spec:
+  selector:
+    app.kubernetes.io/name: fermentation-tracker
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080

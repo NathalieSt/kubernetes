@@ -21,7 +21,7 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `karakeep` | `karakeep` | `kvv2/karakeep` |
 | `miniflux` | `miniflux` | `kvv2/miniflux/db`, `kvv2/miniflux/oidc` |
 | `clamav` | `clamav` | `kvv2/clamav/forgejo-packages`, `kvv2/clamav/hash-lookup` |
-| `fleet` | `fleet` | `kvv2/fleet` |
+| `host-management` | `host-management` | `kvv2/host-management` |
 | `code-server` | `code-server` | `kvv2/code-server`, `kvv2/code-server-git` |
 | `neko` | `neko` | `kvv2/neko` |
 | `kavita` | `kavita` | `kvv2/kavita/oidc` |
@@ -36,19 +36,19 @@ The KV paths themselves are not OpenTofu resources — see Placeholders below.
 | `bazarr` | `jellyfin` | `kvv2/bazarr/db` |
 | `seerr` | `jellyfin` | `kvv2/seerr/db` |
 | `gameyfin` | `gameyfin` | `kvv2/gameyfin/secrets` |
-| `limes` | `limes` | `kvv2/limes`, `kvv2/limes/db` |
+| `image-scanner` | `image-scanner` | `kvv2/image-scanner`, `kvv2/image-scanner/db` |
 | `tandoor` | `tandoor` | `kvv2/tandoor/oidc`, `kvv2/tandoor/db` |
-| `zyme` | `zyme` | `kvv2/zyme`, `kvv2/zyme/db` |
-| `tessera` | `tessera` | `kvv2/tessera/db` |
-| `arca` | `clavis` | `kvv2/psono`, `kvv2/arca/db`, `kvv2/arca/ntfy` |
-| `tare` | `tare` | `kvv2/tare/db`, `kvv2/tare` |
+| `fermentation-tracker` | `fermentation-tracker` | `kvv2/fermentation-tracker`, `kvv2/fermentation-tracker/db` |
+| `device-configuration-manager` | `device-configuration-manager` | `kvv2/device-configuration-manager/db` |
+| `password-server` | `password-manager` | `kvv2/psono`, `kvv2/password-server/db`, `kvv2/password-server/ntfy` |
+| `price-tracker` | `price-tracker` | `kvv2/price-tracker/db`, `kvv2/price-tracker` |
 | `radicale` | `radicale` | `kvv2/radicale/users` |
 | `anki-sync` | `anki-sync` | `kvv2/anki-sync/users` |
 | `trilium` | `trilium` | `kvv2/trilium/oidc` |
 | `paperless` | `paperless` | `kvv2/paperless/oidc`, `kvv2/paperless/app`, `kvv2/paperless/db` |
 | `authelia` | `authelia` | `kvv2/authelia/secrets`, `kvv2/authelia/users`, `kvv2/authelia/oidc-clients`, `kvv2/authelia/db` |
 | `gluetun-proxy` | `gluetun-proxy` | `kvv2/vpn` |
-| `main-pg` | `postgres` | `kvv2/authelia/db`, `kvv2/glitchtip/db`, `kvv2/healthchecks/db`, `kvv2/limes/db`, `kvv2/ntfy/db`, `kvv2/paperless/db`, `kvv2/tandoor/db`, `kvv2/zyme/db`, `kvv2/tessera/db`, `kvv2/arca/db`, `kvv2/tare/db`, `kvv2/miniflux/db`, `kvv2/audiomuseai/db`, `kvv2/sonarr/db`, `kvv2/radarr/db`, `kvv2/lidarr/db`, `kvv2/prowlarr/db`, `kvv2/bazarr/db`, `kvv2/seerr/db` |
+| `main-pg` | `postgres` | `kvv2/authelia/db`, `kvv2/glitchtip/db`, `kvv2/healthchecks/db`, `kvv2/image-scanner/db`, `kvv2/ntfy/db`, `kvv2/paperless/db`, `kvv2/tandoor/db`, `kvv2/fermentation-tracker/db`, `kvv2/device-configuration-manager/db`, `kvv2/password-server/db`, `kvv2/price-tracker/db`, `kvv2/miniflux/db`, `kvv2/audiomuseai/db`, `kvv2/sonarr/db`, `kvv2/radarr/db`, `kvv2/lidarr/db`, `kvv2/prowlarr/db`, `kvv2/bazarr/db`, `kvv2/seerr/db` |
 | `opnsense-backup` | `opnsense-backup` | `kvv2/opnsense-backup` |
 | `opnsense-exporter` | `opnsense-exporter` | `kvv2/opnsense-exporter` |
 | `flux-notifications` | `flux-system` | `kvv2/flux-notifications` |

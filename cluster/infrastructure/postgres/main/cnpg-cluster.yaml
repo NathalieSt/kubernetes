@@ -37,11 +37,11 @@ spec:
       login: true
       passwordSecret:
         name: healthchecks-db-role
-    - name: limes
+    - name: image-scanner
       ensure: present
       login: true
       passwordSecret:
-        name: limes-db-role
+        name: image-scanner-db-role
     - name: ntfy
       ensure: present
       login: true
@@ -57,26 +57,26 @@ spec:
       login: true
       passwordSecret:
         name: tandoor-db-role
-    - name: zyme
+    - name: fermentation-tracker
       ensure: present
       login: true
       passwordSecret:
-        name: zyme-db-role
-    - name: tessera
+        name: fermentation-tracker-db-role
+    - name: device-configuration-manager
       ensure: present
       login: true
       passwordSecret:
-        name: tessera-db-role
-    - name: arca
+        name: device-configuration-manager-db-role
+    - name: password-server
       ensure: present
       login: true
       passwordSecret:
-        name: arca-db-role
-    - name: tare
+        name: password-server-db-role
+    - name: price-tracker
       ensure: present
       login: true
       passwordSecret:
-        name: tare-db-role
+        name: price-tracker-db-role
     - name: miniflux
       ensure: present
       login: true

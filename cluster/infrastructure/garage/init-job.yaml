@@ -44,7 +44,7 @@ kind: Job
 metadata:
   labels:
     app.kubernetes.io/name: garage-init
-  name: garage-init-57dfa29e
+  name: garage-init-c1af8b17
 spec:
   backoffLimit: 5
   ttlSecondsAfterFinished: 3600
@@ -323,31 +323,6 @@ spec:
           write_secret "diary" "restic-repo-password-secret" \
             "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
-          echo "Provisioning backup repository for namespace fleet"
-          BUCKET_ID=$(ensure_bucket "kubernetes-backups-fleet")
-          if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
-            echo "ERROR: could not determine bucket ID for kubernetes-backups-fleet" >&2
-            exit 1
-          fi
-
-          set -- $(ensure_key "backup-fleet")
-          ACCESS_KEY_ID="$1"
-          SECRET_ACCESS_KEY="$2"
-
-          # Scoped to this one bucket: the namespace holding these credentials must not
-          # be able to read or delete any other namespace's backups.
-          GRANT="{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\""
-          GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
-          api POST v2/AllowBucketKey "$GRANT"
-
-          write_secret "fleet" "garage-backup-access-key-secret" \
-            "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
-
-
-          REPO_PASSWORD=$(derive_password "fleet")
-          write_secret "fleet" "restic-repo-password-secret" \
-            "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
-
           echo "Provisioning backup repository for namespace forgejo"
           BUCKET_ID=$(ensure_bucket "kubernetes-backups-forgejo")
           if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
@@ -396,6 +371,31 @@ spec:
 
           REPO_PASSWORD=$(derive_password "forgejo-pg-cluster")
           write_secret "forgejo-pg-cluster" "restic-repo-password-secret" \
+            "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
+
+          echo "Provisioning backup repository for namespace host-management"
+          BUCKET_ID=$(ensure_bucket "kubernetes-backups-host-management")
+          if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
+            echo "ERROR: could not determine bucket ID for kubernetes-backups-host-management" >&2
+            exit 1
+          fi
+
+          set -- $(ensure_key "backup-host-management")
+          ACCESS_KEY_ID="$1"
+          SECRET_ACCESS_KEY="$2"
+
+          # Scoped to this one bucket: the namespace holding these credentials must not
+          # be able to read or delete any other namespace's backups.
+          GRANT="{\"bucketId\":\"${BUCKET_ID}\",\"accessKeyId\":\"${ACCESS_KEY_ID}\""
+          GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$GRANT"
+
+          write_secret "host-management" "garage-backup-access-key-secret" \
+            "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
+
+
+          REPO_PASSWORD=$(derive_password "host-management")
+          write_secret "host-management" "restic-repo-password-secret" \
             "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
           echo "Provisioning backup repository for namespace karakeep"
@@ -718,12 +718,6 @@ spec:
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
           api POST v2/AllowBucketKey "$READER_GRANT"
 
-          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-fleet")
-          READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
-          READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
-          READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
-          api POST v2/AllowBucketKey "$READER_GRANT"
-
           READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-forgejo")
           READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
           READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
@@ -731,6 +725,12 @@ spec:
           api POST v2/AllowBucketKey "$READER_GRANT"
 
           READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-forgejo-pg-cluster")
+          READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
+          READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
+          READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
+          api POST v2/AllowBucketKey "$READER_GRANT"
+
+          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-host-management")
           READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
           READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"

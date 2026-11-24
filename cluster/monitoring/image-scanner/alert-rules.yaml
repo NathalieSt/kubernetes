@@ -1,0 +1,46 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: image-scanner
+spec:
+  groups:
+  - name: image-scanner
+    interval: 1m
+    rules:
+    - alert: ImageScannerPatrolFailing
+      expr: image_scanner_patrol_healthy{job="image-scanner"} == 0
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: The background patrol is disabled or its last sweep ended in an error, so running images are no longer being rescanned and the Frontier screen is ageing. The error is on that screen's patrol strip and in `kubectl -n image-scanner logs deploy/limes`.
+        summary: the image scanner's patrol is failing
+    - alert: ImageScannerPatrolStalled
+      expr: time() - image_scanner_patrol_last_run_timestamp_seconds{job="image-scanner"} > 7200
+      for: 1h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: The patrol wakes every 15 minutes and has not completed a sweep for over two hours, without reporting an error. It is stuck or the pod never started one after a restart; restart the the image scanner pod.
+        summary: the image scanner's patrol has not swept for hours
+    - alert: ImageScannerResultsOld
+      expr: count(time() - image_scanner_scan_last_finished_timestamp_seconds{job="image-scanner", kind="image"} > 259200) > 0
+      for: 2h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: "The patrol rescans every image daily, so a result three days old means it is not keeping up: scans are slow or failing, though each sweep succeeds. The monitoring dashboard's ImageScanner screen lists the oldest results; `kubectl -n image-scanner get jobs` shows how long scans take and on which node."
+        summary: "{{ $value }} running images have not been scanned for three days"
+    - alert: ImageScannerUpdateCheckFailing
+      expr: image_scanner_updates_healthy{job="image-scanner"} == 0
+      for: 7h
+      labels:
+        severity: warning
+        topic: alerts-monitoring
+      annotations:
+        description: Two update checks in a row failed (it runs every six hours), so the Updates screen and its ntfy announcements are behind upstream. The error is on the Updates toolbar and in the image scanner's log.
+        summary: the image scanner's update check is failing

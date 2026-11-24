@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: fermentation-tracker
+    app.kubernetes.io/version: e557c8f
+  name: fermentation-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fermentation-tracker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fermentation-tracker
+        app.kubernetes.io/version: e557c8f
+    spec:
+      imagePullSecrets:
+      - name: forgejo-registry-secret
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/fermentation-tracker:e557c8f@sha256:60c0e7a1d1eeaf7acc1aab083f430e969300df397f1abc3174ac5e9ddd18bedc
+        name: fermentation-tracker
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: WEB_ADDR
+          value: :8080
+        - name: TZ
+          value: Europe/Vienna
+        - name: FERMENTATION_TRACKER_DATABASE_URL
+          value: postgres://postgres-rw.postgres.svc.cluster.local:5432/fermentation-tracker
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: fermentation-tracker-db-secret
+              optional: false
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: fermentation-tracker-db-secret
+              optional: false
+        - name: FERMENTATION_TRACKER_PUBLIC_URL
+          value: https://zyme.netbird.nathalie-stiefsohn.eu
+        - name: FERMENTATION_TRACKER_NTFY_URL
+          value: http://ntfy.ntfy.svc.cluster.local:8080/
+        - name: FERMENTATION_TRACKER_NTFY_TOPIC
+          value: fermentation-tracker
+        - name: FERMENTATION_TRACKER_NTFY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: ntfy-token
+              name: fermentation-tracker-secret
+              optional: true
+        - name: FERMENTATION_TRACKER_OIDC_AUTHORITY
+          value: https://auth.netbird.nathalie-stiefsohn.eu
+        - name: FERMENTATION_TRACKER_OIDC_CLIENT_ID
+          value: fermentation-tracker
+        resources:
+          requests:
+            cpu: 25m
+            memory: 96Mi
+          limits:
+            cpu: 500m
+            memory: 384Mi
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

@@ -41,14 +41,14 @@ spec:
           - gameyfin
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: tare
+          kubernetes.io/metadata.name: price-tracker
       podSelector:
         matchExpressions:
         - key: app.kubernetes.io/name
           operator: In
           values:
-          - tare
-          - tare-crawl
+          - price-tracker
+          - price-tracker-crawl
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: karakeep

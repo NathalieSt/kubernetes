@@ -34,23 +34,23 @@ spec:
           values:
           - backup-dashboard
           - cluster-console
-          - fleet
+          - device-configuration-manager
+          - fermentation-tracker
           - forgejo
           - gameyfin
           - glitchtip
           - healthchecks
+          - host-management
+          - image-scanner
           - karakeep
           - kavita
-          - limes
           - mail
           - miniflux
           - monitoring-dashboard
           - paperless
           - tandoor
-          - tessera
           - trilium
           - vault
-          - zyme
     ports:
     - port: 9091
       protocol: TCP
