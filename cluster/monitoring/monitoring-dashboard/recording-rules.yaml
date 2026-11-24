@@ -2,10 +2,10 @@
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
 metadata:
-  name: orrery-recording
+  name: monitoring-dashboard-recording
 spec:
   groups:
-  - name: orrery-recording
+  - name: monitoring-dashboard-recording
     interval: 30s
     rules:
     - record: verdict:hubble_flows_processed:rate2m

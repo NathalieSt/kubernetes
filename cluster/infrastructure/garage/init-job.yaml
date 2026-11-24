@@ -44,7 +44,7 @@ kind: Job
 metadata:
   labels:
     app.kubernetes.io/name: garage-init
-  name: garage-init-3a9bd105
+  name: garage-init-57dfa29e
 spec:
   backoffLimit: 5
   ttlSecondsAfterFinished: 3600
@@ -298,14 +298,14 @@ spec:
           write_secret "code-server" "restic-repo-password-secret" \
             "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
-          echo "Provisioning backup repository for namespace daybook"
-          BUCKET_ID=$(ensure_bucket "kubernetes-backups-daybook")
+          echo "Provisioning backup repository for namespace diary"
+          BUCKET_ID=$(ensure_bucket "kubernetes-backups-diary")
           if [ -z "$BUCKET_ID" ] || [ "$BUCKET_ID" = "null" ]; then
-            echo "ERROR: could not determine bucket ID for kubernetes-backups-daybook" >&2
+            echo "ERROR: could not determine bucket ID for kubernetes-backups-diary" >&2
             exit 1
           fi
 
-          set -- $(ensure_key "backup-daybook")
+          set -- $(ensure_key "backup-diary")
           ACCESS_KEY_ID="$1"
           SECRET_ACCESS_KEY="$2"
 
@@ -315,12 +315,12 @@ spec:
           GRANT="${GRANT},\"permissions\":{\"read\":true,\"write\":true,\"owner\":false}}"
           api POST v2/AllowBucketKey "$GRANT"
 
-          write_secret "daybook" "garage-backup-access-key-secret" \
+          write_secret "diary" "garage-backup-access-key-secret" \
             "{\"access-key-id\":\"$(b64 "$ACCESS_KEY_ID")\",\"secret-access-key\":\"$(b64 "$SECRET_ACCESS_KEY")\"}"
 
 
-          REPO_PASSWORD=$(derive_password "daybook")
-          write_secret "daybook" "restic-repo-password-secret" \
+          REPO_PASSWORD=$(derive_password "diary")
+          write_secret "diary" "restic-repo-password-secret" \
             "{\"password\":\"$(b64 "$REPO_PASSWORD")\"}"
 
           echo "Provisioning backup repository for namespace fleet"
@@ -712,7 +712,7 @@ spec:
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"
           api POST v2/AllowBucketKey "$READER_GRANT"
 
-          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-daybook")
+          READER_BUCKET_ID=$(ensure_bucket "kubernetes-backups-diary")
           READER_GRANT="{\"bucketId\":\"${READER_BUCKET_ID}\""
           READER_GRANT="${READER_GRANT},\"accessKeyId\":\"${READER_ACCESS_KEY_ID}\""
           READER_GRANT="${READER_GRANT},\"permissions\":{\"read\":true,\"write\":false,\"owner\":false}}"

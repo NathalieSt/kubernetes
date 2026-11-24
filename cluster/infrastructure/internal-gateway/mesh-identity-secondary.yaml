@@ -26,9 +26,9 @@ spec:
       app.kubernetes.io/name: internal-gateway-secondary
   extraDNSLabels:
   - anki
-  - arx
   - bazarr
   - clavis
+  - pharos
   - fdroid
   - fleet
   - gameyfin
@@ -36,7 +36,6 @@ spec:
   - lidarr
   - miniflux
   - paperless
-  - pharos
   - prowlarr
   - qbittorrent
   - radarr
@@ -44,6 +43,7 @@ spec:
   - sabnzbd
   - requests
   - sonarr
+  - arx
   - pdf
   - tare
   - tessera

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: arx-facts
+  name: start-page-facts
 data:
   facts.json: |
     {
@@ -122,6 +122,25 @@ data:
           "usesCistern": false
         },
         {
+          "generator": "cluster-console",
+          "namespace": "cluster-console",
+          "group": "platform",
+          "about": "Kubernetes console: pods, reasons, logs, events",
+          "url": "https://pharos.netbird.nathalie-stiefsohn.eu",
+          "entry": "second",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
+          "generator": "cluster-console-access",
+          "namespace": "cluster-console",
+          "group": "platform",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
           "generator": "cnpg",
           "namespace": "cnpg-system",
           "group": "infrastructure",
@@ -150,8 +169,8 @@ data:
           "usesCistern": false
         },
         {
-          "generator": "daybook",
-          "namespace": "daybook",
+          "generator": "diary",
+          "namespace": "diary",
           "group": "personal",
           "about": "Encrypted diary and habit tracker",
           "url": "https://daybook.netbird.nathalie-stiefsohn.eu",
@@ -524,6 +543,17 @@ data:
           "leavesBy": "gluetun-proxy"
         },
         {
+          "generator": "monitoring-dashboard",
+          "namespace": "monitoring-dashboard",
+          "group": "observability",
+          "about": "Topology, metrics and logs",
+          "url": "https://orrery.netbird.nathalie-stiefsohn.eu",
+          "entry": "own",
+          "sleeps": false,
+          "sendsBackup": false,
+          "usesCistern": false
+        },
+        {
           "generator": "music-library-builder",
           "namespace": "jellyfin",
           "group": "media",
@@ -620,17 +650,6 @@ data:
           "usesCistern": false
         },
         {
-          "generator": "orrery",
-          "namespace": "orrery",
-          "group": "observability",
-          "about": "Topology, metrics and logs",
-          "url": "https://orrery.netbird.nathalie-stiefsohn.eu",
-          "entry": "own",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": false
-        },
-        {
           "generator": "paperless",
           "namespace": "paperless",
           "group": "personal",
@@ -640,25 +659,6 @@ data:
           "sleeps": false,
           "sendsBackup": true,
           "usesCistern": true
-        },
-        {
-          "generator": "pharos",
-          "namespace": "pharos",
-          "group": "platform",
-          "about": "Kubernetes console: pods, reasons, logs, events",
-          "url": "https://pharos.netbird.nathalie-stiefsohn.eu",
-          "entry": "second",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": false
-        },
-        {
-          "generator": "pharos-access",
-          "namespace": "pharos",
-          "group": "platform",
-          "sleeps": false,
-          "sendsBackup": false,
-          "usesCistern": false
         },
         {
           "generator": "prowlarr",

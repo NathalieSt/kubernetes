@@ -875,6 +875,17 @@ data:
           ]
         },
         {
+          "key": "monitoring-dashboard",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/monitoring-dashboard",
+          "version": "d282abb@sha256:2a89332a1836cc86f97e45bee4512a14456be036b65e58f9f5da7b4f37232ccf",
+          "file": "versions/monitoring.json",
+          "inVersionsFile": true,
+          "generators": [
+            "monitoring-dashboard"
+          ]
+        },
+        {
           "key": "ntfy",
           "kind": "image",
           "repository": "binwiederhier/ntfy",
@@ -894,17 +905,6 @@ data:
           "inVersionsFile": true,
           "generators": [
             "opnsense-exporter"
-          ]
-        },
-        {
-          "key": "orrery",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery",
-          "version": "3ab4541@sha256:ca1457bc4739f3d4e249987e3ebb84f7a9a19dc14da45dd9f1cd74312924bb40",
-          "file": "versions/monitoring.json",
-          "inVersionsFile": true,
-          "generators": [
-            "orrery"
           ]
         },
         {
@@ -975,14 +975,14 @@ data:
           ]
         },
         {
-          "key": "daybook",
+          "key": "diary",
           "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/daybook",
-          "version": "60efa74@sha256:d5aa034137e73c858a481c290ed336fa83b33b4eb127c4f0871b7f5ff705fb4d",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/diary",
+          "version": "5615191@sha256:3d2651f2eb425af0de51991adbf67390458b2e646aac0a90cbdd4da1f0a1b6a4",
           "file": "versions/personal.json",
           "inVersionsFile": true,
           "generators": [
-            "daybook"
+            "diary"
           ]
         },
         {
@@ -1085,17 +1085,6 @@ data:
           ]
         },
         {
-          "key": "arx",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/arx",
-          "version": "56205dd@sha256:6e530f3c5820d5a59d5828c30dccae19020165a739f1d0807d9e4db182fbcb24",
-          "file": "versions/platform.json",
-          "inVersionsFile": true,
-          "generators": [
-            "arx"
-          ]
-        },
-        {
           "key": "backup-dashboard",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/backup-dashboard",
@@ -1104,6 +1093,17 @@ data:
           "inVersionsFile": true,
           "generators": [
             "backup-dashboard"
+          ]
+        },
+        {
+          "key": "cluster-console",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/cluster-console",
+          "version": "7c655bf@sha256:e9ed1d0bf3b3df3d8f28b0f17924290a51b708b07c081e3057bd2c4863486f4f",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "cluster-console"
           ]
         },
         {
@@ -1132,7 +1132,7 @@ data:
           "key": "homelab-docs",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/homelab-docs",
-          "version": "7e26a0b@sha256:a603a068e74752e202962bb8ecb214a7b70ee18d2706341942f63dfa0dea4d8d",
+          "version": "c92c32a@sha256:abe94ef34b0854178c74aff36b64672360cdc2591f06e330a242386f638d49e7",
           "file": "versions/platform.json",
           "inVersionsFile": true,
           "generators": [
@@ -1151,17 +1151,6 @@ data:
           ]
         },
         {
-          "key": "pharos",
-          "kind": "image",
-          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/pharos",
-          "version": "1134fdc@sha256:6a8314e481fdf3239e3a9feee01064923b22367037a70676a273b0b271051115",
-          "file": "versions/platform.json",
-          "inVersionsFile": true,
-          "generators": [
-            "pharos"
-          ]
-        },
-        {
           "key": "salt-master",
           "kind": "image",
           "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/salt-master",
@@ -1170,6 +1159,17 @@ data:
           "inVersionsFile": true,
           "generators": [
             "fleet"
+          ]
+        },
+        {
+          "key": "start-page",
+          "kind": "image",
+          "repository": "code.netbird.nathalie-stiefsohn.eu/my-homelab/start-page",
+          "version": "9ca912b@sha256:cd1273bf0b4a764d6d7d3d5fbf1d9327ad2ef25f2883493f0d8a6981c19974fe",
+          "file": "versions/platform.json",
+          "inVersionsFile": true,
+          "generators": [
+            "start-page"
           ]
         },
         {

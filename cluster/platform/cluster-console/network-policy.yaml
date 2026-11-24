@@ -2,11 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: pharos-networkpolicy
+  name: cluster-console-networkpolicy
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: pharos
+      app.kubernetes.io/name: cluster-console
   policyTypes:
   - Ingress
   - Egress
@@ -60,12 +60,12 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: pharos-apiserver
+  name: cluster-console-apiserver
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: pharos
-  description: pharos to the API server.
+      app.kubernetes.io/name: cluster-console
+  description: cluster-console to the API server.
   egress:
   - toEntities:
     - kube-apiserver

@@ -3,27 +3,27 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: orrery
-    app.kubernetes.io/version: 3ab4541
-  name: orrery
+    app.kubernetes.io/name: monitoring-dashboard
+    app.kubernetes.io/version: d282abb
+  name: monitoring-dashboard
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: orrery
+      app.kubernetes.io/name: monitoring-dashboard
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: orrery
-        app.kubernetes.io/version: 3ab4541
+        app.kubernetes.io/name: monitoring-dashboard
+        app.kubernetes.io/version: d282abb
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/orrery:3ab4541@sha256:ca1457bc4739f3d4e249987e3ebb84f7a9a19dc14da45dd9f1cd74312924bb40
-        name: orrery
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/monitoring-dashboard:d282abb@sha256:2a89332a1836cc86f97e45bee4512a14456be036b65e58f9f5da7b4f37232ccf
+        name: monitoring-dashboard
         ports:
         - containerPort: 8080
           name: http
@@ -31,22 +31,22 @@ spec:
         - mountPath: /data
           name: layout-volume
         env:
-        - name: ORRERY_VM_URL
+        - name: MONITORING_DASHBOARD_VM_URL
           value: http://vmsingle-victoria-metrics-vmks.victoria-metrics.svc.cluster.local:8428
-        - name: ORRERY_VL_URL
+        - name: MONITORING_DASHBOARD_VL_URL
           value: http://victoria-logs.victoria-logs.svc.cluster.local:9428
         - name: WEB_ADDR
           value: :8080
-        - name: ORRERY_STATIC_ROOT
+        - name: MONITORING_DASHBOARD_STATIC_ROOT
           value: /app/ui/dist
-        - name: ORRERY_STATE_DIR
+        - name: MONITORING_DASHBOARD_STATE_DIR
           value: /data
-        - name: ORRERY_SENTRY_DSN
+        - name: MONITORING_DASHBOARD_SENTRY_DSN
           value: https://cd8bc55442a644769d472ebfa3fb7ade@glitchtip.netbird.nathalie-stiefsohn.eu/1
-        - name: ORRERY_OIDC_AUTHORITY
+        - name: MONITORING_DASHBOARD_OIDC_AUTHORITY
           value: https://auth.netbird.nathalie-stiefsohn.eu
-        - name: ORRERY_OIDC_CLIENT_ID
-          value: orrery
+        - name: MONITORING_DASHBOARD_OIDC_CLIENT_ID
+          value: monitoring-dashboard
         resources:
           requests:
             cpu: 50m
@@ -63,7 +63,7 @@ spec:
       volumes:
       - name: layout-volume
         persistentVolumeClaim:
-          claimName: orrery-layout-pvc
+          claimName: monitoring-dashboard-layout-pvc
       securityContext:
         fsGroup: 1000
         runAsUser: 1000

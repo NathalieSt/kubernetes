@@ -2,11 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: orrery-networkpolicy
+  name: monitoring-dashboard-networkpolicy
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: orrery
+      app.kubernetes.io/name: monitoring-dashboard
   policyTypes:
   - Ingress
   - Egress

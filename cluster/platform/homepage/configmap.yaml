@@ -361,12 +361,12 @@ data:
           description: Password manager, our client
           namespace: clavis
           app: clavis
-      - daybook:
+      - diary:
           href: https://daybook.netbird.nathalie-stiefsohn.eu
           icon: mdi-book-lock-outline
           description: Encrypted diary and habit tracker
-          namespace: daybook
-          app: daybook
+          namespace: diary
+          app: diary
       - mail:
           href: https://mail.netbird.nathalie-stiefsohn.eu
           icon: roundcube.png
@@ -553,12 +553,6 @@ data:
           description: Our own server for clavis
           namespace: clavis
           app: arca
-      - arx:
-          href: https://arx.netbird.nathalie-stiefsohn.eu
-          icon: mdi-castle
-          description: The homelab as the map of a walled city
-          namespace: arx
-          app: arx
       - authelia:
           href: https://auth.netbird.nathalie-stiefsohn.eu
           icon: authelia.png
@@ -571,6 +565,12 @@ data:
           description: "K8up backups: browse, restore, trigger"
           namespace: backup-dashboard
           app: backup-dashboard
+      - cluster-console:
+          href: https://pharos.netbird.nathalie-stiefsohn.eu
+          icon: mdi-lighthouse
+          description: "Kubernetes console: pods, reasons, logs, events"
+          namespace: cluster-console
+          app: cluster-console
       - fleet:
           href: https://fleet.netbird.nathalie-stiefsohn.eu
           icon: mdi-server-network
@@ -589,12 +589,12 @@ data:
           description: How the homelab works, and runbooks
           namespace: homelab-docs
           app: homelab-docs
-      - pharos:
-          href: https://pharos.netbird.nathalie-stiefsohn.eu
-          icon: mdi-lighthouse
-          description: "Kubernetes console: pods, reasons, logs, events"
-          namespace: pharos
-          app: pharos
+      - start-page:
+          href: https://arx.netbird.nathalie-stiefsohn.eu
+          icon: mdi-castle
+          description: The homelab as the map of a walled city
+          namespace: start-page
+          app: start-page
       - vault:
           href: https://vault.netbird.nathalie-stiefsohn.eu
           icon: hashicorp-vault.png
@@ -620,18 +620,18 @@ data:
           description: Security scans of every image in the cluster
           namespace: limes
           app: limes
+      - monitoring-dashboard:
+          href: https://orrery.netbird.nathalie-stiefsohn.eu
+          icon: mdi-orbit
+          description: Topology, metrics and logs
+          namespace: monitoring-dashboard
+          app: monitoring-dashboard
       - ntfy:
           href: https://ntfy.netbird.nathalie-stiefsohn.eu
           icon: ntfy.png
           description: Push notifications
           namespace: ntfy
           app: ntfy
-      - orrery:
-          href: https://orrery.netbird.nathalie-stiefsohn.eu
-          icon: mdi-orbit
-          description: Topology, metrics and logs
-          namespace: orrery
-          app: orrery
     - Other:
       - fdroid:
           href: https://fdroid.netbird.nathalie-stiefsohn.eu

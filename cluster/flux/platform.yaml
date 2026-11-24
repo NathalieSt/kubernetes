@@ -2,29 +2,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: arx
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  targetNamespace: arx
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/platform/arx
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: reflector
-  - name: victoria-metrics
-  serviceAccountName: flux-arx
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: backup-dashboard
   namespace: flux-system
 spec:
@@ -44,6 +21,49 @@ spec:
   - name: garage
   - name: k8up
   - name: vault-secrets-operator-config
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-console
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  targetNamespace: cluster-console
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/platform/cluster-console
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: reflector
+  serviceAccountName: flux-privileged
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-console-access
+  namespace: flux-system
+spec:
+  interval: 24h
+  retryInterval: 2m
+  sourceRef:
+    kind: GitRepository
+    name: manifests
+  path: ./cluster/platform/cluster-console-access
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+  - name: namespaces
+  - name: flux-rbac
+  - name: cluster-console
   serviceAccountName: flux-privileged
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -140,16 +160,16 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: pharos
+  name: start-page
   namespace: flux-system
 spec:
   interval: 24h
   retryInterval: 2m
-  targetNamespace: pharos
+  targetNamespace: start-page
   sourceRef:
     kind: GitRepository
     name: manifests
-  path: ./cluster/platform/pharos
+  path: ./cluster/platform/start-page
   prune: true
   wait: true
   timeout: 10m
@@ -157,28 +177,8 @@ spec:
   - name: namespaces
   - name: flux-rbac
   - name: reflector
-  serviceAccountName: flux-privileged
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: pharos-access
-  namespace: flux-system
-spec:
-  interval: 24h
-  retryInterval: 2m
-  sourceRef:
-    kind: GitRepository
-    name: manifests
-  path: ./cluster/platform/pharos-access
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-  - name: namespaces
-  - name: flux-rbac
-  - name: pharos
-  serviceAccountName: flux-privileged
+  - name: victoria-metrics
+  serviceAccountName: flux-start-page
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

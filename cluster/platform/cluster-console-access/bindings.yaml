@@ -2,573 +2,573 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: anki-sync
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
-  namespace: arx
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: pharos-operate
-subjects:
-- kind: ServiceAccount
-  name: pharos
-  namespace: pharos
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: changedetection
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: clavis
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
-  namespace: daybook
+  name: cluster-console-operate
+  namespace: diary
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: egress-proxy
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: embeddings
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: fdroid
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: fourget
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: gameyfin
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: glitchtip
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: helium-services
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: homelab-docs
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: internal-dns
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: it-tools
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: jellyfin
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: karakeep
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: kavita
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: mail
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: miniflux
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
+  namespace: monitoring-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-console-operate
+subjects:
+- kind: ServiceAccount
+  name: cluster-console
+  namespace: cluster-console
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cluster-console-operate
   namespace: neko
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: ntfy
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: omni-tools
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: opnsense-backup
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: opnsense-exporter
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
-  namespace: orrery
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: pharos-operate
-subjects:
-- kind: ServiceAccount
-  name: pharos
-  namespace: pharos
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: paperless
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: radicale
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: redis
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: redlib
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: rimworld-together
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
+  namespace: start-page
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-console-operate
+subjects:
+- kind: ServiceAccount
+  name: cluster-console
+  namespace: cluster-console
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cluster-console-operate
   namespace: stirling-pdf
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: tandoor
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: tare
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: tessera
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: trilium
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: valkey
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: victoria-logs
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: vim-trainer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: waking-page
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pharos-operate
+  name: cluster-console-operate
   namespace: zyme
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pharos-operate
+  name: cluster-console-operate
 subjects:
 - kind: ServiceAccount
-  name: pharos
-  namespace: pharos
+  name: cluster-console
+  namespace: cluster-console

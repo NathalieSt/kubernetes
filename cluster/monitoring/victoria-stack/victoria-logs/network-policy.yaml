@@ -11,16 +11,16 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: cluster-console
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: code-server
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: healthchecks
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: orrery
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: pharos
+          kubernetes.io/metadata.name: monitoring-dashboard
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: vector

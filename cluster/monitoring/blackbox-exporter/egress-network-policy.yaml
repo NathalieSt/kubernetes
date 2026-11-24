@@ -29,10 +29,6 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: arx
-  - to:
-    - namespaceSelector:
-        matchLabels:
           kubernetes.io/metadata.name: authelia
   - to:
     - namespaceSelector:
@@ -49,11 +45,15 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: cluster-console
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: code-server
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: daybook
+          kubernetes.io/metadata.name: diary
   - to:
     - namespaceSelector:
         matchLabels:
@@ -129,6 +129,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
+          kubernetes.io/metadata.name: monitoring-dashboard
+  - to:
+    - namespaceSelector:
+        matchLabels:
           kubernetes.io/metadata.name: neko
   - to:
     - namespaceSelector:
@@ -141,15 +145,7 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: orrery
-  - to:
-    - namespaceSelector:
-        matchLabels:
           kubernetes.io/metadata.name: paperless
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: pharos
   - to:
     - namespaceSelector:
         matchLabels:
@@ -162,6 +158,10 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: redlib
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: start-page
   - to:
     - namespaceSelector:
         matchLabels:
