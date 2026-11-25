@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: password-manager
-    app.kubernetes.io/version: e1c120d
+    app.kubernetes.io/version: e38f54a
   name: password-manager
 spec:
   selector:

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: password-server
-    app.kubernetes.io/version: e1c120d
+    app.kubernetes.io/version: e38f54a
   name: password-server
 spec:
   replicas: 1
@@ -15,14 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: password-server
-        app.kubernetes.io/version: e1c120d
+        app.kubernetes.io/version: e38f54a
     spec:
       imagePullSecrets:
       - name: forgejo-registry-secret
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/password-server:e1c120d@sha256:60a9a16bd2c0556b54ad6126d15d7e9092be73f51c96b04f84f77bf27cd20ca4
+      - image: code.netbird.nathalie-stiefsohn.eu/my-homelab/password-server:e38f54a@sha256:251a8c3d60bec5ce3c1c83abbe508dbd822ada3b4c16ead8480c6d867e348f0d
         name: password-server
         ports:
         - containerPort: 8080
